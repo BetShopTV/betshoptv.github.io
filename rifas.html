@@ -395,6 +395,74 @@
 
   <!-- Conteúdo Principal -->
   <main>
+
+        <h1>Calculadora de Distribuição de Prêmios</h1>
+    <div>
+        <label for="pecasDisponiveis">Peças Disponíveis:</label>
+        <input type="number" id="pecasDisponiveis" value="51" min="17">
+    </div>
+    <button onclick="calcularPremios()">Calcular</button>
+
+    <div class="result" id="result">
+        <div>Peças Disponíveis: <span id="pecas">51</span></div>
+        <div>Pessoas Premiadas: <span id="pessoas">0</span></div>
+        <div>Distribuição: <span id="distribuicao">N/A</span></div>
+    </div>
+
+    <script>
+        function calcularPremios() {
+            const pecasDisponiveis = parseInt(document.getElementById("pecasDisponiveis").value);
+            document.getElementById("pecas").textContent = pecasDisponiveis;
+
+            const premios = [];
+
+            if (pecasDisponiveis <= 51) {
+                let restante = pecasDisponiveis;
+
+                for (let i = 0; i < 17; i++) {
+                    if (restante >= 3) {
+                        premios.push(3);
+                        restante -= 3;
+                    } else if (restante > 0) {
+                        premios.push(restante);
+                        restante = 0;
+                    } else {
+                        premios.push(0);
+                    }
+                }
+            } else {
+                let restante = pecasDisponiveis;
+
+                for (let i = 0; i < 17; i++) {
+                    if (restante >= 3) {
+                        premios.push(3);
+                        restante -= 3;
+                    } else if (restante > 0) {
+                        premios.push(restante);
+                        restante = 0;
+                    } else {
+                        premios.push(0);
+                    }
+                }
+
+                let index = 17;
+                while (restante > 0) {
+                    let distribuir = Math.min(3, restante);
+                    if (premios[index]) {
+                        premios[index] += distribuir;
+                    } else {
+                        premios[index] = distribuir;
+                    }
+                    restante -= distribuir;
+                    index++;
+                }
+            }
+
+            document.getElementById("pessoas").textContent = premios.filter(p => p > 0).length;
+            document.getElementById("distribuicao").textContent = premios.join(", ");
+        }
+    </script>
+    
     <div class="calculator-box" id="calc-costo-por-quantidade">
       <p>
         Apostar em 
