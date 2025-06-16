@@ -19,20 +19,11 @@
       align-items: center;
     }
 
-    a {
-      color: #ff0000;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* Cabeçalho padrão (computador) */
+    /* Cabeçalho */
     header {
       width: 100%;
       height: auto;
       min-height: 25vh;
-      padding: 20px 0;
       background-color: #ff0000;
       position: relative;
       overflow: hidden;
@@ -55,32 +46,37 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 10px;
-      margin: 20px 0;
+      margin-top: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
     }
 
-    .raffle-button {
+    .botao-main {
+      padding: 4px 13px;
+      height: 50px;
       border: 2px solid #ff0000;
       background-color: transparent;
       color: #ff0000;
-      padding: 10px 28px; /* Largura de conteúdo + 18px adicionais */
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
       font-size: 1em;
       font-weight: bold;
-      text-transform: uppercase;
-      border-radius: 5px;
+      text-align: center;
+      line-height: 1.2;
       cursor: pointer;
-      transition: all 0.3s ease;
+      white-space: nowrap;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
 
-    .raffle-button:hover {
+    .botao-main:hover {
+      color: #ffffff;
+    }
+
+    .botao-main.active {
       background-color: #ff0000;
-      color: #fff;
-    }
-
-    @media (max-width: 768px) {
-      .raffle-button {
-        font-size: 0.9em;
-        padding: 8px 20px;
-      }
+      color: #ffffff;
+      border-color: #ff0000;
     }
   </style>
 </head>
@@ -93,14 +89,62 @@
     </video>
   </header>
 
-  <!-- Conteúdo Principal -->
+  <!-- Botões -->
   <main>
-    <div class="button-container">
-      <button class="raffle-button">Opção 1</button>
-      <button class="raffle-button">Opção 2</button>
-      <button class="raffle-button">Opção 3</button>
-      <button class="raffle-button">Opção 4</button>
-    </div>
+    <section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">    
+      <div class="button-container">
+        <button class="botao-main" data-hover-color="#FF4500" data-id="1">A001 / 40 graus</button>
+        <button class="botao-main" data-hover-color="#B22222" data-id="2">A002 / 5ª avenida</button>
+        <button class="botao-main" data-hover-color="#FF1493" data-id="3">A003 / Acionando o contatinho</button>
+      </div>
+    </section>
   </main>
+
+  <script>
+    document.querySelectorAll('.botao-main').forEach(button => {
+      const hoverColor = button.dataset.hoverColor;
+
+      // Evento de mouseover
+      button.addEventListener('mouseover', () => {
+        if (!button.classList.contains('active')) {
+          button.style.backgroundColor = hoverColor;
+          button.style.color = '#ffffff';
+        }
+      });
+
+      // Evento de mouseout
+      button.addEventListener('mouseout', () => {
+        if (!button.classList.contains('active')) {
+          button.style.backgroundColor = 'transparent';
+          button.style.color = '#ff0000';
+        }
+      });
+
+      // Evento de clique
+      button.addEventListener('click', () => {
+        if (button.classList.contains('active')) {
+          // Desativa o botão
+          button.classList.remove('active');
+          button.style.backgroundColor = 'transparent';
+          button.style.color = '#ff0000';
+          button.style.borderColor = '#ff0000';
+        } else {
+          // Remove a classe active de outros botões
+          document.querySelectorAll('.botao-main').forEach(btn => {
+            btn.classList.remove('active');
+            btn.style.backgroundColor = 'transparent';
+            btn.style.color = '#ff0000';
+            btn.style.borderColor = '#ff0000';
+          });
+
+          // Ativa o botão clicado
+          button.classList.add('active');
+          button.style.backgroundColor = '#ff0000';
+          button.style.color = '#ffffff';
+          button.style.borderColor = '#ff0000';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
