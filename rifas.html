@@ -91,60 +91,124 @@
 
   <!-- Botões -->
   <main>
-    <section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">    
-      <div class="button-container">
-        <button class="botao-main" data-hover-color="#FF4500" data-id="1">A001 / 40 graus</button>
-        <button class="botao-main" data-hover-color="#B22222" data-id="2">A002 / 5ª avenida</button>
-        <button class="botao-main" data-hover-color="#FF1493" data-id="3">A003 / Acionando o contatinho</button>
-      </div>
-    </section>
-  </main>
+<section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">    
+  <div class="button-container">
+    <button class="botao-main" data-hover-color="#FF4500" data-id="1">A001 / 40 graus</button>
+    <button class="botao-main" data-hover-color="#B22222" data-id="2">A002 / 5ª avenida</button>
+    <button class="botao-main" data-hover-color="#FF1493" data-id="3">A003 / Acionando o contatinho</button>
+  </div>
+</section>
 
-  <script>
-    document.querySelectorAll('.botao-main').forEach(button => {
-      const hoverColor = button.dataset.hoverColor;
+<style>
+  .button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px; /* Espaço entre os botões */
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
 
-      // Evento de mouseover
-      button.addEventListener('mouseover', () => {
-        if (!button.classList.contains('active')) {
-          button.style.backgroundColor = hoverColor;
-          button.style.color = '#ffffff';
-        }
+  .botao-main {
+    padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
+    height: 50px;
+    border: 2px solid #ff0000;
+    background-color: transparent;
+    color: #ff0000;
+    display: inline-flex; /* Garante que o botão ajusta-se ao texto */
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.2;
+    cursor: pointer;
+    white-space: nowrap; /* Evita quebra de texto */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .botao-main:hover {
+    color: #ffffff;
+  }
+
+  .botao-main.active {
+    color: #ffffff;
+  }
+</style>
+
+<script>
+  // Função para determinar o contraste e escolher a cor da fonte
+  function getContrastColor(backgroundColor) {
+    const colors = {
+      white: "#ffffff",
+      red: "#ff0000",
+      gray: "#bebaba",
+      dark: "#2b2424"
+    };
+
+    // Converte hex para RGB
+    function hexToRgb(hex) {
+      const bigint = parseInt(hex.slice(1), 16);
+      return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+    }
+
+    // Calcula luminosidade relativa
+    function luminance([r, g, b]) {
+      const [rs, gs, bs] = [r, g, b].map(v => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
       });
+      return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+    }
 
-      // Evento de mouseout
-      button.addEventListener('mouseout', () => {
-        if (!button.classList.contains('active')) {
-          button.style.backgroundColor = 'transparent';
-          button.style.color = '#ff0000';
-        }
-      });
+    const bgLuminance = luminance(hexToRgb(backgroundColor));
 
-      // Evento de clique
-      button.addEventListener('click', () => {
-        if (button.classList.contains('active')) {
-          // Desativa o botão
-          button.classList.remove('active');
-          button.style.backgroundColor = 'transparent';
-          button.style.color = '#ff0000';
-          button.style.borderColor = '#ff0000';
-        } else {
-          // Remove a classe active de outros botões
-          document.querySelectorAll('.botao-main').forEach(btn => {
-            btn.classList.remove('active');
-            btn.style.backgroundColor = 'transparent';
-            btn.style.color = '#ff0000';
-            btn.style.borderColor = '#ff0000';
-          });
+    // Ordena as cores pela diferença de contraste
+    return Object.values(colors).sort((a, b) => {
+      const lumA = luminance(hexToRgb(a));
+      const lumB = luminance(hexToRgb(b));
+      return Math.abs(bgLuminance - lumB) - Math.abs(bgLuminance - lumA);
+    })[0];
+  }
 
-          // Ativa o botão clicado
-          button.classList.add('active');
-          button.style.backgroundColor = '#ff0000';
-          button.style.color = '#ffffff';
-          button.style.borderColor = '#ff0000';
-        }
-      });
+  document.querySelectorAll('.botao-main').forEach(button => {
+    const hoverColor = button.dataset.hoverColor;
+
+    // Evento de mouseover
+    button.addEventListener('mouseover', () => {
+      if (!button.classList.contains('active')) {
+        button.style.backgroundColor = hoverColor;
+        button.style.color = getContrastColor(hoverColor);
+      }
     });
-  </script>
+
+    // Evento de mouseout
+    button.addEventListener('mouseout', () => {
+      if (!button.classList.contains('active')) {
+        button.style.backgroundColor = 'transparent';
+        button.style.color = '#ff0000';
+      }
+    });
+
+    // Evento de clique
+    button.addEventListener('click', () => {
+      if (button.classList.contains('active')) {
+        // Desativa o botão
+        button.classList.remove('active');
+        button.style.backgroundColor = 'transparent';
+        button.style.color = '#ff0000';
+        button.style.borderColor = '#ff0000';
+      } else {
+        // Ativa o botão clicado
+        button.classList.add('active');
+        button.style.backgroundColor = hoverColor;
+        button.style.color = getContrastColor(hoverColor);
+        button.style.borderColor = hoverColor;
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
