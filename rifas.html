@@ -59,6 +59,52 @@
       /* text-align: center; /* This was on index.html's main, but content within rifas.html sections will be left-aligned */
     }
 
+    .calculator-box {
+      border: 2px solid #ff0000;
+      background-color: transparent;
+      color: #ff0000;
+      padding: 15px;
+      margin-bottom: 20px; /* Space between boxes or other content */
+      border-radius: 5px; /* Optional: for slightly rounded corners */
+      text-align: center; /* Center the paragraph text within the box */
+    }
+    .calculator-box p {
+      margin: 0; /* Remove default paragraph margin */
+      font-size: 1.1em; /* Adjust as needed */
+    }
+    .calculator-box input[type="number"] {
+      width: 70px; /* Default width, can be adjusted per input if needed */
+      text-align: center;
+      background-color: transparent;
+      color: #ff0000; /* Text color of the input */
+      border: 1px solid #ff0000; /* Border for the input */
+      border-radius: 3px;
+      padding: 5px;
+      font-size: 1em;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+    /* Specific width for the first input if needed */
+    #calc-costo-por-quantidade input[type="number"] {
+      width: 60px;
+    }
+
+    /* Style for result spans to make them stand out if needed */
+    .calculator-box span[id^="resultado-"] { /* Targets spans with id starting with "resultado-" */
+      font-weight: bold;
+      /* color: #ff0000; /* Already inherited from .calculator-box */
+    }
+
+    /* Remove browser default spinner arrows for number inputs (optional, for cleaner look) */
+    .calculator-box input[type=number]::-webkit-inner-spin-button, 
+    .calculator-box input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    .calculator-box input[type=number] {
+      -moz-appearance: textfield; /* Firefox */
+    }
+
     /* Estilos específicos da página de rifas */
     .raffle-section, #selection-summary, #user-form-section {
       text-align: left; /* Override text-align:center from main if it was applied */
@@ -332,6 +378,23 @@
 
   <!-- Conteúdo Principal -->
   <main>
+    <div class="calculator-box" id="calc-costo-por-quantidade">
+      <p>
+        Apostar em 
+        <input type="number" id="quantidade-numeros" min="0" value="0"> 
+        números sai por R$ 
+        <span id="resultado-custo" style="font-weight: bold;">0</span>!
+      </p>
+    </div>
+    <div class="calculator-box" id="calc-quantidade-por-dinheiro">
+      <p>
+        Tenho R$ 
+        <input type="number" id="dinheiro-disponivel" min="0" value="0">, 
+        dá pra apostar em 
+        <span id="resultado-quantidade-numeros" style="font-weight: bold;">0</span> 
+        números e <span id="resultado-dinheiro-sobra-falta" style="font-weight: bold;">...</span>
+      </p>
+    </div>
     <section id="coluna-a" class="raffle-section">
       <h2>RIFA COLUNA A: <em>EVA TV Man</em></h2>
       <p>Selecione seus números abaixo:</p>
@@ -551,7 +614,8 @@ document.addEventListener('DOMContentLoaded', () => {
     submissionInstructions.style.display = 'block';
     window.location.href = mailtoLink;
   });
-// --- Logic for Caixa 1: Custo por Quantidade ---
+
+  // --- Logic for Caixa 1: Custo por Quantidade ---
   const quantidadeNumerosInput = document.getElementById('quantidade-numeros');
   const resultadoCustoSpan = document.getElementById('resultado-custo');
 
