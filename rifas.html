@@ -40,16 +40,77 @@
       transform: translate(-50%, -50%);
     }
 
-    /* Botões */
-    .button-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-      margin-right: 10px;
-      margin-left: 10px;
-    }
+/* BOTÕES styles.css */
+.button-container {
+  position: relative; /* Necessário para posicionar o hover-content em relação a este contêiner */
+  display: inline-block; /* Ou 'block', dependendo do seu layout */
+  margin: 20px;
+  font-family: sans-serif;
+}
+
+.hover-button {
+  padding: 12px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.hover-button:hover {
+  background-color: #0056b3;
+}
+
+.hover-content {
+  position: absolute;
+  /* Posicionamento inicial (ex: abaixo do botão) */
+  top: 100%; /* Começa logo abaixo do botão */
+  left: 0;
+  margin-top: 8px; /* Pequeno espaço entre o botão e o conteúdo */
+  min-width: 200px; /* Largura mínima para o conteúdo */
+
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+  /* Inicialmente invisível e transparente */
+  opacity: 0;
+  visibility: hidden; /* Importante para não interagir com o mouse quando invisível */
+
+  /* Transição para opacity e visibility */
+  transition: opacity 0.3s ease-out, visibility 0s linear 0.3s;
+  /*
+    - opacity 0.3s ease-out: Anima a opacidade ao longo de 0.3 segundos com easing 'ease-out'.
+    - visibility 0s linear 0.3s:
+        - Muda a visibilidade instantaneamente (0s).
+        - 'linear' é o timing function.
+        - O atraso de 0.3s (igual à duração da opacidade) garante que 'visibility: hidden'
+          seja aplicado somente DEPOIS que o fade-out da opacidade estiver completo.
+          Isso evita que o elemento desapareça abruptamente antes do fade-out.
+  */
+  z-index: 10; /* Garante que fique acima de outros elementos se necessário */
+}
+
+/*
+  Classe para tornar o conteúdo visível (será adicionada via JavaScript)
+  Esta classe ativa o "fade-in".
+*/
+.hover-content.visible {
+  opacity: 1;
+  visibility: visible;
+  /*
+    A transição para 'visible' precisa ser imediata na propriedade 'visibility',
+    e o fade-in é controlado pela transição da opacidade.
+    O transition-delay é removido (ou definido para 0s) para garantir que, uma vez que a classe 'visible'
+    é adicionada, a transição de opacidade e visibilidade ocorra conforme definido aqui,
+    sem herdar o atraso da regra base de .hover-content.
+  */
+  transition: opacity 0.3s ease-in, visibility 0s linear 0s;
+}
 
     .botao-main {
       padding: 4px 13px;
