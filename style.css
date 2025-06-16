@@ -1,0 +1,11 @@
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h1 {
+    color: #d9534f; /* Um vermelho similar ao que você usa */
+}
