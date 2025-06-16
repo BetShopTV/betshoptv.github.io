@@ -1,14 +1,238 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BetShopTV Teste</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BetShopTV⦿com</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+    /* Estilo Geral */
+    body {
+      margin: 0;
+      font-family: 'Roboto Condensed', sans-serif;
+      background-image: url("https://corhexa.com/png/600x300/bebaba");
+      background-repeat: repeat;
+      color: #2b2424;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    a {
+      color: #ff0000;
+      text-decoration: none;
+      text-decoration-color: #ff0000;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Cabeçalho padrão (computador) */
+    header {
+      width: 100%;
+      height: auto;
+      min-height: 25vh;
+      padding: 20px 0;
+      background-color: #ff0000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 100%;
+      width: auto;
+      min-width: 100%;
+      object-fit: cover;
+      transform: translate(-50%, -50%);
+      background-color: #ff0000;
+    }
+
+    /* Conteúdo Principal */
+    main {
+      width: 90%;
+      max-width: 1200px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    main h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    main p {
+      font-size: 1.2em;
+      line-height: 1.5;
+    }
+
+    /* Botões (versão desktop) */
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px; /* Espaço entre os botões */
+      margin-top: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+.botao-main {
+  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
+  height: 50px;
+  border: 2px solid #ff0000;
+  background-color: transparent;
+  color: #ff0000;
+  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap; /* Evita quebra de texto */
+}
+.botao-off {
+  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
+  height: 50px;
+  border: 2px solid #2b2424;
+  background-color: transparent;
+  color: #2b2424;
+  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap; /* Evita quebra de texto */
+}
+
+
+    /* Responsividade: Celulares (até 768px) */
+    @media (max-width: 768px) {
+      header {
+        height: 112px;
+        min-height: 112px;
+        max-height: 112px;
+        padding: 4px 4px;
+      }
+
+      .header-video {
+        height: 100%;
+        width: auto;
+        min-width: 300%;
+        object-fit: cover;
+        object-position: center;
+        transform: translate(-50%, -50%);
+      }
+
+      main h1 {
+        font-size: 1.8em;
+      }
+
+      main p {
+        font-size: 1em;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Olá Mundo!</h1>
-    <p>Bem-vindo ao BetShopTV. Site em construção.</p>
-    <script src="js/main.js"></script>
+  <!-- Cabeçalho -->
+  <header>
+    <video class="header-video" autoplay loop muted playsinline>
+     <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+      Seu navegador não suporta a tag de vídeo.
+    </video>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main>
+<section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">    
+<div class="button-container">
+      <a href="link-para-como-funciona.html" class="botao-off">COMO FUNCIONA?</a>
+      <a href="link-para-rifas.html" class="botao-main">APOSTE<br>&nbsp;◖RIFAS◗&nbsp;</a>
+      <a href="link-para-ofertas.html" class="botao-main">APOSTE<br>&nbsp;◖OFERTAS◗&nbsp;</a>
+      <a href="link-para-faq.html" class="botao-main">PERGUNTAS<br>FREQUENTES</a>
+      <a href="link-para-sobre.html" class="botao-main">SOBRE O PROJETO</a>
+      <a href="link-para-contato.html" class="botao-main">CONTATO</a>
+    </div>
+</section>
+
+<br><br>
+    <!-- Seção adaptada com o conteúdo e estilo do CÓDIGO 2 -->
+    <section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">
+      
+      <h1><strong><span style="color:#FF0000">⦿</span> <span style="color:#2b2424">COMO FUNCIONA</span></strong></h1>
+
+      <p><span style="color:#2b2424">&nbsp;&nbsp;As apostas disponíveis são divididas entre <strong>RIFAS</strong>, <strong>OFERTAS</strong> e <strong>LEILÕES</strong>.</span></p>
+
+      <p><span style="color:#FF0000">&nbsp;&nbsp;𑇡 <strong>RIFAS</strong></span></p>
+
+      <p><span style="color:#2b2424">&nbsp;&nbsp;&nbsp; São duas rifas disponíveis: na <strong>COLUNA </strong><span style="color:#FF0000"><strong>A</strong></span><span style="color:#2b2424">, será disputado o trabalho </span><span style="color:#FF0000"><strong><em>EVA TV Man</em></strong></span><span style="color:#2b2424"> e, na <strong>COLUNA </strong><span style="color:#FF0000"><strong>X</strong></span><span style="color:#2b2424">, </span><span style="color:#FF0000"><strong><em>Chop Shop AV</em></strong></span><span style="color:#2b2424">, ambas realizadas em 2025 pelo artista Pedro Gallego.</span></p>
+
+      <p><span style="color:#FF0000"><strong>&nbsp;&nbsp;&nbsp;&nbsp;◗</strong></span><span style="color:#2b2424"><strong> <em>EVA TV Man</em></strong>, na <strong>COLUNA </strong><span style="color:#FF0000"><strong>A</strong></span><span style="color:#2b2424">, será rifado normalmente, ou seja, a pessoa sorteada será contemplada com o trabalho integral.</span></p>
+
+      <p><span style="color:#FF0000"><strong>&nbsp;&nbsp;&nbsp;&nbsp;◗</strong></span><span style="color:#2b2424"><strong> <em>Chop Shop AV</em></strong>, na <strong>COLUNA </strong><span style="color:#FF0000"><strong>X</strong></span><span style="color:#2b2424">, é composta por <strong>sete partes </strong>— referentes aos meses de publicação das revistas utilizadas para compor o trabalho — que abrigam <strong>mais de 100 peças</strong> que serão produzidas, divulgadas e postas à venda separadamente até a semana anterior aos sorteios finais. Ao apostar nesta coluna, a pessoa sorteada será contemplada com as peças remanescentes deste trabalho e todos os suportes traseiros nele utilizados.</span></p>
+
+      <p><span style="color:#FF0000"><strong>&nbsp;&nbsp;&nbsp;</strong></span><span style="color:#2b2424">É possível apostar em quantas colunas e números desejar: <strong>o custo da aposta em </strong><span style="color:#FF0000"><strong>1 número</strong></span><span style="color:#2b2424"><strong> é </strong></span><span style="color:#FF0000"><strong>$30</strong></span><span style="color:#2b2424">, mas se quiser apostar em mais números de uma só vez, por </span><span style="color:#FF0000"><strong>$50</strong></span><span style="color:#2b2424"><strong> você pode escolher </strong></span><span style="color:#FF0000"><strong>2 números</strong></span><span style="color:#2b2424">, podendo ser distribuídos em uma mesma coluna ou em colunas diferentes.</span></p>
+
+      <p><span style="color:#FF0000">&nbsp;&nbsp;𑇢 <strong>OFERTAS</strong></span></p>
+
+      <p><span style="color:#2b2424">&nbsp;&nbsp;&nbsp;As <strong>peças</strong> que constituem <strong><em>Chop Shop AV</em></strong>, da <strong>COLUNA </strong><span style="color:#FF0000"><strong>X</strong></span><span style="color:#2b2424">, estão disponíveis para vendas avulsas à medida em que forem produzidas e aqui publicadas, dividindo-se em cotas </span><span style="color:#FF0000"><strong>a partir de $150!</strong></span></p>
+
+      <p><span style="color:#2b2424"><strong>&nbsp;&nbsp;&nbsp;Todas as peças</strong>, exceto as que forem destinadas ao leilão, <strong>serão postas em </strong><span style="color:#FF0000"><strong>OFERTA</strong></span><span style="color:#2b2424"><strong> pela cota mínima de $150</strong> ao menos uma vez até a data dos sorteios finais, pelo período mínimo de 8 horas.</span></p>
+
+      <p><span style="color:#FF0000">&nbsp;&nbsp;𑇣 <strong>LEILÕES</strong></span></p>
+
+      <p><span style="color:#2b2424">&nbsp;&nbsp;&nbsp;Até o dia dos sorteios finais, ao menos uma peça <strong><em>Chop Shop AV</em></strong> será leiloada pelo<strong> lance mínimo de $150</strong>.</span></p>
+
+      <p><span style="color:#2b2424">&nbsp;&nbsp;&nbsp;Para cobrir um lance, a pessoa interessada deve oferecer uma quantia <strong>no mínimo $50 superior ao último lance</strong> registrado.</span></p>
+
+      <p>&nbsp;</p>
+
+      <p><strong><span style="color:#FF0000">⪼</span><span style="color:#2b2424"> PASSO A PASSO</span></strong></p>
+
+      <p><span style="color:#FF0000"><strong>1</strong></span><span style="color:#2b2424">⎠ </span><span style="color:#FF0000"><strong>ESCOLHA SEUS NÚMEROS</strong></span></p>
+
+      <p><span style="color:#FF0000">$<strong>30</strong> ⇴</span><span style="color:#2b2424"> 1 número</span></p>
+
+      <p><span style="color:#FF0000">$<strong>50</strong> ⇴</span><span style="color:#2b2424"> 2 números na mesma coluna ou em colunas distintas</span></p>
+
+      <p><span style="color:#FF0000"><strong>2</strong></span><span style="color:#2b2424">⎠ </span><span style="color:#FF0000"><strong>INDIQUE SUAS ESCOLHAS e EFETUE O PAGAMENTO</strong></span></p>
+
+      <p><span style="color:#2b2424">Preencha o <a href="http://APOSTAR.COM.BR">FORMULÁRIO DE APOSTAS</a> ou envie um e-mail para betshoptv<a href="mailto:betshoptv@gmail.com">@</a>gmail.com contendo os seguintes itens:</span></p>
+
+      <p><span style="color:#2b2424">Nome completo</span></p>
+      <p><span style="color:#2b2424">Telefone e e-mail para contato</span></p>
+      <p><span style="color:#2b2424">Números em que deseja apostar</span></p>
+      <p><span style="color:#2b2424">Comprovante de pagamento</span></p>
+      <p><span style="color:#2b2424">Os pagamentos podem ser feitos em PIX pela chave betshoptv<a href="mailto:betshoptv@gmail.com">@</a>gmail.com ou via <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" target="_blank" rel="noreferrer">PayPal</a>.</span></p>
+
+      <p><span style="color:#FF0000"><strong>3</strong></span><span style="color:#2b2424">⎠ </span><span style="color:#FF0000"><strong>RECEBA SEU COMPROVANTE DE APOSTA</strong></span></p>
+      <p><span style="color:#2b2424">Em até 36h você receberá a confirmação das apostas efetuadas.</span></p>
+
+      <p><span style="color:#FF0000"><strong>4</strong></span><span style="color:#2b2424">⎠ </span><span style="color:#FF0000"><strong>SORTE NOS SORTEIOS!</strong></span></p>
+      <p><span style="color:#2b2424">Agora é só torcer e aguardar o </span><strong><span style="color:#FF0000">resultado dos sorteios finais</span></strong><span style="color:#2b2424">, realizados no dia </span><span style="color:#FF0000"><strong>9 de agosto de 2025</strong></span><span style="color:#2b2424">.</span></p>
+
+    </section>
+  </main>
+
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+
 </body>
 </html>
+
+
+
+
+
