@@ -79,35 +79,93 @@
     }
     .number-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); /* Creates a responsive grid */
-      gap: 5px;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Adjusted minmax for new content */
+      gap: 8px; /* Adjusted gap */
       margin-top: 10px;
     }
+    /* Base .raffle-number style */
     .raffle-number {
-      padding: 10px;
-      border: 1px solid #ccc;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px;
+      min-height: 55px; 
       cursor: pointer;
-      font-weight: bold;
       border-radius: 3px;
+      text-align: center;
+      /* transition: all 0.2s ease-in-out; */ /* Optional: for hover effects */
     }
+
+    /* Base styling for .number-code and .number-name */
+    .number-code {
+      font-weight: bold;
+      font-size: 0.9em;
+      display: block;
+    }
+    .number-name {
+      font-size: 0.7em;
+      display: block;
+      margin-top: 2px;
+      line-height: 1.1;
+    }
+
+    /* State: Available */
     .raffle-number.available {
-      background-color: #e6ffe6; /* Light green for available */
-      color: #333;
+      border: 1px solid #ff0000;
+      background-color: transparent;
+      color: #ff0000; 
     }
+    .raffle-number.available .number-code,
+    .raffle-number.available .number-name {
+      color: #ff0000;
+    }
+
+    /* State: Available Hover */
     .raffle-number.available:hover {
-      background-color: #ccffcc; /* Darker green on hover */
+      border-color: #2b2424;
     }
+    .raffle-number.available:hover .number-code,
+    .raffle-number.available:hover .number-name {
+      color: #2b2424;
+    }
+
+    /* State: Unavailable */
     .raffle-number.unavailable {
-      background-color: #f0f0f0; /* Grey for unavailable */
-      color: #aaa;
+      border: 1px solid transparent; 
+      background-color: transparent;
+      color: #696969;
       cursor: not-allowed;
       text-decoration: line-through;
     }
+    .raffle-number.unavailable .number-code,
+    .raffle-number.unavailable .number-name {
+      color: #696969;
+      text-decoration: line-through; /* Ensure children also get line-through */
+    }
+    /* Ensure line-through doesn't get removed by other styles if needed */
+    .raffle-number.unavailable * {
+       /* text-decoration: line-through !important; /* Using more specific selectors first */
+    }
+     .raffle-number.unavailable .number-code, .raffle-number.unavailable .number-name {
+        text-decoration: inherit !important; /* More specific way to ensure line-through */
+    }
+
+
+    /* State: Selected */
     .raffle-number.selected {
-      background-color: #ffcc00; /* Yellow for selected */
-      color: #000;
-      border: 2px solid #FF0000;
+      border: 1px solid #FF0000; 
+      background-color: #ffcc00; 
+      color: #000000; 
+    }
+    .raffle-number.selected .number-code,
+    .raffle-number.selected .number-name {
+      color: #000000; 
+      text-decoration: none; 
+    }
+    /* Remove line-through for selected items */
+    .raffle-number.selected *, .raffle-number.selected {
+        text-decoration: none !important;
     }
     #selection-summary {
       margin-top: 20px;
@@ -219,12 +277,18 @@
         font-size: 1.5em;
       }
       .number-grid {
-        grid-template-columns: repeat(auto-fill, minmax(35px, 1fr)); /* Slightly smaller numbers on mobile */
-        gap: 3px;
+        grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); /* Adjust for mobile */
+        gap: 5px;
       }
       .raffle-number {
-        padding: 8px; /* Slightly smaller padding */
-        font-size: 0.9em;
+        padding: 5px;
+        min-height: 45px; /* Adjust for mobile */
+      }
+      .number-code {
+        font-size: 0.8em;
+      }
+      .number-name {
+        font-size: 0.65em;
       }
       .submit-raffle-button {
         padding: 10px 20px;
@@ -272,214 +336,14 @@
       <h2>RIFA COLUNA A: <em>EVA TV Man</em></h2>
       <p>Selecione seus números abaixo:</p>
       <div class="number-grid">
-        <div class="raffle-number available" data-number="1">1</div>
-        <div class="raffle-number available" data-number="2">2</div>
-        <div class="raffle-number available" data-number="3">3</div>
-        <div class="raffle-number available" data-number="4">4</div>
-        <div class="raffle-number unavailable" data-number="5">5</div>
-        <div class="raffle-number available" data-number="6">6</div>
-        <div class="raffle-number available" data-number="7">7</div>
-        <div class="raffle-number available" data-number="8">8</div>
-        <div class="raffle-number available" data-number="9">9</div>
-        <div class="raffle-number unavailable" data-number="10">10</div>
-        <div class="raffle-number available" data-number="11">11</div>
-        <div class="raffle-number available" data-number="12">12</div>
-        <div class="raffle-number available" data-number="13">13</div>
-        <div class="raffle-number available" data-number="14">14</div>
-        <div class="raffle-number unavailable" data-number="15">15</div>
-        <div class="raffle-number available" data-number="16">16</div>
-        <div class="raffle-number available" data-number="17">17</div>
-        <div class="raffle-number available" data-number="18">18</div>
-        <div class="raffle-number available" data-number="19">19</div>
-        <div class="raffle-number available" data-number="20">20</div>
-        <div class="raffle-number available" data-number="21">21</div>
-        <div class="raffle-number available" data-number="22">22</div>
-        <div class="raffle-number available" data-number="23">23</div>
-        <div class="raffle-number available" data-number="24">24</div>
-        <div class="raffle-number available" data-number="25">25</div>
-        <div class="raffle-number available" data-number="26">26</div>
-        <div class="raffle-number available" data-number="27">27</div>
-        <div class="raffle-number available" data-number="28">28</div>
-        <div class="raffle-number available" data-number="29">29</div>
-        <div class="raffle-number available" data-number="30">30</div>
-        <div class="raffle-number available" data-number="31">31</div>
-        <div class="raffle-number available" data-number="32">32</div>
-        <div class="raffle-number available" data-number="33">33</div>
-        <div class="raffle-number available" data-number="34">34</div>
-        <div class="raffle-number available" data-number="35">35</div>
-        <div class="raffle-number available" data-number="36">36</div>
-        <div class="raffle-number available" data-number="37">37</div>
-        <div class="raffle-number available" data-number="38">38</div>
-        <div class="raffle-number available" data-number="39">39</div>
-        <div class="raffle-number available" data-number="40">40</div>
-        <div class="raffle-number available" data-number="41">41</div>
-        <div class="raffle-number available" data-number="42">42</div>
-        <div class="raffle-number available" data-number="43">43</div>
-        <div class="raffle-number available" data-number="44">44</div>
-        <div class="raffle-number available" data-number="45">45</div>
-        <div class="raffle-number available" data-number="46">46</div>
-        <div class="raffle-number available" data-number="47">47</div>
-        <div class="raffle-number available" data-number="48">48</div>
-        <div class="raffle-number available" data-number="49">49</div>
-        <div class="raffle-number available" data-number="50">50</div>
-        <div class="raffle-number available" data-number="51">51</div>
-        <div class="raffle-number available" data-number="52">52</div>
-        <div class="raffle-number available" data-number="53">53</div>
-        <div class="raffle-number available" data-number="54">54</div>
-        <div class="raffle-number available" data-number="55">55</div>
-        <div class="raffle-number available" data-number="56">56</div>
-        <div class="raffle-number available" data-number="57">57</div>
-        <div class="raffle-number available" data-number="58">58</div>
-        <div class="raffle-number available" data-number="59">59</div>
-        <div class="raffle-number available" data-number="60">60</div>
-        <div class="raffle-number available" data-number="61">61</div>
-        <div class="raffle-number available" data-number="62">62</div>
-        <div class="raffle-number available" data-number="63">63</div>
-        <div class="raffle-number available" data-number="64">64</div>
-        <div class="raffle-number available" data-number="65">65</div>
-        <div class="raffle-number available" data-number="66">66</div>
-        <div class="raffle-number available" data-number="67">67</div>
-        <div class="raffle-number available" data-number="68">68</div>
-        <div class="raffle-number available" data-number="69">69</div>
-        <div class="raffle-number available" data-number="70">70</div>
-        <div class="raffle-number available" data-number="71">71</div>
-        <div class="raffle-number available" data-number="72">72</div>
-        <div class="raffle-number available" data-number="73">73</div>
-        <div class="raffle-number available" data-number="74">74</div>
-        <div class="raffle-number available" data-number="75">75</div>
-        <div class="raffle-number available" data-number="76">76</div>
-        <div class="raffle-number available" data-number="77">77</div>
-        <div class="raffle-number available" data-number="78">78</div>
-        <div class="raffle-number available" data-number="79">79</div>
-        <div class="raffle-number available" data-number="80">80</div>
-        <div class="raffle-number available" data-number="81">81</div>
-        <div class="raffle-number available" data-number="82">82</div>
-        <div class="raffle-number available" data-number="83">83</div>
-        <div class="raffle-number available" data-number="84">84</div>
-        <div class="raffle-number available" data-number="85">85</div>
-        <div class="raffle-number available" data-number="86">86</div>
-        <div class="raffle-number available" data-number="87">87</div>
-        <div class="raffle-number available" data-number="88">88</div>
-        <div class="raffle-number available" data-number="89">89</div>
-        <div class="raffle-number available" data-number="90">90</div>
-        <div class="raffle-number available" data-number="91">91</div>
-        <div class="raffle-number available" data-number="92">92</div>
-        <div class="raffle-number available" data-number="93">93</div>
-        <div class="raffle-number available" data-number="94">94</div>
-        <div class="raffle-number available" data-number="95">95</div>
-        <div class="raffle-number available" data-number="96">96</div>
-        <div class="raffle-number available" data-number="97">97</div>
-        <div class="raffle-number available" data-number="98">98</div>
-        <div class="raffle-number available" data-number="99">99</div>
-        <div class="raffle-number available" data-number="100">100</div>
-      </div>
+        </div>
     </section>
 
     <section id="coluna-x" class="raffle-section">
       <h2>RIFA COLUNA X: <em>Chop Shop AV</em></h2>
       <p>Selecione seus números abaixo:</p>
       <div class="number-grid">
-        <div class="raffle-number available" data-number="1">1</div>
-        <div class="raffle-number available" data-number="2">2</div>
-        <div class="raffle-number available" data-number="3">3</div>
-        <div class="raffle-number available" data-number="4">4</div>
-        <div class="raffle-number available" data-number="5">5</div>
-        <div class="raffle-number available" data-number="6">6</div>
-        <div class="raffle-number unavailable" data-number="7">7</div>
-        <div class="raffle-number available" data-number="8">8</div>
-        <div class="raffle-number available" data-number="9">9</div>
-        <div class="raffle-number available" data-number="10">10</div>
-        <div class="raffle-number available" data-number="11">11</div>
-        <div class="raffle-number available" data-number="12">12</div>
-        <div class="raffle-number available" data-number="13">13</div>
-        <div class="raffle-number unavailable" data-number="14">14</div>
-        <div class="raffle-number available" data-number="15">15</div>
-        <div class="raffle-number available" data-number="16">16</div>
-        <div class="raffle-number available" data-number="17">17</div>
-        <div class="raffle-number available" data-number="18">18</div>
-        <div class="raffle-number available" data-number="19">19</div>
-        <div class="raffle-number available" data-number="20">20</div>
-        <div class="raffle-number unavailable" data-number="21">21</div>
-        <div class="raffle-number available" data-number="22">22</div>
-        <div class="raffle-number available" data-number="23">23</div>
-        <div class="raffle-number available" data-number="24">24</div>
-        <div class="raffle-number available" data-number="25">25</div>
-        <div class="raffle-number available" data-number="26">26</div>
-        <div class="raffle-number available" data-number="27">27</div>
-        <div class="raffle-number available" data-number="28">28</div>
-        <div class="raffle-number available" data-number="29">29</div>
-        <div class="raffle-number available" data-number="30">30</div>
-        <div class="raffle-number available" data-number="31">31</div>
-        <div class="raffle-number available" data-number="32">32</div>
-        <div class="raffle-number available" data-number="33">33</div>
-        <div class="raffle-number available" data-number="34">34</div>
-        <div class="raffle-number available" data-number="35">35</div>
-        <div class="raffle-number available" data-number="36">36</div>
-        <div class="raffle-number available" data-number="37">37</div>
-        <div class="raffle-number available" data-number="38">38</div>
-        <div class="raffle-number available" data-number="39">39</div>
-        <div class="raffle-number available" data-number="40">40</div>
-        <div class="raffle-number available" data-number="41">41</div>
-        <div class="raffle-number available" data-number="42">42</div>
-        <div class="raffle-number available" data-number="43">43</div>
-        <div class="raffle-number available" data-number="44">44</div>
-        <div class="raffle-number available" data-number="45">45</div>
-        <div class="raffle-number available" data-number="46">46</div>
-        <div class="raffle-number available" data-number="47">47</div>
-        <div class="raffle-number available" data-number="48">48</div>
-        <div class="raffle-number available" data-number="49">49</div>
-        <div class="raffle-number available" data-number="50">50</div>
-        <div class="raffle-number available" data-number="51">51</div>
-        <div class="raffle-number available" data-number="52">52</div>
-        <div class="raffle-number available" data-number="53">53</div>
-        <div class="raffle-number available" data-number="54">54</div>
-        <div class="raffle-number available" data-number="55">55</div>
-        <div class="raffle-number available" data-number="56">56</div>
-        <div class="raffle-number available" data-number="57">57</div>
-        <div class="raffle-number available" data-number="58">58</div>
-        <div class="raffle-number available" data-number="59">59</div>
-        <div class="raffle-number available" data-number="60">60</div>
-        <div class="raffle-number available" data-number="61">61</div>
-        <div class="raffle-number available" data-number="62">62</div>
-        <div class="raffle-number available" data-number="63">63</div>
-        <div class="raffle-number available" data-number="64">64</div>
-        <div class="raffle-number available" data-number="65">65</div>
-        <div class="raffle-number available" data-number="66">66</div>
-        <div class="raffle-number available" data-number="67">67</div>
-        <div class="raffle-number available" data-number="68">68</div>
-        <div class="raffle-number available" data-number="69">69</div>
-        <div class="raffle-number available" data-number="70">70</div>
-        <div class="raffle-number available" data-number="71">71</div>
-        <div class="raffle-number available" data-number="72">72</div>
-        <div class="raffle-number available" data-number="73">73</div>
-        <div class="raffle-number available" data-number="74">74</div>
-        <div class="raffle-number available" data-number="75">75</div>
-        <div class="raffle-number available" data-number="76">76</div>
-        <div class="raffle-number available" data-number="77">77</div>
-        <div class="raffle-number available" data-number="78">78</div>
-        <div class="raffle-number available" data-number="79">79</div>
-        <div class="raffle-number available" data-number="80">80</div>
-        <div class="raffle-number available" data-number="81">81</div>
-        <div class="raffle-number available" data-number="82">82</div>
-        <div class="raffle-number available" data-number="83">83</div>
-        <div class="raffle-number available" data-number="84">84</div>
-        <div class="raffle-number available" data-number="85">85</div>
-        <div class="raffle-number available" data-number="86">86</div>
-        <div class="raffle-number available" data-number="87">87</div>
-        <div class="raffle-number available" data-number="88">88</div>
-        <div class="raffle-number available" data-number="89">89</div>
-        <div class="raffle-number available" data-number="90">90</div>
-        <div class="raffle-number available" data-number="91">91</div>
-        <div class="raffle-number available" data-number="92">92</div>
-        <div class="raffle-number available" data-number="93">93</div>
-        <div class="raffle-number available" data-number="94">94</div>
-        <div class="raffle-number available" data-number="95">95</div>
-        <div class="raffle-number available" data-number="96">96</div>
-        <div class="raffle-number available" data-number="97">97</div>
-        <div class="raffle-number available" data-number="98">98</div>
-        <div class="raffle-number available" data-number="99">99</div>
-        <div class="raffle-number available" data-number="100">100</div>
-      </div>
+        </div>
     </section>
 
     <section id="selection-summary">
@@ -529,25 +393,91 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  const itemNames = [
+    "40 graus", "5ª avenida", "Acionando o contatinho", "Ai, amiga", "Algodão doce", "Amanhecer", "Amarelo Frevo", "Ameixa", "Ar Fresco", "Areia", 
+    "Atmosfera", "Azul Eclesiástico", "Azul biônico", "Batida de Amendoim", "Batida de coco", "Beijo roubado", "Bem-Estar", "Black", "Bolsa de Praia", "Boneca", 
+    "Brinde da virada", "Brocado Rico", "Café", "Caminho do Jardim", "Camurça", "Capuccino Doce", "Casa Portuguesa", "Casamento do Verão", "Chafariz da Praça", "Cinza Tecnológico", 
+    "Cinza minimalista", "Clássico", "Colinas de Inverno", "Concha Prateada", "Coral não tem igual", "Corpo bronzeado", "Corpo tropical", "Cristal rosa", "Céu da Antártida", "De repente, paixão", 
+    "Deixa beijar", "Del Sol", "Delicadeza", "Dia Dourado", "Dieta hoje não", "Doce ou Travessura", "Doçura da Primavera", "Drama Noturno", "Dunas de areia", "Encontro Feliz", 
+    "Encontro às escuras", "Estrela Cadente", "Estrela de luz", "Explícita", "Fazendo a fitness", "Fazendo vários nadas", "Figo Verde", "Fonte Secreta", "Framboesa", "Framboesa Radical", 
+    "França", "Gabriele", "Garota verão", "Geada", "Geléia de Cupuaçu", "Glória da Colheita", "Grace", "Grafite fashionista", "Grande Metrópole", "Harmonia Lilás", 
+    "Hoje sou minha", "Horizonte", "Intuição Divina", "Jabuticaba", "Jardim Misterioso", "Jeans", "Leite de coco", "Ligada no 220v", "Lilás Esplendoroso", "Lugar de Afeto", 
+    "Luz da Floresta", "Luz na Janela", "Mais que preto, black", "Malva misterioso", "Mantilha", "Marrom da Riqueza", "Marrom mutante", "Mauve urban", "Meia de Seda", "Melancia", 
+    "Mil e uma noites", "Momento de Promessa", "Momento selfie", "Mostarda Quente", "Mostarda em Grão", "Movie Star", "Moça Bonita", "Na dúvida, vinho!", "Nariz de palhaço", "Neutro Nepal", 
+    "Noite de gala", "Noite quente", "Nua & crua", "Nude", "Nude desejo", "Nuvens Roxas", "Não mexe comigo", "Ocre Italiano", "Papel de Bala", "Pimenta rosa", 
+    "Pinhão", "Pitada de Alecrim", "Pote de Argila", "Precioso Momento", "Preferia estar dormindo", "Prenda natural", "Puro glamour", "Pétala", "Pétala branca", "Pêra Madura", 
+    "Pó de Pêssego", "Quadrado azul", "Reflexo de Cristal", "Renascer", "Repouso Tranquilo", "Rosa Cintilante", "Rosa Vintage", "Rosa antigo", "Rosa da vez", "Rosa floral", 
+    "Rota do Deserto", "Rota do Vinho", "Roupa de Bebê", "Roxo místico", "Salmão Pálido", "Samba juliana", "Sem retoque", "Sensação de Rosas", "Sereno da Noite", 
+    "Seta vermelha", "Sherazade", "Sol do oriente", "Solário", "Sonho de Anjo", "Suculenta", "Sálvia", "Só dá nude", "Tapete vermelho", "Teatro de Bonecos", "Teia de Aranha", 
+    "Toque Casual", "Toque de Centeio", "Toque de Noz-Moscada", "Trevo Pálido", "Trilha Verde", "Tô bege!", "Urban chic", "Urso de Pelúcia", "Valência", "Vaso de Hortênsia", 
+    "Ventos Calmos", "Verde Pasto", "Vermelha obsessão", "Vermelho ivete", "Vermelho proibido", "Vestida pra matar", "Via Láctea", "Violeta Preciosa", "Violeta Profundo", "Vou de rosa"
+  ];
+
+  const soldItemsA = ["A029", "A060"]; // "Chafariz da Praça", "Framboesa Radical"
+  const soldItemsX = ["X029", "X060"];
+
+  // Refined function definition
+  function populateGrid(gridElement, columnPrefix, namesArray, soldList) {
+    if (!gridElement) return; // Guard clause if grid element doesn't exist
+    gridElement.innerHTML = ''; // Clear existing items
+
+    for (let i = 1; i <= 170; i++) {
+      const numberStr = String(i).padStart(3, '0');
+      const itemCode = columnPrefix + numberStr;
+      const itemName = namesArray[i-1] || "Item " + itemCode; // Use namesArray parameter
+      const isSold = soldList.includes(itemCode);
+
+      const raffleNumberDiv = document.createElement('div');
+      raffleNumberDiv.classList.add('raffle-number');
+      raffleNumberDiv.classList.add(isSold ? 'unavailable' : 'available');
+      raffleNumberDiv.dataset.number = itemCode; // Use itemCode as data-number for uniqueness
+      raffleNumberDiv.dataset.name = itemName;
+
+      const numberCodeSpan = document.createElement('span');
+      numberCodeSpan.classList.add('number-code');
+      numberCodeSpan.textContent = itemCode;
+
+      const numberNameSpan = document.createElement('span');
+      numberNameSpan.classList.add('number-name');
+      numberNameSpan.textContent = itemName;
+
+      raffleNumberDiv.appendChild(numberCodeSpan);
+      raffleNumberDiv.appendChild(numberNameSpan);
+      grid.appendChild(raffleNumberDiv);
+    }
+  }
+
+  // Adjusted calls to populateGrid
+  const gridA = document.querySelector('#coluna-a .number-grid');
+  const gridX = document.querySelector('#coluna-x .number-grid');
+
+  if (gridA) {
+    populateGrid(gridA, 'A', itemNames, soldItemsA); // Pass itemNames (global)
+  }
+  if (gridX) {
+    populateGrid(gridX, 'X', itemNames, soldItemsX); // Pass itemNames (global)
+  }
+
   const numberGrids = document.querySelectorAll('.number-grid');
   const selectedNumbersList = document.getElementById('selected-numbers-list');
   const totalPriceDisplay = document.getElementById('total-price');
-  let selectedNumbers = []; // Should be accessible to submission script part
+  let selectedNumbers = [];
 
   numberGrids.forEach(grid => {
     grid.addEventListener('click', (event) => {
-      const target = event.target;
-      if (target.classList.contains('raffle-number') && target.classList.contains('available')) {
-        const number = target.dataset.number;
-        const raffleType = grid.closest('.raffle-section').id === 'coluna-a' ? 'A' : 'X';
-        const uniqueId = raffleType + '-' + number;
+      const target = event.target.closest('.raffle-number'); // Ensure click on child elements selects the parent
+      if (target && target.classList.contains('available')) {
+        const itemCode = target.dataset.number; // This is now AXXX or XXXX
+        // const itemName = target.dataset.name; // If needed later
+
+        const itemName = target.dataset.name; 
 
         if (target.classList.contains('selected')) {
           target.classList.remove('selected');
-          selectedNumbers = selectedNumbers.filter(item => item.id !== uniqueId);
+          selectedNumbers = selectedNumbers.filter(item => item.id !== itemCode);
         } else {
           target.classList.add('selected');
-          selectedNumbers.push({ id: uniqueId, number: number, type: raffleType, display: `Coluna ${raffleType}, N° ${number}` });
+          selectedNumbers.push({ id: itemCode, name: itemName }); // Store id (code) and name
         }
         updateSelectionSummary();
       }
@@ -556,9 +486,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateSelectionSummary() {
     if (selectedNumbers.length === 0) {
-      selectedNumbersList.textContent = 'Nenhum número selecionado.';
+      selectedNumbersList.innerHTML = 'Nenhum número selecionado.'; // Use innerHTML to clear previous spans
     } else {
-      selectedNumbersList.innerHTML = selectedNumbers.map(item => `<span>${item.display}</span>`).join('');
+      // Display both code and name
+      selectedNumbersList.innerHTML = selectedNumbers.map(item => `<span style="display: block; margin-bottom: 5px;">${item.id} ⩺ ${item.name}</span>`).join('');
     }
     calculatePrice();
   }
@@ -582,12 +513,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const submissionInstructions = document.getElementById('submission-instructions');
 
   raffleForm.addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent actual form submission
+    event.preventDefault(); 
 
     const fullName = document.getElementById('fullName').value;
     const phone = document.getElementById('phone').value;
     const email = document.getElementById('email').value;
-    const paymentProofFile = document.getElementById('paymentProof').files[0]; // Get the file
+    const paymentProofFile = document.getElementById('paymentProof').files[0]; 
 
     if (selectedNumbers.length === 0) {
       alert('Por favor, selecione pelo menos um número para a rifa.');
@@ -608,19 +539,16 @@ document.addEventListener('DOMContentLoaded', () => {
     emailBody += `Nome Completo: ${fullName}\n`;
     emailBody += `Telefone: ${phone}\n`;
     emailBody += `E-mail: ${email}\n\n`;
-    emailBody += `Números Selecionados:\n`;
+    emailBody += `Números Selecionados (Código ⩺ Nome):\n`;
     selectedNumbers.forEach(item => {
-      emailBody += `- ${item.display}\n`;
+      emailBody += `- ${item.id} ⩺ ${item.name}\n`; 
     });
     emailBody += `\nTotal Calculado: R$${totalPriceDisplay.textContent}\n\n`;
     emailBody += `---Comprovante de Pagamento anexado a este e-mail---`;
 
     const mailtoLink = \`mailto:betshoptv@gmail.com?subject=${encodeURIComponent('Participação na Rifa BetShopTV')}&body=${encodeURIComponent(emailBody)}\`;
 
-    // Show instructions
     submissionInstructions.style.display = 'block';
-    
-    // Attempt to open mail client
     window.location.href = mailtoLink;
   });
 });
