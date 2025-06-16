@@ -396,7 +396,7 @@
   <!-- Conteúdo Principal -->
   <main>
 
-  <div class="container">
+    <div class="container">
     <h1>Calculadora de Prêmios</h1>
     <label for="pecas">Peças disponíveis:</label><br>
     <input type="number" id="pecas" min="17" value="17"><br>
@@ -431,18 +431,27 @@
         }
       }
 
-      // Passo 3: Distribuir peças excedentes a novas pessoas
+      // Passo 3: Distribuir peças excedentes para novas pessoas
+      let novaPessoa = 17; // Começar a partir da 18ª pessoa
       while (pecasRestantes > 0) {
-        let novasPessoas = Math.ceil(pecasRestantes / 3);
-        for (let i = 0; i < novasPessoas && pecasRestantes > 0; i++) {
-          let pecasParaPessoa = Math.min(pecasRestantes, 3);
-          premiados.push(pecasParaPessoa);
-          pecasRestantes -= pecasParaPessoa;
+        // Adicionar nova pessoa se necessário
+        if (!premiados[novaPessoa]) {
+          premiados[novaPessoa] = 0;
+        }
+
+        // Dar até 3 peças para a nova pessoa
+        let distribuir = Math.min(3 - premiados[novaPessoa], pecasRestantes);
+        premiados[novaPessoa] += distribuir;
+        pecasRestantes -= distribuir;
+
+        // Mover para a próxima pessoa
+        if (premiados[novaPessoa] === 3) {
+          novaPessoa++;
         }
       }
 
       resultado.innerHTML = `
-        <p>Total de pessoas premiadas: ${premiados.length}</p>
+        <p>Total de pessoas premiadas: ${premiados.filter(p => p > 0).length}</p>
         <p>Distribuição: ${premiados.join(", ")}</p>
       `;
     }
