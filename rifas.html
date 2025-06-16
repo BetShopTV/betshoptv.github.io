@@ -105,6 +105,23 @@
       -moz-appearance: textfield; /* Firefox */
     }
 
+    .calculate-button {
+      border: 2px solid #ff0000;
+      background-color: transparent;
+      color: #ff0000;
+      padding: 6px 12px; /* Slightly smaller padding for inline feel */
+      margin-left: 10px; 
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9em; /* Slightly smaller font size */
+      border-radius: 3px; /* Consistent with input fields */
+      vertical-align: middle; /* Align with text and inputs */
+    }
+    .calculate-button:hover {
+      background-color: #ff0000;
+      color: #ffffff; /* White text on hover */
+    }
+
     /* Estilos específicos da página de rifas */
     .raffle-section, #selection-summary, #user-form-section {
       text-align: left; /* Override text-align:center from main if it was applied */
@@ -384,6 +401,7 @@
         <input type="number" id="quantidade-numeros" min="0" value="0"> 
         números sai por R$ 
         <span id="resultado-custo" style="font-weight: bold;">0</span>!
+        <button type="button" id="btn-calcular-custo" class="calculate-button">CALCULAR</button>
       </p>
     </div>
     <div class="calculator-box" id="calc-quantidade-por-dinheiro">
@@ -393,6 +411,7 @@
         dá pra apostar em 
         <span id="resultado-quantidade-numeros" style="font-weight: bold;">0</span> 
         números e <span id="resultado-dinheiro-sobra-falta" style="font-weight: bold;">...</span>
+        <button type="button" id="btn-calcular-quantidade" class="calculate-button">CALCULAR</button>
       </p>
     </div>
     <section id="coluna-a" class="raffle-section">
@@ -618,34 +637,34 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Logic for Caixa 1: Custo por Quantidade ---
   const quantidadeNumerosInput = document.getElementById('quantidade-numeros');
   const resultadoCustoSpan = document.getElementById('resultado-custo');
+  const btnCalcularCusto = document.getElementById('btn-calcular-custo');
 
-  if (quantidadeNumerosInput && resultadoCustoSpan) {
-    quantidadeNumerosInput.addEventListener('input', function() {
-      let quantidade = parseInt(this.value, 10);
+  if (btnCalcularCusto && quantidadeNumerosInput && resultadoCustoSpan) {
+    btnCalcularCusto.addEventListener('click', function() {
+      let quantidade = parseInt(quantidadeNumerosInput.value, 10);
       let custo = 0;
 
       if (isNaN(quantidade) || quantidade < 0) {
         quantidade = 0;
+        quantidadeNumerosInput.value = 0; // Also reset input field if invalid
       }
       
-      // Prevent non-integer values or reset if user tries to clear to empty
-      if (this.value === '' || quantidade === 0) {
-          this.value = 0; // Reset to 0 if empty or invalid
+      if (quantidade === 0) { // Explicitly handle 0 after potential reset
           custo = 0;
+          // If the original input was not '0' but became 0 due to validation, ensure input reflects this
+          if (quantidadeNumerosInput.value !== '0') {
+            quantidadeNumerosInput.value = 0;
+          }
       } else if (quantidade === 1) {
         custo = 30;
       } else if (quantidade === 2) {
         custo = 50;
       } else if (quantidade > 2) {
-        // Maximize $50 bundles
         const pares = Math.floor(quantidade / 2);
         const unitarios = quantidade % 2;
         custo = (pares * 50) + (unitarios * 30);
       }
-      // For negative or zero, custo remains 0 or is set explicitly
-      if (quantidade <= 0) {
-          custo = 0;
-      }
+      // No need for separate 'if (quantidade <=0)' check if handled by (quantidade === 0)
 
       resultadoCustoSpan.textContent = custo;
     });
@@ -655,56 +674,58 @@ document.addEventListener('DOMContentLoaded', () => {
   const dinheiroDisponivelInput = document.getElementById('dinheiro-disponivel');
   const resultadoQuantidadeNumerosSpan = document.getElementById('resultado-quantidade-numeros');
   const resultadoDinheiroSobraFaltaSpan = document.getElementById('resultado-dinheiro-sobra-falta');
+  const btnCalcularQuantidade = document.getElementById('btn-calcular-quantidade');
 
-  if (dinheiroDisponivelInput && resultadoQuantidadeNumerosSpan && resultadoDinheiroSobraFaltaSpan) {
-    dinheiroDisponivelInput.addEventListener('input', function() {
-      let dinheiro = parseInt(this.value, 10);
+  if (btnCalcularQuantidade && dinheiroDisponivelInput && resultadoQuantidadeNumerosSpan && resultadoDinheiroSobraFaltaSpan) {
+    btnCalcularQuantidade.addEventListener('click', function() {
+      let dinheiroOriginal = parseInt(dinheiroDisponivelInput.value, 10);
+      let dinheiro = dinheiroOriginal; // Work with a copy for calculations
       let numerosComprados = 0;
-      let custoTotal = 0; // Not strictly needed for final output, but good for clarity
+      let custoTotal = 0; 
       let sobraFaltaTexto = "";
 
       if (isNaN(dinheiro) || dinheiro < 0) {
         dinheiro = 0;
+        dinheiroOriginal = 0;
+        dinheiroDisponivelInput.value = 0; // Reset input field
       }
-
-      let dinheiroOriginal = parseInt(this.value, 10); // Keep original input for "falta" logic
-      if (isNaN(dinheiroOriginal) || dinheiroOriginal < 0) dinheiroOriginal = 0;
-
-
-      if (this.value === '' || dinheiroOriginal === 0) {
-          this.value = 0; // Reset to 0 if empty or invalid
+      
+      if (dinheiroOriginal === 0) { 
           numerosComprados = 0;
           sobraFaltaTexto = "sobra R$0";
+          // Ensure input field is also 0 if it was, e.g., empty or invalid leading to this path
+          if (dinheiroDisponivelInput.value !== '0') {
+            dinheiroDisponivelInput.value = 0;
+          }
       } else {
-        let dinheiroRestante = dinheiroOriginal;
         // Prioritize $50 packages (2 numbers)
-        if (dinheiroRestante >= 50) {
-          const pacotesDe50 = Math.floor(dinheiroRestante / 50);
+        if (dinheiro >= 50) {
+          const pacotesDe50 = Math.floor(dinheiro / 50);
           numerosComprados += pacotesDe50 * 2;
           custoTotal += pacotesDe50 * 50;
-          dinheiroRestante -= pacotesDe50 * 50;
+          dinheiro -= pacotesDe50 * 50; 
         }
         // Check if remaining money can buy one more $30 package (1 number)
-        if (dinheiroRestante >= 30) {
+        if (dinheiro >= 30) {
           numerosComprados += 1;
           custoTotal += 30;
-          dinheiroRestante -= 30;
+          dinheiro -= 30; 
         }
         
         if (numerosComprados > 0) {
-          sobraFaltaTexto = `sobra R$${dinheiroRestante}`;
-        } else { // Cannot buy any number
-          if (dinheiroOriginal < 30) { // Needs at least 30 for the first number
-            sobraFaltaTexto = `falta R$${30 - dinheiroOriginal} para o 1º`;
-          } else { // This case implies enough for 1 but not for 2, but the logic above should handle it.
-                  // However, if it's e.g. 40, it buys 1 for 30, sobra 10.
-                  // If it was 20, it correctly says "falta R$10 para o 1º".
-            sobraFaltaTexto = "valor insuficiente"; // Fallback, should ideally be more specific
+          sobraFaltaTexto = `sobra R$${dinheiro}`; 
+        } else { 
+          if (dinheiroOriginal < 30) { 
+            sobraFaltaTexto = `falta R$${30 - dinheiroOriginal} para o 1º número`;
+          } else { 
+            sobraFaltaTexto = "valor insuficiente"; 
           }
         }
       }
       
-      if (dinheiroOriginal <= 0) { // Ensure if input is 0 or less, output reflects that.
+      // This check might be redundant if the above logic correctly sets input to 0 for invalid/negative
+      // but serves as a final explicit reset for the output if input field value is strictly "0"
+      if (dinheiroDisponivelInput.value === '0') { 
            numerosComprados = 0;
            sobraFaltaTexto = "sobra R$0";
       }
