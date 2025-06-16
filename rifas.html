@@ -408,12 +408,26 @@ document.addEventListener('DOMContentLoaded', () => {
     "Chacrinha", "Champagne", "Chantili", "Chapéu de coco", "Charada", "Cheque sem fundo", "Chiclete de bola", "Chimpanzé", "Chinelo de dedo", "Chocolate com pimenta",
     "Choque anafilático", "Chupeta", "Cíclope", "Cigarro de palha", "Clone", "Club privé", "Cobertor de papa", "Cobra de estimação", "Cofrinho", "Cogumelo atômico",
     "Coiote", "Colar de diamantes", "Colecionador de selos", "Come-quieto", "Comida caseira", "Complexo de Édipo", "Computador central", "Conde Drácula", "Contrabando", "Conversa pra boi dormir",
-    "Copo de leite", "Cor de burro quando foge", "Cor-de-rosa choque", "Corda bamba", "Corrente de prata", "Crime organizado", "Crise de identidade", "Crista de galo", "Crocodilo", "Cruz vermelha",
-    "Cubo mágico", "Cueca de homem", "Cyborg", "Dama da noite", "Deby Loide", "Decote", "Dedetizar", "Dedo de moça", "Deflorada", "Dente de leão",
-    "Desenho animado", "Deserto do Saara", "Diabo verde", "Disco de vinil", "Disque-sexo", "Ditadura", "Doce de batata doce", "Dom Quixote", "Domingo no parque", "Doping"
+    "40 graus", "5ª avenida", "Acionando o contatinho", "Ai, amiga", "Algodão doce", "Amanhecer", "Amarelo Frevo", "Ameixa", "Ar Fresco", "Areia", 
+    "Atmosfera", "Azul Eclesiástico", "Azul biônico", "Batida de Amendoim", "Batida de coco", "Beijo roubado", "Bem-Estar", "Black", "Bolsa de Praia", "Boneca", 
+    "Brinde da virada", "Brocado Rico", "Café", "Caminho do Jardim", "Camurça", "Capuccino Doce", "Casa Portuguesa", "Casamento do Verão", "Chafariz da Praça", "Cinza Tecnológico", 
+    "Cinza minimalista", "Clássico", "Colinas de Inverno", "Concha Prateada", "Coral não tem igual", "Corpo bronzeado", "Corpo tropical", "Cristal rosa", "Céu da Antártida", "De repente, paixão", 
+    "Deixa beijar", "Del Sol", "Delicadeza", "Dia Dourado", "Dieta hoje não", "Doce ou Travessura", "Doçura da Primavera", "Drama Noturno", "Dunas de areia", "Encontro Feliz", 
+    "Encontro às escuras", "Estrela Cadente", "Estrela de luz", "Explícita", "Fazendo a fitness", "Fazendo vários nadas", "Figo Verde", "Fonte Secreta", "Framboesa", "Framboesa Radical", 
+    "França", "Gabriele", "Garota verão", "Geada", "Geléia de Cupuaçu", "Glória da Colheita", "Grace", "Grafite fashionista", "Grande Metrópole", "Harmonia Lilás", 
+    "Hoje sou minha", "Horizonte", "Intuição Divina", "Jabuticaba", "Jardim Misterioso", "Jeans", "Leite de coco", "Ligada no 220v", "Lilás Esplendoroso", "Lugar de Afeto", 
+    "Luz da Floresta", "Luz na Janela", "Mais que preto, black", "Malva misterioso", "Mantilha", "Marrom da Riqueza", "Marrom mutante", "Mauve urban", "Meia de Seda", "Melancia", 
+    "Mil e uma noites", "Momento de Promessa", "Momento selfie", "Mostarda Quente", "Mostarda em Grão", "Movie Star", "Moça Bonita", "Na dúvida, vinho!", "Nariz de palhaço", "Neutro Nepal", 
+    "Noite de gala", "Noite quente", "Nua & crua", "Nude", "Nude desejo", "Nuvens Roxas", "Não mexe comigo", "Ocre Italiano", "Papel de Bala", "Pimenta rosa", 
+    "Pinhão", "Pitada de Alecrim", "Pote de Argila", "Precioso Momento", "Preferia estar dormindo", "Prenda natural", "Puro glamour", "Pétala", "Pétala branca", "Pêra Madura", 
+    "Pó de Pêssego", "Quadrado azul", "Reflexo de Cristal", "Renascer", "Repouso Tranquilo", "Rosa Cintilante", "Rosa Vintage", "Rosa antigo", "Rosa da vez", "Rosa floral", 
+    "Rota do Deserto", "Rota do Vinho", "Roupa de Bebê", "Roxo místico", "Salmão Pálido", "Samba juliana", "Sem retoque", "Sensação de Rosas", "Sereno da Noite", 
+    "Seta vermelha", "Sherazade", "Sol do oriente", "Solário", "Sonho de Anjo", "Suculenta", "Sálvia", "Só dá nude", "Tapete vermelho", "Teatro de Bonecos", "Teia de Aranha", 
+    "Toque Casual", "Toque de Centeio", "Toque de Noz-Moscada", "Trevo Pálido", "Trilha Verde", "Tô bege!", "Urban chic", "Urso de Pelúcia", "Valência", "Vaso de Hortênsia", 
+    "Ventos Calmos", "Verde Pasto", "Vermelha obsessão", "Vermelho ivete", "Vermelho proibido", "Vestida pra matar", "Via Láctea", "Violeta Preciosa", "Violeta Profundo", "Vou de rosa"
   ];
 
-  const soldItemsA = ["A029", "A060"];
+  const soldItemsA = ["A029", "A060"]; // "Chafariz da Praça", "Framboesa Radical"
   const soldItemsX = ["X029", "X060"];
 
   function populateGrid(gridId, columnPrefix, soldItemsList) {
