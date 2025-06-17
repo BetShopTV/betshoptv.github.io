@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BetShopTV⦿com</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+    /* Estilo Geral */
+    body {
+      margin: 0;
+      font-family: 'Roboto Condensed', sans-serif;
+      background-image: url("https://corhexa.com/png/600x300/bebaba");
+      background-repeat: repeat;
+      color: #2b2424;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    a {
+      color: #ff0000;
+      text-decoration: none;
+      text-decoration-color: #ff0000;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Cabeçalho padrão (computador) */
+    header {
+      width: 100%;
+      height: auto;
+      min-height: 25vh;
+      padding: 20px 0;
+      background-color: #ff0000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 100%;
+      width: auto;
+      min-width: 100%;
+      object-fit: cover;
+      transform: translate(-50%, -50%);
+      background-color: #ff0000;
+    }
+
+    /* Conteúdo Principal */
+    main {
+      width: 90%;
+      max-width: 1200px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    main h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    main p {
+      font-size: 1.2em;
+      line-height: 1.5;
+    }
+
+    /* Botões (versão desktop) */
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px; /* Espaço entre os botões */
+      margin-top: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+.botao-main {
+  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
+  height: 50px;
+  border: 2px solid #ff0000;
+  background-color: transparent;
+  color: #ff0000;
+  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap; /* Evita quebra de texto */
+}
+.botao-off {
+  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
+  height: 50px;
+  border: 2px solid #2b2424;
+  background-color: transparent;
+  color: #2b2424;
+  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap; /* Evita quebra de texto */
+}
+
+
+    /* Responsividade: Celulares (até 768px) */
+    @media (max-width: 768px) {
+      header {
+        height: 112px;
+        min-height: 112px;
+        max-height: 112px;
+        padding: 4px 4px;
+      }
+
+      .header-video {
+        height: 100%;
+        width: auto;
+        min-width: 300%;
+        object-fit: cover;
+        object-position: center;
+        transform: translate(-50%, -50%);
+      }
+
+      main h1 {
+        font-size: 1.8em;
+      }
+
+      main p {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Cabeçalho -->
+  <header>
+    <video class="header-video" autoplay loop muted playsinline>
+     <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+      Seu navegador não suporta a tag de vídeo.
+    </video>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main>
+<section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">    
+<div class="button-container">
+      <a href="link-para-como-funciona.html" class="botao-off">COMO FUNCIONA?</a>
+      <a href="galeria.html" class="botao-main">GALERIA<BR>DE IMAGENS</a>
+      <a href="rifas.html" class="botao-main">APOSTE<br>&nbsp;◖RIFAS◗&nbsp;</a>
+      <a href="link-para-ofertas.html" class="botao-main">APOSTE<br>&nbsp;◖OFERTAS◗&nbsp;</a>
+      <a href="link-para-faq.html" class="botao-main">PERGUNTAS<br>FREQUENTES</a>
+      <a href="link-para-sobre.html" class="botao-main">SOBRE O PROJETO</a>
+      <a href="link-para-contato.html" class="botao-main">CONTATO</a>
+    </div>
+</section>
+
+<br><br>
+    <!-- Seção adaptada com o conteúdo e estilo do CÓDIGO 2 -->
+    <section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">
+      
+      <h1><strong><span style="color:#FF0000">⦿</span> <span style="color:#2b2424">COMO FUNCIONA</span></strong></h1>
+
+      <p><span style="color:#2b2424">&nbsp;&nbsp;As apostas disponíveis são divididas entre <strong>RIFAS</strong>, <strong>OFERTAS</strong> e <strong>LEILÕES</strong>.</span></p>
+
+      <p><span style="color:#FF0000">&nbsp;&nbsp;𑇡 <strong>RIFAS</strong></span></p>
+
+      <p><span style="color:#2b2424">&nbsp;&nbsp;&nbsp; São duas rifas disponíveis: na <strong>COLUNA </strong><span style="color:#FF0000"><strong>A</strong></span><span style="color:#2b2424">, será disputado o trabalho </span><span style="color:#FF0000"><strong><em>EVA TV Man</em></strong></span><span style="color:#2b2424"> e, na <strong>COLUNA </strong><span style="color:#FF0000"><strong>X</strong></span><span style="color:#2b2424">, </span><span style="color:#FF0000"><strong><em>Chop Shop AV</em></strong></span><span style="color:#2b2424">, ambas realizadas em 2025 pelo artista Pedro Gallego.</span></p>
+
+      <p><span style="color:#FF0000"><strong>&nbsp;&nbsp;&nbsp;&nbsp;◗</strong></span><span style="color:#2b2424"><strong> <em>EVA TV Man</em></strong>, na <strong>COLUNA </strong><span style="color:#FF0000"><strong>A</strong></span><span style="color:#2b2424">, será rifado normalmente, ou seja, a pessoa sorteada será contemplada com o trabalho integral.</span></p>
+
+      <p><span style="color:#FF0000"><strong>&nbsp;&nbsp;&nbsp;&nbsp;◗</strong></span><span style="color:#2b2424"><strong> <em>Chop Shop AV</em></strong>, na <strong>COLUNA </strong><span style="color:#FF0000"><strong>X</strong></span><span style="color:#2b2424">, é composta por <strong>sete partes </strong>— referentes aos meses de publicação das revistas utilizadas para compor o trabalho — que abrigam <strong>mais de 100 peças</strong> que serão produzidas, divulgadas e postas à venda separadamente até a semana anterior aos sorteios finais. Ao apostar nesta coluna, a pessoa sorteada será contemplada com as peças remanescentes deste trabalho e todos os suportes traseiros nele utilizados.</span></p>
+
+      <p><span style="color:#FF0000"><strong>&nbsp;&nbsp;&nbsp;</strong></span><span style="color:#2b2424">É possível apostar em quantas colunas e números desejar: <strong>o custo da aposta em </strong><span style="color:#FF0000"><strong>1 número</strong></span><span style="color:#2b2424"><strong> é </strong></span><span style="color:#FF0000"><strong>$30</strong></span><span style="color:#2b2424">, mas se quiser apostar em mais números de uma só vez, por </span><span style="color:#FF0000"><strong>$50</strong></span><span style="color:#2b2424"><strong> você pode escolher </strong></span><span style="color:#FF0000"><strong>2 números</strong></span><span style="color:#2b2424">, podendo ser distribuídos em uma mesma coluna ou em colunas diferentes.</span></p>
+<!-- Seção 4 - PREMIAÇÕES e RECEBIMENTO DE TRABALHOS -->
+<p><span style="color:#FF0000; font-size:18px;">&nbsp;&nbsp;&nbsp;৶&nbsp;&nbsp;</span><span style="font-size:18px; color:#2b2424; font-weight:bold;"><strong>PREMIA&Ccedil;&Otilde;ES</strong></span></p>
+
+<p style="margin-top:12px;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong><span style="font-size:16px; color:#2b2424; font-weight:bold;">1)</span></strong> As pessoas premiadas ser&atilde;o contactadas por um e-mail geral, em c&oacute;pia oculta, dentro de&nbsp;36 horas ap&oacute;s os sorteios finais com os resultados do <strong>PR&Ecirc;MIO <span style="color:#FF0000;">A</span></strong> e <strong>PR&Ecirc;MIO <span style="color:#FF0000;">X</span></strong>. Esta mensagem apresentar&aacute;&nbsp;tamb&eacute;m os n&uacute;meros das pessoas premiadas em ordem de sorteio e&nbsp;um link para visualizar todas as pe&ccedil;as dispon&iacute;veis para premia&ccedil;&atilde;o, com sinaliza&ccedil;&atilde;o de&nbsp;quais delas&nbsp;j&aacute; podem ser atribu&iacute;das a quais pessoas sorteadas, baseando-nos nas indica&ccedil;&otilde;es de interesses dispon&iacute;veis que, neste primeiro momento, estar&atilde;o condicionadas &agrave; ordem de sorteio. A partir da&iacute;, a ordem de resposta a este e-mail determina a prioridade de escolha sobre pe&ccedil;as dispon&iacute;veis, que poder&atilde;o ser consultadas no mesmo link.</p>
+
+<p style="margin-top:8px;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong><span style="font-size:16px; color:#2b2424; font-weight:bold;">2)</span></strong>&nbsp;O prazo de resposta para garantir o direito &agrave; premia&ccedil;&atilde;o em ambas as colunas &eacute; de 14 dias corridos ap&oacute;s o recebimento da mensagem acima. As pe&ccedil;as que permanecerem dispon&iacute;veis ser&atilde;o destinadas ao acervo do artista.</p>
+<style>
+  .video-container {
+    max-width: 800px;
+    border: 3px solid #ff0000; /* Ajuste para 2px ou 4px se preferir */
+    box-sizing: border-box;
+    overflow: hidden; /* Garante que nada de dentro "vaze" a borda */
+  }
+
+  .video-container video {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>
+
+<div class="video-container">
+  <video controls autoplay loop muted>
+    <source src="https://github.com/BetShopTV/BetShopTVpontocom.github.io/raw/main/images/INFOGRAF_17-sorteades.mp4" type="video/mp4">
+    Seu navegador não suporta a reprodução de vídeo.
+  </video>
+</div>
+
+<div style="height:24px;"></div>
+
+<p><span style="color:#FF0000; font-size:18px;">&nbsp;&nbsp;&nbsp;▥&nbsp;&nbsp;</span><span style="font-size:18px; color:#2b2424; font-weight:bold;"><strong>RECEBIMENTO DE TRABALHOS</strong></span></p>
+
+<p style="margin-top:12px;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong><span style="font-size:16px; color:#2b2424; font-weight:bold;">1)</span></strong> O recebimento dos pr&ecirc;mios pode ser realizado de tr&ecirc;s maneiras principais:&nbsp;</p>
+
+<p style="margin-top:8px;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong><span style="font-size:16px; color:#2b2424; font-weight:bold;">1.a)</span></strong> Retirada presencial no evento de sorteio, provavelmente realizado na cidade de S&atilde;o Paulo.</p>
+
+<p style="margin-top:8px;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong><span style="font-size:16px; color:#2b2424; font-weight:bold;">1.b)</span></strong> Retirada ou recebimento presencial na regi&atilde;o central cidade de S&atilde;o Paulo ou em&nbsp;esta&ccedil;&otilde;es de Metr&ocirc;/CPTM.</p>
+
+<p style="margin-top:8px;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong><span style="font-size:16px; color:#2b2424; font-weight:bold;">1.c)</span></strong> Recebimento por correio (frete n&atilde;o incluso no caso das Rifas)</p>
+
+<p style="margin-top:12px;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong><span style="font-size:16px; color:#2b2424; font-weight:bold;">2)</span></strong>&nbsp;Todos&nbsp;os trabalhos s&atilde;o entregues planificados, em uma embalagem acompanhada de certificado e um documento com sugest&otilde;es de montagem.</p>
+
+<div style="height:24px;"></div>
+
+<!-- Seção 5 - OFERTAS e LEILÕES -->
+<p><span style="color:#FF0000; font-size:18px;">&nbsp;&nbsp;𑇢 <strong>OFERTAS</strong></span></p>
+
+<p style="margin-top:12px;"><span style="color:#2b2424;">&nbsp;&nbsp;&nbsp; As <strong>pe&ccedil;as</strong> que constituem <em><strong>Chop Shop AV</strong></em>, da <strong>COLUNA </strong><span style="color:#FF0000;"><strong>X</strong></span>, est&atilde;o dispon&iacute;veis para vendas avulsas &agrave; medida em que forem produzidas e aqui publicadas, dividindo-se em cotas </span><span style="color:#FF0000;"><strong>a partir de $150!</strong></span></p>
+
+<p style="margin-top:8px;"><span style="color:#2b2424;"><strong>&nbsp;&nbsp;&nbsp; Todas as pe&ccedil;as</strong>, exceto as que forem destinadas ao leil&atilde;o, <strong>ser&atilde;o postas em </strong><span style="color:#FF0000;"><strong>OFERTA</strong></span><strong> pela cota m&iacute;nima de $150</strong> ao menos uma vez at&eacute; a data dos sorteios finais, pelo per&iacute;odo m&iacute;nimo de 8 horas.</span></p>
+
+<div style="height:24px;"></div>
+
+<p><span style="color:#FF0000; font-size:18px;">&nbsp;&nbsp;𑇣 <strong>LEIL&Otilde;ES</strong></span></p>
+
+<p style="margin-top:12px;"><span style="color:#2b2424;">&nbsp;&nbsp;&nbsp; At&eacute; o dia dos sorteios finais, ao menos uma pe&ccedil;a&nbsp;de <em><strong>Chop Shop AV</strong></em> ser&aacute; leiloada pelo<strong> lance m&iacute;nimo de $150</strong>.</span></p>
+
+<p style="margin-top:8px;"><span style="color:#2b2424;">&nbsp;&nbsp;&nbsp; Para cobrir um lance, a pessoa interessada deve oferecer uma quantia <strong>no m&iacute;nimo $50 superior &agrave; do &uacute;ltimo lance</strong> registrado.</span></p>
+
+<div style="height:24px;"></div>
+
+<!-- Seção 6 (final) - PASSO A PASSO -->
+<p><span style="color:#FF0000; font-size:18px;">&nbsp;&nbsp;⪼ <strong>PASSO A PASSO</strong></span></p>
+
+<p style="margin-top:12px;"><strong><span style="color:#2b2424; font-size:16px;">1</span><span style="color:#FF0000; font-size:16px;">】</span><span style="color:#2b2424; font-size:16px; font-weight:bold;">ESCOLHA SEUS N&Uacute;MEROS</span></strong></p>
+
+<p style="margin-left:24px; margin-top:8px;"><strong><span style="color:#2b2424;">$30</span></strong><span style="color:#FF0000;">&nbsp;⇴</span><span style="color:#2b2424;"> 1 n&uacute;mero</span></p>
+
+<p style="margin-left:24px; margin-top:6px;"><strong><span style="color:#2b2424;">$50</span></strong><span style="color:#FF0000;"> ⇴</span><span style="color:#2b2424;"> 2 n&uacute;meros na mesma coluna ou em colunas distintas</span></p>
+
+<p style="margin-top:16px;"><strong><span style="color:#2b2424; font-size:16px;">2</span><span style="color:#FF0000; font-size:16px;">】</span><span style="color:#2b2424; font-size:16px; font-weight:bold;">INDIQUE SUAS ESCOLHAS e EFETUE O PAGAMENTO</span></strong></p>
+
+<p style="margin-left:24px; margin-top:8px; color:#2b2424;">Preencha o <a href="http://APOSTAR.COM.BR" style="color:#2b2424; text-decoration:underline;" target="_blank" rel="noreferrer">FORMUL&Aacute;RIO DE APOSTAS</a> ou envie um e-mail para betshoptv<a href="mailto:betshoptv@gmail.com" style="color:#2b2424; text-decoration:none;" target="_blank" rel="noreferrer">@</a>gmail.com contendo os seguintes itens:</p>
+
+<ul style="color:#2b2424; margin-left:48px; margin-top:8px;">
+  <li><span style="color:#FF0000;">⇴&nbsp;</span>Nome completo</li>
+  <li><span style="color:#FF0000;">⇴&nbsp;</span>Telefone e e-mail para contato</li>
+  <li><span style="color:#FF0000;">⇴&nbsp;</span>N&uacute;meros em que deseja apostar</li>
+  <li><span style="color:#FF0000;">⇴&nbsp;</span>Comprovante de pagamento</li>
+</ul>
+
+<p style="margin-left:24px; margin-top:8px; color:#2b2424;">Os pagamentos podem ser feitos em PIX pela chave betshoptv<a href="mailto:betshoptv@gmail.com" style="color:#2b2424; text-decoration:none;" target="_blank" rel="noreferrer">@</a>gmail.com ou via <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" style="color:#2b2424; text-decoration:underline;" target="_blank" rel="noreferrer">PayPal</a>.</p>
+
+<p style="margin-top:16px;"><strong><span style="color:#2b2424; font-size:16px;">3</span><span style="color:#FF0000; font-size:16px;">】</span><span style="color:#2b2424; font-size:16px; font-weight:bold;">RECEBA SEU COMPROVANTE DE APOSTAS</span></strong></p>
+
+<p style="margin-left:24px; margin-top:8px; color:#2b2424;">Em at&eacute; 36h voc&ecirc; receber&aacute; a confirma&ccedil;&atilde;o das apostas efetuadas.</p>
+
+<p style="margin-top:16px;"><strong><span style="color:#2b2424; font-size:16px;">4</span><span style="color:#FF0000; font-size:16px;">】</span><span style="color:#2b2424; font-size:16px; font-weight:bold;">SORTE NOS SORTEIOS!</span></strong></p>
+
+<p style="margin-left:24px; margin-top:8px; color:#2b2424;">Agora &eacute; s&oacute; torcer e aguardar o <strong><span style="color:#FF0000;">resultado dos sorteios finais</span></strong>, realizados no dia <strong><span style="color:#FF0000;">9 de agosto de 2025</span></strong>.</p>
+
+<div style="height:24px;"></div>
+<br>
+
+      <p><span style="color:#FF0000">&nbsp;&nbsp;𑇢 <strong>OFERTAS</strong></span></p>
+
+      <p><span style="color:#2b2424">&nbsp;&nbsp;&nbsp;As <strong>peças</strong> que constituem <strong><em>Chop Shop AV</em></strong>, da <strong>COLUNA </strong><span style="color:#FF0000"><strong>X</strong></span><span style="color:#2b2424">, estão disponíveis para vendas avulsas à medida em que forem produzidas e aqui publicadas, dividindo-se em cotas </span><span style="color:#FF0000"><strong>a partir de $150!</strong></span></p>
+
+      <p><span style="color:#2b2424"><strong>&nbsp;&nbsp;&nbsp;Todas as peças</strong>, exceto as que forem destinadas ao leilão, <strong>serão postas em </strong><span style="color:#FF0000"><strong>OFERTA</strong></span><span style="color:#2b2424"><strong> pela cota mínima de $150</strong> ao menos uma vez até a data dos sorteios finais, pelo período mínimo de 8 horas.</span></p>
+
+      <p><span style="color:#FF0000">&nbsp;&nbsp;𑇣 <strong>LEILÕES</strong></span></p>
+
+      <p><span style="color:#2b2424">&nbsp;&nbsp;&nbsp;Até o dia dos sorteios finais, ao menos uma peça <strong><em>Chop Shop AV</em></strong> será leiloada pelo<strong> lance mínimo de $150</strong>.</span></p>
+
+      <p><span style="color:#2b2424">&nbsp;&nbsp;&nbsp;Para cobrir um lance, a pessoa interessada deve oferecer uma quantia <strong>no mínimo $50 superior ao último lance</strong> registrado.</span></p>
+
+      <p>&nbsp;</p>
+
+      <p><strong><span style="color:#FF0000">⪼</span><span style="color:#2b2424"> PASSO A PASSO</span></strong></p>
+
+      <p><span style="color:#FF0000"><strong>1</strong></span><span style="color:#2b2424">⎠ </span><span style="color:#FF0000"><strong>ESCOLHA SEUS NÚMEROS</strong></span></p>
+
+      <p><span style="color:#FF0000">$<strong>30</strong> ⇴</span><span style="color:#2b2424"> 1 número</span></p>
+
+      <p><span style="color:#FF0000">$<strong>50</strong> ⇴</span><span style="color:#2b2424"> 2 números na mesma coluna ou em colunas distintas</span></p>
+
+      <p><span style="color:#FF0000"><strong>2</strong></span><span style="color:#2b2424">⎠ </span><span style="color:#FF0000"><strong>INDIQUE SUAS ESCOLHAS e EFETUE O PAGAMENTO</strong></span></p>
+
+      <p><span style="color:#2b2424">Preencha o <a href="http://APOSTAR.COM.BR">FORMULÁRIO DE APOSTAS</a> ou envie um e-mail para betshoptv<a href="mailto:betshoptv@gmail.com">@</a>gmail.com contendo os seguintes itens:</span></p>
+
+      <p><span style="color:#2b2424">Nome completo</span></p>
+      <p><span style="color:#2b2424">Telefone e e-mail para contato</span></p>
+      <p><span style="color:#2b2424">Números em que deseja apostar</span></p>
+      <p><span style="color:#2b2424">Comprovante de pagamento</span></p>
+      <p><span style="color:#2b2424">Os pagamentos podem ser feitos em PIX pela chave betshoptv<a href="mailto:betshoptv@gmail.com">@</a>gmail.com ou via <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" target="_blank" rel="noreferrer">PayPal</a>.</span></p>
+
+      <p><span style="color:#FF0000"><strong>3</strong></span><span style="color:#2b2424">⎠ </span><span style="color:#FF0000"><strong>RECEBA SEU COMPROVANTE DE APOSTA</strong></span></p>
+      <p><span style="color:#2b2424">Em até 36h você receberá a confirmação das apostas efetuadas.</span></p>
+
+      <p><span style="color:#FF0000"><strong>4</strong></span><span style="color:#2b2424">⎠ </span><span style="color:#FF0000"><strong>SORTE NOS SORTEIOS!</strong></span></p>
+      <p><span style="color:#2b2424">Agora é só torcer e aguardar o </span><strong><span style="color:#FF0000">resultado dos sorteios finais</span></strong><span style="color:#2b2424">, realizados no dia </span><span style="color:#FF0000"><strong>9 de agosto de 2025</strong></span><span style="color:#2b2424">.</span></p>
+
+    </section>
+  </main>
+
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+
+</body>
+</html>
+
+
+
+
