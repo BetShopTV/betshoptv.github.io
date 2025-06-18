@@ -326,14 +326,21 @@
         }
       });
 
-      button.addEventListener('mouseout', () => {
-        if (!button.classList.contains('active')) {
-          fadeTimeout = setTimeout(() => {
-            button.style.backgroundColor = 'transparent';
-            button.style.color = '#ff0000';
-          }, 1837);
-        }
-      });
+button.addEventListener('mouseout', () => {
+  if (!button.classList.contains('active')) {
+    clearTimeout(fadeTimeout); // Limpa qualquer timeout anterior se houver
+
+    const minDelay = 188;
+    const maxDelay = 3737;
+    const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+
+    fadeTimeout = setTimeout(() => {
+      button.style.backgroundColor = 'transparent';
+      button.style.color = '#ff0000';
+    }, randomDelay);
+  }
+});
+
 
       button.addEventListener('click', () => {
         clearTimeout(fadeTimeout);
