@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BetShopTV⦿com - Rifas</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
@@ -93,18 +93,71 @@
       white-space: nowrap;
       transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
+
+    /* NOVO: container da área inferior com lista e botão copiar */
+    .selection-container {
+      margin-top: 20px;
+      max-width: 75%;
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Roboto Condensed', sans-serif;
+    }
+
+    .selected-text {
+      flex-grow: 1;
+      min-height: 50px;
+      padding: 8px 12px;
+      border: 2px solid #ff0000;
+      border-radius: 4px;
+      background-color: #fff0f0;
+      color: #2b2424;
+      font-weight: bold;
+      white-space: pre-wrap;
+      user-select: text;
+    }
+
+    .copy-button {
+      padding: 10px 16px;
+      background-color: #ff0000;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .copy-button:hover {
+      background-color: #cc0000;
+    }
   </style>
 </head>
 <body>
   <header>
     <video class="header-video" autoplay loop muted playsinline>
-      <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+      <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4" />
       Seu navegador não suporta a tag de vídeo.
     </video>
   </header>
 
   <main>
-    <section style="text-align: left; margin-top: 30px; max-width: 75%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">
+    <section
+      style="
+        text-align: left;
+        margin-top: 30px;
+        max-width: 75%;
+        margin-left: auto;
+        margin-right: auto;
+        color: #2b2424;
+        font-size: 1em;
+        line-height: 1.5;
+        font-family: 'Roboto Condensed', sans-serif;
+      "
+    >
       <div class="button-container">
 <button class="button-main" data-hover-color="#FF4500" data-id="A001">A001 / 40 graus</button>
 <button class="button-main" data-hover-color="#B22222" data-id="A002">A002 / 5ª avenida</button>
@@ -277,6 +330,12 @@
 <button class="button-main" data-hover-color="#4B0082" data-id="A169">A169 / Violeta Profundo</button>
 <button class="button-main" data-hover-color="#FF69B4" data-id="A170">A170 / Vou de rosa</button>
       </div>
+
+      <!-- NOVO: Área inferior com lista de selecionados e botão copiar -->
+      <div class="selection-container">
+        <div id="selected-text" class="selected-text" aria-live="polite" aria-label="Números selecionados"></div>
+        <button id="copy-btn" class="copy-button" aria-label="Copiar números selecionados">COPIAR</button>
+      </div>
     </section>
   </main>
 
@@ -311,11 +370,20 @@
       })[0];
     }
 
+    const selectedTextDiv = document.getElementById('selected-text');
+    const copyBtn = document.getElementById('copy-btn');
+
+    function updateSelectedText() {
+      // pega todos os botões ativos
+      const activeButtons = document.querySelectorAll('.button-main.active');
+      const texts = Array.from(activeButtons).map(btn => btn.textContent.trim());
+      selectedTextDiv.textContent = texts.length > 0 ? texts.join('\n') : 'Nenhum número selecionado.';
+    }
+
     document.querySelectorAll('.button-main').forEach(button => {
       const hoverColor = button.dataset.hoverColor;
       let fadeTimeout;
 
-      // Garante que todos os botões tenham transição suave
       button.style.transition = 'background-color 0.5s ease, color 0.5s ease, border-color 0.3s ease';
 
       button.addEventListener('mouseover', () => {
@@ -326,21 +394,20 @@
         }
       });
 
-button.addEventListener('mouseout', () => {
-  if (!button.classList.contains('active')) {
-    clearTimeout(fadeTimeout); // Limpa qualquer timeout anterior se houver
+      button.addEventListener('mouseout', () => {
+        if (!button.classList.contains('active')) {
+          clearTimeout(fadeTimeout);
 
-    const minDelay = 373;
-    const maxDelay = 4224;
-    const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+          const minDelay = 373;
+          const maxDelay = 4224;
+          const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
 
-    fadeTimeout = setTimeout(() => {
-      button.style.backgroundColor = 'transparent';
-      button.style.color = '#ff0000';
-    }, randomDelay);
-  }
-});
-
+          fadeTimeout = setTimeout(() => {
+            button.style.backgroundColor = 'transparent';
+            button.style.color = '#ff0000';
+          }, randomDelay);
+        }
+      });
 
       button.addEventListener('click', () => {
         clearTimeout(fadeTimeout);
@@ -356,8 +423,27 @@ button.addEventListener('mouseout', () => {
           button.style.color = getContrastColor(hoverColor);
           button.style.borderColor = hoverColor;
         }
+
+        updateSelectedText();
       });
     });
+
+    copyBtn.addEventListener('click', () => {
+      const textToCopy = selectedTextDiv.textContent.trim();
+      if (textToCopy && textToCopy !== 'Nenhum número selecionado.') {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          copyBtn.textContent = 'COPIADO!';
+          setTimeout(() => {
+            copyBtn.textContent = 'COPIAR';
+          }, 1500);
+        }).catch(() => {
+          alert('Falha ao copiar. Tente manualmente.');
+        });
+      }
+    });
+
+    // Inicializa área com texto padrão
+    updateSelectedText();
   </script>
 </body>
 </html>
