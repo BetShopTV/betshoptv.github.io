@@ -330,8 +330,8 @@ button.addEventListener('mouseout', () => {
   if (!button.classList.contains('active')) {
     clearTimeout(fadeTimeout); // Limpa qualquer timeout anterior se houver
 
-    const minDelay = 888;
-    const maxDelay = 8837;
+    const minDelay = 1837;
+    const maxDelay = 6188;
     const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
 
     fadeTimeout = setTimeout(() => {
