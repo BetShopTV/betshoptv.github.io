@@ -17,6 +17,28 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      overflow-x: hidden; /* Garante que a página inteira nunca terá scroll horizontal */
+    }
+
+    .scroll-horizontal {
+      max-width: 100%;        /* Limita a largura da área ao tamanho da tela */
+      height: 150px;          /* Altura fixa da área */
+      overflow-x: auto;        /* Ativa a rolagem horizontal só dentro desta área */
+      overflow-y: hidden;      /* Não permite rolagem vertical dentro desta área */
+      white-space: nowrap;     /* Mantém os itens lado a lado */
+      border: 1px solid #ccc;
+      background-color: #f0f0f0;
+    }
+
+    .item {
+      display: inline-block;
+      width: 300px;           /* Largura de cada item, pode ajustar */
+      height: 100%;
+      margin-right: 10px;
+      background-color: #ddd;
+      text-align: center;
+      line-height: 150px;      /* Centralização vertical simples para exemplo */
+      font-weight: bold;
     }
 
     /* Cabeçalho */
@@ -171,6 +193,25 @@
 
   <!-- Botões -->
   <main>
+      <h1>Exemplo: Scroll Horizontal Interno</h1>
+
+  <p>A área abaixo tem rolagem horizontal independente:</p>
+
+  <div class="scroll-horizontal">
+    <div class="item">Item 1</div>
+    <div class="item">Item 2</div>
+    <div class="item">Item 3</div>
+    <div class="item">Item 4</div>
+    <div class="item">Item 5</div>
+    <div class="item">Item 6</div>
+    <div class="item">Item 7</div>
+  </div>
+
+  <p>Conteúdo abaixo da área de rolagem horizontal...</p>
+
+  <div style="height: 1000px; background-color: #eee; margin-top: 20px;">
+    Espaço extra só pra mostrar que a rolagem vertical da página continua funcionando normalmente.
+  </div>
 <section style="text-align: left; margin-top: 30px; max-width: 75%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">    
   <div class="button-container">
   <!-- Botões -->
@@ -461,3 +502,4 @@
 </main>
 </body>
 </html>
+
