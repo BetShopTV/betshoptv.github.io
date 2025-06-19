@@ -119,6 +119,22 @@
   cursor: pointer;
   white-space: nowrap; /* Evita quebra de texto */
 }
+    .botao-nao {
+  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
+  height: 50px;
+  border: 2px solid #aaaaaa;
+  background-color: transparent;
+  color: #aaaaaa;
+  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap; /* Evita quebra de texto */
+}
 
 
     /* Responsividade: Celulares (até 768px) */
@@ -162,12 +178,12 @@
   <main>
 <section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">    
 <div class="button-container">
-      <a href="link-para-como-funciona.html" class="botao-off">COMO FUNCIONA?</a>
+      <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
       <a href="galeria.html" class="botao-main">GALERIA<BR>DE IMAGENS</a>
       <a href="rifas.html" class="botao-main">APOSTE<br>&nbsp;◖RIFAS◗&nbsp;</a>
-      <a href="link-para-ofertas.html" class="botao-main">APOSTE<br>&nbsp;◖OFERTAS◗&nbsp;</a>
-      <a href="link-para-faq.html" class="botao-main">PERGUNTAS<br>FREQUENTES</a>
-      <a href="link-para-sobre.html" class="botao-main">SOBRE O PROJETO</a>
+      <a href="ofertas.html" class="botao-nao">APOSTE<br>&nbsp;◖OFERTAS◗&nbsp;</a>
+      <a href="faq.html" class="botao-nao">PERGUNTAS<br>FREQUENTES</a>
+      <a href="link-para-sobre.html" class="botao-nao">SOBRE O PROJETO</a>
       <a href="link-para-contato.html" class="botao-main">CONTATO</a>
     </div>
 </section>
