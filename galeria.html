@@ -1,1 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeria Expandível com Lightbox</title>
+  <style>
+    /* ======= CONFIGURAÇÃO GERAL DA GALERIA ======= */
+    .galeria {
+      width: 800px;
+      margin: 10px auto;
+    }
+
+    .linha {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+      transition: margin 0.3s ease;
+    }
+
+    /* ======= ESTILO PARA LINHAS EXPANDIDAS ======= */
+    .linha.expansivel {
+      margin: 30px 0;
+      flex-direction: column;
+    }
+
+    .linha .galeria-expandida {
+      display: inline-flex;
+      overflow-x: auto;
+      white-space: nowrap;
+      gap: 10px;
+      padding: 10px 0;
+      position: relative;
+    }
+
+    /* ======= ESTILO DO BOTÃO FECHAR (X) ======= */
+    .linha .fechar-expansao {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: #fff;
+      border: none;
+      padding: 2px 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* ======= FICHA TÉCNICA (TEXTO ENTRE AS IMAGENS) ======= */
+    .ficha-tecnica {
+      background: #f0f0f0;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      min-width: 100px;
+      max-width: 300px;
+      height: 150px;
+      box-sizing: border-box;
+    }
+
+    /* ======= LIGHTBOX ======= */
+    .lightbox-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .lightbox-content img {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #fff;
+      font-size: 30px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="galeria">
+    <!-- ======= EXEMPLO DE LINHA 1 ======= -->
+    <div class="linha linha-1" aria-hidden="true">
+      <img src="1a.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="Imagem 1a">
+      <img src="2a.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="Imagem 2a">
+      <img src="3a.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="Imagem 3a">
+    </div>
+
+    <!-- ======= EXEMPLO DE LINHA 2 ======= -->
+    <div class="linha linha-2" aria-hidden="true">
+      <img src="4a.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 4a">
+      <img src="5a.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 5a">
+      <img src="6a.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 6a">
+    </div>
+  </div>
+
+  <!-- ======= LIGHTBOX OVERLAY ======= -->
+  <div class="lightbox-overlay" role="dialog" aria-modal="true">
+    <span class="lightbox-close" aria-label="Fechar galeria">×</span>
+    <span class="lightbox-nav lightbox-prev">&#8592;</span>
+    <div class="lightbox-content">
+      <img src="" alt="Imagem ampliada">
+    </div>
+    <span class="lightbox-nav lightbox-next">&#8594;</span>
+  </div>
+
+  <script>
+    // ======= EXPANDIR / FECHAR LINHAS =======
+    document.querySelectorAll('.imagem').forEach(img => {
+      img.addEventListener('click', (e) => {
+        const linhaNum = img.dataset.linha;
+        const linha = document.querySelector('.linha-' + linhaNum);
+
+        // Toggle expand/collapse
+        if (!linha.classList.contains('expansivel')) {
+          linha.classList.add('expansivel');
+          linha.setAttribute('aria-hidden', 'false');
+          img.setAttribute('aria-expanded', 'true');
+
+          // Criar galeria expandida se ainda não existir
+          if (!linha.querySelector('.galeria-expandida')) {
+            const galeriaExpandida = document.createElement('div');
+            galeriaExpandida.classList.add('galeria-expandida');
+
+            // Criar botão de fechar (X)
+            const botaoFechar = document.createElement('button');
+            botaoFechar.classList.add('fechar-expansao');
+            botaoFechar.innerText = 'X';
+            botaoFechar.setAttribute('aria-label', 'Fechar expansão');
+            botaoFechar.addEventListener('click', () => fecharLinha(linha, img));
+            galeriaExpandida.appendChild(botaoFechar);
+
+            // Exemplo de conteúdo da galeria expandida:
+            const imagens = ['a', 'ficha', 'b', 'c', 'd'];
+            imagens.forEach((letra, index) => {
+              if (letra === 'ficha') {
+                const ficha = document.createElement('div');
+                ficha.classList.add('ficha-tecnica');
+                ficha.innerHTML = '<h3>Ficha Técnica</h3><p>Detalhes da obra aqui...</p>';
+                galeriaExpandida.appendChild(ficha);
+              } else {
+                const novaImg = document.createElement('img');
+                novaImg.src = linhaNum + letra + '.jpg';
+                novaImg.alt = 'Imagem ' + linhaNum + letra;
+                novaImg.classList.add('img-expandida');
+
+                // Evento para abrir o lightbox
+                novaImg.addEventListener('click', () => abrirLightbox(linhaNum, letra));
+
+                galeriaExpandida.appendChild(novaImg);
+              }
+            });
+
+            linha.appendChild(galeriaExpandida);
+          }
+        } else {
+          fecharLinha(linha, img);
+        }
+      });
+    });
+
+    function fecharLinha(linha, img) {
+      linha.classList.remove('expansivel');
+      linha.setAttribute('aria-hidden', 'true');
+      img.setAttribute('aria-expanded', 'false');
+      const galeria = linha.querySelector('.galeria-expandida');
+      if (galeria) galeria.remove();
+    }
+
+    // ======= LIGHTBOX FUNCIONALIDADE =======
+    let imagensDaLinha = [];
+    let indexAtual = 0;
+
+    function abrirLightbox(linhaNum, letraClicada) {
+      const linha = document.querySelector('.linha-' + linhaNum);
+      imagensDaLinha = Array.from(linha.querySelectorAll('img.img-expandida'));
+      indexAtual = imagensDaLinha.findIndex(img => img.src.includes(linhaNum + letraClicada));
+      mostrarImagemNoLightbox();
+      document.querySelector('.lightbox-overlay').style.display = 'flex';
+    }
+
+    function mostrarImagemNoLightbox() {
+      const srcAtual = imagensDaLinha[indexAtual].src;
+      document.querySelector('.lightbox-content img').src = srcAtual;
+    }
+
+    document.querySelector('.lightbox-close').addEventListener('click', fecharLightbox);
+    document.querySelector('.lightbox-prev').addEventListener('click', () => navegarLightbox(-1));
+    document.querySelector('.lightbox-next').addEventListener('click', () => navegarLightbox(1));
+
+    function fecharLightbox() {
+      document.querySelector('.lightbox-overlay').style.display = 'none';
+    }
+
+    function navegarLightbox(direcao) {
+      indexAtual += direcao;
+      if (indexAtual < 0) indexAtual = imagensDaLinha.length - 1;
+      if (indexAtual >= imagensDaLinha.length) indexAtual = 0;
+      mostrarImagemNoLightbox();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      const lightboxAberto = document.querySelector('.lightbox-overlay').style.display === 'flex';
+      if (lightboxAberto) {
+        if (e.key === 'ArrowRight') navegarLightbox(1);
+        if (e.key === 'ArrowLeft') navegarLightbox(-1);
+        if (e.key === 'Escape') fecharLightbox();
+      }
+    });
+  </script>
+
+</body>
+</html>
 
