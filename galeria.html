@@ -6,25 +6,29 @@
   <title>BetShopTV⦿com</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+    /* Estilo Geral */
     body {
       margin: 0;
       font-family: 'Roboto Condensed', sans-serif;
       background-color: #bebab0;
+      background-repeat: repeat;
       color: #2b2424;
       display: flex;
       flex-direction: column;
       align-items: center;
-      overflow-x: hidden; /* Evita rolagem lateral na página */
     }
+
     a {
       color: #ff0000;
       text-decoration: none;
+      text-decoration-color: #ff0000;
     }
     a:hover {
       text-decoration: underline;
     }
 
-    /* Cabeçalho */
+    /* Cabeçalho padrão (computador) */
     header {
       width: 100%;
       height: auto;
@@ -44,37 +48,113 @@
       min-width: 100%;
       object-fit: cover;
       transform: translate(-50%, -50%);
+      background-color: #ff0000;
     }
 
-    /* Botões */
+    /* Conteúdo Principal */
+    main {
+      width: 90%;
+      max-width: 1200px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    main h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
+    }
+
+    main h2 {
+      font-size: 1.8em;
+      margin-bottom: 8px;
+      margin-top: 42px;
+
+    }
+
+    main h3 {
+      font-size: 1.4em;
+      margin-top: 38px;
+      margin-bottom: 0px;
+    }
+    
+    main h4 {
+      font-size: 1em;
+      text-decoration: none;
+    }
+    
+    main v {
+      color: #ff0000;
+    }
+    
+    main p {
+      font-size: 1.2em;
+      color: #2b2424;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+
+    /* Botões (versão desktop) */
     .button-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
-      margin: 20px 0;
+      gap: 10px; /* Espaço entre os botões */
+      margin-top: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
     }
-    .botao-main {
-      padding: 4px 13px;
-      height: 50px;
-      border: 2px solid #ff0000;
-      background-color: transparent;
-      color: #ff0000;
-      font-size: 1em;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .botao-off {
-      padding: 4px 13px;
-      height: 50px;
-      border: 2px solid #2b2424;
-      background-color: transparent;
-      color: #2b2424;
-      font-size: 1em;
-      font-weight: bold;
-      cursor: default;
-    }
+.botao-main {
+  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
+  height: 50px;
+  border: 2px solid #ff0000;
+  background-color: transparent;
+  color: #ff0000;
+  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap; /* Evita quebra de texto */
+}
+.botao-off {
+  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
+  height: 50px;
+  border: 2px solid #2b2424;
+  background-color: transparent;
+  color: #2b2424;
+  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap; /* Evita quebra de texto */
+}
 
+
+    /* Responsividade: Celulares (até 768px) */
+    @media (max-width: 768px) {
+      header {
+        height: 112px;
+        min-height: 112px;
+        max-height: 112px;
+        padding: 4px 4px;
+      }
+
+      .header-video {
+        height: 100%;
+        width: auto;
+        min-width: 300%;
+        object-fit: cover;
+        object-position: center;
+        transform: translate(-50%, -50%);
+      }
+    
     /* Galeria */
     .galeria {
       width: 1224px;
@@ -117,15 +197,15 @@
   <!-- Galeria -->
   <main>
       <div class="galeria">
-    <img src="https://via.placeholder.com/400x300/FF0000/FFFFFF?text=1" alt="Imagem 1">
-    <img src="https://via.placeholder.com/400x600/00FF00/FFFFFF?text=2" alt="Imagem 2">
-    <img src="https://via.placeholder.com/400x450/0000FF/FFFFFF?text=3" alt="Imagem 3">
-    <img src="https://via.placeholder.com/400x350/FFFF00/FFFFFF?text=4" alt="Imagem 4">
-    <img src="https://via.placeholder.com/400x500/FF00FF/FFFFFF?text=5" alt="Imagem 5">
-    <img src="https://via.placeholder.com/400x400/00FFFF/FFFFFF?text=6" alt="Imagem 6">
-    <img src="https://via.placeholder.com/400x650/FFA500/FFFFFF?text=7" alt="Imagem 7">
-    <img src="https://via.placeholder.com/400x300/800080/FFFFFF?text=8" alt="Imagem 8">
-    <img src="https://via.placeholder.com/400x550/008000/FFFFFF?text=9" alt="Imagem 9">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg" alt="Imagem 2">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" alt="Imagem 3">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_004.jpg" alt="Imagem 4">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_005.jpg">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_006.jpg">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg">
   </div>
   </main>
 </body>
