@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BetShopTV⦿com</title>
   <style>
-      @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
     body {
       margin: 0;
       font-family: 'Roboto Condensed', sans-serif;
@@ -18,7 +18,7 @@
     }
 
     .galeria {
-      width: 800px;
+      width: 1200px;
       margin: 20px auto;
     }
 
@@ -26,192 +26,78 @@
       display: flex;
       gap: 10px;
       margin: 10px 0;
-      flex-wrap: wrap;
-      transition: all 0.3s ease;
-    }
-
-    .linha.expansivel {
-      flex-wrap: nowrap;
-      overflow-x: auto;
     }
 
     .linha img {
-      height: auto;
-      max-width: calc((800px - 20px) / 3);
-      cursor: pointer;
+      height: 200px; /* Altura fixa para todas as imagens */
+      flex-grow: 1;
       object-fit: contain;
+      cursor: pointer;
     }
 
     .galeria-expandida {
       display: flex;
+      overflow-x: auto;
       gap: 10px;
       align-items: center;
-      padding: 10px 0;
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ff0000;
+      box-sizing: border-box;
       position: relative;
+    }
+
+    .galeria-expandida::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .galeria-expandida::-webkit-scrollbar-thumb {
+      background-color: #ff0000;
+      border-radius: 4px;
+    }
+
+    .galeria-expandida::-webkit-scrollbar-track {
+      background: transparent;
     }
 
     .ficha-tecnica {
       background: #f0f0f0;
+      color: #2b2424;
+      font-family: 'Roboto Condensed', sans-serif;
       padding: 10px;
       box-sizing: border-box;
       min-width: 150px;
       max-width: 300px;
+      text-align: center;
     }
 
     .fechar-expansao {
       position: absolute;
-      top: 0;
+      top: -40px;
       left: 50%;
       transform: translateX(-50%);
-      background: #333;
+      background: #ff0000;
       color: white;
       border: none;
       cursor: pointer;
       font-size: 16px;
-      padding: 5px 10px;
+      padding: 5px 15px;
     }
-
-        a {
-      color: #ff0000;
-      text-decoration: none;
-      text-decoration-color: #ff0000;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* Cabeçalho padrão (computador) */
-    header {
-      width: 100%;
-      height: auto;
-      min-height: 25vh;
-      padding: 20px 0;
-      background-color: #ff0000;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .header-video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      height: 100%;
-      width: auto;
-      min-width: 100%;
-      object-fit: cover;
-      transform: translate(-50%, -50%);
-      background-color: #ff0000;
-    }
-
-    /* Conteúdo Principal */
-    main {
-      width: 90%;
-      max-width: 1200px;
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    main h1 {
-      font-size: 2.2em;
-      margin-bottom: 10px;
-    }
-
-    main h2 {
-      font-size: 1.8em;
-      margin-bottom: 8px;
-      margin-top: 42px;
-
-    }
-
-    main h3 {
-      font-size: 1.4em;
-      margin-top: 38px;
-      margin-bottom: 0px;
-    }
-    
-    main h4 {
-      font-size: 1em;
-      text-decoration: none;
-    }
-    
-    main v {
-      color: #ff0000;
-    }
-    
-    main p {
-      font-size: 1.2em;
-      color: #2b2424;
-      margin-top: 4px;
-      margin-bottom: 4px;
-    }
-
-    /* Botões (versão desktop) */
-    .button-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px; /* Espaço entre os botões */
-      margin-top: 10px;
-      margin-right: 10px;
-      margin-left: 10px;
-    }
-.botao-main {
-  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
-  height: 50px;
-  border: 2px solid #ff0000;
-  background-color: transparent;
-  color: #ff0000;
-  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
-  justify-content: center;
-  align-items: center;
-  font-size: 1em;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.2;
-  cursor: pointer;
-  white-space: nowrap; /* Evita quebra de texto */
-}
-.botao-off {
-  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
-  height: 50px;
-  border: 2px solid #2b2424;
-  background-color: transparent;
-  color: #2b2424;
-  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
-  justify-content: center;
-  align-items: center;
-  font-size: 1em;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.2;
-  cursor: pointer;
-  white-space: nowrap; /* Evita quebra de texto */
-}
   </style>
 </head>
 <body>
   <!-- Cabeçalho -->
   <header>
     <video class="header-video" autoplay loop muted playsinline>
-     <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+      <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
       Seu navegador não suporta a tag de vídeo.
     </video>
   </header>
 
-  <!-- Conteúdo Principal -->
+  <!-- Galeria -->
   <main>
-<section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">    
-<div class="button-container">
-      <a href="como.html" class="botao-off">COMO FUNCIONA?</a>
-      <a href="galeria.html" class="botao-main">GALERIA<BR>DE IMAGENS</a>
-      <a href="rifas.html" class="botao-main">APOSTE<br>&nbsp;◖RIFAS◗&nbsp;</a>
-      <a href="ofertas.html" class="botao-main">APOSTE<br>&nbsp;◖OFERTAS◗&nbsp;</a>
-      <a href="faq.html" class="botao-main">PERGUNTAS<br>FREQUENTES</a>
-      <a href="sobre.html" class="botao-main">SOBRE O PROJETO</a>
-      <a href="contato.html" class="botao-main">CONTATO</a>
-    </div>
-</section>
-  <div class="galeria" id="galeria"></div>
+    <div class="galeria" id="galeria"></div>
+  </main>
 
   <script>
     const galerias = {
@@ -243,66 +129,63 @@
 
     const galeriaContainer = document.getElementById('galeria');
 
+    // Criação das linhas e inserção de imagens
     Object.keys(galerias).forEach((key, index) => {
-      const linha = document.createElement('div');
-      linha.className = `linha linha-${index + 1}`;
+      if (index % 3 === 0) {
+        const linha = document.createElement('div');
+        linha.className = 'linha';
+        galeriaContainer.appendChild(linha);
+      }
+      const linhaAtual = galeriaContainer.lastElementChild;
 
       const img = document.createElement('img');
       img.src = galerias[key].imagens[0];
-      img.alt = `Imagem ${index + 1}`;
+      img.alt = `Imagem ${key}`;
       img.dataset.galeria = key;
-      linha.appendChild(img);
-
-      galeriaContainer.appendChild(linha);
+      linhaAtual.appendChild(img);
     });
 
     galeriaContainer.addEventListener('click', (e) => {
       if (e.target.tagName === 'IMG') {
-        const linha = e.target.closest('.linha');
         const key = e.target.dataset.galeria;
-        const expandido = linha.classList.toggle('expansivel');
-
-        if (expandido) {
-          expandirGaleria(linha, galerias[key]);
-        } else {
-          removerGaleriaExpandida(linha);
-        }
+        const linhaAtual = e.target.closest('.linha');
+        expandirGaleria(linhaAtual, key);
       }
     });
 
-    function expandirGaleria(linha, galeria) {
+    function expandirGaleria(linha, key) {
+      // Remover galeria expandida existente
+      const existente = document.querySelector('.galeria-expandida');
+      if (existente) existente.remove();
+
+      // Criar nova galeria expandida
       const galeriaExpandida = document.createElement('div');
       galeriaExpandida.className = 'galeria-expandida';
 
+      // Botão para fechar a galeria
       const btnFechar = document.createElement('button');
       btnFechar.className = 'fechar-expansao';
-      btnFechar.textContent = 'Ⓧ';
-      btnFechar.addEventListener('click', () => {
-        linha.classList.remove('expansivel');
-        removerGaleriaExpandida(linha);
-      });
+      btnFechar.textContent = 'Fechar';
+      btnFechar.onclick = () => galeriaExpandida.remove();
       galeriaExpandida.appendChild(btnFechar);
 
-      galeria.imagens.forEach((src) => {
+      // Inserir imagens na galeria expandida
+      galerias[key].imagens.forEach((src) => {
         const img = document.createElement('img');
         img.src = src;
-        img.alt = 'Imagem expandida';
+        img.alt = `Imagem expandida ${key}`;
+        img.style.height = '200px'; // Ajuste de altura para manter padrão
         galeriaExpandida.appendChild(img);
       });
 
+      // Inserir ficha técnica
       const ficha = document.createElement('div');
       ficha.className = 'ficha-tecnica';
-      ficha.innerHTML = `<h3>Ficha Técnica</h3><p>${galeria.ficha}</p>`;
+      ficha.innerHTML = `<h3>Ficha Técnica</h3><p>${galerias[key].ficha}</p>`;
       galeriaExpandida.appendChild(ficha);
 
-      linha.appendChild(galeriaExpandida);
-    }
-
-    function removerGaleriaExpandida(linha) {
-      const galeriaExpandida = linha.querySelector('.galeria-expandida');
-      if (galeriaExpandida) {
-        galeriaExpandida.remove();
-      }
+      // Inserir a galeria expandida na linha
+      linha.after(galeriaExpandida);
     }
   </script>
 </body>
