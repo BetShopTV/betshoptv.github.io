@@ -188,14 +188,14 @@ align-items: left; /* Alinha os itens verticalmente ao centro */
       cursor: pointer;
     }
 
-    /* Clique no fundo */
     .lightbox-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 0;
+      background: transparent; /* Não interfere no design */
+      z-index: 1; /* Para garantir que o clique na área do fundo funcione */
     }    
     /* Galeria */
     .gallery-container {
@@ -283,6 +283,7 @@ align-items: left; /* Alinha os itens verticalmente ao centro */
   
   <!-- LIGHTBOX -->
   <div class="lightbox" id="ETM">
+  <div class="lightbox-overlay" onclick="fecharLightbox()"></div>
     <button class="fechar" onclick="fecharLightbox()">Ⓧ</button>
     <div class="conteudo">
             <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
