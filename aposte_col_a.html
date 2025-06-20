@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BetShopTV⦿com - Rifas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Roboto Condensed', sans-serif;
+      background-color: #bebab0;
+      background-repeat: repeat;
+      color: #2b2424;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      min-height: 25vh;
+      background-color: #ff0000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 100%;
+      width: auto;
+      min-width: 100%;
+      object-fit: cover;
+      transform: translate(-50%, -50%);
+    }
+
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+
+    .button-main {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid #ff0000;
+      background-color: transparent;
+      color: #ff0000;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.2;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.5s ease, color 0.5s ease, border-color 0.3s ease;
+    }
+
+    .button-main:hover {
+      color: #ffffff;
+    }
+
+    .button-main.active {
+      background-color: #ff0000;
+      color: #ffffff;
+      border-color: #ff0000;
+    }
+
+    .button-VENDIDO {
+      padding: 4px 13px;
+      height: 50px;
+      border: 0px solid #2b2424;
+      background-color: transparent;
+      color: #736f6f;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: line-through;
+      line-height: 1.2;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* NOVO: container da área inferior com lista e botão copiar */
+    .selection-container {
+      margin-top: 20px;
+      max-width: 75%;
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Roboto Condensed', sans-serif;
+    }
+
+    .selected-text {
+      flex-grow: 1;
+      min-height: 50px;
+      padding: 8px 12px;
+      border: 2px solid #ff0000;
+      border-radius: 4px;
+      background-color: #fff0f0;
+      color: #2b2424;
+      font-weight: bold;
+      white-space: pre-wrap;
+      user-select: text;
+    }
+
+    .copy-button {
+      padding: 10px 16px;
+      background-color: #ff0000;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .copy-button:hover {
+      background-color: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <video class="header-video" autoplay loop muted playsinline>
+      <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4" />
+      Seu navegador não suporta a tag de vídeo.
+    </video>
+  </header>
+
+  <main>
+      
+            <!-- NÚMEROS SELECIONADOS P/ COPIAR -->
+<center><div id="copy-area-container" style="
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  width: 50%;
+">
+  <div style="
+    display: flex;
+    max-width: 50%; /* Mesma largura máxima dos botões */
+    width: 50%;
+    gap: 10px;
+  ">
+    <textarea id="selected-text" readonly
+      style="
+        flex-grow: 1;
+        max-height: 180px; /* Limita altura e cria rolagem vertical */
+        resize: none;
+        overflow-y: auto;
+        padding: 10px;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 1em;
+        border: 2px solid #ff0000;
+        border-radius: 4px;
+        color: #ff0000;
+        background-color: transparent;
+      "
+    ></textarea>
+
+    <button id="copy-button" style="
+      padding: 0 15px;
+      min-height: 180px;
+      align-self: center;
+      border: 2px solid #ff0000;
+      background-color: transparent;
+      color: #ff0000;
+      font-family: 'Roboto Condensed', sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      border-radius: 4px;
+      white-space: nowrap;
+    ">COPIAR</button>
+  </div>
+</div></center>
+      
+    <section
+      style="
+        text-align: left;
+        margin-top: 30px;
+        max-width: 75%;
+        margin-left: auto;
+        margin-right: auto;
+        color: #2b2424;
+        font-size: 1em;
+        line-height: 1.5;
+        font-family: 'Roboto Condensed', sans-serif;
+      "
+    >
+      <div class="button-container">
+<button class="button-main" data-hover-color="#FF4500" data-id="A001">A001 / 40 graus</button>
+<button class="button-main" data-hover-color="#B22222" data-id="A002">A002 / 5ª avenida</button>
+<button class="button-main" data-hover-color="#FF1493" data-id="A003">A003 / Acionando o contatinho</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="A004">A004 / Ai, amiga</button>
+<button class="button-main" data-hover-color="#FFE4E1" data-id="A005">A005 / Algodão doce</button>
+<button class="button-main" data-hover-color="#FFDAB9" data-id="A006">A006 / Amanhecer</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="A007">A007 / Amarelo Frevo</button>
+<button class="button-main" data-hover-color="#8B0000" data-id="A008">A008 / Ameixa</button>
+<button class="button-main" data-hover-color="#87CEEB" data-id="A009">A009 / Ar Fresco</button>
+<button class="button-main" data-hover-color="#F5DEB3" data-id="A010">A010 / Areia</button>
+<button class="button-main" data-hover-color="#4682B4" data-id="A011">A011 / Atmosfera</button>
+<button class="button-main" data-hover-color="#1E90FF" data-id="A012">A012 / Azul Eclesiástico</button>
+<button class="button-main" data-hover-color="#0000FF" data-id="A013">A013 / Azul biônico</button>
+<button class="button-main" data-hover-color="#D2B48C" data-id="A014">A014 / Batida de Amendoim</button>
+<button class="button-main" data-hover-color="#FFFFF0" data-id="A015">A015 / Batida de coco</button>
+<button class="button-main" data-hover-color="#FF6347" data-id="A016">A016 / Beijo roubado</button>
+<button class="button-main" data-hover-color="#32CD32" data-id="A017">A017 / Bem-Estar</button>
+<button class="button-main" data-hover-color="#000000" data-id="A018">A018 / Black</button>
+<button class="button-main" data-hover-color="#FF7F50" data-id="A019">A019 / Bolsa de Praia</button>
+<button class="button-main" data-hover-color="#FFC0CB" data-id="A020">A020 / Boneca</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="A021">A021 / Brinde da virada</button>
+<button class="button-main" data-hover-color="#DAA520" data-id="A022">A022 / Brocado Rico</button>
+<button class="button-main" data-hover-color="#6F4E37" data-id="A023">A023 / Café</button>
+<button class="button-main" data-hover-color="#008000" data-id="A024">A024 / Caminho do Jardim</button>
+<button class="button-main" data-hover-color="#8B4513" data-id="A025">A025 / Camurça</button>
+<button class="button-main" data-hover-color="#D2B48C" data-id="A026">A026 / Capuccino Doce</button>
+<button class="button-main" data-hover-color="#DEB887" data-id="A027">A027 / Casa Portuguesa</button>
+<button class="button-main" data-hover-color="#FFA07A" data-id="A028">A028 / Casamento do Verão</button>
+<button class="button-VENDIDO" data-hover-color="#87CEEB" data-id="A029">A029 / Chafariz da Praça</button>
+<button class="button-main" data-hover-color="#696969" data-id="A030">A030 / Cinza Tecnológico</button>
+<button class="button-main" data-hover-color="#808080" data-id="A031">A031 / Cinza minimalista</button>
+<button class="button-main" data-hover-color="#FFFFFF" data-id="A032">A032 / Clássico</button>
+<button class="button-main" data-hover-color="#A9A9A9" data-id="A033">A033 / Colinas de Inverno</button>
+<button class="button-main" data-hover-color="#C0C0C0" data-id="A034">A034 / Concha Prateada</button>
+<button class="button-main" data-hover-color="#FF7F50" data-id="A035">A035 / Coral não tem igual</button>
+<button class="button-main" data-hover-color="#CD853F" data-id="A036">A036 / Corpo bronzeado</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="A037">A037 / Corpo tropical</button>
+<button class="button-main" data-hover-color="#F08080" data-id="A038">A038 / Cristal rosa</button>
+<button class="button-main" data-hover-color="#ADD8E6" data-id="A039">A039 / Céu da Antártida</button>
+<button class="button-main" data-hover-color="#FF0000" data-id="A040">A040 / De repente, paixão</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="A041">A041 / Deixa beijar</button>
+<button class="button-main" data-hover-color="#FF8C00" data-id="A042">A042 / Del Sol</button>
+<button class="button-main" data-hover-color="#FFE4E1" data-id="A043">A043 / Delicadeza</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="A044">A044 / Dia Dourado</button>
+<button class="button-main" data-hover-color="#FA8072" data-id="A045">A045 / Dieta hoje não</button>
+<button class="button-main" data-hover-color="#FF4500" data-id="A046">A046 / Doce ou Travessura</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="A047">A047 / Doçura da Primavera</button>
+<button class="button-main" data-hover-color="#483D8B" data-id="A048">A048 / Drama Noturno</button>
+<button class="button-main" data-hover-color="#DEB887" data-id="A049">A049 / Dunas de areia</button>
+<button class="button-main" data-hover-color="#FF1493" data-id="A050">A050 / Encontro Feliz</button>
+<button class="button-main" data-hover-color="#4B0082" data-id="A051">A051 / Encontro às escuras</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="A052">A052 / Estrela Cadente</button>
+<button class="button-main" data-hover-color="#FFFFFF" data-id="A053">A053 / Estrela de luz</button>
+<button class="button-main" data-hover-color="#FF6347" data-id="A054">A054 / Explícita</button>
+<button class="button-main" data-hover-color="#228B22" data-id="A055">A055 / Fazendo a fitness</button>
+<button class="button-main" data-hover-color="#4682B4" data-id="A056">A056 / Fazendo vários nadas</button>
+<button class="button-main" data-hover-color="#556B2F" data-id="A057">A057 / Figo Verde</button>
+<button class="button-main" data-hover-color="#8A2BE2" data-id="A058">A058 / Fonte Secreta</button>
+<button class="button-main" data-hover-color="#E30B5C" data-id="A059">A059 / Framboesa</button>
+<button class="button-VENDIDO" data-hover-color="#C71585" data-id="A060">A060 / Framboesa Radical</button>
+<button class="button-main" data-hover-color="#FAF0E6" data-id="A061">A061 / França</button>
+<button class="button-main" data-hover-color="#B22222" data-id="A062">A062 / Gabriele</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="A063">A063 / Garota verão</button>
+<button class="button-main" data-hover-color="#F0FFF0" data-id="A064">A064 / Geada</button>
+<button class="button-main" data-hover-color="#F4A460" data-id="A065">A065 / Geléia de Cupuaçu</button>
+<button class="button-main" data-hover-color="#DAA520" data-id="A066">A066 / Glória da Colheita</button>
+<button class="button-main" data-hover-color="#B0C4DE" data-id="A067">A067 / Grace</button>
+<button class="button-main" data-hover-color="#696969" data-id="A068">A068 / Grafite fashionista</button>
+<button class="button-main" data-hover-color="#2F4F4F" data-id="A069">A069 / Grande Metrópole</button>
+<button class="button-main" data-hover-color="#9370DB" data-id="A070">A070 / Harmonia Lilás</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="A071">A071 / Hoje sou minha</button>
+<button class="button-main" data-hover-color="#4682B4" data-id="A072">A072 / Horizonte</button>
+<button class="button-main" data-hover-color="#6A5ACD" data-id="A073">A073 / Intuição Divina</button>
+<button class="button-main" data-hover-color="#4B0082" data-id="A074">A074 / Jabuticaba</button>
+<button class="button-main" data-hover-color="#006400" data-id="A075">A075 / Jardim Misterioso</button>
+<button class="button-main" data-hover-color="#5F9EA0" data-id="A076">A076 / Jeans</button>
+<button class="button-main" data-hover-color="#FFFFF0" data-id="A077">A077 / Leite de coco</button>
+<button class="button-main" data-hover-color="#FF8C00" data-id="A078">A078 / Ligada no 220v</button>
+<button class="button-main" data-hover-color="#D8BFD8" data-id="A079">A079 / Lilás Esplendoroso</button>
+<button class="button-main" data-hover-color="#FAF0E6" data-id="A080">A080 / Lugar de Afeto</button>
+<button class="button-main" data-hover-color="#32CD32" data-id="A081">A081 / Luz da Floresta</button>
+<button class="button-main" data-hover-color="#FFFFE0" data-id="A082">A082 / Luz na Janela</button>
+<button class="button-main" data-hover-color="#000000" data-id="A083">A083 / Mais que preto, black</button>
+<button class="button-main" data-hover-color="#9932CC" data-id="A084">A084 / Malva misterioso</button>
+<button class="button-main" data-hover-color="#A0522D" data-id="A085">A085 / Mantilha</button>
+<button class="button-main" data-hover-color="#8B4513" data-id="A086">A086 / Marrom da Riqueza</button>
+<button class="button-main" data-hover-color="#A52A2A" data-id="A087">A087 / Marrom mutante</button>
+<button class="button-main" data-hover-color="#9370DB" data-id="A088">A088 / Mauve urban</button>
+<button class="button-main" data-hover-color="#FFFAFA" data-id="A089">A089 / Meia de Seda</button>
+<button class="button-main" data-hover-color="#FF6347" data-id="A090">A090 / Melancia</button>
+<button class="button-main" data-hover-color="#2F4F4F" data-id="A091">A091 / Mil e uma noites</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="A092">A092 / Momento de Promessa</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="A093">A093 / Momento selfie</button>
+<button class="button-main" data-hover-color="#DAA520" data-id="A094">A094 / Mostarda Quente</button>
+<button class="button-main" data-hover-color="#B8860B" data-id="A095">A095 / Mostarda em Grão</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="A096">A096 / Movie Star</button>
+<button class="button-main" data-hover-color="#FFB6C1" data-id="A097">A097 / Moça Bonita</button>
+<button class="button-main" data-hover-color="#800000" data-id="A098">A098 / Na dúvida, vinho!</button>
+<button class="button-main" data-hover-color="#FF4500" data-id="A099">A099 / Nariz de palhaço</button>
+<button class="button-main" data-hover-color="#DEB887" data-id="A100">A100 / Neutro Nepal</button>
+<button class="button-main" data-hover-color="#00008B" data-id="A101">A101 / Noite de gala</button>
+<button class="button-main" data-hover-color="#8B0000" data-id="A102">A102 / Noite quente</button>
+<button class="button-main" data-hover-color="#FAEBD7" data-id="A103">A103 / Nua & crua</button>
+<button class="button-main" data-hover-color="#D2B48C" data-id="A104">A104 / Nude</button>
+<button class="button-main" data-hover-color="#CDAF95" data-id="A105">A105 / Nude desejo</button>
+<button class="button-main" data-hover-color="#6A5ACD" data-id="A106">A106 / Nuvens Roxas</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="A107">A107 / Não mexe comigo</button>
+<button class="button-main" data-hover-color="#B87333" data-id="A108">A108 / Ocre Italiano</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="A109">A109 / Papel de Bala</button>
+<button class="button-main" data-hover-color="#FF4500" data-id="A110">A110 / Pimenta rosa</button>
+<button class="button-main" data-hover-color="#A0522D" data-id="A111">A111 / Pinhão</button>
+<button class="button-main" data-hover-color="#228B22" data-id="A112">A112 / Pitada de Alecrim</button>
+<button class="button-main" data-hover-color="#A0522D" data-id="A113">A113 / Pote de Argila</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="A114">A114 / Precioso Momento</button>
+<button class="button-main" data-hover-color="#B0C4DE" data-id="A115">A115 / Preferia estar dormindo</button>
+<button class="button-main" data-hover-color="#FFFACD" data-id="A116">A116 / Prenda natural</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="A117">A117 / Puro glamour</button>
+<button class="button-main" data-hover-color="#FFC0CB" data-id="A118">A118 / Pétala</button>
+<button class="button-main" data-hover-color="#FFFFFF" data-id="A119">A119 / Pétala branca</button>
+<button class="button-main" data-hover-color="#FFDAB9" data-id="A120">A120 / Pêra Madura</button>
+<button class="button-main" data-hover-color="#FFE4C4" data-id="A121">A121 / Pó de Pêssego</button>
+<button class="button-main" data-hover-color="#4682B4" data-id="A122">A122 / Quadrado azul</button>
+<button class="button-main" data-hover-color="#87CEEB" data-id="A123">A123 / Reflexo de Cristal</button>
+<button class="button-main" data-hover-color="#FAEBD7" data-id="A124">A124 / Renascer</button>
+<button class="button-main" data-hover-color="#708090" data-id="A125">A125 / Repouso Tranquilo</button>
+<button class="button-main" data-hover-color="#FFB6C1" data-id="A126">A126 / Rosa Cintilante</button>
+<button class="button-main" data-hover-color="#FFC0CB" data-id="A127">A127 / Rosa Vintage</button>
+<button class="button-main" data-hover-color="#CD5C5C" data-id="A128">A128 / Rosa antigo</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="A129">A129 / Rosa da vez</button>
+<button class="button-main" data-hover-color="#FFDAB9" data-id="A130">A130 / Rosa floral</button>
+<button class="button-main" data-hover-color="#DAA520" data-id="A131">A131 / Rota do Deserto</button>
+<button class="button-main" data-hover-color="#800000" data-id="A132">A132 / Rota do Vinho</button>
+<button class="button-main" data-hover-color="#F5DEB3" data-id="A133">A133 / Roupa de Bebê</button>
+<button class="button-main" data-hover-color="#8A2BE2" data-id="A134">A134 / Roxo místico</button>
+<button class="button-main" data-hover-color="#FFA07A" data-id="A135">A135 / Salmão Pálido</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="A136">A136 / Samba Juliana</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="A137">A137 / Sem retoque</button>
+<button class="button-main" data-hover-color="#FFB6C1" data-id="A138">A138 / Sensação de Rosas</button>
+<button class="button-main" data-hover-color="#191970" data-id="A139">A139 / Sereno da Noite</button>
+<button class="button-main" data-hover-color="#FF0000" data-id="A140">A140 / Seta vermelha</button>
+<button class="button-main" data-hover-color="#DAA520" data-id="A141">A141 / Sherazade</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="A142">A142 / Sol do oriente</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="A143">A143 / Solário</button>
+<button class="button-main" data-hover-color="#FFFACD" data-id="A144">A144 / Sonho de Anjo</button>
+<button class="button-main" data-hover-color="#32CD32" data-id="A145">A145 / Suculenta</button>
+<button class="button-main" data-hover-color="#708090" data-id="A146">A146 / Sálvia</button>
+<button class="button-main" data-hover-color="#F5DEB3" data-id="A147">A147 / Só dá nude</button>
+<button class="button-main" data-hover-color="#FF0000" data-id="A148">A148 / Tapete vermelho</button>
+<button class="button-main" data-hover-color="#B22222" data-id="A149">A149 / Teatro de Bonecos</button>
+<button class="button-main" data-hover-color="#696969" data-id="A150">A150 / Teia de Aranha</button>
+<button class="button-main" data-hover-color="#D2B48C" data-id="A151">A151 / Toque Casual</button>
+<button class="button-main" data-hover-color="#8B4513" data-id="A152">A152 / Toque de Centeio</button>
+<button class="button-main" data-hover-color="#8B4513" data-id="A153">A153 / Toque de Noz-Moscada</button>
+<button class="button-main" data-hover-color="#7FFFD4" data-id="A154">A154 / Trevo Pálido</button>
+<button class="button-main" data-hover-color="#008000" data-id="A155">A155 / Trilha Verde</button>
+<button class="button-main" data-hover-color="#F5DEB3" data-id="A156">A156 / Tô bege!</button>
+<button class="button-main" data-hover-color="#696969" data-id="A157">A157 / Urban chic</button>
+<button class="button-main" data-hover-color="#D2B48C" data-id="A158">A158 / Urso de Pelúcia</button>
+<button class="button-main" data-hover-color="#FF8C00" data-id="A159">A159 / Valência</button>
+<button class="button-main" data-hover-color="#4682B4" data-id="A160">A160 / Vaso de Hortênsia</button>
+<button class="button-main" data-hover-color="#87CEEB" data-id="A161">A161 / Ventos Calmos</button>
+<button class="button-main" data-hover-color="#228B22" data-id="A162">A162 / Verde Pasto</button>
+<button class="button-main" data-hover-color="#B22222" data-id="A163">A163 / Vermelha obsessão</button>
+<button class="button-main" data-hover-color="#FF0000" data-id="A164">A164 / Vermelho Ivete</button>
+<button class="button-main" data-hover-color="#8B0000" data-id="A165">A165 / Vermelho proibido</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="A166">A166 / Vestida pra matar</button>
+<button class="button-main" data-hover-color="#F8F8FF" data-id="A167">A167 / Via Láctea</button>
+<button class="button-main" data-hover-color="#8A2BE2" data-id="A168">A168 / Violeta Preciosa</button>
+<button class="button-main" data-hover-color="#4B0082" data-id="A169">A169 / Violeta Profundo</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="A170">A170 / Vou de rosa</button>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    function getContrastColor(backgroundColor) {
+      const colors = {
+        white: "#ffffff",
+        red: "#ff0000",
+        gray: "#bebaba",
+        dark: "#2b2424"
+      };
+
+      function hexToRgb(hex) {
+        const bigint = parseInt(hex.slice(1), 16);
+        return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+      }
+
+      function luminance([r, g, b]) {
+        const [rs, gs, bs] = [r, g, b].map(v => {
+          v /= 255;
+          return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+        });
+        return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+      }
+
+      const bgLuminance = luminance(hexToRgb(backgroundColor));
+
+      return Object.values(colors).sort((a, b) => {
+        const lumA = luminance(hexToRgb(a));
+        const lumB = luminance(hexToRgb(b));
+        return Math.abs(bgLuminance - lumB) - Math.abs(bgLuminance - lumA);
+      })[0];
+    }
+
+    const selectedTextDiv = document.getElementById('selected-text');
+    const copyBtn = document.getElementById('copy-btn');
+
+    function updateSelectedText() {
+      // pega todos os botões ativos
+      const activeButtons = document.querySelectorAll('.button-main.active');
+      const texts = Array.from(activeButtons).map(btn => btn.textContent.trim());
+      selectedTextDiv.textContent = texts.length > 0 ? texts.join('\n') : 'Nenhum número selecionado.';
+    }
+
+    document.querySelectorAll('.button-main').forEach(button => {
+      const hoverColor = button.dataset.hoverColor;
+      let fadeTimeout;
+
+      button.style.transition = 'background-color 0.5s ease, color 0.5s ease, border-color 0.3s ease';
+
+      button.addEventListener('mouseover', () => {
+        if (!button.classList.contains('active')) {
+          clearTimeout(fadeTimeout);
+          button.style.backgroundColor = hoverColor;
+          button.style.color = getContrastColor(hoverColor);
+        }
+      });
+
+      button.addEventListener('mouseout', () => {
+        if (!button.classList.contains('active')) {
+          clearTimeout(fadeTimeout);
+
+          const minDelay = 373;
+          const maxDelay = 4224;
+          const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+
+          fadeTimeout = setTimeout(() => {
+            button.style.backgroundColor = 'transparent';
+            button.style.color = '#ff0000';
+          }, randomDelay);
+        }
+      });
+
+      button.addEventListener('click', () => {
+        clearTimeout(fadeTimeout);
+
+        if (button.classList.contains('active')) {
+          button.classList.remove('active');
+          button.style.backgroundColor = 'transparent';
+          button.style.color = '#ff0000';
+          button.style.borderColor = '#ff0000';
+        } else {
+          button.classList.add('active');
+          button.style.backgroundColor = hoverColor;
+          button.style.color = getContrastColor(hoverColor);
+          button.style.borderColor = hoverColor;
+        }
+
+        updateSelectedText();
+      });
+    });
+
+    copyBtn.addEventListener('click', () => {
+      const textToCopy = selectedTextDiv.textContent.trim();
+      if (textToCopy && textToCopy !== 'Nenhum número selecionado.') {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          copyBtn.textContent = 'COPIADO!';
+          setTimeout(() => {
+            copyBtn.textContent = 'COPIAR';
+          }, 1500);
+        }).catch(() => {
+          alert('Falha ao copiar. Tente manualmente.');
+        });
+      }
+    });
+
+    // Inicializa área com texto padrão
+    updateSelectedText();
+  </script>
+  <br><br>
+  <br><br>
+    <br><br>
+  <br><br>
+    <br><br>
+  <br><br>
+    <br><br>
+  <br><br>
+    <br><br>
+  <br><br>  <br><br>
+  <br><br>  <br><br>
+  <br><br>
+</body>
+</html>
