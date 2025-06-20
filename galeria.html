@@ -136,14 +136,14 @@
   white-space: nowrap; /* Evita quebra de texto */
 }
     /* LIGHTBOX */
-   .lightbox {
+    .lightbox {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(43, 36, 36, 0.95);
+      background: rgba(43, 36, 36, 0.88); /* Fundo mais opaco */
       justify-content: center;
       align-items: center;
       z-index: 1000;
@@ -152,19 +152,31 @@
     .lightbox img {
       max-width: 90%;
       max-height: 80%;
+      pointer-events: none;
     }
 
     .lightbox .fechar {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 24px;
+      right: 24px;
       color: #bebab0;
       background: none;
       border: none;
-      font-size: 24px;
+      font-size: 28px; /* Maior tamanho */
+      font-weight: bold;
       cursor: pointer;
+      user-select: none;
     }
-    
+
+    /* Clique no fundo */
+    .lightbox-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }    
     /* Galeria */
     .gallery-container {
       display: flex;
@@ -240,6 +252,7 @@
 
   <!-- Botões -->
   <div class="button-container">
+    oi oieeeee
     <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
     <a class="botao-off">GALERIA<br>DE IMAGENS</a>
     <a href="rifas.html" class="botao-main">APOSTE<br>◖RIFAS◗</a>
@@ -251,11 +264,13 @@
   
   <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox">
-    <button class="fechar" onclick="fecharLightbox()">X</button>
+    <div class="lightbox-overlay" onclick="fecharLightbox()"></div>
+    <button class="fechar" onclick="fecharLightbox()">Ⓧⓧ</button>
     <img src="" alt="Imagem ampliada">
   </div>
 
   <script>
+    // Abrir o lightbox
     function abrirLightbox(src) {
       const lightbox = document.getElementById('lightbox');
       const lightboxImg = lightbox.querySelector('img');
@@ -263,12 +278,19 @@
       lightbox.style.display = 'flex';
     }
 
+    // Fechar o lightbox
     function fecharLightbox() {
       const lightbox = document.getElementById('lightbox');
       lightbox.style.display = 'none';
     }
-  </script>
 
+    // Fechar com a tecla ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        fecharLightbox();
+      }
+    });
+  </script>
 
   <!-- Galeria -->
   <main>
