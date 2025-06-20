@@ -1,40 +1,115 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Galeria Expandível com Lightbox</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BetShopTV⦿com</title>
   <style>
-    /* ======= CONFIGURAÇÃO GERAL DA GALERIA ======= */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+    body {
+      margin: 0;
+      font-family: 'Roboto Condensed', sans-serif;
+      background-image: url("https://corhexa.com/png/600x300/bebab0");
+      background-repeat: repeat;
+      color: #2b2424;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    a {
+      color: #ff0000;
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    header {
+      width: 100%;
+      height: auto;
+      min-height: 25vh;
+      padding: 20px 0;
+      background-color: #ff0000;
+      position: relative;
+      overflow: hidden;
+    }
+    .header-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 100%;
+      width: auto;
+      min-width: 100%;
+      object-fit: cover;
+      transform: translate(-50%, -50%);
+      background-color: #ff0000;
+    }
+    main {
+      width: 90%;
+      max-width: 1200px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    main h1 { font-size: 2.2em; margin-bottom: 10px; }
+    main h2 { font-size: 1.8em; }
+    main h3 { font-size: 1.4em; }
+    main p { font-size: 1.2em; line-height: 1.5; }
+    .button-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 10px; }
+    .botao-main, .botao-off, .botao-nao {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid;
+      background-color: transparent;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .botao-main { border-color: #ff0000; color: #ff0000; }
+    .botao-off { border-color: #2b2424; color: #2b2424; }
+    .botao-nao { border-color: #aaaaaa; color: #aaaaaa; }
+    @media (max-width: 768px) {
+      header { height: 112px; min-height: 112px; max-height: 112px; padding: 4px; }
+      .header-video { min-width: 300%; object-fit: cover; transform: translate(-50%, -50%); }
+      main h1 { font-size: 1.8em; }
+      main p { font-size: 1em; }
+    }
+
+    /* ======== GALERIA ESTILOS ======== */
     .galeria {
       width: 800px;
       margin: 10px auto;
     }
-
     .linha {
       display: flex;
       gap: 10px;
       margin: 10px 0;
       transition: margin 0.3s ease;
+      aria-hidden: true;
     }
-
-    /* ======= ESTILO PARA LINHAS EXPANDIDAS ======= */
+    .linha img { width: calc((800px - 2*10px - 2*10px)/3); height: auto; cursor: pointer;}
     .linha.expansivel {
       margin: 30px 0;
-      flex-direction: column;
     }
-
-    .linha .galeria-expandida {
-      display: inline-flex;
+    .galeria-expandida {
+      display: flex;
       overflow-x: auto;
-      white-space: nowrap;
       gap: 10px;
       padding: 10px 0;
+      align-items: center;
       position: relative;
     }
-
-    /* ======= ESTILO DO BOTÃO FECHAR (X) ======= */
-    .linha .fechar-expansao {
+    .ficha-tecnica {
+      background: #f0f0f0;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      min-width: 150px;
+      max-width: 300px;
+      height: auto;
+      box-sizing: border-box;
+    }
+    .fechar-expansao {
       position: absolute;
       top: 0;
       left: 50%;
@@ -42,197 +117,178 @@
       background: #333;
       color: #fff;
       border: none;
-      padding: 2px 6px;
+      padding: 4px 8px;
       cursor: pointer;
       font-size: 14px;
+      z-index: 1;
     }
 
-    /* ======= FICHA TÉCNICA (TEXTO ENTRE AS IMAGENS) ======= */
-    .ficha-tecnica {
-      background: #f0f0f0;
-      padding: 5px;
-      display: flex;
-      align-items: center;
-      min-width: 100px;
-      max-width: 300px;
-      height: 150px;
-      box-sizing: border-box;
-    }
-
-    /* ======= LIGHTBOX ======= */
+    /* ======== LIGHTBOX ========= */
     .lightbox-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
       display: none;
       justify-content: center;
       align-items: center;
-      z-index: 999;
+      z-index: 1000;
     }
-
     .lightbox-content img {
       max-width: 90vw;
       max-height: 90vh;
     }
-
     .lightbox-nav {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
       color: #fff;
-      font-size: 30px;
+      font-size: 36px;
       cursor: pointer;
       user-select: none;
+      padding: 10px;
     }
-
     .lightbox-prev { left: 20px; }
     .lightbox-next { right: 20px; }
     .lightbox-close {
       position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 24px;
-      cursor: pointer;
+      top: 20px; right: 20px;
+      font-size: 28px; cursor: pointer;
       color: #fff;
     }
   </style>
 </head>
 <body>
+  <header>
+    <a href="http://betshoptv.com">
+      <video class="header-video" autoplay loop muted playsinline>
+        <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+        Seu navegador não suporta a tag de vídeo.
+      </video>
+    </a>
+  </header>
 
-  <div class="galeria">
-    <!-- ======= EXEMPLO DE LINHA 1 ======= -->
-    <div class="linha linha-1" aria-hidden="true">
-      <img src="galeria/ETM_001.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="ETM_001">
-      <img src="galeria/ETM_002.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="Imagem 2a">
-      <img src="galeria/ETM_003.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="Imagem 3a">
+  <main>
+    <!-- GALERIA INSERIDA AQUI -->
+    <div class="galeria" id="galeria">
+      <!-- Linhas serão inseridas via HTML/JS ou estáticas aqui -->
+      <div class="linha linha-1" aria-hidden="true">
+        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="ETM 001">
+        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="ETM 002">
+        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="ETM 003">
+      </div>
+      <div class="linha linha-2" aria-hidden="true">
+        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_004.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 4a">
+        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_005.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 5a">
+        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_006.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 6a">
+      </div>
+      <!-- Considere adicionar linhas adicionais conforme necessidade -->
     </div>
+  </main>
 
-    <!-- ======= EXEMPLO DE LINHA 2 ======= -->
-    <div class="linha linha-2" aria-hidden="true">
-      <img src="4a.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 4a">
-      <img src="5a.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 5a">
-      <img src="6a.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 6a">
-    </div>
-  </div>
-
-  <!-- ======= LIGHTBOX OVERLAY ======= -->
   <div class="lightbox-overlay" role="dialog" aria-modal="true">
     <span class="lightbox-close" aria-label="Fechar galeria">×</span>
-    <span class="lightbox-nav lightbox-prev">&#8592;</span>
-    <div class="lightbox-content">
-      <img src="" alt="Imagem ampliada">
-    </div>
-    <span class="lightbox-nav lightbox-next">&#8594;</span>
+    <span class="lightbox-nav lightbox-prev" tabindex="0">❮</span>
+    <div class="lightbox-content"><img src="" alt="Imagem ampliada"></div>
+    <span class="lightbox-nav lightbox-next" tabindex="0">❯</span>
   </div>
 
-  <script>
-    // ======= EXPANDIR / FECHAR LINHAS =======
-    document.querySelectorAll('.imagem').forEach(img => {
-      img.addEventListener('click', (e) => {
-        const linhaNum = img.dataset.linha;
-        const linha = document.querySelector('.linha-' + linhaNum);
-
-        // Toggle expand/collapse
-        if (!linha.classList.contains('expansivel')) {
-          linha.classList.add('expansivel');
-          linha.setAttribute('aria-hidden', 'false');
-          img.setAttribute('aria-expanded', 'true');
-
-          // Criar galeria expandida se ainda não existir
-          if (!linha.querySelector('.galeria-expandida')) {
-            const galeriaExpandida = document.createElement('div');
-            galeriaExpandida.classList.add('galeria-expandida');
-
-            // Criar botão de fechar (X)
-            const botaoFechar = document.createElement('button');
-            botaoFechar.classList.add('fechar-expansao');
-            botaoFechar.innerText = 'X';
-            botaoFechar.setAttribute('aria-label', 'Fechar expansão');
-            botaoFechar.addEventListener('click', () => fecharLinha(linha, img));
-            galeriaExpandida.appendChild(botaoFechar);
-
-            // Exemplo de conteúdo da galeria expandida:
-            const imagens = ['a', 'ficha', 'b', 'c', 'd'];
-            imagens.forEach((letra, index) => {
-              if (letra === 'ficha') {
-                const ficha = document.createElement('div');
-                ficha.classList.add('ficha-tecnica');
-                ficha.innerHTML = '<h3>Ficha Técnica</h3><p>Detalhes da obra aqui...</p>';
-                galeriaExpandida.appendChild(ficha);
-              } else {
-                const novaImg = document.createElement('img');
-                novaImg.src = linhaNum + letra + '.jpg';
-                novaImg.alt = 'Imagem ' + linhaNum + letra;
-                novaImg.classList.add('img-expandida');
-
-                // Evento para abrir o lightbox
-                novaImg.addEventListener('click', () => abrirLightbox(linhaNum, letra));
-
-                galeriaExpandida.appendChild(novaImg);
-              }
-            });
-
-            linha.appendChild(galeriaExpandida);
-          }
-        } else {
-          fecharLinha(linha, img);
-        }
-      });
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const imagens = document.querySelectorAll('.galeria .imagem');
+    imagens.forEach(img => {
+      img.addEventListener('click', () => toggleLinha(img));
     });
 
-    function fecharLinha(linha, img) {
-      linha.classList.remove('expansivel');
-      linha.setAttribute('aria-hidden', 'true');
-      img.setAttribute('aria-expanded', 'false');
-      const galeria = linha.querySelector('.galeria-expandida');
-      if (galeria) galeria.remove();
+    function toggleLinha(img) {
+      const num = img.dataset.linha;
+      const linha = document.querySelector('.linha-' + num);
+      const expanded = linha.classList.toggle('expansivel');
+      linha.setAttribute('aria-hidden', !expanded);
+      img.setAttribute('aria-expanded', expanded);
+
+      const existente = linha.querySelector('.galeria-expandida');
+      if (expanded && !existente) {
+        criarExpandida(linha, num);
+      }
+      if (!expanded && existente) {
+        existente.remove();
+      }
     }
 
-    // ======= LIGHTBOX FUNCIONALIDADE =======
-    let imagensDaLinha = [];
-    let indexAtual = 0;
+    function criarExpandida(linha, num) {
+      const div = document.createElement('div');
+      div.className = 'galeria-expandida';
 
-    function abrirLightbox(linhaNum, letraClicada) {
-      const linha = document.querySelector('.linha-' + linhaNum);
-      imagensDaLinha = Array.from(linha.querySelectorAll('img.img-expandida'));
-      indexAtual = imagensDaLinha.findIndex(img => img.src.includes(linhaNum + letraClicada));
-      mostrarImagemNoLightbox();
-      document.querySelector('.lightbox-overlay').style.display = 'flex';
+      const btn = document.createElement('button');
+      btn.className = 'fechar-expansao';
+      btn.setAttribute('aria-label', 'Fechar expansão');
+      btn.textContent = 'X';
+      btn.addEventListener('click', () => toggleLinha(linha.querySelector('img.imagem')));
+      div.appendChild(btn);
+
+      const itens = ['a','ficha','b','c','d'];
+      itens.forEach(item => {
+        if (item === 'ficha') {
+          const ficha = document.createElement('div');
+          ficha.className = 'ficha-tecnica';
+          ficha.innerHTML = '<h3>Ficha Técnica</h3><p>Detalhes da obra...</p>';
+          div.appendChild(ficha);
+        } else {
+          const e = document.createElement('img');
+          e.src = `${num}${item}.jpg`;
+          e.alt = `Imagem ${num}${item}`;
+          e.className = 'img-expandida';
+          e.tabIndex = 0;
+          e.addEventListener('click', () => abrirLightbox(num, item));
+          div.appendChild(e);
+        }
+      });
+      linha.appendChild(div);
     }
 
-    function mostrarImagemNoLightbox() {
-      const srcAtual = imagensDaLinha[indexAtual].src;
-      document.querySelector('.lightbox-content img').src = srcAtual;
+    // ====== Lightbox ======
+    let slideImgs = [];
+    let currentIndex = 0;
+    const overlay = document.querySelector('.lightbox-overlay');
+    const lightboxImg = overlay.querySelector('.lightbox-content img');
+
+    function abrirLightbox(num, letra) {
+      const linha = document.querySelector('.linha-' + num + ' .galeria-expandida');
+      slideImgs = Array.from(linha.querySelectorAll('img.img-expandida'));
+      currentIndex = slideImgs.findIndex(i => i.src.includes(`${num}${letra}.jpg`));
+      showSlide();
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
     }
 
-    document.querySelector('.lightbox-close').addEventListener('click', fecharLightbox);
-    document.querySelector('.lightbox-prev').addEventListener('click', () => navegarLightbox(-1));
-    document.querySelector('.lightbox-next').addEventListener('click', () => navegarLightbox(1));
-
-    function fecharLightbox() {
-      document.querySelector('.lightbox-overlay').style.display = 'none';
+    function showSlide() {
+      const src = slideImgs[currentIndex].src;
+      lightboxImg.src = src;
     }
 
-    function navegarLightbox(direcao) {
-      indexAtual += direcao;
-      if (indexAtual < 0) indexAtual = imagensDaLinha.length - 1;
-      if (indexAtual >= imagensDaLinha.length) indexAtual = 0;
-      mostrarImagemNoLightbox();
-    }
+    overlay.querySelector('.lightbox-close').onclick = fecharLightbox;
+    overlay.querySelector('.lightbox-prev').onclick = () => navega(-1);
+    overlay.querySelector('.lightbox-next').onclick = () => navega(1);
 
-    document.addEventListener('keydown', (e) => {
-      const lightboxAberto = document.querySelector('.lightbox-overlay').style.display === 'flex';
-      if (lightboxAberto) {
-        if (e.key === 'ArrowRight') navegarLightbox(1);
-        if (e.key === 'ArrowLeft') navegarLightbox(-1);
+    document.addEventListener('keydown', e => {
+      if (overlay.style.display === 'flex') {
+        if (e.key === 'ArrowLeft') navega(-1);
+        if (e.key === 'ArrowRight') navega(1);
         if (e.key === 'Escape') fecharLightbox();
       }
     });
-  </script>
 
+    function fecharLightbox() {
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function navega(delta) {
+      currentIndex = (currentIndex + delta + slideImgs.length) % slideImgs.length;
+      showSlide();
+    }
+  });
+</script>
 </body>
 </html>
-
