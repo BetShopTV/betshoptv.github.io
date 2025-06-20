@@ -53,8 +53,8 @@
 
     /* Conteúdo Principal */
     main {
-      width: 100%;
-      max-width: 1224px;
+      width: 90%;
+      max-width: 1200px;
       margin-top: 20px;
       text-align: center;
     }
@@ -66,31 +66,15 @@
 
     main h2 {
       font-size: 1.8em;
-      margin-bottom: 8px;
-      margin-top: 42px;
-
     }
 
     main h3 {
       font-size: 1.4em;
-      margin-top: 38px;
-      margin-bottom: 0px;
-    }
-    
-    main h4 {
-      font-size: 1em;
-      text-decoration: none;
-    }
-    
-    main v {
-      color: #ff0000;
     }
     
     main p {
       font-size: 1.2em;
-      color: #2b2424;
-      margin-top: 4px;
-      margin-bottom: 4px;
+      line-height: 1.5;
     }
 
     /* Botões (versão desktop) */
@@ -135,6 +119,22 @@
   cursor: pointer;
   white-space: nowrap; /* Evita quebra de texto */
 }
+    .botao-nao {
+  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
+  height: 50px;
+  border: 2px solid #aaaaaa;
+  background-color: transparent;
+  color: #aaaaaa;
+  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap; /* Evita quebra de texto */
+}
 
 
     /* Responsividade: Celulares (até 768px) */
@@ -153,6 +153,14 @@
         object-fit: cover;
         object-position: center;
         transform: translate(-50%, -50%);
+      }
+
+      main h1 {
+        font-size: 1.8em;
+      }
+
+      main p {
+        font-size: 1em;
       }
     
     /* Galeria */
@@ -206,15 +214,15 @@
     <div class="gallery-container">
         <div class="column">
             <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg" alt="Imagem 2">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" alt="Imagem 2">
         </div>
         <div class="column">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" alt="Imagem 3">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg" alt="Imagem 3">
             <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_004.jpg" alt="Imagem 4">
         </div>
         <div class="column">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_005.jpg" alt="Imagem 5">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_006.jpg" alt="Imagem 6">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_006.jpg" alt="Imagem 5">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_005.jpg" alt="Imagem 6">
         </div></div>
   </main>
 </body>
