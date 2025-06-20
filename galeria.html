@@ -77,71 +77,20 @@
 
     /* Galeria */
     .galeria {
-      width: 1200px;
-      margin: 20px auto;
-    }
-
-    .linha {
+      width: 1224px;
       display: flex;
-      gap: 10px;
-      margin: 10px 0;
-      justify-content: space-between;
-    }
-
-    .linha img {
-      height: auto;
-      object-fit: contain;
-      cursor: pointer;
-    }
-
-    .galeria-expandida {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #ff0000;
-      position: relative;
-      max-width: 1200px;
-      overflow-x: auto;
-      overflow-y: hidden;
-    }
-
-    .galeria-expandida::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .galeria-expandida::-webkit-scrollbar-thumb {
-      background-color: #ff0000;
-      border-radius: 4px;
-    }
-
-    .galeria-expandida::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .ficha-tecnica {
-      background: #f0f0f0;
-      color: #2b2424;
-      font-family: 'Roboto Condensed', sans-serif;
-      padding: 10px;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 20px;
       box-sizing: border-box;
-      min-width: 150px;
-      max-width: 300px;
-      text-align: center;
     }
 
-    .fechar-expansao {
-      position: absolute;
-      top: -40px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #ff0000;
-      color: white;
-      border: none;
+    .galeria img {
+      width: 400px;
+      height: auto;
       cursor: pointer;
-      font-size: 16px;
-      padding: 5px 15px;
+      object-fit: cover;
+      background-color: #2b2424; /* Para imagens vazias */
     }
   </style>
 </head>
