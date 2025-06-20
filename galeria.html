@@ -12,6 +12,7 @@
       margin: 0;
       font-family: 'Roboto Condensed', sans-serif;
       background-color: #bebab0;
+      background-repeat: repeat;
       color: #2b2424;
       display: flex;
       flex-direction: column;
@@ -52,10 +53,10 @@
 
     /* Conteúdo Principal */
     main {
-      max-width: 1400px;
+      width: 90%;
+      max-width: 1200px;
       margin-top: 20px;
       text-align: center;
-      align-items: center;
     }
 
     main h1 {
@@ -65,15 +66,31 @@
 
     main h2 {
       font-size: 1.8em;
+      margin-bottom: 8px;
+      margin-top: 42px;
+
     }
 
     main h3 {
       font-size: 1.4em;
+      margin-top: 38px;
+      margin-bottom: 0px;
+    }
+    
+    main h4 {
+      font-size: 1em;
+      text-decoration: none;
+    }
+    
+    main v {
+      color: #ff0000;
     }
     
     main p {
       font-size: 1.2em;
-      line-height: 1.5;
+      color: #2b2424;
+      margin-top: 4px;
+      margin-bottom: 4px;
     }
 
     /* Botões (versão desktop) */
@@ -118,23 +135,34 @@
   cursor: pointer;
   white-space: nowrap; /* Evita quebra de texto */
 }
-    .botao-nao {
-  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
-  height: 50px;
-  border: 2px solid #aaaaaa;
-  background-color: transparent;
-  color: #aaaaaa;
-  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
-  justify-content: center;
-  align-items: center;
-  font-size: 1em;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.2;
-  cursor: pointer;
-  white-space: nowrap; /* Evita quebra de texto */
-}
 
+
+    /* Galeria */
+    .gallery-container {
+      display: flex;
+      justify-content: space-between;
+      max-width: 1224px;
+      margin: 20px auto;
+      /* padding: foi removido anteriormente e não deve estar aqui */
+      /* flex-wrap: wrap; foi removido e não deve estar aqui */
+      /* gap: foi removido e não deve estar aqui */
+    }
+
+    /* A regra .gallery-container img foi removida pois as imagens agora estão em .column img */
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      width: 400px;
+    }
+
+    .column img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 12px;
+      /* box-shadow: none; /* Garantir que não haja, se herdado */
+      /* border-radius: 0; /* Garantir que não haja, se herdado */
+    }
 
     /* Responsividade: Celulares (até 768px) */
     @media (max-width: 768px) {
@@ -154,36 +182,20 @@
         transform: translate(-50%, -50%);
       }
 
-      main h1 {
-        font-size: 1.8em;
+      /* Estilos da Galeria para mobile */
+      .gallery-container {
+        flex-direction: column;
+        align-items: center;
       }
 
-      main p {
-        font-size: 1em;
+      .column {
+        width: 90%; /* Colunas ocupam 90% da largura do gallery-container */
+        margin-bottom: 20px;
       }
-    
-    /* Galeria */
-.gallery-container {
-    display: flex;
-    justify-content: space-between; /* Distribui o espaço entre as colunas */
-    max-width: 1200px; /* Largura total da galeria (3 * 400px + 2 * 12px) */
-    margin: 0 auto; /* Centraliza a galeria na página */
-}
 
-.column {
-    display: flex;
-    flex-direction: column; /* Imagens empilhadas verticalmente */
-    width: 390px; /* Largura de cada coluna */
-}
-
-.column img {
-    width: 100%; /* Imagem ocupa toda a largura da coluna (400px) */
-    height: auto; /* Altura se ajusta proporcionalmente */
-    margin-bottom: 15px; /* Espaçamento abaixo de cada imagem */
-    box-shadow: 0 2px 4px rgba(118,0,0,0.1); /* Adiciona uma sombra sutil */
-    
-    border-radius: 2px;
-}
+      .column:last-child {
+        margin-bottom: 0;
+      }
     }
   </style>
 </head>
@@ -198,7 +210,7 @@
 
   <!-- Botões -->
   <div class="button-container">
-    <a href="como.html" class="botao-main">COMO FUNCIONAaaaaaaaaaa?</a>
+    <a href="como.html" class="botao-main">CooooooooooooooooooooooooOMO FUNCIONaaaaaaaaaaaaaaaaaaaaaaaaaaaaaA?</a>
     <a class="botao-off">GALERIA<br>DE IMAGENS</a>
     <a href="rifas.html" class="botao-main">APOSTE<br>◖RIFAS◗</a>
     <a href="ofertas.html" class="botao-main">APOSTE<br>◖OFERTAS◗</a>
@@ -209,7 +221,7 @@
 
   <!-- Galeria -->
   <main>
-    <div class="gallery-container" max-width="1300px">
+    <div class="gallery-container">
         <div class="column">
             <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1">
             <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" alt="Imagem 2">
@@ -221,7 +233,8 @@
         <div class="column">
             <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_006.jpg" alt="Imagem 5">
             <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_005.jpg" alt="Imagem 6">
-        </div></div>
+        </div>
+    </div>
   </main>
 </body>
 </html>
