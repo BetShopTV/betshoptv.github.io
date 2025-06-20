@@ -10,7 +10,6 @@
       margin: 0;
       font-family: 'Roboto Condensed', sans-serif;
       background-color: #bebab0;
-      background-repeat: repeat;
       color: #2b2424;
       display: flex;
       flex-direction: column;
@@ -20,13 +19,12 @@
     a {
       color: #ff0000;
       text-decoration: none;
-      text-decoration-color: #ff0000;
     }
     a:hover {
       text-decoration: underline;
     }
 
-    /* Cabeçalho padrão (computador) */
+    /* Cabeçalho */
     header {
       width: 100%;
       height: auto;
@@ -46,113 +44,38 @@
       min-width: 100%;
       object-fit: cover;
       transform: translate(-50%, -50%);
-      background-color: #ff0000;
     }
 
-    /* Conteúdo Principal */
-    main {
-      width: 90%;
-      max-width: 1200px;
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    main h1 {
-      font-size: 2.2em;
-      margin-bottom: 10px;
-    }
-
-    main h2 {
-      font-size: 1.8em;
-      margin-bottom: 8px;
-      margin-top: 42px;
-
-    }
-
-    main h3 {
-      font-size: 1.4em;
-      margin-top: 38px;
-      margin-bottom: 0px;
-    }
-    
-    main h4 {
-      font-size: 1em;
-      text-decoration: none;
-    }
-    
-    main v {
-      color: #ff0000;
-    }
-    
-    main p {
-      font-size: 1.2em;
-      color: #2b2424;
-      margin-top: 4px;
-      margin-bottom: 4px;
-    }
-
-    /* Botões (versão desktop) */
+    /* Botões */
     .button-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px; /* Espaço entre os botões */
-      margin-top: 10px;
-      margin-right: 10px;
-      margin-left: 10px;
+      gap: 10px;
+      margin: 20px 0;
     }
-.botao-main {
-  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
-  height: 50px;
-  border: 2px solid #ff0000;
-  background-color: transparent;
-  color: #ff0000;
-  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
-  justify-content: center;
-  align-items: center;
-  font-size: 1em;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.2;
-  cursor: pointer;
-  white-space: nowrap; /* Evita quebra de texto */
-}
-.botao-off {
-  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
-  height: 50px;
-  border: 2px solid #2b2424;
-  background-color: transparent;
-  color: #2b2424;
-  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
-  justify-content: center;
-  align-items: center;
-  font-size: 1em;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.2;
-  cursor: pointer;
-  white-space: nowrap; /* Evita quebra de texto */
-}
+    .botao-main {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid #ff0000;
+      background-color: transparent;
+      color: #ff0000;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .botao-off {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid #2b2424;
+      background-color: transparent;
+      color: #2b2424;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: default;
+    }
 
-
-    /* Responsividade: Celulares (até 768px) */
-    @media (max-width: 768px) {
-      header {
-        height: 112px;
-        min-height: 112px;
-        max-height: 112px;
-        padding: 4px 4px;
-      }
-
-      .header-video {
-        height: 100%;
-        width: auto;
-        min-width: 300%;
-        object-fit: cover;
-        object-position: center;
-        transform: translate(-50%, -50%);
-      }
-
+    /* Galeria */
     .galeria {
       width: 1200px;
       margin: 20px auto;
@@ -166,9 +89,7 @@
     }
 
     .linha img {
-      height: 200px; /* Mesma altura para todas as imagens */
-      flex-grow: 1;
-      width: calc((1200px - 20px) / 3); /* Ajusta largura para somar 1200px */
+      height: auto;
       object-fit: contain;
       cursor: pointer;
     }
@@ -225,122 +146,63 @@
   </style>
 </head>
 <body>
-<!-- Cabeçalho -->
+  <!-- Cabeçalho -->
   <header>
     <video class="header-video" autoplay loop muted playsinline>
-     <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+      <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
       Seu navegador não suporta a tag de vídeo.
     </video>
   </header>
 
-  <!-- Conteúdo Principal -->
-  <main>
-<section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">    
-<div class="button-container">
-      <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
-      <a class="botao-off">GALERIA<BR>DE IMAGENS</a>
-      <a href="rifas.html" class="botao-main">APOSTE<br>&nbsp;◖RIFAS◗&nbsp;</a>
-      <a href="ofertas.html" class="botao-main">APOSTE<br>&nbsp;◖OFERTAS◗&nbsp;</a>
-      <a href="faq.html" class="botao-main">PERGUNTAS<br>FREQUENTES</a>
-      <a href="sobre.html" class="botao-main">SOBRE O PROJETO</a>
-      <a href="contato.html" class="botao-main">CONTATO</a>
-    </div>
-</section>
+  <!-- Botões -->
+  <div class="button-container">
+    <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
+    <a class="botao-off">GALERIA<br>DE IMAGENS</a>
+    <a href="rifas.html" class="botao-main">APOSTE<br>◖RIFAS◗</a>
+    <a href="ofertas.html" class="botao-main">APOSTE<br>◖OFERTAS◗</a>
+    <a href="faq.html" class="botao-main">PERGUNTAS<br>FREQUENTES</a>
+    <a href="sobre.html" class="botao-main">SOBRE O PROJETO</a>
+    <a href="contato.html" class="botao-main">CONTATO</a>
+  </div>
 
-<br><br>  
-    <!-- Galeria -->
+  <!-- Galeria -->
+  <main>
     <div class="galeria" id="galeria"></div>
- 
+  </main>
 
   <script>
     const galerias = {
       'ETM_001': {
         imagens: [
-          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg',
-          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001a.jpg',
-          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001b.jpg'
+          { src: 'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg', largura: 1000, altura: 600 },
+          { src: 'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001a.jpg', largura: 180, altura: 600 },
+          { src: 'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001b.jpg', largura: 1000, altura: 600 }
         ],
-        ficha: 'FichaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA técnica da imagem ETM_001'
-      },
-      'ETM_002': {
-        imagens: [
-          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg',
-          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002a.jpg',
-          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002b.jpg'
-        ],
-        ficha: 'Ficha técnica da imagem ETM_002'
-      },
-      'ETM_003': {
-        imagens: [
-          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg',
-          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003a.jpg',
-          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003b.jpg'
-        ],
-        ficha: 'Ficha técnica da imagem ETM_003'
+        ficha: 'Ficha técnica da imagem ETM_001'
       }
     };
 
     const galeriaContainer = document.getElementById('galeria');
 
-    // Criar linhas e adicionar imagens
-    Object.keys(galerias).forEach((key, index) => {
-      if (index % 3 === 0) {
-        const linha = document.createElement('div');
-        linha.className = 'linha';
-        galeriaContainer.appendChild(linha);
-      }
-      const linhaAtual = galeriaContainer.lastElementChild;
+    // Gerar linhas e imagens com cálculo dinâmico
+    Object.keys(galerias).forEach((key) => {
+      const linha = document.createElement('div');
+      linha.className = 'linha';
 
-      const img = document.createElement('img');
-      img.src = galerias[key].imagens[0];
-      img.alt = `Imagem ${key}`;
-      img.dataset.galeria = key;
-      linhaAtual.appendChild(img);
-    });
+      const totalLargura = galerias[key].imagens.reduce((total, img) => total + img.largura, 0);
+      const escala = 1200 / (totalLargura + 20); // Inclui gaps de 10px
 
-    galeriaContainer.addEventListener('click', (e) => {
-      if (e.target.tagName === 'IMG') {
-        const key = e.target.dataset.galeria;
-        const linhaAtual = e.target.closest('.linha');
-        expandirGaleria(linhaAtual, key);
-      }
-    });
-
-    function expandirGaleria(linha, key) {
-      // Remover galeria expandida existente
-      const existente = document.querySelector('.galeria-expandida');
-      if (existente) existente.remove();
-
-      // Criar nova galeria expandida
-      const galeriaExpandida = document.createElement('div');
-      galeriaExpandida.className = 'galeria-expandida';
-
-      // Botão para fechar a galeria
-      const btnFechar = document.createElement('button');
-      btnFechar.className = 'fechar-expansao';
-      btnFechar.textContent = 'Fechar';
-      btnFechar.onclick = () => galeriaExpandida.remove();
-      galeriaExpandida.appendChild(btnFechar);
-
-      // Inserir imagens na galeria expandida
-      galerias[key].imagens.forEach((src) => {
+      galerias[key].imagens.forEach((imgData) => {
         const img = document.createElement('img');
-        img.src = src;
-        img.alt = `Imagem expandida ${key}`;
-        img.style.height = '200px'; // Ajuste de altura para manter padrão
-        galeriaExpandida.appendChild(img);
+        img.src = imgData.src;
+        img.style.width = `${imgData.largura * escala}px`;
+        img.style.height = `${imgData.altura * escala}px`;
+        img.alt = `Imagem ${key}`;
+        linha.appendChild(img);
       });
 
-      // Inserir ficha técnica
-      const ficha = document.createElement('div');
-      ficha.className = 'ficha-tecnica';
-      ficha.innerHTML = `<h3>Ficha Técnica</h3><p>${galerias[key].ficha}</p>`;
-      galeriaExpandida.appendChild(ficha);
-
-      // Inserir a galeria expandida na linha
-      linha.after(galeriaExpandida);
-    }
+      galeriaContainer.appendChild(linha);
+    });
   </script>
-  </main>
 </body>
 </html>
