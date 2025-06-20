@@ -266,17 +266,25 @@
     <a href="contato.html" class="botao-main">CONTATO</a>
   </div>
 
+  <!-- Lightbox ETM -->
   <div class="lightbox" id="ETM">
-    <div class="lightbox-overlay" onclick="fecharLightbox()"></div>
-    <button class="fechar" onclick="fecharLightbox()">Ⓧ</button>
+    <div class="lightbox-overlay" onclick="fecharLightbox('ETM')"></div>
+    <button class="fechar" onclick="fecharLightbox('ETM')">Ⓧ</button>
     <div class="conteudo">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" alt="Imagem 2">
-      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg" alt="Imagem 3">
-      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_004.jpg" alt="Imagem 4">
     </div>
   </div>
 
+  <!-- Lightbox CSA -->
+  <div class="lightbox" id="CSA">
+    <div class="lightbox-overlay" onclick="fecharLightbox('CSA')"></div>
+    <button class="fechar" onclick="fecharLightbox('CSA')">Ⓧ</button>
+    <div class="conteudo">
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/003-03-c.jpg" alt="Imagem CSA">
+    </div>
+  </div>
+  
   <main>
     <div class="gallery-container">
         <div class="column">
@@ -286,29 +294,48 @@
       <p><i>EVA TV Man</i>, 2025</p>
       <p>Página da revista Playboy brasileira contendo reprodução da serigrafia <i>TV Man</i>, de Keith Haring, transferida para refugo de EVA, tinta acrílica e ímãs. 60 x 40 x 15 cm</p>
       <br>
-      <a onclick="abrirLightbox(ETM)" class="botao-off">VEJA MAIS</a>
+      <a onclick="abrirLightbox('ETM')" class="botao-off">VEJA MAIS</a>
       <a href="aposte_col_a.html" class="botao-coluna">APOSTE na COLUNA A</a>
       </div>
       <div class="column">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1" class="imagem-interativa" onclick="abrirLightbox(ETM)" style="cursor: pointer;">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1" class="imagem-interativa" onclick="abrirLightbox('ETM')" style="cursor: pointer;">
         </div>
     </div>
+    
+    <br>
+    
+        <div class="gallery-container">
+        <div class="column">
+              <h2><v>⦿</v> COLUNA <v>X</v></h2>
+              <br>
+              <p><strong>Pedro Gallego</strong></p>
+      <p><i>Chop Shop AV</i>, 2025</p>
+      <p>Páginas da revista Playboy brasileira publicadas entre fevereiro e agosto de 1990 transferidas para EVA estampado, tinta acrílica, ímãs, grampos, ferragens e refugos de EVA. Políptico, dimensões variáveis</p>
+      <br>
+      <a onclick="abrirLightbox('CSA')" class="botao-off">VEJA MAIS</a>
+      <a href="aposte_col_x.html" class="botao-coluna">APOSTE na COLUNA X</a>
+      </div>
+      
+      <div class="column">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/003-03-c.jpg" alt="Imagem 2" class="imagem-interativa" onclick="abrirLightbox('CSA')" style="cursor: pointer;">
+        </div>
   </main>
 
   <script>
-    function abrirLightbox() {
-      const lightbox = document.getElementById('ETM');
+    function abrirLightbox(id) {
+      const lightbox = document.getElementById(id);
       lightbox.style.display = 'flex';
     }
 
-    function fecharLightbox() {
-      const lightbox = document.getElementById('ETM');
+    function fecharLightbox(id) {
+      const lightbox = document.getElementById(id);
       lightbox.style.display = 'none';
     }
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        fecharLightbox();
+        fecharLightbox('ETM');
+        fecharLightbox('CSA');
       }
     });
   </script>
