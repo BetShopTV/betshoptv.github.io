@@ -241,6 +241,13 @@
       display: flex;
       flex-direction: column;
       width: 400px;
+      text-align: left;
+    }
+    .column p, 
+    .column div {
+     margin-left: 6px;
+     margin-bottom: 12px;
+     line-height: 1.3;
     }
 
     .column img {
@@ -312,12 +319,6 @@
   <div class="lightbox-overlay" onclick="fecharLightbox()"></div>
   <button class="fechar" onclick="fecharLightbox()">Ⓧ</button>
   <div class="conteudo">
-    <div class="texto">
-      <p>Pedro Gallego</p>
-      <p><i>EVA TV Man</i>, 2025</p>
-      <p>Página da revista Playboy brasileira contendo reprodução da serigrafia TV Man, de Keith Haring, transferida para refugo de EVA com gel médium acrílico fosco, tinta acrílica e parafuso.</p>
-      <p>60 x 40 x 15 cm</p>
-    </div>
     <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1">
     <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" alt="Imagem 2">
     <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg" alt="Imagem 3">
@@ -333,6 +334,10 @@
     <div class="gallery-container">
         <div class="column">
             <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1" class="imagem-interativa" onclick="abrirLightbox(ETM)">
+                  <div align="margin-left"><p><strong>Pedro Gallego</strong></p>
+      <p><i>EVA TV Man</i>, 2025</p>
+      <p>Página da revista Playboy brasileira contendo reprodução da serigrafia TV Man, de Keith Haring, transferida para refugo de EVA com gel médium acrílico fosco, tinta acrílica e parafuso.</p>
+      <p>60 x 40 x 15 cm</p></div>
             <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" alt="Imagem 2">
         </div>
         <div class="column">
