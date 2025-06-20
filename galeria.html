@@ -116,42 +116,17 @@
 
   <!-- Galeria -->
   <main>
-    <div class="galeria" id="galeria"></div>
+      <div class="galeria">
+    <img src="https://via.placeholder.com/400x300/FF0000/FFFFFF?text=1" alt="Imagem 1">
+    <img src="https://via.placeholder.com/400x600/00FF00/FFFFFF?text=2" alt="Imagem 2">
+    <img src="https://via.placeholder.com/400x450/0000FF/FFFFFF?text=3" alt="Imagem 3">
+    <img src="https://via.placeholder.com/400x350/FFFF00/FFFFFF?text=4" alt="Imagem 4">
+    <img src="https://via.placeholder.com/400x500/FF00FF/FFFFFF?text=5" alt="Imagem 5">
+    <img src="https://via.placeholder.com/400x400/00FFFF/FFFFFF?text=6" alt="Imagem 6">
+    <img src="https://via.placeholder.com/400x650/FFA500/FFFFFF?text=7" alt="Imagem 7">
+    <img src="https://via.placeholder.com/400x300/800080/FFFFFF?text=8" alt="Imagem 8">
+    <img src="https://via.placeholder.com/400x550/008000/FFFFFF?text=9" alt="Imagem 9">
+  </div>
   </main>
-
-  <script>
-    const galerias = {
-      'ETM_001': {
-        imagens: [
-          { src: 'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg', largura: 1000, altura: 600 },
-          { src: 'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001a.jpg', largura: 180, altura: 600 },
-          { src: 'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001b.jpg', largura: 1000, altura: 600 }
-        ],
-        ficha: 'Ficha técnica da imagem ETM_001'
-      }
-    };
-
-    const galeriaContainer = document.getElementById('galeria');
-
-    // Gerar linhas e imagens com cálculo dinâmico
-    Object.keys(galerias).forEach((key) => {
-      const linha = document.createElement('div');
-      linha.className = 'linha';
-
-      const totalLargura = galerias[key].imagens.reduce((total, img) => total + img.largura, 0);
-      const escala = 1200 / (totalLargura + 20); // Inclui gaps de 10px
-
-      galerias[key].imagens.forEach((imgData) => {
-        const img = document.createElement('img');
-        img.src = imgData.src;
-        img.style.width = `${imgData.largura * escala}px`;
-        img.style.height = `${imgData.altura * escala}px`;
-        img.alt = `Imagem ${key}`;
-        linha.appendChild(img);
-      });
-
-      galeriaContainer.appendChild(linha);
-    });
-  </script>
 </body>
 </html>
