@@ -46,6 +46,16 @@
       margin-right: 10px;
       margin-left: 10px;
     }
+    
+    .button-container-subitem {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
 
     .button-main {
       padding: 4px 13px;
@@ -93,7 +103,80 @@
       white-space: nowrap;
       transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
+    
+    .botao-main, .botao-off, .botao-coluna {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid;
+      color: #ff0000;
+      background-color: transparent;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    .botao-main:hover {
+      color: #ff0000;
+      border-color: #ff0000;
+      text-decoration: underline;
+    }
+    
+    .botao-subitem {
+      padding: 4px 13px;
+      height: 37px;
+      border: 2px solid;
+      color: #ff0000;
+      background-color: transparent;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    .botao-subitem:hover {
+      color: #bebab0;
+      background-color: #ff0000;
+      border-color: #ff0000;
+      text-decoration: underline;
+    }
+    
+        .botao-subitem-off {
+      padding: 4px 13px;
+      height: 37px;
+      border: 2px solid;
+      color: #2b2424;
+      border-color: #2b2424;
+      background-color: transparent;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    .botao-coluna {
+      color: #bebab0;
+      border-color: #2b2424;
+      background-color: #2b2424;
+    }    
 
+    .botao-off {
+      color: #2b2424;
+      border-color: #2b2424;
+    }
+    
     /* NOVO: container da área inferior com lista e botão copiar */
     .selection-container {
       margin-top: 20px;
@@ -143,6 +226,21 @@
       Seu navegador não suporta a tag de vídeo.
     </video>
   </header>
+    <!-- BOTÕES MENU -->
+  <div class="button-container">
+    <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
+    <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
+    <a class="botao-off">APOSTE<br>◖RIFAS◗</a>
+    <a href="ofertas.html" class="botao-main">APOSTE<br>◖OFERTAS◗</a>
+    <a href="faq.html" class="botao-main">PERGUNTAS<br>FREQUENTES</a>
+    <a href="sobre.html" class="botao-main">SOBRE O PROJETO</a>
+    <a href="contato.html" class="botao-main">CONTATO</a>
+  </div>
+  <br><br>
+  <div class="button-container-subitem">
+    <a class="botao-subitem-off">COLUNA A&nbsp;&nbsp;/&nbsp;&nbsp;<i>EVA TV Man</i></a>
+    <a href="aposte_col_x.html" class="botao-subitem">COLUNA X&nbsp;&nbsp;/&nbsp;&nbsp;<i>Chop Shop AV</i></a>
+  </div>
 
   <main>
       
@@ -440,8 +538,8 @@
         if (!button.classList.contains('active')) {
           clearTimeout(fadeTimeout);
 
-          const minDelay = 373;
-          const maxDelay = 4224;
+          const minDelay = 188;
+          const maxDelay = 1802;
           const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
 
           fadeTimeout = setTimeout(() => {
@@ -489,15 +587,8 @@
   </script>
   <br><br>
   <br><br>
-    <br><br>
   <br><br>
-    <br><br>
   <br><br>
-    <br><br>
-  <br><br>
-    <br><br>
-  <br><br>  <br><br>
-  <br><br>  <br><br>
   <br><br>
 </body>
 </html>
