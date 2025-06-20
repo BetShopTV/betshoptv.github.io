@@ -2,10 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BetShopTV⦿com</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
     body {
       margin: 0;
       font-family: 'Roboto Condensed', sans-serif;
@@ -16,11 +15,71 @@
       flex-direction: column;
       align-items: center;
     }
-    a {
+
+    .galeria {
+      width: 800px;
+      margin: 20px auto;
+    }
+
+    .linha {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+      flex-wrap: wrap;
+      transition: all 0.3s ease;
+    }
+
+    .linha.expansivel {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+
+    .linha img {
+      height: auto;
+      max-width: calc((800px - 20px) / 3);
+      cursor: pointer;
+      object-fit: contain;
+    }
+
+    .galeria-expandida {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      position: relative;
+    }
+
+    .ficha-tecnica {
+      background: #f0f0f0;
+      padding: 10px;
+      box-sizing: border-box;
+      min-width: 150px;
+      max-width: 300px;
+    }
+
+    .fechar-expansao {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 5px 10px;
+    }
+
+        a {
       color: #ff0000;
       text-decoration: none;
+      text-decoration-color: #ff0000;
     }
-    a:hover { text-decoration: underline; }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Cabeçalho padrão (computador) */
     header {
       width: 100%;
       height: auto;
@@ -30,6 +89,7 @@
       position: relative;
       overflow: hidden;
     }
+
     .header-video {
       position: absolute;
       top: 50%;
@@ -41,254 +101,208 @@
       transform: translate(-50%, -50%);
       background-color: #ff0000;
     }
+
+    /* Conteúdo Principal */
     main {
       width: 90%;
       max-width: 1200px;
       margin-top: 20px;
       text-align: center;
     }
-    main h1 { font-size: 2.2em; margin-bottom: 10px; }
-    main h2 { font-size: 1.8em; }
-    main h3 { font-size: 1.4em; }
-    main p { font-size: 1.2em; line-height: 1.5; }
-    .button-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 10px; }
-    .botao-main, .botao-off, .botao-nao {
-      padding: 4px 13px;
-      height: 50px;
-      border: 2px solid;
-      background-color: transparent;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
+
+    main h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
+    }
+
+    main h2 {
+      font-size: 1.8em;
+      margin-bottom: 8px;
+      margin-top: 42px;
+
+    }
+
+    main h3 {
+      font-size: 1.4em;
+      margin-top: 38px;
+      margin-bottom: 0px;
+    }
+    
+    main h4 {
       font-size: 1em;
-      font-weight: bold;
-      cursor: pointer;
-      white-space: nowrap;
+      text-decoration: none;
     }
-    .botao-main { border-color: #ff0000; color: #ff0000; }
-    .botao-off { border-color: #2b2424; color: #2b2424; }
-    .botao-nao { border-color: #aaaaaa; color: #aaaaaa; }
-    @media (max-width: 768px) {
-      header { height: 112px; min-height: 112px; max-height: 112px; padding: 4px; }
-      .header-video { min-width: 300%; object-fit: cover; transform: translate(-50%, -50%); }
-      main h1 { font-size: 1.8em; }
-      main p { font-size: 1em; }
+    
+    main v {
+      color: #ff0000;
     }
-
-    /* ======== GALERIA ESTILOS ======== */
-    .galeria {
-      width: 800px;
-      margin: 10px auto;
-    }
-    .linha {
-      display: flex;
-      gap: 10px;
-      margin: 10px 0;
-      transition: margin 0.3s ease;
-      aria-hidden: true;
-    }
-    .linha img { width: calc((800px - 2*10px - 2*10px)/3); height: auto; cursor: pointer;}
-    .linha.expansivel {
-      margin: 30px 0;
-    }
-    .galeria-expandida {
-      display: flex;
-      overflow-x: auto;
-      gap: 10px;
-      padding: 10px 0;
-      align-items: center;
-      position: relative;
-    }
-    .ficha-tecnica {
-      background: #f0f0f0;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      min-width: 150px;
-      max-width: 300px;
-      height: auto;
-      box-sizing: border-box;
-    }
-    .fechar-expansao {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #333;
-      color: #fff;
-      border: none;
-      padding: 4px 8px;
-      cursor: pointer;
-      font-size: 14px;
-      z-index: 1;
+    
+    main p {
+      font-size: 1.2em;
+      color: #2b2424;
+      margin-top: 4px;
+      margin-bottom: 4px;
     }
 
-    /* ======== LIGHTBOX ========= */
-    .lightbox-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: none;
+    /* Botões (versão desktop) */
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      gap: 10px; /* Espaço entre os botões */
+      margin-top: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
     }
-    .lightbox-content img {
-      max-width: 90vw;
-      max-height: 90vh;
-    }
-    .lightbox-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #fff;
-      font-size: 36px;
-      cursor: pointer;
-      user-select: none;
-      padding: 10px;
-    }
-    .lightbox-prev { left: 20px; }
-    .lightbox-next { right: 20px; }
-    .lightbox-close {
-      position: absolute;
-      top: 20px; right: 20px;
-      font-size: 28px; cursor: pointer;
-      color: #fff;
-    }
+.botao-main {
+  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
+  height: 50px;
+  border: 2px solid #ff0000;
+  background-color: transparent;
+  color: #ff0000;
+  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap; /* Evita quebra de texto */
+}
+.botao-off {
+  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
+  height: 50px;
+  border: 2px solid #2b2424;
+  background-color: transparent;
+  color: #2b2424;
+  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap; /* Evita quebra de texto */
+}
   </style>
 </head>
 <body>
+  <!-- Cabeçalho -->
   <header>
-    <a href="http://betshoptv.com">
-      <video class="header-video" autoplay loop muted playsinline>
-        <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
-        Seu navegador não suporta a tag de vídeo.
-      </video>
-    </a>
+    <video class="header-video" autoplay loop muted playsinline>
+     <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+      Seu navegador não suporta a tag de vídeo.
+    </video>
   </header>
 
+  <!-- Conteúdo Principal -->
   <main>
-    <!-- GALERIA INSERIDA AQUI -->
-    <div class="galeria" id="galeria">
-      <!-- Linhas serão inseridas via HTML/JS ou estáticas aqui -->
-      <div class="linha linha-1" aria-hidden="true">
-        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="ETM 001">
-        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="ETM 002">
-        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" class="imagem" data-linha="1" aria-expanded="false" alt="ETM 003">
-      </div>
-      <div class="linha linha-2" aria-hidden="true">
-        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_004.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 4a">
-        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_005.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 5a">
-        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_006.jpg" class="imagem" data-linha="2" aria-expanded="false" alt="Imagem 6a">
-      </div>
-      <!-- Considere adicionar linhas adicionais conforme necessidade -->
+<section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">    
+<div class="button-container">
+      <a href="como.html" class="botao-off">COMO FUNCIONA?</a>
+      <a href="galeria.html" class="botao-main">GALERIA<BR>DE IMAGENS</a>
+      <a href="rifas.html" class="botao-main">APOSTE<br>&nbsp;◖RIFAS◗&nbsp;</a>
+      <a href="ofertas.html" class="botao-main">APOSTE<br>&nbsp;◖OFERTAS◗&nbsp;</a>
+      <a href="faq.html" class="botao-main">PERGUNTAS<br>FREQUENTES</a>
+      <a href="sobre.html" class="botao-main">SOBRE O PROJETO</a>
+      <a href="contato.html" class="botao-main">CONTATO</a>
     </div>
-  </main>
+</section>
+  <div class="galeria" id="galeria"></div>
 
-  <div class="lightbox-overlay" role="dialog" aria-modal="true">
-    <span class="lightbox-close" aria-label="Fechar galeria">×</span>
-    <span class="lightbox-nav lightbox-prev" tabindex="0">❮</span>
-    <div class="lightbox-content"><img src="" alt="Imagem ampliada"></div>
-    <span class="lightbox-nav lightbox-next" tabindex="0">❯</span>
-  </div>
+  <script>
+    const galerias = {
+      'ETM_001': {
+        imagens: [
+          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg',
+          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001a.jpg',
+          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001b.jpg'
+        ],
+        ficha: 'Ficha técnica da imagem ETM_001'
+      },
+      'ETM_002': {
+        imagens: [
+          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg',
+          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002a.jpg',
+          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002b.jpg'
+        ],
+        ficha: 'Ficha técnica da imagem ETM_002'
+      },
+      'ETM_003': {
+        imagens: [
+          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg',
+          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003a.jpg',
+          'https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003b.jpg'
+        ],
+        ficha: 'Ficha técnica da imagem ETM_003'
+      }
+    };
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const imagens = document.querySelectorAll('.galeria .imagem');
-    imagens.forEach(img => {
-      img.addEventListener('click', () => toggleLinha(img));
+    const galeriaContainer = document.getElementById('galeria');
+
+    Object.keys(galerias).forEach((key, index) => {
+      const linha = document.createElement('div');
+      linha.className = `linha linha-${index + 1}`;
+
+      const img = document.createElement('img');
+      img.src = galerias[key].imagens[0];
+      img.alt = `Imagem ${index + 1}`;
+      img.dataset.galeria = key;
+      linha.appendChild(img);
+
+      galeriaContainer.appendChild(linha);
     });
 
-    function toggleLinha(img) {
-      const num = img.dataset.linha;
-      const linha = document.querySelector('.linha-' + num);
-      const expanded = linha.classList.toggle('expansivel');
-      linha.setAttribute('aria-hidden', !expanded);
-      img.setAttribute('aria-expanded', expanded);
+    galeriaContainer.addEventListener('click', (e) => {
+      if (e.target.tagName === 'IMG') {
+        const linha = e.target.closest('.linha');
+        const key = e.target.dataset.galeria;
+        const expandido = linha.classList.toggle('expansivel');
 
-      const existente = linha.querySelector('.galeria-expandida');
-      if (expanded && !existente) {
-        criarExpandida(linha, num);
-      }
-      if (!expanded && existente) {
-        existente.remove();
-      }
-    }
-
-    function criarExpandida(linha, num) {
-      const div = document.createElement('div');
-      div.className = 'galeria-expandida';
-
-      const btn = document.createElement('button');
-      btn.className = 'fechar-expansao';
-      btn.setAttribute('aria-label', 'Fechar expansão');
-      btn.textContent = 'X';
-      btn.addEventListener('click', () => toggleLinha(linha.querySelector('img.imagem')));
-      div.appendChild(btn);
-
-      const itens = ['a','ficha','b','c','d'];
-      itens.forEach(item => {
-        if (item === 'ficha') {
-          const ficha = document.createElement('div');
-          ficha.className = 'ficha-tecnica';
-          ficha.innerHTML = '<h3>Ficha Técnica</h3><p>Detalhes da obra...</p>';
-          div.appendChild(ficha);
+        if (expandido) {
+          expandirGaleria(linha, galerias[key]);
         } else {
-          const e = document.createElement('img');
-          e.src = `${num}${item}.jpg`;
-          e.alt = `Imagem ${num}${item}`;
-          e.className = 'img-expandida';
-          e.tabIndex = 0;
-          e.addEventListener('click', () => abrirLightbox(num, item));
-          div.appendChild(e);
+          removerGaleriaExpandida(linha);
         }
-      });
-      linha.appendChild(div);
-    }
-
-    // ====== Lightbox ======
-    let slideImgs = [];
-    let currentIndex = 0;
-    const overlay = document.querySelector('.lightbox-overlay');
-    const lightboxImg = overlay.querySelector('.lightbox-content img');
-
-    function abrirLightbox(num, letra) {
-      const linha = document.querySelector('.linha-' + num + ' .galeria-expandida');
-      slideImgs = Array.from(linha.querySelectorAll('img.img-expandida'));
-      currentIndex = slideImgs.findIndex(i => i.src.includes(`${num}${letra}.jpg`));
-      showSlide();
-      overlay.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
-
-    function showSlide() {
-      const src = slideImgs[currentIndex].src;
-      lightboxImg.src = src;
-    }
-
-    overlay.querySelector('.lightbox-close').onclick = fecharLightbox;
-    overlay.querySelector('.lightbox-prev').onclick = () => navega(-1);
-    overlay.querySelector('.lightbox-next').onclick = () => navega(1);
-
-    document.addEventListener('keydown', e => {
-      if (overlay.style.display === 'flex') {
-        if (e.key === 'ArrowLeft') navega(-1);
-        if (e.key === 'ArrowRight') navega(1);
-        if (e.key === 'Escape') fecharLightbox();
       }
     });
 
-    function fecharLightbox() {
-      overlay.style.display = 'none';
-      document.body.style.overflow = '';
+    function expandirGaleria(linha, galeria) {
+      const galeriaExpandida = document.createElement('div');
+      galeriaExpandida.className = 'galeria-expandida';
+
+      const btnFechar = document.createElement('button');
+      btnFechar.className = 'fechar-expansao';
+      btnFechar.textContent = 'Ⓧ';
+      btnFechar.addEventListener('click', () => {
+        linha.classList.remove('expansivel');
+        removerGaleriaExpandida(linha);
+      });
+      galeriaExpandida.appendChild(btnFechar);
+
+      galeria.imagens.forEach((src) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'Imagem expandida';
+        galeriaExpandida.appendChild(img);
+      });
+
+      const ficha = document.createElement('div');
+      ficha.className = 'ficha-tecnica';
+      ficha.innerHTML = `<h3>Ficha Técnica</h3><p>${galeria.ficha}</p>`;
+      galeriaExpandida.appendChild(ficha);
+
+      linha.appendChild(galeriaExpandida);
     }
 
-    function navega(delta) {
-      currentIndex = (currentIndex + delta + slideImgs.length) % slideImgs.length;
-      showSlide();
+    function removerGaleriaExpandida(linha) {
+      const galeriaExpandida = linha.querySelector('.galeria-expandida');
+      if (galeriaExpandida) {
+        galeriaExpandida.remove();
+      }
     }
-  });
-</script>
+  </script>
 </body>
 </html>
