@@ -336,5 +336,33 @@ align-items: left; /* Alinha os itens verticalmente ao centro */
         </div>
     </div>
   </main>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+  const conteudo = document.querySelector('.conteudo');
+  
+  let isDragging = false;
+  let startX, scrollLeft;
+
+  // Início do toque
+  conteudo.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    startX = e.touches[0].pageX - conteudo.offsetLeft;
+    scrollLeft = conteudo.scrollLeft;
+  });
+
+  // Durante o arrasto
+  conteudo.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault(); // Impede o comportamento padrão do scroll vertical
+    const x = e.touches[0].pageX - conteudo.offsetLeft;
+    const walk = (x - startX) * 1; // Ajusta a sensibilidade do arrasto
+    conteudo.scrollLeft = scrollLeft - walk;
+  });
+
+  // Fim do toque
+  conteudo.addEventListener('touchend', () => {
+    isDragging = false;
+  });
+});</script>
 </body>
 </html>
