@@ -149,16 +149,6 @@
       z-index: 1000;
     }
 
-    .lightbox-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      z-index: 1;
-    }
-
     .conteudo {
       position: relative;
       width: 90%;
@@ -173,10 +163,22 @@
       box-sizing: border-box;
       gap: 12px;
     }
+    
+.lightbox-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 1; /* Abaixo da `.conteudo` */
+}
 
     .conteudo img {
-      height: 100%;
-      object-fit: contain;
+  flex-shrink: 0; /* As imagens não encolhem */
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer; /* Garante o cursor de pointer */
     }
 
     .conteudo .texto {
@@ -187,7 +189,7 @@
       font-size: 18px;
       max-width: 400px; /* Limite de largura */
       line-height: 1.2;
-      padding: 242px;
+      padding: 16px;
       background: rgba(43, 36, 36, 0.0); /* Fundo transparente */
       border-radius: 8px;
     }
@@ -198,12 +200,16 @@
 
     .conteudo::-webkit-scrollbar-thumb {
       background-color: #ff0000;
-      border-radius: 4px;
+      border-radius: 2px;
     }
 
     .conteudo::-webkit-scrollbar-track {
       background: transparent;
     }
+
+.imagem-interativa {
+  cursor: pointer;
+}
 
     .fechar {
       position: absolute;
@@ -302,27 +308,44 @@
   </div>
   
   <!-- LIGHTBOX -->
-  <div class="lightbox" id="ETM">
-    <button class="fechar" onclick="fecharLightbox()">Ⓧ</button>
-    <div class="conteudo">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<div class="texto"><p>Pedro Gallego</p>
-<br><p><i>EVA TV Man</i>, 2025</p>
-<br><p>Página da revista Playboy brasileira contendo reprodução da serigrafia TV Man, de Keith Haring,
-<br>transferida para refugo de EVA com gel médium acrílico fosco, tinta acrílica e parafuso.</p>
-<br><p>60 x 40 x 15 cm</p></div>
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" alt="Imagem 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg" alt="Imagem 3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_004.jpg" alt="Imagem 4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_006.jpg" alt="Imagem 5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_005.jpg" alt="Imagem 6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          
-       <!-- Área para inserir conteúdo -->
+ <div class="lightbox" id="ETM">
+  <div class="lightbox-overlay" onclick="fecharLightbox()"></div>
+  <button class="fechar" onclick="fecharLightbox()">Ⓧ</button>
+  <div class="conteudo">
+    <div class="texto">
+      <p>Pedro Gallego</p>
+      <p><i>EVA TV Man</i>, 2025</p>
+      <p>Página da revista Playboy brasileira contendo reprodução da serigrafia TV Man, de Keith Haring, transferida para refugo de EVA com gel médium acrílico fosco, tinta acrílica e parafuso.</p>
+      <p>60 x 40 x 15 cm</p>
     </div>
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" alt="Imagem 2">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg" alt="Imagem 3">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_004.jpg" alt="Imagem 4">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_006.jpg" alt="Imagem 5">
+    <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_005.jpg" alt="Imagem 6">
   </div>
+</div>
 
- <script>
+  
+  <!-- Galeria -->
+  <main>
+    <div class="gallery-container">
+        <div class="column">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1" class="imagem-interativa" onclick="abrirLightbox(ETM)">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" alt="Imagem 2">
+        </div>
+        <div class="column">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg" alt="Imagem 3">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_004.jpg" alt="Imagem 4">
+        </div>
+        <div class="column">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_006.jpg" alt="Imagem 5">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_005.jpg" alt="Imagem 6">
+        </div>
+    </div>
+  </main>
+   <script>
     function abrirLightbox() {
       const lightbox = document.getElementById('ETM');
       lightbox.style.display = 'flex';
@@ -339,24 +362,5 @@
       }
     });
   </script>
-
-  
-  <!-- Galeria -->
-  <main>
-    <div class="gallery-container">
-        <div class="column">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1" onclick="abrirLightbox(ETM)">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg" alt="Imagem 2">
-        </div>
-        <div class="column">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg" alt="Imagem 3">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_004.jpg" alt="Imagem 4">
-        </div>
-        <div class="column">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_006.jpg" alt="Imagem 5">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_005.jpg" alt="Imagem 6">
-        </div>
-    </div>
-  </main>
 </body>
 </html>
