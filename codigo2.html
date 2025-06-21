@@ -217,6 +217,20 @@
     .copy-button:hover {
       background-color: #cc0000;
     }
+
+    textarea#selected-text::-webkit-scrollbar {
+      width: 8px;  /* Espessura da barra de rolagem vertical */
+      height: 8px; /* Espessura da barra de rolagem horizontal (menos comum para textarea) */
+    }
+
+    textarea#selected-text::-webkit-scrollbar-thumb {
+      background-color: #ff0000;
+      border-radius: 2px;
+    }
+
+    textarea#selected-text::-webkit-scrollbar-track {
+      background: transparent;
+    }
   </style>
 </head>
 <body>
