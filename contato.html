@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BetShopTV⦿com</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Roboto Condensed', sans-serif;
+      background-color: #bebab0;
+      background-repeat: repeat;
+      color: #2b2424;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    a {
+      color: #ff0000;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      width: 100%;
+      height: auto;
+      min-height: 25vh;
+      padding: 20px 0;
+      background-color: #ff0000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 100%;
+      width: auto;
+      min-width: 100%;
+      object-fit: cover;
+      transform: translate(-50%, -50%);
+      background-color: #ff0000;
+    }
+
+    main {
+      width: 90%;
+      max-width: 1200px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    main h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
+    }
+
+    main h2 {
+      font-size: 1.8em;
+      margin-bottom: 8px;
+      margin-top: 42px;
+
+    }
+
+    main h3 {
+      font-size: 1.4em;
+      margin-top: 38px;
+      margin-bottom: 0px;
+    }
+    
+    main h4 {
+      font-size: 1em;
+      text-decoration: none;
+    }
+    
+    main v {
+      color: #ff0000;
+    }
+    
+    main p {
+      font-size: 1.2em;
+      color: #2b2424;
+      margin-top: 13px;
+      margin-bottom: 4px;
+    }
+    
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .botao-main, .botao-off, .botao-coluna, .botao-oferta {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid;
+      background-color: transparent;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .botao-main {
+      color: #ff0000;
+      border-color: #ff0000;
+    }
+    
+    .botao-coluna {
+      color: #bebab0;
+      border-color: #2b2424;
+  background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/faposteee.gif');
+    }    
+
+.botao-oferta {
+  color: #bebab0;
+  border-color: #ff0000;
+  background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fofertas.gif');
+}
+    
+    .botao-off {
+      color: #2b2424;
+      border-color: #2b2424;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(43, 36, 36, 0.69);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .lightbox-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: 1;
+    }
+
+    .conteudo {
+      position: relative;
+      width: 90%;
+      height: calc(94% - 48px);
+      border: 2px solid #ff0000;
+      background: #c1bbb1;
+      overflow-x: auto;
+      overflow-y: hidden;
+      display: flex;
+      align-items: center;
+      padding: 24px;
+      gap: 12px;
+      z-index: 2;
+    }
+
+    .conteudo img {
+      flex-shrink: 0;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .conteudo::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .conteudo::-webkit-scrollbar-thumb {
+      background-color: #ff0000;
+      border-radius: 2px;
+    }
+
+    .conteudo::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .fechar {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      color: #ff0000;
+      background: none;
+      border: none;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .gallery-container {
+      display: flex;
+      justify-content: space-between;
+      max-width: 1224px;
+      margin: 20px auto;
+      gap: 12px;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      min-width: 50px;
+      text-align: left;
+    }
+
+    .column p, .column h1, .column h2, .column h3, .column h4 {
+      margin-left: 6px;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+     
+    .column a {
+      margin-right: 50%;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .column img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        height: 112px;
+      }
+
+      .gallery-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .column {
+        width: 90%;
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <video class="header-video" autoplay loop muted playsinline>
+      <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+    </video>
+  </header>
+
+    <!-- BOTÕES MENU -->
+  <div class="button-container">
+    <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
+    <a href="rifas.html" class="botao-main">RIFAS</a>
+    <a href="ofertas.html" class="botao-main">OFERTAS</a>
+    <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
+    <a href="sobre.html" class="botao-main">SOBRE O PROJETO</a>
+    <a class="botao-off">CONTATO</a>
+  </div>
+
+  <main><br><br><br>
+<center><div style="border: 2px solid #ff0000; padding: 30px; text-align: center; line-height: 26px; max-width: 642px;">
+  <h3 style="text-align: center;">e-mail&nbsp;&nbsp; betshoptv<a href="mailto:betshoptv@gmail.com" rel="noreferrer" target="_blank">@</a>gmail.com
+<br><br>
+  instagram&nbsp;&nbsp; <a href="http://instagram.com/betshoptv" rel="noreferrer" target="_blank">@betshoptv</a><br><br></h3></div></center>
+  </main>
+
+  <script>
+function abrirLightbox(idLightbox, idImagem = null) {
+  const lightbox = document.getElementById(idLightbox);
+  lightbox.style.display = 'flex';
+
+  if (idImagem) {
+    const imagem = document.getElementById(idImagem);
+    if (imagem) {
+      imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }
+  }
+}
+
+function fecharLightbox(idLightbox) {
+  const lightbox = document.getElementById(idLightbox);
+  lightbox.style.display = 'none';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    fecharLightbox('ETM');
+    fecharLightbox('CSA');
+  }
+});
+
+  </script>
+  <br><br>
+    <br><br>
+    <br><br>
+</body>
+</html>
