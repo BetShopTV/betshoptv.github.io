@@ -46,7 +46,7 @@
       margin-right: 10px;
       margin-left: 10px;
     }
-    
+
     .button-container-subitem {
       display: flex;
       flex-wrap: wrap;
@@ -103,7 +103,7 @@
       white-space: nowrap;
       transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
-    
+
     .botao-main, .botao-off, .botao-coluna {
       padding: 4px 13px;
       height: 50px;
@@ -119,13 +119,13 @@
       text-decoration: none;
       cursor: pointer;
     }
-    
+
     .botao-main:hover {
       color: #ff0000;
       border-color: #ff0000;
       text-decoration: underline;
     }
-    
+
     .botao-subitem {
       padding: 4px 13px;
       height: 37px;
@@ -141,14 +141,14 @@
       text-decoration: none;
       cursor: pointer;
     }
-    
+
     .botao-subitem:hover {
       color: #bebab0;
       background-color: #ff0000;
       border-color: #ff0000;
       text-decoration: underline;
     }
-    
+
         .botao-subitem-off {
       padding: 4px 13px;
       height: 37px;
@@ -165,18 +165,18 @@
       text-decoration: none;
       cursor: pointer;
     }
-    
+
     .botao-coluna {
       color: #bebab0;
       border-color: #2b2424;
       background-color: #2b2424;
-    }    
+    }
 
     .botao-off {
       color: #2b2424;
       border-color: #2b2424;
     }
-    
+
     /* NOVO: container da área inferior com lista e botão copiar */
     .selection-container {
       margin-top: 20px;
@@ -238,12 +238,12 @@
   </div>
   <br><br>
   <div class="button-container-subitem">
-    <a class="botao-subitem-off">COLUNA A&nbsp;&nbsp;/&nbsp;&nbsp;<i>EVA TV Man</i></a>
-    <a href="aposte_col_x.html" class="botao-subitem">COLUNA X&nbsp;&nbsp;/&nbsp;&nbsp;<i>Chop Shop AV</i></a>
+    <button id="toggleA" class="botao-subitem-off active">COLUNA A&nbsp;&nbsp;/&nbsp;&nbsp;<i>EVA TV Man</i></button>
+    <button id="toggleX" class="botao-subitem">COLUNA X&nbsp;&nbsp;/&nbsp;&nbsp;<i>Chop Shop AV</i></button>
   </div>
 
   <main>
-      
+
             <!-- NÚMEROS SELECIONADOS P/ COPIAR -->
 <center><div id="copy-area-container" style="
   display: flex;
@@ -289,7 +289,7 @@
     ">COPIAR</button>
   </div>
 </div></center>
-      
+
     <section
       style="
         text-align: left;
@@ -303,7 +303,8 @@
         font-family: 'Roboto Condensed', sans-serif;
       "
     >
-      <div class="button-container">
+      <div id="gridA" class="grid-column">
+          <div class="button-container">
 <button class="button-main" data-hover-color="#FF4500" data-id="A001">A001 / 40 graus</button>
 <button class="button-main" data-hover-color="#B22222" data-id="A002">A002 / 5ª avenida</button>
 <button class="button-main" data-hover-color="#FF1493" data-id="A003">A003 / Acionando o contatinho</button>
@@ -474,116 +475,386 @@
 <button class="button-main" data-hover-color="#8A2BE2" data-id="A168">A168 / Violeta Preciosa</button>
 <button class="button-main" data-hover-color="#4B0082" data-id="A169">A169 / Violeta Profundo</button>
 <button class="button-main" data-hover-color="#FF69B4" data-id="A170">A170 / Vou de rosa</button>
+          </div>
       </div>
-
+      <div id="gridX" class="grid-column" style="display: none;">
+          <div class="button-container">
+<button class="button-main" data-hover-color="#FF4500" data-id="X001">X001 / 40 graus</button>
+<button class="button-main" data-hover-color="#B22222" data-id="X002">X002 / 5ª avenida</button>
+<button class="button-main" data-hover-color="#FF1493" data-id="X003">X003 / Acionando o contatinho</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="X004">X004 / Ai, amiga</button>
+<button class="button-main" data-hover-color="#FFE4E1" data-id="X005">X005 / Algodão doce</button>
+<button class="button-main" data-hover-color="#FFDAB9" data-id="X006">X006 / Amanhecer</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="X007">X007 / Amarelo Frevo</button>
+<button class="button-main" data-hover-color="#8B0000" data-id="X008">X008 / Ameixa</button>
+<button class="button-main" data-hover-color="#87CEEB" data-id="X009">X009 / Ar Fresco</button>
+<button class="button-main" data-hover-color="#F5DEB3" data-id="X010">X010 / Areia</button>
+<button class="button-main" data-hover-color="#4682B4" data-id="X011">X011 / Atmosfera</button>
+<button class="button-main" data-hover-color="#1E90FF" data-id="X012">X012 / Azul Eclesiástico</button>
+<button class="button-main" data-hover-color="#0000FF" data-id="X013">X013 / Azul biônico</button>
+<button class="button-main" data-hover-color="#D2B48C" data-id="X014">X014 / Batida de Amendoim</button>
+<button class="button-main" data-hover-color="#FFFFF0" data-id="X015">X015 / Batida de coco</button>
+<button class="button-main" data-hover-color="#FF6347" data-id="X016">X016 / Beijo roubado</button>
+<button class="button-main" data-hover-color="#32CD32" data-id="X017">X017 / Bem-Estar</button>
+<button class="button-main" data-hover-color="#000000" data-id="X018">X018 / Black</button>
+<button class="button-main" data-hover-color="#FF7F50" data-id="X019">X019 / Bolsa de Praia</button>
+<button class="button-main" data-hover-color="#FFC0CB" data-id="X020">X020 / Boneca</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="X021">X021 / Brinde da virada</button>
+<button class="button-main" data-hover-color="#DAA520" data-id="X022">X022 / Brocado Rico</button>
+<button class="button-main" data-hover-color="#6F4E37" data-id="X023">X023 / Café</button>
+<button class="button-main" data-hover-color="#008000" data-id="X024">X024 / Caminho do Jardim</button>
+<button class="button-main" data-hover-color="#8B4513" data-id="X025">X025 / Camurça</button>
+<button class="button-main" data-hover-color="#D2B48C" data-id="X026">X026 / Capuccino Doce</button>
+<button class="button-main" data-hover-color="#DEB887" data-id="X027">X027 / Casa Portuguesa</button>
+<button class="button-main" data-hover-color="#FFA07A" data-id="X028">X028 / Casamento do Verão</button>
+<button class="button-VENDIDO" data-hover-color="#87CEEB" data-id="X029">X029 / Chafariz da Praça</button>
+<button class="button-main" data-hover-color="#696969" data-id="X030">X030 / Cinza Tecnológico</button>
+<button class="button-main" data-hover-color="#808080" data-id="X031">X031 / Cinza minimalista</button>
+<button class="button-main" data-hover-color="#FFFFFF" data-id="X032">X032 / Clássico</button>
+<button class="button-main" data-hover-color="#A9A9A9" data-id="X033">X033 / Colinas de Inverno</button>
+<button class="button-main" data-hover-color="#C0C0C0" data-id="X034">X034 / Concha Prateada</button>
+<button class="button-main" data-hover-color="#FF7F50" data-id="X035">X035 / Coral não tem igual</button>
+<button class="button-main" data-hover-color="#CD853F" data-id="X036">X036 / Corpo bronzeado</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="X037">X037 / Corpo tropical</button>
+<button class="button-main" data-hover-color="#F08080" data-id="X038">X038 / Cristal rosa</button>
+<button class="button-main" data-hover-color="#ADD8E6" data-id="X039">X039 / Céu da Antártida</button>
+<button class="button-main" data-hover-color="#FF0000" data-id="X040">X040 / De repente, paixão</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="X041">X041 / Deixa beijar</button>
+<button class="button-main" data-hover-color="#FF8C00" data-id="X042">X042 / Del Sol</button>
+<button class="button-main" data-hover-color="#FFE4E1" data-id="X043">X043 / Delicadeza</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="X044">X044 / Dia Dourado</button>
+<button class="button-main" data-hover-color="#FA8072" data-id="X045">X045 / Dieta hoje não</button>
+<button class="button-main" data-hover-color="#FF4500" data-id="X046">X046 / Doce ou Travessura</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="X047">X047 / Doçura da Primavera</button>
+<button class="button-main" data-hover-color="#483D8B" data-id="X048">X048 / Drama Noturno</button>
+<button class="button-main" data-hover-color="#DEB887" data-id="X049">X049 / Dunas de areia</button>
+<button class="button-main" data-hover-color="#FF1493" data-id="X050">X050 / Encontro Feliz</button>
+<button class="button-main" data-hover-color="#4B0082" data-id="X051">X051 / Encontro às escuras</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="X052">X052 / Estrela Cadente</button>
+<button class="button-main" data-hover-color="#FFFFFF" data-id="X053">X053 / Estrela de luz</button>
+<button class="button-main" data-hover-color="#FF6347" data-id="X054">X054 / Explícita</button>
+<button class="button-main" data-hover-color="#228B22" data-id="X055">X055 / Fazendo a fitness</button>
+<button class="button-main" data-hover-color="#4682B4" data-id="X056">X056 / Fazendo vários nadas</button>
+<button class="button-main" data-hover-color="#556B2F" data-id="X057">X057 / Figo Verde</button>
+<button class="button-main" data-hover-color="#8A2BE2" data-id="X058">X058 / Fonte Secreta</button>
+<button class="button-main" data-hover-color="#E30B5C" data-id="X059">X059 / Framboesa</button>
+<button class="button-VENDIDO" data-hover-color="#C71585" data-id="X060">X060 / Framboesa Radical</button>
+<button class="button-main" data-hover-color="#FAF0E6" data-id="X061">X061 / França</button>
+<button class="button-main" data-hover-color="#B22222" data-id="X062">X062 / Gabriele</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="X063">X063 / Garota verão</button>
+<button class="button-main" data-hover-color="#F0FFF0" data-id="X064">X064 / Geada</button>
+<button class="button-main" data-hover-color="#F4A460" data-id="X065">X065 / Geléia de Cupuaçu</button>
+<button class="button-main" data-hover-color="#DAA520" data-id="X066">X066 / Glória da Colheita</button>
+<button class="button-main" data-hover-color="#B0C4DE" data-id="X067">X067 / Grace</button>
+<button class="button-main" data-hover-color="#696969" data-id="X068">X068 / Grafite fashionista</button>
+<button class="button-main" data-hover-color="#2F4F4F" data-id="X069">X069 / Grande Metrópole</button>
+<button class="button-main" data-hover-color="#9370DB" data-id="X070">X070 / Harmonia Lilás</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="X071">X071 / Hoje sou minha</button>
+<button class="button-main" data-hover-color="#4682B4" data-id="X072">X072 / Horizonte</button>
+<button class="button-main" data-hover-color="#6A5ACD" data-id="X073">X073 / Intuição Divina</button>
+<button class="button-main" data-hover-color="#4B0082" data-id="X074">X074 / Jabuticaba</button>
+<button class="button-main" data-hover-color="#006400" data-id="X075">X075 / Jardim Misterioso</button>
+<button class="button-main" data-hover-color="#5F9EA0" data-id="X076">X076 / Jeans</button>
+<button class="button-main" data-hover-color="#FFFFF0" data-id="X077">X077 / Leite de coco</button>
+<button class="button-main" data-hover-color="#FF8C00" data-id="X078">X078 / Ligada no 220v</button>
+<button class="button-main" data-hover-color="#D8BFD8" data-id="X079">X079 / Lilás Esplendoroso</button>
+<button class="button-main" data-hover-color="#FAF0E6" data-id="X080">X080 / Lugar de Afeto</button>
+<button class="button-main" data-hover-color="#32CD32" data-id="X081">X081 / Luz da Floresta</button>
+<button class="button-main" data-hover-color="#FFFFE0" data-id="X082">X082 / Luz na Janela</button>
+<button class="button-main" data-hover-color="#000000" data-id="X083">X083 / Mais que preto, black</button>
+<button class="button-main" data-hover-color="#9932CC" data-id="X084">X084 / Malva misterioso</button>
+<button class="button-main" data-hover-color="#A0522D" data-id="X085">X085 / Mantilha</button>
+<button class="button-main" data-hover-color="#8B4513" data-id="X086">X086 / Marrom da Riqueza</button>
+<button class="button-main" data-hover-color="#A52A2A" data-id="X087">X087 / Marrom mutante</button>
+<button class="button-main" data-hover-color="#9370DB" data-id="X088">X088 / Mauve urban</button>
+<button class="button-main" data-hover-color="#FFFAFA" data-id="X089">X089 / Meia de Seda</button>
+<button class="button-main" data-hover-color="#FF6347" data-id="X090">X090 / Melancia</button>
+<button class="button-main" data-hover-color="#2F4F4F" data-id="X091">X091 / Mil e uma noites</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="X092">X092 / Momento de Promessa</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="X093">X093 / Momento selfie</button>
+<button class="button-main" data-hover-color="#DAA520" data-id="X094">X094 / Mostarda Quente</button>
+<button class="button-main" data-hover-color="#B8860B" data-id="X095">X095 / Mostarda em Grão</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="X096">X096 / Movie Star</button>
+<button class="button-main" data-hover-color="#FFB6C1" data-id="X097">X097 / Moça Bonita</button>
+<button class="button-main" data-hover-color="#800000" data-id="X098">X098 / Na dúvida, vinho!</button>
+<button class="button-main" data-hover-color="#FF4500" data-id="X099">X099 / Nariz de palhaço</button>
+<button class="button-main" data-hover-color="#DEB887" data-id="X100">X100 / Neutro Nepal</button>
+<button class="button-main" data-hover-color="#00008B" data-id="X101">X101 / Noite de gala</button>
+<button class="button-main" data-hover-color="#8B0000" data-id="X102">X102 / Noite quente</button>
+<button class="button-main" data-hover-color="#FAEBD7" data-id="X103">X103 / Nua & crua</button>
+<button class="button-main" data-hover-color="#D2B48C" data-id="X104">X104 / Nude</button>
+<button class="button-main" data-hover-color="#CDAF95" data-id="X105">X105 / Nude desejo</button>
+<button class="button-main" data-hover-color="#6A5ACD" data-id="X106">X106 / Nuvens Roxas</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="X107">X107 / Não mexe comigo</button>
+<button class="button-main" data-hover-color="#B87333" data-id="X108">X108 / Ocre Italiano</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="X109">X109 / Papel de Bala</button>
+<button class="button-main" data-hover-color="#FF4500" data-id="X110">X110 / Pimenta rosa</button>
+<button class="button-main" data-hover-color="#A0522D" data-id="X111">X111 / Pinhão</button>
+<button class="button-main" data-hover-color="#228B22" data-id="X112">X112 / Pitada de Alecrim</button>
+<button class="button-main" data-hover-color="#A0522D" data-id="X113">X113 / Pote de Argila</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="X114">X114 / Precioso Momento</button>
+<button class="button-main" data-hover-color="#B0C4DE" data-id="X115">X115 / Preferia estar dormindo</button>
+<button class="button-main" data-hover-color="#FFFACD" data-id="X116">X116 / Prenda natural</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="X117">X117 / Puro glamour</button>
+<button class="button-main" data-hover-color="#FFC0CB" data-id="X118">X118 / Pétala</button>
+<button class="button-main" data-hover-color="#FFFFFF" data-id="X119">X119 / Pétala branca</button>
+<button class="button-main" data-hover-color="#FFDAB9" data-id="X120">X120 / Pêra Madura</button>
+<button class="button-main" data-hover-color="#FFE4C4" data-id="X121">X121 / Pó de Pêssego</button>
+<button class="button-main" data-hover-color="#4682B4" data-id="X122">X122 / Quadrado azul</button>
+<button class="button-main" data-hover-color="#87CEEB" data-id="X123">X123 / Reflexo de Cristal</button>
+<button class="button-main" data-hover-color="#FAEBD7" data-id="X124">X124 / Renascer</button>
+<button class="button-main" data-hover-color="#708090" data-id="X125">X125 / Repouso Tranquilo</button>
+<button class="button-main" data-hover-color="#FFB6C1" data-id="X126">X126 / Rosa Cintilante</button>
+<button class="button-main" data-hover-color="#FFC0CB" data-id="X127">X127 / Rosa Vintage</button>
+<button class="button-main" data-hover-color="#CD5C5C" data-id="X128">X128 / Rosa antigo</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="X129">X129 / Rosa da vez</button>
+<button class="button-main" data-hover-color="#FFDAB9" data-id="X130">X130 / Rosa floral</button>
+<button class="button-main" data-hover-color="#DAA520" data-id="X131">X131 / Rota do Deserto</button>
+<button class="button-main" data-hover-color="#800000" data-id="X132">X132 / Rota do Vinho</button>
+<button class="button-main" data-hover-color="#F5DEB3" data-id="X133">X133 / Roupa de Bebê</button>
+<button class="button-main" data-hover-color="#8A2BE2" data-id="X134">X134 / Roxo místico</button>
+<button class="button-main" data-hover-color="#FFA07A" data-id="X135">X135 / Salmão Pálido</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="X136">X136 / Samba Juliana</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="X137">X137 / Sem retoque</button>
+<button class="button-main" data-hover-color="#FFB6C1" data-id="X138">X138 / Sensação de Rosas</button>
+<button class="button-main" data-hover-color="#191970" data-id="X139">X139 / Sereno da Noite</button>
+<button class="button-main" data-hover-color="#FF0000" data-id="X140">X140 / Seta vermelha</button>
+<button class="button-main" data-hover-color="#DAA520" data-id="X141">X141 / Sherazade</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="X142">X142 / Sol do oriente</button>
+<button class="button-main" data-hover-color="#FFD700" data-id="X143">X143 / Solário</button>
+<button class="button-main" data-hover-color="#FFFACD" data-id="X144">X144 / Sonho de Anjo</button>
+<button class="button-main" data-hover-color="#32CD32" data-id="X145">X145 / Suculenta</button>
+<button class="button-main" data-hover-color="#708090" data-id="X146">X146 / Sálvia</button>
+<button class="button-main" data-hover-color="#F5DEB3" data-id="X147">X147 / Só dá nude</button>
+<button class="button-main" data-hover-color="#FF0000" data-id="X148">X148 / Tapete vermelho</button>
+<button class="button-main" data-hover-color="#B22222" data-id="X149">X149 / Teatro de Bonecos</button>
+<button class="button-main" data-hover-color="#696969" data-id="X150">X150 / Teia de Aranha</button>
+<button class="button-main" data-hover-color="#D2B48C" data-id="X151">X151 / Toque Casual</button>
+<button class="button-main" data-hover-color="#8B4513" data-id="X152">X152 / Toque de Centeio</button>
+<button class="button-main" data-hover-color="#8B4513" data-id="X153">X153 / Toque de Noz-Moscada</button>
+<button class="button-main" data-hover-color="#7FFFD4" data-id="X154">X154 / Trevo Pálido</button>
+<button class="button-main" data-hover-color="#008000" data-id="X155">X155 / Trilha Verde</button>
+<button class="button-main" data-hover-color="#F5DEB3" data-id="X156">X156 / Tô bege!</button>
+<button class="button-main" data-hover-color="#696969" data-id="X157">X157 / Urban chic</button>
+<button class="button-main" data-hover-color="#D2B48C" data-id="X158">X158 / Urso de Pelúcia</button>
+<button class="button-main" data-hover-color="#FF8C00" data-id="X159">X159 / Valência</button>
+<button class="button-main" data-hover-color="#4682B4" data-id="X160">X160 / Vaso de Hortênsia</button>
+<button class="button-main" data-hover-color="#87CEEB" data-id="X161">X161 / Ventos Calmos</button>
+<button class="button-main" data-hover-color="#228B22" data-id="X162">X162 / Verde Pasto</button>
+<button class="button-main" data-hover-color="#B22222" data-id="X163">X163 / Vermelha obsessão</button>
+<button class="button-main" data-hover-color="#FF0000" data-id="X164">X164 / Vermelho Ivete</button>
+<button class="button-main" data-hover-color="#8B0000" data-id="X165">X165 / Vermelho proibido</button>
+<button class="button-main" data-hover-color="#DC143C" data-id="X166">X166 / Vestida pra matar</button>
+<button class="button-main" data-hover-color="#F8F8FF" data-id="X167">X167 / Via Láctea</button>
+<button class="button-main" data-hover-color="#8A2BE2" data-id="X168">X168 / Violeta Preciosa</button>
+<button class="button-main" data-hover-color="#4B0082" data-id="X169">X169 / Violeta Profundo</button>
+<button class="button-main" data-hover-color="#FF69B4" data-id="X170">X170 / Vou de rosa</button>
+          </div>
+      </div>
     </section>
   </main>
 
   <script>
-    function getContrastColor(backgroundColor) {
-      const colors = {
-        white: "#ffffff",
-        red: "#ff0000",
-        gray: "#bebaba",
-        dark: "#2b2424"
-      };
+    // Elementos do DOM
+    const toggleA = document.getElementById('toggleA');
+    const toggleX = document.getElementById('toggleX');
+    const gridA = document.getElementById('gridA');
+    const gridX = document.getElementById('gridX');
+    const selectionBox = document.getElementById('selected-text'); // ID do codigo2.html
+    const copyButton = document.getElementById('copy-button');
 
+    let selectedItems = [];
+    let currentColumn = 'A'; // Default column
+
+    // Função para obter cor de contraste (do script original do codigo2.html)
+    function getContrastColor(backgroundColor) {
+      const colors = { white: "#ffffff", red: "#ff0000", gray: "#bebaba", dark: "#2b2424" };
       function hexToRgb(hex) {
         const bigint = parseInt(hex.slice(1), 16);
         return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
       }
-
       function luminance([r, g, b]) {
         const [rs, gs, bs] = [r, g, b].map(v => {
-          v /= 255;
-          return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+          v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
         });
         return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
       }
-
       const bgLuminance = luminance(hexToRgb(backgroundColor));
-
       return Object.values(colors).sort((a, b) => {
-        const lumA = luminance(hexToRgb(a));
-        const lumB = luminance(hexToRgb(b));
+        const lumA = luminance(hexToRgb(a)); const lumB = luminance(hexToRgb(b));
         return Math.abs(bgLuminance - lumB) - Math.abs(bgLuminance - lumA);
       })[0];
     }
 
-    const selectedTextDiv = document.getElementById('selected-text');
-    const copyBtn = document.getElementById('copy-button');
-
-    function updateSelectedText() {
-      // pega todos os botões ativos
-      const activeButtons = document.querySelectorAll('.button-main.active');
-      const texts = Array.from(activeButtons).map(btn => btn.textContent.trim());
-      selectedTextDiv.textContent = texts.length > 0 ? texts.join('\n') : 'Nenhum número selecionado.';
+    // Atualiza a textarea com os itens selecionados
+    function updateSelection() {
+      if (selectedItems.length === 0) {
+        selectionBox.value = 'Nenhum número selecionado.';
+      } else {
+        selectionBox.value = selectedItems.join('\n');
+      }
     }
 
-    document.querySelectorAll('.button-main').forEach(button => {
-      const hoverColor = button.dataset.hoverColor;
+    function updateActiveButtonsInVisibleGrid() {
+        const currentGrid = gridA.style.display !== 'none' ? gridA : gridX;
+        const buttonsInCurrentGrid = currentGrid.querySelectorAll('.button-main:not(.button-VENDIDO)');
+
+        buttonsInCurrentGrid.forEach(button => {
+            const buttonText = button.textContent.trim();
+            if (selectedItems.includes(buttonText)) {
+                if (!button.classList.contains('active')) {
+                    button.classList.add('active');
+                    // Aplicar estilos de ativo (conforme lógica original do codigo2.html)
+                    const hoverColor = button.dataset.hoverColor; // Assumindo que hoverColor é a cor ativa
+                    if (hoverColor) { // Verificar se hoverColor existe
+                        button.style.backgroundColor = hoverColor;
+                        button.style.color = getContrastColor(hoverColor); // Função já existente
+                        button.style.borderColor = hoverColor;
+                    } else { // Fallback para caso data-hover-color não esteja definido
+                        button.style.backgroundColor = '#ff0000';
+                        button.style.color = '#ffffff';
+                        button.style.borderColor = '#ff0000';
+                    }
+                }
+            } else {
+                if (button.classList.contains('active')) {
+                    button.classList.remove('active');
+                    // Aplicar estilos de inativo (conforme lógica original do codigo2.html)
+                    button.style.backgroundColor = 'transparent';
+                    button.style.color = '#ff0000'; // Cor padrão do botão
+                    button.style.borderColor = '#ff0000'; // Borda padrão
+                }
+            }
+        });
+    }
+
+    // Lógica de alternância para Coluna A
+    toggleA.addEventListener('click', () => {
+      if (currentColumn === 'A') return;
+      toggleA.classList.add('active');
+      toggleA.classList.add('botao-subitem-off');
+      toggleX.classList.remove('active');
+      toggleX.classList.remove('botao-subitem-off');
+      toggleX.classList.add('botao-subitem');
+
+      gridA.style.display = 'block';
+      gridX.style.display = 'none';
+      currentColumn = 'A';
+      updateSelection();
+      updateActiveButtonsInVisibleGrid();
+    });
+
+    // Lógica de alternância para Coluna X
+    toggleX.addEventListener('click', () => {
+      if (currentColumn === 'X') return;
+      toggleX.classList.add('active');
+      toggleX.classList.add('botao-subitem-off');
+      toggleA.classList.remove('active');
+      toggleA.classList.remove('botao-subitem-off');
+      toggleA.classList.add('botao-subitem');
+
+      gridX.style.display = 'block';
+      gridA.style.display = 'none';
+      currentColumn = 'X';
+      updateSelection();
+      updateActiveButtonsInVisibleGrid();
+    });
+
+    // Lógica de seleção de itens
+    document.querySelectorAll('#gridA .button-main, #gridX .button-main').forEach(button => {
+      const hoverColor = button.dataset.hoverColor; // Usado para o estado ativo e hover
       let fadeTimeout;
 
-      button.style.transition = 'background-color 0.5s ease, color 0.5s ease, border-color 0.3s ease';
+      // Manter transição do CSS original se existir, ou definir aqui
+      button.style.transition = button.style.transition || 'background-color 0.5s ease, color 0.5s ease, border-color 0.3s ease';
 
       button.addEventListener('mouseover', () => {
-        if (!button.classList.contains('active')) {
+        if (!button.classList.contains('active') && !button.classList.contains('button-VENDIDO')) {
           clearTimeout(fadeTimeout);
-          button.style.backgroundColor = hoverColor;
-          button.style.color = getContrastColor(hoverColor);
+          if (hoverColor) {
+            button.style.backgroundColor = hoverColor;
+            button.style.color = getContrastColor(hoverColor);
+          }
         }
       });
 
       button.addEventListener('mouseout', () => {
-        if (!button.classList.contains('active')) {
+        if (!button.classList.contains('active') && !button.classList.contains('button-VENDIDO')) {
           clearTimeout(fadeTimeout);
-
           const minDelay = 188;
           const maxDelay = 1802;
           const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-
           fadeTimeout = setTimeout(() => {
             button.style.backgroundColor = 'transparent';
-            button.style.color = '#ff0000';
+            button.style.color = '#ff0000'; // Cor original do botão não selecionado
           }, randomDelay);
         }
       });
 
       button.addEventListener('click', () => {
-        clearTimeout(fadeTimeout);
+        if (button.classList.contains('button-VENDIDO')) {
+          return; // Ignora botões vendidos
+        }
+        clearTimeout(fadeTimeout); // Limpa timeout de mouseout ao clicar
 
-        if (button.classList.contains('active')) {
+        const value = button.textContent.trim();
+        const dataId = button.getAttribute('data-id'); // Ex: A001 ou X001
+
+        const index = selectedItems.indexOf(value);
+
+        if (index > -1) { // Se já selecionado, deseleciona
+          selectedItems.splice(index, 1);
           button.classList.remove('active');
+          // Estilo não ativo (original do codigo2.html)
           button.style.backgroundColor = 'transparent';
           button.style.color = '#ff0000';
           button.style.borderColor = '#ff0000';
-        } else {
+        } else { // Se não selecionado, seleciona
+          selectedItems.push(value);
           button.classList.add('active');
-          button.style.backgroundColor = hoverColor;
-          button.style.color = getContrastColor(hoverColor);
-          button.style.borderColor = hoverColor;
+          // Estilo ativo (original do codigo2.html)
+          if (hoverColor) {
+            button.style.backgroundColor = hoverColor;
+            button.style.color = getContrastColor(hoverColor);
+            button.style.borderColor = hoverColor;
+          } else { // Fallback se data-hover-color não existir
+            button.style.backgroundColor = '#ff0000';
+            button.style.color = '#ffffff';
+            button.style.borderColor = '#ff0000';
+          }
         }
-
-        updateSelectedText();
+        updateSelection();
       });
     });
 
-    copyBtn.addEventListener('click', () => {
-      const textToCopy = selectedTextDiv.textContent.trim();
+    // Lógica de copiar texto (mantida do codigo2.html)
+    copyButton.addEventListener('click', () => {
+      const textToCopy = selectionBox.value.trim();
       if (textToCopy && textToCopy !== 'Nenhum número selecionado.') {
         navigator.clipboard.writeText(textToCopy).then(() => {
-          copyBtn.textContent = 'COPIOU';
+          copyButton.textContent = 'COPIOU';
           setTimeout(() => {
-            copyBtn.textContent = 'COPIAR';
+            copyButton.textContent = 'COPIAR';
           }, 1500);
-        }).catch(() => {
+        }).catch(err => {
+          console.error('Falha ao copiar: ', err);
           alert('Falha ao copiar. Tente manualmente.');
         });
+      } else {
+        alert('Nada para copiar.');
       }
     });
 
-    // Inicializa área com texto padrão
-    updateSelectedText();
+    // Inicialização
+    gridA.style.display = 'block'; // Garante que gridA (ou .button-container dentro dela) esteja visível
+    gridX.style.display = 'none';
+    // Assegurar classes corretas nos toggles no início
+    toggleA.classList.add('active', 'botao-subitem-off');
+    toggleX.classList.remove('active', 'botao-subitem-off');
+    toggleX.classList.add('botao-subitem');
+
+    updateSelection(); // Para exibir "Nenhum número selecionado." inicialmente
+    updateActiveButtonsInVisibleGrid(); // Para garantir estado visual inicial correto
   </script>
   <br><br>
   <br><br>
