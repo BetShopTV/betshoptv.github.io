@@ -249,13 +249,14 @@
   display: flex;
   justify-content: center;
   margin-top: 20px;
-  width: 50%;
+  width: 80%; /* Increased width */
 ">
   <div style="
     display: flex;
-    max-width: 50%; /* Mesma largura máxima dos botões */
-    width: 50%;
+    width: auto; /* Adjusted width */
+    max-width: 100%; /* Adjusted max-width */
     gap: 10px;
+    align-items: stretch; /* To make all items in flex container same height */
   ">
     <textarea id="selected-text" readonly
       style="
@@ -287,6 +288,27 @@
       border-radius: 2px;
       white-space: nowrap;
     ">COPIAR</button>
+
+    <div id="total-cost-display" style="
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 1em;
+        color: #ff0000;
+        border: 2px solid #ff0000;
+        border-radius: 2px;
+        padding: 10px;
+        min-height: 180px; /* Align height */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-left: 30px; /* Spacing */
+        box-sizing: border-box;
+        text-align: center;
+        width: 120px; /* Fixed width for the cost display */
+    ">
+        <p style="margin: 0 0 5px 0; font-weight: bold;">TOTAL</p>
+        <p id="calculated-cost" style="margin: 0; font-size: 1.5em; font-weight: bold;">$0</p>
+    </div>
   </div>
 </div></center>
 
@@ -686,12 +708,39 @@
       })[0];
     }
 
+    function calculateTotalCost(numberOfSelectedItems) {
+        if (numberOfSelectedItems <= 0) {
+            return 0;
+        } else if (numberOfSelectedItems === 1) {
+            return 30;
+        } else if (numberOfSelectedItems === 2) {
+            return 50;
+        } else if (numberOfSelectedItems === 3) {
+            return 80;
+        } else if (numberOfSelectedItems === 4) {
+            return 100;
+        } else {
+            // Para 5 ou mais itens:
+            // Custo base para 4 itens é 100.
+            // Cada item adicional (acima de 4) custa $20.
+            return 100 + (numberOfSelectedItems - 4) * 20;
+        }
+    }
+
     // Atualiza a textarea com os itens selecionados
     function updateSelection() {
       if (selectedItems.length === 0) {
         selectionBox.value = 'Nenhum número selecionado.';
       } else {
         selectionBox.value = selectedItems.join('\n');
+      }
+
+      const numberOfItems = selectedItems.length;
+      const totalCost = calculateTotalCost(numberOfItems);
+
+      const calculatedCostElement = document.getElementById('calculated-cost');
+      if (calculatedCostElement) {
+        calculatedCostElement.textContent = '$' + totalCost;
       }
     }
 
