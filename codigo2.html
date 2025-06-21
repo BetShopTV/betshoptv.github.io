@@ -695,111 +695,69 @@
       }
     }
 
-    // Atualiza os prefixos dos itens selecionados ao trocar de coluna
-    function updateButtonPrefixes(targetPrefix) {
-      const
+    function updateActiveButtonsInVisibleGrid() {
+        const currentGrid = gridA.style.display !== 'none' ? gridA : gridX;
+        const buttonsInCurrentGrid = currentGrid.querySelectorAll('.button-main:not(.button-VENDIDO)');
 
-previousPrefix = targetPrefix === 'A' ? 'X' : 'A';
-      selectedItems = selectedItems.map(item => {
-        if (item.startsWith(previousPrefix)) {
-          return targetPrefix + item.substring(1);
-        }
-        return item;
-      });
-
-      // Atualiza visualmente os botões selecionados na grade que ficou visível
-      const visibleGridId = targetPrefix === 'A' ? 'gridA' : 'gridX';
-      const visibleGrid = document.getElementById(visibleGridId);
-      document.querySelectorAll(`#${visibleGridId} .button-main`).forEach(button => {
-        const buttonText = button.textContent.trim();
-        if (selectedItems.includes(buttonText)) {
-          if (!button.classList.contains('active')) {
-            button.classList.add('active');
-            // Aplicar estilos de ativo do codigo2.html
-            const hoverColor = button.dataset.hoverColor;
-            if (hoverColor) {
-                 button.style.backgroundColor = hoverColor;
-                 button.style.color = getContrastColor(hoverColor);
-                 button.style.borderColor = hoverColor;
-            } else { // Fallback se não houver hoverColor definido
-                 button.style.backgroundColor = '#ff0000';
-                 button.style.color = '#ffffff';
-                 button.style.borderColor = '#ff0000';
+        buttonsInCurrentGrid.forEach(button => {
+            const buttonText = button.textContent.trim();
+            if (selectedItems.includes(buttonText)) {
+                if (!button.classList.contains('active')) {
+                    button.classList.add('active');
+                    // Aplicar estilos de ativo (conforme lógica original do codigo2.html)
+                    const hoverColor = button.dataset.hoverColor; // Assumindo que hoverColor é a cor ativa
+                    if (hoverColor) { // Verificar se hoverColor existe
+                        button.style.backgroundColor = hoverColor;
+                        button.style.color = getContrastColor(hoverColor); // Função já existente
+                        button.style.borderColor = hoverColor;
+                    } else { // Fallback para caso data-hover-color não esteja definido
+                        button.style.backgroundColor = '#ff0000';
+                        button.style.color = '#ffffff';
+                        button.style.borderColor = '#ff0000';
+                    }
+                }
+            } else {
+                if (button.classList.contains('active')) {
+                    button.classList.remove('active');
+                    // Aplicar estilos de inativo (conforme lógica original do codigo2.html)
+                    button.style.backgroundColor = 'transparent';
+                    button.style.color = '#ff0000'; // Cor padrão do botão
+                    button.style.borderColor = '#ff0000'; // Borda padrão
+                }
             }
-          }
-        } else {
-          if (button.classList.contains('active')) {
-            button.classList.remove('active');
-            // Aplicar estilos de inativo do codigo2.html
-            button.style.backgroundColor = 'transparent';
-            button.style.color = '#ff0000';
-            button.style.borderColor = '#ff0000';
-          }
-        }
-      });
-      // Garante que os botões da outra grade (que ficou invisível) sejam desativados se não estiverem na lista de selecionados com o novo prefixo
-      const hiddenGridId = targetPrefix === 'A' ? 'gridX' : 'gridA';
-      document.querySelectorAll(`#${hiddenGridId} .button-main`).forEach(button => {
-          const buttonTextOriginal = button.textContent.trim(); // ex: X001 / Nome
-          // Verifica se o item correspondente (com o prefixo da coluna atual) está selecionado
-          const correspondingItemInSelectedList = targetPrefix + buttonTextOriginal.substring(1);
-
-          if (!selectedItems.includes(correspondingItemInSelectedList)) {
-              if (button.classList.contains('active')) {
-                  button.classList.remove('active');
-                  button.style.backgroundColor = 'transparent';
-                  button.style.color = '#ff0000';
-                  button.style.borderColor = '#ff0000';
-              }
-          } else { // Se ESTÁ na lista, mas a grade está escondida, garantir que esteja ativo para a próxima vez que for exibido
-              if (!button.classList.contains('active')) {
-                  button.classList.add('active');
-                  const hoverColor = button.dataset.hoverColor;
-                  if (hoverColor) {
-                       button.style.backgroundColor = hoverColor;
-                       button.style.color = getContrastColor(hoverColor);
-                       button.style.borderColor = hoverColor;
-                  } else {
-                       button.style.backgroundColor = '#ff0000';
-                       button.style.color = '#ffffff';
-                       button.style.borderColor = '#ff0000';
-                  }
-              }
-          }
-      });
-
-      updateSelection();
+        });
     }
 
     // Lógica de alternância para Coluna A
     toggleA.addEventListener('click', () => {
-      if (currentColumn === 'A') return; // Já está na coluna A
+      if (currentColumn === 'A') return;
       toggleA.classList.add('active');
-      toggleA.classList.add('botao-subitem-off'); // Estilo ativo para A
+      toggleA.classList.add('botao-subitem-off');
       toggleX.classList.remove('active');
-      toggleX.classList.remove('botao-subitem-off'); // Estilo inativo para X
+      toggleX.classList.remove('botao-subitem-off');
       toggleX.classList.add('botao-subitem');
 
-      gridA.style.display = 'block'; // ou 'grid' / 'flex' conforme o estilo de .button-container
+      gridA.style.display = 'block';
       gridX.style.display = 'none';
       currentColumn = 'A';
-      updateButtonPrefixes('A');
+      updateSelection();
+      updateActiveButtonsInVisibleGrid();
     });
 
     // Lógica de alternância para Coluna X
     toggleX.addEventListener('click', () => {
-      if (currentColumn === 'X') return; // Já está na coluna X
+      if (currentColumn === 'X') return;
       toggleX.classList.add('active');
-      toggleX.classList.add('botao-subitem-off'); // Estilo ativo para X
+      toggleX.classList.add('botao-subitem-off');
       toggleA.classList.remove('active');
-      toggleA.classList.remove('botao-subitem-off'); // Estilo inativo para A
+      toggleA.classList.remove('botao-subitem-off');
       toggleA.classList.add('botao-subitem');
 
-
-      gridX.style.display = 'block'; // ou 'grid' / 'flex'
+      gridX.style.display = 'block';
       gridA.style.display = 'none';
       currentColumn = 'X';
-      updateButtonPrefixes('X');
+      updateSelection();
+      updateActiveButtonsInVisibleGrid();
     });
 
     // Lógica de seleção de itens
@@ -896,6 +854,7 @@ previousPrefix = targetPrefix === 'A' ? 'X' : 'A';
     toggleX.classList.add('botao-subitem');
 
     updateSelection(); // Para exibir "Nenhum número selecionado." inicialmente
+    updateActiveButtonsInVisibleGrid(); // Para garantir estado visual inicial correto
   </script>
   <br><br>
   <br><br>
