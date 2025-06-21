@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleção de Rifas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2b2424;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .button-toggle {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .button-toggle button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+        }
+
+        .button-toggle button.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .grid {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            max-width: 600px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .grid button {
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        .grid button.selected {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .textarea-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        button.copy {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #007bff;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .button-toggle {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .button-toggle button {
+                width: 100%;
+            }
+
+            .grid {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="button-toggle">
+        <button id="toggleA" class="active">COLUNA A</button>
+        <button id="toggleX">COLUNA X</button>
+    </div>
+
+    <div id="gridA" class="grid">
+        <!-- Exemplos de botões da COLUNA A -->
+        <button data-value="A062 / Gabriele">A062</button>
+        <button data-value="A078 / Ligada no 220v">A078</button>
+    </div>
+
+    <div id="gridX" class="grid" style="display: none;">
+        <!-- Exemplos de botões da COLUNA X -->
+        <button data-value="X023 / Café">X023</button>
+        <button data-value="X025 / Camurça">X025</button>
+    </div>
+
+    <div class="textarea-container">
+        <textarea id="selectionBox" readonly></textarea>
+        <button class="copy" onclick="copyToClipboard()">COPIAR</button>
+    </div>
+
+    <script>
+        const toggleA = document.getElementById('toggleA');
+        const toggleX = document.getElementById('toggleX');
+        const gridA = document.getElementById('gridA');
+        const gridX = document.getElementById('gridX');
+        const selectionBox = document.getElementById('selectionBox');
+
+        let selectedItems = [];
+
+        toggleA.addEventListener('click', () => {
+            toggleA.classList.add('active');
+            toggleX.classList.remove('active');
+            gridA.style.display = 'grid';
+            gridX.style.display = 'none';
+        });
+
+        toggleX.addEventListener('click', () => {
+            toggleX.classList.add('active');
+            toggleA.classList.remove('active');
+            gridA.style.display = 'none';
+            gridX.style.display = 'grid';
+        });
+
+        function updateSelection() {
+            selectionBox.value = selectedItems.join('\n');
+        }
+
+        document.querySelectorAll('.grid button').forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.getAttribute('data-value');
+                if (selectedItems.includes(value)) {
+                    selectedItems = selectedItems.filter(item => item !== value);
+                    button.classList.remove('selected');
+                } else {
+                    selectedItems.push(value);
+                    button.classList.add('selected');
+                }
+                updateSelection();
+            });
+        });
+
+        // Adicionando a função copyToClipboard que faltava no Código 1 original
+        // e que estava causando erro no console ao clicar no botão COPIAR
+        function copyToClipboard() {
+            if (selectionBox.value) {
+                navigator.clipboard.writeText(selectionBox.value).then(() => {
+                    alert('Texto copiado para a área de transferência!');
+                }).catch(err => {
+                    console.error('Erro ao copiar texto: ', err);
+                    alert('Erro ao copiar texto.');
+                });
+            } else {
+                alert('Nada para copiar.');
+            }
+        }
+
+    </script>
+</body>
+</html>
