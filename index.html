@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BetShopTV⦿com</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
 
-    /* Estilo Geral */
     body {
       margin: 0;
       font-family: 'Roboto Condensed', sans-serif;
@@ -22,13 +21,12 @@
     a {
       color: #ff0000;
       text-decoration: none;
-      text-decoration-color: #ff0000;
     }
+
     a:hover {
       text-decoration: underline;
     }
 
-    /* Cabeçalho padrão (computador) */
     header {
       width: 100%;
       height: auto;
@@ -51,14 +49,13 @@
       background-color: #ff0000;
     }
 
-    /* Conteúdo Principal */
     main {
       width: 90%;
       max-width: 1200px;
       margin-top: 20px;
       text-align: center;
     }
-
+    
     main h1 {
       font-size: 2.2em;
       margin-bottom: 10px;
@@ -66,224 +63,366 @@
 
     main h2 {
       font-size: 1.8em;
+      margin-bottom: 8px;
+      margin-top: 42px;
+
     }
 
     main h3 {
       font-size: 1.4em;
+      margin-top: 38px;
+      margin-bottom: 0px;
+    }
+    
+    main h4 {
+      font-size: 1em;
+      text-decoration: none;
+    }
+    
+    main v {
+      color: #ff0000;
     }
     
     main p {
       font-size: 1.2em;
-      line-height: 1.5;
+      color: #2b2424;
+      margin-top: 4px;
+      margin-bottom: 4px;
     }
-
-    /* Botões (versão desktop) */
+    
     .button-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px; /* Espaço entre os botões */
+      gap: 10px;
       margin-top: 10px;
-      margin-right: 10px;
-      margin-left: 10px;
     }
-.botao-main {
-  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
-  height: 50px;
-  border: 2px solid #ff0000;
-  background-color: transparent;
-  color: #ff0000;
-  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
-  justify-content: center;
-  align-items: center;
-  font-size: 1em;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.2;
-  cursor: pointer;
-  white-space: nowrap; /* Evita quebra de texto */
-}
-.botao-off {
-  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
-  height: 50px;
-  border: 2px solid #2b2424;
-  background-color: transparent;
-  color: #2b2424;
-  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
-  justify-content: center;
-  align-items: center;
-  font-size: 1em;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.2;
-  cursor: pointer;
-  white-space: nowrap; /* Evita quebra de texto */
-}
-    .botao-nao {
-  padding: 4px 13px; /* 9px de cada lado resulta em 18px extras */
-  height: 50px;
-  border: 2px solid #aaaaaa;
-  background-color: transparent;
-  color: #aaaaaa;
-  display: inline-flex; /* Garante que o botão ajusta-se ao texto */
-  justify-content: center;
-  align-items: center;
-  font-size: 1em;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.2;
-  cursor: pointer;
-  white-space: nowrap; /* Evita quebra de texto */
-}
 
+    .botao-main, .botao-off, .botao-coluna, .botao-oferta {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid;
+      background-color: transparent;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+    }
 
-    /* Responsividade: Celulares (até 768px) */
+    .botao-main {
+      color: #ff0000;
+      border-color: #ff0000;
+    }
+    
+    .botao-coluna {
+      color: #bebab0;
+      border-color: #2b2424;
+  background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/faposteee.gif');
+    }    
+
+.botao-oferta {
+  color: #bebab0;
+  border-color: #ff0000;
+  background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fofertas.gif');
+}
+    
+    .botao-off {
+      color: #2b2424;
+      border-color: #2b2424;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(43, 36, 36, 0.69);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .lightbox-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: 1;
+    }
+
+    .conteudo {
+      position: relative;
+      width: 90%;
+      height: calc(94% - 48px);
+      border: 2px solid #ff0000;
+      background: #c1bbb1;
+      overflow-x: auto;
+      overflow-y: hidden;
+      display: flex;
+      align-items: center;
+      padding: 24px;
+      gap: 12px;
+      z-index: 2;
+    }
+
+    .conteudo img {
+      flex-shrink: 0;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .conteudo::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .conteudo::-webkit-scrollbar-thumb {
+      background-color: #ff0000;
+      border-radius: 2px;
+    }
+
+    .conteudo::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .fechar {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      color: #ff0000;
+      background: none;
+      border: none;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .gallery-container {
+      display: flex;
+      justify-content: space-between;
+      max-width: 1224px;
+      margin: 20px auto;
+      gap: 12px;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      min-width: 50px;
+      text-align: left;
+    }
+
+    .column p, .column h1, .column h2, .column h3, .column h4 {
+      margin-left: 6px;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+     
+    .column a {
+      margin-right: 50%;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .column img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 12px;
+    }
+
     @media (max-width: 768px) {
       header {
         height: 112px;
-        min-height: 112px;
-        max-height: 112px;
-        padding: 4px 4px;
       }
 
-      .header-video {
-        height: 100%;
-        width: auto;
-        min-width: 300%;
-        object-fit: cover;
-        object-position: center;
-        transform: translate(-50%, -50%);
+      .gallery-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
       }
 
-      main h1 {
-        font-size: 1.8em;
-      }
-
-      main p {
-        font-size: 1em;
+      .column {
+        width: 90%;
+        margin-bottom: 20px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Cabeçalho -->
   <header>
-    <a href="http://betshoptv.com"><video class="header-video" autoplay loop muted playsinline>
-     <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
-      Seu navegador não suporta a tag de vídeo.
-    </video></a>
+    <video class="header-video" autoplay loop muted playsinline>
+      <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+    </video>
   </header>
 
-  <!-- Conteúdo Principal -->
-  <main>
-<section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">    
-<div class="button-container">
-      <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
-      <a href="galeria.html" class="botao-main">GALERIA<BR>DE IMAGENS</a>
-      <a href="rifas.html" class="botao-main">APOSTE<br>&nbsp;◖RIFAS◗&nbsp;</a>
-      <a class="botao-nao">APOSTE<br>&nbsp;◖OFERTAS◗&nbsp;</a>
-      <a class="botao-nao">PERGUNTAS<br>FREQUENTES</a>
-      <a class="botao-nao">SOBRE O PROJETO</a>
-      <a href="link-para-contato.html" class="botao-main">CONTATO</a>
-    </div>
-</section>
-
-<br><br>
-    <!-- Seção adaptada por JULES às 17h de 17/06 -->
-<section style="text-align: left; margin-top: 30px; max-width: 88%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">
-  <h1 style="color: #2b2424;"><span style="color:#FF0000;">⦿</span> COMO FUNCIONA</h1>
-  <p><span style="color:#2b2424;">&nbsp;&nbsp;As apostas disponíveis são divididas entre <strong>RIFAS</strong>, <strong>OFERTAS</strong> e <strong>LEILÕES</strong>.</span></p>
-  
-  <p><h2 style="color:#FF0000;">&nbsp;&nbsp;𑇢&nbsp;&nbsp;RIFAS</h2></p>
-  <p><span style="color:#2b2424;">&nbsp;&nbsp;&nbsp; São duas rifas disponíveis: na <strong>COLUNA <span style="color:#FF0000;">A</span></strong>, será disputado o trabalho <em style="font-style:italic; color:#FF0000;"><strong>EVA TV Man</strong></em> e, na <strong>COLUNA <span style="color:#FF0000;">X</span></strong>, <em style="font-style:italic; color:#FF0000;"><strong>Chop Shop AV</strong></em>, ambas realizadas em 2025 pelo artista Pedro Gallego.</span></p>
-  <p><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;◗</strong></span><strong> <em style="font-style:italic;">EVA TV Man</em></strong>, na <strong>COLUNA <span style="color:#FF0000;">A</span></strong>, será rifado normalmente, ou seja, a pessoa sorteada será contemplada com o trabalho integral.</span></p>
-  <p><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;◗</strong></span><strong> <em style="font-style:italic;">Chop Shop AV</em></strong>, na <strong>COLUNA <span style="color:#FF0000;">X</span></strong>, é composta por <strong>sete partes</strong> — referentes aos meses de publicação das revistas utilizadas para compor o trabalho — que abrigam <strong>mais de 100 peças</strong> que serão produzidas, divulgadas e postas à venda separadamente até a semana anterior aos sorteios finais. Ao apostar nesta coluna, a pessoa sorteada será contemplada com as peças remanescentes deste trabalho e todos os suportes traseiros nele utilizados.</span></p>
-  <p><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>É possível apostar em quantas colunas e números desejar: <strong>o custo da aposta em <span style="color:#FF0000;">1 número</span> é <span style="color:#FF0000;">$30</span></strong>, mas se quiser apostar em mais números de uma só vez, por <strong><span style="color:#FF0000;">$50</span> você pode escolher <span style="color:#FF0000;">2 números</span></strong>, podendo ser distribuídos em uma mesma coluna ou em colunas diferentes.</span></p>
-
-  <p><h3 style="color:#FF0000;">&nbsp;&nbsp;𝍃&nbsp;&nbsp;<span style="color:#2b2424">SORTEIOS, PREMIAÇÕES e RECEBIMENTO DE TRABALHOS</span></h3></p>
-  <p><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>Os sorteios acontecerão em um sábado, dia 9 de agosto de 2025, em local e horários que serão divulgados na semana anterior, e terá seu resultado transmitido e/ou publicado no Instagram e no site. Os números sorteados serão baseados em diferentes extrações do Jogo do Bicho realizadas neste dia.</span></p>
-  <p><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;⨮ Saiba mais</strong></span> sobre o sistema utilizado para correspondência de números sorteados.</span></p>  
-<br>
-<p><h3><span style="color:#ff0000">&nbsp;&nbsp;&nbsp;⏣&nbsp;&nbsp;</span><span style="color:#2b2424">SORTEIO COLUNA <span style="color:#FF0000;">A</span>  /  <i>EVA TV Man</i></span></h3></p>
-  <p style="margin-top:12px;"><span style="color:#2b2424;"><strong>&nbsp;&nbsp;&nbsp;</strong>Um único número será sorteado nesta coluna e quem nele tiver apostado receberá o <strong>PRÊMIO <span style="color:#FF0000;">A</span></strong>. Este será o último sorteio da noite, a partir da extração das 21h, conhecida como Coruja.</span></p>
-<br>
-<p><h3><span style="color:#ff0000">&nbsp;&nbsp;&nbsp;ᛪ&nbsp;&nbsp;</span><span style="color:#2b2424">SORTEIO COLUNA <span style="color:#FF0000;">X</span>  /  <i>Chop Shop AV</i></span></h3></p>
-  <p><h3><span style="color:#ff0000">&nbsp;&nbsp;&nbsp;৶&nbsp;&nbsp;</span><span style="color:#2b2424">PREMIAÇÕES</span></h3></p>
-  <p style="margin-top:12px;"><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong style="font-size:16px; color:#2b2424; font-weight:bold;">1</strong><span style="color:#FF0000; font-size:16px;">】</span> As pessoas premiadas serão contactadas por um e-mail geral, em cópia oculta, dentro de&nbsp;36 horas após os sorteios finais com os resultados do <strong>PRÊMIO <span style="color:#FF0000;">A</span></strong> e <strong>PRÊMIO <span style="color:#FF0000;">X</span></strong>. Esta mensagem apresentará&nbsp;também os números das pessoas premiadas em ordem de sorteio e&nbsp;um link para visualizar todas as peças disponíveis para premiação, com sinalização de&nbsp;quais delas&nbsp;já podem ser atribuídas a quais pessoas sorteadas, baseando-nos nas indicações de interesses disponíveis que, neste primeiro momento, estarão condicionadas à ordem de sorteio. A partir daí, a ordem de resposta a este e-mail determina a prioridade de escolha sobre peças disponíveis, que poderão ser consultadas no mesmo link.</span></p>
-  <p style="margin-top:8px;"><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong style="font-size:16px; color:#2b2424; font-weight:bold;">2</strong><span style="color:#FF0000; font-size:16px;">】</span>&nbsp;O prazo de resposta para garantir o direito à premiação em ambas as colunas é de 14 dias corridos após o recebimento da mensagem acima. As peças que permanecerem disponíveis serão destinadas ao acervo do artista.</span></p>
-  
-  <style>
-.video-container {
-    max-width: 94%;
-    margin-left: auto;
-    margin-right: auto;
-    border: 2px solid #ff0000; /* Ajuste para 2px ou 4px se preferir */
-    box-sizing: border-box;
-    overflow: hidden; /* Garante que nada de dentro "vaze" a borda */
-  }
-
-  .video-container video {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-</style>
-  <div class="video-container">
-    <video controls autoplay loop muted>
-      <source src="https://github.com/BetShopTV/BetShopTVpontocom.github.io/raw/main/images/INFOGRAF_17-sorteades.mp4" type="video/mp4"/>
-      Seu navegador não suporta a reprodução de vídeo.
-    </video>
+    <!-- BOTÕES MENU -->
+  <div class="button-container">
+    <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
+    <a href="rifas.html" class="botao-main">RIFAS</a>
+    <a href="ofertas.html" class="botao-main">OFERTAS</a>
+    <a class="botao-off">GALERIA<br>DE IMAGENS</a>
+    <a href="sobre.html" class="botao-main">SOBRE O PROJETO</a>
+    <a href="contato.html" class="botao-main">CONTATO</a>
   </div>
-  <div style="height:24px;"></div>
- <p><h3><span style="color:#ff0000">&nbsp;&nbsp;&nbsp;▥&nbsp;&nbsp;</span><span style="color:#2b2424">RECEBIMENTO DE TRABALHOS</span></h3></p>
-  <p style="margin-top:12px;"><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong style="font-size:16px; color:#2b2424; font-weight:bold;">1</strong><span style="color:#FF0000; font-size:16px;">】</span> O recebimento dos prêmios pode ser realizado de três maneiras principais:&nbsp;</span></p>
-  <p style="margin-top:8px;"><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong style="font-size:16px; color:#2b2424; font-weight:bold;">1.a</strong><span style="color:#FF0000; font-size:16px;">】</span> Retirada presencial no evento de sorteio, provavelmente realizado na cidade de São Paulo.</span></p>
-  <p style="margin-top:8px;"><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong style="font-size:16px; color:#2b2424; font-weight:bold;">1.b</strong><span style="color:#FF0000; font-size:16px;">】</span> Retirada ou recebimento presencial na região central cidade de São Paulo ou em&nbsp;estações de Metrô/CPTM.</span></p>
-  <p style="margin-top:8px;"><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong style="font-size:16px; color:#2b2424; font-weight:bold;">1.c</strong><span style="color:#FF0000; font-size:16px;">】</span> Recebimento por correio (frete não incluso no caso das Rifas)</span></p>
-  <p style="margin-top:12px;"><span style="color:#2b2424;"><span style="color:#FF0000;"><strong>&nbsp;&nbsp;&nbsp;</strong></span>&nbsp; <strong style="font-size:16px; color:#2b2424; font-weight:bold;">2</strong><span style="color:#FF0000; font-size:16px;">】</span>&nbsp;Todos&nbsp;os trabalhos são entregues planificados, em uma embalagem acompanhada de certificado e um documento com sugestões de montagem.</span></p>
-  <div style="height:24px;"></div>
-<p><h2 style="color:#FF0000;">&nbsp;&nbsp;𑇢&nbsp;&nbsp;OFERTAS</h2></p>
-  <p style="margin-top:12px;"><span style="color:#2b2424;">&nbsp;&nbsp;&nbsp; As <strong>peças</strong> que constituem <em style="font-style:italic;"><strong>Chop Shop AV</strong></em>, da <strong>COLUNA <span style="color:#FF0000;">X</span></strong>, est&atilde;o dispon&iacute;veis para vendas avulsas &agrave; medida em que forem produzidas e aqui publicadas, dividindo-se em cotas <span style="color:#FF0000;"><strong>a partir de $150!</strong></span></span></p>
-  <p style="margin-top:8px;"><span style="color:#2b2424;"><strong>&nbsp;&nbsp;&nbsp; Todas as peças</strong>, exceto as que forem destinadas ao leilão, <strong>serão postas em <span style="color:#FF0000;">OFERTA</span> pela cota mínima de $150</strong> ao menos uma vez até a data dos sorteios finais, pelo período mínimo de 8 horas.</span></p>
-  <div style="height:24px;"></div>
+
+  <!-- Lightbox ETM -->
+  <div class="lightbox" id="ETM">
+    <div class="lightbox-overlay" onclick="fecharLightbox('ETM')"></div>
+    <button class="fechar" onclick="fecharLightbox('ETM')">Ⓧ</button>
+    <div class="conteudo">
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_002.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_005.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_004.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_003.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_006.jpg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+    </div>
+  </div>
+
+  <!-- Lightbox CSA -->
+  <div class="lightbox" id="CSA">
+    <div class="lightbox-overlay" onclick="fecharLightbox('CSA')"></div>
+    <button class="fechar" onclick="fecharLightbox('CSA')">Ⓧ</button>
+    <div class="conteudo">
+              <img id="CSA-001" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/001-03-a.jpg">
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/F001.png">
+      <h2><font color="#bebab0">$200</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/001-03-b.jpg">
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/001-03-c.jpg">
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/001-03-d.jpg">      
+      <img id="CSA-002" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png"> 
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/002-03-a.jpg">
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/F002.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/002-03-b.jpg">      
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/002-03-c.jpg">
+      <img id="CSA-003" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png"> 
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/003-03-a.jpg">
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/F003.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/003-03-b.jpg">
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/003-03-c.jpg">
+      <img id="CSA-004" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png"> 
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/004-03-a.jpg">
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/F004.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/004-03-b.jpg">
+            <img id="CSA-005" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+            <img id="CSA-006" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+            <img id="CSA-007" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+            <img id="CSA-008" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+            <img id="CSA-009" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+            <img id="CSA-010" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+    </div>
+  </div>
   
-<p><h2 style="color:#FF0000;">&nbsp;&nbsp;𑇢&nbsp;&nbsp;LEILÕES</h2></p>
-  <p style="margin-top:12px;"><span style="color:#2b2424;">&nbsp;&nbsp;&nbsp; At&eacute; o dia dos sorteios finais, ao menos uma pe&ccedil;a&nbsp;de <em style="font-style:italic;"><strong>Chop Shop AV</strong></em> ser&aacute; leiloada pelo<strong> lance m&iacute;nimo de $150</strong>.</span></p>
-  <p style="margin-top:8px;"><span style="color:#2b2424;">&nbsp;&nbsp;&nbsp; Para cobrir um lance, a pessoa interessada deve oferecer uma quantia <strong>no m&iacute;nimo $50 superior &agrave; do &uacute;ltimo lance</strong> registrado.</span></p>
-  <div style="height:24px;"></div>
-
-  <p><h2 style="color:#FF0000;">⪼ <span style="color:#2b2424">PASSO A PASSO</span></h2></p>
-  <p style="margin-top:12px;"><strong><span style="color:#2b2424; font-size:16px;">1</span><span style="color:#FF0000; font-size:16px;">】</span><span style="color:#2b2424; font-size:16px; font-weight:bold;">ESCOLHA SEUS NÚMEROS</span></strong></p>
-  <p style="margin-left:24px; margin-top:8px;"><strong style="color:#2b2424;">$30</strong><span style="color:#FF0000;">&nbsp;⇴</span><span style="color:#2b2424;"> 1 número</span></p>
-  <p style="margin-left:24px; margin-top:6px;"><strong style="color:#2b2424;">$50</strong><span style="color:#FF0000;"> ⇴</span><span style="color:#2b2424;"> 2 números na mesma coluna ou em colunas distintas</span></p>
-  <p style="margin-top:16px;"><strong><span style="color:#2b2424; font-size:16px;">2</span><span style="color:#FF0000; font-size:16px;">】</span><span style="color:#2b2424; font-size:16px; font-weight:bold;">INDIQUE SUAS ESCOLHAS e EFETUE O PAGAMENTO</span></strong></p>
-  <p style="margin-left:24px; margin-top:8px; color:#2b2424;">Preencha o <a href="https://forms.gle/QwbwNNSSV27H5DYQ8" text-decoration:underline; target="_blank" rel="noreferrer"><u>formulário</u> <u>de</u> <u>apostas</u></a> ou envie um e-mail para betshoptv<a href="mailto:betshoptv@gmail.com" style="color:#2b2424; text-decoration:none;" target="_blank" rel="noreferrer">@</a>gmail.com contendo os seguintes itens:</p>
-<p style="margin-top:8px;"><span style="color:#FF0000;">⇴&nbsp;</span>Nome completo </p>
-<p style="margin-top:8px;"><span style="color:#FF0000;">⇴&nbsp;</span>Telefone e e-mail para contato </p>
-<p style="margin-top:8px;"><span style="color:#FF0000;">⇴&nbsp;</span>Números em que deseja apostar </p>
-<p style="margin-top:8px;"><span style="color:#FF0000;">⇴&nbsp;</span>Comprovante de pagamento </p>
-  <p style="margin-left:24px; margin-top:8px; color:#2b2424;">Os pagamentos podem ser feitos em PIX pela chave betshoptv<a href="mailto:betshoptv@gmail.com" style="color:#2b2424; text-decoration:none;" target="_blank" rel="noreferrer">@</a>gmail.com ou via <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" style="color:#2b2424; text-decoration:underline;" target="_blank" rel="noreferrer">PayPal</a>.</p>
-  <p style="margin-top:16px;"><strong><span style="color:#2b2424; font-size:16px;">3</span><span style="color:#FF0000; font-size:16px;">】</span><span style="color:#2b2424; font-size:16px; font-weight:bold;">RECEBA SEU COMPROVANTE DE APOSTAS</span></strong></p>
-  <p style="margin-left:24px; margin-top:8px; color:#2b2424;">Em até 36h você receberá a confirmação das apostas efetuadas.</p>
-  <p style="margin-top:16px;"><strong><span style="color:#2b2424; font-size:16px;">4</span><span style="color:#FF0000; font-size:16px;">】</span><span style="color:#2b2424; font-size:16px; font-weight:bold;">SORTE NOS SORTEIOS!</span></strong></p>
-  <p style="margin-left:24px; margin-top:8px; color:#2b2424;">Agora é só torcer e aguardar o <strong><span style="color:#FF0000;">resultado dos sorteios finais</span></strong>, realizados no dia <strong><span style="color:#FF0000;">9 de agosto de 2025</span></strong>.</p>
-  <div style="height:24px;"></div>
-  <br/>
-</section>
-
+  <main>
+    <div class="gallery-container">
+              <div class="column">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1" class="imagem-interativa" onclick="abrirLightbox('ETM')" style="cursor: pointer;">
+        </div>  
+        <div class="column"></div>
+        <div class="column">
+              <text style="font-size: 1.3em;"><h1><v>⦿</v> COLUNA <v>A</v></h1><br></text>
+              <br>
+              <p><strong>Pedro Gallego</strong></p>
+      <p><i>EVA TV Man</i>, 2025</p>
+      <p>Página da revista Playboy brasileira contendo reprodução da serigrafia <i>TV Man</i>, de Keith Haring, transferida para refugo de EVA, tinta acrílica, ferragens e ímãs.</p>
+      <p>60 x 40 x 15 cm</p>
+      <br>
+      <a onclick="abrirLightbox('ETM')" class="botao-off">VEJA MAIS</a>
+      <a href="aposte_col_a.html" class="botao-coluna">APOSTE na COLUNA A</a>
+      </div>
+      <div class="column"></div>
+    </div>
+    
+    <br>
+    
+        <div class="gallery-container">
+      <div class="column">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA_004-trat.jpg" alt="Imagem 2" class="imagem-interativa" onclick="abrirLightbox('CSA')" style="cursor: pointer;">
+        </div>
+        <div class="column"></div>
+                <div class="column">
+              <text style="font-size: 1.3em;"><h1><v>⦿</v> COLUNA <v>X</v></h1><br></text>
+              <br>
+              <p><strong>Pedro Gallego</strong></p>
+      <p><i>Chop Shop AV</i>, 2025</p>
+      <p>Páginas da revista Playboy brasileira publicadas entre fevereiro e agosto de 1990 transferidas para EVA estampado, tinta acrílica, ímãs, grampos, ferragens e refugos de EVA.</p>
+      <p>Políptico, dimensões variáveis</p>
+      <br>
+      <a onclick="abrirLightbox('CSA')" class="botao-off">VEJA MAIS</a>
+      <a href="ofertas.html" class="botao-oferta">PEÇAS EM OFERTA
+</a>
+      <a href="aposte_col_x.html" class="botao-coluna">APOSTE na COLUNA X</a>
+      </div>
+        <div class="column"></div>
+        </div>
   </main>
 
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
+  <script>
+function abrirLightbox(idLightbox, idImagem = null) {
+  const lightbox = document.getElementById(idLightbox);
+  lightbox.style.display = 'flex';
 
+  if (idImagem) {
+    const imagem = document.getElementById(idImagem);
+    if (imagem) {
+      imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }
+  }
+}
+
+function fecharLightbox(idLightbox) {
+  const lightbox = document.getElementById(idLightbox);
+  lightbox.style.display = 'none';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    fecharLightbox('ETM');
+    fecharLightbox('CSA');
+  }
+});
+
+  </script>
+  <script>window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash.substring(1); // Ex: CSA-002
+
+  if (hash.startsWith('CSA-')) {
+    const targetId = hash;
+    const imgAlvo = document.getElementById(targetId);
+
+    if (imgAlvo) {
+      const todasImagensCSA = Array.from(document.querySelectorAll('.img-expandida[id^="CSA-"]'));
+      const index = todasImagensCSA.findIndex(img => img.id === targetId);
+
+      if (index !== -1) {
+        imagensDaLinha = todasImagensCSA;
+        indexAtual = index;
+        mostrarImagemNoLightbox();
+        document.querySelector('.lightbox-overlay').style.display = 'flex';
+      }
+    }
+  }
+});
+</script>
+  <br><br>
+    <br><br>
+    <br><br>
 </body>
 </html>
-
-
-
-
-
