@@ -20,7 +20,9 @@
 
     header {
       width: 100%;
+      height: auto; /* Added */
       min-height: 25vh;
+      padding: 20px 0; /* Added */
       background-color: #ff0000;
       position: relative;
       overflow: hidden;
@@ -35,6 +37,7 @@
       min-width: 100%;
       object-fit: cover;
       transform: translate(-50%, -50%);
+      background-color: #ff0000; /* Added fallback */
     }
 
     .button-container {
@@ -282,6 +285,20 @@
 
     .intro-text-section a:hover {
         text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        height: 112px;
+        min-height: 112px;
+        max-height: 112px;
+        padding: 4px 4px;
+      }
+
+      .header-video {
+        min-width: 300%;
+        object-position: center;
+      }
     }
   </style>
 </head>
@@ -782,7 +799,7 @@
     </section>
   </main>
 
-  <script>
+ <script>
     // Elementos do DOM
     const toggleA = document.getElementById('toggleA');
     const toggleX = document.getElementById('toggleX');
