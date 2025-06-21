@@ -306,8 +306,10 @@
         text-align: center;
         width: 120px; /* Fixed width for the cost display */
     ">
-        <p style="margin: 0 0 5px 0; font-weight: bold;">TOTAL</p>
-        <p id="calculated-cost" style="margin: 0; font-size: 1.5em; font-weight: bold;">$0</p>
+        <p style="margin: 0 0 5px 0; font-weight: bold; line-height: 1.2;">APOSTAS</p>
+        <p id="selected-count" style="margin: 0 0 10px 0; font-size: 1.2em; line-height: 1.2; font-weight: bold;">0</p>
+        <p style="margin: 0 0 5px 0; font-weight: bold; line-height: 1.2;">TOTAL</p>
+        <p id="calculated-cost" style="margin: 0; font-size: 1.5em; font-weight: bold; line-height: 1.2;">$0</p>
     </div>
   </div>
 </div></center>
@@ -711,19 +713,10 @@
     function calculateTotalCost(numberOfSelectedItems) {
         if (numberOfSelectedItems <= 0) {
             return 0;
-        } else if (numberOfSelectedItems === 1) {
-            return 30;
-        } else if (numberOfSelectedItems === 2) {
-            return 50;
-        } else if (numberOfSelectedItems === 3) {
-            return 80;
-        } else if (numberOfSelectedItems === 4) {
-            return 100;
-        } else {
-            // Para 5 ou mais itens:
-            // Custo base para 4 itens é 100.
-            // Cada item adicional (acima de 4) custa $20.
-            return 100 + (numberOfSelectedItems - 4) * 20;
+        } else if (numberOfSelectedItems % 2 === 0) { // Quantidade PAR
+            return numberOfSelectedItems * 25;
+        } else { // Quantidade ÍMPAR
+            return ((numberOfSelectedItems - 1) * 25) + 30;
         }
     }
 
@@ -736,8 +729,13 @@
       }
 
       const numberOfItems = selectedItems.length;
-      const totalCost = calculateTotalCost(numberOfItems);
 
+      const selectedCountElement = document.getElementById('selected-count');
+      if (selectedCountElement) {
+        selectedCountElement.textContent = numberOfItems;
+      }
+
+      const totalCost = calculateTotalCost(numberOfItems);
       const calculatedCostElement = document.getElementById('calculated-cost');
       if (calculatedCostElement) {
         calculatedCostElement.textContent = '$' + totalCost;
