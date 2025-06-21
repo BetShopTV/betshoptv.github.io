@@ -1,3 +1,4 @@
+<div class="lightbox_CSA">
   <!-- Lightbox  CSA -->
   <div class="lightbox" id="CSA">
     <div class="lightbox-overlay" onclick="fecharLightbox('CSA')"></div>
@@ -29,3 +30,4 @@
       
     </div>
   </div>
+</div>
