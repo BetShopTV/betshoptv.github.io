@@ -231,6 +231,58 @@
     textarea#selected-text::-webkit-scrollbar-track {
       background: transparent;
     }
+
+    /* Estilos para a seção de introdução PASSO A PASSO */
+    .intro-text-section { /* Já aplicado inline, mas pode ser referenciado se necessário */
+        /* max-width: 75%; */ /* Já inline */
+        /* margin: 20px auto; */ /* Já inline */
+        /* text-align: left; */ /* Já inline */
+        /* font-family: 'Roboto Condensed', sans-serif; */ /* Herdado do body ou inline */
+        /* color: #2b2424; */ /* Herdado do body ou inline */
+        /* line-height: 1.5; */ /* Já inline */
+    }
+
+    .intro-text-section h2 {
+        font-size: 1.8em; /* Similar ao h2 de como.html */
+        color: #2b2424;   /* Cor do texto do título */
+        margin-top: 40px;
+        margin-bottom: 25px; /* Mais espaço antes do primeiro passo */
+        text-align: center; /* Mantém centralização do título */
+    }
+
+    /* Estilo para os parágrafos que servem como títulos de passo */
+    .intro-text-section .step-title {
+        font-weight: bold; /* O strong já faz isso, mas reforça */
+        font-size: 1.3em;  /* Um pouco maior para destaque, similar a um h3 discreto */
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+    .intro-text-section .step-title:first-of-type { /* O primeiro título de passo não precisa de tanto margin-top */
+        margin-top: 0;
+    }
+
+
+    .intro-text-section p {
+        font-size: 1.15em; /* Ajuste fino para parágrafos normais, um pouco menor que 1.2em de como.html para não ficar muito grande */
+        margin-top: 8px;
+        margin-bottom: 8px;
+        /* color: #2b2424; será herdada */
+    }
+
+    /* Parágrafos com preços - manter o margin-left inline mas ajustar top/bottom */
+    .intro-text-section p[style*="margin-left:24px"] {
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .intro-text-section a {
+        color: #ff0000 !important; /* Sobrescreve o estilo inline #2b2424 */
+        text-decoration: none;
+    }
+
+    .intro-text-section a:hover {
+        text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -256,23 +308,23 @@
     <div class="intro-text-section" style="text-align: left; max-width: 75%; margin: 20px auto; color: #2b2424; font-family: 'Roboto Condensed', sans-serif; font-size: 1em; line-height: 1.5;">
       <h2 style="text-align: center;">&nbsp;&nbsp;<span style="color:#FF0000">⪼</span>&nbsp;&nbsp;PASSO A PASSO</h2>
 
-    <p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<span style="color:#FF0000">】</span> ESCOLHA SEUS N&Uacute;MEROS</strong></p>
+    <p class="step-title"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<span style="color:#FF0000">】</span> ESCOLHA SEUS N&Uacute;MEROS</strong></p>
 
-    <p><font color="#2b2424">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Voc&ecirc; pode escolher quantos quiser, em ambas as colunas. Clique sobre os n&uacute;meros desejados para selecion&aacute;-los.</font></p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Voc&ecirc; pode escolher quantos quiser, em ambas as colunas. Clique sobre os n&uacute;meros desejados para selecion&aacute;-los.</p>
 
-    <p style="margin-left:24px"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$30</strong><span style="color:#FF0000">&nbsp;⇴</span><span style="color:#2b2424"> 1 n&uacute;mero</span></p>
+    <p style="margin-left:24px"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$30</strong><span style="color:#FF0000">&nbsp;⇴</span> 1 n&uacute;mero</p>
 
-    <p style="margin-left:24px"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$50</strong><span style="color:#FF0000">&nbsp;⇴</span><span style="color:#2b2424"> 2 n&uacute;meros na mesma coluna ou em colunas distintas</span></p>
+    <p style="margin-left:24px"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$50</strong><span style="color:#FF0000">&nbsp;⇴</span> 2 n&uacute;meros na mesma coluna ou em colunas distintas</p>
 
-    <p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<span style="color:#FF0000">】</span> PREENCHA O <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPz2aYtPGXRHnJYBJrAji5KsZ2jq5Sci36G0lrFHywMWHQoA/viewform?usp=header" style="color:#2b2424; text-decoration:underline;">FORMUL&Aacute;RIO DE APOSTAS</a></strong></p>
+    <p class="step-title"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<span style="color:#FF0000">】</span> PREENCHA O <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPz2aYtPGXRHnJYBJrAji5KsZ2jq5Sci36G0lrFHywMWHQoA/viewform?usp=header">FORMUL&Aacute;RIO DE APOSTAS</a></strong></p>
 
-    <p style="margin-left:24px"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>Ap&oacute;s finalizar suas escolhas de aposta, copie o texto gerado na &aacute;rea abaixo e insira no campo correspondente do <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPz2aYtPGXRHnJYBJrAji5KsZ2jq5Sci36G0lrFHywMWHQoA/viewform?usp=header" style="color:#2b2424; text-decoration:underline;">formul&aacute;rio</a>.</p>
+    <p style="margin-left:24px"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>Ap&oacute;s finalizar suas escolhas de aposta, copie o texto gerado na &aacute;rea abaixo e insira no campo correspondente do <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPz2aYtPGXRHnJYBJrAji5KsZ2jq5Sci36G0lrFHywMWHQoA/viewform?usp=header">formul&aacute;rio</a>.</p>
 
-    <p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3<span style="color:#FF0000">】</span>&nbsp;EFETUE O PAGAMENTO</strong></p>
+    <p class="step-title"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3<span style="color:#FF0000">】</span>&nbsp;EFETUE O PAGAMENTO</strong></p>
 
-    <p style="margin-left:24px"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>Os pagamentos podem ser feitos em PIX pela chave betshoptv<a href="mailto:betshoptv@gmail.com" rel="noreferrer" style="color:#2b2424; text-decoration:underline;" target="_blank">@</a>gmail.com ou via <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" rel="noreferrer" style="color:#2b2424; text-decoration:underline;" target="_blank">PayPal</a>. Assim que efetu&aacute;-lo, salve o comprovante e carregue este arquivo no formul&aacute;rio.</p>
+    <p style="margin-left:24px"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>Os pagamentos podem ser feitos em PIX pela chave betshoptv<a href="mailto:betshoptv@gmail.com" rel="noreferrer" target="_blank">@</a>gmail.com ou via <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" rel="noreferrer" target="_blank">PayPal</a>. Assim que efetu&aacute;-lo, salve o comprovante e carregue este arquivo no formul&aacute;rio.</p>
 
-    <p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4<span style="color:#FF0000">】</span> SORTE NOS SORTEIOS!</strong></p>
+    <p class="step-title"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4<span style="color:#FF0000">】</span> SORTE NOS SORTEIOS!</strong></p>
 
     <p style="margin-left:24px"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>Em at&eacute; 37h ap&oacute;s o pagamento voc&ecirc; receber&aacute; a confirma&ccedil;&atilde;o das apostas efetuadas por e-mail e os n&uacute;meros escolhidos ser&atilde;o sinalizados como indispon&iacute;veis nesta p&aacute;gina.</p>
 
