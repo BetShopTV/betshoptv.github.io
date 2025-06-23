@@ -98,7 +98,22 @@
       margin-top: 10px;
     }
 
-    .botao-main, .botao-off, .botao-coluna, .botao-oferta {
+    .botao-main {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid;
+      color: #ff0000;
+      border-color: #ff0000;
+      background-color: transparent;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+    }
+        .botao-off, .botao-coluna, .botao-oferta, .botao-veja {
       padding: 4px 13px;
       height: 50px;
       border: 2px solid;
@@ -112,25 +127,42 @@
       cursor: pointer;
     }
 
-    .botao-main {
-      color: #ff0000;
-      border-color: #ff0000;
-    }
     
     .botao-coluna {
       color: #bebab0;
-      border-color: #2b2424;
+      border-color: transparent;
   background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/faposteee.gif');
     }    
+  .botao-coluna:hover {
+  color: #bebab0;
+  border-color: #ff0000;
+  background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fofertas_hover.gif');
+}
 
-.botao-oferta {
+    .botao-oferta {
   color: #bebab0;
   border-color: #ff0000;
   background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fofertas.gif');
 }
+    .botao-oferta:hover {
+  color: #bebab0;
+  border-color: #ff0000;
+  background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fofertas_hover.gif');
+}
     
     .botao-off {
       color: #2b2424;
+      border-color: #2b2424;
+    }
+    
+    .botao-veja {
+      color: #2b2424;
+      border-color: #2b2424;
+    }
+    
+        .botao-veja:hover {
+      color: #bebab0;
+      background-color: #2b2424;
       border-color: #2b2424;
     }
 
@@ -333,7 +365,7 @@
   <main>
     <div class="gallery-container">
               <div class="column">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1" class="imagem-interativa" onclick="abrirLightbox('ETM')" style="cursor: pointer;">
+            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1" class="imagem-interativa" onclick="abrirLightbox('ETM')" style="cursor: pointer; max-width: 60%;">
         </div>  
         <div class="column"></div>
         <div class="column">
@@ -344,8 +376,8 @@
       <p>Página da revista Playboy brasileira contendo reprodução da serigrafia <i>TV Man</i>, de Keith Haring, transferida para refugo de EVA, tinta acrílica, ferragens e ímãs.</p>
       <p>60 x 40 x 15 cm</p>
       <br>
-      <a onclick="abrirLightbox('ETM')" class="botao-off">VEJA MAIS</a>
-      <a href="rifas.html" class="botao-coluna">APOSTE na COLUNA A</a>
+      <div onclick="abrirLightbox('ETM')" class="botao-veja" style="margin-bottom: 12px;"><text style="color: #bebab0; font-size: 3em; font-weight: normal; margin-bottom: 6px;">👁&nbsp;</text> VEJA MAIS <text style="color: #bebab0; font-size: 3em; font-weight: normal; margin-bottom: 6px;">&nbsp;👁</text></div>
+      <div class="botao-coluna">APOSTE na COLUNA A</div>
       </div>
       <div class="column"></div>
     </div>
@@ -365,10 +397,10 @@
       <p>Páginas da revista Playboy brasileira publicadas entre fevereiro e agosto de 1990 transferidas para EVA estampado, tinta acrílica, ímãs, grampos, ferragens e refugos de EVA.</p>
       <p>Políptico, dimensões variáveis</p>
       <br>
-      <a onclick="abrirLightbox('CSA')" class="botao-off">VEJA MAIS</a>
-      <a href="ofertas.html" class="botao-oferta">PEÇAS EM OFERTA
-</a>
-      <a href="rifas.html" class="botao-coluna">APOSTE na COLUNA X</a>
+      <div onclick="abrirLightbox('CSA')" class="botao-veja" style="margin-bottom: 12px;"><text style="color: #bebab0; font-size: 3em; font-weight: normal; margin-bottom: 6px;">👁&nbsp;</text> VEJA MAIS <text style="color: #bebab0; font-size: 3em; font-weight: normal; margin-bottom: 6px;">&nbsp;👁</text></div>
+      <div href="ofertas.html" class="botao-oferta" style="margin-bottom: 12px;">PEÇAS EM OFERTA
+</div>
+      <div href="rifas.html" class="botao-coluna">APOSTE na COLUNA X</div>
       </div>
         <div class="column"></div>
         </div>
