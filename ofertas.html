@@ -187,8 +187,21 @@
       flex-shrink: 0;
       height: 100%;
       object-fit: contain;
+    
+    }
+    .conteudo::-webkit-scrollbar {
+      height: 8px;
     }
 
+    .conteudo::-webkit-scrollbar-thumb {
+      background-color: #ff0000;
+      border-radius: 2px;
+    }
+
+    .conteudo::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
     .fechar {
       position: absolute;
       top: 24px;
