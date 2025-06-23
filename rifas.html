@@ -18,6 +18,15 @@
       align-items: center;
     }
 
+    a {
+      color: #ff0000;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+    
     header {
       width: 100%;
       height: auto; /* Added */
@@ -40,6 +49,46 @@
       background-color: #ff0000; /* Added fallback */
     }
 
+    main {
+      width: 90%;
+      max-width: 1200px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    main h1 {
+      font-size: 1.6em;
+      margin-bottom: 600px;
+    }
+
+    main h2 {
+      font-size: 1.8em;
+      margin-bottom: 8px;
+      margin-top: 42px;
+    }
+
+    main h3 {
+      font-size: 1.4em;
+      margin-top: 38px;
+      margin-bottom: 0px;
+    }
+
+    main h4 {
+      font-size: 6.6em;
+      color: #ff0000;
+    }
+
+    main v {
+      color: #ff0000;
+    }
+
+    main p {
+      font-size: 1em;
+      color: #2b2424;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+    
     .button-container {
       display: flex;
       flex-wrap: wrap;
@@ -286,6 +335,78 @@
     .intro-text-section a:hover {
         text-decoration: underline;
     }
+    
+        .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(43, 36, 36, 0.69);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .lightbox-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      min-height: 100%;
+      background: transparent;
+      z-index: 1;
+    }
+
+.conteudo {
+  position: relative;
+  width: 50%;
+  height: calc(94% - 48px);
+  border: 2px solid #2b2424;
+  background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/BG-PAP.gif'); 
+  background-color: #bebab0;
+  overflow-y: auto;        /* ✅ Scroll vertical habilitado */
+  overflow-x: hidden;      /* ✅ Sem scroll horizontal */
+  display: flex;
+  flex-direction: column;  /* ✅ Organiza conteúdo verticalmente */
+  align-items: flex-start; /* ✅ Alinha ao topo/esquerda */
+  padding: 24px;
+  gap: 12px;
+  z-index: 2;
+}
+
+    .conteudo img {
+      flex-shrink: 0;
+      height: 100%;
+      object-fit: contain;
+    
+    }
+    .conteudo::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .conteudo::-webkit-scrollbar-thumb {
+      background-color: #2b2424;
+      border-radius: 2px;
+    }
+
+    .conteudo::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .fechar {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      color: #ff0000;
+      background: none;
+      border: none;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 3;
+    }
 
     @media (max-width: 768px) {
       header {
@@ -299,6 +420,35 @@
         min-width: 300%;
         object-position: center;
       }
+      
+             .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width:85%;
+      height: 100%;
+      background: rgba(43, 36, 36, 0.69);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+.conteudo {
+  position: relative;
+  width: 88%;
+  height: calc(94% - 48px);
+  border: 2px solid #ff0000;
+  background: #bebab0;
+  overflow-y: auto;        /* ✅ Scroll vertical habilitado */
+  overflow-x: hidden;      /* ✅ Sem scroll horizontal */
+  display: flex;
+  flex-direction: column;  /* ✅ Organiza conteúdo verticalmente */
+  align-items: flex-start; /* ✅ Alinha ao topo/esquerda */
+  padding: 24px;
+  gap: 12px;
+  z-index: 2;
+}
     }
   </style>
 </head>
@@ -312,46 +462,64 @@
     <!-- BOTÕES MENU -->
   <div class="button-container">
     <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
-    <a class="botao-off">RIFAS</a>
+    <div class="botao-off">RIFAS</div>
     <a href="ofertas.html" class="botao-main">OFERTAS</a>
     <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
-    <a href="sobre.html" class="botao-main">SOBRE O PROJETO</a>
     <a href="contato.html" class="botao-main">CONTATO</a>
   </div>
  
-
-    <!-- TEXTO INTRO INÍCIO -->
-    <div class="intro-text-section" style="text-align: left; max-width: 50%; margin: 20px auto; color: #2b2424; font-family: 'Roboto Condensed', sans-serif; font-size: 1em; line-height: 1.5;">
-      <h2 style="text-align: left;"><span style="color:#FF0000">⪼</span>&nbsp;&nbsp;PASSO A PASSO</h2>
-<div style="border: 2px solid #ff0000; padding: 20px;">
-    <p class="step-title"><strong>1<span style="color:#FF0000">】</span> ESCOLHA SEUS N&Uacute;MEROS</strong></p>
-
-    <p>Voc&ecirc; pode escolher quantos quiser, em ambas as colunas.<br> Clique sobre os n&uacute;meros desejados para selecion&aacute;-los.</p>
-
-    <p style="margin-left:18px"><strong>$30</strong><span style="color:#FF0000">&nbsp;⇴</span> 1 n&uacute;mero</p>
-
-    <p style="margin-left:18px"><strong>$50</strong><span style="color:#FF0000">&nbsp;⇴</span> 2 n&uacute;meros na mesma coluna ou em colunas distintas</p>
-
-    <p class="step-title"><strong>2<span style="color:#FF0000">】</span> PREENCHA O <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPz2aYtPGXRHnJYBJrAji5KsZ2jq5Sci36G0lrFHywMWHQoA/viewform?usp=header">FORMUL&Aacute;RIO DE APOSTAS</a></strong></p>
-
-    <p>Ap&oacute;s finalizar suas escolhas de aposta, copie o texto gerado na &aacute;rea abaixo e insira no campo correspondente do <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPz2aYtPGXRHnJYBJrAji5KsZ2jq5Sci36G0lrFHywMWHQoA/viewform?usp=header">formul&aacute;rio</a>.</p>
-
-    <p class="step-title"><strong>3<span style="color:#FF0000">】</span>&nbsp;EFETUE O PAGAMENTO</strong></p>
-
-    <p>Os pagamentos podem ser feitos em PIX pela chave betshoptv<a href="mailto:betshoptv@gmail.com" rel="noreferrer" target="_blank">@</a>gmail.com ou via <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" rel="noreferrer" target="_blank">PayPal</a>.<br> Assim que efetu&aacute;-lo, salve o comprovante e carregue este arquivo no formul&aacute;rio.</p>
-
-    <p class="step-title"><strong>4<span style="color:#FF0000">】</span> SORTE NOS SORTEIOS!</strong></p>
-
-    <p>Em at&eacute; 37h ap&oacute;s o pagamento voc&ecirc; receber&aacute; a confirma&ccedil;&atilde;o das apostas efetuadas por e-mail e os n&uacute;meros escolhidos ser&atilde;o sinalizados como indispon&iacute;veis nesta p&aacute;gina.</p>
-
-    <p>Agora &eacute; s&oacute; torcer e aguardar os resultados dos sorteios!</p>
-<br>
-<div style="border: 2px dashed #ff0000;">
-    <p style="margin-left:18px"><span style="color:#FF0000; font-size: 1.8em;">⇴&nbsp;</span><strong><em> EVA TV Man</em></strong>, da <strong>COLUNA <span style="color:#FF0000">A</span></strong>, ser&aacute; sorteado &agrave;s 21h&nbsp;no dia <strong><span style="color:#FF0000">9 de agosto de 2025</span></strong>.</p>
-
-    <p style="margin-left:18px; margin-bottom: 20px"><span style="color:#FF0000; font-size: 1.8em;">⇴&nbsp;</span><strong><em> Chop Shop AV</em></strong>, da <strong>COLUNA <span style="color:#FF0000">X</span></strong>, ser&aacute; sorteado ao longo do dia <strong><span style="color:#FF0000">30 de agosto de 2025</span></strong>.&nbsp;</p>
-    </div></div>
+ 
+ <!-- Lightbox PAP -->
+  <div class="lightbox" id="PAP">
+    <div class="lightbox-overlay" onclick="fecharLightbox('PAP')"></div>
+    <button class="fechar" onclick="fecharLightbox('PAP')"><font color="#2b2424">Ⓧ</font></button>
+    <div class="conteudo">
+      <!-- PASSO A PASSO no topo -->
+<br>      <div style="background-color:#2b2424;border-top:2px solid #2b2424;border-bottom:4px solid #2b2424;border-radius:2px;text-align:center;width:100%;">
+        <h2 style="color:#bebab0;margin:4px 0;font-size:2.4em;padding:8px;">PASSO A PASSO</h2>
+      </div>
+      <div style="background-color:#bebab0;border:2px solid #2b2424;border-radius:2px;text-align:left; width:100%;">
+        <!-- Usar formatação interna conforme seu padrão -->
+        <div style="padding: 12px; background-color: #bebab0;">
+        <p class="step-title"><strong>1<span style="color:#FF0000">】</span> ESCOLHA SEUS NÚMEROS</strong></p>
+        <p>Você pode escolher quantos quiser, em ambas as colunas. Clique sobre os números desejados para selecioná‑los.</p>
+        <p style="margin-left:18px"><strong>$30</strong><span style="color:#FF0000">&nbsp;⇴</span> 1 número</p>
+        <p style="margin-left:18px"><strong>$50</strong><span style="color:#FF0000">&nbsp;⇴</span> 2 números na mesma coluna ou em colunas distintas</p>
+        <p class="step-title"><strong>2<span style="color:#FF0000">】</span> PREENCHA O <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPz2aYtPGXRHnJYBJrAji5KsZ2jq5Sci36G0lrFHywMWHQoA/viewform?usp=header">FORMULÁRIO DE APOSTAS</a></strong></p>
+        <p>Após finalizar suas escolhas, copie o texto gerado e insira no campo correspondente do formulário.</p>
+        <p class="step-title"><strong>3<span style="color:#FF0000">】</span> EFETUE O PAGAMENTO</strong></p>
+        <p>Os pagamentos podem ser feitos em PIX pela chave betshoptv@gmail.com ou via <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" target="_blank" rel="noreferrer">PayPal</a>. Depois, carregue o comprovante no formulário.</p>
+        <p class="step-title"><strong>4<span style="color:#FF0000">】</span> SORTE NOS SORTEIOS!</strong></p>
+        <p>Em até 37 h após o pagamento você receberá confirmação por e‑mail e os números serão marcados como indisponíveis aqui.</p>
+        <p>Agora é só torcer e aguardar os resultados dos sorteios!</p></div>
+        </div>
+      </div>
     </div>
+     <br>
+    <!-- TEXTO INTRO FIM -->
+ 
+ 
+<main>
+    
+    <!-- TEXTO INTRO INÍCIO -->
+
+    <br><br><center>
+      <div style="background-color: #ff0000; border-top: 2px solid #ff0000; border-bottom: 4px solid #bebab0; border-radius: 2px; text-align: center; max-width: 892px; min-width: 200px;">
+        <h2 style="color: #bebab0; margin-top: 10px; font-size: 2.4em; padding: 8px;">RIFAS</h2>
+      </div>
+        <div style="color: #ff0000; margin-top: -38px; font-size: 1.4em; margin-bottom: -4px; text-align: center;"><br><center><div style="border: 2px solid #ff0000; min-width: 200px; max-width: 888px; background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fdisp_.gif'); background-repeat: repeat;"><br><text style="color: #2b2424; background-color: #bebab0;"><strong><em> &nbsp;&nbsp;EVA TV Man</em></strong>, da <strong>COLUNA <span style="color:#FF0000">A</span></strong>, ser&aacute; sorteado &agrave;s 21h&nbsp;no dia <strong><span style="color:#FF0000">9 de agosto de 2025</span></strong>.&nbsp;&nbsp;</text><br><br>
+        
+        <text style="color: #2b2424; background-color: #bebab0;"><strong><em> &nbsp;&nbsp;Chop Shop AV</em></strong>, da <strong>COLUNA <span style="color:#FF0000">X</span></strong>, ser&aacute; sorteado ao longo do dia <strong><span style="color:#FF0000">30 de agosto de 2025</span></strong>.&nbsp;&nbsp;</text><br><br>
+        
+        </div>
+
+               <span id="thumb-005" class="imagem-interativa" onclick="abrirLightbox('PAP')" style="cursor: pointer;"><div style="border: solid 2px #ff0000; background-color: #FF0000; max-width: 420px; margin-top: 10px; padding: 10px; cursor: pointer; background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/BG-PAP.gif'); background-repeat: repeat;"><text style="color: #bebab0; font-weight: bold;">COMO APOSTAR?<BR>VEJA O PASSO A PASSO</text></div></span></center>
+        
+        </div>
+    
+    
+    
+    
     <br>
     <!-- TEXTO INTRO FIM -->
 
@@ -362,7 +530,7 @@
     <button id="toggleX" class="botao-subitem">COLUNA X&nbsp;&nbsp;/&nbsp;&nbsp;<i>Chop Shop AV</i></button>
   </div>
 
-  <main>
+ 
 
             <!-- NÚMEROS SELECIONADOS P/ COPIAR -->
 <center><div id="copy-area-container" style="
@@ -798,7 +966,37 @@
       </div>
     </section>
   </main>
+   <script>
+    function abrirLightbox(idLightbox, idImagem = null) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'flex';
+      if (idImagem) {
+        const imagem = document.getElementById(idImagem);
+        if (imagem) {
+          imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        }
+      }
+    }
 
+    function fecharLightbox(idLightbox) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'none';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        fecharLightbox('PAP');
+      }
+    });
+
+    // CORREÇÃO HASH NA URL → abre lightbox direto via #001, #002, #003...
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.substring(1);
+      if (hash && document.getElementById(hash)) {
+        abrirLightbox('PAP', hash);
+      }
+    });
+  </script>
  <script>
     // Elementos do DOM
     const toggleA = document.getElementById('toggleA');
