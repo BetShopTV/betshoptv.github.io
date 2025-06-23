@@ -11,13 +11,14 @@
       margin: 0;
       font-family: 'Roboto Condensed', sans-serif;
       background-color: #bebab0;
+      background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/BGV_inicio-rapido-mais-longo.gif');
       background-repeat: repeat;
       color: #2b2424;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-
+ 
     a {
       color: #ff0000;
       text-decoration: none;
@@ -55,17 +56,16 @@
       margin-top: 20px;
       text-align: center;
     }
-    
+
     main h1 {
-      font-size: 2.2em;
-      margin-bottom: 10px;
+      font-size: 1.6em;
+      margin-bottom: 600px;
     }
 
     main h2 {
       font-size: 1.8em;
       margin-bottom: 8px;
       margin-top: 42px;
-
     }
 
     main h3 {
@@ -73,32 +73,37 @@
       margin-top: 38px;
       margin-bottom: 0px;
     }
-    
+
     main h4 {
-      font-size: 1em;
-      text-decoration: none;
+      font-size: 6.6em;
+      color: #ff0000;
     }
-    
+
     main v {
       color: #ff0000;
     }
-    
+
     main p {
-      font-size: 1.2em;
+      font-size: 1em;
       color: #2b2424;
       margin-top: 4px;
       margin-bottom: 4px;
     }
-    
+
     .button-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      max-width: 94%;
       gap: 10px;
       margin-top: 10px;
     }
 
-    .botao-main, .botao-off, .botao-coluna, .botao-oferta {
+    .botao-main,
+    .botao-off,
+    .botao-coluna,
+    .botao-oferta,
+    .botao-veja {
       padding: 4px 13px;
       height: 50px;
       border: 2px solid;
@@ -112,26 +117,33 @@
       cursor: pointer;
     }
 
-    .botao-main {
-      color: #ff0000;
-      border-color: #ff0000;
-    }
-    
+    .botao-main { color: #ff0000; border-color: #ff0000; }
+    .botao-off { color: #2b2424; border-color: #2b2424; }
+    .botao-veja { color: #2b2424; border-color: #2b2424; }
+    .botao-veja:hover { color: #bebab0; background-color: #2b2424; border-color: #2b2424; }
+
     .botao-coluna {
       color: #bebab0;
-      border-color: #2b2424;
-  background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/faposteee.gif');
-    }    
+      border-color: transparent;
+      background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/faposteee.gif');
+    }
 
-.botao-oferta {
-  color: #bebab0;
-  border-color: #ff0000;
-  background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fofertas.gif');
-}
-    
-    .botao-off {
-      color: #2b2424;
-      border-color: #2b2424;
+    .botao-coluna:hover {
+      color: #bebab0;
+      border-color: #ff0000;
+      background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fofertas_hover.gif');
+    }
+
+    .botao-oferta {
+      color: #bebab0;
+      border-color: #ff0000;
+      background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fofertas.gif');
+    }
+
+    .botao-oferta:hover {
+      color: #bebab0;
+      border-color: #ff0000;
+      background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fofertas_hover.gif');
     }
 
     .lightbox {
@@ -162,7 +174,7 @@
       width: 90%;
       height: calc(94% - 48px);
       border: 2px solid #ff0000;
-      background: #c1bbb1;
+      background: #bebab0;
       overflow-x: auto;
       overflow-y: hidden;
       display: flex;
@@ -176,8 +188,8 @@
       flex-shrink: 0;
       height: 100%;
       object-fit: contain;
+    
     }
-
     .conteudo::-webkit-scrollbar {
       height: 8px;
     }
@@ -190,7 +202,7 @@
     .conteudo::-webkit-scrollbar-track {
       background: transparent;
     }
-
+    
     .fechar {
       position: absolute;
       top: 24px;
@@ -204,31 +216,24 @@
       z-index: 3;
     }
 
+    /* ======== A PARTIR DAQUI: ajustes de layout da galeria ======== */
     .gallery-container {
       display: flex;
-      justify-content: space-between;
-      max-width: 1224px;
+      flex-wrap: nowrap;      /* colunas não quebram linha! */
+      justify-content: center;
+      width: 100%;
+      max-width: 1200px;
       margin: 20px auto;
       gap: 12px;
+      box-sizing: border-box;
     }
 
     .column {
+      flex: 1 1 0;            /* colunas crescem e encolhem igualmente */
+      max-width: 300px;       /* limite máximo */
       display: flex;
       flex-direction: column;
-      min-width: 50px;
       text-align: left;
-    }
-
-    .column p, .column h1, .column h2, .column h3, .column h4 {
-      margin-left: 6px;
-      margin-bottom: 12px;
-      line-height: 1.3;
-    }
-     
-    .column a {
-      margin-right: 50%;
-      margin-bottom: 12px;
-      line-height: 1.3;
     }
 
     .column img {
@@ -236,19 +241,47 @@
       height: auto;
       margin-bottom: 12px;
     }
+    
+        /* ======== COLUNAS INTRO ======== */
+    .colunas-intro {
+      display: flex;
+      flex-wrap: nowrap;      /* colunas não quebram linha! */
+      justify-content: center;
+      width: 100%;
+      max-width: 1200px;
+      margin: 20px auto;
+      gap: 12px;
+      box-sizing: border-box;
+    }
+
+    .coluninha {
+      flex: 1 1 0;            /* colunas crescem e encolhem igualmente */
+      max-width: 370px;       /* limite máximo */
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .coluninha img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 12px;
+    }
+    
+    
 
     @media (max-width: 768px) {
       header {
         height: 112px;
       }
 
-      .gallery-container {
+      .colunas-intro {
         flex-direction: column;
         align-items: center;
         gap: 8px;
       }
 
-      .column {
+      .coluninha {
         width: 90%;
         margin-bottom: 20px;
       }
@@ -258,19 +291,18 @@
 <body>
   <header>
     <video class="header-video" autoplay loop muted playsinline>
-      <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+      <source src="https://betshoptv.github.io/BetShopTVpontocom.github.io/images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
     </video>
   </header>
 
-    <!-- BOTÕES MENU -->
+  <!-- BOTÕES MENU -->
   <div class="button-container">
     <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
     <a href="rifas.html" class="botao-main">RIFAS</a>
     <a href="ofertas.html" class="botao-main">OFERTAS</a>
-    <a class="botao-off">GALERIA<br>DE IMAGENS</a>
+    <div class="botao-off">GALERIA<br>DE IMAGENS</div>
     <a href="sobre.html" class="botao-main">SOBRE O PROJETO</a>
     <a href="contato.html" class="botao-main">CONTATO</a>
-  </div>
 
   <!-- Lightbox ETM -->
   <div class="lightbox" id="ETM">
@@ -297,131 +329,130 @@
     <div class="lightbox-overlay" onclick="fecharLightbox('CSA')"></div>
     <button class="fechar" onclick="fecharLightbox('CSA')">Ⓧ</button>
     <div class="conteudo">
-              <img id="CSA-001" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+      <img id="001" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/001-03-a.jpg">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/F001.png">
       <h2><font color="#bebab0">$200</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/001-03-b.jpg">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/001-03-c.jpg">
-      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/001-03-d.jpg">      
-      <img id="CSA-002" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png"> 
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/001-03-d.jpg">
+      <img id="002" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/002-03-a.jpg">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/F002.png">
       <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/002-03-b.jpg">      
+      <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/002-03-b.jpg">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/002-03-c.jpg">
-      <img id="CSA-003" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png"> 
+      <img id="003" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/003-03-a.jpg">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/F003.png">
       <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/003-03-b.jpg">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/003-03-c.jpg">
-      <img id="CSA-004" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png"> 
+      <img id="004" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/004-03-a.jpg">
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/F004.png">
       <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/004-03-b.jpg">
-            <img id="CSA-005" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
-            <img id="CSA-006" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
-            <img id="CSA-007" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
-            <img id="CSA-008" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
-            <img id="CSA-009" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
-            <img id="CSA-010" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+      <img id="005" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+      <img id="006" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+      <img id="007" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+      <img id="008" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+      <img id="009" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
+      <img id="010" src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/separador_lightbox2.png">
     </div>
   </div>
-  
+
   <main>
-    <div class="gallery-container">
-              <div class="column">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/ETM_001.jpg" alt="Imagem 1" class="imagem-interativa" onclick="abrirLightbox('ETM')" style="cursor: pointer;">
-        </div>  
-        <div class="column"></div>
-        <div class="column">
-              <text style="font-size: 1.3em;"><h1><v>⦿</v> COLUNA <v>A</v></h1><br></text>
-              <br>
-              <p><strong>Pedro Gallego</strong></p>
-      <p><i>EVA TV Man</i>, 2025</p>
-      <p>Página da revista Playboy brasileira contendo reprodução da serigrafia <i>TV Man</i>, de Keith Haring, transferida para refugo de EVA, tinta acrílica, ferragens e ímãs.</p>
-      <p>60 x 40 x 15 cm</p>
-      <br>
-      <a onclick="abrirLightbox('ETM')" class="botao-off">VEJA MAIS</a>
-      <a href="rifas.html" class="botao-coluna">APOSTE na COLUNA A</a>
+    <br><br><center>
+      <div style="background-color: #ff0000; border-top: 2px solid #ff0000; border-bottom: 4px solid #bebab0; border-radius: 2px; text-align: center; max-width: 892px; min-width: 200px;">
+        <h2 style="color: #bebab0; margin-top: 10px; font-size: 2.4em; padding: 8px;">GALERIA DE IMAGENS</h2>
       </div>
-      <div class="column"></div>
-    </div>
-    
+        <h2 style="color: #ff0000; margin-top: -38px; font-size: 1.6em; margin-bottom: -4px; text-align: center;"><br><center><div style="border: 2px solid #ff0000; min-width: 200px; max-width: 888px; background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fdisp_.gif'); background-repeat: repeat;"><br><text style="background-color: #bebab0;">&nbsp;APOSTAS DISPONÍVEIS&nbsp;</text><br><br></div></center></h2><br>
+        
+
+    <div class="colunas-intro" style="margin-top: 10px;">
+      <div class="coluninha" style="border: 2px solid #2b2424; background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fdisp_.gif'); background-repeat: repeat;">
+           <h2 style="color: #ff0000; font-size: 1.6em; text-align: center; margin-top: 0px;"><center><br><text style="background-color: #bebab0;">&nbsp;<i>EVA TV Man</i>&nbsp;<p></p><text style="font-weight: normal; border-bottom: 2px solid #ff0000; color: #2b2424">&nbsp; COLUNA <v>A</v> &nbsp;</text></text></center></h2>
+<div style="padding: 18px;"><p style="background-color: #bebab0;">Página da revista Playboy brasileira contendo reprodução da serigrafia <i>TV Man</i>, de Keith Haring, transferida para refugo de EVA, tinta acrílica, ferragens e ímãs.</p>
+      <p style="background-color: #bebab0; margin-top: 10px;">60 x 40 x 15 cm</p></div> 
+      <br>
+      <div class="botao-coluna" style="url: ('rifas.html');">APOSTE na COLUNA A</div>
+      </div>
+
+            <div class="coluninha" style="border: 2px solid #2b2424; background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fdisp_.gif'); background-repeat: repeat;">
+           <h2 style="color: #ff0000; font-size: 1.6em; text-align: center; margin-top: 0px;"><center><br><text style="background-color: #bebab0;">&nbsp;<i>Chop Shop AV</i>&nbsp;&nbsp;<p></p><text style="font-weight: normal; border-bottom: 2px solid #ff0000; color: #2b2424">&nbsp; COLUNA <v>X</v> &nbsp;</text></text></center></h2>
+<div style="padding: 18px;">
+      <p style="background-color: #bebab0;">Páginas da revista Playboy brasileira publicadas entre fevereiro e agosto de 1990 transferidas para EVA estampado, tinta acrílica, ímãs, grampos, ferragens e refugos de EVA.</p>
+      <p style="background-color: #bebab0; margin-top: 10px;">Políptico, dimensões variáveis</p></div> 
+      <br>
+      <div class="botao-coluna" style="url: ('rifas.html');">APOSTE na COLUNA X</div>
+      </div>
+    </center>
     <br>
-    
-        <div class="gallery-container">
+
+  
+      
+    <!-- REGIÃO DE TRABALHO - INÍCIO -->
+    <div class="gallery-container">
       <div class="column">
-            <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA_004-trat.jpg" alt="Imagem 2" class="imagem-interativa" onclick="abrirLightbox('CSA')" style="cursor: pointer;">
-        </div>
-        <div class="column"></div>
-                <div class="column">
-              <text style="font-size: 1.3em;"><h1><v>⦿</v> COLUNA <v>X</v></h1><br></text>
-              <br>
-              <p><strong>Pedro Gallego</strong></p>
-      <p><i>Chop Shop AV</i>, 2025</p>
-      <p>Páginas da revista Playboy brasileira publicadas entre fevereiro e agosto de 1990 transferidas para EVA estampado, tinta acrílica, ímãs, grampos, ferragens e refugos de EVA.</p>
-      <p>Políptico, dimensões variáveis</p>
-      <br>
-      <a onclick="abrirLightbox('CSA')" class="botao-off">VEJA MAIS</a>
-      <a href="ofertas.html" class="botao-oferta">PEÇAS EM OFERTA</a>
-      <a href="rifas.html" class="botao-coluna">APOSTE na COLUNA X</a>
+        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/001-03-a.jpg"
+             id="thumb-001" alt="Imagem 001"
+             class="imagem-interativa"
+             onclick="abrirLightbox('CSA', '001')"
+             style="cursor: pointer;">
       </div>
-        <div class="column"></div>
-        </div>
+      <div class="column">
+        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/002-03-a.jpg"
+             id="thumb-002" alt="Imagem 002"
+             class="imagem-interativa"
+             onclick="abrirLightbox('CSA', '002')"
+             style="cursor: pointer;">
+      </div>
+      <div class="column">
+        <img src="https://betshoptv.github.io/BetShopTVpontocom.github.io/galeria/CSA/003-03-a.jpg"
+             id="thumb-003" alt="Imagem 003"
+             class="imagem-interativa"
+             onclick="abrirLightbox('CSA', '003')"
+             style="cursor: pointer;">
+      </div>
+    </div>
+    <!-- REGIÃO DE TRABALHO - FIM -->
+
   </main>
 
   <script>
-function abrirLightbox(idLightbox, idImagem = null) {
-  const lightbox = document.getElementById(idLightbox);
-  lightbox.style.display = 'flex';
-
-  if (idImagem) {
-    const imagem = document.getElementById(idImagem);
-    if (imagem) {
-      imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-    }
-  }
-}
-
-function fecharLightbox(idLightbox) {
-  const lightbox = document.getElementById(idLightbox);
-  lightbox.style.display = 'none';
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    fecharLightbox('ETM');
-    fecharLightbox('CSA');
-  }
-});
-
-  </script>
-  <script>window.addEventListener('DOMContentLoaded', () => {
-  const hash = window.location.hash.substring(1); // Ex: CSA-002
-
-  if (hash.startsWith('CSA-')) {
-    const targetId = hash;
-    const imgAlvo = document.getElementById(targetId);
-
-    if (imgAlvo) {
-      const todasImagensCSA = Array.from(document.querySelectorAll('.img-expandida[id^="CSA-"]'));
-      const index = todasImagensCSA.findIndex(img => img.id === targetId);
-
-      if (index !== -1) {
-        imagensDaLinha = todasImagensCSA;
-        indexAtual = index;
-        mostrarImagemNoLightbox();
-        document.querySelector('.lightbox-overlay').style.display = 'flex';
+    function abrirLightbox(idLightbox, idImagem = null) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'flex';
+      if (idImagem) {
+        const imagem = document.getElementById(idImagem);
+        if (imagem) {
+          imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        }
       }
     }
-  }
-});
-</script>
-  <br><br>
-    <br><br>
-    <br><br>
+
+    function fecharLightbox(idLightbox) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'none';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        fecharLightbox('CSA');
+        fecharLightbox('ETM');
+      }
+    });
+
+    // CORREÇÃO HASH NA URL → abre lightbox direto via #001, #002, #003...
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.substring(1);
+      if (hash && document.getElementById(hash)) {
+        abrirLightbox('CSA', hash);
+      }
+    });
+  </script>
+
+  <br><br><br><br>
 </body>
 </html>
