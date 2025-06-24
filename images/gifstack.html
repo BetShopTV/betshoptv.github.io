@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Cubo 3D Girando com GIFs de Background Repeat</title>
+<style>
+  body {
+    background: #000;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 800px;
+  }
+  .cube {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    transform-style: preserve-3d;
+    animation: spin 10s infinite linear;
+  }
+  .face {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border: 1px solid #fff;
+    background-repeat: repeat;
+    background-size: auto;
+    background-position: center;
+  }
+  .face1 {
+    transform: rotateY(0deg) translateZ(75px);
+    background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/BGV_inicio-rapido-mais-longo.gif');
+  }
+  .face2 {
+    transform: rotateY(90deg) translateZ(75px);
+    background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/BGB.gif');
+  }
+  .face3 {
+    transform: rotateY(180deg) translateZ(75px);
+    background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/BGV.gif');
+  }
+  .face4 {
+    transform: rotateY(-90deg) translateZ(75px);
+    background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/BG-PAP.gif');
+  }
+  .face5 {
+    transform: rotateX(90deg) translateZ(75px);
+    background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/fdisp2.gif');
+  }
+  .face6 {
+    transform: rotateX(-90deg) translateZ(75px);
+    background-image: url('https://betshoptv.github.io/BetShopTVpontocom.github.io/images/faposte.gif');
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotateX(0deg) rotateY(0deg);
+    }
+    100% {
+      transform: rotateX(360deg) rotateY(360deg);
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="cube">
+  <div class="face face1"></div>
+  <div class="face face2"></div>
+  <div class="face face3"></div>
+  <div class="face face4"></div>
+  <div class="face face5"></div>
+  <div class="face face6"></div>
+</div>
+
+</body>
+</html>
