@@ -141,16 +141,15 @@
     .button-VENDIDO {
       padding: 4px 13px;
       height: 50px;
-      border: 0px solid #2b2424;
-      background-color: transparent;
-      color: #736f6f;
+      border: 2px solid #ff0000;
+      background-color: #ff0000;
+      color: #bebab0;
       display: inline-flex;
       justify-content: center;
       align-items: center;
       font-size: 1em;
       font-weight: bold;
       text-align: center;
-      text-decoration: line-through;
       line-height: 1.2;
       cursor: pointer;
       white-space: nowrap;
@@ -646,9 +645,9 @@
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#008000" data-id="A024">A024 / Caminho do Jardim</button>
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#8B4513" data-id="A025">A025 / Camurça</button>
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#D2B48C" data-id="A026">A026 / Capuccino Doce</button>
-<button class="button-VENDIDO" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#DEB887" data-id="A027">A027 / Casa Portuguesa</button>
+<button class="button-VENDIDO" data-hover-color="#DEB887" data-id="A027">A027 / Casa Portuguesa</button>
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#FFA07A" data-id="A028">A028 / Casamento do Verão</button>
-<button class="button-VENDIDO" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#87CEEB" data-id="A029">A029 / Chafariz da Praça</button>
+<button class="button-VENDIDO" data-hover-color="#87CEEB" data-id="A029">A029 / Chafariz da Praça</button>
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#696969" data-id="A030">A030 / Cinza Tecnológico</button>
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#808080" data-id="A031">A031 / Cinza minimalista</button>
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#FFFFFF" data-id="A032">A032 / Clássico</button>
@@ -679,7 +678,7 @@
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#556B2F" data-id="A057">A057 / Figo Verde</button>
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#8A2BE2" data-id="A058">A058 / Fonte Secreta</button>
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#E30B5C" data-id="A059">A059 / Framboesa</button>
-<button class="button-VENDIDO" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#C71585" data-id="A060">A060 / Framboesa Radical</button>
+<button class="button-VENDIDO" data-hover-color="#C71585" data-id="A060">A060 / Framboesa Radical</button>
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#FAF0E6" data-id="A061">A061 / França</button>
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#B22222" data-id="A062">A062 / Gabriele</button>
 <button class="button-main" style="background-color: #bebab0;" style="background-color: #bebab0;" data-hover-color="#FFD700" data-id="A063">A063 / Garota verão</button>
@@ -820,7 +819,7 @@
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#008000" data-id="X024">X024 / Caminho do Jardim</button>
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#8B4513" data-id="X025">X025 / Camurça</button>
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#D2B48C" data-id="X026">X026 / Capuccino Doce</button>
-<button class="button-VENDIDO" style="background-color: #bebab0;" data-hover-color="#DEB887" data-id="X027">X027 / Casa Portuguesa</button>
+<button class="button-VENDIDO" data-hover-color="#DEB887" data-id="X027">X027 / Casa Portuguesa</button>
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFA07A" data-id="X028">X028 / Casamento do Verão</button>
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#87CEEB" data-id="X029">X029 / Chafariz da Praça</button>
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#696969" data-id="X030">X030 / Cinza Tecnológico</button>
@@ -1153,8 +1152,8 @@
           const maxDelay = 1802;
           const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
           fadeTimeout = setTimeout(() => {
-            button.style.backgroundColor = '#ff0000';
-            button.style.color = '#bebab0'; // Cor original do botão não selecionado
+            button.style.backgroundColor = '#e3a69a';
+            button.style.color = '#2b2424'; // Cor original do botão não selecionado
           }, randomDelay);
         }
       });
