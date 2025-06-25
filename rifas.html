@@ -142,7 +142,7 @@
       padding: 4px 13px;
       height: 50px;
       border: 0px solid #2b2424;
-      background-color: #bebab0;
+      background-color: transparent;
       color: #736f6f;
       display: inline-flex;
       justify-content: center;
@@ -1153,7 +1153,7 @@
           const maxDelay = 1802;
           const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
           fadeTimeout = setTimeout(() => {
-            button.style.backgroundColor = '#bebab0';
+            button.style.backgroundColor = 'transparent';
             button.style.color = '#ff0000'; // Cor original do botão não selecionado
           }, randomDelay);
         }
