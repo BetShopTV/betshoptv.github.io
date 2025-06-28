@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Camadas com GIFs</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-repeat: repeat;
+      background-size: auto;
+      background-position: 0 0;
+      pointer-events: none;
+    }
+
+    .layer1 {
+      background-image: url('https://betshoptv.com/images/BGO-big.gif');
+      z-index: 2;
+      background-size: 24px 24px;
+      animation: scroll-horizontal 370s linear infinite;
+    }
+
+    .layer2 {
+      background-image: url('https://betshoptv.com/images/BGO-big.gif');
+      background-size: 24px 24px;
+      z-index: 1;
+      animation: scroll-diagonal 188s linear infinite;
+    }
+
+    @keyframes scroll-horizontal {
+      0%   { background-position: 0 0; }
+      100% { background-position: 100% 0; }
+    }
+
+    @keyframes scroll-diagonal {
+      0%   { background-position: 0 0; }
+      100% { background-position: 100% 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layer layer1"></div>
+  <div class="layer layer2"></div>
+</body>
+</html>
