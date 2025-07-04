@@ -4,15 +4,54 @@
     <meta charset="UTF-8">
     <title>Live Fullscreen com Data e Hora</title>
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        #videoContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #topLabel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+            z-index: 9999;
+        }
+
+        .hide-cursor {
+            cursor: none;
+        }
 
         .video-container {
   position: relative;
+  padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
   max-width: 100%;
   margin: 0 auto; /* Centraliza na tela */
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
 
 .video-container iframe {
@@ -26,6 +65,10 @@
 </head>
 <body>
 
+<!-- Tarja com Data e Hora -->
+<div id="topLabel"></div>
+
+    
 <div class="video-container">
   <iframe 
     src="https://www.youtube.com/embed/y4lyy47iN8Q?controls=0&modestbranding=1&rel=0&showinfo=0&autohide=1" 
@@ -36,7 +79,98 @@
 </div>
 
 
+<script>
+    // --- Atualização Automática da Página a cada 12 horas ---
+    const intervalo = 12 * 60 * 60 * 1000; // 12 horas em ms
+    setTimeout(function() {
+        location.reload();
+    }, intervalo);
 
+    // --- Esconder Cursor após Inatividade ---
+    (function() {
+        let time;
+        function hideUI() {
+            document.body.classList.add('hide-cursor');
+        }
+
+        function showUI() {
+            document.body.classList.remove('hide-cursor');
+        }
+
+        function resetTimer() {
+            showUI();
+            clearTimeout(time);
+            time = setTimeout(hideUI, 10000); // 10 segundos
+        }
+
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+        document.onclick = resetTimer;
+    })();
+
+    // --- Tentar Ativar Fullscreen Real na Primeira Interação ---
+    function launchFullscreen(element) {
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullscreen) {
+            element.webkitRequestFullscreen();
+        } else if (element.msRequestFullscreen) {
+            element.msRequestFullscreen();
+        }
+    }
+
+    let firstInteraction = true;
+    function handleFirstInteraction() {
+        if (firstInteraction) {
+            launchFullscreen(document.documentElement);
+            firstInteraction = false;
+        }
+    }
+
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('keypress', handleFirstInteraction);
+
+    // --- Atualizar Data e Hora em Tempo Real (Horário de São Paulo) ---
+    function updateClock() {
+        const now = new Date();
+
+        // Converter para horário de São Paulo (America/Sao_Paulo)
+        const options = {
+            timeZone: 'America/Sao_Paulo',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        };
+
+        const formatter = new Intl.DateTimeFormat('pt-BR', options);
+        const parts = formatter.formatToParts(now);
+
+        let day, month, year, hour, minute, second;
+
+        parts.forEach(part => {
+            if (part.type === 'day') day = part.value;
+            if (part.type === 'month') month = part.value;
+            if (part.type === 'year') year = part.value;
+            if (part.type === 'hour') hour = part.value;
+            if (part.type === 'minute') minute = part.value;
+            if (part.type === 'second') second = part.value;
+        });
+
+        const displayTime = `${day}/${month}/${year} - ${hour}:${minute}:${second}`;
+
+        document.getElementById('topLabel').innerText = displayTime;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock(); // Atualiza imediatamente ao carregar
+</script>
 
 </body>
 </html>
