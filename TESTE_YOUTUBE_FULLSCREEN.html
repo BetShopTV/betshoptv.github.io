@@ -27,20 +27,6 @@
             height: 100%;
             border: none;
         }
-
-        #topLabel {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            font-size: 24px;
-            font-family: Arial, sans-serif;
-            z-index: 9999;
-        }
-
         .hide-cursor {
             cursor: none;
         }
@@ -65,9 +51,6 @@
 </head>
 <body>
 
-<!-- Tarja com Data e Hora -->
-<div id="topLabel"></div>
-
     
 <div class="video-container">
   <iframe 
@@ -79,98 +62,6 @@
 </div>
 
 
-<script>
-    // --- Atualização Automática da Página a cada 12 horas ---
-    const intervalo = 12 * 60 * 60 * 1000; // 12 horas em ms
-    setTimeout(function() {
-        location.reload();
-    }, intervalo);
-
-    // --- Esconder Cursor após Inatividade ---
-    (function() {
-        let time;
-        function hideUI() {
-            document.body.classList.add('hide-cursor');
-        }
-
-        function showUI() {
-            document.body.classList.remove('hide-cursor');
-        }
-
-        function resetTimer() {
-            showUI();
-            clearTimeout(time);
-            time = setTimeout(hideUI, 10000); // 10 segundos
-        }
-
-        window.onload = resetTimer;
-        document.onmousemove = resetTimer;
-        document.onkeypress = resetTimer;
-        document.onclick = resetTimer;
-    })();
-
-    // --- Tentar Ativar Fullscreen Real na Primeira Interação ---
-    function launchFullscreen(element) {
-        if (element.requestFullscreen) {
-            element.requestFullscreen();
-        } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-        } else if (element.webkitRequestFullscreen) {
-            element.webkitRequestFullscreen();
-        } else if (element.msRequestFullscreen) {
-            element.msRequestFullscreen();
-        }
-    }
-
-    let firstInteraction = true;
-    function handleFirstInteraction() {
-        if (firstInteraction) {
-            launchFullscreen(document.documentElement);
-            firstInteraction = false;
-        }
-    }
-
-    document.addEventListener('click', handleFirstInteraction);
-    document.addEventListener('keypress', handleFirstInteraction);
-
-    // --- Atualizar Data e Hora em Tempo Real (Horário de São Paulo) ---
-    function updateClock() {
-        const now = new Date();
-
-        // Converter para horário de São Paulo (America/Sao_Paulo)
-        const options = {
-            timeZone: 'America/Sao_Paulo',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-        };
-
-        const formatter = new Intl.DateTimeFormat('pt-BR', options);
-        const parts = formatter.formatToParts(now);
-
-        let day, month, year, hour, minute, second;
-
-        parts.forEach(part => {
-            if (part.type === 'day') day = part.value;
-            if (part.type === 'month') month = part.value;
-            if (part.type === 'year') year = part.value;
-            if (part.type === 'hour') hour = part.value;
-            if (part.type === 'minute') minute = part.value;
-            if (part.type === 'second') second = part.value;
-        });
-
-        const displayTime = `${day}/${month}/${year} - ${hour}:${minute}:${second}`;
-
-        document.getElementById('topLabel').innerText = displayTime;
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock(); // Atualiza imediatamente ao carregar
-</script>
 
 </body>
 </html>
