@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BetShopTV⦿com</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Roboto Condensed', sans-serif;
+      background-color: #bebab0;
+      background-repeat: repeat;
+      color: #2b2424;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    a {
+      color: #ff0000;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      width: 100%;
+      height: auto;
+      min-height: 25vh;
+      padding: 20px 0;
+      background-color: #ff0000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 100%;
+      width: auto;
+      min-width: 100%;
+      object-fit: cover;
+      transform: translate(-50%, -50%);
+      background-color: #ff0000;
+    }
+
+    main {
+      width: 90%;
+      max-width: 1200px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    main h1 {
+      font-size: 1.6em;
+      margin-bottom: 600px;
+    }
+
+    main h2 {
+      font-size: 1.8em;
+      margin-bottom: 8px;
+      margin-top: 42px;
+    }
+
+    main h3 {
+      font-size: 1.4em;
+      margin-top: 38px;
+      margin-bottom: 0px;
+    }
+
+    main h4 {
+      font-size: 6.6em;
+      color: #ff0000;
+    }
+
+    main v {
+      color: #ff0000;
+    }
+
+    main p {
+      font-size: 1.2em;
+      color: #2b2424;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 94%;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .botao-main,
+    .botao-off,
+    .botao-coluna,
+    .botao-oferta,
+    .botao-veja {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid;
+      background-color: transparent;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .botao-main { color: #ff0000; border-color: #ff0000; }
+    .botao-off { color: #2b2424; border-color: #2b2424; }
+    .botao-veja { color: #2b2424; border-color: #2b2424; }
+    .botao-veja:hover { color: #bebab0; background-color: #2b2424; border-color: #2b2424; }
+
+    .botao-coluna {
+      color: #bebab0;
+      border-color: transparent;
+      background-image: url('/images/faposteee.gif');
+    }
+
+    .botao-coluna:hover {
+      color: #bebab0;
+      border-color: #ff0000;
+      background-image: url('/images/fofertas_hover.gif');
+    }
+
+    .botao-oferta {
+      color: #bebab0;
+      border-color: #ff0000;
+      background-image: url('/images/fofertas.gif');
+    }
+
+    .botao-oferta:hover {
+      color: #bebab0;
+      border-color: #ff0000;
+      background-image: url('/images/fofertas_hover.gif');
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(43, 36, 36, 1);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .lightbox-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: 1;
+    }
+
+    .conteudo {
+      position: relative;
+      width: 90%;
+      height: calc(94% - 48px);
+      border: 2px solid #ff0000;
+      background: #8f8a84;
+      overflow-x: auto;
+      overflow-y: hidden;
+      display: flex;
+      align-items: center;
+      padding: 24px;
+      gap: 12px;
+      z-index: 2;
+    }
+
+    .conteudo img {
+      flex-shrink: 0;
+      height: 100%;
+      object-fit: contain;
+    
+    }
+    .conteudo::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .conteudo::-webkit-scrollbar-thumb {
+      background-color: #ff0000;
+      border-radius: 2px;
+    }
+
+    .conteudo::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .fechar {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      color: #ff0000;
+      background: none;
+      border: none;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    /* ======== A PARTIR DAQUI: ajustes de layout da galeria ======== */
+    .gallery-container {
+      display: flex;
+      flex-wrap: nowrap;      /* colunas não quebram linha! */
+      justify-content: center;
+      width: 100%;
+      max-width: 1200px;
+      margin: 20px auto;
+      gap: 12px;
+      box-sizing: border-box;
+    }
+
+    .column {
+      flex: 1 1 0;            /* colunas crescem e encolhem igualmente */
+      max-width: 300px;       /* limite máximo */
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .column img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 960px) {
+      .gallery-container {
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <video class="header-video" autoplay loop muted playsinline>
+      <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+    </video>
+  </header>
+
+  <!-- BOTÕES MENU -->
+  <div class="button-container">
+    <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
+    <a href="rifas.html" class="botao-main">RIFAS</a>
+    <div href="ofertas.html" class="botao-main">OFERTAS</div>
+    <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
+    <div class="botao-off">BSTV</div>
+    <a href="contato.html" class="botao-main">CONTATO</a>
+  </div>
+
+  <!-- Lightbox BSTV -->
+  <div class="lightbox" id="BSTV">
+    <div class="lightbox-overlay" onclick="fecharLightbox('BSTV')"></div>
+    <button class="fechar" onclick="fecharLightbox('BSTV')">Ⓧ</button>
+    <div class="conteudo">
+      <img id="001" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/001-03-a.jpg">
+      <img src="/galeria/F001.png">
+      <h2><font color="#bebab0">$200</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/001-03-b.jpg">
+      <img src="/galeria/CSA/001-03-c.jpg">
+      <img src="/galeria/CSA/001-03-d.jpg">
+      <img id="002" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/002-03-a.jpg">
+      <img src="/galeria/F002.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/002-03-b.jpg">
+      <img src="/galeria/CSA/002-03-c.jpg">
+      <img id="003" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/003-03-a.jpg">
+      <img src="/galeria/F003.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/003-03-b.jpg">
+      <img src="/galeria/CSA/003-03-c.jpg">
+      <img id="004" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/004-03-a.jpg">
+      <img src="/galeria/F004.png">
+      <h2><font color="#bebab0">$200</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/004-03-b.jpg">
+      <img id="005" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/005-03-a.jpg">
+      <img src="/galeria/F005.png">
+      <h2><font color="#bebab0">$200</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/005-03-c.jpg">
+      <img src="/galeria/CSA/005-03-b.jpg">
+      <img id="006" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/006-03-a.jpg">
+      <img src="/galeria/F006.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/006-03-b.jpg">
+      <img id="007" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/007-03-a.jpg">
+      <img src="/galeria/F007.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/007-03-b.jpg">
+      <img id="008" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/008-03-a.jpg">
+      <img src="/galeria/F008.png">
+      <h2><font color="#bebab0">$250</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/008-03-c.jpg">
+      <img src="/galeria/CSA/008-03-b.jpg">
+      <img id="009" src="/galeria/separador_lightbox2.png">
+      <img id="010" src="/galeria/separador_lightbox2.png">
+      <img id="011" src="/galeria/separador_lightbox2.png">
+      <img id="012" src="/galeria/separador_lightbox2.png">
+      <img id="013" src="/galeria/separador_lightbox2.png">
+      <img id="014" src="/galeria/separador_lightbox2.png">
+      <img id="015" src="/galeria/separador_lightbox2.png">
+      <img id="016" src="/galeria/separador_lightbox2.png">
+      <img id="017" src="/galeria/separador_lightbox2.png">
+      <img id="018" src="/galeria/separador_lightbox2.png">
+      <img id="019" src="/galeria/separador_lightbox2.png">
+      <img id="020" src="/galeria/separador_lightbox2.png">
+      <img id="021" src="/galeria/separador_lightbox2.png">
+      <img id="022" src="/galeria/separador_lightbox2.png">
+      <img id="023" src="/galeria/separador_lightbox2.png">
+      <img id="024" src="/galeria/separador_lightbox2.png">
+      <img id="025" src="/galeria/separador_lightbox2.png">
+      <img id="026" src="/galeria/separador_lightbox2.png">
+      <img id="027" src="/galeria/separador_lightbox2.png">
+      <img id="028" src="/galeria/separador_lightbox2.png">
+      <img id="029" src="/galeria/separador_lightbox2.png">
+      <img id="030" src="/galeria/separador_lightbox2.png">
+      <img id="031" src="/galeria/separador_lightbox2.png">
+      <img id="032" src="/galeria/separador_lightbox2.png">
+      <img id="033" src="/galeria/separador_lightbox2.png">
+      <img id="034" src="/galeria/separador_lightbox2.png">
+      <img id="035" src="/galeria/separador_lightbox2.png">
+      <img id="036" src="/galeria/separador_lightbox2.png">      
+      <img id="037" src="/galeria/separador_lightbox2.png">      
+    </div>
+  </div>
+
+
+  <main>
+    <br><br><center>
+      <div style="background-image: url('/images/BGB.gif'); background-color: #ff0000; border-top: 4px solid #ff0000; border-bottom: 2px solid #ff0000; border-radius: 2px; text-align: center; max-width: 928px; min-width: 200px;">
+        <h2 style="color: #bebab0; margin-top: 10px; font-size: 2.4em;"> BSTV </h2>
+      </div> 
+      
+      <div style="border: 2px solid #ff0000; min-width: 200px; max-width: 924px; background-repeat: repeat;">
+        <p style="padding: 24px; line-height: 37px;">
+          Fique por dentro de nossa programação audiovisual!<br>
+          Clique nas imagens abaixo para assistir os vídeos.
+        </p>
+      </div> 
+    </center>
+    <br>
+
+    <!-- REGIÃO DE TRABALHO - INÍCIO -->
+    <div class="gallery-container">
+      <div class="column">
+        <img src="/galeria/CSA/007-03-a.jpg"
+             id="thumb-007"
+             class="imagem-interativa"
+             onclick="abrirLightbox('BSTV', '001')"
+             style="cursor: pointer;">
+        
+        <img src="/galeria/CSA/005-03-a.jpg"
+             id="thumb-005"
+             class="imagem-interativa"
+             onclick="abrirLightbox('BSTV', '005')"
+             style="cursor: pointer;">        
+             
+        <img src="/galeria/CSA/006-03-a.jpg"
+             id="thumb-002"
+             class="imagem-interativa"
+             onclick="abrirLightbox('BSTV', '006')"
+             style="cursor: pointer;">             
+   
+      </div>
+      
+      
+      
+      
+      <div class="column">
+         <img src="/galeria/CSA/008-03-a.jpg"
+             id="thumb-008"
+             class="imagem-interativa"
+             onclick="abrirLightbox('BSTV', '008')"
+             style="cursor: pointer;">   
+        
+        <img src="/galeria/CSA/003-03-a.jpg"
+             id="thumb-003"
+             class="imagem-interativa"
+             onclick="abrirLightbox('BSTV', '003')"
+             style="cursor: pointer;">
+
+        <img src="/galeria/CSA/002-03-a.jpg"
+             id="thumb-002" alt="Imagem 003"
+             class="imagem-interativa"
+             onclick="abrirLightbox('BSTV', '002')"
+             style="cursor: pointer;">
+             
+      </div>
+      
+      
+      
+
+
+      <div class="column">
+             
+        <img src="/galeria/CSA/004-03-a.jpg"
+             id="thumb-004" alt="Imagem 003"
+             class="imagem-interativa"
+             onclick="abrirLightbox('BSTV', '004')"
+             style="cursor: pointer;">
+             
+        <img src="/galeria/CSA/001-03-a.jpg"
+             id="thumb-001"
+             class="imagem-interativa"
+             onclick="abrirLightbox('BSTV', '001')"
+             style="cursor: pointer;">
+
+             
+      </div>
+    </div>
+    <!-- REGIÃO DE TRABALHO - FIM -->
+
+  </main>
+
+  <script>
+    function abrirLightbox(idLightbox, idImagem = null) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'flex';
+      if (idImagem) {
+        const imagem = document.getElementById(idImagem);
+        if (imagem) {
+          imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        }
+      }
+    }
+
+    function fecharLightbox(idLightbox) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'none';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        fecharLightbox('BSTV');
+      }
+    });
+
+    // CORREÇÃO HASH NA URL → abre lightbox direto via #001, #002, #003...
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.substring(1);
+      if (hash && document.getElementById(hash)) {
+        abrirLightbox('BSTV', hash);
+      }
+    });
+  </script>
+
+  <br><br><br><br>
+</body>
+</html>
+ 
