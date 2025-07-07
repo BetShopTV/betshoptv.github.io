@@ -179,8 +179,8 @@
     }
 
     .botao-subitem {
-      padding: 4px 13px;
-      height: 37px;
+      padding: 8px 8px;
+      height: 60px;
       border: 2px solid;
       color: #ff0000;
       background-color: #bebab0;
@@ -202,8 +202,8 @@
     }
 
         .botao-subitem-off {
-      padding: 4px 13px;
-      height: 37px;
+      padding: 8px 8px;
+      height: 60px;
       border: 2px solid;
       color: #2b2424;
       border-color: #2b2424;
@@ -508,9 +508,9 @@
       <div style="background-color: #ff0000; border-top: 2px solid #ff0000; border-bottom: 4px solid #bebab0; border-radius: 2px; text-align: center; max-width: 892px; min-width: 200px;">
         <h2 style="color: #bebab0; margin-top: 10px; font-size: 2.4em; padding: 8px;">RIFAS</h2>
       </div>
-        <div style="color: #ff0000; margin-top: -38px; font-size: 1.4em; margin-bottom: -4px; text-align: center;"><br><center><div style="border: 2px solid #ff0000; min-width: 200px; max-width: 888px; background-image: url('/images/fdisp_.gif'); background-repeat: repeat;"><br><text style="color: #2b2424; background-color: #bebab0;"><strong><em> &nbsp;&nbsp;EVA TV Man</em></strong>, da <strong>COLUNA <span style="color:#FF0000">A</span></strong>, ser&aacute; sorteado &agrave;s 21h&nbsp;no dia <strong><span style="color:#FF0000">9 de agosto de 2025</span></strong>.&nbsp;&nbsp;</text><br><br>
+        <div style="color: #ff0000; margin-top: -38px; font-size: 1.4em; margin-bottom: -4px; text-align: center;"><br><center><div style="border: 2px solid #ff0000; min-width: 200px; max-width: 888px; background-image: url('/images/fdisp_.gif'); background-repeat: repeat;"><br><text style="color: #2b2424; background-color: #bebab0;"><strong><em> &nbsp;&nbsp;EVA TV Man</em></strong>, da <strong>COLUNA <span style="color:#FF0000">A</span></strong>, será sorteado em <strong><span style="color:#FF0000">9 de agosto de 2025</span></strong>.&nbsp;&nbsp;</text><br><br>
         
-        <text style="color: #2b2424; background-color: #bebab0;"><strong><em> &nbsp;&nbsp;Chop Shop AV</em></strong>, da <strong>COLUNA <span style="color:#FF0000">X</span></strong>, ser&aacute; sorteado ao longo do dia <strong><span style="color:#FF0000">30 de agosto de 2025</span></strong>.&nbsp;&nbsp;</text><br><br>
+        <text style="color: #2b2424; background-color: #bebab0;"><strong><em> &nbsp;&nbsp;Chop Shop AV</em></strong>, da <strong>COLUNA <span style="color:#FF0000">X</span></strong>, ser&aacute; sorteado em <strong><span style="color:#FF0000">30 de agosto de 2025</span></strong>.&nbsp;&nbsp;</text><br><br>
         
         </div>
 
@@ -527,8 +527,8 @@
     <!-- BOTÕES COL A E X -->
 
   <div class="button-container-subitem">
-    <button id="toggleA" style="text-decoration: none; font-weight: normal; padding: 24px;" class="botao-subitem-off active"><font style="color: #bebab0; font-size: 1.8em; margin-top:-6px;">👁</font>&nbsp;<strong>VEJA os №s DISPONÍVEIS na COLUNA A</strong>&nbsp;<font style="color: #bebab0; font-size: 1.8em; margin-top:-6px;">👁</font></button>
-    <button id="toggleX" style="text-decoration: none;  font-weight: normal; padding: 24px;" class="botao-subitem"><font style="color: #bebab0; font-size: 1.8em; margin-top:-6px;">👁</font>&nbsp;<strong>VEJA os №s DISPONÍVEIS na COLUNA X</strong>&nbsp;<font style="color: #bebab0; font-size: 1.8em; margin-top:-6px;">👁</font></button>
+    <button id="toggleA" style="text-decoration: none; font-weight: normal; padding: 24px;" class="botao-subitem-off active"><font style="color: #bebab0; font-size: 1.8em; margin-top:-6px; padding: 6px">👁</font><strong>APOSTE na COLUNA A</strong>&nbsp;<font style="color: #bebab0; font-size: 1.8em; margin-top:-6px;">👁</font></button>
+    <button id="toggleX" style="text-decoration: none;  font-weight: normal; padding: 24px;" class="botao-subitem"><font style="color: #bebab0; font-size: 1.8em; margin-top:-6px; padding: 6px;">👁</font><strong>APOSTE na COLUNA X</strong>&nbsp;<font style="color: #bebab0; font-size: 1.8em; margin-top:-6px;">👁</font></button>
   </div>
 
  
@@ -544,6 +544,7 @@
     display: flex;
     width: auto; /* Adjusted width */
     max-width: 100%; /* Adjusted max-width */
+    min-width: 420px;
     gap: 10px;
     align-items: stretch; /* To make all items in flex container same height */
   ">
@@ -584,7 +585,7 @@
         font-size: 1em;
         color: #ff0000;
         background-color: #bebab0;
-        border: 2px solid #ff0000;
+        border: 2px solid #2b2424;
         border-radius: 2px;
         padding: 10px;
         min-height: 180px; /* Align height */
@@ -592,16 +593,35 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-left: 30px; /* Spacing */
+        margin-left: 0px; /* Spacing */
         box-sizing: border-box;
         text-align: center;
-        width: 120px; /* Fixed width for the cost display */
+        width: 100px; /* Fixed width for the cost display */
     ">
         <p style="margin: 0 0 5px 0; font-weight: bold; line-height: 1.2;">APOSTAS</p>
         <p id="selected-count" style="margin: 0 0 10px 0; font-size: 1.2em; line-height: 1.2; font-weight: bold;">0</p>
         <p style="margin: 0 0 5px 0; font-weight: bold; line-height: 1.2;">TOTAL</p>
         <p id="calculated-cost" style="margin: 0; font-size: 1.5em; font-weight: bold; line-height: 1.2;">$0</p>
     </div>
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPz2aYtPGXRHnJYBJrAji5KsZ2jq5Sci36G0lrFHywMWHQoA/viewform" target="_blank" class="botao-subitem"
+       style="
+        color: #bebab0;
+        background-color: #2b2424;
+        border: 2px solid #2b2424;
+        border-radius: 2px;
+        padding: 10px;
+        min-height: 180px; /* Align height */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-left: 0px; /* Spacing */
+        box-sizing: border-box;
+        text-align: center;
+    ">FORMULÁRIO<BR>DE<BR>APOSTAS</a>
+
+
   </div>
 </div></center>
 
