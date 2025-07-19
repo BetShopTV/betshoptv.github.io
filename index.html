@@ -329,6 +329,7 @@
     <div class="lightbox-overlay" onclick="fecharLightbox('CSA')"></div>
     <button class="fechar" onclick="fecharLightbox('CSA')">Ⓧ</button>
     <div class="conteudo">
+      <h1 style="margin-left: 38px; color: #ff0000; font-size:3.8em;">SÉRIE 03</h1>
       <img id="001" src="/galeria/separador_lightbox2.png">
       <img src="/galeria/CSA/001-03-a.jpg">
       <img src="/galeria/F001.png">
@@ -497,7 +498,49 @@
       <img id="037" src="/galeria/separador_lightbox2.png">      
     </div>
   </div>
-
+    
+  <!-- Lightbox CSA04 -->
+  <div class="lightbox" id="CSA04">
+    <div class="lightbox-overlay" onclick="fecharLightbox('CSA04')"></div>
+    <button class="fechar" onclick="fecharLightbox('CSA04')">Ⓧ</button>
+    <div class="conteudo">
+      <h1 style="margin-left: 38px; color: #ff0000; font-size:3.8em;">SÉRIE 04</h1>
+      <img id="014" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/014-04a.jpg">
+      <img src="/galeria/F014.png">
+      <h2><font color="#bebab0">$500</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/014-04b.jpg">
+      <img id="015" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/015-04a.jpg">
+      <img src="/galeria/F015.png">
+      <h2><font color="#bebab0">$420</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/015-04b.jpg">
+      <img id="016" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/016-04a.jpg">
+      <img src="/galeria/F016.png">
+      <h2><font color="#bebab0">$500</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/016-04b.jpg">
+      <img src="/galeria/CSA/016-04c.jpg">
+      <img id="017" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/017-04a.jpg">
+      <img src="/galeria/F017.png">
+      <h2><font color="#bebab0">$370</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/017-04b.jpg">
+      <img id="005" src="/galeria/separador_lightbox2.png">
+            <img id="026" src="/galeria/separador_lightbox2.png">
+      <img id="027" src="/galeria/separador_lightbox2.png">
+      <img id="028" src="/galeria/separador_lightbox2.png">
+      <img id="029" src="/galeria/separador_lightbox2.png">
+      <img id="030" src="/galeria/separador_lightbox2.png">
+      <img id="031" src="/galeria/separador_lightbox2.png">
+      <img id="032" src="/galeria/separador_lightbox2.png">
+      <img id="033" src="/galeria/separador_lightbox2.png">
+      <img id="034" src="/galeria/separador_lightbox2.png">
+      <img id="035" src="/galeria/separador_lightbox2.png">
+      <img id="036" src="/galeria/separador_lightbox2.png">      
+      <img id="037" src="/galeria/separador_lightbox2.png">      
+    </div>
+  </div>
   <main>
     <br><br><center>
       <div style="background-color: #ff0000; border-top: 2px solid #ff0000; border-bottom: 4px solid #bebab0; border-radius: 2px; text-align: center; max-width: 892px; min-width: 200px;">
@@ -536,6 +579,12 @@
              onclick="abrirLightbox('ETM')"
              style="cursor: pointer;">
 
+         <img src="/galeria/CSA/015-04a.jpg"
+             id="thumb-015"
+             class="imagem-interativa"
+             onclick="abrirLightbox('CSA04', '015')"
+             style="cursor: pointer;">
+        
         <img src="/galeria/CSA/010-03a.jpg"
              id="thumb-010"
              class="imagem-interativa"
@@ -561,6 +610,12 @@
       
       <div class="column">
 
+         <img src="/galeria/CSA/014-04a.jpg"
+             id="thumb-014"
+             class="imagem-interativa"
+             onclick="abrirLightbox('CSA04')"
+             style="cursor: pointer;">
+        
         <img src="/galeria/CSA/013-03a.jpg"
              id="thumb-013"
              class="imagem-interativa"
@@ -597,7 +652,18 @@
 
 
       <div class="column">
-
+         <img src="/galeria/CSA/016-04a.jpg"
+             id="thumb-016"
+             class="imagem-interativa"
+             onclick="abrirLightbox('CSA04', '016')"
+             style="cursor: pointer;">
+        
+        <img src="/galeria/CSA/017-04a.jpg"
+             id="thumb-017"
+             class="imagem-interativa"
+             onclick="abrirLightbox('CSA04', '017')"
+             style="cursor: pointer;">
+        
         <img src="/galeria/CSA/012-03a.jpg"
              id="thumb-0012"
              class="imagem-interativa"
@@ -640,7 +706,7 @@
       if (idImagem) {
         const imagem = document.getElementById(idImagem);
         if (imagem) {
-          imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+          imagem.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'start' });
         }
       }
     }
@@ -653,6 +719,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         fecharLightbox('CSA');
+        fecharLightbox('CSA04');
         fecharLightbox('ETM');
       }
     });
@@ -663,6 +730,11 @@
       if (hash && document.getElementById(hash)) {
         abrirLightbox('CSA', hash);
       }
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.substring(1);
+      if (hash && document.getElementById(hash)) {
+        abrirLightbox('CSA04', hash);
+      }   
     });
   </script>
 
