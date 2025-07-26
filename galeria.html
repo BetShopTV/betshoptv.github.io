@@ -573,11 +573,15 @@
     <!-- REGIÃO DE TRABALHO - INÍCIO -->
     <div class="gallery-container">
       <div class="column">
-        <img src="/galeria/ETM_001.jpg"
-             id="thumb-001" alt="Imagem 001"
-             class="imagem-interativa"
-             onclick="abrirLightbox('ETM')"
-             style="cursor: pointer;">
+<!-- INÍCIO MODIFICAÇÃO -->
+<img 
+  src="/galeria/ETM_001.jpg"
+  class="imagem-interativa"
+  data-serie="ETM"
+  data-index="0"
+  data-sequencia="/galeria/ETM_001.jpg,/galeria/ETM_002.jpg,/galeria/ETM_004.jpg,/galeria/ETM_003.jpg,/galeria/ETM_005.jpg,/galeria/ETM_006.jpg"
+  style="cursor: pointer;">
+<!-- FIM MODIFICAÇÃO -->
 
          <img src="/galeria/CSA/015-04a.jpg"
              id="thumb-015"
@@ -732,7 +736,25 @@
         abrirLightbox('CSA04', hash);
       }
     });
+
+    
   </script>
+    
+<!-- INÍCIO MODIFICAÇÃO: Script de rotação de imagens -->
+<script>
+  document.querySelectorAll('.imagem-interativa').forEach(img => {
+    img.addEventListener('click', () => {
+      const sequencia = img.dataset.sequencia.split(',');
+      let indexAtual = parseInt(img.dataset.index, 10) || 0;
+
+      indexAtual = (indexAtual + 1) % sequencia.length;
+
+      img.src = sequencia[indexAtual];
+      img.dataset.index = indexAtual;
+    });
+  });
+</script>
+<!-- FIM MODIFICAÇÃO: Script de rotação de imagens -->
 
   <br><br><br><br>
 </body>
