@@ -304,25 +304,18 @@
     <a href="tv.html" class="botao-main">BSTV</a>
     <a href="contato.html" class="botao-main">CONTATO</a>
 
-  <!-- Lightbox ETM -->
-  <div class="lightbox" id="ETM">
-    <div class="lightbox-overlay" onclick="fecharLightbox('ETM')"></div>
-    <button class="fechar" onclick="fecharLightbox('ETM')">Ⓧ</button>
-    <div class="conteudo">
-      <img src="/galeria/ETM_001.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
-      <img src="/galeria/ETM_002.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
-      <img src="/galeria/ETM_005.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
-      <img src="/galeria/ETM_004.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
-      <img src="/galeria/ETM_003.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
-      <img src="/galeria/ETM_006.jpg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <img src="/galeria/separador_lightbox2.png">
-            <img src="/galeria/separador_lightbox2.png">
-            <img src="/galeria/separador_lightbox2.png">
-            <img src="/galeria/separador_lightbox2.png">
-            <img src="/galeria/separador_lightbox2.png">
-            <img src="/galeria/separador_lightbox2.png">
-    </div>
+<!-- INÍCIO MODIFICAÇÃO: Novo conteúdo do lightbox ETM -->
+<div class="lightbox" id="ETM">
+  <div class="lightbox-overlay" onclick="fecharLightbox('ETM')"></div>
+  <button class="fechar" onclick="fecharLightbox('ETM')">Ⓧ</button>
+  <div class="conteudo" style="justify-content: center; text-align: center;">
+    <button onclick="navegarETM(-1)" style="font-size: 32px;">⟨</button>
+    <img id="lightboxETMImage" src="/galeria/ETM_001.jpg" style="max-height: 88vh; max-width: 88vw;">
+    <button onclick="navegarETM(1)" style="font-size: 32px;">⟩</button>
   </div>
+</div>
+<!-- FIM MODIFICAÇÃO -->
+
 
   <!-- Lightbox CSA -->
   <div class="lightbox" id="CSA">
@@ -582,6 +575,7 @@
   data-sequencia="/galeria/ETM_001.jpg,/galeria/ETM_002.jpg,/galeria/ETM_004.jpg,/galeria/ETM_003.jpg,/galeria/ETM_005.jpg,/galeria/ETM_006.jpg"
   style="cursor: pointer;">
         <p style="background-color: #bebab0; margin-bottom: 38px;">
+          <a href="#" style="color: #ff0000; font-weight: bold;" onclick="ampliarImagem(this)">AMPLIAR</a><br>
   <strong><i>EVA TV Man</i>, 2025</strong><br>
   Página da revista Playboy brasileira contendo reprodução da serigrafia <i>TV Man</i>, de Keith Haring, transferida para refugo de EVA, tinta acrílica, ferragens e ímãs.<br>
   60 x 40 x 15 cm
@@ -760,6 +754,29 @@
   });
 </script>
 <!-- FIM MODIFICAÇÃO: Script de rotação de imagens -->
+
+    <!-- INÍCIO MODIFICAÇÃO: Script de lightbox dinâmico para ETM -->
+<script>
+  let imagemAtualETM = 0;
+  let sequenciaETM = [];
+
+  function ampliarImagem(link) {
+    const img = link.closest('.column').querySelector('.imagem-interativa[data-serie="ETM"]');
+    if (!img) return;
+
+    sequenciaETM = img.dataset.sequencia.split(',');
+    imagemAtualETM = parseInt(img.dataset.index, 10);
+
+    document.getElementById('lightboxETMImage').src = sequenciaETM[imagemAtualETM];
+    document.getElementById('ETM').style.display = 'flex';
+  }
+
+  function navegarETM(direcao) {
+    imagemAtualETM = (imagemAtualETM + direcao + sequenciaETM.length) % sequenciaETM.length;
+    document.getElementById('lightboxETMImage').src = sequenciaETM[imagemAtualETM];
+  }
+</script>
+<!-- FIM MODIFICAÇÃO -->
 
   <br><br><br><br>
 </body>
