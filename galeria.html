@@ -309,9 +309,11 @@
   <div class="lightbox-overlay" onclick="fecharLightbox('ETM')"></div>
   <button class="fechar" onclick="fecharLightbox('ETM')">Ⓧ</button>
   <div class="conteudo" style="justify-content: center; text-align: center;">
-    <button onclick="navegarETM(-1)" style="font-size: 32px;">⟨</button>
-    <img id="lightboxETMImage" src="/galeria/ETM_001.jpg" style="max-height: 88vh; max-width: 88vw;">
-    <button onclick="navegarETM(1)" style="font-size: 32px;">⟩</button>
+<button onclick="navegarETM(-1)" style="font-size: 48px; color: #ff0000; background: none; border: none; cursor: pointer;">⟨</button>
+<img id="lightboxETMImage" src="/galeria/ETM_001.jpg" style="max-height: 88vh; max-width: 88vw;">
+<button onclick="navegarETM(1)" style="font-size: 48px; color: #ff0000; background: none; border: none; cursor: pointer;">⟩</button>
+
+    
   </div>
 </div>
 <!-- FIM MODIFICAÇÃO -->
@@ -775,6 +777,20 @@
     imagemAtualETM = (imagemAtualETM + direcao + sequenciaETM.length) % sequenciaETM.length;
     document.getElementById('lightboxETMImage').src = sequenciaETM[imagemAtualETM];
   }
+
+  // INÍCIO MODIFICAÇÃO TECLADO
+document.addEventListener('keydown', (e) => {
+  const lightboxAberto = document.getElementById('ETM').style.display === 'flex';
+  if (!lightboxAberto) return;
+
+  if (e.key === 'ArrowRight') {
+    navegarETM(1);
+  } else if (e.key === 'ArrowLeft') {
+    navegarETM(-1);
+  }
+});
+// FIM MODIFICAÇÃO TECLADO
+
 </script>
 <!-- FIM MODIFICAÇÃO -->
 
