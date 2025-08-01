@@ -248,7 +248,7 @@
       flex-wrap: nowrap;      /* colunas não quebram linha! */
       justify-content: center;
       width: 100%;
-      max-width: 1200px;
+      max-width: 938px;
       margin: 20px auto;
       gap: 12px;
       box-sizing: border-box;
@@ -256,7 +256,7 @@
 
     .coluninha {
       flex: 1 1 0;            /* colunas crescem e encolhem igualmente */
-      max-width: 370px;       /* limite máximo */
+      max-width: 100%;       /* limite máximo */
       display: flex;
       flex-direction: column;
       text-align: left;
@@ -282,7 +282,7 @@
       }
 
       .coluninha {
-        width: 90%;
+        width: 100%;
         margin-bottom: 20px;
       }
     }
@@ -309,12 +309,12 @@
     <div class="lightbox-overlay" onclick="fecharLightbox('ETM')"></div>
     <button class="fechar" onclick="fecharLightbox('ETM')">Ⓧ</button>
     <div class="conteudo">
-      <img src="/galeria/ETM_001.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
-      <img src="/galeria/ETM_002.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
-      <img src="/galeria/ETM_005.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
-      <img src="/galeria/ETM_004.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
-      <img src="/galeria/ETM_003.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
-      <img src="/galeria/ETM_006.jpg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/ETM_001.jpg" id="001">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/ETM_002.jpg" id="002">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/ETM_005.jpg" id="005">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/ETM_004.jpg" id="004">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/ETM_003.jpg" id="003">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/ETM_006.jpg" id="006">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <img src="/galeria/separador_lightbox2.png">
             <img src="/galeria/separador_lightbox2.png">
             <img src="/galeria/separador_lightbox2.png">
@@ -543,41 +543,74 @@
   </div>
   <main>
     <br><br><center>
-      <div style="background-color: #ff0000; border-top: 2px solid #ff0000; border-bottom: 4px solid #bebab0; border-radius: 2px; text-align: center; max-width: 892px; min-width: 200px;">
-        <h2 style="color: #bebab0; margin-top: 10px; font-size: 2.4em; padding: 8px;">GALERIA DE IMAGENS</h2>
-      </div>
-        <h2 style="color: #ff0000; margin-top: -38px; font-size: 1.6em; margin-bottom: -4px; text-align: center;"><br><center><div style="border: 2px solid #ff0000; min-width: 200px; max-width: 888px; background-image: url('/images/fdisp_.gif'); background-repeat: repeat;"><br><text style="background-color: #bebab0;">&nbsp;APOSTAS DISPONÍVEIS&nbsp;</text><br><br></div></center></h2><br>
-        
-
-    <div class="colunas-intro" style="margin-top: 10px;">
+    <div class="colunas-intro" style="margin-top: 10px; max-width: 669px;">
       <div class="coluninha" style="border: 2px solid #2b2424; background-image: url('/images/fdisp_.gif'); background-repeat: repeat;">
-           <h2 style="color: #ff0000; font-size: 1.6em; text-align: center; margin-top: 0px;"><center><br><text style="background-color: #bebab0;">&nbsp;<i>EVA TV Man</i>&nbsp;<p></p><text style="font-weight: normal; border-bottom: 2px solid #ff0000; color: #2b2424">&nbsp; COLUNA <v>A</v> &nbsp;</text></text></center></h2>
+        <h2 style="color: #ff0000; font-size: 0.8em; text-align: center; margin-bottom: -18px; margin-top: -8px;"><center><text style="background-color: #bebab0;">&nbsp;APOSTA DISPONÍVEL</text></center></h2>   
+        <h2 style="color: #2b2424; font-size: 1.6em; text-align: center; margin-top: 0px;"><center><br><text style="background-color: #bebab0;">&nbsp;<i>EVA TV Man&nbsp;</i>&nbsp;<p></p><text style="font-weight: normal; border-bottom: 2px solid #ff0000; color: #f0000">&nbsp; COLUNA <strong>A</strong> &nbsp;</text></text></center></h2>
 <div style="padding: 18px;"><p style="background-color: #bebab0;">Página da revista Playboy brasileira contendo reprodução da serigrafia <i>TV Man</i>, de Keith Haring, transferida para refugo de EVA, tinta acrílica, ferragens e ímãs.</p>
       <p style="background-color: #bebab0; margin-top: 10px;">60 x 40 x 15 cm</p></div> 
       <br>
         <a href="rifas.html" class="botao-coluna" style="text-decoration: none;">APOSTE na COLUNA A</a>
-      </div>
+      </div></div>
+    </center>
 
-            <div class="coluninha" style="border: 2px solid #2b2424; background-image: url('/images/fdisp_.gif'); background-repeat: repeat;">
-           <h2 style="color: #ff0000; font-size: 1.6em; text-align: center; margin-top: 0px;"><center><br><text style="background-color: #bebab0;">&nbsp;<i>Chop Shop AV</i>&nbsp;&nbsp;<p></p><text style="font-weight: normal; border-bottom: 2px solid #ff0000; color: #2b2424">&nbsp; COLUNA <v>X</v> &nbsp;</text></text></center></h2>
+  
+          <!-- REGIÃO DE TRABALHO - INÍCIO -->
+    <div class="gallery-container">
+      <div class="column">
+        <img src="/galeria/t-ETM_001.jpg"
+             id="thumb-001" alt="Imagem 001"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM')"
+             style="cursor: pointer;">
+
+                <img src="/galeria/t-ETM_003.jpg"
+             id="thumb-003" alt="Imagem 003"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM', '003')"
+             style="cursor: pointer;">
+
+        
+      </div>
+            <div class="column">
+        <img src="/galeria/t-ETM_004.jpg"
+             id="thumb-004" alt="Imagem 004"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM', '004')"
+             style="cursor: pointer;">
+        <img src="/galeria/t-ETM_002.jpg"
+             id="thumb-001" alt="Imagem 001"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM', '002')"
+             style="cursor: pointer;">
+              
+      </div>
+            <div class="column">
+        <img src="/galeria/t-ETM_005.jpg"
+             id="thumb-005" alt="Imagem 005"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM', '005')"
+             style="cursor: pointer;">
+        <img src="/galeria/t-ETM_006.jpg"
+             id="thumb-006" alt="Imagem 006"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM', '006')"
+             style="cursor: pointer;">
+      </div></div>
+<br>
+    <div class="colunas-intro" style="margin-top: 10px;  max-width: 669px;">
+      <div class="coluninha" style="border: 2px solid #2b2424; background-image: url('/images/fdisp_.gif'); background-repeat: repeat;">
+        <h2 style="color: #ff0000; font-size: 0.8em; text-align: center; margin-bottom: -18px; margin-top: -8px;"><center><text style="background-color: #bebab0;">&nbsp;APOSTA DISPONÍVEL</text></center></h2>   
+        <h2 style="color: #2b2424; font-size: 1.6em; text-align: center; margin-top: 0px;"><center><br><text style="background-color: #bebab0;">&nbsp;<i>Chop Shop AV&nbsp;</i>&nbsp;<p></p><text style="font-weight: normal; border-bottom: 2px solid #ff0000; color: #f0000">&nbsp; COLUNA <strong>X</strong> &nbsp;</text></text></center></h2>
 <div style="padding: 18px;">
       <p style="background-color: #bebab0;">Páginas da revista Playboy brasileira publicadas entre fevereiro e agosto de 1990 transferidas para EVA estampado, tinta acrílica, ímãs, grampos, ferragens e refugos de EVA.</p>
       <p style="background-color: #bebab0; margin-top: 10px;">Políptico, dimensões variáveis</p></div> 
       <br>
         <a href="rifas.html" class="botao-coluna" style="text-decoration: none;">APOSTE na COLUNA X</a>
-      </div>
-    </center>
-
-  
-      
+      </div></div>
     <!-- REGIÃO DE TRABALHO - INÍCIO -->
     <div class="gallery-container">
       <div class="column">
-        <img src="/galeria/ETM_001.jpg"
-             id="thumb-001" alt="Imagem 001"
-             class="imagem-interativa"
-             onclick="abrirLightbox('ETM')"
-             style="cursor: pointer;">
 
          <img src="/galeria/CSA/015-04a.jpg"
              id="thumb-015"
@@ -706,7 +739,7 @@
       if (idImagem) {
         const imagem = document.getElementById(idImagem);
         if (imagem) {
-          imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+          imagem.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'start' });
         }
       }
     }
@@ -719,7 +752,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         fecharLightbox('CSA');
-                fecharLightbox('CSA04');
+        fecharLightbox('CSA04');
         fecharLightbox('ETM');
       }
     });
@@ -730,7 +763,7 @@
       if (hash && document.getElementById(hash)) {
         abrirLightbox('CSA', hash);
         abrirLightbox('CSA04', hash);
-      }
+      } 
     });
   </script>
 
