@@ -304,20 +304,25 @@
     <a href="tv.html" class="botao-main">BSTV</a>
     <a href="contato.html" class="botao-main">CONTATO</a>
 
-<!-- INÍCIO MODIFICAÇÃO: Novo conteúdo do lightbox ETM -->
-<div class="lightbox" id="ETM">
-  <div class="lightbox-overlay" onclick="fecharLightbox('ETM')"></div>
-  <button class="fechar" onclick="fecharLightbox('ETM')">Ⓧ</button>
-  <div class="conteudo" style="justify-content: center; text-align: center;">
-<button onclick="navegarETM(-1)" style="font-size: 48px; color: #ff0000; background: none; border: none; cursor: pointer;">⟨</button>
-<img id="lightboxETMImage" src="/galeria/ETM_001.jpg" style="max-height: 88vh; max-width: 88vw;">
-<button onclick="navegarETM(1)" style="font-size: 48px; color: #ff0000; background: none; border: none; cursor: pointer;">⟩</button>
-
-    
+  <!-- Lightbox ETM -->
+  <div class="lightbox" id="ETM">
+    <div class="lightbox-overlay" onclick="fecharLightbox('ETM')"></div>
+    <button class="fechar" onclick="fecharLightbox('ETM')">Ⓧ</button>
+    <div class="conteudo">
+      <img src="/galeria/ETM_001.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/ETM_002.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/ETM_005.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/ETM_004.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/ETM_003.jpg">&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/ETM_006.jpg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="/galeria/separador_lightbox2.png">
+            <img src="/galeria/separador_lightbox2.png">
+            <img src="/galeria/separador_lightbox2.png">
+            <img src="/galeria/separador_lightbox2.png">
+            <img src="/galeria/separador_lightbox2.png">
+            <img src="/galeria/separador_lightbox2.png">
+    </div>
   </div>
-</div>
-<!-- FIM MODIFICAÇÃO -->
-
 
   <!-- Lightbox CSA -->
   <div class="lightbox" id="CSA">
@@ -564,25 +569,48 @@
     </center>
 
   
-      
+          <!-- REGIÃO DE TRABALHO - INÍCIO -->
+    <div class="gallery-container">
+      <div class="column">
+        <img src="/galeria/ETM_001.jpg"
+             id="thumb-001" alt="Imagem 001"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM')"
+             style="cursor: pointer;">
+        
+        <img src="/galeria/ETM_004.jpg"
+             id="thumb-004" alt="Imagem 004"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM', '004')"
+             style="cursor: pointer;">
+      </div>
+            <div class="column">
+        <img src="/galeria/ETM_002.jpg"
+             id="thumb-001" alt="Imagem 001"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM', '002')"
+             style="cursor: pointer;">
+        <img src="/galeria/ETM_003.jpg"
+             id="thumb-003" alt="Imagem 003"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM', '003')"
+             style="cursor: pointer;">
+      </div>
+            <div class="column">
+        <img src="/galeria/ETM_005.jpg"
+             id="thumb-005" alt="Imagem 005"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM', '005')"
+             style="cursor: pointer;">
+        <img src="/galeria/ETM_006.jpg"
+             id="thumb-006" alt="Imagem 006"
+             class="imagem-interativa"
+             onclick="abrirLightbox('ETM', '006')"
+             style="cursor: pointer;">
+      </div>
     <!-- REGIÃO DE TRABALHO - INÍCIO -->
     <div class="gallery-container">
       <div class="column">
-<!-- INÍCIO MODIFICAÇÃO -->
-<img 
-  src="/galeria/ETM_001.jpg"
-  class="imagem-interativa"
-  data-serie="ETM"
-  data-index="0"
-  data-sequencia="/galeria/ETM_001.jpg,/galeria/ETM_002.jpg,/galeria/ETM_004.jpg,/galeria/ETM_003.jpg,/galeria/ETM_005.jpg,/galeria/ETM_006.jpg"
-  style="cursor: pointer;">
-        <p style="background-color: #bebab0; margin-bottom: 38px;">
-          <a href="#" style="color: #ff0000; font-weight: bold;" onclick="ampliarImagem(this)">AMPLIAR🔎</a><br>
-  <strong><i>EVA TV Man</i>, 2025</strong><br>
-  Página da revista Playboy brasileira contendo reprodução da serigrafia <i>TV Man</i>, de Keith Haring, transferida para refugo de EVA, tinta acrílica, ferragens e ímãs.<br>
-  60 x 40 x 15 cm
-</p>
-<!-- FIM MODIFICAÇÃO -->
 
          <img src="/galeria/CSA/015-04a.jpg"
              id="thumb-015"
@@ -711,7 +739,7 @@
       if (idImagem) {
         const imagem = document.getElementById(idImagem);
         if (imagem) {
-          imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+          imagem.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'start' });
         }
       }
     }
@@ -724,7 +752,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         fecharLightbox('CSA');
-                fecharLightbox('CSA04');
+        fecharLightbox('CSA04');
         fecharLightbox('ETM');
       }
     });
@@ -735,64 +763,9 @@
       if (hash && document.getElementById(hash)) {
         abrirLightbox('CSA', hash);
         abrirLightbox('CSA04', hash);
-      }
+      } 
     });
-
-    
   </script>
-    
-<!-- INÍCIO MODIFICAÇÃO: Script de rotação de imagens -->
-<script>
-  document.querySelectorAll('.imagem-interativa').forEach(img => {
-    img.addEventListener('click', () => {
-      const sequencia = img.dataset.sequencia.split(',');
-      let indexAtual = parseInt(img.dataset.index, 10) || 0;
-
-      indexAtual = (indexAtual + 1) % sequencia.length;
-
-      img.src = sequencia[indexAtual];
-      img.dataset.index = indexAtual;
-    });
-  });
-</script>
-<!-- FIM MODIFICAÇÃO: Script de rotação de imagens -->
-
-    <!-- INÍCIO MODIFICAÇÃO: Script de lightbox dinâmico para ETM -->
-<script>
-  let imagemAtualETM = 0;
-  let sequenciaETM = [];
-
-  function ampliarImagem(link) {
-    const img = link.closest('.column').querySelector('.imagem-interativa[data-serie="ETM"]');
-    if (!img) return;
-
-    sequenciaETM = img.dataset.sequencia.split(',');
-    imagemAtualETM = parseInt(img.dataset.index, 10);
-
-    document.getElementById('lightboxETMImage').src = sequenciaETM[imagemAtualETM];
-    document.getElementById('ETM').style.display = 'flex';
-  }
-
-  function navegarETM(direcao) {
-    imagemAtualETM = (imagemAtualETM + direcao + sequenciaETM.length) % sequenciaETM.length;
-    document.getElementById('lightboxETMImage').src = sequenciaETM[imagemAtualETM];
-  }
-
-  // INÍCIO MODIFICAÇÃO TECLADO
-document.addEventListener('keydown', (e) => {
-  const lightboxAberto = document.getElementById('ETM').style.display === 'flex';
-  if (!lightboxAberto) return;
-
-  if (e.key === 'ArrowRight') {
-    navegarETM(1);
-  } else if (e.key === 'ArrowLeft') {
-    navegarETM(-1);
-  }
-});
-// FIM MODIFICAÇÃO TECLADO
-
-</script>
-<!-- FIM MODIFICAÇÃO -->
 
   <br><br><br><br>
 </body>
