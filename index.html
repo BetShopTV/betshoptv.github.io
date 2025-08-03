@@ -285,6 +285,27 @@
         width: 90%;
         margin-bottom: 20px;
       }
+         .marquee-container {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+      padding: 10px 0;
+    }
+
+    .marquee-text {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll-text 12s linear infinite;
+    }
+
+    @keyframes scroll-text {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
     }
   </style>
 </head>
@@ -543,6 +564,12 @@
   </div>
   <main>
     <br><br><center>
+      
+  <div class="marquee-container">
+    <div class="marquee-text">
+      O PRIMEIRO SORTEIO ESTÁ CHEGANDO!! O PRIMEIRO SORTEIO ESTÁ CHEGANDO!!
+    </div>
+  </div>
       <div style="background-color: #ff0000; border-top: 2px solid #ff0000; border-bottom: 4px solid #bebab0; border-radius: 2px; text-align: center; max-width: 892px; min-width: 200px;">
         <h2 style="color: #bebab0; margin-top: 10px; font-size: 2.4em; padding: 8px;">GALERIA DE IMAGENS</h2>
       </div>
