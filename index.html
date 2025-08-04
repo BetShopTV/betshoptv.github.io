@@ -101,7 +101,6 @@
 
     .botao-main,
     .botao-off,
-    .botao-coluna,
     .botao-oferta,
     .botao-veja {
       padding: 4px 13px;
@@ -116,23 +115,33 @@
       text-align: center;
       cursor: pointer;
     }
-
+        .botao-coluna {
+      color: #bebab0;
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid #ff0000;
+      background-color: #ff0000;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+    }
+    .botao-coluna:hover {
+      color: #ff0000;
+      border-color: #2b2424;
+      background-color: #2b2424;
+      background-image: url('/images/fofertas_hover.gif');
+    }
     .botao-main { color: #ff0000; border-color: #ff0000; }
     .botao-off { color: #2b2424; border-color: #2b2424; }
     .botao-veja { color: #2b2424; border-color: #2b2424; }
     .botao-veja:hover { color: #bebab0; background-color: #2b2424; border-color: #2b2424; }
 
-    .botao-coluna {
-      color: #bebab0;
-      border-color: transparent;
-      background-image: url('/images/faposteee.gif');
     }
 
-    .botao-coluna:hover {
-      color: #bebab0;
-      border-color: #ff0000;
-      background-image: url('/images/fofertas_hover.gif');
-    }
 
     .botao-oferta {
       color: #bebab0;
@@ -248,7 +257,6 @@
       flex-wrap: nowrap;      /* colunas não quebram linha! */
       justify-content: center;
       width: 100%;
-      max-width: 1200px;
       margin: 20px auto;
       gap: 12px;
       box-sizing: border-box;
@@ -256,7 +264,7 @@
 
     .coluninha {
       flex: 1 1 0;            /* colunas crescem e encolhem igualmente */
-      max-width: 370px;       /* limite máximo */
+      max-width: 690px;       /* limite máximo */
       display: flex;
       flex-direction: column;
       text-align: left;
@@ -311,7 +319,7 @@
       }
 
       .coluninha {
-        width: 90%;
+        width: 100%;
         margin-bottom: 20px;
       }
     }
@@ -353,15 +361,15 @@
   </div>
 </div>
 <br>
-    <center>
-    <div class="colunas-intro" style="margin-top: 10px; max-width: 669px;">
-      <div class="coluninha" style="border: 2px solid #2b2424; background-image: url('/images/fdisp_.gif'); background-repeat: repeat;">
-        <img src="images/SORTEIO_ETM.png">
-      </div> 
-      <br>
-        <a href="rifas.html" class="botao-coluna" style="text-decoration: none;">QUERO APOSTAR!</a>
-      </div></div>
-    </center>
+    <div class="colunas-intro" style="margin-top: 10px; position: center;">
+      <div class="coluninha">
+    <center>    <img src="https://betshoptv.com/images/SORTEIO_ETM.png">
+          </center></div></div>
+        <div class="colunas-intro">
+      <div class="coluninha">
+    <center><a href="rifas.html" class="botao-coluna" style="text-decoration: none; font-size: 1.8em; margin-top: -38px;">&nbsp;&nbsp;QUERO APOSTAR!&nbsp;&nbsp;</a>
+  </center></div></div>
+
 
   </main>
 
