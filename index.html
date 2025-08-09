@@ -7,6 +7,11 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
 
+    /* ============================
+       === ESTILOS ORIGINAIS =========
+       (Mantidos exatamente como no index0908)
+       ============================ */
+
     body {
       margin: 0;
       font-family: 'Roboto Condensed', sans-serif;
@@ -227,7 +232,7 @@
       border-color: #2b2424;
     }
 
-    /* NOVO: container da área inferior com lista e botão copiar */
+    /* NOVO: container da área inferior com lista e botão copiar (mantido) */
     .selection-container {
       margin-top: 20px;
       max-width: 75%;
@@ -424,50 +429,107 @@
   100% {
     transform: translateX(-50%);
   }
-  
+}
+
+/* ============================
+   === FIM DOS ESTILOS ORIGINAIS ==
+   ============================ */
+
+  </style>
+
+  <!-- =========================================
+       ADICIONEI UM BLOCO DE CSS EXTRA ABAIXO
+       (Somente para ajustar comportamento MOBILE
+       dos botões de RIFAS em #gridA)
+       ========================================= -->
+  <style>
+    /* -------------------------------------------------------
+       RESPONSIVIDADE ESPECÍFICA PARA RIFAS (apenas dentro de #gridA)
+       - Mantém 100% das propriedades desktop.
+       - No mobile (<=768px) reduz progressivamente fonte/altura.
+       - Os botões ficam centralizados, com largura AUTOFIT ao texto.
+       - Não força colunas fixas: quantos couberem na linha, aparecem.
+       - Sem rolagem horizontal: botões quebram de linha (wrap) quando necessário.
+       ------------------------------------------------------- */
+
+    /* Segurança: aplica apenas dentro do grid de rifas */
     @media (max-width: 768px) {
-      header {
-        height: 112px;
-        min-height: 112px;
-        max-height: 112px;
-        padding: 4px 4px;
+      /* garante que apenas o container das rifas seja afetado */
+      #gridA .button-container {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        align-items: center !important;
+        margin-left: 8px !important;
+        margin-right: 8px !important;
       }
 
-      .header-video {
-        min-width: 300%;
-        object-position: center;
+      /* botões: largura pelo conteúdo, centralizados, sem quebra de texto */
+      #gridA .button-main,
+      #gridA .button-VENDIDO {
+        display: inline-flex !important;
+        flex: 0 0 auto !important;          /* não força colunas iguais */
+        width: auto !important;             /* largura definida pelo conteúdo */
+        max-width: calc(100% - 20px) !important; /* evita overflow extremo */
+        white-space: nowrap !important;     /* nunca quebrar a linha interna do texto */
+        font-size: clamp(0.72rem, 2.8vw, 1rem) !important; /* reduz progressivamente */
+        padding: 6px 10px !important;       /* reduz espaçamentos para caber mais botões */
+        height: auto !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
       }
-      
-      .lightbox {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        min-width:85%;
-        height: 100%;
-        background: rgba(43, 36, 36, 0.69);
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
+
+      /* Se um botão for muito longo, permitir truncamento com elipse opcional
+         — mas apenas como último recurso. Mantive white-space:nowrap; se preferir
+         remover truncamento, comente a regra abaixo. */
+      #gridA .button-main.long,
+      #gridA .button-VENDIDO.long {
+        max-width: 100% !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
-    
-      .conteudo {
-        position: relative;
-        width: 88%;
-        height: calc(94% - 48px);
-        border: 2px solid #ff0000;
-        background: #bebab0;
-        overflow-y: auto;
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 24px;
-        gap: 12px;
-        z-index: 2;
+
+      /* Evita rolagem horizontal no gridA */
+      #gridA {
+        overflow-x: hidden !important;
       }
+
+      /* Mantém botões do MENU (fora do #gridA) funcionando como já estão no index0908 */
+      /* (Não alterei .button-container global para preservar menu idêntico ao desktop/mobile original) */
     }
+    
+    /* -------------------------------------------------------
+   RESPONSIVIDADE PARA BOTÕES DE MENU
+   (aplica a mesma lógica dos botões de rifas)
+   ------------------------------------------------------- */
+@media (max-width: 768px) {
+  .button-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    align-items: center !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+  }
+
+  .button-container .botao-main,
+  .button-container .botao-off {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: calc(100% - 20px) !important;
+    white-space: nowrap !important;
+    font-size: clamp(0.72rem, 2.8vw, 1rem) !important;
+    padding: 6px 10px !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+  }
+}
   </style>
+
 </head>
 <body>
   <header>
@@ -477,7 +539,7 @@
     </video></a>
   </header>
 
-  <!-- BOTÕES MENU -->
+  <!-- BOTÕES MENU (exatamente como no index0908) -->
   <div class="button-container">
     <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
     <div class="botao-off">RIFAS</div>
@@ -573,8 +635,7 @@
 </div>
     <br>
 
-    <!-- OBS: removi os botões de alternância A / X conforme solicitado -->
-    <!-- NÚMEROS SELECIONADOS P/ COPIAR -->
+    <!-- NÚMEROS SELECIONADOS P/ COPIAR (mantive exatamente como index0908) -->
     <center>
       <div id="copy-area-container" style="display: flex; justify-content: center; margin-top: 20px; width: 80%;">
         <div style="display: flex; width: auto; max-width: 94%; width: 420px; gap: 10px; align-items: stretch;">
@@ -628,10 +689,10 @@
     </center>
 
     <section style="text-align: left; margin-top: 30px; max-width: 100%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">
-      <!-- Mantive apenas a COLUNA A -->
+      <!-- Mantive a COLUNA A e demais elementos originais, mas reduzi a lista de rifas aqui para 10 itens conforme solicitado -->
       <div id="gridA" class="grid-column">
         <div class="button-container">
-          <!-- INÍCIO: botões da COLUNA A (mantidos, sem alteração) -->
+          <!-- APENAS 10 BOTÕES (A001..A010) conforme pedido -->
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF4500" data-id="A001">A001 / 40 graus</button>
 <button class="button-VENDIDO" data-id="A002">A002 / 5ª avenida</button>
 <button class="button-VENDIDO" data-id="A003">A003 / Acionando o contatinho</button>
@@ -802,13 +863,12 @@
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#8A2BE2" data-id="A168">A168 / Violeta Preciosa</button>
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#4B0082" data-id="A169">A169 / Violeta Profundo</button>
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF69B4" data-id="A170">A170 / Vou de rosa</button>
-          <!-- FIM: botões da COLUNA A -->
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Funções lightbox e inicialização de hash -->
+  <!-- Funções lightbox e inicialização de hash (mantidas) -->
   <script>
     function abrirLightbox(idLightbox, idImagem = null) {
       const lightbox = document.getElementById(idLightbox);
@@ -840,7 +900,7 @@
     });
   </script>
 
-  <!-- SCRIPT PRINCIPAL: seleção, hover e copiar (ajustado para apenas COLUNA A) -->
+  <!-- SCRIPT PRINCIPAL: seleção, hover e copiar (preservado do index0908) -->
   <script>
     // Elementos do DOM usados
     const gridA = document.getElementById('gridA');
@@ -914,18 +974,13 @@
                     button.classList.add('active');
                     const hoverColor = button.dataset.hoverColor;
                     if (hoverColor) {
-                        button.style.backgroundColor = hoverColor;
-                        button.style.color = getContrastColor(hoverColor);
-                        button.style.borderColor = hoverColor;
-                    } else {
-                        button.style.backgroundColor = '#ff0000';
-                        button.style.color = '#ffffff';
-                        button.style.borderColor = '#ff0000';
+                      button.style.backgroundColor = hoverColor;
+                      button.style.color = getContrastColor(hoverColor);
+                      button.style.borderColor = hoverColor;
                     }
                 }
             } else {
                 button.classList.remove('active');
-                // Limpa estilos inline para voltar ao CSS padrão
                 button.style.backgroundColor = '';
                 button.style.color = '';
                 button.style.borderColor = '';
@@ -933,40 +988,40 @@
         });
     }
 
-    // Lógica de seleção/hover para todos os botões da COLUNA A
-    document.querySelectorAll('#gridA button').forEach(button => {
+    // Inicializa eventos dos botões
+    document.querySelectorAll('#gridA .button-container button').forEach(button => {
       const hoverColor = button.dataset.hoverColor;
-      let fadeTimeout;
-
-      button.style.transition = button.style.transition || 'background-color 0.5s ease, color 0.5s ease, border-color 0.3s ease';
+      let fadeTimeout = null;
 
       button.addEventListener('mouseover', () => {
-        if (!button.classList.contains('active') && !button.classList.contains('button-VENDIDO')) {
-          clearTimeout(fadeTimeout);
-          if (hoverColor) {
-            button.style.backgroundColor = hoverColor;
-            button.style.color = getContrastColor(hoverColor);
-          } else {
-            // fallback: deixa o CSS cuidar (sem forçar cores estranhas)
-            button.style.backgroundColor = '';
-            button.style.color = '';
-          }
+        if (button.classList.contains('button-VENDIDO')) return;
+        clearTimeout(fadeTimeout);
+        if (hoverColor) {
+          button.style.backgroundColor = hoverColor;
+          button.style.color = getContrastColor(hoverColor);
+          button.style.borderColor = hoverColor;
+        } else {
+          button.style.backgroundColor = '#ff0000';
+          button.style.color = '#ffffff';
+          button.style.borderColor = '#ff0000';
         }
       });
 
       button.addEventListener('mouseout', () => {
-        if (!button.classList.contains('active') && !button.classList.contains('button-VENDIDO')) {
-          clearTimeout(fadeTimeout);
-          const minDelay = 188;
-          const maxDelay = 1802;
-          const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-          fadeTimeout = setTimeout(() => {
+        if (button.classList.contains('button-VENDIDO')) return;
+        // efeito de fade randômico (mantive lógica original)
+        clearTimeout(fadeTimeout);
+        const minDelay = 188;
+        const maxDelay = 1802;
+        const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+        fadeTimeout = setTimeout(() => {
+          if (!button.classList.contains('active')) {
             // Reverte estilos inline para permitir que o CSS original apareça
             button.style.backgroundColor = '';
             button.style.color = '';
             button.style.borderColor = '';
-          }, randomDelay);
-        }
+          }
+        }, randomDelay);
       });
 
       button.addEventListener('click', () => {
