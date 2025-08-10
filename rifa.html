@@ -554,26 +554,37 @@
 
 <!-- Campos para os 7 resultados -->
 <div>
-  <label>Resultado 1: <input type="number" id="res1" min="0" max="999"></label>
-  <label>Resultado 2: <input type="number" id="res2" min="0" max="999"></label>
-  <label>Resultado 3: <input type="number" id="res3" min="0" max="999"></label>
-  <label>Resultado 4: <input type="number" id="res4" min="0" max="999"></label>
-  <label>Resultado 5: <input type="number" id="res5" min="0" max="999"></label>
-  <label>Resultado 6: <input type="number" id="res6" min="0" max="999"></label>
-  <label>Resultado 7: <input type="number" id="res7" min="0" max="999"></label>
+  <label>Resultado 1: <input type="number" id="res1" min="0" max="999" style="margin-bottom: 2px; border: 2px solid #ff0000;
+        border-radius: 2px;
+        color: #ff0000;
+        background-color: #bebab0;"></label>
+  <label>Resultado 2: <input type="number" id="res2" min="0" max="999" style="margin-bottom: 2px; border: 2px solid #ff0000;
+        border-radius: 2px;
+        color: #ff0000;
+        background-color: #bebab0;"></label>
+  <label>Resultado 3: <input type="number" id="res3" min="0" max="999" style="margin-bottom: 2px; border: 2px solid #ff0000;
+        border-radius: 2px;
+        color: #ff0000;
+        background-color: #bebab0;"></label>
+  <label>Resultado 4: <input type="number" id="res4" min="0" max="999" style="margin-bottom: 2px; border: 2px solid #ff0000;         border-radius: 2px;         color: #ff0000;         background-color: #bebab0;"></label>
+  <label>Resultado 5: <input type="number" id="res5" min="0" max="999" style="margin-bottom: 2px; border: 2px solid #ff0000;         border-radius: 2px;         color: #ff0000;         background-color: #bebab0;"></label>
+  <label>Resultado 6: <input type="number" id="res6" min="0" max="999" style="margin-bottom: 2px; border: 2px solid #ff0000;         border-radius: 2px;         color: #ff0000;         background-color: #bebab0;"></label>
+  <label>Resultado 7: <input type="number" id="res7" min="0" max="999" style="margin-bottom: 2px; border: 2px solid #ff0000;         border-radius: 2px;         color: #ff0000;         background-color: #bebab0;"></label>
 </div>
-
+<br>
 <!-- Lista de números vendidos já preenchida -->
-<label>
-  Números vendidos (separados por vírgula):  
-  <input type="text" id="vendidos" value="029,060,020,097,069,101,077,098,115,055,073,057,103,048,056,002,003,147,022,045,006,009,023,032,030,040,066,004,013,161,042,010,011,049,026,038,054,078">
-</label>
 
-<button onclick="sortear()">Sortear</button>
+
+<button class="botao-coluna" onclick="sortear()">Sortear</button>
 
 <div id="resultado"></div>
 
-<script>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  <label>
+  Números vendidos (separados por vírgula):  
+  <input type="text" id="vendidos" value="029,060,020,097,069,101,077,098,115,055,073,057,103,048,056,002,003,147,022,045,006,009,023,032,030,040,066,004,013,161,042,010,011,049,026,038,054,078">
+</label>
+  <script>
 function sortear() {
   // Pega a lista de números vendidos e converte para inteiros
   let vendidos = document.getElementById("vendidos").value
