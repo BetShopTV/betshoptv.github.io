@@ -247,6 +247,99 @@
       }
     }
   </style>
+    <!-- =========================================
+       ADICIONEI UM BLOCO DE CSS EXTRA ABAIXO
+       (Somente para ajustar comportamento MOBILE
+       dos botões de RIFAS em #gridA)
+       ========================================= -->
+  <style>
+    /* -------------------------------------------------------
+       RESPONSIVIDADE ESPECÍFICA PARA RIFAS (apenas dentro de #gridA)
+       - Mantém 100% das propriedades desktop.
+       - No mobile (<=768px) reduz progressivamente fonte/altura.
+       - Os botões ficam centralizados, com largura AUTOFIT ao texto.
+       - Não força colunas fixas: quantos couberem na linha, aparecem.
+       - Sem rolagem horizontal: botões quebram de linha (wrap) quando necessário.
+       ------------------------------------------------------- */
+
+    /* Segurança: aplica apenas dentro do grid de rifas */
+    @media (max-width: 768px) {
+      /* garante que apenas o container das rifas seja afetado */
+      #gridA .button-container {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        align-items: center !important;
+        margin-left: 8px !important;
+        margin-right: 8px !important;
+      }
+
+      /* botões: largura pelo conteúdo, centralizados, sem quebra de texto */
+      #gridA .button-main,
+      #gridA .button-VENDIDO {
+        display: inline-flex !important;
+        flex: 0 0 auto !important;          /* não força colunas iguais */
+        width: auto !important;             /* largura definida pelo conteúdo */
+        max-width: calc(100% - 20px) !important; /* evita overflow extremo */
+        white-space: nowrap !important;     /* nunca quebrar a linha interna do texto */
+        font-size: clamp(0.72rem, 2.8vw, 1rem) !important; /* reduz progressivamente */
+        padding: 6px 10px !important;       /* reduz espaçamentos para caber mais botões */
+        height: auto !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
+      }
+
+      /* Se um botão for muito longo, permitir truncamento com elipse opcional
+         — mas apenas como último recurso. Mantive white-space:nowrap; se preferir
+         remover truncamento, comente a regra abaixo. */
+      #gridA .button-main.long,
+      #gridA .button-VENDIDO.long {
+        max-width: 100% !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Evita rolagem horizontal no gridA */
+      #gridA {
+        overflow-x: hidden !important;
+      }
+
+      /* Mantém botões do MENU (fora do #gridA) funcionando como já estão no index0908 */
+      /* (Não alterei .button-container global para preservar menu idêntico ao desktop/mobile original) */
+    }
+    
+    /* -------------------------------------------------------
+   RESPONSIVIDADE PARA BOTÕES DE MENU
+   (aplica a mesma lógica dos botões de rifas)
+   ------------------------------------------------------- */
+@media (max-width: 768px) {
+  .button-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    align-items: center !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+  }
+
+  .button-container .botao-main,
+  .button-container .botao-off {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: calc(100% - 20px) !important;
+    white-space: nowrap !important;
+    font-size: clamp(0.72rem, 2.8vw, 1rem) !important;
+    padding: 6px 10px !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+  }
+}
+  </style>
+
 </head>
 <body>
   <header>
@@ -256,13 +349,14 @@
     </video></a>
   </header>
 
-  <!-- BOTÕES MENU -->
+  <!-- BOTÕES MENU (exatamente como no index0908) -->
+
   <div class="button-container">
-    <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
-    <a href="rifas.html" class="botao-main">RIFAS</a>
-    <div class="botao-off">OFERTAS</div>
+    <a href="como.html" class="botao-main">COMO<br>FUNCIONA?</a>
+    <div class="botao-off">APOSTE EM<br>RIFAS</div>
+    <a href="ofertas.html" class="botao-main">APOSTE EM<br>OFERTAS</a>
     <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
-    <a href="contato.html" class="botao-main">CONTATO</a>
+    <a href="contato.html" class="botao-main">FALE<br>CONOSCO</a>
   </div>
 
   <!-- Lightbox CSA -->
