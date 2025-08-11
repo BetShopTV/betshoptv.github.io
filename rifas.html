@@ -526,6 +526,21 @@
     box-sizing: border-box !important;
     text-align: center !important;
   }
+        header {
+        height: 112px;
+        min-height: 112px;
+        max-height: 112px;
+        padding: 4px 4px;
+      }
+
+      .header-video {
+        height: 100%;
+        width: auto;
+        min-width: 300%;
+        object-fit: cover;
+        object-position: center;
+        transform: translate(-50%, -50%);
+      }
 }
   </style>
 
@@ -540,15 +555,15 @@
 
   <!-- BOTÕES MENU (exatamente como no index0908) -->
 
-  <div class="button-container" style="margin-right: 4px; margin-left: 4px;">
+  <div class="button-container" style="padding: 0 50px;">
     <a href="como.html" class="botao-main">COMO<br>FUNCIONA?</a>
-    <a href="rifas.html"
-     class="botao-main"
+    <div class="botao-off"
      style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
-            background-position: 50% 52%;">APOSTE<br>RIFAS</a>
-   <div class="botao-off"
+            background-position: 50% 52%;">APOSTE<br>RIFAS</div>
+   <a href="ofertas.html"
+      class="botao-main"
       style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
-      background-position: 50% 52%;">APOSTE<br>OFERTAS</div>
+      background-position: 50% 52%;">APOSTE<br>OFERTAS</a>
     <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
     <a href="contato.html" class="botao-main">FALE<br>CONOSCO</a>
   </div>
