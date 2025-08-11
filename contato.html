@@ -237,23 +237,48 @@
       margin-bottom: 12px;
     }
 
-    @media (max-width: 768px) {
-      header {
+@media (max-width: 768px) {
+  .button-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    align-items: center !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+  }
+
+  .button-container .botao-main,
+  .button-container .botao-off {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: calc(100% - 20px) !important;
+    white-space: nowrap !important;
+    font-size: clamp(0.72rem, 2.8vw, 1rem) !important;
+    padding: 6px 10px !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+  }
+        header {
         height: 112px;
+        min-height: 112px;
+        max-height: 112px;
+        padding: 4px 4px;
       }
 
-      .gallery-container {
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
+      .header-video {
+        height: 100%;
+        width: auto;
+        min-width: 300%;
+        object-fit: cover;
+        object-position: center;
+        transform: translate(-50%, -50%);
       }
-
-      .column {
-        width: 90%;
-        margin-bottom: 20px;
-      }
-    }
+}
   </style>
+
 </head>
 <body>
   <header>
@@ -263,14 +288,22 @@
     </video></a>
   </header>
 
-    <!-- BOTÕES MENU -->
-  <div class="button-container">
-    <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
-    <a href="rifas.html" class="botao-main">RIFAS</a>
-    <a href="ofertas.html" class="botao-main">OFERTAS</a>
+  <!-- BOTÕES MENU (exatamente como no index0908) -->
+
+  <div class="button-container" style="padding: 0 50px;">
+    <a href="como.html" class="botao-main">COMO<br>FUNCIONA?</a>
+    <a href="rifas.html" 
+      class="botao-main"
+     style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
+            background-position: 50% 52%;">APOSTE<br>RIFAS</div>
+   <a href="ofertas.html"
+      class="botao-main"
+      style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
+      background-position: 50% 52%;">APOSTE<br>OFERTAS</a>
     <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
-    <div class="botao-off">CONTATO</div>
+    <div class="botao-off">FALE<br>CONOSCO</div>
   </div>
+
 
   <main><br><br><br>
 <center><div style="border: 2px solid #ff0000; padding: 30px; text-align: center; line-height: 26px; max-width: 642px;">
