@@ -263,57 +263,7 @@
        ------------------------------------------------------- */
 
     /* Segurança: aplica apenas dentro do grid de rifas */
-    @media (max-width: 768px) {
-      /* garante que apenas o container das rifas seja afetado */
-      #gridA .button-container {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 8px !important;
-        align-items: center !important;
-        margin-left: 8px !important;
-        margin-right: 8px !important;
-      }
-
-      /* botões: largura pelo conteúdo, centralizados, sem quebra de texto */
-      #gridA .button-main,
-      #gridA .button-VENDIDO {
-        display: inline-flex !important;
-        flex: 0 0 auto !important;          /* não força colunas iguais */
-        width: auto !important;             /* largura definida pelo conteúdo */
-        max-width: calc(100% - 20px) !important; /* evita overflow extremo */
-        white-space: nowrap !important;     /* nunca quebrar a linha interna do texto */
-        font-size: clamp(0.72rem, 2.8vw, 1rem) !important; /* reduz progressivamente */
-        padding: 6px 10px !important;       /* reduz espaçamentos para caber mais botões */
-        height: auto !important;
-        box-sizing: border-box !important;
-        text-align: center !important;
-      }
-
-      /* Se um botão for muito longo, permitir truncamento com elipse opcional
-         — mas apenas como último recurso. Mantive white-space:nowrap; se preferir
-         remover truncamento, comente a regra abaixo. */
-      #gridA .button-main.long,
-      #gridA .button-VENDIDO.long {
-        max-width: 100% !important;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      /* Evita rolagem horizontal no gridA */
-      #gridA {
-        overflow-x: hidden !important;
-      }
-
-      /* Mantém botões do MENU (fora do #gridA) funcionando como já estão no index0908 */
-      /* (Não alterei .button-container global para preservar menu idêntico ao desktop/mobile original) */
-    }
-    
-    /* -------------------------------------------------------
-   RESPONSIVIDADE PARA BOTÕES DE MENU
-   (aplica a mesma lógica dos botões de rifas)
-   ------------------------------------------------------- */
-@media (max-width: 768px) {
+   @media (max-width: 768px) {
   .button-container {
     display: flex !important;
     flex-wrap: wrap !important;
@@ -337,6 +287,21 @@
     box-sizing: border-box !important;
     text-align: center !important;
   }
+        header {
+        height: 112px;
+        min-height: 112px;
+        max-height: 112px;
+        padding: 4px 4px;
+      }
+
+      .header-video {
+        height: 100%;
+        width: auto;
+        min-width: 300%;
+        object-fit: cover;
+        object-position: center;
+        transform: translate(-50%, -50%);
+      }
 }
   </style>
 
@@ -351,7 +316,7 @@
 
   <!-- BOTÕES MENU (exatamente como no index0908) -->
 
-  <div class="button-container">
+  <div class="button-container" style="padding: 0 50px;">
     <a href="como.html" class="botao-main">COMO<br>FUNCIONA?</a>
     <a href="rifas.html"
      class="botao-main"
