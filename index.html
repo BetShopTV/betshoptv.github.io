@@ -429,15 +429,14 @@
   100% {
     transform: translateX(-50%);
   }
-}
 
-/* ============================
-   === FIM DOS ESTILOS ORIGINAIS ==
-   ============================ */
-
+    @media (max-width: 960px) {
+      .gallery-container {
+        gap: 8px;
+      }
+    }
   </style>
-
-  <!-- =========================================
+    <!-- =========================================
        ADICIONEI UM BLOCO DE CSS EXTRA ABAIXO
        (Somente para ajustar comportamento MOBILE
        dos botões de RIFAS em #gridA)
@@ -453,57 +452,7 @@
        ------------------------------------------------------- */
 
     /* Segurança: aplica apenas dentro do grid de rifas */
-    @media (max-width: 768px) {
-      /* garante que apenas o container das rifas seja afetado */
-      #gridA .button-container {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 8px !important;
-        align-items: center !important;
-        margin-left: 8px !important;
-        margin-right: 8px !important;
-      }
-
-      /* botões: largura pelo conteúdo, centralizados, sem quebra de texto */
-      #gridA .button-main,
-      #gridA .button-VENDIDO {
-        display: inline-flex !important;
-        flex: 0 0 auto !important;          /* não força colunas iguais */
-        width: auto !important;             /* largura definida pelo conteúdo */
-        max-width: calc(100% - 20px) !important; /* evita overflow extremo */
-        white-space: nowrap !important;     /* nunca quebrar a linha interna do texto */
-        font-size: clamp(0.72rem, 2.8vw, 1rem) !important; /* reduz progressivamente */
-        padding: 6px 10px !important;       /* reduz espaçamentos para caber mais botões */
-        height: auto !important;
-        box-sizing: border-box !important;
-        text-align: center !important;
-      }
-
-      /* Se um botão for muito longo, permitir truncamento com elipse opcional
-         — mas apenas como último recurso. Mantive white-space:nowrap; se preferir
-         remover truncamento, comente a regra abaixo. */
-      #gridA .button-main.long,
-      #gridA .button-VENDIDO.long {
-        max-width: 100% !important;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      /* Evita rolagem horizontal no gridA */
-      #gridA {
-        overflow-x: hidden !important;
-      }
-
-      /* Mantém botões do MENU (fora do #gridA) funcionando como já estão no index0908 */
-      /* (Não alterei .button-container global para preservar menu idêntico ao desktop/mobile original) */
-    }
-    
-    /* -------------------------------------------------------
-   RESPONSIVIDADE PARA BOTÕES DE MENU
-   (aplica a mesma lógica dos botões de rifas)
-   ------------------------------------------------------- */
-@media (max-width: 768px) {
+   @media (max-width: 768px) {
   .button-container {
     display: flex !important;
     flex-wrap: wrap !important;
@@ -523,10 +472,34 @@
     white-space: nowrap !important;
     font-size: clamp(0.72rem, 2.8vw, 1rem) !important;
     padding: 6px 10px !important;
-    height: 50px !important;
+    height: auto !important;
     box-sizing: border-box !important;
     text-align: center !important;
   }
+        header {
+        height: 112px;
+        min-height: 112px;
+        max-height: 112px;
+        padding: 4px 4px;
+      }
+
+      .header-video {
+        height: 100%;
+        width: auto;
+        min-width: 300%;
+        object-fit: cover;
+        object-position: center;
+        transform: translate(-50%, -50%);
+      }
+       main {
+        font-size: clamp(0.78rem, 3.3vw, 1rem) !important;
+       }
+       
+     .marquee-text {   
+  font-size: clamp(2rem, 7.3vw, 1rem) !important;
+  margin-top: 18px;
+         
+     }
 }
   </style>
 
@@ -540,89 +513,95 @@
   </header>
 
   <!-- BOTÕES MENU (exatamente como no index0908) -->
-  <div class="button-container">
-    <a href="como.html" class="botao-main">COMO FUNCIONA?</a>
-    <a href="rifas.html" class="botao-main">RIFAS</a>
-    <a href="ofertas.html" class="botao-main">OFERTAS</a>
+
+  <div class="button-container" style="padding: 0 50px;">
+    <a href="como.html" class="botao-main">COMO<br>FUNCIONA?</a>
+    <a href="rifas.html"
+     class="botao-main"
+     style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
+            background-position: 50% 52%;">APOSTE<br>RIFAS</a>
+   <a href="ofertas.html"
+      class="botao-off"
+      style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
+      background-position: 50% 52%;">APOSTE<br>OFERTAS</a>
     <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
-    <a href="tv.html" class="botao-main">BSTV</a>    
-    <a href="contato.html" class="botao-main">CONTATO</a>
+    <a href="contato.html" class="botao-main">FALE<br>CONOSCO</a>
   </div>
 
   <main>
-<center>  <div class="marquee-container" style="background-image: url('https://betshoptv.com/images/BGINDEX2.gif'); max-width: 800px; width: 100%;">
-  <div class="marquee-track">
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BG-COMO.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-              <span class="marquee-text">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BG-COMO.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BG-COMO.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV-COMO.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </span>
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTAS ENCERRADAS</strong>&nbsp; ☞ </font></span>
-
-  </div>
-</div></center>
     <br><center>
     <div style="
-  max-width: 800px;
+  max-width: 420px;
   width: 100%;
   height: auto;
   overflow: hidden;
   box-sizing: border-box;
   background-image: url('https://betshoptv.com/images/BG-COMO.gif');
-">
+  border-radius: 1820px;">
     <img src="https://betshoptv.com/images/APOSTAS_ENCERRADAS.gif" 
-         style="width: 100%; height: auto; display: block;">
+         style="width: 88%; height: auto; display: block; margin-bottom: 13px; margin-top: -8px;"></div>
+        
+         <center>  <div class="marquee-container" style="margin-top: -124px; background-image: url('https://betshoptv.com/images/BGINDEX2.gif'); max-width: 800px; width: 100%;">
+  <div class="marquee-track">
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BG-COMO.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+              <span class="marquee-text">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BG-COMO.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BG-COMO.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV-COMO.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+    
+          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </span>
+              <span class="marquee-text" style="margin-bottom: 24px;"><font color="#2b2424">&nbsp; ☞ <STRONG>APOSTA ENCERRADA &nbsp;&nbsp; ☞  NÚMERO SORTEADO &nbsp;&nbsp;☞ A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp; ☞ </font></span>
+
+</div>
       <br><br>
-      <h4 style="background-color: #ff0000; padding: 18px 38px;">Saiba como calculamos o número sorteado a partir da extração da Coruja, que aconteceu às 21h do dia 09 de agosto de 2025 e é divulgada após 30 minutos.</h4>
+      <h4 style="background-color: #ff0000; padding: 18px 38px; margin-bottom: -20px;">Saiba como calculamos o número sorteado a partir da extração da Coruja, que aconteceu às 21h do dia 09 de agosto de 2025</h4>
 <br>
-    </div>
+    
       <div style="
   max-width: 800px;
   width: 100%;
@@ -634,7 +613,6 @@
 </div>
     <br>
     </center>
-
 
     </section>
   </main>
