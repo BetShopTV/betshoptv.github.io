@@ -334,9 +334,23 @@
       width: 100%;
       height: auto;
     }
+              header {
+        height: 112px;
+        min-height: 112px;
+        max-height: 112px;
+        padding: 4px 4px;
+      }
+
+      .header-video {
+        height: 100%;
+        width: auto;
+        min-width: 300%;
+        object-fit: cover;
+        object-position: center;
+        transform: translate(-50%, -50%);
+      }
      }
   </style>
-
 </head>
 <body>
   <header>
@@ -348,7 +362,7 @@
 
   <!-- BOTÕES MENU (exatamente como no index0908) -->
 
-  <div class="button-container">
+  <div class="button-container" style="padding: 0 50px;">
     <a href="como.html" class="botao-main">COMO<br>FUNCIONA?</a>
     <a href="rifas.html"
       class="botao-main"
