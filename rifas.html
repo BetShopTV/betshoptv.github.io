@@ -1034,28 +1034,53 @@
     });
 
     // Lógica de copiar texto
-    copyButton.addEventListener('click', () => {
-      const textToCopy = selectionBox.value.trim();
-      if (textToCopy && textToCopy !== 'Nenhum número selecionado.') {
-        navigator.clipboard.writeText(textToCopy).then(() => {
-          copyButton.textContent = 'COPIOU!  ;)';
-          setTimeout(() => {
-            copyButton.textContent = 'CLIQUE PARA COPIAR SEUS NÚMEROS';
-          }, 1500);
-        }).catch(err => {
-          console.error('Falha ao copiar: ', err);
-          alert('Falha ao copiar. Tente manualmente.');
-        });
-      } else {
-        alert('Nada para copiar.');
-      }
-    });
+copyButton.addEventListener('click', () => {
+  const textToCopy = selectionBox.value.trim();
+  if (!textToCopy || textToCopy === 'Nenhum número selecionado.') {
+    alert('Nada para copiar.');
+    return;
+  }
 
-    // Inicialização
-    if (gridA) gridA.style.display = 'block';
-    updateSelection();
-    updateActiveButtonsInVisibleGrid();
-  </script>
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      copyButton.textContent = 'COPIOU!  ;)';
+      setTimeout(() => {
+        copyButton.textContent = 'CLIQUE PARA COPIAR SEUS NÚMEROS';
+      }, 1500);
+    }).catch(() => {
+      fallbackCopy(textToCopy);
+    });
+  } else {
+    fallbackCopy(textToCopy);
+  }
+});
+
+function fallbackCopy(text) {
+  const tempInput = document.createElement('textarea');
+  tempInput.value = text;
+  tempInput.style.position = 'fixed';
+  tempInput.style.top = '0';
+  tempInput.style.left = '0';
+  tempInput.style.opacity = '0';
+  document.body.appendChild(tempInput);
+  tempInput.focus();
+  tempInput.select();
+  try {
+    const sucesso = document.execCommand('copy');
+    if (sucesso) {
+      copyButton.textContent = 'COPIOU!  ;)';
+      setTimeout(() => {
+        copyButton.textContent = 'CLIQUE PARA COPIAR SEUS NÚMEROS';
+      }, 1500);
+    } else {
+      alert('Falha ao copiar. Tente manualmente.');
+    }
+  } catch (err) {
+    alert('Falha ao copiar. Tente manualmente.');
+  }
+  document.body.removeChild(tempInput);
+}
+</script>
 
   <br><br><br><br><br><br>
 </body>
