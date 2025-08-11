@@ -5,38 +5,18 @@
 <title>Laboratório CSS Interativo BetShopTV</title>
 <style>
 body {
-  background: #888888;
+  background: #888888 url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');
+  background-size: cover;
+  background-attachment: fixed;
   color: white;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 20px;
 }
-
 h1 {
   text-align: center;
   margin-bottom: 10px;
 }
-
-.controls {
-  background: rgba(0,0,0,0.4);
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-.controls label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-
-.slider-group {
-  flex: 1;
-  min-width: 150px;
-}
-
 .example-grid {
   display: flex;
   flex-wrap: wrap;
@@ -53,17 +33,14 @@ h1 {
   text-align: center;
   font-weight: bold;
   padding: 10px;
-  background-size: var(--gif-scale, 100%) var(--gif-scale, 100%);
+  background-size: cover;
   background-position: center;
-  animation: bgMove var(--speed, 10s) linear infinite;
+  animation: bgMove 10s linear infinite;
 }
-
-/* Movimento do gif */
 @keyframes bgMove {
   from { background-position: 0 0; }
   to { background-position: 100% 100%; }
 }
-
 /* Radius */
 .radius-2 {
   border-radius: 50%;
@@ -73,27 +50,25 @@ h1 {
   border-radius: 50px 10px 30px 0;
   background-image: url('https://betshoptv.com/images/fofertas_hover.gif');
 }
-
 /* Bordas */
 .border-3 {
   border: 20px solid transparent;
-  border-image: url('https://betshoptv.com/images/fofertas_hover.gif') 30 round;
+  border-image: url('https://betshoptv.com/images/BG-ENCERRADA.gif') 30 round;
   background: black;
 }
 .border-4 {
   border: 20px solid transparent;
-  border-image: url('https://betshoptv.com/images/fofertas_hover.gif') 30 round;
+  border-image: url('https://betshoptv.com/images/BG-COMO.gif') 30 round;
   background: black;
   border-radius: 20px;
 }
-
-/* Máscaras */
+/* Máscaras originais */
 .mask-1 {
   background: red;
   -webkit-mask-image: url('https://betshoptv.com/images/APOSTAS_ENCERRADAS.gif');
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
-  -webkit-mask-size: var(--mask-size, contain);
+  -webkit-mask-size: contain;
 }
 .mask-2 {
   background: yellow;
@@ -103,10 +78,28 @@ h1 {
   background: blue;
   -webkit-mask-image: url('https://betshoptv.com/images/fofertas_hover.gif');
   -webkit-mask-repeat: repeat;
-  -webkit-mask-size: var(--mask-size, 80px);
+  -webkit-mask-size: 80px;
 }
-
-/* Shape-outside exemplos */
+/* Máscaras novas */
+.mask-5 {
+  background: purple;
+  -webkit-mask-image: radial-gradient(circle at center, black 50%, transparent 38%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: 50% 55%;
+}
+.mask-6 {
+  background: #2b2424;
+  -webkit-mask-image: repeating-linear-gradient(45deg, black 0 10px, transparent 10px 20px);
+}
+.mask-7 {
+  background: orange;
+  -webkit-mask-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');
+  -webkit-mask-repeat: repeat;
+  -webkit-mask-size: 60px 60px;
+  mix-blend-mode: multiply;
+}
+/* Shape-outside */
 .shape-container {
   float: left;
   margin: 0 20px 20px 0;
@@ -127,59 +120,48 @@ h1 {
   shape-outside: polygon(50% 15%, 61% 8%, 75% 8%, 88% 20%, 88% 35%, 50% 80%, 12% 35%, 12% 20%, 25% 8%, 39% 8%);
   clip-path: polygon(50% 15%, 61% 8%, 75% 8%, 88% 20%, 88% 35%, 50% 80%, 12% 35%, 12% 20%, 25% 8%, 39% 8%);
 }
-
 /* Combinações criativas */
-.combo {
+.combo-1 {
   border-radius: 50% 0 50% 0;
   clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%);
   background-image: url('https://betshoptv.com/images/fofertas_hover.gif');
   box-shadow: inset 0 0 30px rgba(255,255,255,0.5), 0 0 20px rgba(255,0,0,0.7);
 }
-
-/* EXTRA: Máscaras criativas tipo estêncil */
+.combo-2 {
+  background: conic-gradient(red, yellow, green, blue);
+  border-radius: 50%;
+  clip-path: ellipse(50% 40%);
+  mix-blend-mode: screen;
+}
+.combo-3 {
+  background: url('https://betshoptv.com/images/BG-ENCERRADA.gif');
+  -webkit-mask-image: url('https://betshoptv.com/images/fofertas_hover.gif');
+  -webkit-mask-repeat: repeat;
+  -webkit-mask-size: 80px 80px;
+  border: 10px solid transparent;
+  border-image: url('https://betshoptv.com/images/BG-COMO.gif') 30 round;
+  box-shadow: inset 0 0 50px rgba(255,255,255,0.5);
+}
+/* Máscaras criativas tipo estêncil */
+.stencil-circle {
+  background: rgba(0,0,0,0.6);
+  -webkit-mask-image: radial-gradient(circle at center, transparent 40%, black 41%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: 18% 150%;
+}
 .stencil-text {
-  background: #2b2424;
-  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200"><text x="0" y="150" font-size="150" font-family="Arial" font-weight="bold">OFERTAS</text></svg>');
+  background: rgba(0,0,0,0.6);
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200"><text x="0" y="150" font-size="150" font-family="Arial" font-weight="bold">APOSTA</text></svg>');
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
   -webkit-mask-size: contain;
-}
-.stencil-pattern {
-  background: #2b2424;
-  -webkit-mask-image: url('https://betshoptv.com/images/fofertas_hover.gif');
-  -webkit-mask-repeat: repeat;
-  -webkit-mask-size: var(--mask-size, 80px);
 }
 </style>
 </head>
 <body>
 
 <h1>Laboratório CSS Interativo BetShopTV</h1>
-
-<details open>
-<summary><strong>📖 Instruções de Uso</strong></summary>
-<p>Este laboratório mostra efeitos de borda, máscara, formatos e combinações usando apenas o gif <em>fofertas_hover.gif</em> como "cor".</p>
-<ul>
-<li>Use os controles abaixo para alterar velocidade, escala e tamanho das máscaras.</li>
-<li>Role a página para ver os diferentes tipos de efeito.</li>
-<li>Experimente combinar <code>shape-outside</code> com máscaras para efeitos únicos!</li>
-</ul>
-</details>
-
-<div class="controls">
-  <div class="slider-group">
-    <label>Velocidade da animação</label>
-    <input type="range" min="2" max="20" value="10" id="speedSlider">
-  </div>
-  <div class="slider-group">
-    <label>Escala do gif</label>
-    <input type="range" min="50" max="300" value="100" id="scaleSlider">
-  </div>
-  <div class="slider-group">
-    <label>Tamanho da máscara</label>
-    <input type="range" min="40" max="200" value="80" id="maskSlider">
-  </div>
-</div>
 
 <h2>1. Radius</h2>
 <div class="example-grid">
@@ -189,8 +171,8 @@ h1 {
 
 <h2>2. Bordas</h2>
 <div class="example-grid">
-  <div class="example border-3">Border 3</div>
-  <div class="example border-4">Border 4</div>
+  <div class="example border-3">BG-ENCERRADA.gif</div>
+  <div class="example border-4">BG-COMO.gif</div>
 </div>
 
 <h2>3. Máscaras</h2>
@@ -198,52 +180,63 @@ h1 {
   <div class="example mask-1"></div>
   <div class="example mask-2"></div>
   <div class="example mask-4"></div>
+  <div class="example mask-5"></div>
+  <div class="example mask-6"></div>
+  <div class="example mask-7"></div>
 </div>
+<details>
+<summary>💡 Como funciona as novas máscaras</summary>
+<ul>
+<li><b>Mask-5:</b> Usa <code>radial-gradient</code> para criar um círculo recortado no centro.</li>
+<li><b>Mask-6:</b> Usa <code>repeating-linear-gradient</code> para criar listras diagonais transparentes.</li>
+<li><b>Mask-7:</b> Usa um gif como máscara repetida, combinado com <code>mix-blend-mode</code> para efeito extra.</li>
+</ul>
+</details>
 
 <h2>4. Shape-outside</h2>
-<details>
-<summary>💡 Como funciona</summary>
-<p>O <code>shape-outside</code> define a forma pela qual o texto flui ao redor de um elemento flutuante.</p>
-<p>Nestes exemplos, o elemento à esquerda tem um <code>clip-path</code> que recorta a forma, e o texto à direita se ajusta a ela.</p>
-</details>
+<h3>Círculo</h3>
 <div>
   <div class="shape-container shape-circle"></div>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet facilisis urna. Mauris bibendum mi sed sem finibus, et pulvinar elit porttitor.</p>
+  <p>O texto flui ao redor de um círculo, porque a área flutuante tem <code>shape-outside: circle()</code> e <code>clip-path</code> igual, garantindo que a forma visual e a área de recorte sejam idênticas.</p>
 </div>
 <div style="clear:both;"></div>
+<h3>Elipse</h3>
 <div>
   <div class="shape-container shape-ellipse"></div>
-  <p>Integer malesuada lacus sed neque facilisis, nec posuere urna viverra. Vivamus feugiat, nisl sed varius tincidunt, massa eros convallis lectus.</p>
+  <p>Aqui o formato é uma elipse, usando <code>shape-outside: ellipse()</code>. O texto envolve a curva de forma suave.</p>
 </div>
 <div style="clear:both;"></div>
+<h3>Coração</h3>
 <div>
   <div class="shape-container shape-heart"></div>
-  <p>Aliquam erat volutpat. Praesent fermentum nunc vel est laoreet, non laoreet massa malesuada. Sed dignissim lorem ut lacus hendrerit, nec ullamcorper nulla blandit.</p>
+  <p>Forma de coração feita com <code>polygon()</code>. O texto contorna cada ponta.</p>
 </div>
+<div style="clear:both;"></div>
 
 <h2>5. Combinações criativas</h2>
 <div class="example-grid">
-  <div class="example combo">Combo 1</div>
+  <div class="example combo-1">Combo 1</div>
+  <div class="example combo-2">Combo 2</div>
+  <div class="example combo-3">Combo 3</div>
 </div>
+<details>
+<summary>💡 Como funciona Combo 2</summary>
+<p>Usa <code>conic-gradient</code> para cores circulares, <code>border-radius</code> e <code>clip-path</code> para forma de elipse e <code>mix-blend-mode</code> para mesclar com o fundo.</p>
+</details>
+<details>
+<summary>💡 Como funciona Combo 3</summary>
+<p>Aplica um gif como máscara, bordas com <code>border-image</code> de outro gif e sombra interna, criando uma peça visual complexa.</p>
+</details>
 
-<h2>EXTRA: Máscaras criativas</h2>
+<h2>6. Máscaras criativas (tipo estêncil)</h2>
 <div class="example-grid">
+  <div class="example stencil-circle"></div>
   <div class="example stencil-text"></div>
-  <div class="example stencil-pattern"></div>
 </div>
-
-<script>
-const root = document.documentElement;
-document.getElementById('speedSlider').addEventListener('input', e => {
-  root.style.setProperty('--speed', e.target.value + 's');
-});
-document.getElementById('scaleSlider').addEventListener('input', e => {
-  root.style.setProperty('--gif-scale', e.target.value + '%');
-});
-document.getElementById('maskSlider').addEventListener('input', e => {
-  root.style.setProperty('--mask-size', e.target.value + 'px');
-});
-</script>
+<details>
+<summary>💡 Como funciona</summary>
+<p>Essas máscaras usam áreas transparentes para "furar" o fundo, deixando ver o <code>background-image</code> da página. É como recortar um buraco numa folha de papel: a cor ou imagem de trás aparece no recorte.</p>
+</details>
 
 </body>
 </html>
