@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BetShopTV⦿com</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+    :root { --cor-fundo: #bebab0; --cor-texto: #2b2424; --cor-destaque: #ff0000; --cor-branco: #fff; }
+    body { margin: 0; font-family: 'Roboto Condensed', sans-serif; background-color: var(--cor-fundo); color: var(--cor-texto); display: flex; flex-direction: column; align-items: center; }
+    body::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background-color: #2b2424;
+      border-radius: 2px;
+    }
+
+    body::-webkit-scrollbar-track {
+      background: #bebab0;
+    }
+    a { color: var(--cor-destaque); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header { width: 100%; min-height: 25vh; padding: 20px 0; background-color: var(--cor-destaque); position: relative; overflow: hidden; }
+    .header-video { position: absolute; top: 50%; left: 50%; max-height: 100%; width: auto; min-width: 100%; object-fit: cover; transform: translate(-50%, -50%); background-color: var(--cor-destaque); }
+    main { width: 90%; max-width: 1888px; margin-top: 20px; text-align: center; }
+    .central-apostas { position: sticky; top: 0; z-index: 999; background: var(--cor-fundo); padding: 10px; border-bottom: 2px solid var(--cor-texto); width: 100%; max-width: 480px; margin: 0 auto; box-sizing: border-box; }
+    .resumo-container { display: flex; justify-content: center; gap: 10px; width: 100%; }
+    textarea#selected-text { flex-grow: 1; max-height: 100px; resize: none; overflow-y: auto; padding: 10px; font-size: 1em; border-radius: 2px; border: 2px solid var(--cor-texto); color: var(--cor-texto); background: var(--cor-fundo); }
+    textarea#selected-text::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    textarea#selected-text::-webkit-scrollbar-thumb {
+      background-color: #ff0000;
+      border-radius: 2px;
+    }
+
+    textarea#selected-text::-webkit-scrollbar-track {
+      background: #bebab0;
+    }
+    
+    #total-cost-display { font-size: 0.88em; border-radius: 2px; border: 2px solid var(--cor-texto); color: var(--cor-texto); background: var(--cor-fundo); max-height: 100px; width: 69px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    #toggle-apostar { width: 100%; color: var(--cor-branco); background-image: url('https://betshoptv.com/images/fofertas.gif'); border: none; border-radius: 2px; padding: 14px; font-size: 1.2em; font-weight: 700; cursor: pointer; margin-top: 10px; }
+    #toggle-apostar:hover { background-image: url('https://betshoptv.com/images/fofertas_hover.gif'); }
+    .apostar-wrapper { width: 100%; margin: 10px auto 0; display: none; }
+    .painel-apostar { background: var(--cor-fundo); border: 2px solid var(--cor-texto); border-radius: 2px; padding: 14px; display: none; }
+    .painel-apostar.is-visible { display: block; }
+    .painel-titulo { font-size: 1.2em; text-align: left; margin-bottom: 12px; }
+    .linha-form { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .linha-form input { flex: 1 1 160px; min-height: 14px; padding: 10px 12px; font-size: 1em; border-radius: 2px; outline: none; background: var(--cor-fundo); border: 2px solid var(--cor-texto); color: var(--cor-texto); }
+    .linha-form input::placeholder { color: var(--cor-texto); opacity: .7; }
+    .row-actions, .payment-tabs, .row-submit { display: flex; gap: 10px; margin-top: 14px; }
+    .btn-cancelar, .btn-proxima, .btn-voltar, .botao-apostar, .btn-left, .btn-copiar, .btn-site, .btn-etapa4 { border: none; border-radius: 2px; padding: 14px; font-size: 1em; font-weight: bold; cursor: pointer; transition: .2s ease; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-cancelar, .btn-voltar { background: var(--cor-texto); color: #bebab0; border: 2px solid var(--cor-texto); height: 38px; padding: 0 18px; flex-basis: 30%; }
+    .btn-proxima, .botao-apostar, .btn-etapa4 { background: var(--cor-destaque); color: var(--cor-branco); border: 2px solid var(--cor-destaque); height: 38px; padding: 0 18px; flex: 1; }
+    .payment-tabs { margin-bottom: 14px; }
+    .btn-left { flex: 1; height: 38px; border: 2px solid var(--cor-texto); background: var(--cor-texto); color: var(--cor-branco); }
+    .btn-left.is-selected { background: var(--cor-fundo); border-color: var(--cor-destaque); color: var(--cor-destaque); cursor: default; }
+    .payment-content { display: none; flex-direction: column; gap: 10px; align-items: center; }
+    .payment-content.is-visible { display: flex; }
+    .qr-area { background: var(--cor-branco); border: 2px solid var(--cor-texto); border-radius: 2px; height: 188px; width: 100%; display:flex; align-items:center; justify-content:center; }
+    .qr-area img { max-width: 180px; max-height: 180px; object-fit: contain; }
+    .btn-copiar, .btn-site { width: 100%; height: 38px; font-size: .88em; border: 2px solid var(--cor-texto); background: var(--cor-texto); color: var(--cor-branco); }
+    .botao-apostar[disabled] { opacity: .7; cursor: not-allowed; }
+    .button-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 10px; }
+    .button-main {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid #ff0000;
+      background-color: #bebab0;
+      color: #2b2424;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.2;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.5s ease, color 0.5s ease, border-color 0.3s ease;
+    }
+
+    .button-main:hover {
+      color: #ffffff;
+    }
+
+    .button-main.active {
+      background-color: #bebab0;
+      color: #ffffff;
+      border-color: #ff0000;
+    }
+
+    .button-VENDIDO {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid #ff0000;
+      background-color: #ff0000;
+      color: #bebab0;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.2;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    .botao-main, .botao-off { padding: 4px 13px; height: 50px; border: 2px solid; color: #ff0000; background-color: #bebab0; display: inline-flex; justify-content: center; align-items: center; font-size: 1em; font-weight: bold; text-align: center; text-decoration: none; cursor: pointer; }
+    .botao-main:hover { border-color: #ff0000; text-decoration: underline; }
+    .botao-off { color: #2b2424; border-color: #2b2424; }
+    @media (max-width: 768px) { .central-apostas { max-height: 75vh; overflow-y: auto; } header { min-height: 100px; max-height: 118px; padding: 4px; } .header-video { max-height: 100%; width: auto; object-fit: cover; object-position: center; transform: translate(-50%, -50%); } #gridA .button-main, #gridA .button-VENDIDO, .button-container .botao-main, .button-container .botao-off { font-size: clamp(.72rem, 2.8vw, 1rem) !important; padding: 6px 10px !important; height: auto !important; } }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="https://betshoptv.com"><video class="header-video" autoplay loop muted playsinline><source src="https://betshoptv.com/images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4"></video></a>
+  </header>
+  <div class="button-container" style="padding: 0 50px;">
+    <a href="https://betshoptv.com/como.html" class="botao-main">COMO<br>FUNCIONA?</a>
+    <div class="botao-off" style="background-image:url('https://betshoptv.com/images/BG-BOTAO.gif');background-position:50% 52%;">APOSTE<br>RIFAS</div>
+    <a href="https://betshoptv.com/ofertas.html" class="botao-main" style="background-image:url('https://betshoptv.com/images/BG-BOTAO.gif');background-position:50% 52%;">APOSTE<br>OFERTAS</a>
+    <a href="https://betshoptv.com/galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
+    <a href="https://betshoptv.com/contato.html" class="botao-main">FALE<br>CONOSCO</a>
+  </div>
+  <main>
+    <br>
+    <div class="central-apostas">
+        <div class="resumo-container">
+            <textarea id="selected-text" readonly>👁 LISTA de APOSTAS 👁</textarea>
+            <div id="total-cost-display">
+              <span style="font-weight:bold; margin-top: 6px;">QTD.</span>
+              <span id="selected-count" style="font-weight:normal;">0</span>
+              <span style="font-weight:bold;">TOTAL</span>
+              <span id="calculated-cost" style="font-weight:bold; margin-bottom: 6px;">$0</span>
+            </div>
+        </div>
+        <button id="toggle-apostar">APOSTE AQUI!</button>
+        <div class="apostar-wrapper" id="apostar-wrapper">
+          <div id="etapa2-content" class="painel-apostar">
+            <div class="painel-titulo">Preencha os campos abaixo:</div>
+            <div class="linha-form"><input id="nome" name="NOME" type="text" placeholder="Nome" required form="form-aposta"></div>
+            <div class="linha-form">
+              <input id="email" name="E-MAIL" type="email" placeholder="E-mail" required form="form-aposta">
+              <input id="whats" name="TELEFONE/WHATSAPP" type="tel" placeholder="Telefone / WhatsApp" form="form-aposta">
+            </div>
+            <div class="row-actions"><button type="button" class="btn-cancelar" id="btn-cancelar">CANCELAR</button><button type="button" class="btn-proxima" id="btn-proxima">AVANÇAR</button></div>
+          </div>
+          <div id="etapa3-content" class="painel-apostar">
+            <div class="painel-titulo">Escolha a forma de pagamento:</div>
+            <div class="payment-tabs"><button class="btn-left is-selected" type="button" id="btn-pix">PIX</button><button class="btn-left" type="button" id="btn-paypal">PayPal</button></div>
+            <div id="pix-content" class="payment-content is-visible">
+              <div class="qr-area"><img src="https://betshoptv.com/images/placeholder-pix.png" alt="QR Code PIX"></div>
+              <button class="btn-copiar" type="button" id="btn-copiar-pix">COPIA e COLA</button>
+            </div>
+            <div id="paypal-content" class="payment-content">
+                <p style="text-align: center; margin: 20px 0;">Clique no botão para pagar com PayPal.</p>
+                <button class="btn-site" type="button" id="btn-site-paypal">Pagar com PayPal</button>
+            </div>
+            <div class="row-submit"><button type="button" class="btn-voltar" id="btn-voltar">VOLTAR</button><button type="submit" class="botao-apostar" id="btn-apostar" form="form-aposta">APOSTAR!</button></div>
+          </div>
+          <div id="etapa4-content" class="painel-apostar centered">
+            <p style="font-size:1.2em; font-weight:bold;">UHUUUUL!!!!</p>
+            <button type="button" class="btn-etapa4" id="btn-recomecar">FAZER NOVA APOSTA</button>
+          </div>
+          <form id="form-aposta" action="https://formsubmit.co/betshoptv@gmail.com" method="POST" target="hidden_iframe" style="display: none;">
+            <input type="hidden" id="hidden-apostas" name="LISTA de APOSTAS" value=""><input type="hidden" id="hidden-qtd" name="QTD." value="0"><input type="hidden" id="hidden-total" name="TOTAL" value="$0">
+            <input type="hidden" name="_subject" id="hidden-subject" value="APOSTA"><input type="hidden" name="_template" value="table"><input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
+          </form>
+          <iframe name="hidden_iframe" style="display:none;"></iframe>
+        </div>
+    </div>
+    <section style="text-align:left; margin-top:30px; max-width:100%; margin-left:auto; margin-right:auto;">
+      <div id="gridA" class="grid-column">
+        <div class="button-container">
+          <button style="border:0;background-color:transparent;color:#2b2424;font-weight:normal;" disabled>LEGENDA:</button>
+          <button class="button-main" style="margin-right:-2px;margin-left:-15px;" disabled>DISPONÍVEL</button>
+          <button class="button-VENDIDO" disabled>INDISPONÍVEL</button>
+        </div><br><br>
+        <div class="button-container">
+          <button class="button-VENDIDO" data-id="X001">X001 / 40 graus</button>
+          <button class="button-main" data-hover-color="#B22222" data-id="X002">X002 / 5ª avenida</button>
+          <button class="button-VENDIDO" data-id="X003">X003 / Acionando o contatinho</button>
+          <button class="button-main" data-hover-color="#FF69B4" data-id="X004">X004 / Ai, amiga</button>
+          <button class="button-main" data-hover-color="#FFE4E1" data-id="X005">X005 / Algodão doce</button>
+          <button class="button-main" data-hover-color="#FFDAB9" data-id="X006">X006 / Amanhecer</button>
+          <button class="button-main" data-hover-color="#FFD700" data-id="X007">X007 / Amarelo Frevo</button>
+          <button class="button-main" data-hover-color="#8B0000" data-id="X008">X008 / Ameixa</button>
+          <button class="button-main" data-hover-color="#87CEEB" data-id="X009">X009 / Ar Fresco</button>
+          <button class="button-main" data-hover-color="#F5DEB3" data-id="X010">X010 / Areia</button>
+          <button class="button-main" data-hover-color="#4682B4" data-id="X011">X011 / Atmosfera</button>
+          <button class="button-main" data-hover-color="#1E90FF" data-id="X012">X012 / Azul Eclesiástico</button>
+          <button class="button-main" data-hover-color="#0000FF" data-id="X013">X013 / Azul biônico</button>
+          <button class="button-main" data-hover-color="#D2B48C" data-id="X014">X014 / Batida de Amendoim</button>
+          <button class="button-main" data-hover-color="#FFFFF0" data-id="X015">X015 / Batida de coco</button>
+          <button class="button-main" data-hover-color="#FF6347" data-id="X016">X016 / Beijo roubado</button>
+          <button class="button-main" data-hover-color="#32CD32" data-id="X017">X017 / Bem-Estar</button>
+          <button class="button-main" data-hover-color="#000000" data-id="X018">X018 / Black</button>
+          <button class="button-main" data-hover-color="#FF7F50" data-id="X019">X019 / Bolsa de Praia</button>
+          <button class="button-main" data-hover-color="#FFC0CB" data-id="X020">X020 / Boneca</button>
+          <button class="button-main" data-hover-color="#FFD700" data-id="X021">X021 / Brinde da virada</button>
+          <button class="button-main" data-hover-color="#DAA520" data-id="X022">X022 / Brocado Rico</button>
+          <button class="button-main" data-hover-color="#6F4E37" data-id="X023">X023 / Café</button>
+          <button class="button-main" data-hover-color="#008000" data-id="X024">X024 / Caminho do Jardim</button>
+          <button class="button-main" data-hover-color="#8B4513" data-id="X025">X025 / Camurça</button>
+          <button class="button-main" data-hover-color="#D2B48C" data-id="X026">X026 / Capuccino Doce</button>
+          <button class="button-main" data-hover-color="#DEB887" data-id="X027">X027 / Casa Portuguesa</button>
+          <button class="button-main" data-hover-color="#FFA07A" data-id="X028">X028 / Casamento do Verão</button>
+          <button class="button-main" data-hover-color="#87CEEB" data-id="X029">X029 / Chafariz da Praça</button>
+          <button class="button-main" data-hover-color="#696969" data-id="X030">X030 / Cinza Tecnológico</button>
+          <button class="button-main" data-hover-color="#808080" data-id="X031">X031 / Cinza minimalista</button>
+          <button class="button-main" data-hover-color="#FFFFFF" data-id="X032">X032 / Clássico</button>
+          <button class="button-main" data-hover-color="#A9A9A9" data-id="X033">X033 / Colinas de Inverno</button>
+          <button class="button-main" data-hover-color="#C0C0C0" data-id="X034">X034 / Concha Prateada</button>
+          <button class="button-main" data-hover-color="#FF7F50" data-id="X035">X035 / Coral não tem igual</button>
+          <button class="button-main" data-hover-color="#CD853F" data-id="X036">X036 / Corpo bronzeado</button>
+          <button class="button-main" data-hover-color="#FFD700" data-id="X037">X037 / Corpo tropical</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>{
+        const gridContainer=document.querySelector("#gridA .button-container:last-child"),selectionBox=document.getElementById("selected-text"),toggleBtn=document.getElementById("toggle-apostar"),wrapper=document.getElementById("apostar-wrapper"),form=document.getElementById("form-aposta"),nomeInput=document.getElementById("nome"),hiddenApostas=document.getElementById("hidden-apostas"),hiddenQtd=document.getElementById("hidden-qtd"),hiddenTotal=document.getElementById("hidden-total"),hiddenSubject=document.getElementById("hidden-subject"),etapa2Content=document.getElementById("etapa2-content"),etapa3Content=document.getElementById("etapa3-content"),etapa4Content=document.getElementById("etapa4-content"),btnCancelar=document.getElementById("btn-cancelar"),btnProxima=document.getElementById("btn-proxima"),btnVoltar=document.getElementById("btn-voltar"),btnApostar=document.getElementById("btn-apostar"),btnRecomecar=document.getElementById("btn-recomecar"),btnPix=document.getElementById("btn-pix"),btnPaypal=document.getElementById("btn-paypal"),pixContent=document.getElementById("pix-content"),paypalContent=document.getElementById("paypal-content"),btnCopiarPix=document.getElementById("btn-copiar-pix"),btnSitePaypal=document.getElementById("btn-site-paypal");
+        let selectedItems=[];
+        const getContrastColor=e=>{try{const t=parseInt(e.slice(1),16),o=(t>>16)&255,l=(t>>8)&255,n=255&t;return.2126*o+.7152*l+.0722*n<128?"#fff":"#2b2424"}catch(e){return"#2b2424"}},calculateTotalCost=e=>e<=0?0:e%2==0?25*e:25*(e-1)+30,updateSelection=()=>{const{length:e}=selectedItems,t=calculateTotalCost(e);selectionBox.value=e?selectedItems.map(e=>e.label).join("\n"):"👁 LISTA de APOSTAS 👁";document.getElementById("selected-count").textContent=e;document.getElementById("calculated-cost").textContent=`$${t}`;hiddenApostas.value=selectedItems.map(e=>e.label).join("\n");hiddenQtd.value=String(e);hiddenTotal.value=`$${t}`;const o=(nomeInput?.value||"").trim()||"Cliente";hiddenSubject.value=`APOSTA / ${o} / $${t}`},showStep=e=>{[etapa2Content,etapa3Content,etapa4Content].forEach(t=>{t&&t.classList.toggle("is-visible",t===e)})};
+        document.querySelectorAll("#gridA .button-main").forEach(e=>{const t=e.dataset.hoverColor;let o=null;e.addEventListener("mouseover",()=>{if(e.classList.contains("button-VENDIDO"))return;clearTimeout(o);if(t){e.style.backgroundColor=t;e.style.color=getContrastColor(t)}else{e.style.backgroundColor="#ff0000";e.style.color="#ffffff"}});e.addEventListener("mouseout",()=>{if(e.classList.contains("button-VENDIDO"))return;o=setTimeout(()=>{e.classList.contains("active")||(e.style.backgroundColor="",e.style.color="")},200)});e.addEventListener("click",()=>{if(e.classList.contains("button-VENDIDO"))return;const t={id:e.dataset.id,label:e.textContent.trim()},o=selectedItems.findIndex(e=>e.id===t.id);-1<o?(selectedItems.splice(o,1),e.classList.remove("active")):(selectedItems.push(t),e.classList.add("active"));updateSelection()})});
+        toggleBtn.addEventListener("click",()=>{toggleBtn.style.display="none";wrapper.style.display="block";showStep(etapa2Content);setTimeout(()=>wrapper.classList.add("is-visible"),10)});
+        btnCancelar.addEventListener("click",()=>{wrapper.classList.remove("is-visible");setTimeout(()=>{wrapper.style.display="none";toggleBtn.style.display="block"},300)});
+        btnProxima.addEventListener("click",()=>{if(!form.checkValidity()){form.reportValidity();return}showStep(etapa3Content)});
+        btnVoltar.addEventListener("click",()=>showStep(etapa2Content));
+        btnPix.addEventListener("click",()=>{btnPix.classList.add("is-selected");btnPaypal.classList.remove("is-selected");pixContent.classList.add("is-visible");paypalContent.classList.remove("is-visible")});
+        btnPaypal.addEventListener("click",()=>{btnPaypal.classList.add("is-selected");btnPix.classList.remove("is-selected");paypalContent.classList.add("is-visible");pixContent.classList.remove("is-visible")});
+        btnCopiarPix.addEventListener("click",e=>{const t="00020126410014BR.GOV.BCB.PIX0119betshoptv@gmail.com5204000053039865911BET SHOP TV6009SAO PAULO62070503***63048AB7",o=e.currentTarget;navigator.clipboard.writeText(t).then(()=>{o.textContent="PIX COPIADO!";setTimeout(()=>{o.textContent="COPIA e COLA"},3000)})});
+        btnSitePaypal.addEventListener("click",()=>window.open("https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G","_blank"));
+        form.addEventListener("submit",e=>{if(selectedItems.length===0){e.preventDefault();alert("Selecione ao menos 1 número.");return}updateSelection();y.disabled=!0;y.textContent="ENVIANDO...";setTimeout(()=>{y.textContent="APOSTA ENVIADA!";setTimeout(()=>{wrapper.classList.remove("is-visible");setTimeout(()=>{wrapper.style.display="none";showStep(etapa4Content)},300)},2e3)},1e3)});
+        btnRecomecar.addEventListener('click',()=>{selectedItems=[];document.querySelectorAll("#gridA .button-main.active").forEach(e=>{e.classList.remove("active")});updateSelection();form.reset();showStep(null);o.style.display="block";y.disabled=!1;y.textContent="APOSTAR!";l.classList.remove("is-visible");window.scrollTo({top:0,behavior:"smooth"})});
+        updateSelection();
+    });
+  </script>
+</body>
+</html>
