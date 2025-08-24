@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BetShopTV⦿com</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+    /* ============================
+       === ESTILOS ORIGINAIS =========
+       (Mantidos exatamente como no index0908)
+       ============================ */
+
+    body {
+      margin: 0;
+      font-family: 'Roboto Condensed', sans-serif;
+      background-color: #bebab0;
+      color: #2b2424;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    a {
+      color: #ff0000;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    header {
+      width: 100%;
+      height: auto;
+      min-height: 25vh;
+      padding: 20px 0;
+      background-color: #ff0000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      max-height: 100%;
+      width: auto;
+      min-width: 100%;
+      object-fit: cover;
+      transform: translate(-50%, -50%);
+      background-color: #ff0000;
+    }
+
+    main {
+      width: 90%;
+      max-width: 1888px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    main h1 {
+      font-size: 1.6em;
+      margin-bottom: 600px;
+    }
+
+    main h2 {
+      font-size: 1.8em;
+      margin-bottom: 8px;
+      margin-top: 42px;
+    }
+
+    main h3 {
+      font-size: 1.4em;
+      margin-top: 38px;
+      margin-bottom: 0px;
+    }
+
+    main h4 {
+      font-size: 6.6em;
+      color: #ff0000;
+    }
+
+    main v {
+      color: #ff0000;
+    }
+
+    main p {
+      font-size: 1em;
+      color: #2b2424;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+    
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+
+    .button-container-subitem {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+
+    .button-main {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid #ff0000;
+      background-color: #bebab0;
+      color: #2b2424;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.2;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.5s ease, color 0.5s ease, border-color 0.3s ease;
+    }
+
+    .button-main:hover {
+      color: #ffffff;
+    }
+
+    .button-main.active {
+      background-color: #bebab0;
+      color: #ffffff;
+      border-color: #ff0000;
+    }
+
+    .button-VENDIDO {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid #ff0000;
+      background-color: #ff0000;
+      color: #bebab0;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.2;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .botao-main, .botao-off, .botao-coluna {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid;
+      color: #ff0000;
+      background-color: #bebab0;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .botao-main:hover {
+      color: #ff0000;
+      border-color: #ff0000;
+      text-decoration: underline;
+    }
+
+    .botao-subitem {
+      padding: 8px 8px;
+      height: 60px;
+      border: 2px solid;
+      color: #ff0000;
+      background-color: #bebab0;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .botao-subitem:hover {
+      color: #bebab0;
+      background-color: #2b2424;
+      border-color: #2b2424;
+      text-decoration: underline;
+    }
+
+    .botao-subitem-off {
+      padding: 8px 8px;
+      height: 60px;
+      border: 2px solid;
+      color: #2b2424;
+      border-color: #2b2424;
+      background-color: #bebab0;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .botao-coluna {
+      color: #bebab0;
+      border-color: #2b2424;
+      background-color: #2b2424;
+    }
+
+    .botao-off {
+      color: #2b2424;
+      border-color: #2b2424;
+    }
+
+    textarea#selected-text::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    textarea#selected-text::-webkit-scrollbar-thumb {
+      background-color: #ff0000;
+      border-radius: 2px;
+    }
+
+    textarea#selected-text::-webkit-scrollbar-track {
+      background: #bebab0;
+    }
+
+    /* Estilos para a seção de introdução PASSO A PASSO */
+    .intro-text-section { }
+
+    .intro-text-section h2 {
+        font-size: 1.8em;
+        color: #2b2424;
+        margin-top: 40px;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .intro-text-section .step-title {
+        font-weight: bold;
+        font-size: 1.3em;
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+    .intro-text-section .step-title:first-of-type {
+        margin-top: 0;
+    }
+
+    .intro-text-section p {
+        font-size: 1.15em;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    .intro-text-section p[style*="margin-left:24px"] {
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .intro-text-section a {
+        color: #ff0000 !important;
+        text-decoration: none;
+    }
+
+    .intro-text-section a:hover {
+        text-decoration: underline;
+    }
+    
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(43, 36, 36, 0.69);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .lightbox-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      min-height: 100%;
+      background: transparent;
+      z-index: 1;
+    }
+
+.conteudo {
+  position: relative;
+  width: 50%;
+  height: calc(94% - 48px);
+  border: 2px solid #2b2424;
+  background-image: url('/images/BG-PAP.gif'); 
+  background-color: #bebab0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px;
+  gap: 12px;
+  z-index: 2;
+}
+
+    .conteudo img {
+      flex-shrink: 0;
+      height: 100%;
+      object-fit: contain;
+    }
+    .conteudo::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .conteudo::-webkit-scrollbar-thumb {
+      background-color: #2b2424;
+      border-radius: 2px;
+    }
+
+    .conteudo::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .fechar {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      color: #ff0000;
+      background: none;
+      border: none;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 3;
+    }
+    
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: transparent;
+  padding: 10px 0;
+  position: relative;
+}
+
+.marquee-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scroll-text 88s linear infinite;
+}
+
+.marquee-text {
+  display: inline-block;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 3em;
+  color: #ff0000;
+  margin-right: 38px;
+}
+
+@keyframes scroll-text {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ============================
+   === FIM DOS ESTILOS ORIGINAIS ==
+   ============================ */
+
+/* =================================
+   === ESTILOS DO FORMULÁRIO DE APOSTAS ===
+   ================================= */
+
+/* --- Caixa de Resumo (Números e Total) --- */
+textarea#selected-text {
+  flex-grow: 1;
+  max-height: 124px;
+  width: 224px;
+  resize: none;
+  overflow-y: auto;
+  padding: 10px;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 1em;
+  border: 2px solid #2b2424; /* grafite */
+  border-radius: 2px;
+  color: #2b2424; /* grafite */
+  background-color: #bebab0; /* areia */
+}
+
+#total-cost-display {
+  font-size: 1em;
+  color: #2b2424; /* grafite */
+  background-color: #bebab0; /* areia */
+  border: 2px solid #2b2424; /* grafite */
+  border-radius: 2px;
+  min-height: 124px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100px;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* --- Seção Principal do Formulário --- */
+.central-apostas {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: #bebab0; /* areia */
+  padding: 10px 0;
+  border-bottom: 2px solid #2b2424; /* grafite */
+  width: 100%; /* Garante que a faixa ocupe toda a largura */
+}
+
+#toggle-apostar {
+  width: 100%;
+  max-width: 524px;
+  color: #ffffff; /* branco */
+  background-image: url('https://betshoptv.com/images/fofertas_hover.gif');
+  border: none;
+  border-radius: 2px;
+  padding: 14px;
+  font-size: 1.2em;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#toggle-apostar:hover {
+  background-image: url('https://betshoptv.com/images/BG-O.gif');
+}
+
+.apostar-wrapper {
+  max-width: 520px;
+  width: 100%;
+  margin: 10px auto 0;
+  display: none; /* Inicia oculto */
+  flex-direction: column;
+  gap: 12px;
+}
+
+.painel-apostar {
+  display: block;
+  background-color: #bebab0; /* areia */
+  border: 2px solid #2b2424; /* grafite */
+  border-radius: 2px;
+  padding: 14px;
+}
+
+.painel-titulo {
+  font-size: 1.2em;
+  text-align: left;
+  margin: 6px 0 0 2px;
+}
+
+/* --- Campos de Texto Harmonizados --- */
+.linha-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.linha-form input {
+  flex: 1 1 160px;
+  min-height: 14px;
+  padding: 10px 12px;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 0.88em;
+  border-radius: 2px;
+  outline: none;
+  /* Estilo harmonizado */
+  background-color: #bebab0;
+  border: 2px solid #2b2424;
+  color: #2b2424;
+}
+
+.linha-form input::placeholder {
+    color: #2b2424;
+    opacity: 0.7;
+}
+
+
+/* --- Seção de Pagamento --- */
+.pagamento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.pay-card {
+  border: 2px solid #2b2424; /* grafite */
+  background: #2b2424; /* grafite */
+  color: #ffffff; /* branco */
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.pay-card h5 {
+  margin: 0;
+  padding: 8px 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 1.05em;
+  background: #2b2424; /* grafite */
+  color: #ffffff; /* branco */
+}
+
+.pay-img {
+  width: 100%;
+  background: #ffffff; /* branco */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  height: 180px;
+}
+
+.pay-img img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.btn-secondary {
+  width: 100%;
+  border: 0;
+  border-top: 2px solid #2b2424; /* grafite */
+  background: #2b2424;
+  color: #ffffff; /* branco */
+  padding: 10px 12px;
+  font-weight: 800;
+  font-size: .96em;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  filter: brightness(1.2);
+}
+
+/* --- Botão Principal de Apostar --- */
+.botao-apostar {
+  width: 100%;
+  min-height: 50px;
+  border: 2px solid #ff0000; /* vermelho */
+  border-radius: 2px;
+  background: #ff0000; /* vermelho */
+  color: #ffffff; /* branco */
+  font-weight: 900;
+  font-size: 1.15em;
+  cursor: pointer;
+  transition: .2s ease;
+  margin-top: 8px;
+}
+
+.botao-apostar[disabled] {
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+/* --- Media Queries para o Formulário --- */
+@media (max-width: 560px) {
+  #total-cost-display {
+    width: 96px
+  }
+  .pagamento-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+  </style>
+
+  <!-- =========================================
+       ADICIONEI UM BLOCO DE CSS EXTRA ABAIXO
+       (Somente para ajustar comportamento MOBILE
+       dos botões de RIFAS em #gridA)
+       ========================================= -->
+  <style>
+    /* -------------------------------------------------------
+       RESPONSIVIDADE ESPECÍFICA PARA RIFAS (apenas dentro de #gridA)
+       - Mantém 100% das propriedades desktop.
+       - No mobile (<=768px) reduz progressivamente fonte/altura.
+       - Os botões ficam centralizados, com largura AUTOFIT ao texto.
+       - Não força colunas fixas: quantos couberem na linha, aparecem.
+       - Sem rolagem horizontal: botões quebram de linha (wrap) quando necessário.
+       ------------------------------------------------------- */
+
+    /* Segurança: aplica apenas dentro do grid de rifas */
+    @media (max-width: 768px) {
+      /* garante que apenas o container das rifas seja afetado */
+      #gridA .button-container {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        align-items: center !important;
+        margin-left: 8px !important;
+        margin-right: 8px !important;
+      }
+
+      /* botões: largura pelo conteúdo, centralizados, sem quebra de texto */
+      #gridA .button-main,
+      #gridA .button-VENDIDO {
+        display: inline-flex !important;
+        flex: 0 0 auto !important;          /* não força colunas iguais */
+        width: auto !important;             /* largura definida pelo conteúdo */
+        max-width: calc(100% - 20px) !important; /* evita overflow extremo */
+        white-space: nowrap !important;     /* nunca quebrar a linha interna do texto */
+        font-size: clamp(0.72rem, 2.8vw, 1rem) !important; /* reduz progressivamente */
+        padding: 6px 10px !important;       /* reduz espaçamentos para caber mais botões */
+        height: auto !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
+      }
+
+      /* Se um botão for muito longo, permitir truncamento com elipse opcional
+         — mas apenas como último recurso. Mantive white-space:nowrap; se preferir
+         remover truncamento, comente a regra abaixo. */
+      #gridA .button-main.long,
+      #gridA .button-VENDIDO.long {
+        max-width: 100% !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Evita rolagem horizontal no gridA */
+      #gridA {
+        overflow-x: hidden !important;
+      }
+
+      /* Mantém botões do MENU (fora do #gridA) funcionando como já estão no index0908 */
+      /* (Não alterei .button-container global para preservar menu idêntico ao desktop/mobile original) */
+    }
+    
+    /* -------------------------------------------------------
+   RESPONSIVIDADE PARA BOTÕES DE MENU
+   (aplica a mesma lógica dos botões de rifas)
+   ------------------------------------------------------- */
+@media (max-width: 768px) {
+  .button-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    align-items: center !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+  }
+
+  .button-container .botao-main,
+  .button-container .botao-off {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: calc(100% - 20px) !important;
+    white-space: nowrap !important;
+    font-size: clamp(0.72rem, 2.8vw, 1rem) !important;
+    padding: 6px 10px !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+  }
+        header {
+        min-height: 100px;
+        max-height: 118px;
+        padding: 4px 4px;
+      }
+
+      .header-video {
+        max-height: 100%;
+        width: auto;
+        object-fit: cover;
+        object-position: center;
+        transform: translate(-50%, -50%);
+      }
+}
+  </style>
+
+</head>
+<body>
+  <header>
+    <a href="https://betshoptv.com"><video class="header-video" autoplay loop muted playsinline>
+     <source src="https://betshoptv.com/images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+      Seu navegador não suporta a tag de vídeo.
+    </video></a>
+  </header>
+
+  <!-- BOTÕES MENU (exatamente como no index0908) -->
+
+  <div class="button-container" style="padding: 0 50px;">
+    <a href="como.html" class="botao-main">COMO<br>FUNCIONA?</a>
+    <div class="botao-off"
+     style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
+            background-position: 50% 52%;">APOSTE<br>RIFAS</div>
+   <a href="ofertas.html"
+      class="botao-main"
+      style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
+      background-position: 50% 52%;">APOSTE<br>OFERTAS</a>
+    <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
+    <a href="contato.html" class="botao-main">FALE<br>CONOSCO</a>
+  </div>
+
+
+  <main>
+      
+    <br><center>
+    <div style="
+  max-width: 800px;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');
+  background-color: #ff0000;
+  border: 2px solid #ff0000;
+">
+<img 
+  src="https://betshoptv.com/images/COMO-CSA1b.png"
+  class="imagem-interativa"
+  data-serie="ETM"
+  data-index="0"
+  data-sequencia="https://betshoptv.com/images/COMO-CSA1b.png,https://betshoptv.com/images/COMO-CSA2d.png"
+  style="cursor: pointer; margin-bottom: -4px; width: 100%; background-image: url('https://betshoptv.com/images/BG-COMO.gif');">
+  
+</div></center>
+
+    <br>
+
+    <!-- INÍCIO - CENTRAL DE APOSTAS -->
+   <div class="central-apostas">
+    <center>
+      <div style="display:flex;justify-content:center;margin-top:10px;width:100%;">
+        <div style="display:flex;max-width:100%;width:459px;gap:10px;align-items:stretch;">
+          <textarea id="selected-text" readonly>👁 LISTA de APOSTAS 👁</textarea>
+          <div id="total-cost-display">
+            <p style="margin:0 0 5px 0;font-weight:bold;">QTD.</p>
+            <p id="selected-count" style="margin:0 0 13px 0;font-size:1.2em;font-weight:bold;">0</p>
+            <p style="margin:0 0 5px 0;font-weight:bold;">TOTAL</p>
+            <p id="calculated-cost" style="margin:0;font-size:1.5em;font-weight:bold;">$0</p>
+          </div>
+        </div>
+      </div>
+
+      <button id="toggle-apostar">APOSTE AQUI!</button>
+
+      <!-- FORMULARIO (FormSubmit) -->
+      <div class="apostar-wrapper" id="apostar-wrapper">
+        <form id="form-aposta"
+              class="painel-apostar"
+              action="https://formsubmit.co/betshoptv@gmail.com"
+              method="POST"
+              target="hidden_iframe">
+
+          <div class="painel-titulo">Preencha os campos abaixo:</div>
+          <div class="linha-form"><input id="nome" name="NOME" type="text" placeholder="NOME" required></div>
+          <div class="linha-form"><input id="email" name="E-MAIL" type="email" placeholder="E-MAIL" required></div>
+          <div class="linha-form"><input id="whats" name="TELEFONE/WHATSAPP" type="tel" placeholder="Telefone / WhatsApp" required></div>
+
+          <div class="painel-titulo">Escolha a forma de pagamento:</div>
+          <div class="pagamento-grid">
+            <div class="pay-card">
+              <h5>PIX</h5>
+              <div class="pay-img"><img src="https://betshoptv.com/images/placeholder-pix.png"></div>
+              <button type="button" id="btn-copiar-pix" class="btn-secondary">COPIE O PIX COPIA E COLA</button>
+            </div>
+            <div class="pay-card">
+              <h5>PayPal</h5>
+              <div class="pay-img"><img src="https://betshoptv.com/images/placeholder-paypal.png"></div>
+              <a class="btn-secondary" href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" target="_blank">PAGUE VIA PayPal</a>
+            </div>
+          </div>
+
+          <input type="hidden" id="hidden-apostas" name="LISTA de APOSTAS" value="">
+          <input type="hidden" id="hidden-qtd" name="QTD." value="0">
+          <input type="hidden" id="hidden-total" name="TOTAL" value="$0">
+          <input type="hidden" name="_subject" id="hidden-subject" value="APOSTA">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
+
+          <button id="btn-apostar" class="botao-apostar" type="submit">APOSTAR!</button>
+        </form>
+        <iframe name="hidden_iframe" style="display:none;"></iframe>
+      </div>
+    </center>
+   </div>
+   <!-- FIM - CENTRAL DE APOSTAS -->
+
+    <section style="text-align: left; margin-top: 30px; max-width: 100%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">
+      <!-- Mantive a COLUNA A e demais elementos originais, mas reduzi a lista de rifas aqui para 10 itens conforme solicitado -->
+      
+      
+      <div id="gridA" class="grid-column">
+        <div style="margin-top: 8px;" class="button-container">
+          <!-- APENAS 10 BOTÕES (A001..A010) conforme pedido -->
+          
+  <span style="margin-right: 18px; margin-top: 6px; font-family: 'Roboto Condensed', sans-serif; font-size: 1.2em;"><strong><font color="#ff0000">CHAVE PIX</font> betshoptv@gmail.com</strong>
+  <br>ou efetue o pagamento <strong>via <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" target="_blank">PayPal</a></strong></span>
+
+<button class="button-VENDIDO" style="margin-left: 18px; margin-top: 8px; margin-bottom: 8px; background-color: #bebab0; color: #2b2424;" data-hover-color="#FF1493" data-id="X003">DISPONÍVEL</button>
+<button class="button-VENDIDO" style="margin-right: 18px; margin-top: 8px; margin-bottom: 8px;">INDISPONÍVEL</button>
+</div><br><br>
+ <div class="button-container">
+<button class="button-VENDIDO" data-hover-color="#FF4500" data-id="X001">X001 / 40 graus</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#B22222" data-id="X002">X002 / 5ª avenida</button>
+<button class="button-VENDIDO" data-hover-color="#FF1493" data-id="X003">X003 / Acionando o contatinho</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF69B4" data-id="X004">X004 / Ai, amiga</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFE4E1" data-id="X005">X005 / Algodão doce</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFDAB9" data-id="X006">X006 / Amanhecer</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFD700" data-id="X007">X007 / Amarelo Frevo</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#8B0000" data-id="X008">X008 / Ameixa</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#87CEEB" data-id="X009">X009 / Ar Fresco</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#F5DEB3" data-id="X010">X010 / Areia</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#4682B4" data-id="X011">X011 / Atmosfera</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#1E90FF" data-id="X012">X012 / Azul Eclesiástico</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#0000FF" data-id="X013">X013 / Azul biônico</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#D2B48C" data-id="X014">X014 / Batida de Amendoim</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFFFF0" data-id="X015">X015 / Batida de coco</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF6347" data-id="X016">X016 / Beijo roubado</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#32CD32" data-id="X017">X017 / Bem-Estar</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#000000" data-id="X018">X018 / Black</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF7F50" data-id="X019">X019 / Bolsa de Praia</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFC0CB" data-id="X020">X020 / Boneca</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFD700" data-id="X021">X021 / Brinde da virada</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DAA520" data-id="X022">X022 / Brocado Rico</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#6F4E37" data-id="X023">X023 / Café</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#008000" data-id="X024">X024 / Caminho do Jardim</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#8B4513" data-id="X025">X025 / Camurça</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#D2B48C" data-id="X026">X026 / Capuccino Doce</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DEB887" data-id="X027">X027 / Casa Portuguesa</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFA07A" data-id="X028">X028 / Casamento do Verão</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#87CEEB" data-id="X029">X029 / Chafariz da Praça</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#696969" data-id="X030">X030 / Cinza Tecnológico</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#808080" data-id="X031">X031 / Cinza minimalista</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFFFFF" data-id="X032">X032 / Clássico</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#A9A9A9" data-id="X033">X033 / Colinas de Inverno</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#C0C0C0" data-id="X034">X034 / Concha Prateada</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF7F50" data-id="X035">X035 / Coral não tem igual</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#CD853F" data-id="X036">X036 / Corpo bronzeado</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFD700" data-id="X037">X037 / Corpo tropical</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#F08080" data-id="X038">X038 / Cristal rosa</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#ADD8E6" data-id="X039">X039 / Céu da Antártida</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF0000" data-id="X040">X040 / De repente, paixão</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DC143C" data-id="X041">X041 / Deixa beijar</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF8C00" data-id="X042">X042 / Del Sol</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFE4E1" data-id="X043">X043 / Delicadeza</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFD700" data-id="X044">X044 / Dia Dourado</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FA8072" data-id="X045">X045 / Dieta hoje não</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF4500" data-id="X046">X046 / Doce ou Travessura</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF69B4" data-id="X047">X047 / Doçura da Primavera</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#483D8B" data-id="X048">X048 / Drama Noturno</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DEB887" data-id="X049">X049 / Dunas de areia</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF1493" data-id="X050">X050 / Encontro Feliz</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#4B0082" data-id="X051">X051 / Encontro às escuras</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFD700" data-id="X052">X052 / Estrela Cadente</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFFFFF" data-id="X053">X053 / Estrela de luz</button>
+<button class="button-VENDIDO" data-hover-color="#FF6347" data-id="X054">X054 / Explícita</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#228B22" data-id="X055">X055 / Fazendo a fitness</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#4682B4" data-id="X056">X056 / Fazendo vários nadas</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#556B2F" data-id="X057">X057 / Figo Verde</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#8A2BE2" data-id="X058">X058 / Fonte Secreta</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#E30B5C" data-id="X059">X059 / Framboesa</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#C71585" data-id="X060">X060 / Framboesa Radical</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FAF0E6" data-id="X061">X061 / França</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#B22222" data-id="X062">X062 / Gabriele</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFD700" data-id="X063">X063 / Garota verão</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#F0FFF0" data-id="X064">X064 / Geada</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#F4A460" data-id="X065">X065 / Geléia de Cupuaçu</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DAA520" data-id="X066">X066 / Glória da Colheita</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#B0C4DE" data-id="X067">X067 / Grace</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#696969" data-id="X068">X068 / Grafite fashionista</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#2F4F4F" data-id="X069">X069 / Grande Metrópole</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#9370DB" data-id="X070">X070 / Harmonia Lilás</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DC143C" data-id="X071">X071 / Hoje sou minha</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#4682B4" data-id="X072">X072 / Horizonte</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#6A5ACD" data-id="X073">X073 / Intuição Divina</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#4B0082" data-id="X074">X074 / Jabuticaba</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#006400" data-id="X075">X075 / Jardim Misterioso</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#5F9EA0" data-id="X076">X076 / Jeans</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFFFF0" data-id="X077">X077 / Leite de coco</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF8C00" data-id="X078">X078 / Ligada no 220v</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#D8BFD8" data-id="X079">X079 / Lilás Esplendoroso</button>
+<button class="button-VENDIDO" data-hover-color="#FAF0E6" data-id="X080">X080 / Lugar de Afeto</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#32CD32" data-id="X081">X081 / Luz da Floresta</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFFFE0" data-id="X082">X082 / Luz na Janela</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#000000" data-id="X083">X083 / Mais que preto, black</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#9932CC" data-id="X084">X084 / Malva misterioso</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#A0522D" data-id="X085">X085 / Mantilha</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#8B4513" data-id="X086">X086 / Marrom da Riqueza</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#A52A2A" data-id="X087">X087 / Marrom mutante</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#9370DB" data-id="X088">X088 / Mauve urban</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFFAFA" data-id="X089">X089 / Meia de Seda</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF6347" data-id="X090">X090 / Melancia</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#2F4F4F" data-id="X091">X091 / Mil e uma noites</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFD700" data-id="X092">X092 / Momento de Promessa</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF69B4" data-id="X093">X093 / Momento selfie</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DAA520" data-id="X094">X094 / Mostarda Quente</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#B8860B" data-id="X095">X095 / Mostarda em Grão</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DC143C" data-id="X096">X096 / Movie Star</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFB6C1" data-id="X097">X097 / Moça Bonita</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#800000" data-id="X098">X098 / Na dúvida, vinho!</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF4500" data-id="X099">X099 / Nariz de palhaço</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DEB887" data-id="X100">X100 / Neutro Nepal</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#00008B" data-id="X101">X101 / Noite de gala</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#8B0000" data-id="X102">X102 / Noite quente</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FAEBD7" data-id="X103">X103 / Nua & crua</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#D2B48C" data-id="X104">X104 / Nude</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#CDAF95" data-id="X105">X105 / Nude desejo</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#6A5ACD" data-id="X106">X106 / Nuvens Roxas</button>
+<button class="button-VENDIDO" data-hover-color="#DC143C" data-id="X107">X107 / Não mexe comigo</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#B87333" data-id="X108">X108 / Ocre Italiano</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF69B4" data-id="X109">X109 / Papel de Bala</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF4500" data-id="X110">X110 / Pimenta rosa</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#A0522D" data-id="X111">X111 / Pinhão</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#228B22" data-id="X112">X112 / Pitada de Alecrim</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#A0522D" data-id="X113">X113 / Pote de Argila</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF69B4" data-id="X114">X114 / Precioso Momento</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#B0C4DE" data-id="X115">X115 / Preferia estar dormindo</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFFACD" data-id="X116">X116 / Prenda natural</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFD700" data-id="X117">X117 / Puro glamour</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFC0CB" data-id="X118">X118 / Pétala</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFFFFF" data-id="X119">X119 / Pétala branca</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFDAB9" data-id="X120">X120 / Pêra Madura</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFE4C4" data-id="X121">X121 / Pó de Pêssego</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#4682B4" data-id="X122">X122 / Quadrado azul</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#87CEEB" data-id="X123">X123 / Reflexo de Cristal</button>
+<button class="button-VENDIDO" data-hover-color="#FAEBD7" data-id="X124">X124 / Renascer</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#708090" data-id="X125">X125 / Repouso Tranquilo</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFB6C1" data-id="X126">X126 / Rosa Cintilante</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFC0CB" data-id="X127">X127 / Rosa Vintage</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#CD5C5C" data-id="X128">X128 / Rosa antigo</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF69B4" data-id="X129">X129 / Rosa da vez</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFDAB9" data-id="X130">X130 / Rosa floral</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DAA520" data-id="X131">X131 / Rota do Deserto</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#800000" data-id="X132">X132 / Rota do Vinho</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#F5DEB3" data-id="X133">X133 / Roupa de Bebê</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#8A2BE2" data-id="X134">X134 / Roxo místico</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFA07A" data-id="X135">X135 / Salmão Pálido</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DC143C" data-id="X136">X136 / Samba Juliana</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DC143C" data-id="X137">X137 / Sem retoque</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFB6C1" data-id="X138">X138 / Sensação de Rosas</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#191970" data-id="X139">X139 / Sereno da Noite</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF0000" data-id="X140">X140 / Seta vermelha</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DAA520" data-id="X141">X141 / Sherazade</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFD700" data-id="X142">X142 / Sol do oriente</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFD700" data-id="X143">X143 / Solário</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FFFACD" data-id="X144">X144 / Sonho de Anjo</button>
+<button class="button-VENDIDO" data-id="X145">X145 / Suculenta</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#708090" data-id="X146">X146 / Sálvia</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#F5DEB3" data-id="X147">X147 / Só dá nude</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF0000" data-id="X148">X148 / Tapete vermelho</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#B22222" data-id="X149">X149 / Teatro de Bonecos</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#696969" data-id="X150">X150 / Teia de Aranha</button>
+<button class="button-VENDIDO" data-hover-color="#D2B48C" data-id="X151">X151 / Toque Casual</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#8B4513" data-id="X152">X152 / Toque de Centeio</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#8B4513" data-id="X153">X153 / Toque de Noz-Moscada</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#7FFFD4" data-id="X154">X154 / Trevo Pálido</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#008000" data-id="X155">X155 / Trilha Verde</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#F5DEB3" data-id="X156">X156 / Tô bege!</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#696969" data-id="X157">X157 / Urban chic</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#D2B48C" data-id="X158">X158 / Urso de Pelúcia</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF8C00" data-id="X159">X159 / Valência</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#4682B4" data-id="X160">X160 / Vaso de Hortênsia</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#87CEEB" data-id="X161">X161 / Ventos Calmos</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#228B22" data-id="X162">X162 / Verde Pasto</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#B22222" data-id="X163">X163 / Vermelha obsessão</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF0000" data-id="X164">X164 / Vermelho Ivete</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#8B0000" data-id="X165">X165 / Vermelho proibido</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#DC143C" data-id="X166">X166 / Vestida pra matar</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#F8F8FF" data-id="X167">X167 / Via Láctea</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#8A2BE2" data-id="X168">X168 / Violeta Preciosa</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#4B0082" data-id="X169">X169 / Violeta Profundo</button>
+<button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF69B4" data-id="X170">X170 / Vou de rosa</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+<!-- INÍCIO MODIFICAÇÃO: Script de rotação de imagens -->
+<script>
+  document.querySelectorAll('.imagem-interativa').forEach(img => {
+    img.addEventListener('click', () => {
+      const sequencia = img.dataset.sequencia.split(',');
+      let indexAtual = parseInt(img.dataset.index, 10) || 0;
+
+      indexAtual = (indexAtual + 1) % sequencia.length;
+
+      img.src = sequencia[indexAtual];
+      img.dataset.index = indexAtual;
+    });
+  });
+</script>
+<!-- FIM MODIFICAÇÃO: Script de rotação de imagens -->
+
+
+  <!-- Funções lightbox e inicialização de hash (mantidas) -->
+  <script>
+    function abrirLightbox(idLightbox, idImagem = null) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'flex';
+      if (idImagem) {
+        const imagem = document.getElementById(idImagem);
+        if (imagem) {
+          imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        }
+      }
+    }
+
+    function fecharLightbox(idLightbox) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'none';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        fecharLightbox('PAP');
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.substring(1);
+      if (hash && document.getElementById(hash)) {
+        abrirLightbox('PAP', hash);
+      }
+    });
+  </script>
+
+  <!-- SCRIPT PRINCIPAL: Seleção, Formulário e Interatividade -->
+  <script>
+    // --- Elementos do DOM ---
+    const gridA = document.getElementById('gridA');
+    const selectionBox = document.getElementById('selected-text');
+    
+    // Elementos do formulário
+    const form = document.getElementById('form-aposta');
+    const nomeInput = document.getElementById('nome');
+    const hiddenApostas = document.getElementById('hidden-apostas');
+    const hiddenQtd = document.getElementById('hidden-qtd');
+    const hiddenTotal = document.getElementById('hidden-total');
+    const hiddenSubject = document.getElementById('hidden-subject');
+    const btnApostar = document.getElementById('btn-apostar');
+    
+    let selectedItems = [];
+
+    // --- Funções Auxiliares ---
+
+    // Função para obter cor de contraste (versão compacta de rifafa.html)
+    function getContrastColor(hex){
+      function hexToRgb(h){ const x=parseInt(h.replace('#',''),16); return [(x>>16)&255,(x>>8)&255,x&255]; }
+      function L([r,g,b]){ const f=v=>{v/=255; return v<=.03928? v/12.92: Math.pow((v+.055)/1.055,2.4)}; return .2126*f(r)+.7152*f(g)+.0722*f(b); }
+      try{
+        const bgL=L(hexToRgb(hex));
+        const opts=['#ffffff','#ff0000','#bebaba','#2b2424'];
+        return opts.sort((a,b)=>Math.abs(bgL-L(hexToRgb(b)))-Math.abs(bgL-L(hexToRgb(a))))[0];
+      }catch(e){ return '#ffffff';}
+    }
+
+    // Função para calcular o custo total (regra par/ímpar)
+    function calculateTotalCost(n) {
+        if (n <= 0) return 0;
+        return (n % 2 === 0) ? n * 25 : ((n - 1) * 25) + 30;
+    }
+
+    // --- Função Principal de Atualização ---
+
+    // Atualiza a textarea, os totais e os campos ocultos do formulário
+    function updateSelection() {
+      // Atualiza a textarea
+      selectionBox.value = selectedItems.length ? selectedItems.join('\n') : '👁 LISTA de APOSTAS 👁';
+      
+      const qtd = selectedItems.length;
+      const total = calculateTotalCost(qtd);
+
+      // Atualiza os displays de Qtd e Total
+      document.getElementById('selected-count').textContent = qtd;
+      document.getElementById('calculated-cost').textContent = `$${total}`;
+
+      // Preenche os campos ocultos que serão enviados por e-mail
+      if (hiddenApostas) hiddenApostas.value = selectedItems.join('\n');
+      if (hiddenQtd) hiddenQtd.value = String(qtd);
+      if (hiddenTotal) hiddenTotal.value = `$${total}`;
+
+      // Atualiza o assunto do e-mail dinamicamente
+      if (hiddenSubject) {
+        const nome = (nomeInput?.value || '').trim() || 'Cliente';
+        hiddenSubject.value = `APOSTA / ${nome} / $${total}`;
+      }
+    }
+
+    // --- Event Listeners ---
+
+    // 1. Event Listeners para cada botão de rifa (hover e clique)
+    document.querySelectorAll('#gridA .button-container button').forEach(button => {
+      const hoverColor = button.dataset.hoverColor;
+      let fadeTimeout = null;
+
+      // Efeito de hover (mantido de rifas.html)
+      button.addEventListener('mouseover', () => {
+        if (button.classList.contains('button-VENDIDO')) return;
+        clearTimeout(fadeTimeout);
+        if (hoverColor) {
+          button.style.backgroundColor = hoverColor;
+          button.style.color = getContrastColor(hoverColor);
+          button.style.borderColor = hoverColor;
+        } else {
+          button.style.backgroundColor = '#ff0000';
+          button.style.color = '#ffffff';
+          button.style.borderColor = '#ff0000';
+        }
+      });
+
+      // Efeito de fade-out no mouseout (mantido de rifas.html)
+      button.addEventListener('mouseout', () => {
+        if (button.classList.contains('button-VENDIDO')) return;
+        clearTimeout(fadeTimeout);
+        const randomDelay = Math.floor(Math.random() * (1802 - 188 + 1)) + 188;
+        fadeTimeout = setTimeout(() => {
+          if (!button.classList.contains('active')) {
+            button.style.backgroundColor = '';
+            button.style.color = '';
+            button.style.borderColor = '';
+          }
+        }, randomDelay);
+      });
+
+      // Lógica de clique para selecionar/deselecionar
+      button.addEventListener('click', () => {
+        if (button.classList.contains('button-VENDIDO')) return;
+        
+        clearTimeout(fadeTimeout);
+        const value = button.dataset.id || button.textContent.trim(); // Usa data-id como em rifafa
+        const index = selectedItems.indexOf(value);
+
+        if (index > -1) { // Deselecionar
+          selectedItems.splice(index, 1);
+          button.classList.remove('active');
+          button.style.backgroundColor = '';
+          button.style.color = '';
+          button.style.borderColor = '';
+        } else { // Selecionar
+          selectedItems.push(value);
+          button.classList.add('active');
+          if (hoverColor) {
+            button.style.backgroundColor = hoverColor;
+            button.style.color = getContrastColor(hoverColor);
+            button.style.borderColor = hoverColor;
+          } else {
+            button.style.backgroundColor = '#ff0000';
+            button.style.color = '#ffffff';
+            button.style.borderColor = '#ff0000';
+          }
+        }
+        // Chama a função de atualização principal
+        updateSelection();
+      });
+    });
+
+    // 2. Event Listener para o botão de toggle do formulário
+    document.getElementById('toggle-apostar')?.addEventListener('click', () => {
+      const wrap = document.getElementById('apostar-wrapper');
+      if (wrap) {
+        const isVisible = wrap.style.display === 'flex';
+        wrap.style.display = isVisible ? 'none' : 'flex';
+      }
+    });
+
+    // 3. Event Listener para o botão de copiar PIX
+    document.getElementById('btn-copiar-pix')?.addEventListener('click', (e) => {
+      const payload = "00020126410014BR.GOV.BCB.PIX0119betshoptv@gmail.com5204000053039865911BET SHOP TV6009SAO PAULO62070503***63048AB7";
+      const btn = e.currentTarget;
+      navigator.clipboard.writeText(payload).then(() => {
+        btn.textContent = 'PIX COPIADO!';
+        setTimeout(() => { btn.textContent = 'COPIE O PIX COPIA E COLA'; }, 5000);
+      }).catch(() => alert('Falha ao copiar o código PIX.'));
+    });
+
+    // 4. Event Listener para atualizar o assunto do e-mail ao digitar o nome
+    nomeInput?.addEventListener('input', updateSelection);
+
+    // 5. Event Listener para o envio do formulário
+    form?.addEventListener('submit', (ev) => {
+      if (selectedItems.length === 0) {
+        ev.preventDefault();
+        alert('Selecione ao menos 1 número para apostar.');
+        return;
+      }
+      updateSelection(); // Garante que os dados estão atualizados antes de enviar
+
+      if (btnApostar) {
+        btnApostar.disabled = true;
+        btnApostar.textContent = 'ENVIANDO APOSTA...';
+        // O FormSubmit redirecionará ou o iframe lidará com isso.
+        // Podemos reativar o botão após um tempo caso o usuário não saia da página.
+        setTimeout(() => {
+          btnApostar.textContent = 'APOSTA ENVIADA!';
+        }, 5000);
+      }
+    });
+
+    // --- Inicialização ---
+    // Chama a função de atualização uma vez no carregamento da página
+    updateSelection();
+  </script>
+
+  <br><br><br><br><br><br>
+</body>
+</html>
