@@ -85,7 +85,7 @@
               <button class="btn-copiar" type="button" id="btn-copiar-pix">COPIA e COLA</button>
             </div>
             <div id="paypal-content" class="payment-content">
-                <p style="text-align: center; margin: 20px 0;">Clique no botão para pagar com PayPal.</p>
+                <div class="qr-area"><img src="https://betshoptv.com/images/placeholder-paypal.png" alt="QR Code PayPal"></div>
                 <button class="btn-site" type="button" id="btn-site-paypal">Pagar com PayPal</button>
             </div>
             <div class="row-submit"><button type="button" class="btn-voltar" id="btn-voltar">VOLTAR</button><button type="submit" class="botao-apostar" id="btn-apostar" form="form-aposta">APOSTAR!</button></div>
@@ -103,10 +103,10 @@
     </div>
     <section style="text-align:left; margin-top:30px; max-width:100%; margin-left:auto; margin-right:auto;">
       <div id="gridA" class="grid-column">
-        <div class="button-container">
-          <button style="border:0;background-color:transparent;color:#2b2424;font-weight:normal;" disabled>LEGENDA:</button>
-          <button class="button-main" style="margin-right:-2px;margin-left:-15px;" disabled>DISPONÍVEL</button>
-          <button class="button-VENDIDO" disabled>INDISPONÍVEL</button>
+        <div style="margin-top: 8px;" class="button-container">
+          <button class="button-VENDIDO" style="border: 0px; background-color:#bebab0; color:#2b2424; font-weight: normal; cursor: default;">LEGENDA:&nbsp;</button>
+          <button class="button-VENDIDO" style="margin-right: -2px; margin-left: -15px; background-color:#bebab0; color:#2b2424; cursor: default;" data-hover-color="#FF1493">DISPONÍVEL</button>
+          <button class="button-VENDIDO" style="cursor: default;">INDISPONÍVEL</button>
         </div><br><br>
         <div class="button-container"></div>
       </div>
