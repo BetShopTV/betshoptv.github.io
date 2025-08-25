@@ -42,8 +42,8 @@
     .btn-cancelar, .btn-voltar { background: var(--cor-texto); color: #bebab0; border: 2px solid var(--cor-texto); flex-basis: 30%; }
     .btn-proxima, .botao-apostar, .btn-etapa4 { background: var(--cor-destaque); color: var(--cor-branco); border: 2px solid var(--cor-destaque); flex: 1; }
     .payment-tabs { margin-bottom: 14px; }
-    .btn-left { flex: 1; border: 2px solid var(--cor-texto); background: var(--cor-texto); color: var(--cor-branco); }
-    .btn-left.is-selected { background: var(--cor-fundo); border-color: var(--cor-destaque); color: var(--cor-destaque); cursor: default; }
+    .btn-left { flex: 1; background: var(--cor-fundo); border: 2px solid #2b2424; border-color: #2b2424; color: #2b2424; }
+    .btn-left.is-selected { border: 2px solid #2b2424; background: var(--cor-texto); color: #bebab0; cursor: default; font-size: 1.24em;}
     .payment-content { display: none; flex-direction: column; gap: 10px; align-items: center; }
     .payment-content.is-visible { display: flex; }
     .paypal-info { text-align: center; margin: 20px 0; }
@@ -51,6 +51,9 @@
     .qr-area { background: var(--cor-branco); height: 138px; width: 100%; display:flex; align-items:center; justify-content:center; }
     .qr-area img { max-width: 124px; max-height: 124px; object-fit: contain; }
     .btn-copiar, .btn-site { width: 100%; font-size: .88em; border: 2px solid var(--cor-texto); background: var(--cor-texto); color: var(--cor-branco); }
+    .btn-copiar:hover {
+        background-image: url('https://betshoptv.com/images/faposteee.gif');
+        border-image: url('https://betshoptv.com/images/faposteee.gif');}
     .botao-apostar[disabled] { opacity: .7; cursor: not-allowed; }
     .button-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 10px; }
     .top-nav-container { padding: 0 50px; }
@@ -146,11 +149,11 @@
             <div class="payment-tabs"><button class="btn-left is-selected" type="button" id="btn-pix">PIX</button><button class="btn-left" type="button" id="btn-paypal">PayPal</button></div>
             <div id="pix-content" class="payment-content is-visible">
               <div class="qr-area"><img src="https://betshoptv.com/images/placeholder-pix.png" alt="QR Code PIX"></div>
-              <button class="btn-copiar" type="button" id="btn-copiar-pix">COPIA e COLA</button>
+              <button class="btn-copiar" type="button" id="btn-copiar-pix">PIX COPIA e COLA</button>
             </div>
             <div id="paypal-content" class="payment-content">
             <div class="qr-area"><img src="https://betshoptv.com/images/PayPal_QR Code.png" alt="QR Code PayPal"></div>
-                <button class="btn-site" type="button" id="btn-site-paypal">Pagar com PayPal</button>
+                <button class="btn-site" type="button" id="btn-site-paypal">Pagar via PayPal</button>
             </div>
             <div class="row-submit"><button type="button" class="btn-voltar" id="btn-voltar">VOLTAR</button><button type="submit" class="botao-apostar" id="btn-apostar" form="form-aposta">APOSTAR!</button></div>
           </div>
