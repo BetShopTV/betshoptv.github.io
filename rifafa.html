@@ -17,7 +17,7 @@
     header { width: 100%; min-height: 25vh; padding: 20px 0; background-color: var(--cor-destaque); position: relative; overflow: hidden; }
     .header-video { position: absolute; top: 50%; left: 50%; max-height: 100%; width: auto; min-width: 100%; object-fit: cover; transform: translate(-50%, -50%); background-color: var(--cor-destaque); }
     main { width: 90%; max-width: 1888px; margin-top: 20px; text-align: center; }
-    .central-apostas { position: sticky; top: 0; z-index: 999; background: var(--cor-fundo); padding: 10px; border-bottom: 2px solid var(--cor-texto); width: 100%; max-width: 480px; margin: 0 auto; box-sizing: border-box; }
+    .central-apostas { position: sticky; top: 0; z-index: 999; background: var(--cor-fundo); padding: 10px; border-bottom: 2px solid #ff0000; width: 100%; max-width: 480px; margin: 0 auto; box-sizing: border-box; }
     .resumo-container { display: flex; justify-content: center; gap: 10px; width: 100%; }
     textarea#selected-text { flex-grow: 1; max-height: 100px; resize: none; overflow-y: auto; padding: 10px; font-size: 1em; border-radius: 2px; border: 2px solid var(--cor-texto); color: var(--cor-texto); background: var(--cor-fundo); }
     textarea#selected-text::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -28,8 +28,8 @@
     #total-cost-display .total-value { font-weight: normal; }
     #total-cost-display #calculated-cost { font-weight: bold; margin-bottom: 6px; }
     #total-cost-display > .total-label:first-of-type { margin-top: 6px; }
-    #toggle-apostar { width: 100%; color: var(--cor-branco); background-image: url('https://betshoptv.com/images/fofertas.gif'); border: none; border-radius: 2px; padding: 14px; font-size: 1.2em; font-weight: 700; cursor: pointer; margin-top: 10px; }
-    #toggle-apostar:hover { background-image: url('https://betshoptv.com/images/fofertas_hover.gif'); }
+    #toggle-apostar { width: 100%; color: var(--cor-branco); background-image: url('https://betshoptv.com/images/fofertas.gif'); transition: background-image 0.8s ease-in-out; border: none; border-radius: 2px; padding: 14px; font-size: 1.2em; font-weight: 700; cursor: pointer; margin-top: 10px; }
+    #toggle-apostar:hover { background-image: url('https://betshoptv.com/images/faposteee.gif'); }
     .apostar-wrapper { width: 100%; margin: 10px auto 0; display: none; }
     .painel-apostar { background: var(--cor-fundo); border: 2px solid var(--cor-texto); border-radius: 2px; padding: 14px; display: none; }
     .painel-apostar.is-visible { display: block; }
@@ -48,8 +48,8 @@
     .payment-content.is-visible { display: flex; }
     .paypal-info { text-align: center; margin: 20px 0; }
     .success-message { font-size: 1.2em; font-weight: bold; }
-    .qr-area { background: var(--cor-branco); border: 2px solid var(--cor-texto); border-radius: 2px; height: 188px; width: 100%; display:flex; align-items:center; justify-content:center; }
-    .qr-area img { max-width: 180px; max-height: 180px; object-fit: contain; }
+    .qr-area { background: var(--cor-branco); height: 138px; width: 100%; display:flex; align-items:center; justify-content:center; }
+    .qr-area img { max-width: 124px; max-height: 124px; object-fit: contain; }
     .btn-copiar, .btn-site { width: 100%; font-size: .88em; border: 2px solid var(--cor-texto); background: var(--cor-texto); color: var(--cor-branco); }
     .botao-apostar[disabled] { opacity: .7; cursor: not-allowed; }
     .button-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 10px; }
@@ -103,7 +103,7 @@
     .botao-main, .botao-off { padding: 4px 13px; height: 50px; border: 2px solid; color: #ff0000; background-color: #bebab0; display: inline-flex; justify-content: center; align-items: center; font-size: 1em; font-weight: bold; text-align: center; text-decoration: none; cursor: pointer; }
     .botao-main:hover { border-color: #ff0000; text-decoration: underline; }
     .botao-off { color: #2b2424; border-color: #2b2424; }
-    @media (max-width: 768px) { .central-apostas { max-height: 75vh; overflow-y: auto; } header { min-height: 100px; max-height: 118px; padding: 4px; } .header-video { max-height: 100%; width: auto; object-fit: cover; object-position: center; transform: translate(-50%, -50%); } #gridA .button-main, #gridA .button-VENDIDO, .button-container .botao-main, .button-container .botao-off { font-size: clamp(.72rem, 2.8vw, 1rem) !important; padding: 6px 10px !important; height: auto !important; } .txt-principal { font-size: clamp(0.94rem, 3vw, 1rem) !important; margin-bottom: 10px;} }
+    @media (max-width: 768px) { .central-apostas { max-height: 75vh; overflow-y: auto; } header { min-height: 100px; max-height: 118px; padding: 4px; } .header-video { max-height: 100%; width: auto; object-fit: cover; object-position: center; transform: translate(-50%, -50%); } #gridA .button-main, #gridA .button-VENDIDO, .button-container .botao-main, .button-container .botao-off { font-size: clamp(.72rem, 2.8vw, 1rem) !important; padding: 6px 10px !important; height: auto !important; } .txt-destaque { font-size: clamp(1.4rem, 2vw, 1.2rem) !important; margin-bottom: 10px;} }
   </style>
 </head>
 <body>
@@ -118,7 +118,8 @@
     <a href="https://betshoptv.com/contato.html" class="botao-main">FALE<br>CONOSCO</a>
   </div>
   <main>
-    <br>
+        <!-- início CENTRAL DE APOSTAS -->
+    
     <div class="central-apostas">
         <div class="resumo-container" aria-live="polite">
             <textarea id="selected-text" readonly>👁 LISTA de APOSTAS 👁</textarea>
@@ -141,7 +142,7 @@
             <div class="row-actions"><button type="button" class="btn-cancelar" id="btn-cancelar">CANCELAR</button><button type="button" class="btn-proxima" id="btn-proxima">AVANÇAR</button></div>
           </div>
           <div id="etapa3-content" class="painel-apostar">
-            <div class="txt-principal">Escolha a forma de pagamento:</div>
+            <div class="txt-principal" style="text-align: left; margin-bottom: 10px;">Escolha a forma de pagamento:</div>
             <div class="payment-tabs"><button class="btn-left is-selected" type="button" id="btn-pix">PIX</button><button class="btn-left" type="button" id="btn-paypal">PayPal</button></div>
             <div id="pix-content" class="payment-content is-visible">
               <div class="qr-area"><img src="https://betshoptv.com/images/placeholder-pix.png" alt="QR Code PIX"></div>
@@ -164,6 +165,9 @@
           <iframe name="hidden_iframe" style="display:none;"></iframe>
         </div>
     </div>
+    
+            <!-- fim CENTRAL DE APOSTAS -->
+    
     <section class="grid-section">
       <div id="gridA" class="grid-column">
         <div class="button-container">
@@ -346,7 +350,7 @@
       </div>
     </section>
   </main>
-
+<br><br><br><br><br><br><br><br><br>
   <script>
     // --- PIX UTILITY FUNCTIONS ---
     const crc16_ccitt_ffff = (data) => {
