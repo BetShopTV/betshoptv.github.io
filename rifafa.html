@@ -4,115 +4,57 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BetShopTV⦿com</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
-
-    /* ============================
-       === ESTILOS ORIGINAIS =========
-       (Mantidos exatamente como no index0908)
-       ============================ */
-
-    body {
-      margin: 0;
-      font-family: 'Roboto Condensed', sans-serif;
-      background-color: #bebab0;
-      color: #2b2424;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    a {
-      color: #ff0000;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-    
-    header {
-      width: 100%;
-      height: auto;
-      min-height: 25vh;
-      padding: 20px 0;
-      background-color: #ff0000;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .header-video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      max-height: 100%;
-      width: auto;
-      min-width: 100%;
-      object-fit: cover;
-      transform: translate(-50%, -50%);
-      background-color: #ff0000;
-    }
-
-    main {
-      width: 90%;
-      max-width: 1888px;
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    main h1 {
-      font-size: 1.6em;
-      margin-bottom: 600px;
-    }
-
-    main h2 {
-      font-size: 1.8em;
-      margin-bottom: 8px;
-      margin-top: 42px;
-    }
-
-    main h3 {
-      font-size: 1.4em;
-      margin-top: 38px;
-      margin-bottom: 0px;
-    }
-
-    main h4 {
-      font-size: 6.6em;
-      color: #ff0000;
-    }
-
-    main v {
-      color: #ff0000;
-    }
-
-    main p {
-      font-size: 1em;
-      color: #2b2424;
-      margin-top: 4px;
-      margin-bottom: 4px;
-    }
-    
-    .button-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-      margin-right: 10px;
-      margin-left: 10px;
-    }
-
-    .button-container-subitem {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-      margin-right: 10px;
-      margin-left: 10px;
-    }
-
+    :root { --cor-fundo: #bebab0; --cor-texto: #2b2424; --cor-destaque: #ff0000; --cor-branco: #fff; }
+    body { margin: 0; font-family: 'Roboto Condensed', sans-serif; background-color: var(--cor-fundo); color: var(--cor-texto); display: flex; flex-direction: column; align-items: center; }
+    body::-webkit-scrollbar { width: 8px; height: 8px; }
+    body::-webkit-scrollbar-thumb { background-color: #2b2424; border-radius: 2px; }
+    body::-webkit-scrollbar-track { background: #bebab0; }
+    a { color: var(--cor-destaque); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header { width: 100%; min-height: 25vh; padding: 20px 0; background-color: var(--cor-destaque); position: relative; overflow: hidden; }
+    .header-video { position: absolute; top: 50%; left: 50%; max-height: 100%; width: auto; min-width: 100%; object-fit: cover; transform: translate(-50%, -50%); background-color: var(--cor-destaque); }
+    main { width: 90%; max-width: 1888px; margin-top: 20px; text-align: center; }
+    .central-apostas { position: sticky; top: 0; z-index: 999; background: var(--cor-fundo); padding: 10px; border-bottom: 2px solid var(--cor-texto); width: 100%; max-width: 480px; margin: 0 auto; box-sizing: border-box; }
+    .resumo-container { display: flex; justify-content: center; gap: 10px; width: 100%; }
+    textarea#selected-text { flex-grow: 1; max-height: 100px; resize: none; overflow-y: auto; padding: 10px; font-size: 1em; border-radius: 2px; border: 2px solid var(--cor-texto); color: var(--cor-texto); background: var(--cor-fundo); }
+    textarea#selected-text::-webkit-scrollbar { width: 4px; height: 4px; }
+    textarea#selected-text::-webkit-scrollbar-thumb { background-color: #ff0000; border-radius: 2px; }
+    textarea#selected-text::-webkit-scrollbar-track { background: #bebab0; }
+    #total-cost-display { font-size: 0.88em; border-radius: 2px; border: 2px solid var(--cor-texto); color: var(--cor-texto); background: var(--cor-fundo); max-height: 100px; width: 69px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    #total-cost-display .total-label { font-weight: bold; }
+    #total-cost-display .total-value { font-weight: normal; }
+    #total-cost-display #calculated-cost { font-weight: bold; margin-bottom: 6px; }
+    #total-cost-display > .total-label:first-of-type { margin-top: 6px; }
+    #toggle-apostar { width: 100%; color: var(--cor-branco); background-image: url('https://betshoptv.com/images/fofertas.gif'); border: none; border-radius: 2px; padding: 14px; font-size: 1.2em; font-weight: 700; cursor: pointer; margin-top: 10px; }
+    #toggle-apostar:hover { background-image: url('https://betshoptv.com/images/fofertas_hover.gif'); }
+    .apostar-wrapper { width: 100%; margin: 10px auto 0; display: none; }
+    .painel-apostar { background: var(--cor-fundo); border: 2px solid var(--cor-texto); border-radius: 2px; padding: 14px; display: none; }
+    .painel-apostar.is-visible { display: block; }
+    .painel-titulo { font-size: 1.2em; text-align: left; margin-bottom: 12px; }
+    .linha-form { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .linha-form input { flex: 1 1 160px; min-height: 14px; padding: 10px 12px; font-size: 0.94em; border-radius: 2px; outline: none; background: var(--cor-fundo); border: 2px solid var(--cor-texto); color: var(--cor-texto); }
+    .linha-form input::placeholder { color: var(--cor-texto); opacity: .7; }
+    .row-actions, .payment-tabs, .row-submit { display: flex; gap: 10px; margin-top: 14px; }
+    .btn-cancelar, .btn-proxima, .btn-voltar, .botao-apostar, .btn-left, .btn-copiar, .btn-site, .btn-etapa4 { border: none; border-radius: 2px; padding: 0 18px; height: 38px; font-size: 1em; font-weight: bold; cursor: pointer; transition: .2s ease; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
+    .btn-cancelar, .btn-voltar { background: var(--cor-texto); color: #bebab0; border: 2px solid var(--cor-texto); flex-basis: 30%; }
+    .btn-proxima, .botao-apostar, .btn-etapa4 { background: var(--cor-destaque); color: var(--cor-branco); border: 2px solid var(--cor-destaque); flex: 1; }
+    .payment-tabs { margin-bottom: 14px; }
+    .btn-left { flex: 1; border: 2px solid var(--cor-texto); background: var(--cor-texto); color: var(--cor-branco); }
+    .btn-left.is-selected { background: var(--cor-fundo); border-color: var(--cor-destaque); color: var(--cor-destaque); cursor: default; }
+    .payment-content { display: none; flex-direction: column; gap: 10px; align-items: center; }
+    .payment-content.is-visible { display: flex; }
+    .paypal-info { text-align: center; margin: 20px 0; }
+    .success-message { font-size: 1.2em; font-weight: bold; }
+    .qr-area { background: var(--cor-branco); border: 2px solid var(--cor-texto); border-radius: 2px; height: 188px; width: 100%; display:flex; align-items:center; justify-content:center; }
+    .qr-area img { max-width: 180px; max-height: 180px; object-fit: contain; }
+    .btn-copiar, .btn-site { width: 100%; font-size: .88em; border: 2px solid var(--cor-texto); background: var(--cor-texto); color: var(--cor-branco); }
+    .botao-apostar[disabled] { opacity: .7; cursor: not-allowed; }
+    .button-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 10px; }
+    .top-nav-container { padding: 0 50px; }
+    .btn-bg-image { background-image:url('https://betshoptv.com/images/BG-BOTAO.gif'); background-position:50% 52%; }
     .button-main {
       padding: 4px 13px;
       height: 50px;
@@ -158,683 +100,79 @@
       white-space: nowrap;
       transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
-
-    .botao-main, .botao-off, .botao-coluna {
-      padding: 4px 13px;
-      height: 50px;
-      border: 2px solid;
-      color: #ff0000;
-      background-color: #bebab0;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1em;
-      font-weight: bold;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .botao-main:hover {
-      color: #ff0000;
-      border-color: #ff0000;
-      text-decoration: underline;
-    }
-
-    .botao-subitem {
-      padding: 8px 8px;
-      height: 60px;
-      border: 2px solid;
-      color: #ff0000;
-      background-color: #bebab0;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1em;
-      font-weight: bold;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .botao-subitem:hover {
-      color: #bebab0;
-      background-color: #2b2424;
-      border-color: #2b2424;
-      text-decoration: underline;
-    }
-
-    .botao-subitem-off {
-      padding: 8px 8px;
-      height: 60px;
-      border: 2px solid;
-      color: #2b2424;
-      border-color: #2b2424;
-      background-color: #bebab0;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1em;
-      font-weight: bold;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .botao-coluna {
-      color: #bebab0;
-      border-color: #2b2424;
-      background-color: #2b2424;
-    }
-
-    .botao-off {
-      color: #2b2424;
-      border-color: #2b2424;
-    }
-
-    textarea#selected-text::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    textarea#selected-text::-webkit-scrollbar-thumb {
-      background-color: #ff0000;
-      border-radius: 2px;
-    }
-
-    textarea#selected-text::-webkit-scrollbar-track {
-      background: #bebab0;
-    }
-
-    /* Estilos para a seção de introdução PASSO A PASSO */
-    .intro-text-section { }
-
-    .intro-text-section h2 {
-        font-size: 1.8em;
-        color: #2b2424;
-        margin-top: 40px;
-        margin-bottom: 25px;
-        text-align: center;
-    }
-
-    .intro-text-section .step-title {
-        font-weight: bold;
-        font-size: 1.3em;
-        margin-top: 25px;
-        margin-bottom: 10px;
-    }
-    .intro-text-section .step-title:first-of-type {
-        margin-top: 0;
-    }
-
-    .intro-text-section p {
-        font-size: 1.15em;
-        margin-top: 8px;
-        margin-bottom: 8px;
-    }
-
-    .intro-text-section p[style*="margin-left:24px"] {
-        margin-top: 5px;
-        margin-bottom: 10px;
-    }
-
-    .intro-text-section a {
-        color: #ff0000 !important;
-        text-decoration: none;
-    }
-
-    .intro-text-section a:hover {
-        text-decoration: underline;
-    }
-    
-    .lightbox {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(43, 36, 36, 0.69);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .lightbox-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      min-height: 100%;
-      background: transparent;
-      z-index: 1;
-    }
-
-.conteudo {
-  position: relative;
-  width: 50%;
-  height: calc(94% - 48px);
-  border: 2px solid #2b2424;
-  background-image: url('/images/BG-PAP.gif'); 
-  background-color: #bebab0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 24px;
-  gap: 12px;
-  z-index: 2;
-}
-
-    .conteudo img {
-      flex-shrink: 0;
-      height: 100%;
-      object-fit: contain;
-    }
-    .conteudo::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .conteudo::-webkit-scrollbar-thumb {
-      background-color: #2b2424;
-      border-radius: 2px;
-    }
-
-    .conteudo::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    .fechar {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      color: #ff0000;
-      background: none;
-      border: none;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 3;
-    }
-    
-.marquee-container {
-  width: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-  background: transparent;
-  padding: 10px 0;
-  position: relative;
-}
-
-.marquee-track {
-  display: inline-block;
-  white-space: nowrap;
-  animation: scroll-text 88s linear infinite;
-}
-
-.marquee-text {
-  display: inline-block;
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 3em;
-  color: #ff0000;
-  margin-right: 38px;
-}
-
-@keyframes scroll-text {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-/* ============================
-   === FIM DOS ESTILOS ORIGINAIS ==
-   ============================ */
-
-/* =================================
-   === ESTILOS DO FORMULÁRIO DE APOSTAS ===
-   ================================= */
-
-/* --- Caixa de Resumo (Números e Total) --- */
-textarea#selected-text {
-  flex-grow: 1;
-  max-height: 124px;
-  width: 224px;
-  resize: none;
-  overflow-y: auto;
-  padding: 10px;
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 1em;
-  border: 2px solid #2b2424; /* grafite */
-  border-radius: 2px;
-  color: #2b2424; /* grafite */
-  background-color: #bebab0; /* areia */
-}
-
-#total-cost-display {
-  font-size: 1em;
-  color: #2b2424; /* grafite */
-  background-color: #bebab0; /* areia */
-  border: 2px solid #2b2424; /* grafite */
-  border-radius: 2px;
-  min-height: 124px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 100px;
-  font-family: 'Roboto Condensed', sans-serif;
-}
-
-/* --- Seção Principal do Formulário --- */
-.central-apostas {
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  background: #bebab0; /* areia */
-  padding: 10px 0;
-  border-bottom: 2px solid #2b2424; /* grafite */
-  width: 100%; /* Garante que a faixa ocupe toda a largura */
-}
-
-#toggle-apostar {
-  width: 100%;
-  max-width: 524px;
-  color: #ffffff; /* branco */
-  background-image: url('https://betshoptv.com/images/fofertas_hover.gif');
-  border: none;
-  border-radius: 2px;
-  padding: 14px;
-  font-size: 1.2em;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-#toggle-apostar:hover {
-  background-image: url('https://betshoptv.com/images/BG-O.gif');
-}
-
-.apostar-wrapper {
-  max-width: 520px;
-  width: 100%;
-  margin: 10px auto 0;
-  display: none; /* Inicia oculto */
-  flex-direction: column;
-  gap: 12px;
-}
-
-.painel-apostar {
-  display: block;
-  background-color: #bebab0; /* areia */
-  border: 2px solid #2b2424; /* grafite */
-  border-radius: 2px;
-  padding: 14px;
-}
-
-.painel-titulo {
-  font-size: 1.2em;
-  text-align: left;
-  margin: 6px 0 0 2px;
-}
-
-/* --- Campos de Texto Harmonizados --- */
-.linha-form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-.linha-form input {
-  flex: 1 1 160px;
-  min-height: 14px;
-  padding: 10px 12px;
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 0.88em;
-  border-radius: 2px;
-  outline: none;
-  /* Estilo harmonizado */
-  background-color: #bebab0;
-  border: 2px solid #2b2424;
-  color: #2b2424;
-}
-
-.linha-form input::placeholder {
-    color: #2b2424;
-    opacity: 0.7;
-}
-
-
-/* --- Seção de Pagamento --- */
-.pagamento-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-top: 8px;
-}
-
-.pay-card {
-  border: 2px solid #2b2424; /* grafite */
-  background: #2b2424; /* grafite */
-  color: #ffffff; /* branco */
-  border-radius: 2px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.pay-card h5 {
-  margin: 0;
-  padding: 8px 10px;
-  width: 100%;
-  text-align: center;
-  font-size: 1.05em;
-  background: #2b2424; /* grafite */
-  color: #ffffff; /* branco */
-}
-
-.pay-img {
-  width: 100%;
-  background: #ffffff; /* branco */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  height: 180px;
-}
-
-.pay-img img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.btn-secondary {
-  width: 100%;
-  border: 0;
-  border-top: 2px solid #2b2424; /* grafite */
-  background: #2b2424;
-  color: #ffffff; /* branco */
-  padding: 10px 12px;
-  font-weight: 800;
-  font-size: .96em;
-  cursor: pointer;
-}
-
-.btn-secondary:hover {
-  filter: brightness(1.2);
-}
-
-/* --- Botão Principal de Apostar --- */
-.botao-apostar {
-  width: 100%;
-  min-height: 50px;
-  border: 2px solid #ff0000; /* vermelho */
-  border-radius: 2px;
-  background: #ff0000; /* vermelho */
-  color: #ffffff; /* branco */
-  font-weight: 900;
-  font-size: 1.15em;
-  cursor: pointer;
-  transition: .2s ease;
-  margin-top: 8px;
-}
-
-.botao-apostar[disabled] {
-  opacity: .7;
-  cursor: not-allowed;
-}
-
-/* --- Media Queries para o Formulário --- */
-@media (max-width: 560px) {
-  #total-cost-display {
-    width: 96px
-  }
-  .pagamento-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
+    .botao-main, .botao-off { padding: 4px 13px; height: 50px; border: 2px solid; color: #ff0000; background-color: #bebab0; display: inline-flex; justify-content: center; align-items: center; font-size: 1em; font-weight: bold; text-align: center; text-decoration: none; cursor: pointer; }
+    .botao-main:hover { border-color: #ff0000; text-decoration: underline; }
+    .botao-off { color: #2b2424; border-color: #2b2424; }
+    @media (max-width: 768px) { .central-apostas { max-height: 75vh; overflow-y: auto; } header { min-height: 100px; max-height: 118px; padding: 4px; } .header-video { max-height: 100%; width: auto; object-fit: cover; object-position: center; transform: translate(-50%, -50%); } #gridA .button-main, #gridA .button-VENDIDO, .button-container .botao-main, .button-container .botao-off { font-size: clamp(.72rem, 2.8vw, 1rem) !important; padding: 6px 10px !important; height: auto !important; } .txt-principal { font-size: clamp(0.94rem, 3vw, 1rem) !important; margin-bottom: 10px;} }
   </style>
-
-  <!-- =========================================
-       ADICIONEI UM BLOCO DE CSS EXTRA ABAIXO
-       (Somente para ajustar comportamento MOBILE
-       dos botões de RIFAS em #gridA)
-       ========================================= -->
-  <style>
-    /* -------------------------------------------------------
-       RESPONSIVIDADE ESPECÍFICA PARA RIFAS (apenas dentro de #gridA)
-       - Mantém 100% das propriedades desktop.
-       - No mobile (<=768px) reduz progressivamente fonte/altura.
-       - Os botões ficam centralizados, com largura AUTOFIT ao texto.
-       - Não força colunas fixas: quantos couberem na linha, aparecem.
-       - Sem rolagem horizontal: botões quebram de linha (wrap) quando necessário.
-       ------------------------------------------------------- */
-
-    /* Segurança: aplica apenas dentro do grid de rifas */
-    @media (max-width: 768px) {
-      /* garante que apenas o container das rifas seja afetado */
-      #gridA .button-container {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 8px !important;
-        align-items: center !important;
-        margin-left: 8px !important;
-        margin-right: 8px !important;
-      }
-
-      /* botões: largura pelo conteúdo, centralizados, sem quebra de texto */
-      #gridA .button-main,
-      #gridA .button-VENDIDO {
-        display: inline-flex !important;
-        flex: 0 0 auto !important;          /* não força colunas iguais */
-        width: auto !important;             /* largura definida pelo conteúdo */
-        max-width: calc(100% - 20px) !important; /* evita overflow extremo */
-        white-space: nowrap !important;     /* nunca quebrar a linha interna do texto */
-        font-size: clamp(0.72rem, 2.8vw, 1rem) !important; /* reduz progressivamente */
-        padding: 6px 10px !important;       /* reduz espaçamentos para caber mais botões */
-        height: auto !important;
-        box-sizing: border-box !important;
-        text-align: center !important;
-      }
-
-      /* Se um botão for muito longo, permitir truncamento com elipse opcional
-         — mas apenas como último recurso. Mantive white-space:nowrap; se preferir
-         remover truncamento, comente a regra abaixo. */
-      #gridA .button-main.long,
-      #gridA .button-VENDIDO.long {
-        max-width: 100% !important;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      /* Evita rolagem horizontal no gridA */
-      #gridA {
-        overflow-x: hidden !important;
-      }
-
-      /* Mantém botões do MENU (fora do #gridA) funcionando como já estão no index0908 */
-      /* (Não alterei .button-container global para preservar menu idêntico ao desktop/mobile original) */
-    }
-    
-    /* -------------------------------------------------------
-   RESPONSIVIDADE PARA BOTÕES DE MENU
-   (aplica a mesma lógica dos botões de rifas)
-   ------------------------------------------------------- */
-@media (max-width: 768px) {
-  .button-container {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    align-items: center !important;
-    margin-left: 8px !important;
-    margin-right: 8px !important;
-  }
-
-  .button-container .botao-main,
-  .button-container .botao-off {
-    display: inline-flex !important;
-    flex: 0 0 auto !important;
-    width: auto !important;
-    max-width: calc(100% - 20px) !important;
-    white-space: nowrap !important;
-    font-size: clamp(0.72rem, 2.8vw, 1rem) !important;
-    padding: 6px 10px !important;
-    height: auto !important;
-    box-sizing: border-box !important;
-    text-align: center !important;
-  }
-        header {
-        min-height: 100px;
-        max-height: 118px;
-        padding: 4px 4px;
-      }
-
-      .header-video {
-        max-height: 100%;
-        width: auto;
-        object-fit: cover;
-        object-position: center;
-        transform: translate(-50%, -50%);
-      }
-}
-  </style>
-
 </head>
 <body>
   <header>
-    <a href="https://betshoptv.com"><video class="header-video" autoplay loop muted playsinline>
-     <source src="https://betshoptv.com/images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
-      Seu navegador não suporta a tag de vídeo.
-    </video></a>
+    <a href="https://betshoptv.com"><video class="header-video" autoplay loop muted playsinline><source src="https://betshoptv.com/images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4"></video></a>
   </header>
-
-  <!-- BOTÕES MENU (exatamente como no index0908) -->
-
-  <div class="button-container" style="padding: 0 50px;">
-    <a href="como.html" class="botao-main">COMO<br>FUNCIONA?</a>
-    <div class="botao-off"
-     style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
-            background-position: 50% 52%;">APOSTE<br>RIFAS</div>
-   <a href="ofertas.html"
-      class="botao-main"
-      style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
-      background-position: 50% 52%;">APOSTE<br>OFERTAS</a>
-    <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
-    <a href="contato.html" class="botao-main">FALE<br>CONOSCO</a>
+  <div class="button-container top-nav-container">
+    <a href="https://betshoptv.com/como.html" class="botao-main">COMO<br>FUNCIONA?</a>
+    <div class="botao-off btn-bg-image">APOSTE<br>RIFAS</div>
+    <a href="https://betshoptv.com/ofertas.html" class="botao-main btn-bg-image">APOSTE<br>OFERTAS</a>
+    <a href="https://betshoptv.com/galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
+    <a href="https://betshoptv.com/contato.html" class="botao-main">FALE<br>CONOSCO</a>
   </div>
-
-
   <main>
-      
-    <br><center>
-    <div style="
-  max-width: 800px;
-  width: 100%;
-  height: auto;
-  overflow: hidden;
-  box-sizing: border-box;
-  background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');
-  background-color: #ff0000;
-  border: 2px solid #ff0000;
-">
-<img 
-  src="https://betshoptv.com/images/COMO-CSA1b.png"
-  class="imagem-interativa"
-  data-serie="ETM"
-  data-index="0"
-  data-sequencia="https://betshoptv.com/images/COMO-CSA1b.png,https://betshoptv.com/images/COMO-CSA2d.png"
-  style="cursor: pointer; margin-bottom: -4px; width: 100%; background-image: url('https://betshoptv.com/images/BG-COMO.gif');">
-  
-</div></center>
-
     <br>
-
-    <!-- INÍCIO - CENTRAL DE APOSTAS -->
-   <div class="central-apostas">
-    <center>
-      <div style="display:flex;justify-content:center;margin-top:10px;width:100%;">
-        <div style="display:flex;max-width:100%;width:459px;gap:10px;align-items:stretch;">
-          <textarea id="selected-text" readonly>👁 LISTA de APOSTAS 👁</textarea>
-          <div id="total-cost-display">
-            <p style="margin:0 0 5px 0;font-weight:bold;">QTD.</p>
-            <p id="selected-count" style="margin:0 0 13px 0;font-size:1.2em;font-weight:bold;">0</p>
-            <p style="margin:0 0 5px 0;font-weight:bold;">TOTAL</p>
-            <p id="calculated-cost" style="margin:0;font-size:1.5em;font-weight:bold;">$0</p>
-          </div>
+    <div class="central-apostas">
+        <div class="resumo-container" aria-live="polite">
+            <textarea id="selected-text" readonly>👁 LISTA de APOSTAS 👁</textarea>
+            <div id="total-cost-display">
+              <span class="total-label">QTD.:</span>
+              <span id="selected-count" class="total-value">0</span>
+              <span class="total-label">TOTAL</span>
+              <span id="calculated-cost">R$ 0,00</span>
+            </div>
         </div>
-      </div>
-
-      <button id="toggle-apostar">APOSTE AQUI!</button>
-
-      <!-- FORMULARIO (FormSubmit) -->
-      <div class="apostar-wrapper" id="apostar-wrapper">
-        <form id="form-aposta"
-              class="painel-apostar"
-              action="https://formsubmit.co/betshoptv@gmail.com"
-              method="POST"
-              target="hidden_iframe">
-
-          <div class="painel-titulo">Preencha os campos abaixo:</div>
-          <div class="linha-form"><input id="nome" name="NOME" type="text" placeholder="NOME" required></div>
-          <div class="linha-form"><input id="email" name="E-MAIL" type="email" placeholder="E-MAIL" required></div>
-          <div class="linha-form"><input id="whats" name="TELEFONE/WHATSAPP" type="tel" placeholder="Telefone / WhatsApp" required></div>
-
-          <div class="painel-titulo">Escolha a forma de pagamento:</div>
-          <div class="pagamento-grid">
-            <div class="pay-card">
-              <h5>PIX</h5>
-              <div class="pay-img"><img src="https://betshoptv.com/images/placeholder-pix.png"></div>
-              <button type="button" id="btn-copiar-pix" class="btn-secondary">COPIE O PIX COPIA E COLA</button>
+        <button id="toggle-apostar">APOSTE AQUI!</button>
+        <div class="apostar-wrapper" id="apostar-wrapper">
+          <div id="etapa2-content" class="painel-apostar">
+            <div class="txt-principal" style="text-align: left; margin-bottom: 10px;">Preencha os campos abaixo:</div>
+            <div class="linha-form"><input id="nome" name="NOME" type="text" placeholder="Nome" required form="form-aposta"></div>
+            <div class="linha-form">
+              <input id="email" name="E-MAIL" type="email" placeholder="E-mail" required form="form-aposta">
+              <input id="whats" name="TELEFONE/WHATSAPP" type="tel" placeholder="Telefone / WhatsApp" form="form-aposta">
             </div>
-            <div class="pay-card">
-              <h5>PayPal</h5>
-              <div class="pay-img"><img src="https://betshoptv.com/images/placeholder-paypal.png"></div>
-              <a class="btn-secondary" href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" target="_blank">PAGUE VIA PayPal</a>
-            </div>
+            <div class="row-actions"><button type="button" class="btn-cancelar" id="btn-cancelar">CANCELAR</button><button type="button" class="btn-proxima" id="btn-proxima">AVANÇAR</button></div>
           </div>
-
-          <input type="hidden" id="hidden-apostas" name="LISTA de APOSTAS" value="">
-          <input type="hidden" id="hidden-qtd" name="QTD." value="0">
-          <input type="hidden" id="hidden-total" name="TOTAL" value="$0">
-          <input type="hidden" name="_subject" id="hidden-subject" value="APOSTA">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
-
-          <button id="btn-apostar" class="botao-apostar" type="submit">APOSTAR!</button>
-        </form>
-        <iframe name="hidden_iframe" style="display:none;"></iframe>
-      </div>
-    </center>
-   </div>
-   <!-- FIM - CENTRAL DE APOSTAS -->
-
-    <section style="text-align: left; margin-top: 30px; max-width: 100%; margin-left: auto; margin-right: auto; color: #2b2424; font-size: 1em; line-height: 1.5; font-family: 'Roboto Condensed', sans-serif;">
-      <!-- Mantive a COLUNA A e demais elementos originais, mas reduzi a lista de rifas aqui para 10 itens conforme solicitado -->
-      
-      
+          <div id="etapa3-content" class="painel-apostar">
+            <div class="txt-principal">Escolha a forma de pagamento:</div>
+            <div class="payment-tabs"><button class="btn-left is-selected" type="button" id="btn-pix">PIX</button><button class="btn-left" type="button" id="btn-paypal">PayPal</button></div>
+            <div id="pix-content" class="payment-content is-visible">
+              <div class="qr-area"><img src="https://betshoptv.com/images/placeholder-pix.png" alt="QR Code PIX"></div>
+              <button class="btn-copiar" type="button" id="btn-copiar-pix">COPIA e COLA</button>
+            </div>
+            <div id="paypal-content" class="payment-content">
+            <div class="qr-area"><img src="https://betshoptv.com/images/PayPal_QR Code.png" alt="QR Code PayPal"></div>
+                <button class="btn-site" type="button" id="btn-site-paypal">Pagar com PayPal</button>
+            </div>
+            <div class="row-submit"><button type="button" class="btn-voltar" id="btn-voltar">VOLTAR</button><button type="submit" class="botao-apostar" id="btn-apostar" form="form-aposta">APOSTAR!</button></div>
+          </div>
+          <div id="etapa4-content" class="painel-apostar centered">
+            <p class="success-message" style="margin-top: -6px;"><span class="txt-principal"><span style="color: #ff0000; font-size: 1.8em; font-weight: 700;">APOSTA ENVIADA</span><br><span style="font-weight: normal;">Em até 37 horas você receberá<br>o comprovante por e-mail ou WhatsApp.</span><br><br>Agradecemos a participação e desejamos<br><span style="color: #ff0000; font-size: 1.8em; font-weight: 700;">SORTE NO SORTEIO!</span></span></p>
+            <button type="button" class="btn-etapa4" id="btn-recomecar">CONCLUIR</button>
+          </div>
+          <form id="form-aposta" action="https://formsubmit.co/betshoptv@gmail.com" method="POST" target="hidden_iframe" style="display: none;">
+            <input type="hidden" id="hidden-apostas" name="LISTA de APOSTAS" value=""><input type="hidden" id="hidden-qtd" name="QTD." value="0"><input type="hidden" id="hidden-total" name="TOTAL" value="$0">
+            <input type="hidden" name="_subject" id="hidden-subject" value="APOSTA"><input type="hidden" name="_template" value="table"><input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
+          </form>
+          <iframe name="hidden_iframe" style="display:none;"></iframe>
+        </div>
+    </div>
+    <section class="grid-section">
       <div id="gridA" class="grid-column">
-        <div style="margin-top: 8px;" class="button-container">
-          <!-- APENAS 10 BOTÕES (A001..A010) conforme pedido -->
-          
-  <span style="margin-right: 18px; margin-top: 6px; font-family: 'Roboto Condensed', sans-serif; font-size: 1.2em;"><strong><font color="#ff0000">CHAVE PIX</font> betshoptv@gmail.com</strong>
-  <br>ou efetue o pagamento <strong>via <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" target="_blank">PayPal</a></strong></span>
-
-<button class="button-VENDIDO" style="margin-left: 18px; margin-top: 8px; margin-bottom: 8px; background-color: #bebab0; color: #2b2424;" data-hover-color="#FF1493" data-id="X003">DISPONÍVEL</button>
-<button class="button-VENDIDO" style="margin-right: 18px; margin-top: 8px; margin-bottom: 8px;">INDISPONÍVEL</button>
-</div><br><br>
- <div class="button-container">
-<button class="button-VENDIDO" data-hover-color="#FF4500" data-id="X001">X001 / 40 graus</button>
+        <div class="button-container">
+<button class="button-VENDIDO" style="border: 0px; background-color:#bebab0; color:#2b2424; font-weight: normal; cursor: default;">LEGENDA:</button>
+          <button class="button-main" style="cursor: default;" disabled>DISPONÍVEL</button>
+          <button class="button-VENDIDO" style="cursor: default;" disabled>INDISPONÍVEL</button>
+        </div><br><br>
+        <div class="button-container">
+          <button class="button-VENDIDO" data-hover-color="#FF4500" data-id="X001">X001 / 40 graus</button>
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#B22222" data-id="X002">X002 / 5ª avenida</button>
 <button class="button-VENDIDO" data-hover-color="#FF1493" data-id="X003">X003 / Acionando o contatinho</button>
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF69B4" data-id="X004">X004 / Ai, amiga</button>
@@ -1009,233 +347,306 @@ textarea#selected-text {
     </section>
   </main>
 
-
-<!-- INÍCIO MODIFICAÇÃO: Script de rotação de imagens -->
-<script>
-  document.querySelectorAll('.imagem-interativa').forEach(img => {
-    img.addEventListener('click', () => {
-      const sequencia = img.dataset.sequencia.split(',');
-      let indexAtual = parseInt(img.dataset.index, 10) || 0;
-
-      indexAtual = (indexAtual + 1) % sequencia.length;
-
-      img.src = sequencia[indexAtual];
-      img.dataset.index = indexAtual;
-    });
-  });
-</script>
-<!-- FIM MODIFICAÇÃO: Script de rotação de imagens -->
-
-
-  <!-- Funções lightbox e inicialização de hash (mantidas) -->
   <script>
-    function abrirLightbox(idLightbox, idImagem = null) {
-      const lightbox = document.getElementById(idLightbox);
-      lightbox.style.display = 'flex';
-      if (idImagem) {
-        const imagem = document.getElementById(idImagem);
-        if (imagem) {
-          imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    // --- PIX UTILITY FUNCTIONS ---
+    const crc16_ccitt_ffff = (data) => {
+        let crc = 0xFFFF;
+        for (let i = 0; i < data.length; i++) {
+            let x = ((crc >> 8) ^ data.charCodeAt(i)) & 0xff;
+            x ^= x >> 4;
+            crc = (crc << 8) ^ (x << 12) ^ (x << 5) ^ x;
         }
-      }
-    }
+        crc &= 0xFFFF;
+        return crc.toString(16).toUpperCase().padStart(4, '0');
+    };
 
-    function fecharLightbox(idLightbox) {
-      const lightbox = document.getElementById(idLightbox);
-      lightbox.style.display = 'none';
-    }
+    const gerarBRCode = (valor) => {
+        const chavePix = "betshoptv@gmail.com";
+        const nomeBeneficiario = "BET SHOP TV";
+        const cidadeBeneficiario = "SAO PAULO";
+        const txid = "***";
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        fecharLightbox('PAP');
-      }
-    });
+        const nome = nomeBeneficiario.substring(0, 25).toUpperCase().replace(/[^A-Z0-9 ]/g, '');
+        const cidade = cidadeBeneficiario.substring(0, 15).toUpperCase().replace(/[^A-Z0-9 ]/g, '');
+        const valorFormatado = valor.toFixed(2);
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const hash = window.location.hash.substring(1);
-      if (hash && document.getElementById(hash)) {
-        abrirLightbox('PAP', hash);
-      }
-    });
-  </script>
+        const formatarTLV = (id, valor) => {
+            const len = valor.length.toString().padStart(2, '0');
+            return `${id}${len}${valor}`;
+        };
 
-  <!-- SCRIPT PRINCIPAL: Seleção, Formulário e Interatividade -->
-  <script>
-    // --- Elementos do DOM ---
-    const gridA = document.getElementById('gridA');
-    const selectionBox = document.getElementById('selected-text');
-    
-    // Elementos do formulário
-    const form = document.getElementById('form-aposta');
-    const nomeInput = document.getElementById('nome');
-    const hiddenApostas = document.getElementById('hidden-apostas');
-    const hiddenQtd = document.getElementById('hidden-qtd');
-    const hiddenTotal = document.getElementById('hidden-total');
-    const hiddenSubject = document.getElementById('hidden-subject');
-    const btnApostar = document.getElementById('btn-apostar');
-    
-    let selectedItems = [];
+        let payload = '000201';
+        payload += formatarTLV('26', `0014BR.GOV.BCB.PIX01${chavePix.length.toString().padStart(2, '0')}${chavePix}`);
+        payload += '52040000';
+        payload += '5303986';
+        payload += formatarTLV('54', valorFormatado);
+        payload += '5802BR';
+        payload += formatarTLV('59', nome);
+        payload += formatarTLV('60', cidade);
+        payload += formatarTLV('62', formatarTLV('05', txid));
+        payload += '6304';
 
-    // --- Funções Auxiliares ---
+        const checksum = crc16_ccitt_ffff(payload);
+        return payload + checksum;
+    };
 
-    // Função para obter cor de contraste (versão compacta de rifafa.html)
-    function getContrastColor(hex){
-      function hexToRgb(h){ const x=parseInt(h.replace('#',''),16); return [(x>>16)&255,(x>>8)&255,x&255]; }
-      function L([r,g,b]){ const f=v=>{v/=255; return v<=.03928? v/12.92: Math.pow((v+.055)/1.055,2.4)}; return .2126*f(r)+.7152*f(g)+.0722*f(b); }
-      try{
-        const bgL=L(hexToRgb(hex));
-        const opts=['#ffffff','#ff0000','#bebaba','#2b2424'];
-        return opts.sort((a,b)=>Math.abs(bgL-L(hexToRgb(b)))-Math.abs(bgL-L(hexToRgb(a))))[0];
-      }catch(e){ return '#ffffff';}
-    }
 
-    // Função para calcular o custo total (regra par/ímpar)
-    function calculateTotalCost(n) {
-        if (n <= 0) return 0;
-        return (n % 2 === 0) ? n * 25 : ((n - 1) * 25) + 30;
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- ELEMENT SELECTORS ---
+        const selectionBox = document.getElementById("selected-text");
+        const toggleBtn = document.getElementById("toggle-apostar");
+        const wrapper = document.getElementById("apostar-wrapper");
+        const form = document.getElementById("form-aposta");
+        const nomeInput = document.getElementById("nome");
+        const hiddenApostas = document.getElementById("hidden-apostas");
+        const hiddenQtd = document.getElementById("hidden-qtd");
+        const hiddenTotal = document.getElementById("hidden-total");
+        const hiddenSubject = document.getElementById("hidden-subject");
+        const hiddenPagamento = document.getElementById("hidden-pagamento");
+        const etapa2Content = document.getElementById("etapa2-content");
+        const etapa3Content = document.getElementById("etapa3-content");
+        const etapa4Content = document.getElementById("etapa4-content");
+        const btnCancelar = document.getElementById("btn-cancelar");
+        const btnProxima = document.getElementById("btn-proxima");
+        const btnVoltar = document.getElementById("btn-voltar");
+        const btnApostar = document.getElementById("btn-apostar");
+        const btnRecomecar = document.getElementById("btn-recomecar");
+        const btnPix = document.getElementById("btn-pix");
+        const btnPaypal = document.getElementById("btn-paypal");
+        const pixContent = document.getElementById("pix-content");
+        const paypalContent = document.getElementById("paypal-content");
+        const btnCopiarPix = document.getElementById("btn-copiar-pix");
+        const btnSitePaypal = document.getElementById("btn-site-paypal");
+        const qrArea = document.querySelector(".qr-area");
 
-    // --- Função Principal de Atualização ---
+        // --- STATE VARIABLES ---
+        let selectedItems = [];
+        let qrCodeInstance = null;
+        let pixPayload = "";
 
-    // Atualiza a textarea, os totais e os campos ocultos do formulário
-    function updateSelection() {
-      // Atualiza a textarea
-      selectionBox.value = selectedItems.length ? selectedItems.join('\n') : '👁 LISTA de APOSTAS 👁';
-      
-      const qtd = selectedItems.length;
-      const total = calculateTotalCost(qtd);
+        // --- CORE FUNCTIONS ---
+        const getContrastColor = (hexColor) => {
+            try {
+                if (hexColor.startsWith('#')) hexColor = hexColor.slice(1);
+                const r = parseInt(hexColor.substring(0, 2), 16);
+                const g = parseInt(hexColor.substring(2, 4), 16);
+                const b = parseInt(hexColor.substring(4, 6), 16);
+                const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+                return (yiq >= 128) ? '#2b2424' : '#fff';
+            } catch (e) {
+                return '#2b2424';
+            }
+        };
 
-      // Atualiza os displays de Qtd e Total
-      document.getElementById('selected-count').textContent = qtd;
-      document.getElementById('calculated-cost').textContent = `$${total}`;
+        const calculateTotalCost = (count) => {
+            if (count <= 0) return 0;
+            return count % 2 === 0 ? 25 * count : 25 * (count - 1) + 30;
+        };
 
-      // Preenche os campos ocultos que serão enviados por e-mail
-      if (hiddenApostas) hiddenApostas.value = selectedItems.join('\n');
-      if (hiddenQtd) hiddenQtd.value = String(qtd);
-      if (hiddenTotal) hiddenTotal.value = `$${total}`;
+        const updateSelection = () => {
+            const count = selectedItems.length;
+            const total = calculateTotalCost(count);
+            const totalFormatado = `R$ ${total.toFixed(2).replace('.', ',')}`;
 
-      // Atualiza o assunto do e-mail dinamicamente
-      if (hiddenSubject) {
-        const nome = (nomeInput?.value || '').trim() || 'Cliente';
-        hiddenSubject.value = `APOSTA / ${nome} / $${total}`;
-      }
-    }
+            // Update visible summary
+            selectionBox.value = count ? selectedItems.map(item => item.label).join("\n") : "👁 LISTA de APOSTAS 👁";
+            document.getElementById("selected-count").textContent = count;
+            document.getElementById("calculated-cost").textContent = totalFormatado;
 
-    // --- Event Listeners ---
+            // Update hidden form fields
+            hiddenApostas.value = selectedItems.map(item => item.label).join("\n");
+            hiddenQtd.value = String(count);
+            hiddenTotal.value = totalFormatado;
+            const nomeApostador = (nomeInput?.value || "").trim() || "Cliente";
+            hiddenSubject.value = `APOSTA / ${nomeApostador} / ${totalFormatado}`;
 
-    // 1. Event Listeners para cada botão de rifa (hover e clique)
-    document.querySelectorAll('#gridA .button-container button').forEach(button => {
-      const hoverColor = button.dataset.hoverColor;
-      let fadeTimeout = null;
+            // Generate and display dynamic PIX
+            if (total > 0) {
+                pixPayload = gerarBRCode(total);
+                if (qrCodeInstance) {
+                    qrCodeInstance.clear();
+                    qrCodeInstance.makeCode(pixPayload);
+                } else {
+                    qrArea.innerHTML = ''; // Clear placeholder image
+                    qrCodeInstance = new QRCode(qrArea, {
+                        text: pixPayload,
+                        width: 180,
+                        height: 180,
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
+                }
+            } else {
+                qrArea.innerHTML = '<img src="https://betshoptv.com/images/placeholder-pix.png" alt="QR Code PIX">';
+                pixPayload = "";
+                if(qrCodeInstance) qrCodeInstance.clear();
+                qrCodeInstance = null;
+            }
+        };
 
-      // Efeito de hover (mantido de rifas.html)
-      button.addEventListener('mouseover', () => {
-        if (button.classList.contains('button-VENDIDO')) return;
-        clearTimeout(fadeTimeout);
-        if (hoverColor) {
-          button.style.backgroundColor = hoverColor;
-          button.style.color = getContrastColor(hoverColor);
-          button.style.borderColor = hoverColor;
-        } else {
-          button.style.backgroundColor = '#ff0000';
-          button.style.color = '#ffffff';
-          button.style.borderColor = '#ff0000';
-        }
-      });
+        const showStep = (stepToShow) => {
+            [etapa2Content, etapa3Content, etapa4Content].forEach(step => {
+                if (step) step.classList.toggle("is-visible", step === stepToShow);
+            });
+        };
 
-      // Efeito de fade-out no mouseout (mantido de rifas.html)
-      button.addEventListener('mouseout', () => {
-        if (button.classList.contains('button-VENDIDO')) return;
-        clearTimeout(fadeTimeout);
-        const randomDelay = Math.floor(Math.random() * (1802 - 188 + 1)) + 188;
-        fadeTimeout = setTimeout(() => {
-          if (!button.classList.contains('active')) {
-            button.style.backgroundColor = '';
-            button.style.color = '';
-            button.style.borderColor = '';
-          }
-        }, randomDelay);
-      });
+        // --- EVENT LISTENERS ---
+        document.querySelectorAll("#gridA .button-main").forEach(button => {
+            button.setAttribute('aria-pressed', 'false');
+            const hoverColor = button.dataset.hoverColor;
+            let timeoutId = null;
 
-      // Lógica de clique para selecionar/deselecionar
-      button.addEventListener('click', () => {
-        if (button.classList.contains('button-VENDIDO')) return;
-        
-        clearTimeout(fadeTimeout);
-        const value = button.dataset.id || button.textContent.trim(); // Usa data-id como em rifafa
-        const index = selectedItems.indexOf(value);
+            button.addEventListener("mouseover", () => {
+                if (button.classList.contains("button-VENDIDO")) return;
+                clearTimeout(timeoutId);
+                button.style.backgroundColor = hoverColor || "#ff0000";
+                button.style.color = getContrastColor(hoverColor || "#ff0000");
+            });
 
-        if (index > -1) { // Deselecionar
-          selectedItems.splice(index, 1);
-          button.classList.remove('active');
-          button.style.backgroundColor = '';
-          button.style.color = '';
-          button.style.borderColor = '';
-        } else { // Selecionar
-          selectedItems.push(value);
-          button.classList.add('active');
-          if (hoverColor) {
-            button.style.backgroundColor = hoverColor;
-            button.style.color = getContrastColor(hoverColor);
-            button.style.borderColor = hoverColor;
-          } else {
-            button.style.backgroundColor = '#ff0000';
-            button.style.color = '#ffffff';
-            button.style.borderColor = '#ff0000';
-          }
-        }
-        // Chama a função de atualização principal
+            button.addEventListener("mouseout", () => {
+                if (button.classList.contains("button-VENDIDO")) return;
+                timeoutId = setTimeout(() => {
+                    if (!button.classList.contains("active")) {
+                        button.style.backgroundColor = "";
+                        button.style.color = "";
+                    }
+                }, 200);
+            });
+
+            button.addEventListener("click", () => {
+                if (button.classList.contains("button-VENDIDO")) return;
+                const item = { id: button.dataset.id, label: button.textContent.trim() };
+                const itemIndex = selectedItems.findIndex(i => i.id === item.id);
+
+                if (itemIndex > -1) {
+                    selectedItems.splice(itemIndex, 1);
+                    button.classList.remove("active");
+                    button.setAttribute('aria-pressed', 'false');
+                } else {
+                    selectedItems.push(item);
+                    button.classList.add("active");
+                    button.setAttribute('aria-pressed', 'true');
+                }
+                updateSelection();
+            });
+        });
+
+        document.querySelectorAll("#gridA .button-VENDIDO").forEach(b => b.setAttribute('aria-disabled', 'true'));
+
+        toggleBtn.addEventListener("click", () => {
+            toggleBtn.style.display = "none";
+            wrapper.style.display = "block";
+            showStep(etapa2Content);
+            setTimeout(() => wrapper.classList.add("is-visible"), 10);
+        });
+
+        btnCancelar.addEventListener("click", () => {
+            wrapper.classList.remove("is-visible");
+            setTimeout(() => {
+                wrapper.style.display = "none";
+                toggleBtn.style.display = "block";
+            }, 300);
+        });
+
+        btnProxima.addEventListener("click", () => {
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            showStep(etapa3Content);
+        });
+
+        btnVoltar.addEventListener("click", () => showStep(etapa2Content));
+
+        btnPix.addEventListener("click", () => {
+            btnPix.classList.add("is-selected");
+            btnPaypal.classList.remove("is-selected");
+            pixContent.classList.add("is-visible");
+            paypalContent.classList.remove("is-visible");
+            hiddenPagamento.value = "PIX";
+        });
+
+        btnPaypal.addEventListener("click", () => {
+            btnPaypal.classList.add("is-selected");
+            btnPix.classList.remove("is-selected");
+            paypalContent.classList.add("is-visible");
+            pixContent.classList.remove("is-visible");
+            hiddenPagamento.value = "PayPal";
+        });
+
+        btnCopiarPix.addEventListener("click", e => {
+            const button = e.currentTarget;
+            if (!pixPayload) return;
+
+            const fallbackCopy = (text) => {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.top = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    button.textContent = "PIX COPIADO!";
+                } catch (err) {
+                    button.textContent = "ERRO AO COPIAR";
+                }
+                document.body.removeChild(textArea);
+                setTimeout(() => { button.textContent = "COPIA e COLA"; }, 3000);
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(pixPayload).then(() => {
+                    button.textContent = "PIX COPIADO!";
+                    setTimeout(() => { button.textContent = "COPIA e COLA"; }, 3000);
+                }).catch(() => fallbackCopy(pixPayload));
+            } else {
+                fallbackCopy(pixPayload);
+            }
+        });
+
+        btnSitePaypal.addEventListener("click", () => window.open("https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G", "_blank", "noopener"));
+
+        form.addEventListener("submit", e => {
+            if (selectedItems.length === 0) {
+                e.preventDefault();
+                alert("Selecione ao menos 1 número.");
+                return;
+            }
+            updateSelection();
+            btnApostar.disabled = true;
+            btnApostar.textContent = "ENVIANDO...";
+
+            setTimeout(() => {
+                btnApostar.textContent = "APOSTA ENVIADA!";
+                setTimeout(() => {
+                    showStep(etapa4Content);
+                }, 1500);
+            }, 1000);
+        });
+
+        btnRecomecar.addEventListener('click', () => {
+            selectedItems = [];
+            document.querySelectorAll("#gridA .button-main.active").forEach(b => {
+                b.classList.remove("active");
+                b.setAttribute('aria-pressed', 'false');
+                b.style.backgroundColor = "";
+                b.style.color = "";
+            });
+            updateSelection();
+            form.reset();
+            showStep(null);
+            wrapper.style.display = "none";
+            wrapper.classList.remove("is-visible");
+            toggleBtn.style.display = "block";
+            btnApostar.disabled = false;
+            btnApostar.textContent = "APOSTAR!";
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        // Initial state
         updateSelection();
-      });
     });
-
-    // 2. Event Listener para o botão de toggle do formulário
-    document.getElementById('toggle-apostar')?.addEventListener('click', () => {
-      const wrap = document.getElementById('apostar-wrapper');
-      if (wrap) {
-        const isVisible = wrap.style.display === 'flex';
-        wrap.style.display = isVisible ? 'none' : 'flex';
-      }
-    });
-
-    // 3. Event Listener para o botão de copiar PIX
-    document.getElementById('btn-copiar-pix')?.addEventListener('click', (e) => {
-      const payload = "00020126410014BR.GOV.BCB.PIX0119betshoptv@gmail.com5204000053039865911BET SHOP TV6009SAO PAULO62070503***63048AB7";
-      const btn = e.currentTarget;
-      navigator.clipboard.writeText(payload).then(() => {
-        btn.textContent = 'PIX COPIADO!';
-        setTimeout(() => { btn.textContent = 'COPIE O PIX COPIA E COLA'; }, 5000);
-      }).catch(() => alert('Falha ao copiar o código PIX.'));
-    });
-
-    // 4. Event Listener para atualizar o assunto do e-mail ao digitar o nome
-    nomeInput?.addEventListener('input', updateSelection);
-
-    // 5. Event Listener para o envio do formulário
-    form?.addEventListener('submit', (ev) => {
-      if (selectedItems.length === 0) {
-        ev.preventDefault();
-        alert('Selecione ao menos 1 número para apostar.');
-        return;
-      }
-      updateSelection(); // Garante que os dados estão atualizados antes de enviar
-
-      if (btnApostar) {
-        btnApostar.disabled = true;
-        btnApostar.textContent = 'ENVIANDO APOSTA...';
-        // O FormSubmit redirecionará ou o iframe lidará com isso.
-        // Podemos reativar o botão após um tempo caso o usuário não saia da página.
-        setTimeout(() => {
-          btnApostar.textContent = 'APOSTA ENVIADA!';
-        }, 5000);
-      }
-    });
-
-    // --- Inicialização ---
-    // Chama a função de atualização uma vez no carregamento da página
-    updateSelection();
   </script>
-
-  <br><br><br><br><br><br>
 </body>
 </html>
