@@ -655,5 +655,56 @@
         updateSelection();
     });
   </script>
+  
+  <script>
+  // 1) Cole a URL da implantação do seu Apps Script aqui:
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwWEQ3qfNqW23L4XC9EgE_NCvuEwFbSsksDPbMRpFlD8-6bUtcXXh-YQqqO8KUbryaDoQ/exec';
+
+  (function(){
+    const form = document.getElementById('form-aposta');
+    if(!form) return;
+
+    // Utilidades para ler campos já existentes na página
+    const $ = (id) => document.getElementById(id);
+    const getVal = (id, def='') => ($(id)?.value || def).trim();
+
+    // Descobre forma de pagamento pela aba selecionada na ETAPA 3 (mantém seu design/fluxo)
+    function formaPagamentoAtual(){
+      // Se existir a classe "is-selected" nos botões PIX/PayPal, usamos isso
+      const pixSel = document.getElementById('btn-pix')?.classList.contains('is-selected');
+      const paypalSel = document.getElementById('btn-paypal')?.classList.contains('is-selected');
+      if (paypalSel) return 'PayPal';
+      if (pixSel) return 'PIX';
+      // fallback
+      return 'PIX';
+    }
+
+    // No submit, enviamos para FormSubmit (como sempre) e também para o GAS (backup)
+    form.addEventListener('submit', function(){
+      try{
+        // Monta os dados exatamente com os mesmos nomes já usados no e-mail/FormSubmit
+        const fd = new FormData();
+        fd.append('NOME', getVal('nome'));
+        fd.append('E-MAIL', getVal('email'));
+        fd.append('TELEFONE/WHATSAPP', getVal('whats'));
+        fd.append('LISTA de APOSTAS', getVal('hidden-apostas'));
+        fd.append('QTD.', getVal('hidden-qtd','0'));
+        fd.append('TOTAL', getVal('hidden-total'));
+        fd.append('_subject', getVal('hidden-subject')); // "APOSTA / [NOME] / [TOTAL]" já é montado no seu JS
+        fd.append('FORMA', formaPagamentoAtual());
+
+        // Envio "fire-and-forget" (não bloqueia o FormSubmit nem muda a UI)
+        fetch(GAS_URL, { method:'POST', body: fd, mode:'no-cors' });
+
+        // Fallback redundante por GET (caso o POST seja bloqueado por alguma rede)
+        const qs = new URLSearchParams([...fd.entries()]).toString();
+        (new Image()).src = GAS_URL + '?' + qs + '&t=' + Date.now();
+      }catch(err){
+        console.warn('Backup em planilha falhou (não afeta o e-mail):', err);
+      }
+    }, { passive: true });
+  })();
+</script>
+
 </body>
 </html>
