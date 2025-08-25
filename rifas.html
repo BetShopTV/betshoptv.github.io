@@ -705,6 +705,139 @@
     }, { passive: true });
   })();
 </script>
+  
+<script>
+(function(){
+  // === CONFIG ===
+  const LOCKS_URL  = 'https://script.google.com/macros/s/SEU_DEPLOY_ID/exec'; // sua URL /exec do GAS
+  const REFRESH_MS = 1800000; // 30 minutos (1800s)
+  const ENABLE_JSONP_FALLBACK = true; // se fetch/CORS falhar, tenta JSONP
+
+  // Seleciona todos os botões de números (ajuste o seletor se necessário)
+  function getAllNumberButtons(){
+    // inclui ambos: disponíveis e já vendidos
+    return Array.from(document.querySelectorAll('.button-main, .button-VENDIDO'));
+  }
+
+  // Extrai código: prioriza data-code, depois data-id, depois pelo texto
+  function getCodeFromButton(btn){
+    const dc = btn.getAttribute('data-code');
+    if (dc) return dc.toUpperCase();
+    const di = btn.getAttribute('data-id');
+    if (di) return di.toUpperCase();
+    const t = (btn.textContent || '').trim();
+    const m = t.match(/(X\d{3})/i);
+    return m ? m[1].toUpperCase() : null;
+  }
+
+  // Aplica a lógica de visual: Pago => .button-VENDIDO (disable);
+  // Não pago => .button-main (enable)
+  function applyPaidSet(pagoSet){
+    const buttons = getAllNumberButtons();
+    let vendidos = 0;
+
+    buttons.forEach(btn=>{
+      const code = getCodeFromButton(btn);
+      if (!code) return;
+
+      if (pagoSet.has(code)) {
+        // vira VENDIDO (mantém rótulo original intacto)
+        if (!btn.classList.contains('button-VENDIDO')) {
+          btn.classList.remove('button-main');
+          btn.classList.add('button-VENDIDO');
+        }
+        btn.disabled = true; // evita clique
+        btn.setAttribute('aria-disabled','true');
+        vendidos++;
+      } else {
+        // garante que não vendido fique disponível visualmente
+        if (btn.classList.contains('button-VENDIDO')) {
+          btn.classList.remove('button-VENDIDO');
+          btn.classList.add('button-main');
+        }
+        btn.disabled = false;
+        btn.removeAttribute('aria-disabled');
+      }
+    });
+
+    // (Opcional) badge discreto de contagem
+    const id = 'paid-badge-counter';
+    let badge = document.getElementById(id);
+    if (!badge) {
+      badge = document.createElement('div');
+      badge.id = id;
+      badge.style.cssText = 'position:fixed;right:10px;bottom:10px;background:#2b2424;color:#fff;padding:6px 10px;font:600 12px/1 Arial;border-radius:8px;opacity:.85;z-index:9999';
+      document.body.appendChild(badge);
+    }
+    badge.textContent = vendidos > 0 ? `Vendidos: ${vendidos}` : 'Nenhum vendido';
+  }
+
+  // === FETCH JSON padrão ===
+  async function fetchPaidJSON(){
+    const url = LOCKS_URL + (LOCKS_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
+    const resp = await fetch(url, { cache: 'no-store' }); // se CORS permitido, ok
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    const arr = Array.isArray(data.pago) ? data.pago : [];
+    return new Set(arr);
+  }
+
+  // === Fallback JSONP (para cenários com CORS restrito) ===
+  function fetchPaidJSONP(){
+    return new Promise((resolve, reject)=>{
+      const cbName = '__locksCB_' + Math.random().toString(36).slice(2);
+      const url = LOCKS_URL + (LOCKS_URL.includes('?') ? '&' : '?') + 'callback=' + cbName + '&t=' + Date.now();
+      const s = document.createElement('script');
+      const timeout = setTimeout(()=>{
+        cleanup();
+        reject(new Error('JSONP timeout'));
+      }, 12000);
+
+      function cleanup(){
+        clearTimeout(timeout);
+        delete window[cbName];
+        if (s.parentNode) s.parentNode.removeChild(s);
+      }
+
+      window[cbName] = function(payload){
+        try{
+          const arr = payload && Array.isArray(payload.pago) ? payload.pago : [];
+          resolve(new Set(arr));
+        } catch(e){ reject(e); }
+        finally{ cleanup(); }
+      };
+
+      s.src = url;
+      s.onerror = function(){ cleanup(); reject(new Error('JSONP error')); };
+      document.head.appendChild(s);
+    });
+  }
+
+  async function syncOnce(){
+    try{
+      const set = await fetchPaidJSON();
+      applyPaidSet(set);
+    } catch(err){
+      // Se CORS falhar e fallback estiver habilitado, tenta JSONP
+      if (ENABLE_JSONP_FALLBACK) {
+        try {
+          const set = await fetchPaidJSONP();
+          applyPaidSet(set);
+        } catch(e) {
+          console.warn('Falha no JSONP:', e);
+        }
+      } else {
+        console.warn('Falha ao buscar pagos:', err);
+      }
+    }
+  }
+
+  // Carrega agora…
+  syncOnce();
+  // …e repete a cada 30 minutos
+  setInterval(syncOnce, REFRESH_MS);
+})();
+</script>
 
 </body>
 </html>
