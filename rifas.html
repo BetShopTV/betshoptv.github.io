@@ -48,7 +48,7 @@
     .payment-content.is-visible { display: flex; }
     .paypal-info { text-align: center; margin: 20px 0; }
     .success-message { font-size: 1.2em; font-weight: bold; }
-    .qr-area { background: var(--cor-branco); height: 138px; width: 100%; display:flex; align-items:center; justify-content:center; }
+    .qr-area { background: var(--cor-branco); max-height: 138px; width: 100%; display:flex; align-items:center; justify-content:center; }
     .qr-area img { max-width: 124px; max-height: 124px; object-fit: contain; }
     .btn-copiar, .btn-site { width: 100%; font-size: .88em; border: 2px solid var(--cor-texto); background: var(--cor-texto); color: var(--cor-branco); }
     .btn-copiar:hover {
@@ -148,11 +148,11 @@
             <div class="txt-principal" style="text-align: left; margin-bottom: 10px;">Escolha a forma de pagamento:</div>
             <div class="payment-tabs"><button class="btn-left is-selected" type="button" id="btn-pix">PIX</button><button class="btn-left" type="button" id="btn-paypal">PayPal</button></div>
             <div id="pix-content" class="payment-content is-visible">
-              <div class="qr-area"><img src="https://betshoptv.com/images/placeholder-pix.png" alt="QR Code PIX"></div>
+              <div class="qr-area" style="padding-top: 8px; padding-bottom: 8px;"><img src="https://betshoptv.com/images/placeholder-pix.png" style="padding: 8px; max-width: 124px; max-height: 124px;" alt="QR Code PIX"></div>
               <button class="btn-copiar" type="button" id="btn-copiar-pix">PIX COPIA e COLA</button>
             </div>
             <div id="paypal-content" class="payment-content">
-            <div class="qr-area"><img src="https://betshoptv.com/images/PayPal_QR Code.png" alt="QR Code PayPal"></div>
+            <div class="qr-area"><img src="https://betshoptv.com/images/PayPal_QR Code.png" style="margin: 8px;" alt="QR Code PayPal"></div>
                 <button class="btn-site" type="button" id="btn-site-paypal">Pagar via PayPal</button>
             </div>
             <div class="row-submit"><button type="button" class="btn-voltar" id="btn-voltar">VOLTAR</button><button type="submit" class="botao-apostar" id="btn-apostar" form="form-aposta">APOSTAR!</button></div>
