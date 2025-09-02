@@ -142,7 +142,7 @@
               <input id="email" name="E-MAIL" type="email" placeholder="E-mail" required form="form-aposta">
               <input id="whats" name="TELEFONE/WHATSAPP" type="tel" placeholder="Telefone / WhatsApp" form="form-aposta">
             </div>
-            <div class="row-actions"><button type="button" class="btn-cancelar" id="btn-cancelar">CANCELAR</button><button type="button" class="btn-proxima" id="btn-proxima">AVANÇAR</button></div>
+            <div class="row-actions"><button type="button" class="btn-cancelar" id="btn-cancelar">CANCELAR</button><button type="submit" class="btn-proxima" id="btn-proxima" form="form-aposta">AVANÇAR</button></div>
           </div>
           <div id="etapa3-content" class="painel-apostar">
             <div class="txt-principal" style="text-align: left; margin-bottom: 10px;">Escolha a forma de pagamento:</div>
@@ -155,7 +155,7 @@
             <div class="qr-area"><img src="https://betshoptv.com/images/PayPal_QR Code.png" style="margin: 8px;" alt="QR Code PayPal"></div>
                 <button class="btn-site" type="button" id="btn-site-paypal">Pagar via PayPal</button>
             </div>
-            <div class="row-submit"><button type="button" class="btn-voltar" id="btn-voltar">VOLTAR</button><button type="submit" class="botao-apostar" id="btn-apostar" form="form-aposta">ENVIAR APOSTA</button></div>
+            <div class="row-submit"><button type="button" class="btn-voltar" id="btn-voltar">VOLTAR</button><button type="button" class="botao-apostar" id="btn-apostar">ENVIAR APOSTA</button></div>
           </div>
           <div id="etapa4-content" class="painel-apostar centered">
             <p class="success-message" style="margin-top: -6px;"><span class="txt-principal"><span style="color: #ff0000; font-size: 1.8em; font-weight: 700;">APOSTA ENVIADA</span><br><span style="font-weight: normal;">Em até 37 horas você receberá<br>o comprovante por e-mail ou WhatsApp.</span><br><br>Agradecemos a participação e desejamos<br><span style="color: #ff0000; font-size: 1.8em; font-weight: 700;">SORTE NO SORTEIO!</span></span></p>
@@ -348,6 +348,7 @@
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#8A2BE2" data-id="X168">X168 / Violeta Preciosa</button>
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#4B0082" data-id="X169">X169 / Violeta Profundo</button>
 <button class="button-main" style="background-color: #bebab0;" data-hover-color="#FF69B4" data-id="X170">X170 / Vou de rosa</button>
+
         </div>
       </div>
     </section>
@@ -627,22 +628,40 @@ updateCounters();
         btnSitePaypal.addEventListener("click", () => window.open("https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G", "_blank", "noopener"));
 
         form.addEventListener("submit", e => {
-            if (selectedItems.length === 0) {
-                e.preventDefault();
-                alert("Selecione ao menos 1 número.");
-                return;
-            }
-            updateSelection();
-            btnApostar.disabled = true;
-            btnApostar.textContent = "ENVIANDO...";
+  if (selectedItems.length === 0) {
+    e.preventDefault();
+    alert("Selecione ao menos 1 número.");
+    return;
+  }
+  updateSelection();
+  // Deixa enviar normalmente (FormSubmit + GAS) e já mostra a etapa 3 (pagamento)
+  showStep(etapa3Content);
+});
 
+
+        // --- ENVIAR APOSTA (só efeito visual + ir para a última tela) ---
+        // Colocado EM ESCOPO para poder usar showStep, updateSelection e selectedItems
+        btnApostar.addEventListener("click", () => {
+          if (selectedItems.length === 0) {
+            alert("Selecione ao menos 1 número.");
+            return;
+          }
+
+          // garante que campos/hidden estejam atualizados visualmente
+          updateSelection();
+
+          btnApostar.disabled = true;
+          btnApostar.textContent = "ENVIANDO...";
+
+          setTimeout(() => {
+            btnApostar.textContent = "APOSTA ENVIADA!";
             setTimeout(() => {
-                btnApostar.textContent = "APOSTA ENVIADA!";
-                setTimeout(() => {
-                    showStep(etapa4Content);
-                }, 1500);
-            }, 1000);
+              // usa a função existente para alternar telas (mesmo comportamento do resto do código)
+              showStep(etapa4Content);
+            }, 1500);
+          }, 1000);
         });
+
 
         btnRecomecar.addEventListener('click', () => {
             selectedItems = [];
