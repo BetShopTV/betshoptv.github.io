@@ -174,9 +174,8 @@
     <section class="grid-section">
       <div id="gridA" class="grid-column">
         <div class="button-container">
-<button class="button-VENDIDO" style="border: 0px; background-color:#bebab0; color:#2b2424; font-weight: normal; cursor: default;">LEGENDA:</button>
-          <button class="button-main" style="cursor: default;" disabled>DISPONÍVEL</button>
-          <button class="button-VENDIDO" style="cursor: default;" disabled>INDISPONÍVEL</button>
+          <button class="button-VENDIDO" style="cursor: default; background-color: #bebab0; border-color: #ff0000; color: #2b2424;" disabled><span id="count-disponiveis">0</span>&nbsp;DISPONÍVEIS</button>
+          <button class="button-VENDIDO" style="cursor: default;" disabled><span id="count-indisponiveis">0</span>&nbsp;INDISPONÍVEIS</button>
         </div><br><br>
         <div class="button-container">
           <button class="button-VENDIDO" data-hover-color="#FF4500" data-id="X001">X001 / 40 graus</button>
@@ -449,6 +448,19 @@
             if (count <= 0) return 0;
             return count % 2 === 0 ? 25 * count : 25 * (count - 1) + 30;
         };
+
+// --- CONTADOR DISPONÍVEIS / INDISPONÍVEIS ---
+const updateCounters = () => {
+  let indisponiveisBruto = document.querySelectorAll("#gridA .button-VENDIDO").length;
+  let indisponiveisAjustado = Math.max(0, indisponiveisBruto - 2); // nunca negativo
+  let disponiveis = 170 - indisponiveisAjustado;
+
+  document.getElementById("count-indisponiveis").textContent = indisponiveisAjustado;
+  document.getElementById("count-disponiveis").textContent = disponiveis;
+};
+
+// Atualiza ao carregar
+updateCounters();
 
         const updateSelection = () => {
             const count = selectedItems.length;
