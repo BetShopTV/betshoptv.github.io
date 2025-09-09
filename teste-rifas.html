@@ -137,62 +137,8 @@
     <a href="https://betshoptv.com/contato.html" class="botao-main">FALE<br>CONOSCO</a>
   </div>
   <main>
-        <!-- início CENTRAL DE APOSTAS -->
-    
-    <div class="central-apostas">
-        <div class="resumo-container" aria-live="polite">
-            <textarea id="selected-text" style="font-family: 'Roboto Condensed', sans-serif; font-size: 0.9em;" readonly>LISTA de APOSTAS</textarea>
-            <div id="total-cost-display">
-              <span class="total-label" style="margin-top: 10px;">QTD.</span>
-              <span id="selected-count" class="total-value" style="margin-bottom: 8px;">0</span>
-              <span class="total-label">TOTAL</span>
-              <span id="calculated-cost" style="margin-bottom: 10px;">R$ 0,00</span>
-            </div>
-        </div>
-        <button id="toggle-apostar">APOSTE AQUI!</button>
-        <div class="apostar-wrapper" id="apostar-wrapper">
-          <div id="etapa2-content" class="painel-apostar">
-            <div class="txt-principal" style="text-align: left; margin-bottom: 10px;">Preencha os campos abaixo:</div>
-            <div class="linha-form"><input id="nome" name="NOME" type="text" placeholder="Nome" required form="form-aposta"></div>
-            <div class="linha-form">
-              <input id="email" name="E-MAIL" type="email" placeholder="E-mail" required form="form-aposta">
-              <input id="whats" name="TELEFONE/WHATSAPP" type="tel" placeholder="Telefone / WhatsApp" form="form-aposta">
-            </div>
-            <div class="row-actions"><button type="button" class="btn-cancelar" id="btn-cancelar">CANCELAR</button><button type="submit" class="btn-proxima" id="btn-proxima" form="form-aposta">AVANÇAR</button></div>
-          </div>
-          <div id="etapa3-content" class="painel-apostar">
-            <div class="txt-principal" style="text-align: left; margin-bottom: 10px;">Escolha a forma de pagamento:</div>
-            <div class="payment-tabs"><button class="btn-left is-selected" type="button" id="btn-pix">PIX</button><button class="btn-left" type="button" id="btn-paypal">PayPal</button></div>
-            <div id="pix-content" class="payment-content is-visible">
-              <div class="qr-area" style="padding-top: 8px; padding-bottom: 8px; min-height: auto;"><img src="https://betshoptv.com/images/placeholder-pix.png" style="padding: 8px; max-width: 124px; max-height: 124px;" alt="QR Code PIX"></div>
-              <button class="btn-copiar" type="button" id="btn-copiar-pix">PIX COPIA e COLA</button>
-            </div>
-            <div id="paypal-content" class="payment-content">
-            <div class="qr-area"><img src="https://betshoptv.com/images/PayPal_QR Code.png" style="margin: 8px;" alt="QR Code PayPal"></div>
-                <button class="btn-site" type="button" id="btn-site-paypal">Pagar via PayPal</button>
-            </div>
-            <div class="row-submit"><button type="button" class="btn-voltar" id="btn-voltar">VOLTAR</button><button type="button" class="botao-apostar" id="btn-apostar">ENVIAR APOSTA</button></div>
-          </div>
-          <div id="etapa4-content" class="painel-apostar centered">
-            <p class="success-message" style="margin-top: -6px;"><span class="txt-principal"><span style="color: #ff0000; font-size: 1.8em; font-weight: 700;">APOSTA ENVIADA</span><br><span style="font-weight: normal;">Em até 37 horas você receberá<br>o comprovante por e-mail ou WhatsApp.</span><br><br>Agradecemos a participação e desejamos<br><span style="color: #ff0000; font-size: 1.8em; font-weight: 700;">SORTE NO SORTEIO!</span></span></p>
-            <button type="button" class="btn-etapa4" id="btn-recomecar">CONCLUIR</button>
-          </div>
-          <form id="form-aposta" action="https://formsubmit.co/e47cb3b75ceb71fc080318c811d80f13" method="POST" target="hidden_iframe" style="display: none;">
-            <input type="hidden" id="hidden-apostas" name="LISTA de APOSTAS" value=""><input type="hidden" id="hidden-qtd" name="QTD." value="0"><input type="hidden" id="hidden-total" name="TOTAL" value="$0">
-            <input type="hidden" name="_subject" id="hidden-subject" value="APOSTA"><input type="hidden" name="_template" value="table"><input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
-          </form>
-          <iframe name="hidden_iframe" style="display:none;"></iframe>
-        </div>
-    </div>
-    
-            <!-- fim CENTRAL DE APOSTAS -->
-    
     <section class="grid-section">
       <div id="gridA" class="grid-column">
-        <div class="button-container">
-          <button class="button-VENDIDO" style="cursor: default; background-color: #bebab0; border-color: #ff0000; color: #2b2424;" disabled><span id="count-disponiveis">0</span>&nbsp;DISPONÍVEIS</button>
-          <button class="button-VENDIDO" style="cursor: default;" disabled><span id="count-indisponiveis">0</span>&nbsp;INDISPONÍVEIS</button>
-        </div><br><br>
         <div class="button-container">
           <button class="button-VENDIDO" data-hover-color="#FF4500" data-id="X001">X001 / 40 graus</button>
 <button class="button-VENDIDO" style="border: 0px #bebab0;" data-hover-color="#B22222" data-id="X002">X002 / 5ª avenida</button>
