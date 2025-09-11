@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BSTV — Galeria (3 colunas) + Feed</title>
+<style>
+  :root{
+    --bg:#f7f6f4; --card:#ffffff; --text:#222; --muted:#666;
+    --accent:#c23b3b; --maxWidth:1200px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; font-family:Inter, "Roboto", Arial, sans-serif; background:var(--bg); color:var(--text); padding:18px;}
+  header{display:flex; align-items:center; gap:12px; margin-bottom:12px;}
+  h1{margin:0; color:var(--accent); font-size:1.1rem}
+  .controls{margin-left:auto; display:flex; gap:8px; align-items:center;}
+  .small{font-size:0.9rem; color:var(--muted)}
+  button{cursor:pointer; border-radius:6px; padding:8px 10px; border:none; background:#222; color:#fff}
+  .secondary{background:#fff;color:var(--text);border:1px solid #ddd;padding:7px 10px}
+
+  /* Container limitado a 1200px e centrado */
+  .container {max-width: var(--maxWidth); margin: 0 auto; width:100%;}
+
+  /* FILTROS */
+  .filters{display:flex; gap:8px; align-items:center; margin-bottom:12px; flex-wrap:wrap;}
+  .filters input, .filters select{padding:8px;border-radius:6px;border:1px solid #ddd;}
+
+  /* GALERIA: 3 colunas iguais */
+  .gallery {
+    display:flex;
+    gap:12px;
+    width:100%;
+    justify-content:center;
+  }
+  /* Each column is equal width. We compute width so 3 columns always visible.
+     On wide screens they will share up to max container width (1200px).
+     On narrow screens they shrink proportionally so three columns remain visible. */
+  .col {
+    flex: 0 0 calc((100% - 24px) / 3); /* 3 columns with gaps accounted */
+    max-width: calc((min(1200px,100%) - 24px) / 3);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .card {
+    background:var(--card);
+    border-radius:8px;
+    overflow:hidden;
+    border:1px solid #e6e6e6;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* Images keep natural aspect ratio; width is 100% of column */
+  .card img {
+    display:block;
+    width:100%;
+    height:auto; /* keeps proportional height */
+    object-fit:cover;
+  }
+
+  .card-body {padding:10px;}
+  .card-title{font-weight:700; margin-bottom:6px;}
+  .card-sub{font-size:0.9rem; color:var(--muted); margin-bottom:8px}
+
+  .card-footer {display:flex; justify-content:space-between; align-items:center; padding:0 10px 10px 10px;}
+  .ampliar {background:var(--accent); color:#fff; border:none; padding:8px 10px; border-radius:6px}
+
+  /* FEED (in place of lightbox) */
+  .feed {display:none; margin-top:18px;}
+  .post {background:var(--card); border-radius:10px; margin-bottom:20px; border:1px solid #e8e8e8; overflow:visible;}
+  .post-media {position:relative; background:#000; display:flex; align-items:center; justify-content:center; min-height:320px;}
+  .carousel {display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; width:100%;}
+  .carousel .slide {min-width:100%; scroll-snap-align:center; display:flex; justify-content:center; align-items:center; background:#111;}
+  .carousel img {max-width:100%; max-height:70vh; object-fit:contain; display:block;}
+  .nav-btn {position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.35); color:#fff; border:none; padding:8px; border-radius:50%; cursor:pointer}
+  .nav-left{left:10px} .nav-right{right:10px}
+  .post-actions{display:flex; gap:8px; align-items:center; padding:10px}
+  .post-actions .left{display:flex;gap:8px}
+  .post-actions .right{margin-left:auto; display:flex; gap:8px}
+  .ficha{padding:0 12px 14px 12px}
+  .ficha .title{font-weight:700}
+  .caption{color:var(--muted); font-size:0.95rem}
+
+  /* Controls visibility */
+  .show {display:block}
+  .hide {display:none}
+
+  /* Responsividade: garantir 3 colunas visíveis em mobile:
+     columns shrink but remain 3 across. For very narrow screens they become small but visible */
+  @media (max-width:820px){
+    .col { flex-basis: calc((100% - 24px) / 3); max-width: calc((100% - 24px) / 3); }
+    .card img { height:auto; }
+    .post-media { min-height:200px; }
+  }
+
+  /* small screens extremely narrow, allow columns to be at least 80px */
+  @media (max-width:420px){
+    .col { min-width:80px; }
+    .carousel img { max-height:50vh; }
+  }
+
+  /* simple utility */
+  .center {text-align:center}
+  .muted {color:var(--muted)}
+  .btn-secondary {background:#fff;color:var(--text);border:1px solid #ddd;padding:7px 10px;border-radius:6px}
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>BSTV — Galeria (3 colunas) / Feed</h1>
+      <div class="controls">
+        <div class="small">Modo: <strong id="modeLabel">GALERIA</strong></div>
+        <button id="btnBackGallery" class="btn-secondary" style="display:none">← Voltar à Galeria</button>
+      </div>
+    </header>
+
+    <div class="filters">
+      <label class="small">Ordem colunas:</label>
+      <select id="colOrder" title="Ordem das colunas">
+        <option value="0,1,2">A • B • C</option>
+        <option value="1,2,0">B • C • A</option>
+        <option value="2,0,1">C • A • B</option>
+      </select>
+
+      <label class="small">Filtrar grupo:</label>
+      <input id="groupFilter" placeholder="03" />
+
+      <label class="small">Peça (YY):</label>
+      <input id="numberFilter" placeholder="01" />
+
+      <button id="applyFilter" class="secondary">Aplicar</button>
+      <button id="resetFilter" class="secondary">Reset</button>
+    </div>
+
+    <!-- GALERIA -->
+    <div id="gallery" class="gallery" aria-hidden="false">
+      <div class="col" id="col0"></div>
+      <div class="col" id="col1"></div>
+      <div class="col" id="col2"></div>
+    </div>
+
+    <!-- FEED (aparece ao clicar em uma peça) -->
+    <div id="feed" class="feed" aria-hidden="true"></div>
+  </div>
+
+<script>
+/*
+  Nova nomenclatura: XX-YYi.jpg
+  XX = grupo (2 dígitos)
+  YY = número peça (2 dígitos)
+  i = letra a..f (a é principal)
+  Base path: https://betshoptv.com/peças/  (usamos encodeURI)
+*/
+
+/* === Lista completa fornecida pelo usuário === */
+const fileList = [
+"03-01a.jpg","03-01b.jpg","03-01c.jpg","03-01d.jpg",
+"03-02a.jpg","03-02b.jpg","03-02c.jpg",
+"03-03a.jpg","03-03b.jpg","03-03c.jpg",
+"03-04a.jpg","03-04b.jpg",
+"03-05a.jpg","03-05b.jpg","03-05c.jpg",
+"03-06a.jpg","03-06b.jpg",
+"03-07a.jpg","03-07b.jpg",
+"03-08a.jpg","03-08b.jpg","03-08c.jpg",
+"03-09a.jpg","03-09b.jpg",
+"03-10a.jpg","03-10b.jpg","03-10c.jpg",
+"03-11a.jpg","03-11b.jpg","03-11c.jpg",
+"03-12a.jpg","03-12b.jpg","03-12c.jpg",
+"03-13a.jpg","03-13b.jpg","03-13c.jpg",
+"04-01a.jpg","04-01b.jpg",
+"04-02a.jpg","04-02b.jpg",
+"04-03a.jpg","04-03b.jpg","04-03c.jpg",
+"04-04a.jpg","04-04b.jpg",
+"04-05a.jpg","04-05b.jpg","04-05c.jpg","04-05d.jpg",
+"04-06a.jpg","04-06b.jpg","04-06c.jpg","04-06d.jpg"
+];
+
+/* Base path: cuidado com acento em URL -> usamos encodeURI quando construir URL */
+const basePathRaw = "https://betshoptv.com/peças/"; // conforme sua instrução
+const basePath = (p)=> {
+  // encode each component to be safe
+  // base has a special char; encode full path
+  return encodeURI(basePathRaw + p);
+};
+
+/* Parse each filename and build pieces map */
+const pieces = {}; // key "XX-YY" -> {group, number, images: [ {letter, filename, url} ], mainTitle}
+
+fileList.forEach(fn=>{
+  const m = fn.match(/^(\d{2})-(\d{2})([a-z])\.jpg$/i);
+  if(!m) return;
+  const group = m[1];
+  const number = m[2];
+  const letter = m[3].toLowerCase();
+  const key = `${group}-${number}`;
+  if(!pieces[key]) pieces[key] = { group, number, images: [], mainTitle: null };
+  const url = basePath(fn);
+  pieces[key].images.push({ letter, filename: fn, url });
+  if(letter === 'a') pieces[key].mainTitle = fn;
+});
+
+/* Sort images in each piece by letter a..f */
+Object.values(pieces).forEach(p=>{
+  p.images.sort((x,y)=> x.letter.localeCompare(y.letter));
+  if(!p.mainTitle && p.images.length>0) p.mainTitle = p.images[0].filename;
+});
+
+/* Build sorted list of pieces by group then number */
+function buildList(filterGroup=null, filterNumber=null){
+  const arr = Object.keys(pieces).map(k=>{
+    const p = pieces[k];
+    return { key:k, group:p.group, number:p.number, images:p.images.map(i=>i.url), mainTitle:p.mainTitle };
+  });
+  arr.sort((a,b)=>{
+    if(a.group === b.group) return a.number.localeCompare(b.number);
+    return a.group.localeCompare(b.group);
+  });
+  // apply filters if any
+  return arr.filter(it=>{
+    if(filterGroup && it.group !== filterGroup) return false;
+    if(filterNumber && it.number !== filterNumber) return false;
+    return true;
+  });
+} 
+
+/* RENDER GALERIA (3 colunas) */
+function renderGallery(){
+  const groupFilter = document.getElementById('groupFilter').value.trim();
+  const numberFilter = document.getElementById('numberFilter').value.trim();
+  const gp = groupFilter ? groupFilter.padStart(2,'0') : null;
+  const np = numberFilter ? numberFilter.padStart(2,'0') : null;
+  const list = buildList(gp,np);
+  // distribute round-robin to 3 columns
+  const cols = [[],[],[]];
+  list.forEach((it, idx)=> cols[idx % 3].push(it));
+  const order = document.getElementById('colOrder').value.split(',').map(Number);
+
+  // clear columns
+  for(let i=0;i<3;i++){
+    const colEl = document.getElementById('col'+i);
+    colEl.innerHTML = '';
+    const srcIdx = order[i];
+    const items = cols[srcIdx];
+    if(items.length === 0){
+      const empty = document.createElement('div');
+      empty.className = 'card';
+      empty.innerHTML = '<div class="card-body center muted">Sem peças nesta coluna</div>';
+      colEl.appendChild(empty);
+    } else {
+      items.forEach(it=>{
+        const card = document.createElement('div');
+        card.className = 'card';
+        // thumb: first image (letter a is first in sorted images)
+        const img = document.createElement('img');
+        img.src = it.images[0]; // main image
+        img.alt = `Peça ${it.number} • Série ${it.group}`;
+        img.loading = 'lazy';
+        // clicking the image opens feed at that piece
+        img.addEventListener('click', ()=> openFeed(it.key));
+        card.appendChild(img);
+
+        const body = document.createElement('div');
+        body.className = 'card-body';
+        const title = document.createElement('div');
+        title.className = 'card-title';
+        title.innerText = `Peça ${it.number}`;
+        const sub = document.createElement('div');
+        sub.className = 'card-sub';
+        sub.innerText = `Série ${it.group} • ${it.images.length} arquivo(s)`;
+        body.appendChild(title);
+        body.appendChild(sub);
+        card.appendChild(body);
+
+        const footer = document.createElement('div');
+        footer.className = 'card-footer';
+        const left = document.createElement('div');
+        left.className = 'small';
+        left.innerText = `#${it.key}`;
+        const right = document.createElement('div');
+        const amp = document.createElement('button');
+        amp.className = 'ampliar';
+        amp.innerText = 'AMPLIAR';
+        amp.addEventListener('click', (e)=>{ e.stopPropagation(); openFeed(it.key); });
+        right.appendChild(amp);
+        footer.appendChild(left);
+        footer.appendChild(right);
+        card.appendChild(footer);
+
+        colEl.appendChild(card);
+      });
+    }
+  }
+  // ensure mode label and views
+  document.getElementById('modeLabel').innerText = 'GALERIA';
+  document.getElementById('gallery').style.display = 'flex';
+  document.getElementById('feed').style.display = 'none';
+  document.getElementById('btnBackGallery').style.display = 'none';
+}
+
+/* OPEN FEED at a specific piece (shows feed with all posts, scrolled to that piece) */
+function openFeed(startKey){
+  const groupFilter = document.getElementById('groupFilter').value.trim();
+  const numberFilter = document.getElementById('numberFilter').value.trim();
+  const gp = groupFilter ? groupFilter.padStart(2,'0') : null;
+  const np = numberFilter ? numberFilter.padStart(3,'0') : null; // note pieces YY are 2 digits so padStart(2)
+  const list = buildList(gp, numberFilter?numberFilter.padStart(2,'0'):null);
+
+  const feed = document.getElementById('feed');
+  feed.innerHTML = ''; // clear
+
+  list.forEach((it, idx)=>{
+    const post = document.createElement('section');
+    post.className = 'post';
+    post.id = 'post-'+it.key;
+
+    // media area
+    const media = document.createElement('div');
+    media.className = 'post-media';
+
+    const carousel = document.createElement('div');
+    carousel.className = 'carousel';
+    // add slides
+    it.images.forEach((url, i)=>{
+      const slide = document.createElement('div');
+      slide.className = 'slide';
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = `${it.key} - ${i+1}`;
+      img.loading = 'lazy';
+      slide.appendChild(img);
+      carousel.appendChild(slide);
+    });
+
+    media.appendChild(carousel);
+
+    // prev/next buttons for convenience (scroll by width)
+    if(it.images.length > 1){
+      const prev = document.createElement('button');
+      prev.className = 'nav-btn nav-left';
+      prev.innerText = '‹';
+      prev.addEventListener('click', (e)=> { e.stopPropagation(); carousel.scrollBy({ left: -carousel.clientWidth, behavior:'smooth' }); });
+      const next = document.createElement('button');
+      next.className = 'nav-btn nav-right';
+      next.innerText = '›';
+      next.addEventListener('click', (e)=> { e.stopPropagation(); carousel.scrollBy({ left: carousel.clientWidth, behavior:'smooth' }); });
+      media.appendChild(prev);
+      media.appendChild(next);
+      // page indicator
+      const indicator = document.createElement('div');
+      indicator.style.position='absolute';
+      indicator.style.top='10px';
+      indicator.style.left='12px';
+      indicator.style.padding='6px 10px';
+      indicator.style.background='rgba(0,0,0,0.35)';
+      indicator.style.color='#fff';
+      indicator.style.borderRadius='16px';
+      indicator.innerText = `1 / ${it.images.length}`;
+      media.appendChild(indicator);
+      // update on scroll
+      carousel.addEventListener('scroll', ()=>{
+        const page = Math.round(carousel.scrollLeft / carousel.clientWidth) + 1;
+        indicator.innerText = `${page} / ${it.images.length}`;
+      });
+    }
+
+    post.appendChild(media);
+
+    // actions: Curtir / Compartilhar / Salvar  + QUERO / POSSO
+    const actions = document.createElement('div');
+    actions.className = 'post-actions';
+
+    const left = document.createElement('div'); left.className = 'left';
+    const btnLike = document.createElement('button'); btnLike.className='secondary'; btnLike.innerText='Curtir';
+    btnLike.addEventListener('click', ()=> btnLike.classList.toggle('active'));
+    const btnShare = document.createElement('button'); btnShare.className='secondary'; btnShare.innerText='Compartilhar';
+    btnShare.addEventListener('click', ()=> {
+      // copia url do primeiro image
+      const txt = it.images[0];
+      navigator.clipboard?.writeText(txt).then(()=> alert('Link copiado'));
+    });
+    const btnSave = document.createElement('button'); btnSave.className='secondary'; btnSave.innerText='Salvar';
+    btnSave.addEventListener('click', ()=> btnSave.classList.toggle('active'));
+    left.appendChild(btnLike); left.appendChild(btnShare); left.appendChild(btnSave);
+
+    const right = document.createElement('div'); right.className = 'right';
+    const btnQuero = document.createElement('button'); btnQuero.innerText='QUERO'; btnQuero.style.background='#28a745'; btnQuero.style.color='#fff';
+    btnQuero.addEventListener('click', ()=> alert(`QUERO → Peça ${it.number} (Série ${it.group})`));
+    const btnPosso = document.createElement('button'); btnPosso.innerText='POSSO'; btnPosso.style.background='#17a2b8'; btnPosso.style.color='#fff';
+    btnPosso.addEventListener('click', ()=> alert(`POSSO → Peça ${it.number} (Série ${it.group})`));
+    right.appendChild(btnQuero); right.appendChild(btnPosso);
+
+    actions.appendChild(left); actions.appendChild(right);
+    post.appendChild(actions);
+
+    // ficha técnica (título do arquivo principal)
+    const ficha = document.createElement('div');
+    ficha.className = 'ficha';
+    const title = document.createElement('div'); title.className='title';
+    title.innerText = `Ficha técnica: ${it.mainTitle || (it.group + '-' + it.number + 'a.jpg')}`;
+    const desc = document.createElement('div'); desc.className='caption';
+    desc.innerText = `Peça ${it.number} • Série ${it.group} • ${it.images.length} imagem(ns)`;
+    ficha.appendChild(title); ficha.appendChild(desc);
+    post.appendChild(ficha);
+
+    feed.appendChild(post);
+  });
+
+  // show feed and hide gallery
+  document.getElementById('gallery').style.display = 'none';
+  document.getElementById('feed').style.display = 'block';
+  document.getElementById('modeLabel').innerText = 'FEED';
+  document.getElementById('btnBackGallery').style.display = 'inline-block';
+
+  // scroll to the requested post
+  setTimeout(()=>{
+    const el = document.getElementById('post-'+startKey);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 120);
+} 
+
+/* Back to gallery */
+document.getElementById('btnBackGallery').addEventListener('click', ()=>{
+  document.getElementById('feed').style.display = 'none';
+  document.getElementById('gallery').style.display = 'flex';
+  document.getElementById('modeLabel').innerText = 'GALERIA';
+  document.getElementById('btnBackGallery').style.display = 'none';
+});
+
+/* Filters */
+document.getElementById('applyFilter').addEventListener('click', ()=> renderGallery());
+document.getElementById('resetFilter').addEventListener('click', ()=>{
+  document.getElementById('groupFilter').value = '';
+  document.getElementById('numberFilter').value = '';
+  renderGallery();
+});
+
+/* Init */
+renderGallery();
+
+/* Expose internals for dev/debug */
+window._BSTV = { pieces, buildList, renderGallery, openFeed };
+</script>
+</body>
+</html>
