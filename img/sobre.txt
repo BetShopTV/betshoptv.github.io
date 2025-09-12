@@ -1,0 +1,4 @@
+central de novas imagens para automação em github actions
+
+tomara
+  maravilha
