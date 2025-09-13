@@ -529,32 +529,13 @@
 
   </main>
 <script>
-    // ESTA PARTE VAMOS AUTOMATIZAR DEPOIS COM O GOOGLE APPS SCRIPT
-    // Por enquanto, você deve manter e atualizar este array manualmente.
-    // Lembre-se: 'id' é o nome do seu arquivo sem a extensão (.webp)
-    const galleryData = [
-        // SÉRIE 04 - Adicionados mais recentemente
-        { id: "04-05a", grupo: "04", sequencia: ["04-05a", "04-05b", "04-05c", "04-05d"], ordem_galeria: 1 },
-        { id: "04-06a", grupo: "04", sequencia: ["04-06a", "04-06b", "04-06c", "04-06d"], ordem_galeria: 2 },
-        { id: "04-04a", grupo: "04", sequencia: ["04-04a", "04-04b"], ordem_galeria: 3 },
-        { id: "04-03a", grupo: "04", sequencia: ["04-03a", "04-03b"], ordem_galeria: 4 },
-        { id: "04-02a", grupo: "04", sequencia: ["04-02a", "04-02b", "04-02c"], ordem_galeria: 5 },
-        { id: "04-01a", grupo: "04", sequencia: ["04-01a", "04-01b"], ordem_galeria: 6 },
-        
-        // SÉRIE 03 - Adicionados anteriormente
-        { id: "03-01a", grupo: "03", sequencia: ["03-01a", "03-01b", "03-01c", "03-01d"], ordem_galeria: 7 },
-        { id: "03-02a", grupo: "03", sequencia: ["03-02a", "03-02b", "03-02c"], ordem_galeria: 8 },
-        { id: "03-03a", grupo: "03", sequencia: ["03-03a", "03-03b", "03-03c"], ordem_galeria: 9 },
-        { id: "03-04a", grupo: "03", sequencia: ["03-04a", "03-04b"], ordem_galeria: 10 },
-        { id: "03-05a", grupo: "03", sequencia: ["03-05a", "03-05b", "03-05c"], ordem_galeria: 11 },
-        { id: "03-06a", grupo: "03", sequencia: ["03-06a", "03-06b"], ordem_galeria: 12 },
-        //... Adicione todas as suas imagens aqui, com a ordem de exibição desejada.
-    ];
+    // 1. SUBSTITUA A URL ABAIXO PELA URL DA SUA API DO APPS SCRIPT
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyJppUV5ehBApJZODZT6YJsCcj8tTI34ZRPdQ1Q4ljuCFkGRpuX9beojeiVfJsce_Xr/exec';
 
     document.addEventListener('DOMContentLoaded', () => {
         const galleryContainer = document.querySelector('.gallery-container');
-        const numColumns = 3; // O número de colunas da galeria
-
+        const numColumns = 3; 
+        
         // Função para criar as colunas da galeria
         const createColumns = () => {
             let columns = [];
@@ -566,42 +547,58 @@
             }
             return columns;
         };
-
-        // Função para renderizar a galeria
-        const renderGallery = () => {
+        
+        // Função para buscar e renderizar a galeria
+        const fetchAndRenderGallery = async () => {
             if (!galleryContainer) return;
             
-            // Limpa o conteúdo atual
             galleryContainer.innerHTML = '';
             
-            // Cria as colunas dinamicamente
-            const columns = createColumns();
-
-            // Ordena os dados da galeria
-            galleryData.sort((a, b) => a.ordem_galeria - b.ordem_galeria);
-
-            galleryData.forEach((item, index) => {
-                const imgElement = document.createElement('img');
-                imgElement.src = `img/tmb/${item.id}.webp`;
-                imgElement.alt = `Peça ${item.id}`;
-                imgElement.setAttribute('loading', 'lazy');
-
-                // Adiciona o evento de clique para o lightbox
-                imgElement.onclick = () => {
-                    abrirLightbox('CSA', item.id);
-                };
+            try {
+                // Tenta buscar os dados da planilha via Apps Script
+                const response = await fetch(API_URL);
+                const galleryData = await response.json();
                 
-                // Distribui as imagens entre as colunas
-                const columnIndex = index % numColumns;
-                columns[columnIndex].appendChild(imgElement);
-            });
+                const columns = createColumns();
+                
+                // Ordena os dados da planilha antes de renderizar
+                // A ordem de exibição pode ser ajustada na planilha
+                galleryData.sort((a, b) => {
+                    // Ordenação por grupo e depois por número da peça
+                    if (a.grupo !== b.grupo) {
+                        return a.grupo - b.grupo;
+                    }
+                    return a.peça - b.peça;
+                });
+                
+                galleryData.forEach((item, index) => {
+                    // Só renderiza se a peça estiver disponível
+                    if (item.disp && item.disp.toUpperCase() === 'X') {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = `img/tmb/${item.img}.webp`; // Usa o thumbnail
+                        imgElement.alt = `Peça ${item.título}`;
+                        imgElement.setAttribute('loading', 'lazy');
+                        
+                        imgElement.onclick = () => {
+                            abrirLightbox('CSA', item.img); // A função abrirLightbox vai precisar de ajuste
+                        };
+                        
+                        const columnIndex = index % numColumns;
+                        columns[columnIndex].appendChild(imgElement);
+                    }
+                });
+                
+            } catch (error) {
+                console.error("Erro ao carregar dados da planilha:", error);
+                galleryContainer.innerHTML = '<p>Erro ao carregar a galeria. Tente novamente mais tarde.</p>';
+            }
         };
-
-        // Chama a função para montar a galeria ao carregar a página
-        renderGallery();
+        
+        // Chama a função para buscar e montar a galeria
+        fetchAndRenderGallery();
     });
-
-    // Funções do Lightbox (manter essas funções do seu código existente)
+    
+    // Funções do Lightbox (manter estas funções do seu código existente)
     function abrirLightbox(idLightbox, idImagem = null) {
       const lightbox = document.getElementById(idLightbox);
       lightbox.style.display = 'flex';
@@ -631,7 +628,8 @@
       }
     });
 </script>
-  <script>
+
+<script>
     function abrirLightbox(idLightbox, idImagem = null) {
       const lightbox = document.getElementById(idLightbox);
       lightbox.style.display = 'flex';
