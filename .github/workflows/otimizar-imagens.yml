@@ -20,12 +20,10 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies
-        run: |
-          npm install sharp@0.32.1
+      - name: Install sharp
+        run: npm install sharp
 
-      - name: Process images
-        id: process-images
+      - name: Process images and create folders
         run: |
           mkdir -p img/otm
           mkdir -p img/tmb
@@ -38,7 +36,7 @@ jobs:
                   
                   # Versão otimizada para lightbox (otm)
                   echo "Otimizando lightbox para $filename..."
-                  npx sharp "$file" \
+                  ./node_modules/.bin/sharp "$file" \
                       -resize 1200 1200 \
                       -background '#bebab0' \
                       -flatten \
@@ -48,7 +46,7 @@ jobs:
                   
                   # Versão thumbnail (tmb)
                   echo "Criando thumbnail para $filename..."
-                  npx sharp "$file" \
+                  ./node_modules/.bin/sharp "$file" \
                       -resize 400 400 \
                       -background '#bebab0' \
                       -flatten \
