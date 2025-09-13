@@ -558,22 +558,28 @@
 
                 const columns = createColumns();
                 
+                // Ordenação pela data de inserção e pela ordem da peça
                 galleryData.sort((a, b) => {
-                    if (a.grupo !== b.grupo) {
-                        return parseInt(a.grupo) - parseInt(b.grupo);
-                    }
+                    const dateA = new Date(a.last_commit_date);
+                    const dateB = new Date(b.last_commit_date);
+
+                    if (dateA > dateB) return -1;
+                    if (dateA < dateB) return 1;
+
                     return parseInt(a.peça) - parseInt(b.peça);
                 });
 
                 galleryData.forEach((item, index) => {
                     if (item.disp && item.disp.toUpperCase() === 'X') {
+                        // Constrói o nome do arquivo a partir dos dados da planilha
+                        const imgFilename = `${item.grupo}-${item.peça}a`;
                         const imgElement = document.createElement('img');
-                        imgElement.src = `img/tmb/${item.img}.webp`;
+                        imgElement.src = `img/tmb/${imgFilename}.webp`;
                         imgElement.alt = `Peça ${item.título}`;
                         imgElement.setAttribute('loading', 'lazy');
 
                         imgElement.onclick = () => {
-                            abrirLightbox('CSA', item.img);
+                            abrirLightbox('CSA', imgFilename);
                         };
 
                         const columnIndex = index % numColumns;
@@ -598,7 +604,7 @@
                 });
                 return obj;
             });
-            return data.filter(item => item.img && item.img.trim() !== ''); // Filtra linhas vazias
+            return data.filter(item => item.peça && item.peça.trim() !== ''); // Filtra linhas vazias
         };
 
         fetchAndRenderGallery();
