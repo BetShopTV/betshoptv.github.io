@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BetShopTV⦿com</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Roboto Condensed', sans-serif;
+      background-color: #bebab0;
+      background-repeat: repeat;
+      color: #2b2424;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    a {
+      color: #ff0000;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      width: 100%;
+      height: auto;
+      min-height: 25vh;
+      padding: 20px 0;
+      background-color: #ff0000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 100%;
+      width: auto;
+      min-width: 100%;
+      object-fit: cover;
+      transform: translate(-50%, -50%);
+      background-color: #ff0000;
+    }
+
+    main {
+      width: 90%;
+      max-width: 1200px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    main h1 {
+      font-size: 1.6em;
+      margin-bottom: 600px;
+    }
+
+    main h2 {
+      font-size: 1.8em;
+      margin-bottom: 8px;
+      margin-top: 42px;
+    }
+
+    main h3 {
+      font-size: 1.4em;
+      margin-top: 38px;
+      margin-bottom: 0px;
+    }
+
+    main h4 {
+      font-size: 6.6em;
+      color: #ff0000;
+    }
+
+    main v {
+      color: #ff0000;
+    }
+
+    main p {
+      font-size: 1.2em;
+      color: #2b2424;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 94%;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .botao-main,
+    .botao-off,
+    .botao-coluna,
+    .botao-oferta,
+    .botao-veja {
+      padding: 4px 13px;
+      height: 50px;
+      border: 2px solid;
+      background-color: transparent;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .botao-main { color: #ff0000; border-color: #ff0000; }
+    .botao-off { color: #2b2424; border-color: #2b2424; }
+    .botao-veja { color: #2b2424; border-color: #2b2424; }
+    .botao-veja:hover { color: #bebab0; background-color: #2b2424; border-color: #2b2424; }
+
+    .botao-coluna {
+      color: #bebab0;
+      border-color: transparent;
+      background-image: url('/images/faposteee.gif');
+    }
+
+    .botao-coluna:hover {
+      color: #bebab0;
+      border-color: #ff0000;
+      background-image: url('/images/fofertas_hover.gif');
+    }
+
+    .botao-oferta {
+      color: #bebab0;
+      border-color: #ff0000;
+      background-image: url('/images/fofertas.gif');
+    }
+
+    .botao-oferta:hover {
+      color: #bebab0;
+      border-color: #ff0000;
+      background-image: url('/images/fofertas_hover.gif');
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(43, 36, 36, 0.69);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .lightbox-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: 1;
+    }
+
+    .conteudo {
+      position: relative;
+      width: 90%;
+      height: calc(94% - 48px);
+      border: 2px solid #2b2424;
+      background: #8f8a84;
+      overflow-x: auto;
+      overflow-y: hidden;
+      display: flex;
+      align-items: center;
+      padding: 24px;
+      gap: 12px;
+      z-index: 2;
+    }
+
+    .conteudo img {
+      flex-shrink: 0;
+      height: 100%;
+      object-fit: contain;
+    
+    }
+    .conteudo::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .conteudo::-webkit-scrollbar-thumb {
+      background-color: #2b2424;
+      border-radius: 2px;
+    }
+
+    .conteudo::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .fechar {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      color: #ff0000;
+      background: none;
+      border: none;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    /* ======== A PARTIR DAQUI: ajustes de layout da galeria ======== */
+    .gallery-container {
+      display: flex;
+      flex-wrap: nowrap;      /* colunas não quebram linha! */
+      justify-content: center;
+      width: 100%;
+      max-width: 1200px;
+      margin: 20px auto;
+      gap: 12px;
+      box-sizing: border-box;
+    }
+
+    .column {
+      flex: 1 1 0;            /* colunas crescem e encolhem igualmente */
+      max-width: 300px;       /* limite máximo */
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .column img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 960px) {
+      .gallery-container {
+        gap: 8px;
+      }
+    }
+  </style>
+    <!-- =========================================
+       ADICIONEI UM BLOCO DE CSS EXTRA ABAIXO
+       (Somente para ajustar comportamento MOBILE
+       dos botões de RIFAS em #gridA)
+       ========================================= -->
+  <style>
+    /* -------------------------------------------------------
+       RESPONSIVIDADE ESPECÍFICA PARA RIFAS (apenas dentro de #gridA)
+       - Mantém 100% das propriedades desktop.
+       - No mobile (<=768px) reduz progressivamente fonte/altura.
+       - Os botões ficam centralizados, com largura AUTOFIT ao texto.
+       - Não força colunas fixas: quantos couberem na linha, aparecem.
+       - Sem rolagem horizontal: botões quebram de linha (wrap) quando necessário.
+       ------------------------------------------------------- */
+
+    /* Segurança: aplica apenas dentro do grid de rifas */
+   @media (max-width: 768px) {
+  .button-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    align-items: center !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+  }
+
+  .button-container .botao-main,
+  .button-container .botao-off {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: calc(100% - 20px) !important;
+    white-space: nowrap !important;
+    font-size: clamp(0.72rem, 2.8vw, 1rem) !important;
+    padding: 6px 10px !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+  }
+        header {
+        height: 112px;
+        min-height: 112px;
+        max-height: 112px;
+        padding: 4px 4px;
+      }
+
+      .header-video {
+        height: 100%;
+        width: auto;
+        min-width: 300%;
+        object-fit: cover;
+        object-position: center;
+        transform: translate(-50%, -50%);
+      }
+       main {
+        font-size: clamp(0.78rem, 3.3vw, 1rem) !important;
+  }
+}
+  </style>
+
+</head>
+<body>
+  <header>
+    <a href="https://betshoptv.com"><video class="header-video" autoplay loop muted playsinline>
+     <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
+      Seu navegador não suporta a tag de vídeo.
+    </video></a>
+  </header>
+
+  <!-- BOTÕES MENU (exatamente como no index0908) -->
+
+  <div class="button-container" style="padding: 0 50px;">
+    <a href="como.html" class="botao-main">COMO<br>FUNCIONA?</a>
+    <a href="rifas.html"
+     class="botao-main"
+     style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
+            background-position: 50% 52%;">APOSTE<br>RIFAS</a>
+   <div class="botao-off"
+      style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
+      background-position: 50% 52%;">APOSTE<br>OFERTAS</div>
+    <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
+    <a href="contato.html" class="botao-main">FALE<br>CONOSCO</a>
+  </div>
+  
+
+  <!-- Lightbox CSA -->
+  <div class="lightbox" id="CSA">
+    <div class="lightbox-overlay" onclick="fecharLightbox('CSA')"></div>
+    <button class="fechar" onclick="fecharLightbox('CSA')">Ⓧ</button>
+    <div class="conteudo">
+      <img id="001" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/001-03-a.jpg">
+      <img src="/galeria/F001.png">
+      <h2><font color="#bebab0">$200</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/001-03-b.jpg">
+      <img src="/galeria/CSA/001-03-c.jpg">
+      <img src="/galeria/CSA/001-03-d.jpg">
+      <img id="002" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/002-03-a.jpg">
+      <img src="/galeria/F002.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/002-03-b.jpg">
+      <img src="/galeria/CSA/002-03-c.jpg">
+      <img id="003" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/003-03-a.jpg">
+      <img src="/galeria/F003.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/003-03-b.jpg">
+      <img src="/galeria/CSA/003-03-c.jpg">
+      <img id="004" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/004-03-a.jpg">
+      <img src="/galeria/F004.png">
+      <h2><font color="#bebab0">$200</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/004-03-b.jpg">
+      <img id="005" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/005-03-a.jpg">
+      <img src="/galeria/F005.png">
+      <h2><font color="#bebab0">$200</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/005-03-c.jpg">
+      <img src="/galeria/CSA/005-03-b.jpg">
+      <img id="006" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/006-03-a.jpg">
+      <img src="/galeria/F006.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/006-03-b.jpg">
+      <img id="007" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/007-03-a.jpg">
+      <img src="/galeria/F007.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/007-03-b.jpg">
+
+      <img id="008" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/008-03-a.jpg">
+      <img src="/galeria/F008.png">
+      <h2><font color="#bebab0">$250</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/008-03-c.jpg">
+      <img src="/galeria/CSA/008-03-b.jpg">
+
+      <img id="009" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/009-03a.jpg">
+      <img src="/galeria/F009.png">
+      <font color="#ff0000" size="13em" style="margin-top: 420px;">⬤</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/009-03b.jpg">
+
+      <img id="010" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/010-03a.jpg">
+      <img src="/galeria/F010.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/010-03b.jpg">
+
+      <img id="011" src="/galeria/separador_lightbox2.png">
+      <img src="/galeria/CSA/011-03a.jpg">
+      <img src="/galeria/F011.png">
+      <h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="/galeria/CSA/011-03b.jpg">
+
+<img id="012" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/012-03a.jpg">
+<img src="/galeria/F012.png">
+<h2><font color="#bebab0">$250</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/012-03b.jpg">
+<img src="/galeria/CSA/012-03c.jpg">      
+
+<img id="013" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/013-03a.jpg">
+<img src="/galeria/F013.png">
+<h2><font color="#bebab0">$350</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/013-03b.jpg">
+<img src="/galeria/CSA/013-03c.jpg">
+      
+<img id="014" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/014-03a.jpg">
+<img src="/galeria/F014.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/014-03b.jpg">
+
+<img id="015" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/015-03a.jpg">
+<img src="/galeria/F015.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/015-03b.jpg">
+
+<img id="016" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/016-03a.jpg">
+<img src="/galeria/F016.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/016-03b.jpg">
+
+<img id="017" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/017-03a.jpg">
+<img src="/galeria/F017.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/017-03b.jpg">
+
+<img id="018" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/018-03a.jpg">
+<img src="/galeria/F018.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/018-03b.jpg">
+
+<img id="019" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/019-03a.jpg">
+<img src="/galeria/F019.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/019-03b.jpg">
+
+<img id="020" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/020-03a.jpg">
+<img src="/galeria/F020.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/020-03b.jpg">
+
+<img id="021" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/021-03a.jpg">
+<img src="/galeria/F021.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/021-03b.jpg">
+
+<img id="022" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/022-03a.jpg">
+<img src="/galeria/F022.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/022-03b.jpg">
+
+<img id="023" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/023-03a.jpg">
+<img src="/galeria/F023.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/023-03b.jpg">
+
+<img id="024" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/024-03a.jpg">
+<img src="/galeria/F024.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/024-03b.jpg">
+
+<img id="025" src="/galeria/separador_lightbox2.png">
+<img src="/galeria/CSA/025-03a.jpg">
+<img src="/galeria/F025.png">
+<h2><font color="#bebab0">$150</font></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/galeria/CSA/025-03b.jpg">
+
+<!-- Continue this same pattern up to 088 -->
+      <img id="026" src="/galeria/separador_lightbox2.png">
+      <img id="027" src="/galeria/separador_lightbox2.png">
+      <img id="028" src="/galeria/separador_lightbox2.png">
+      <img id="029" src="/galeria/separador_lightbox2.png">
+      <img id="030" src="/galeria/separador_lightbox2.png">
+      <img id="031" src="/galeria/separador_lightbox2.png">
+      <img id="032" src="/galeria/separador_lightbox2.png">
+      <img id="033" src="/galeria/separador_lightbox2.png">
+      <img id="034" src="/galeria/separador_lightbox2.png">
+      <img id="035" src="/galeria/separador_lightbox2.png">
+      <img id="036" src="/galeria/separador_lightbox2.png">      
+      <img id="037" src="/galeria/separador_lightbox2.png">      
+    </div>
+  </div>
+
+
+  <main>
+    <br><br><center>
+      <div style="border: 2px solid #ff0000; min-width: 200px; max-width: 924px; background-repeat: repeat;">
+        <p style="padding: 24px;">
+          Aqui você pode consultar as peças disponíveis em <v><i><strong>Chop Shop AV</strong></i></v> e adquirí-las antes do sorteio final!
+          <br><br>
+          <strong>Clique nas imagens</strong> para saber mais detalhes sobre cada peça.
+          <br>
+          <br>
+          Para aproveitar nossas ofertas, fale conosco em <strong>betshoptv<a href="mailto:betshoptv@gmail.com">@</a>gmail.com</strong> ou no instagram <strong><a href="https://www.instagram.com/betshoptv">@betshoptv</a></strong>!
+        </p>
+      </div> 
+    </center>
+    <br>
+
+    <!-- REGIÃO DE TRABALHO - INÍCIO -->
+    <div class="gallery-container">
+  </div>
+    <!-- REGIÃO DE TRABALHO - FIM -->
+
+  </main>
+<script>
+    // ESTA PARTE VAMOS AUTOMATIZAR DEPOIS COM O GOOGLE APPS SCRIPT
+    // Por enquanto, você deve manter e atualizar este array manualmente.
+    // Lembre-se: 'id' é o nome do seu arquivo sem a extensão (.webp)
+    const galleryData = [
+        // SÉRIE 04 - Adicionados mais recentemente
+        { id: "04-05a", grupo: "04", sequencia: ["04-05a", "04-05b", "04-05c", "04-05d"], ordem_galeria: 1 },
+        { id: "04-06a", grupo: "04", sequencia: ["04-06a", "04-06b", "04-06c", "04-06d"], ordem_galeria: 2 },
+        { id: "04-04a", grupo: "04", sequencia: ["04-04a", "04-04b"], ordem_galeria: 3 },
+        { id: "04-03a", grupo: "04", sequencia: ["04-03a", "04-03b"], ordem_galeria: 4 },
+        { id: "04-02a", grupo: "04", sequencia: ["04-02a", "04-02b", "04-02c"], ordem_galeria: 5 },
+        { id: "04-01a", grupo: "04", sequencia: ["04-01a", "04-01b"], ordem_galeria: 6 },
+        
+        // SÉRIE 03 - Adicionados anteriormente
+        { id: "03-01a", grupo: "03", sequencia: ["03-01a", "03-01b", "03-01c", "03-01d"], ordem_galeria: 7 },
+        { id: "03-02a", grupo: "03", sequencia: ["03-02a", "03-02b", "03-02c"], ordem_galeria: 8 },
+        { id: "03-03a", grupo: "03", sequencia: ["03-03a", "03-03b", "03-03c"], ordem_galeria: 9 },
+        { id: "03-04a", grupo: "03", sequencia: ["03-04a", "03-04b"], ordem_galeria: 10 },
+        { id: "03-05a", grupo: "03", sequencia: ["03-05a", "03-05b", "03-05c"], ordem_galeria: 11 },
+        { id: "03-06a", grupo: "03", sequencia: ["03-06a", "03-06b"], ordem_galeria: 12 },
+        //... Adicione todas as suas imagens aqui, com a ordem de exibição desejada.
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const galleryContainer = document.querySelector('.gallery-container');
+        const numColumns = 3; // O número de colunas da galeria
+
+        // Função para criar as colunas da galeria
+        const createColumns = () => {
+            let columns = [];
+            for (let i = 0; i < numColumns; i++) {
+                const column = document.createElement('div');
+                column.classList.add('column');
+                columns.push(column);
+                galleryContainer.appendChild(column);
+            }
+            return columns;
+        };
+
+        // Função para renderizar a galeria
+        const renderGallery = () => {
+            if (!galleryContainer) return;
+            
+            // Limpa o conteúdo atual
+            galleryContainer.innerHTML = '';
+            
+            // Cria as colunas dinamicamente
+            const columns = createColumns();
+
+            // Ordena os dados da galeria
+            galleryData.sort((a, b) => a.ordem_galeria - b.ordem_galeria);
+
+            galleryData.forEach((item, index) => {
+                const imgElement = document.createElement('img');
+                imgElement.src = `img/tmb/${item.id}.webp`;
+                imgElement.alt = `Peça ${item.id}`;
+                imgElement.setAttribute('loading', 'lazy');
+
+                // Adiciona o evento de clique para o lightbox
+                imgElement.onclick = () => {
+                    abrirLightbox('CSA', item.id);
+                };
+                
+                // Distribui as imagens entre as colunas
+                const columnIndex = index % numColumns;
+                columns[columnIndex].appendChild(imgElement);
+            });
+        };
+
+        // Chama a função para montar a galeria ao carregar a página
+        renderGallery();
+    });
+
+    // Funções do Lightbox (manter essas funções do seu código existente)
+    function abrirLightbox(idLightbox, idImagem = null) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'flex';
+      if (idImagem) {
+        const imagem = document.getElementById(idImagem);
+        if (imagem) {
+          imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        }
+      }
+    }
+
+    function fecharLightbox(idLightbox) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'none';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        fecharLightbox('CSA');
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.substring(1);
+      if (hash && document.getElementById(hash)) {
+        abrirLightbox('CSA', hash);
+      }
+    });
+</script>
+  <script>
+    function abrirLightbox(idLightbox, idImagem = null) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'flex';
+      if (idImagem) {
+        const imagem = document.getElementById(idImagem);
+        if (imagem) {
+          imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        }
+      }
+    }
+
+    function fecharLightbox(idLightbox) {
+      const lightbox = document.getElementById(idLightbox);
+      lightbox.style.display = 'none';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        fecharLightbox('CSA');
+      }
+    });
+
+    // CORREÇÃO HASH NA URL → abre lightbox direto via #001, #002, #003...
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.substring(1);
+      if (hash && document.getElementById(hash)) {
+        abrirLightbox('CSA', hash);
+      }
+    });
+  </script>
+
+  <br><br><br><br>
+</body>
+</html>
+ 
