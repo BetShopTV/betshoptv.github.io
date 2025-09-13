@@ -1,0 +1,65 @@
+name: Otimizar Imagens
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'img/**'
+  workflow_dispatch:
+  
+jobs:
+  optimize-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm install sharp@0.32.1
+
+      - name: Process images
+        id: process-images
+        run: |
+          mkdir -p img/otm
+          mkdir -p img/tmb
+          
+          # Encontra todas as imagens originais na pasta /img/
+          for file in img/*.{jpg,jpeg,png,webp}; do
+              if [ -f "$file" ]; then
+                  filename=$(basename -- "$file")
+                  filename_no_ext="${filename%.*}"
+                  
+                  # Versão otimizada para lightbox (otm)
+                  echo "Otimizando lightbox para $filename..."
+                  npx sharp "$file" \
+                      -resize 1200 1200 \
+                      -background '#bebab0' \
+                      -flatten \
+                      -webp \
+                      -q 80 \
+                      -o "img/otm/${filename_no_ext}.webp"
+                  
+                  # Versão thumbnail (tmb)
+                  echo "Criando thumbnail para $filename..."
+                  npx sharp "$file" \
+                      -resize 400 400 \
+                      -background '#bebab0' \
+                      -flatten \
+                      -webp \
+                      -q 60 \
+                      -o "img/tmb/${filename_no_ext}.webp"
+              fi
+          done
+
+      - name: Commit optimized images
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Automated: Otimizando imagens"
+          file_pattern: 'img/otm/* img/tmb/*'
