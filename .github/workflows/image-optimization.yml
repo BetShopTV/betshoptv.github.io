@@ -1,0 +1,45 @@
+name: Otimizar Imagens
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'img/**'
+
+jobs:
+  optimize-images:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Compress Images
+        uses: calibreapp/image-actions@v1
+        with:
+          jpeg-quality: '80'
+          png-quality: '80'
+          webp-quality: '80'
+          compress-only: true
+          output-path: 'img/otm/'
+          source-dir: 'img/'
+
+      - name: Create Thumbnails
+        uses: calibreapp/image-actions@v1
+        with:
+          jpeg-quality: '60'
+          png-quality: '60'
+          webp-quality: '60'
+          compress-only: true
+          output-path: 'img/tmb/'
+          source-dir: 'img/'
+          resize-width: '400'
+
+      - name: Commit Optimized Images
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Automated: Otimizando imagens"
+          file_pattern: 'img/otm/* img/tmb/*'
