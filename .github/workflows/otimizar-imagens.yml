@@ -11,6 +11,9 @@ on:
 jobs:
   optimize-images:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -28,8 +31,9 @@ jobs:
           mkdir -p img/otm
           mkdir -p img/tmb
           
+          echo "Buscando imagens originais na pasta 'img/'..."
           # Encontra todas as imagens originais na pasta /img/
-          for file in img/*.{jpg,jpeg,png,webp}; do
+          for file in img/*; do
               if [ -f "$file" ]; then
                   filename=$(basename -- "$file")
                   filename_no_ext="${filename%.*}"
