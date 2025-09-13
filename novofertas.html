@@ -510,7 +510,7 @@
   <main>
     <br><br><center>
       <div style="border: 2px solid #ff0000; min-width: 200px; max-width: 924px; background-repeat: repeat;">
-        ooooooooooooooooooooooo
+        WRÉÉÉÉON
         <br>
         <br>
         <p style="padding: 24px;">
@@ -561,10 +561,9 @@
 
                 const columns = createColumns();
                 
-                // Ordenação pela data de inserção e pela ordem da peça
                 galleryData.sort((a, b) => {
-                    const dateA = new Date(a.last_commit_date);
-                    const dateB = new Date(b.last_commit_date);
+                    const dateA = a.last_commit_date ? new Date(a.last_commit_date) : new Date(0);
+                    const dateB = b.last_commit_date ? new Date(b.last_commit_date) : new Date(0);
 
                     if (dateA > dateB) return -1;
                     if (dateA < dateB) return 1;
@@ -573,7 +572,9 @@
                 });
 
                 galleryData.forEach((item, index) => {
-                    if (item.disp && item.disp.toUpperCase() === 'X') {
+                    // Verifique se a peça deve ser exibida (Coluna 'DISP' com 'X' e 'TÍTULO' não vazio)
+                    if (item.disp && item.disp.toUpperCase().trim() === 'X' && item.título && item.título.trim() !== '') {
+                        
                         // Constrói o nome do arquivo a partir dos dados da planilha
                         const imgFilename = `${item.grupo}-${item.peça}a`;
                         const imgElement = document.createElement('img');
@@ -595,7 +596,8 @@
                 galleryContainer.innerHTML = '<p>Erro ao carregar a galeria. Tente novamente mais tarde.</p>';
             }
         };
-
+        
+        // Função parseCSV corrigida para lidar com vírgulas em strings
         const parseCSV = (csv) => {
             const lines = csv.split('\n');
             const headers = lines[3].split(',').map(header => header.toLowerCase().replace(/\s/g, '_').replace(/\//g, '_'));
@@ -607,13 +609,12 @@
                 });
                 return obj;
             });
-            return data.filter(item => item.peça && item.peça.trim() !== ''); // Filtra linhas vazias
+            return data.filter(item => item.peça && item.peça.trim() !== '');
         };
 
         fetchAndRenderGallery();
     });
 
-    // Funções do Lightbox (manter estas funções do seu código existente)
     function abrirLightbox(idLightbox, idImagem = null) {
       const lightbox = document.getElementById(idLightbox);
       lightbox.style.display = 'flex';
@@ -643,7 +644,7 @@
       }
     });
 </script>
-
+  
 <script>
     function abrirLightbox(idLightbox, idImagem = null) {
       const lightbox = document.getElementById(idLightbox);
