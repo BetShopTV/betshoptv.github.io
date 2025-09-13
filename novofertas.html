@@ -529,14 +529,12 @@
 
   </main>
 <script>
-    // 1. SUBSTITUA A URL ABAIXO PELA URL DA SUA API DO APPS SCRIPT
-    const API_URL = 'https://script.google.com/macros/s/AKfycby-EHgQWISAHimusOjxQ_krt0TfwjTVzRYK0otjaRHRs9q9y2YBAEe_sbQMU_pEFOkz/exec';
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSEI88BFOPqoGjdCmLtItSPmEWFusTYObN8awD_QZX85VJZgxkBmkVNrsJdP3PkOg/pub?gid=1247365408&single=true&output=csv';
 
     document.addEventListener('DOMContentLoaded', () => {
         const galleryContainer = document.querySelector('.gallery-container');
         const numColumns = 3; 
-        
-        // Função para criar as colunas da galeria
+
         const createColumns = () => {
             let columns = [];
             for (let i = 0; i < numColumns; i++) {
@@ -547,57 +545,65 @@
             }
             return columns;
         };
-        
-        // Função para buscar e renderizar a galeria
+
         const fetchAndRenderGallery = async () => {
             if (!galleryContainer) return;
-            
+
             galleryContainer.innerHTML = '';
-            
+
             try {
-                // Tenta buscar os dados da planilha via Apps Script
-                const response = await fetch(API_URL);
-                const galleryData = await response.json();
-                
+                const response = await fetch(CSV_URL);
+                const csvText = await response.text();
+                const galleryData = parseCSV(csvText);
+
                 const columns = createColumns();
                 
-                // Ordena os dados da planilha antes de renderizar
-                // A ordem de exibição pode ser ajustada na planilha
                 galleryData.sort((a, b) => {
-                    // Ordenação por grupo e depois por número da peça
                     if (a.grupo !== b.grupo) {
-                        return a.grupo - b.grupo;
+                        return parseInt(a.grupo) - parseInt(b.grupo);
                     }
-                    return a.peça - b.peça;
+                    return parseInt(a.peça) - parseInt(b.peça);
                 });
-                
+
                 galleryData.forEach((item, index) => {
-                    // Só renderiza se a peça estiver disponível
                     if (item.disp && item.disp.toUpperCase() === 'X') {
                         const imgElement = document.createElement('img');
-                        imgElement.src = `img/tmb/${item.img}.webp`; // Usa o thumbnail
+                        imgElement.src = `img/tmb/${item.img}.webp`;
                         imgElement.alt = `Peça ${item.título}`;
                         imgElement.setAttribute('loading', 'lazy');
-                        
+
                         imgElement.onclick = () => {
-                            abrirLightbox('CSA', item.img); // A função abrirLightbox vai precisar de ajuste
+                            abrirLightbox('CSA', item.img);
                         };
-                        
+
                         const columnIndex = index % numColumns;
                         columns[columnIndex].appendChild(imgElement);
                     }
                 });
-                
+
             } catch (error) {
                 console.error("Erro ao carregar dados da planilha:", error);
                 galleryContainer.innerHTML = '<p>Erro ao carregar a galeria. Tente novamente mais tarde.</p>';
             }
         };
-        
-        // Chama a função para buscar e montar a galeria
+
+        const parseCSV = (csv) => {
+            const lines = csv.split('\n');
+            const headers = lines[3].split(',').map(header => header.toLowerCase().replace(/\s/g, '_').replace(/\//g, '_'));
+            const data = lines.slice(4).map(line => {
+                const values = line.split(',');
+                let obj = {};
+                headers.forEach((header, index) => {
+                    obj[header] = values[index];
+                });
+                return obj;
+            });
+            return data.filter(item => item.img && item.img.trim() !== ''); // Filtra linhas vazias
+        };
+
         fetchAndRenderGallery();
     });
-    
+
     // Funções do Lightbox (manter estas funções do seu código existente)
     function abrirLightbox(idLightbox, idImagem = null) {
       const lightbox = document.getElementById(idLightbox);
