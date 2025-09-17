@@ -1,501 +1,422 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BSTV — Galeria + Feed (acessível)</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BSTV — Galeria com BARRA SHOPPING</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* ===== Scrollbars conforme pedido ===== */
-  body::-webkit-scrollbar { width: 8px; height: 8px; }
-  body::-webkit-scrollbar-thumb { background-color: #2b2424; }
-  body::-webkit-scrollbar-track { background: #bebab0; }
+:root{
+  --bg:#bebab0; --text:#2b2424; --accent:#ff0000; --white:#bebab0;
+  --footer-h: clamp(46px,6vh,64px);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:'Roboto Condensed',sans-serif; background:var(--bg); color:var(--text);
+  padding:1vw 1vw 6.2rem; /* espaço para footer */
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent);}
+h1{font-size:1.2rem;margin:0 0 1rem}
 
-  textarea#selected-text::-webkit-scrollbar { width: 4px; height: 4px; }
-  textarea#selected-text::-webkit-scrollbar-thumb { background-color: #ff0000; }
-  textarea#selected-text::-webkit-scrollbar-track { background: #bebab0; }
+/* gallery layout (3 col) */
+.container{max-width:1200px;margin:0 auto}
+.filter-bar{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:16px;}
+.filter-btn{padding:6px 12px;border:2px solid var(--accent);background:transparent;color:var(--accent);font-weight:700;cursor:pointer}
+.filter-btn.disabled{border:2px dashed #fff;background:#fff;color:var(--text);cursor:default}
+.shuffle-btn{border:2px dashed var(--accent)}
+.reset-btn{border:2px solid #2b2424;background:#2b2424;color:#fff}
+.recent-btn{border:2px solid var(--accent)}
 
-  :root{
-    --cor-fundo:#bebab0;
-    --cor-texto:#2b2424;
-    --cor-destaque:#ff0000;
-    --maxW:1200px;
-    --btn-h:48px; /* base button height */
-    --border-w:2px;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; font-family:'Roboto Condensed',sans-serif;
-    background:var(--cor-fundo); color:var(--cor-texto); padding:1vw;
-  }
+.gallery-container{display:flex;gap:clamp(4px,1.2vw,24px);max-width:1200px;margin:0 auto}
+.col{flex:1 1 calc(33.333% - 1.333vw); display:flex; flex-direction:column; gap:24px; max-width:calc((min(1200px,100vw)-4vw)/3);}
 
-  /* ===== BACK BAR (aparece apenas no feed) ===== */
-  .back-bar{
-    display:none; /* shown only in feed */
-    position:fixed;
-    inset:0 0 auto 0;
-    background:var(--cor-destaque);
-    color:#bebab0;
-    z-index:9999;
-    height: clamp(42px,6vh,60px); /* responsive */
-    display:flex; align-items:center; justify-content:flex-start;
-    padding:0 clamp(12px,2vw,20px);
-    cursor:pointer;
-  }
-  .back-bar .label{ font-weight:700; font-size: clamp(0.9rem, 2vw, 1.1rem); color:#bebab0; }
-  /* slight 5% reduction relative to original if needed - already built into clamp values */
+/* item */
+.gallery-item{display:flex;flex-direction:column; background:var(--bg); cursor:pointer; position:relative}
+.gallery-image{width:100%;height:auto;display:block;object-fit:cover} /* no rounding per request */
+.item-code{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);font-family:'Roboto Mono',monospace;border:2px solid #2b2424;padding:.35vw .9vw;background:var(--bg);font-weight:700;font-size:clamp(.7rem,1.6vw,1.05rem)}
+.add-button{border:2px solid var(--accent);background:transparent;color:var(--accent);font-weight:700;padding:8px;text-transform:uppercase;cursor:pointer;margin-top:12px;margin-bottom:24px;width:100%;}
 
-  /* leave page content space for fixed bar */
-  .page-padding-top{ padding-top: calc(clamp(42px,6vh,60px) + 12px); }
+/* FEED (post) */
+#feed{display:none;max-width:1200px;margin:0 auto 8rem}
+.post{margin-bottom:28px}
+.carousel-wrap{border:2px solid #2b2424;padding:12px}
+.carousel{display:flex;gap:24px;overflow-x:auto;align-items:center;scroll-snap-type:none} /* continuous scroll */
+.slide{flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+.slide img{max-width:100%;max-height:80vh;object-fit:contain}
 
-  /* ===== GALERIA (mantida) ===== */
-  .gallery-container {
-      max-width: var(--maxW);
-      margin: 0 auto;
-      display: flex;
-      gap: clamp(8px, 1.2vw, 24px);
-  }
-  .col {
-      flex: 1 1 calc(33.333% - 1.333vw);
-      max-width: calc((min(var(--maxW), 100vw) - 4vw) / 3);
-      display: flex; flex-direction: column; gap: 38px;
-  }
-  .gallery-item {
-      background-color: var(--cor-fundo);
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      box-sizing: border-box;
-      position: relative;
-      cursor: pointer;
-  }
-  .item-code{
-      font-family:'Roboto Mono', monospace;
-      font-weight:500;
-      font-size:clamp(0.7em,1.8vw,1.2em);
-      white-space:nowrap;
-      padding:0.38vw 1.8vw;
-      color:var(--cor-texto);
-      background:var(--cor-fundo);
-      border: var(--border-w) solid var(--cor-texto);
-      width:fit-content;
-      position:absolute;
-      top:0;
-      left:50%;
-      transform:translate(-50%,-50%);
-      z-index:10;
-    }
-  .gallery-image{
-      width:100%; height:auto; display:block;
-      border: var(--border-w) solid var(--cor-texto);
-      border-right:0; border-left:0; border-bottom:0;
-      margin-bottom:0; cursor:pointer;
-  }
-  .item-price{
-      font-family:'Roboto Mono', monospace;
-      font-weight:500;
-      font-size:clamp(0.8em,1.8vw,1.2em);
-      padding:0.5vw 1vw; background:var(--cor-texto); color:var(--cor-fundo);
-      line-height:1.2; position:absolute; bottom:0; left:0; z-index:10;
-  }
-  .add-button{
-      background-image:url('https://betshoptv.com/images/fofertas_hover.gif');
-      color: #fff; font-family:'Roboto Mono', monospace; border:0; font-weight:500;
-      font-size:clamp(0.8em,1.8vw,1.2em); padding:0.5vw 1vw; cursor:pointer; text-transform:uppercase;
-      align-self:flex-end; margin-top:0;
-  }
-  @media(max-width:768px){ .col{ flex-basis:calc(50% - 2vw); max-width:calc(50% - 1vw); } }
+/* piece info */
+.piece-info{padding:12px 8px;display:flex;flex-direction:column;gap:6px}
+.title-row{display:flex;justify-content:space-between;align-items:center}
+.piece-title,.piece-price{font-weight:700;font-size:clamp(1rem,2.2vw,1.1rem)}
+.piece-tech,.piece-dims{font-size:clamp(.85rem,1.6vw,1rem)}
 
-  /* ===== FEED ===== */
-  #feed{ display:none; max-width:var(--maxW); margin:0 auto; box-sizing:border-box; }
-  .feed-content{ padding:12px; box-sizing:border-box; }
+/* actions */
+.actions-row{display:flex;gap:12px;padding:8px 12px}
+.btn{height:44px;border:2px solid var(--accent);background:transparent;color:var(--accent);font-weight:700;cursor:pointer;padding:0 14px}
+.btn.no-round{border-radius:0}
+.heart.active{background:var(--accent);color:var(--white)}
 
-  .post{ margin-bottom:28px; position:relative; background:transparent; }
+/* footer / BARRA SHOPPING */
+.footer-bar{position:fixed;left:0;right:0;bottom:0;background:var(--accent);color:var(--white);height:var(--footer-h);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:9999;font-weight:700}
+.footer-left{display:flex;align-items:center;gap:8px}
+.footer-dot{width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.footer-dot svg{fill:var(--white)}
+.footer-panels{display:flex;gap:8px;align-items:center}
+.panel-btn{background:transparent;border:0;color:var(--white);font-weight:700;cursor:pointer;position:relative;padding:8px}
 
-  /* carousel wrapper with border as requested */
-  .carousel-wrap{
-    border: var(--border-w) solid var(--cor-texto);
-    padding: 12px;
-    box-sizing:border-box;
-  }
-  /* border width reduces on smaller screens (and item-code too) */
-  @media(max-width:600px){ :root{ --border-w:1px; } .item-code{ border-width:1px; } }
+/* expanded panel (overlay above footer) */
+.panel-expanded{position:fixed;left:0;right:0;bottom:var(--footer-h);background:rgba(255,255,255,0.98);max-height:45vh;border-top:2px solid #d0d0d0;display:none;padding:12px;z-index:9998;overflow:hidden}
+.panel-row{display:flex;align-items:center;gap:12px;height:100%}
+.mini-list{display:flex;gap:12px;overflow-x:auto;align-items:center;padding:8px 4px}
+.mini-item{flex:0 0 auto;display:flex;gap:8px;align-items:center;border:1px solid #ddd;padding:6px;background:#fff}
+.mini-thumb{width:64px;height:48px;object-fit:cover;border:1px solid #ccc}
 
-  /* continuous scroller */
-  .carousel{
-    display:flex; overflow-x:auto; gap:24px; align-items:center; padding-bottom:8px;
-    scroll-behavior:auto; -webkit-overflow-scrolling:touch;
-    padding-left:0; margin-left:0;
-  }
-  .carousel::-webkit-scrollbar{ height: 8px; }
-  .carousel::-webkit-scrollbar-thumb{ background: var(--cor-destaque); }
-  .carousel::-webkit-scrollbar-track{ background: transparent; }
+/* totals */
+.total-box{padding:6px 10px;background:transparent;color:var(--white);font-weight:700}
 
-  /* slides inline, left-aligned starting from first (a) */
-  .slide{ flex:0 0 auto; display:flex; align-items:center; justify-content:center; min-width:unset; box-sizing:border-box; }
-  .slide img{
-    max-width:100%; max-height:80vh; width:auto; height:auto; object-fit:contain; display:block;
-    vertical-align:middle;
-    border-radius:0;
-  }
-
-  /* piece info below carousel */
-  .piece-info{ padding:12px 8px; font-family:'Roboto Condensed',sans-serif; color:var(--cor-texto); display:flex; flex-direction:column; gap:6px; }
-  .title-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-  .piece-title{ font-weight:700; font-size: clamp(1rem, 2.2vw, 1.1rem); text-align:left; }
-  .piece-price{ font-weight:500; font-size: clamp(1rem, 2.2vw, 1.1rem); text-align:right; }
-  .piece-tech{ font-size: clamp(0.85rem, 1.6vw, 1rem); color:var(--cor-texto); }
-  .piece-dims{ font-size: clamp(0.8rem, 1.4vw, 0.95rem); color:var(--cor-texto); }
-
-  /* actions row: equal-height buttons, square corners, border 2px or 1px on small */
-  .actions-row{ display:flex; gap:12px; padding:8px 12px; align-items:center; }
-  .btn{
-    height: var(--btn-h);
-    min-height: var(--btn-h);
-    padding: 0 14px;
-    border: 2px solid var(--cor-destaque);
-    background: transparent;
-    color: var(--cor-destaque);
-    font-weight:700;
-    cursor:pointer;
-    border-radius:0;
-    display:inline-flex; align-items:center; justify-content:center;
-    font-family:'Roboto Condensed',sans-serif;
-  }
-  .btn.small-border{ border-width:1px; }
-  .heart{ width: calc(var(--btn-h)); } /* square */
-  .heart.active{ background:var(--cor-destaque); color:var(--cor-fundo); }
-
-  @media(max-width:600px){
-    :root{ --btn-h:40px; }
-    .btn{ border-width:1px; }
-    .item-code{ border-width:1px; }
-  }
-
-  /* focus styles (accessibility) */
-  .btn:focus, .carousel:focus { outline: 2px solid rgba(255,0,0,0.02); outline-offset:2px; }
-
-  /* visually-hidden (for aria-live region) */
-  .visually-hidden{ position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; border:0; padding:0; margin:-1px; }
-
+/* responsive tweaks */
+@media(max-width:768px){
+  .col{flex-basis:calc(33.333% - 8px)}
+  .mini-thumb{width:52px;height:40px}
+  .footer-bar{padding:0 8px}
+}
 </style>
 </head>
-<body class="page-padding-top">
+<body>
 
-  <!-- BACK BAR (click anywhere to go back) -->
-  <div id="backBar" class="back-bar" aria-hidden="true" role="button" tabindex="0">
-    <span class="label">← Voltar</span>
+<div class="container">
+  <h1>Galeria de Ofertas — BSTV</h1>
+
+  <!-- filtros (exemplo - segue seu layout) -->
+  <div class="filter-bar">
+    <button class="filter-btn disabled" data-group="02">02</button>
+    <button class="filter-btn" data-group="03">03</button>
+    <button class="filter-btn" data-group="04">04</button>
+    <button class="filter-btn disabled" data-group="05">05</button>
+    <button class="filter-btn disabled" data-group="06">06</button>
+    <button class="filter-btn disabled" data-group="07">07</button>
+    <button class="filter-btn disabled" data-group="08">08</button>
+    <button class="filter-btn shuffle-btn" id="shuffleBtn">SHUFFLE</button>
+    <button class="filter-btn recent-btn" id="recentBtn">RECENTE 🠵</button>
+    <button class="filter-btn reset-btn" id="resetBtn">RESET</button>
   </div>
 
   <!-- GALERIA -->
-  <div id="gallery" class="gallery-container" aria-hidden="false">
+  <div id="gallery" class="gallery-container">
     <div class="col" id="col0"></div>
     <div class="col" id="col1"></div>
     <div class="col" id="col2"></div>
   </div>
 
   <!-- FEED -->
-  <div id="feed" role="region" aria-hidden="true">
-    <div id="feedContent" class="feed-content"></div>
+  <div id="feed">
+    <div id="feedContent"></div>
+  </div>
+</div>
+
+<!-- BARRA SHOPPING (footer) -->
+<div class="footer-bar" id="footerBar" role="region" aria-label="Barra de compras">
+  <div class="footer-left">
+    <div id="backBtn" class="footer-dot" title="Voltar" aria-hidden="true" style="display:none;">
+      <!-- simple left arrow -->
+      <svg width="18" height="18" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+    </div>
+    <div class="footer-dot" id="cartCountBtn" title="Carrinho" aria-expanded="false" aria-controls="cartPanel">
+      🛍 <span id="cartCount" style="margin-left:6px">0</span>
+    </div>
+    <div class="footer-dot" id="rifaCountBtn" title="Rifas" aria-expanded="false" aria-controls="rifaPanel">
+      🎟 <span id="rifaCount" style="margin-left:6px">0</span>
+    </div>
+    <div class="footer-dot" id="likesCountBtn" title="Favoritos" aria-expanded="false" aria-controls="likesPanel">
+      ♥ <span id="likesCount" style="margin-left:6px">0</span>
+    </div>
   </div>
 
-  <!-- aria-live region (visually hidden) to announce current slide for screen readers -->
-  <div id="sr-live" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <div class="footer-panels">
+    <div class="total-box" id="totalBox">R$ 0,00</div>
+    <button class="panel-btn" id="openCartBtn" aria-controls="cartPanel">Carrinho</button>
+    <button class="panel-btn" id="openRifaBtn" aria-controls="rifaPanel">Rifa</button>
+    <button class="panel-btn" id="openLikesBtn" aria-controls="likesPanel">Favoritos</button>
+  </div>
+</div>
+
+<!-- expanded panels -->
+<div id="cartPanel" class="panel-expanded" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <strong>Carrinho</strong>
+    <button id="closeCart">Fechar ✕</button>
+  </div>
+  <div style="height:12px"></div>
+  <div class="mini-list" id="cartList" aria-live="polite"></div>
+</div>
+
+<div id="rifaPanel" class="panel-expanded" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <strong>Rifas</strong>
+    <button id="closeRifa">Fechar ✕</button>
+  </div>
+  <div style="height:12px"></div>
+  <div class="mini-list" id="rifaList"></div>
+</div>
+
+<div id="likesPanel" class="panel-expanded" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <strong>Favoritos</strong>
+    <button id="closeLikes">Fechar ✕</button>
+  </div>
+  <div style="height:12px"></div>
+  <div class="mini-list" id="likesList"></div>
+</div>
 
 <script>
-/* ===== Data & piece metadata (titles, técnica, dimensões, preço) ===== */
+/* ========= Dados (exemplo baseado no seu ofertas-iaeu5.txt) =========
+   estrutura: peças identificadas por "XX-YY" e imagens (array)
+   NOTE: URLs usam seu padrão: https://betshoptv.com/peças/XX-YYx.jpg
+   (a lista usada aqui é reduzida para demo; substitua/expanda conforme necessário)
+   Fonte de referência: arquivo enviado. :contentReference[oaicite:2]{index=2}
+*/
 const fileList = [
-"03-01a.jpg","03-01b.jpg","03-01c.jpg","03-01d.jpg",
-"03-02a.jpg","03-02b.jpg","03-02c.jpg",
-"03-03a.jpg","03-03b.jpg","03-03c.jpg",
-"03-04a.jpg","03-04b.jpg",
-"03-05a.jpg","03-05b.jpg","03-05c.jpg",
-"03-06a.jpg","03-06b.jpg",
-"03-07a.jpg","03-07b.jpg",
-"03-08a.jpg","03-08b.jpg","03-08c.jpg",
-"03-09a.jpg","03-09b.jpg",
-"03-10a.jpg","03-10b.jpg","03-10c.jpg",
-"03-11a.jpg","03-11b.jpg","03-11c.jpg",
-"03-12a.jpg","03-12b.jpg","03-12c.jpg",
-"03-13a.jpg","03-13b.jpg","03-13c.jpg",
-"04-01a.jpg","04-01b.jpg",
-"04-02a.jpg","04-02b.jpg",
-"04-03a.jpg","04-03b.jpg","04-03c.jpg",
-"04-04a.jpg","04-04b.jpg",
-"04-05a.jpg","04-05b.jpg","04-05c.jpg","04-05d.jpg",
-"04-06a.jpg","04-06b.jpg","04-06c.jpg","04-06d.jpg"
+  "03-01a.jpg","03-01b.jpg","03-02a.jpg","03-03a.jpg","04-01a.jpg","04-02a.jpg",
+  "04-03a.jpg","04-04a.jpg","04-05a.jpg","04-06a.jpg"
 ];
-const basePath = "https://betshoptv.com/peças/";
-/* pieceData: título, técnica (we'll use titulo field for "técnica" if provided), medidas, preco */
-const pieceData = {
-  "03-01": { titulo:"Rádio 01", tecnica:"Página da edição de março de 1990 da revista Playboy brasileira transferida para EVA estampado e parafusos.", medidas:"57 x 18 x 15 cm", preco:"200" },
-  "03-02": { titulo:"Câmera fotográfica 01", tecnica:"Técnica X aplicada sobre madeira", medidas:"45 x 20 x 12 cm", preco:"150" },
-  "03-03": { titulo:"Polaroid 01", tecnica:"Técnica Y com verniz", medidas:"30 x 20 x 10 cm", preco:"150" },
-  "03-04": { titulo:"Câmera fotográfica 02", tecnica:"Técnica Z", medidas:"40 x 18 x 12 cm", preco:"200" },
-  "03-05": { titulo:"Rádio 02", tecnica:"Montagem com componentes reciclados", medidas:"50 x 22 x 14 cm", preco:"200" },
-  "03-06": { titulo:"Rádio 03", tecnica:"Técnica A", medidas:"48 x 20 x 13 cm", preco:"150" },
-  "03-07": { titulo:"Câmera fotográfica 03", tecnica:"Técnica B", medidas:"44 x 19 x 12 cm", preco:"150" },
-  "03-08": { titulo:"Rádio 04", tecnica:"Técnica C", medidas:"60 x 25 x 18 cm", preco:"250" },
-  "03-09": { titulo:"Conjunto de som e imagem 01", tecnica:"Técnica D", medidas:"57 x 18 x 15 cm", preco:"1800" },
-  "03-10": { titulo:"Rádio 05", tecnica:"Técnica E", medidas:"40 x 15 x 12 cm", preco:"150" },
-  "03-11": { titulo:"Rádio 06", tecnica:"Técnica F", medidas:"42 x 16 x 13 cm", preco:"150" },
-  "03-12": { titulo:"Câmera fotográfica 04", tecnica:"Técnica G", medidas:"46 x 18 x 12 cm", preco:"250" },
-  "03-13": { titulo:"Polaroid 03", tecnica:"Técnica H", medidas:"34 x 20 x 11 cm", preco:"350" },
-  "04-01": { titulo:"Rádio 07", tecnica:"Técnica I", medidas:"48 x 21 x 14 cm", preco:"150" },
-  "04-02": { titulo:"Câmera fotográfica 05", tecnica:"Técnica J", medidas:"44 x 18 x 12 cm", preco:"150" },
-  "04-03": { titulo:"Polaroid 04", tecnica:"Técnica K", medidas:"32 x 18 x 12 cm", preco:"150" },
-  "04-04": { titulo:"Câmera fotográfica 06", tecnica:"Técnica L", medidas:"50 x 20 x 15 cm", preco:"150" },
-  "04-05": { titulo:"Rádio 08", tecnica:"Técnica M", medidas:"58 x 22 x 16 cm", preco:"150" },
-  "04-06": { titulo:"Rádio 09", tecnica:"Técnica N", medidas:"59 x 23 x 17 cm", preco:"150" }
-};
-
-/* ===== build pieces map ===== */
+const basePath="https://betshoptv.com/peças/";
 const pieces = {};
 fileList.forEach(fn=>{
   const m = fn.match(/^(\d{2})-(\d{2})([a-z])\.jpg$/i);
   if(!m) return;
-  const group = m[1], number = m[2], letter = m[3].toLowerCase();
-  const key = `${group}-${number}`;
-  if(!pieces[key]) pieces[key] = { group, number, images: [] };
-  pieces[key].images.push({ letter, filename: fn, url: basePath+fn });
+  const g=m[1], n=m[2], l=m[3];
+  const key=`${g}-${n}`;
+  if(!pieces[key]) pieces[key]={group:g,number:n,images:[] , price:150, title:`Peça ${n}`};
+  pieces[key].images.push({letter:l, url: basePath + fn});
 });
-Object.values(pieces).forEach(p=> p.images.sort((a,b)=> a.letter.localeCompare(b.letter)));
+Object.values(pieces).forEach(p=>p.images.sort((a,b)=>a.letter.localeCompare(b.letter)));
 
-/* ordered keys (group then number) */
-let orderedKeys = Object.keys(pieces).sort((a,b)=>{
-  if(pieces[a].group === pieces[b].group) return pieces[a].number.localeCompare(pieces[b].number);
-  return pieces[a].group.localeCompare(pieces[b].group);
-});
+/* ========= Estado ========= */
+let cart = [];          // array of keys
+let likes = new Set();  // set of keys
+let rifas = [];         // array of selected raffle numbers (demo)
+let activeGroups = new Set();
+let shuffled = false;
+let recentDesc = true;
 
-/* ===== render gallery (keeps exact design) ===== */
-const cols = [document.getElementById('col0'), document.getElementById('col1'), document.getElementById('col2')];
-orderedKeys.forEach((key, idx)=>{
-  const p = pieces[key];
-  if(!p.images[0]) return;
-  const galleryItem = document.createElement('div');
-  galleryItem.className = 'gallery-item';
-  galleryItem.onclick = ()=> openFeed(key);
+/* ========= Helpers ========= */
+function formatMoney(v){ return 'R$ ' + Number(v).toFixed(2).replace('.',','); }
+function calcTotal(){
+  const subtotal = cart.reduce((s,k)=> s + (pieces[k]?.price||0),0);
+  const rifaSubtotal = rifas.length * 10; // demo: cada rifa R$10
+  return subtotal + rifaSubtotal;
+}
 
-  const itemCode = document.createElement('span');
-  itemCode.className = 'item-code';
-  itemCode.textContent = `${p.group} / ${p.number}`;
-
-  const image = document.createElement('img');
-  image.className = 'gallery-image';
-  image.src = p.images[0].url;
-  image.alt = `Peça ${p.group}-${p.number}`;
-
-  const price = document.createElement('span');
-  price.className = 'item-price';
-  price.textContent = p.group === '03' ? "R$ 200" : "R$ 250";
-
-  const btn = document.createElement('button');
-  btn.className = 'add-button';
-  btn.textContent = 'ADICIONAR';
-
-  galleryItem.appendChild(itemCode);
-  galleryItem.appendChild(image);
-  galleryItem.appendChild(price);
-  galleryItem.appendChild(btn);
-  cols[idx % 3].appendChild(galleryItem);
-});
-
-/* ===== Accessibility helpers ===== */
-const srLive = document.getElementById('sr-live');
-function announce(text){ srLive.textContent = text; }
-
-/* intersection observer to detect which slide is most visible for accessibility */
-function createVisibilityObserver(carousel){
-  const slides = Array.from(carousel.querySelectorAll('.slide'));
-  const options = { root: carousel, threshold: buildThresholdList() };
-  const obs = new IntersectionObserver((entries)=>{
-    // pick slide with max intersectionRatio
-    let best = {ratio:0, target:null, index:0};
-    entries.forEach(e=>{
-      const idx = slides.indexOf(e.target);
-      if(e.intersectionRatio > best.ratio){ best = {ratio: e.intersectionRatio, target: e.target, index: idx}; }
-    });
-    if(best.target){
-      // announce (for screen reader only)
-      const total = slides.length;
-      const current = Math.min(Math.max(1, best.index + 1), total);
-      announce(`Imagem ${current} de ${total}`);
-      // set aria-current attributes
-      slides.forEach((s,i)=> s.setAttribute('aria-current', (i===best.index) ? 'true' : 'false'));
+/* ========= Render Gallery ========= */
+function renderGallery(){
+  document.querySelectorAll('.col').forEach(c=>c.innerHTML='');
+  let keys = Object.keys(pieces);
+  if(activeGroups.size>0) keys = keys.filter(k=> activeGroups.has(pieces[k].group));
+  // sort
+  keys.sort((a,b)=>{
+    const [ga,na]=a.split('-'); const [gb,nb]=b.split('-');
+    if(recentDesc){
+      if(gb!==ga) return gb-ga;
+      return nb-na;
+    }else{
+      if(ga!==gb) return ga-gb;
+      return na-nb;
     }
-  }, options);
-  slides.forEach(s=> obs.observe(s));
-  return obs;
-}
-function buildThresholdList() {
-  const thresholds = [];
-  for (let i=0; i<=100; i++){ thresholds.push(i/100); }
-  return thresholds;
-}
-
-/* keyboard navigation for carousel: left/right arrows */
-function attachCarouselKeyboard(carousel){
-  carousel.addEventListener('keydown', (e)=>{
-    if(e.key === 'ArrowLeft'){ e.preventDefault(); carousel.scrollBy({ left: -Math.round(carousel.clientWidth - 24), behavior: 'auto' }); }
-    if(e.key === 'ArrowRight'){ e.preventDefault(); carousel.scrollBy({ left: Math.round(carousel.clientWidth - 24), behavior: 'auto' }); }
   });
+  if(shuffled) keys = keys.sort(()=>Math.random()-0.5);
+  keys.forEach((key,i)=>{
+    const p = pieces[key];
+    if(!p || !p.images[0]) return;
+    const item = document.createElement('div'); item.className='gallery-item';
+    const code = document.createElement('span'); code.className='item-code'; code.innerText=`${p.group}/${p.number}`;
+    const img = document.createElement('img'); img.className='gallery-image'; img.src=p.images[0].url; img.alt=`${p.group}/${p.number}`;
+    img.loading='lazy';
+    // add button area
+    const btn = document.createElement('button'); btn.className='add-button'; btn.innerText='🛍 ADICIONAR AO CARRINHO';
+    btn.onclick = (ev)=>{ ev.stopPropagation(); toggleCartAdd(key); };
+    item.onclick = ()=> openFeed(key);
+    item.appendChild(code); item.appendChild(img); item.appendChild(btn);
+    document.getElementById('col' + (i%3)).appendChild(item);
+  });
+  updateFooterCounts();
 }
 
-/* ===== openFeed implementation with requested UI changes ===== */
+/* ========= Feed (post view) ========= */
 function openFeed(startKey){
-  // show back bar
-  const backBar = document.getElementById('backBar');
-  backBar.style.display = 'flex';
-  backBar.setAttribute('aria-hidden','false');
-
-  const feed = document.getElementById('feed');
-  const feedContent = document.getElementById('feedContent');
-  feedContent.innerHTML = '';
-
-  orderedKeys.forEach((k, index)=>{
-    const p = pieces[k];
-    const post = document.createElement('div');
-    post.className = 'post';
-
-    // carousel wrap with border
-    const wrap = document.createElement('div');
-    wrap.className = 'carousel-wrap';
-    // container carousel (continuous)
-    const carousel = document.createElement('div');
-    carousel.className = 'carousel';
-    carousel.setAttribute('role','group');
-    carousel.setAttribute('tabindex','0');
-    carousel.setAttribute('aria-label', `${k} — imagens`);
-
-    // append slides
-    p.images.forEach((imgObj,i)=>{
-      const slide = document.createElement('div');
-      slide.className = 'slide';
-      slide.setAttribute('role','img');
-      slide.setAttribute('aria-label', `Imagem ${i+1} de ${p.images.length}`);
-      const img = document.createElement('img');
-      img.src = imgObj.url;
-      img.alt = `${k} - ${imgObj.letter}`;
-      img.loading = 'lazy';
-      slide.appendChild(img);
-      carousel.appendChild(slide);
-    });
-
-    wrap.appendChild(carousel);
-    post.appendChild(wrap);
-
-    /* piece info area */
-    const info = document.createElement('div');
-    info.className = 'piece-info';
-    const meta = pieceData[k] || { titulo:k, tecnica:'', medidas:'-', preco:'-' };
-    // title row with code/title left and price right
-    const titleRow = document.createElement('div');
-    titleRow.className = 'title-row';
-    const title = document.createElement('div');
-    title.className = 'piece-title';
-    title.innerText = `${p.group}/${p.number} ${meta.titulo}`;
-    const price = document.createElement('div');
-    price.className = 'piece-price';
-    price.innerText = `R$ ${meta.preco}`;
-    titleRow.appendChild(title); titleRow.appendChild(price);
-
-    const tech = document.createElement('div'); tech.className = 'piece-tech';
-    tech.innerText = meta.tecnica;
-
-    const dims = document.createElement('div'); dims.className = 'piece-dims';
-    dims.innerText = meta.medidas;
-
-    info.appendChild(titleRow);
-    info.appendChild(tech);
-    info.appendChild(dims);
-
-    /* actions row */
-    const actions = document.createElement('div');
-    actions.className = 'actions-row';
-    const heart = document.createElement('button');
-    heart.className = 'btn heart';
-    heart.setAttribute('aria-pressed','false');
-    heart.title = 'Favoritar';
-    heart.innerText = '♡';
-    heart.onclick = ()=>{
-      const active = heart.classList.toggle('active');
-      heart.setAttribute('aria-pressed', active ? 'true' : 'false');
-      heart.innerText = active ? '♥' : '♡';
-    };
-    const addCart = document.createElement('button');
-    addCart.className = 'btn';
-    addCart.innerText = '🛍 ADICIONAR AO CARRINHO';
-    addCart.setAttribute('aria-label', `Adicionar ${meta.titulo} ao carrinho`);
-    addCart.onclick = ()=>{
-      const cart = JSON.parse(localStorage.getItem('bstv_cart_v1') || '[]');
-      cart.push({ key:k, title: meta.titulo, price: meta.preco });
-      localStorage.setItem('bstv_cart_v1', JSON.stringify(cart));
-      addCart.innerText = 'ADICIONADO ✓';
-      setTimeout(()=> addCart.innerText = '🛍 ADICIONAR AO CARRINHO', 1200);
-    };
-    actions.appendChild(heart);
-    actions.appendChild(addCart);
-
-    post.appendChild(info);
-    post.appendChild(actions);
-
-    feedContent.appendChild(post);
-
-    /* accessibility: observe visibility of slides inside this carousel */
-    // create observer after appending to DOM (done later)
-  });
-
-  /* show feed, hide gallery */
-  document.getElementById('gallery').style.display = 'none';
-  feed.style.display = 'block';
-  // make back bar clickable: click anywhere returns to gallery
-  document.getElementById('backBar').onclick = backToGallery;
-  document.getElementById('backBar').onkeydown = (e)=> { if(e.key === 'Enter' || e.key === ' ') backToGallery(); };
-
-  // scroll to requested post without animation
-  const idx = orderedKeys.indexOf(startKey);
-  if(idx >= 0){
-    const posts = document.querySelectorAll('#feedContent .post');
-    const target = posts[idx];
-    if(target){
-      // compute top offset to leave back bar visible
-      const topOffset = target.getBoundingClientRect().top + window.scrollY - document.querySelector('.back-bar').offsetHeight - 8;
-      window.scrollTo({ top: topOffset, left:0, behavior:'auto' });
-      // ensure first image aligned left
-      const car = target.querySelector('.carousel');
-      if(car) car.scrollLeft = 0;
+  document.getElementById('gallery').style.display='none';
+  document.getElementById('feed').style.display='block';
+  // show back button on footer
+  document.getElementById('backBtn').style.display='flex';
+  const cont = document.getElementById('feedContent'); cont.innerHTML='';
+  let keys = Object.keys(pieces);
+  if(activeGroups.size>0) keys = keys.filter(k=> activeGroups.has(pieces[k].group));
+  keys.sort((a,b)=>{
+    const [ga,na]=a.split('-'); const [gb,nb]=b.split('-');
+    if(recentDesc){
+      if(gb!==ga) return gb-ga;
+      return nb-na;
+    }else{
+      if(ga!==gb) return ga-gb;
+      return na-nb;
     }
+  });
+  if(shuffled) keys = keys.sort(()=>Math.random()-0.5);
+  keys.forEach(k=>{
+    const p = pieces[k];
+    const post = document.createElement('div'); post.className='post';
+    // carousel
+    const wrap = document.createElement('div'); wrap.className='carousel-wrap';
+    const car = document.createElement('div'); car.className='carousel';
+    p.images.forEach(imgObj=>{
+      const s = document.createElement('div'); s.className='slide';
+      const im = document.createElement('img'); im.src = imgObj.url; im.alt = `${k} ${imgObj.letter}`;
+      s.appendChild(im); car.appendChild(s);
+    });
+    wrap.appendChild(car); post.appendChild(wrap);
+    // info
+    const info = document.createElement('div'); info.className='piece-info';
+    const titleRow = document.createElement('div'); titleRow.className='title-row';
+    const t = document.createElement('div'); t.className='piece-title'; t.innerText = `${p.group}/${p.number} ${p.title}`;
+    const pr = document.createElement('div'); pr.className='piece-price'; pr.innerText = formatMoney(p.price);
+    titleRow.appendChild(t); titleRow.appendChild(pr);
+    info.appendChild(titleRow);
+    const tech = document.createElement('div'); tech.className='piece-tech'; tech.innerText = 'Técnica exemplo';
+    const dims = document.createElement('div'); dims.className='piece-dims'; dims.innerText = '57 x 18 x 15 cm';
+    info.appendChild(tech); info.appendChild(dims);
+    post.appendChild(info);
+    // actions
+    const act = document.createElement('div'); act.className='actions-row';
+    const heart = document.createElement('button'); heart.className='btn no-round heart'; heart.innerText = likes.has(k)?'♥':'♡';
+    if(likes.has(k)) heart.classList.add('active');
+    heart.onclick = (ev)=>{ ev.stopPropagation(); toggleLike(k, heart); };
+    const cartbtn = document.createElement('button'); cartbtn.className='btn no-round'; cartbtn.innerText = cart.includes(k)?'REMOVER':'🛍 ADICIONAR AO CARRINHO';
+    cartbtn.onclick = (ev)=>{ ev.stopPropagation(); toggleCartAdd(k); cartbtn.innerText = cart.includes(k)?'REMOVER':'🛍 ADICIONAR AO CARRINHO'; };
+    act.appendChild(heart); act.appendChild(cartbtn);
+    post.appendChild(act);
+    cont.appendChild(post);
+  });
+  // scroll to selected
+  const idx = Object.keys(pieces).indexOf(startKey);
+  if(idx>=0){
+    const posts = document.querySelectorAll('#feedContent .post');
+    if(posts[idx]) posts[idx].scrollIntoView({behavior:'auto',block:'start'});
   }
+  updateFooterCounts();
+}
 
-  /* After feed built: attach observers and keyboard to each carousel */
-  document.querySelectorAll('#feedContent .post').forEach(postEl=>{
-    const carousel = postEl.querySelector('.carousel');
-    if(!carousel) return;
-    // create observer to update SR live region and aria-current per slide
-    createVisibilityObserver(carousel);
-    attachCarouselKeyboard(carousel);
-    // initial announce: first image
-    const slides = carousel.querySelectorAll('.slide');
-    if(slides.length) announce(`Imagem 1 de ${slides.length}`);
+/* ========= Cart / Likes / Rifa actions ========= */
+function toggleCartAdd(key){
+  const i = cart.indexOf(key);
+  if(i>-1) cart.splice(i,1);
+  else cart.push(key);
+  updateFooterCounts();
+  renderGallery(); // button text updated in feed when opened
+}
+function toggleLike(key, btn){
+  if(likes.has(key)) likes.delete(key);
+  else likes.add(key);
+  if(btn){
+    btn.classList.toggle('active', likes.has(key));
+    btn.innerText = likes.has(key)?'♥':'♡';
+  }
+  updateFooterCounts();
+}
+function addRifa(number){
+  if(!rifas.includes(number)) rifas.push(number);
+  updateFooterCounts();
+}
+
+/* ========= Footer / Panels ========= */
+function updateFooterCounts(){
+  document.getElementById('cartCount').innerText = cart.length;
+  document.getElementById('likesCount').innerText = likes.size;
+  document.getElementById('rifaCount').innerText = rifas.length;
+  document.getElementById('totalBox').innerText = formatMoney(calcTotal());
+
+  // refresh panel contents
+  const cartList = document.getElementById('cartList'); cartList.innerHTML='';
+  cart.forEach(k=>{
+    const p = pieces[k];
+    const el = document.createElement('div'); el.className='mini-item';
+    const img = document.createElement('img'); img.className='mini-thumb'; img.src = (p.images[0] && p.images[0].url) || '';
+    const txt = document.createElement('div'); txt.style.fontSize='0.9rem'; txt.innerText = `${p.group}/${p.number} ${p.title}\n${formatMoney(p.price)}`;
+    el.appendChild(img); el.appendChild(txt);
+    cartList.appendChild(el);
+  });
+
+  const likesList = document.getElementById('likesList'); likesList.innerHTML='';
+  [...likes].forEach(k=>{
+    const p = pieces[k];
+    const el = document.createElement('div'); el.className='mini-item';
+    const img = document.createElement('img'); img.className='mini-thumb'; img.src = (p.images[0] && p.images[0].url) || '';
+    const txt = document.createElement('div'); txt.style.fontSize='0.9rem'; txt.innerText = `${p.group}/${p.number} ${p.title}`;
+    el.appendChild(img); el.appendChild(txt);
+    likesList.appendChild(el);
+  });
+
+  const rifaList = document.getElementById('rifaList'); rifaList.innerHTML='';
+  rifas.forEach(n=>{
+    const el = document.createElement('div'); el.className='mini-item';
+    el.style.padding='10px'; el.innerText = n; rifaList.appendChild(el);
   });
 }
 
-/* back to gallery */
-function backToGallery(){
-  document.getElementById('feed').style.display = 'none';
-  document.getElementById('gallery').style.display = 'flex';
-  // hide back bar
-  document.getElementById('backBar').style.display = 'none';
-  document.getElementById('backBar').setAttribute('aria-hidden','true');
-  // scroll to top of gallery (respect back bar height)
-  const topOffset = document.querySelector('.gallery-container').getBoundingClientRect().top + window.scrollY - 24;
-  window.scrollTo({ top: topOffset, left:0, behavior:'auto' });
+/* ========= Panel open/close handlers ========= */
+function openPanel(id){
+  // close others
+  ['cartPanel','rifaPanel','likesPanel'].forEach(pid=>{
+    const el = document.getElementById(pid);
+    if(pid===id){ el.style.display='block'; el.setAttribute('aria-hidden','false'); }
+    else { el.style.display='none'; el.setAttribute('aria-hidden','true'); }
+  });
+  // mark aria-expanded attributes
+  document.getElementById('cartCountBtn').setAttribute('aria-expanded', id==='cartPanel');
+  document.getElementById('rifaCountBtn').setAttribute('aria-expanded', id==='rifaPanel');
+  document.getElementById('likesCountBtn').setAttribute('aria-expanded', id==='likesPanel');
 }
+function closePanels(){ openPanel(null); document.getElementById('cartPanel').style.display='none'; document.getElementById('rifaPanel').style.display='none'; document.getElementById('likesPanel').style.display='none'; }
 
-/* init: gallery already rendered earlier */
+/* ========= UI wiring ========= */
+document.getElementById('cartCountBtn').addEventListener('click', ()=>{ const visible = document.getElementById('cartPanel').style.display==='block'; openPanel(visible?null:'cartPanel'); });
+document.getElementById('rifaCountBtn').addEventListener('click', ()=>{ const visible = document.getElementById('rifaPanel').style.display==='block'; openPanel(visible?null:'rifaPanel'); });
+document.getElementById('likesCountBtn').addEventListener('click', ()=>{ const visible = document.getElementById('likesPanel').style.display==='block'; openPanel(visible?null:'likesPanel'); });
+document.getElementById('closeCart').addEventListener('click', ()=>closePanels());
+document.getElementById('closeRifa').addEventListener('click', ()=>closePanels());
+document.getElementById('closeLikes').addEventListener('click', ()=>closePanels());
+
+/* back button behaviour */
+document.getElementById('backBtn').addEventListener('click', ()=>{
+  document.getElementById('feed').style.display='none';
+  document.getElementById('gallery').style.display='flex';
+  document.getElementById('backBtn').style.display='none';
+  closePanels();
+});
+
+/* filters */
+document.getElementById('shuffleBtn').addEventListener('click', ()=>{ shuffled=!shuffled; renderGallery();});
+document.getElementById('recentBtn').addEventListener('click', (e)=>{ recentDesc=!recentDesc; e.target.innerText = recentDesc ? 'RECENTE 🠵' : 'RECENTE 🠷'; renderGallery();});
+document.getElementById('resetBtn').addEventListener('click', ()=>{ activeGroups.clear(); document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); renderGallery();});
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  if(btn.classList.contains('disabled')) return;
+  const g = btn.dataset.group;
+  btn.addEventListener('click', ()=>{
+    if(activeGroups.has(g)){ activeGroups.delete(g); btn.classList.remove('active'); } else { activeGroups.add(g); btn.classList.add('active'); }
+    renderGallery();
+  });
+});
+
+/* demo: allow adding some rifas (for testing) */
+(function addDemoRifas(){
+  // create three demo rifa numbers to demonstrate expand
+  // in real app you will populate rifas via another UI
+  // For testing, add two by default
+  rifas.push('X002','X005');
+})();
+
+/* === init === */
+renderGallery();
+updateFooterCounts();
 </script>
 </body>
 </html>
