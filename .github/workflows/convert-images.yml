@@ -15,19 +15,19 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo (full history)
+      - Checkout repo (full history)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Setup Node.js
+      - Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Run AVIF conversion script
         env:
