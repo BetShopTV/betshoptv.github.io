@@ -1,27 +1,21 @@
 name: Convert JPG -> AVIF (otm + tmb)
 
-# Rodar em pushes que tocam img/
 on:
   push:
     paths:
       - 'img/**'
-
-# evita loop: não roda se o actor for o bot que fez o commit de saída
-permissions:
-  contents: write
 
 jobs:
   convert:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     steps:
-      - Checkout repo (full history)
+      - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: true
 
-      - Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -30,19 +24,16 @@ jobs:
         run: npm install
 
       - name: Run AVIF conversion script
-        env:
-          GITHUB_BEFORE: ${{ github.event.before }}
-          GITHUB_SHA: ${{ github.sha }}
         run: node scripts/convert-images.js
 
-      - name: Commit & push generated AVIFs (if any)
+      - name: Commit & push generated AVIFs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add img/otm img/tmb || true
           if git diff --cached --quiet; then
-            echo "No generated AVIF files to commit."
+            echo "No new AVIF files to commit."
           else
-            git commit -m "chore: add generated AVIF images [skip ci]" || echo "commit failed"
+            git commit -m "chore: add generated AVIF images [skip ci]" || echo "Nothing to commit"
             git push origin HEAD
           fi
