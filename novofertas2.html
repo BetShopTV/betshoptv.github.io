@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BSTV — Galeria de Ofertas</title>
+<style>
+    /* Variáveis de Cores */
+    :root {
+        --cor-fundo: #bebab0;
+        --cor-texto: #2b2424;
+        --cor-borda: transparent;
+        --cor-destaque: #ff0000;
+        --cor-texto-fundo: #ffffff;
+    }
+
+    /* Estilos Globais */
+    body {
+        margin: 0;
+        font-family: 'Roboto Condensed', sans-serif;
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+        padding: 1vw;
+        box-sizing: border-box;
+    }
+
+    /* Container principal da galeria */
+    .gallery-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        gap: clamp(0px, 0.6vw, 12px); /* Espaçamento entre as colunas */
+    }
+
+    /* Cada coluna da galeria */
+    .col {
+        flex: 1 1 calc(33.333% - 1.333vw); /* 3 colunas em todas as telas */
+        max-width: calc((min(1200px, 100vw) - 4vw) / 3);
+        display: flex;
+        flex-direction: column;
+        gap: 38px; /* Espaçamento entre os itens na coluna */
+    }
+
+    /* Cada item da galeria */
+    .gallery-item {
+        background-color: var(--cor-fundo);
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .item-code {
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 500;
+        font-size: clamp(0.8em, 1.8vw, 1.2em);
+        padding: 0.38vw 0.88vw;
+        color: var(--cor-texto);
+        background-color: var(--cor-fundo);
+        border-width: clamp(1px, 0.2vw, 2px); /* Valor mínimo, Valor preferido (4,2vw * 1000px [largura da tela] / 100 = 42px), Valor máximo */
+        border-style: solid;
+        border-color: var(--cor-texto);
+        width: fit-content;
+        margin-bottom: clamp(-24px, 2vw, -13px);
+        display: block;
+        align-self: center;
+        z-index: 10;
+    }
+    .gallery-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-width: clamp(1px, 0.2vw, 2px); /* Valor mínimo, Valor preferido (4,2vw * 1000px [largura da tela] / 100 = 42px), Valor máximo */
+        border-style: solid;
+        border-color: var(--cor-texto);
+        border-right: 0px;
+        border-left: 0px;
+        border-bottom: 0px;
+        margin-bottom: 0px; /* Espaçamento entre imagem e informações */
+    }
+
+    .item-info-bottom {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .item-price {
+        background-color: var(--cor-texto);
+        color: var(--cor-fundo);
+        border-top: 0px;
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 500;
+        font-size: clamp(0.8em, 1.8vw, 1.2em);
+        padding: 0.5vw 1vw;
+        cursor: pointer;
+        text-transform: uppercase;
+        text-align: center;
+        white-space: nowrap;
+        margin-right: 3px;
+        margin-top: clamp(-6vw, -5vw, -4vw);
+    }
+    
+    .add-button {
+        background-image: url('https://betshoptv.com/images/fofertas_hover.gif');
+        color: var(--cor-texto-fundo);
+        font-family: 'Roboto Mono', monospace;
+        border: 0px;
+        font-weight: 500;
+        font-size: clamp(0.8em, 1.8vw, 1.2em);
+        padding: 0.5vw 1vw;
+        cursor: pointer;
+        text-transform: uppercase;
+        text-align: center;
+        white-space: nowrap;
+        margin-left: 3px;
+    }
+    
+    @media (max-width: 768px) {
+        .col {
+            flex-basis: calc(50% - 2vw);
+            max-width: calc(50% - 1vw);
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="gallery-container">
+        <div class="col" id="col0"></div>
+        <div class="col" id="col1"></div>
+        <div class="col" id="col2"></div>
+    </div>
+
+    <script>
+        const fileList = [
+            "03-01a.jpg", "03-01b.jpg", "03-01c.jpg", "03-01d.jpg",
+            "03-02a.jpg", "03-02b.jpg", "03-02c.jpg",
+            "03-03a.jpg", "03-03b.jpg", "03-03c.jpg",
+            "03-04a.jpg", "03-04b.jpg",
+            "03-05a.jpg", "03-05b.jpg", "03-05c.jpg",
+            "03-06a.jpg", "03-06b.jpg",
+            "03-07a.jpg", "03-07b.jpg",
+            "03-08a.jpg", "03-08b.jpg", "03-08c.jpg",
+            "03-09a.jpg", "03-09b.jpg",
+            "03-10a.jpg", "03-10b.jpg", "03-10c.jpg",
+            "03-11a.jpg", "03-11b.jpg", "03-11c.jpg",
+            "03-12a.jpg", "03-12b.jpg", "03-12c.jpg",
+            "03-13a.jpg", "03-13b.jpg", "03-13c.jpg",
+            "04-01a.jpg", "04-01b.jpg",
+            "04-02a.jpg", "04-02b.jpg",
+            "04-03a.jpg", "04-03b.jpg", "04-03c.jpg",
+            "04-04a.jpg", "04-04b.jpg",
+            "04-05a.jpg", "04-05b.jpg", "04-05c.jpg", "04-05d.jpg",
+            "04-06a.jpg", "04-06b.jpg", "04-06c.jpg", "04-06d.jpg"
+        ];
+        
+        const basePathRaw = "https://betshoptv.com/peças/";
+        const basePath = (p) => encodeURI(basePathRaw + p);
+
+        const pieces = {};
+        fileList.forEach(fn => {
+            const m = fn.match(/^(\d{2})-(\d{2})([a-z])\.jpg$/i);
+            if (!m) return;
+            const group = m[1];
+            const number = m[2];
+            const letter = m[3].toLowerCase();
+            const key = `${group}-${number}`;
+            if (!pieces[key]) pieces[key] = { group, number, images: [], mainImage: null, price: "R$ 150" };
+            
+            if (letter === 'a') {
+                pieces[key].mainImage = basePath(fn);
+            }
+        });
+        
+        const list = Object.keys(pieces).map(k => pieces[k]);
+        list.sort((a, b) => {
+            if (a.group === b.group) return a.number.localeCompare(b.number);
+            return a.group.localeCompare(b.group);
+        });
+
+        const cols = document.querySelectorAll('.col');
+        list.forEach((piece, index) => {
+            if (piece.mainImage) {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+
+                const itemCode = document.createElement('span');
+                itemCode.className = 'item-code';
+                itemCode.textContent = `${piece.group} / ${piece.number}`;
+                
+                const image = document.createElement('img');
+                image.className = 'gallery-image';
+                image.src = piece.mainImage;
+                image.alt = `Peça ${piece.group}-${piece.number}`;
+                image.loading = 'lazy';
+                
+                const infoBottom = document.createElement('div');
+                infoBottom.className = 'item-info-bottom';
+                
+                const price = document.createElement('span');
+                price.className = 'item-price';
+                // Adicionando um preço fictício para os exemplos
+                if (piece.group === '03') {
+                    price.textContent = "R$ 200";
+                } else if (piece.group === '04') {
+                    price.textContent = "R$ 250";
+                } else {
+                    price.textContent = "R$ 150";
+                }
+                
+                const button = document.createElement('button');
+                button.className = 'add-button';
+                button.textContent = 'ADICIONAR';
+
+                infoBottom.appendChild(price);
+                infoBottom.appendChild(button);
+                
+                galleryItem.appendChild(itemCode);
+                galleryItem.appendChild(image);
+                galleryItem.appendChild(infoBottom);
+
+                cols[index % 3].appendChild(galleryItem);
+            }
+        });
+    </script>
+</body>
+</html>
