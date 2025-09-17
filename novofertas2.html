@@ -4,6 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>BSTV — Galeria de Ofertas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <style>
     /* Variáveis de Cores */
     :root {
@@ -29,7 +32,7 @@
         max-width: 1200px;
         margin: 0 auto;
         display: flex;
-        gap: clamp(0px, 0.6vw, 12px);
+        gap: clamp(8px, 1.2vw, 24px); /* Espaçamento entre as colunas */
     }
 
     /* Cada coluna da galeria */
@@ -48,7 +51,7 @@
         flex-direction: column;
         width: 100%;
         box-sizing: border-box;
-        position: relative;
+        position: relative; /* Container pai para posicionar elementos filhos de forma absoluta */
     }
     
     .item-code {
@@ -56,7 +59,7 @@
         font-weight: 500;
         font-size: clamp(0.7em, 1.8vw, 1.2em);
         white-space: nowrap;
-        padding: 0.38vw 0.88vw;
+        padding: 0.38vw 1.8vw;
         color: var(--cor-texto);
         background-color: var(--cor-fundo);
         border-width: clamp(1px, 0.2vw, 2px);
@@ -64,12 +67,11 @@
         border-color: var(--cor-texto);
         width: fit-content;
         display: block;
-        align-self: center;
-        z-index: 10;
         position: absolute;
         top: 0;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%); /* Ajuste para centralizar e sobrepor */
+        z-index: 10;
     }
 
     .gallery-image {
@@ -83,13 +85,12 @@
         border-left: 0px;
         border-bottom: 0px;
         margin-bottom: 0px;
-        cursor: pointer;
     }
     
     .item-price {
         font-family: 'Roboto Mono', monospace;
         font-weight: 500;
-        font-size: clamp(0.7em, 1.8vw, 1.2em);
+        font-size: clamp(0.8em, 1.8vw, 1.2em);
         padding: 0.5vw 1vw;
         background-color: var(--cor-texto);
         color: var(--cor-fundo);
@@ -98,7 +99,8 @@
         bottom: 0;
         left: 0;
         z-index: 10;
-        transform: translateY(50%);
+        /* Remover o transform de vertical, pois ele estava quebrando o alinhamento inferior */
+        transform: translateY(0%);
     }
 
     .add-button {
@@ -107,14 +109,14 @@
         font-family: 'Roboto Mono', monospace;
         border: 0px;
         font-weight: 500;
-        font-size: clamp(0.7em, 1.8vw, 1.2em);
+        font-size: clamp(0.8em, 1.8vw, 1.2em);
         padding: 0.5vw 1vw;
         cursor: pointer;
         text-transform: uppercase;
         text-align: center;
         white-space: nowrap;
-        margin-top: 1vw;
-        align-self: flex-end;
+        margin-top: 0vw; /* Espaçamento entre a imagem e o botão */
+        align-self: flex-end; /* Alinha o botão à direita dentro de um container flexível */
     }
 
     @media (max-width: 768px) {
@@ -123,70 +125,6 @@
             max-width: calc(50% - 1vw);
         }
     }
-    
-    /* Estilos do Lightbox */
-    .lightbox {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(43, 36, 36, 0.9);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-        overflow: auto;
-    }
-
-    .lightbox-content {
-        background-color: var(--cor-fundo);
-        width: 90%;
-        max-width: 800px;
-        height: auto;
-        padding: 2vw;
-        position: relative;
-        box-sizing: border-box;
-    }
-
-    .lightbox-close {
-        position: absolute;
-        top: 1vw;
-        right: 1vw;
-        font-size: clamp(1.5em, 3vw, 2em);
-        font-weight: bold;
-        color: var(--cor-destaque);
-        cursor: pointer;
-    }
-
-    .lightbox-image-container {
-        width: 100%;
-        height: 60vh;
-        overflow-x: scroll;
-        overflow-y: hidden;
-        white-space: nowrap;
-        border: clamp(1px, 0.2vw, 2px) solid var(--cor-texto);
-        margin-bottom: 2vw;
-    }
-
-    .lightbox-image {
-        height: 100%;
-        width: auto;
-        display: inline-block;
-        margin-right: 1vw;
-    }
-    
-    .lightbox-details {
-        font-family: 'Roboto Mono', monospace;
-        font-size: clamp(0.8em, 1.8vw, 1.2em);
-        line-height: 1.5;
-    }
-    
-    .lightbox-details h3 {
-        font-size: clamp(1em, 2vw, 1.4em);
-        font-weight: 700;
-        margin-bottom: 1vw;
-    }
 </style>
 </head>
 <body>
@@ -194,16 +132,6 @@
         <div class="col" id="col0"></div>
         <div class="col" id="col1"></div>
         <div class="col" id="col2"></div>
-    </div>
-    
-    <div id="piece-lightbox" class="lightbox">
-        <div class="lightbox-content">
-            <span class="lightbox-close" onclick="closeLightbox()">Ⓧ</span>
-            <div id="lightbox-images" class="lightbox-image-container">
-                </div>
-            <div id="lightbox-details" class="lightbox-details">
-                </div>
-        </div>
     </div>
 
     <script>
@@ -229,10 +157,8 @@
             "04-06a.jpg", "04-06b.jpg", "04-06c.jpg", "04-06d.jpg"
         ];
         
-        const basePathRaw = "https://betshoptv.com/img/tmb/";
-        const basePathOtm = "https://betshoptv.com/img/otm/";
+        const basePathRaw = "https://betshoptv.com/peças/";
         const basePath = (p) => encodeURI(basePathRaw + p);
-        const basePathHd = (p) => encodeURI(basePathOtm + p);
 
         const pieces = {};
         fileList.forEach(fn => {
@@ -244,7 +170,6 @@
             const key = `${group}-${number}`;
             if (!pieces[key]) pieces[key] = { group, number, images: [], mainImage: null, price: "R$ 150" };
             
-            pieces[key].images.push(fn);
             if (letter === 'a') {
                 pieces[key].mainImage = basePath(fn);
             }
@@ -262,6 +187,10 @@
                 const galleryItem = document.createElement('div');
                 galleryItem.className = 'gallery-item';
                 
+                // Container para a imagem, código e preço
+                const imageContainer = document.createElement('div');
+                imageContainer.style.position = 'relative';
+                
                 const itemCode = document.createElement('span');
                 itemCode.className = 'item-code';
                 itemCode.textContent = `${piece.group} / ${piece.number}`;
@@ -271,10 +200,6 @@
                 image.src = piece.mainImage;
                 image.alt = `Peça ${piece.group}-${piece.number}`;
                 image.loading = 'lazy';
-                image.onclick = () => showPieceDetails(piece);
-                
-                const infoBottom = document.createElement('div');
-                infoBottom.className = 'item-info-bottom';
                 
                 const price = document.createElement('span');
                 price.className = 'item-price';
@@ -286,78 +211,20 @@
                     price.textContent = "R$ 150";
                 }
                 
+                imageContainer.appendChild(itemCode);
+                imageContainer.appendChild(image);
+                imageContainer.appendChild(price);
+
                 const button = document.createElement('button');
                 button.className = 'add-button';
                 button.textContent = 'ADICIONAR';
 
-                infoBottom.appendChild(price);
-                infoBottom.appendChild(button);
-                
-                galleryItem.appendChild(itemCode);
-                galleryItem.appendChild(image);
-                galleryItem.appendChild(infoBottom);
+                galleryItem.appendChild(imageContainer);
+                galleryItem.appendChild(button);
 
                 cols[index % 3].appendChild(galleryItem);
             }
         });
-        
-        const pieceData = {
-          "03-01": { "titulo": "Rádio 01", "medidas": "27 x 20,5 cm", "preço": "200", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-02": { "titulo": "Câmera fotográfica 01", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-03": { "titulo": "Polaroid 01", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-04": { "titulo": "Câmera fotográfica 02", "medidas": "27 x 20,5 cm", "preço": "200", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-05": { "titulo": "Rádio 02", "medidas": "27 x 20,5 cm", "preço": "200", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-06": { "titulo": "Rádio 03", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-07": { "titulo": "Câmera fotográfica 03", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-08": { "titulo": "Rádio 04", "medidas": "27 x 20,5 cm", "preço": "250", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-09": { "titulo": "Polaroid 02", "medidas": "27 x 20,5 cm", "preço": "1.800", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-10": { "titulo": "Rádio 05", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-11": { "titulo": "Rádio 06", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-12": { "titulo": "Câmera fotográfica 04", "medidas": "27 x 20,5 cm", "preço": "250", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "03-13": { "titulo": "Polaroid 03", "medidas": "27 x 20,5 cm", "preço": "350", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "04-01": { "titulo": "Rádio 07", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "04-02": { "titulo": "Câmera fotográfica 05", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "04-03": { "titulo": "Polaroid 04", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "04-04": { "titulo": "Câmera fotográfica 06", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "04-05": { "titulo": "Rádio 08", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
-          "04-06": { "titulo": "Rádio 09", "medidas": "27 x 20,5 cm", "preço": "150", "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." }
-        };
-        
-        function showPieceDetails(piece) {
-            const lightbox = document.getElementById('piece-lightbox');
-            const imagesContainer = document.getElementById('lightbox-images');
-            const detailsContainer = document.getElementById('lightbox-details');
-            
-            imagesContainer.innerHTML = '';
-            detailsContainer.innerHTML = '';
-
-            const fullPieceData = pieceData[`${piece.group}-${piece.number}`];
-            if (!fullPieceData) {
-                detailsContainer.innerHTML = '<h3>Detalhes da peça não encontrados.</h3>';
-                return;
-            }
-
-            piece.images.forEach(imgName => {
-                const img = document.createElement('img');
-                img.src = basePathHd(imgName);
-                img.className = 'lightbox-image';
-                imagesContainer.appendChild(img);
-            });
-
-            detailsContainer.innerHTML = `
-                <h3>${fullPieceData.titulo}</h3>
-                <p><strong>CÓDIGO:</strong> ${piece.group} / ${piece.number}</p>
-                <p><strong>DIMENSÕES:</strong> ${fullPieceData.medidas}</p>
-                <p><strong>PREÇO:</strong> R$ ${fullPieceData.preço}</p>
-                <p>${fullPieceData.desc}</p>
-            `;
-
-            lightbox.style.display = 'flex';
-        }
-
-        function closeLightbox() {
-            document.getElementById('piece-lightbox').style.display = 'none';
-        }
     </script>
 </body>
 </html>
