@@ -1,0 +1,1 @@
+vamos tentar automatizar a conversão de imagens com o github actions?
