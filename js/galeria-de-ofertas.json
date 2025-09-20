@@ -1,0 +1,399 @@
+{
+  "03-01": {
+    "grupo": "03",
+    "numero": "01",
+    "titulo": "Rádio 01",
+    "tecnica": "Página da revista Playboy brasileira, transferida para EVA estampado e parafusos.",
+    "dimensoes": "57 x 18 x 15 cm",
+    "preco": 200,
+    "thumb": "/img/tmb/03-01a.webp",
+    "imagens_alta": [
+      "/img/otm/03-01a.webp",
+      "/img/otm/03-01b.webp",
+      "/img/otm/03-01c.webp",
+      "/img/otm/03-01d.webp"
+    ]
+  },
+  "03-02": {
+    "grupo": "03",
+    "numero": "02",
+    "titulo": "Câmera fotográfica 01",
+    "tecnica": "Técnica X aplicada sobre madeira",
+    "dimensoes": "45 x 20 x 12 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/03-02a.webp",
+    "imagens_alta": [
+      "/img/otm/03-02a.webp",
+      "/img/otm/03-02b.webp",
+      "/img/otm/03-02c.webp"
+    ]
+  },
+  "03-03": {
+    "grupo": "03",
+    "numero": "03",
+    "titulo": "Polaroid 01",
+    "tecnica": "Técnica Y com verniz",
+    "dimensoes": "30 x 20 x 10 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/03-03a.webp",
+    "imagens_alta": [
+      "/img/otm/03-03a.webp",
+      "/img/otm/03-03b.webp",
+      "/img/otm/03-03c.webp"
+    ]
+  },
+  "03-04": {
+    "grupo": "03",
+    "numero": "04",
+    "titulo": "Câmera fotográfica 02",
+    "tecnica": "Técnica Z",
+    "dimensoes": "40 x 18 x 12 cm",
+    "preco": 200,
+    "thumb": "/img/tmb/03-04a.webp",
+    "imagens_alta": [
+      "/img/otm/03-04a.webp",
+      "/img/otm/03-04b.webp"
+    ]
+  },
+  "03-05": {
+    "grupo": "03",
+    "numero": "05",
+    "titulo": "Rádio 02",
+    "tecnica": "Montagem com componentes reciclados",
+    "dimensoes": "50 x 22 x 14 cm",
+    "preco": 200,
+    "thumb": "/img/tmb/03-05a.webp",
+    "imagens_alta": [
+      "/img/otm/03-05a.webp",
+      "/img/otm/03-05b.webp",
+      "/img/otm/03-05c.webp"
+    ]
+  },
+  "03-06": {
+    "grupo": "03",
+    "numero": "06",
+    "titulo": "Rádio 03",
+    "tecnica": "Técnica A",
+    "dimensoes": "48 x 20 x 13 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/03-06a.webp",
+    "imagens_alta": [
+      "/img/otm/03-06a.webp",
+      "/img/otm/03-06b.webp"
+    ]
+  },
+  "03-07": {
+    "grupo": "03",
+    "numero": "07",
+    "titulo": "Câmera fotográfica 03",
+    "tecnica": "Técnica B",
+    "dimensoes": "44 x 19 x 12 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/03-07a.webp",
+    "imagens_alta": [
+      "/img/otm/03-07a.webp",
+      "/img/otm/03-07b.webp"
+    ]
+  },
+  "03-08": {
+    "grupo": "03",
+    "numero": "08",
+    "titulo": "Rádio 04",
+    "tecnica": "Técnica C",
+    "dimensoes": "60 x 25 x 18 cm",
+    "preco": 250,
+    "thumb": "/img/tmb/03-08a.webp",
+    "imagens_alta": [
+      "/img/otm/03-08a.webp",
+      "/img/otm/03-08b.webp",
+      "/img/otm/03-08c.webp"
+    ]
+  },
+  "03-09": {
+    "grupo": "03",
+    "numero": "09",
+    "titulo": "Polaroid 02",
+    "tecnica": "Técnica D",
+    "dimensoes": "57 x 18 x 15 cm",
+    "preco": 1800,
+    "thumb": "/img/tmb/03-09a.webp",
+    "imagens_alta": [
+      "/img/otm/03-09a.webp",
+      "/img/otm/03-09b.webp"
+    ]
+  },
+  "03-10": {
+    "grupo": "03",
+    "numero": "10",
+    "titulo": "Rádio 05",
+    "tecnica": "Técnica E",
+    "dimensoes": "40 x 15 x 12 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/03-10a.webp",
+    "imagens_alta": [
+      "/img/otm/03-10a.webp",
+      "/img/otm/03-10b.webp",
+      "/img/otm/03-10c.webp"
+    ]
+  },
+  "03-11": {
+    "grupo": "03",
+    "numero": "11",
+    "titulo": "Rádio 06",
+    "tecnica": "Técnica F",
+    "dimensoes": "42 x 16 x 13 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/03-11a.webp",
+    "imagens_alta": [
+      "/img/otm/03-11a.webp",
+      "/img/otm/03-11b.webp",
+      "/img/otm/03-11c.webp"
+    ]
+  },
+  "03-12": {
+    "grupo": "03",
+    "numero": "12",
+    "titulo": "Câmera fotográfica 04",
+    "tecnica": "Técnica G",
+    "dimensoes": "46 x 18 x 12 cm",
+    "preco": 250,
+    "thumb": "/img/tmb/03-12a.webp",
+    "imagens_alta": [
+      "/img/otm/03-12a.webp",
+      "/img/otm/03-12b.webp",
+      "/img/otm/03-12c.webp"
+    ]
+  },
+  "03-13": {
+    "grupo": "03",
+    "numero": "13",
+    "titulo": "Polaroid 03",
+    "tecnica": "Técnica H",
+    "dimensoes": "34 x 20 x 11 cm",
+    "preco": 350,
+    "thumb": "/img/tmb/03-13a.webp",
+    "imagens_alta": [
+      "/img/otm/03-13a.webp",
+      "/img/otm/03-13b.webp",
+      "/img/otm/03-13c.webp"
+    ]
+  },
+  "04-01": {
+    "grupo": "04",
+    "numero": "01",
+    "titulo": "Rádio 07",
+    "tecnica": "Técnica I",
+    "dimensoes": "48 x 21 x 14 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/04-01a.webp",
+    "imagens_alta": [
+      "/img/otm/04-01a.webp",
+      "/img/otm/04-01b.webp"
+    ]
+  },
+  "04-02": {
+    "grupo": "04",
+    "numero": "02",
+    "titulo": "Câmera fotográfica 05",
+    "tecnica": "Técnica J",
+    "dimensoes": "44 x 18 x 12 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/04-02a.webp",
+    "imagens_alta": [
+      "/img/otm/04-02a.webp",
+      "/img/otm/04-02b.webp"
+    ]
+  },
+  "04-03": {
+    "grupo": "04",
+    "numero": "03",
+    "titulo": "Polaroid 04",
+    "tecnica": "Técnica K",
+    "dimensoes": "32 x 18 x 12 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/04-03a.webp",
+    "imagens_alta": [
+      "/img/otm/04-03a.webp",
+      "/img/otm/04-03b.webp",
+      "/img/otm/04-03c.webp"
+    ]
+  },
+  "04-04": {
+    "grupo": "04",
+    "numero": "04",
+    "titulo": "Câmera fotográfica 06",
+    "tecnica": "Técnica L",
+    "dimensoes": "50 x 20 x 15 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/04-04a.webp",
+    "imagens_alta": [
+      "/img/otm/04-04a.webp",
+      "/img/otm/04-04b.webp"
+    ]
+  },
+  "04-05": {
+    "grupo": "04",
+    "numero": "05",
+    "titulo": "Rádio 08",
+    "tecnica": "Técnica M",
+    "dimensoes": "58 x 22 x 16 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/04-05a.webp",
+    "imagens_alta": [
+      "/img/otm/04-05a.webp",
+      "/img/otm/04-05b.webp",
+      "/img/otm/04-05c.webp",
+      "/img/otm/04-05d.webp"
+    ]
+  },
+  "04-06": {
+    "grupo": "04",
+    "numero": "06",
+    "titulo": "Rádio 09",
+    "tecnica": "Técnica N",
+    "dimensoes": "59 x 23 x 17 cm",
+    "preco": 150,
+    "thumb": "/img/tmb/04-06a.webp",
+    "imagens_alta": [
+      "/img/otm/04-06a.webp",
+      "/img/otm/04-06b.webp",
+      "/img/otm/04-06c.webp",
+      "/img/otm/04-06d.webp"
+    ]
+  },
+  "04-07": {
+    "grupo": "04",
+    "numero": "07",
+    "titulo": "Peça Fictícia 07",
+    "tecnica": "Técnica com mistura de acrílico e resina",
+    "dimensoes": "25 x 30 x 10 cm",
+    "preco": 300,
+    "thumb": "/img/tmb/04-07a.webp",
+    "imagens_alta": [
+      "/img/otm/04-07a.webp",
+      "/img/otm/04-07b.webp",
+      "/img/otm/04-07c.webp",
+      "/img/otm/04-07d.webp"
+    ]
+  },
+  "04-08": {
+    "grupo": "04",
+    "numero": "08",
+    "titulo": "Peça Fictícia 08",
+    "tecnica": "Óleo sobre tela com aplicação de gesso",
+    "dimensoes": "40 x 40 x 5 cm",
+    "preco": 450,
+    "thumb": "/img/tmb/04-08a.webp",
+    "imagens_alta": [
+      "/img/otm/04-08a.webp",
+      "/img/otm/04-08b.webp",
+      "/img/otm/04-08c.webp",
+      "/img/otm/04-08d.webp"
+    ]
+  },
+  "04-09": {
+    "grupo": "04",
+    "numero": "09",
+    "titulo": "Peça Fictícia 09",
+    "tecnica": "Colagem de recortes de jornal e revista em madeira",
+    "dimensoes": "35 x 20 x 8 cm",
+    "preco": 220,
+    "thumb": "/img/tmb/04-09a.webp",
+    "imagens_alta": [
+      "/img/otm/04-09a.webp",
+      "/img/otm/04-09b.webp",
+      "/img/otm/04-09c.webp",
+      "/img/otm/04-09d.webp"
+    ]
+  },
+  "04-10": {
+    "grupo": "04",
+    "numero": "10",
+    "titulo": "Peça Fictícia 10",
+    "tecnica": "Escultura em cerâmica com acabamento envelhecido",
+    "dimensoes": "50 x 15 x 15 cm",
+    "preco": 600,
+    "thumb": "/img/tmb/04-10a.webp",
+    "imagens_alta": [
+      "/img/otm/04-10a.webp",
+      "/img/otm/04-10b.webp",
+      "/img/otm/04-10c.webp",
+      "/img/otm/04-10d.webp"
+    ]
+  },
+  "04-11": {
+    "grupo": "04",
+    "numero": "11",
+    "titulo": "Peça Fictícia 11",
+    "tecnica": "Acrílica sobre compensado naval",
+    "dimensoes": "30 x 30 x 1 cm",
+    "preco": 180,
+    "thumb": "/img/tmb/04-11a.webp",
+    "imagens_alta": [
+      "/img/otm/04-11a.webp",
+      "/img/otm/04-11b.webp",
+      "/img/otm/04-11c.webp",
+      "/img/otm/04-11d.webp"
+    ]
+  },
+  "04-12": {
+    "grupo": "04",
+    "numero": "12",
+    "titulo": "Peça Fictícia 12",
+    "tecnica": "Montagem com objetos de vidro e metal",
+    "dimensoes": "28 x 20 x 10 cm",
+    "preco": 550,
+    "thumb": "/img/tmb/04-12a.webp",
+    "imagens_alta": [
+      "/img/otm/04-12a.webp",
+      "/img/otm/04-12b.webp",
+      "/img/otm/04-12c.webp",
+      "/img/otm/04-12d.webp"
+    ]
+  },
+  "04-13": {
+    "grupo": "04",
+    "numero": "13",
+    "titulo": "Peça Fictícia 13",
+    "tecnica": "Pintura em tecido com bordado manual",
+    "dimensoes": "55 x 40 x 2 cm",
+    "preco": 320,
+    "thumb": "/img/tmb/04-13a.webp",
+    "imagens_alta": [
+      "/img/otm/04-13a.webp",
+      "/img/otm/04-13b.webp",
+      "/img/otm/04-13c.webp",
+      "/img/otm/04-13d.webp"
+    ]
+  },
+  "04-14": {
+    "grupo": "04",
+    "numero": "14",
+    "titulo": "Peça Fictícia 14",
+    "tecnica": "Impressão digital sobre PVC com iluminação interna",
+    "dimensoes": "60 x 60 x 12 cm",
+    "preco": 900,
+    "thumb": "/img/tmb/04-14a.webp",
+    "imagens_alta": [
+      "/img/otm/04-14a.webp",
+      "/img/otm/04-14b.webp",
+      "/img/otm/04-14c.webp",
+      "/img/otm/04-14d.webp"
+    ]
+  },
+  "04-15": {
+    "grupo": "04",
+    "numero": "15",
+    "titulo": "Peça Fictícia 15",
+    "tecnica": "Instalação sonora com caixas de madeira",
+    "dimensoes": "120 x 30 x 20 cm",
+    "preco": 750,
+    "thumb": "/img/tmb/04-15a.webp",
+    "imagens_alta": [
+      "/img/otm/04-15a.webp",
+      "/img/otm/04-15b.webp",
+      "/img/otm/04-15c.webp",
+      "/img/otm/04-15d.webp"
+    ]
+  }
+}
