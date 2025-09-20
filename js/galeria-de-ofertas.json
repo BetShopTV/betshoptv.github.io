@@ -270,10 +270,10 @@
     "preco": 300,
     "thumb": "/img/tmb/04-07a.webp",
     "imagens_alta": [
-      "/img/otm/04-07a.webp",
-      "/img/otm/04-07b.webp",
-      "/img/otm/04-07c.webp",
-      "/img/otm/04-07d.webp"
+      "/img/otm/04-07a.avif",
+      "/img/otm/04-07b.avif",
+      "/img/otm/04-07c.avif",
+      "/img/otm/04-07d.avif"
     ]
   },
   "04-08": {
@@ -283,12 +283,12 @@
     "tecnica": "Óleo sobre tela com aplicação de gesso",
     "dimensoes": "40 x 40 x 5 cm",
     "preco": 450,
-    "thumb": "/img/tmb/04-08a.webp",
+    "thumb": "/img/tmb/04-08a.avif",
     "imagens_alta": [
-      "/img/otm/04-08a.webp",
-      "/img/otm/04-08b.webp",
-      "/img/otm/04-08c.webp",
-      "/img/otm/04-08d.webp"
+      "/img/otm/04-08a.avif",
+      "/img/otm/04-08b.avif",
+      "/img/otm/04-08c.avif",
+      "/img/otm/04-08d.avif"
     ]
   },
   "04-09": {
@@ -300,7 +300,7 @@
     "preco": 220,
     "thumb": "/img/tmb/04-09a.webp",
     "imagens_alta": [
-      "/img/otm/04-09a.webp",
+      "/img/otm/04-09a.avif",
       "/img/otm/04-09b.webp",
       "/img/otm/04-09c.webp",
       "/img/otm/04-09d.webp"
