@@ -6,12 +6,12 @@
     "tecnica": "Página da revista Playboy brasileira, transferida para EVA estampado e parafusos.",
     "dimensoes": "57 x 18 x 15 cm",
     "preco": 200,
-    "thumb": "/img/tmb/03-01a.webp",
+    "thumb": "/img/tmb/03-01a.avif",
     "imagens_alta": [
-      "/img/otm/03-01a.webp",
-      "/img/otm/03-01b.webp",
-      "/img/otm/03-01c.webp",
-      "/img/otm/03-01d.webp"
+      "/img/otm/03-01a.avif",
+      "/img/otm/03-01b.avif",
+      "/img/otm/03-01c.avif",
+      "/img/otm/03-01d.avif"
     ]
   },
   "03-02": {
@@ -21,11 +21,11 @@
     "tecnica": "Técnica X aplicada sobre madeira",
     "dimensoes": "45 x 20 x 12 cm",
     "preco": 150,
-    "thumb": "/img/tmb/03-02a.webp",
+    "thumb": "/img/tmb/03-02a.avif",
     "imagens_alta": [
-      "/img/otm/03-02a.webp",
-      "/img/otm/03-02b.webp",
-      "/img/otm/03-02c.webp"
+      "/img/otm/03-02a.avif",
+      "/img/otm/03-02b.avif",
+      "/img/otm/03-02c.avif"
     ]
   },
   "03-03": {
@@ -35,11 +35,11 @@
     "tecnica": "Técnica Y com verniz",
     "dimensoes": "30 x 20 x 10 cm",
     "preco": 150,
-    "thumb": "/img/tmb/03-03a.webp",
+    "thumb": "/img/tmb/03-03a.avif",
     "imagens_alta": [
-      "/img/otm/03-03a.webp",
-      "/img/otm/03-03b.webp",
-      "/img/otm/03-03c.webp"
+      "/img/otm/03-03a.avif",
+      "/img/otm/03-03b.avif",
+      "/img/otm/03-03c.avif"
     ]
   },
   "03-04": {
@@ -49,10 +49,10 @@
     "tecnica": "Técnica Z",
     "dimensoes": "40 x 18 x 12 cm",
     "preco": 200,
-    "thumb": "/img/tmb/03-04a.webp",
+    "thumb": "/img/tmb/03-04a.avif",
     "imagens_alta": [
-      "/img/otm/03-04a.webp",
-      "/img/otm/03-04b.webp"
+      "/img/otm/03-04a.avif",
+      "/img/otm/03-04b.avif"
     ]
   },
   "03-05": {
@@ -62,11 +62,11 @@
     "tecnica": "Montagem com componentes reciclados",
     "dimensoes": "50 x 22 x 14 cm",
     "preco": 200,
-    "thumb": "/img/tmb/03-05a.webp",
+    "thumb": "/img/tmb/03-05a.avif",
     "imagens_alta": [
-      "/img/otm/03-05a.webp",
-      "/img/otm/03-05b.webp",
-      "/img/otm/03-05c.webp"
+      "/img/otm/03-05a.avif",
+      "/img/otm/03-05b.avif",
+      "/img/otm/03-05c.avif"
     ]
   },
   "03-06": {
@@ -76,10 +76,10 @@
     "tecnica": "Técnica A",
     "dimensoes": "48 x 20 x 13 cm",
     "preco": 150,
-    "thumb": "/img/tmb/03-06a.webp",
+    "thumb": "/img/tmb/03-06a.avif",
     "imagens_alta": [
-      "/img/otm/03-06a.webp",
-      "/img/otm/03-06b.webp"
+      "/img/otm/03-06a.avif",
+      "/img/otm/03-06b.avif"
     ]
   },
   "03-07": {
@@ -89,10 +89,10 @@
     "tecnica": "Técnica B",
     "dimensoes": "44 x 19 x 12 cm",
     "preco": 150,
-    "thumb": "/img/tmb/03-07a.webp",
+    "thumb": "/img/tmb/03-07a.avif",
     "imagens_alta": [
-      "/img/otm/03-07a.webp",
-      "/img/otm/03-07b.webp"
+      "/img/otm/03-07a.avif",
+      "/img/otm/03-07b.avif"
     ]
   },
   "03-08": {
@@ -102,11 +102,11 @@
     "tecnica": "Técnica C",
     "dimensoes": "60 x 25 x 18 cm",
     "preco": 250,
-    "thumb": "/img/tmb/03-08a.webp",
+    "thumb": "/img/tmb/03-08a.avif",
     "imagens_alta": [
-      "/img/otm/03-08a.webp",
-      "/img/otm/03-08b.webp",
-      "/img/otm/03-08c.webp"
+      "/img/otm/03-08a.avif",
+      "/img/otm/03-08b.avif",
+      "/img/otm/03-08c.avif"
     ]
   },
   "03-09": {
@@ -116,10 +116,10 @@
     "tecnica": "Técnica D",
     "dimensoes": "57 x 18 x 15 cm",
     "preco": 1800,
-    "thumb": "/img/tmb/03-09a.webp",
+    "thumb": "/img/tmb/03-09a.avif",
     "imagens_alta": [
-      "/img/otm/03-09a.webp",
-      "/img/otm/03-09b.webp"
+      "/img/otm/03-09a.avif",
+      "/img/otm/03-09b.avif"
     ]
   },
   "03-10": {
@@ -129,11 +129,11 @@
     "tecnica": "Técnica E",
     "dimensoes": "40 x 15 x 12 cm",
     "preco": 150,
-    "thumb": "/img/tmb/03-10a.webp",
+    "thumb": "/img/tmb/03-10a.avif",
     "imagens_alta": [
-      "/img/otm/03-10a.webp",
-      "/img/otm/03-10b.webp",
-      "/img/otm/03-10c.webp"
+      "/img/otm/03-10a.avif",
+      "/img/otm/03-10b.avif",
+      "/img/otm/03-10c.avif"
     ]
   },
   "03-11": {
@@ -143,11 +143,11 @@
     "tecnica": "Técnica F",
     "dimensoes": "42 x 16 x 13 cm",
     "preco": 150,
-    "thumb": "/img/tmb/03-11a.webp",
+    "thumb": "/img/tmb/03-11a.avif",
     "imagens_alta": [
-      "/img/otm/03-11a.webp",
-      "/img/otm/03-11b.webp",
-      "/img/otm/03-11c.webp"
+      "/img/otm/03-11a.avif",
+      "/img/otm/03-11b.avif",
+      "/img/otm/03-11c.avif"
     ]
   },
   "03-12": {
@@ -157,11 +157,11 @@
     "tecnica": "Técnica G",
     "dimensoes": "46 x 18 x 12 cm",
     "preco": 250,
-    "thumb": "/img/tmb/03-12a.webp",
+    "thumb": "/img/tmb/03-12a.avif",
     "imagens_alta": [
-      "/img/otm/03-12a.webp",
-      "/img/otm/03-12b.webp",
-      "/img/otm/03-12c.webp"
+      "/img/otm/03-12a.avif",
+      "/img/otm/03-12b.avif",
+      "/img/otm/03-12c.avif"
     ]
   },
   "03-13": {
@@ -171,11 +171,11 @@
     "tecnica": "Técnica H",
     "dimensoes": "34 x 20 x 11 cm",
     "preco": 350,
-    "thumb": "/img/tmb/03-13a.webp",
+    "thumb": "/img/tmb/03-13a.avif",
     "imagens_alta": [
-      "/img/otm/03-13a.webp",
-      "/img/otm/03-13b.webp",
-      "/img/otm/03-13c.webp"
+      "/img/otm/03-13a.avif",
+      "/img/otm/03-13b.avif",
+      "/img/otm/03-13c.avif"
     ]
   },
   "04-01": {
@@ -185,10 +185,10 @@
     "tecnica": "Técnica I",
     "dimensoes": "48 x 21 x 14 cm",
     "preco": 150,
-    "thumb": "/img/tmb/04-01a.webp",
+    "thumb": "/img/tmb/04-01a.avif",
     "imagens_alta": [
-      "/img/otm/04-01a.webp",
-      "/img/otm/04-01b.webp"
+      "/img/otm/04-01a.avif",
+      "/img/otm/04-01b.avif"
     ]
   },
   "04-02": {
@@ -198,10 +198,10 @@
     "tecnica": "Técnica J",
     "dimensoes": "44 x 18 x 12 cm",
     "preco": 150,
-    "thumb": "/img/tmb/04-02a.webp",
+    "thumb": "/img/tmb/04-02a.avif",
     "imagens_alta": [
-      "/img/otm/04-02a.webp",
-      "/img/otm/04-02b.webp"
+      "/img/otm/04-02a.avif",
+      "/img/otm/04-02b.avif"
     ]
   },
   "04-03": {
@@ -211,11 +211,11 @@
     "tecnica": "Técnica K",
     "dimensoes": "32 x 18 x 12 cm",
     "preco": 150,
-    "thumb": "/img/tmb/04-03a.webp",
+    "thumb": "/img/tmb/04-03a.avif",
     "imagens_alta": [
-      "/img/otm/04-03a.webp",
-      "/img/otm/04-03b.webp",
-      "/img/otm/04-03c.webp"
+      "/img/otm/04-03a.avif",
+      "/img/otm/04-03b.avif",
+      "/img/otm/04-03c.avif"
     ]
   },
   "04-04": {
@@ -225,10 +225,10 @@
     "tecnica": "Técnica L",
     "dimensoes": "50 x 20 x 15 cm",
     "preco": 150,
-    "thumb": "/img/tmb/04-04a.webp",
+    "thumb": "/img/tmb/04-04a.avif",
     "imagens_alta": [
-      "/img/otm/04-04a.webp",
-      "/img/otm/04-04b.webp"
+      "/img/otm/04-04a.avif",
+      "/img/otm/04-04b.avif"
     ]
   },
   "04-05": {
@@ -238,12 +238,12 @@
     "tecnica": "Técnica M",
     "dimensoes": "58 x 22 x 16 cm",
     "preco": 150,
-    "thumb": "/img/tmb/04-05a.webp",
+    "thumb": "/img/tmb/04-05a.avif",
     "imagens_alta": [
-      "/img/otm/04-05a.webp",
-      "/img/otm/04-05b.webp",
-      "/img/otm/04-05c.webp",
-      "/img/otm/04-05d.webp"
+      "/img/otm/04-05a.avif",
+      "/img/otm/04-05b.avif",
+      "/img/otm/04-05c.avif",
+      "/img/otm/04-05d.avif"
     ]
   },
   "04-06": {
@@ -253,12 +253,12 @@
     "tecnica": "Técnica N",
     "dimensoes": "59 x 23 x 17 cm",
     "preco": 150,
-    "thumb": "/img/tmb/04-06a.webp",
+    "thumb": "/img/tmb/04-06a.avif",
     "imagens_alta": [
-      "/img/otm/04-06a.webp",
-      "/img/otm/04-06b.webp",
-      "/img/otm/04-06c.webp",
-      "/img/otm/04-06d.webp"
+      "/img/otm/04-06a.avif",
+      "/img/otm/04-06b.avif",
+      "/img/otm/04-06c.avif",
+      "/img/otm/04-06d.avif"
     ]
   },
   "04-07": {
@@ -268,7 +268,7 @@
     "tecnica": "Técnica com mistura de acrílico e resina",
     "dimensoes": "25 x 30 x 10 cm",
     "preco": 300,
-    "thumb": "/img/tmb/04-07a.webp",
+    "thumb": "/img/tmb/04-07a.avif",
     "imagens_alta": [
       "/img/otm/04-07a.avif",
       "/img/otm/04-07b.avif",
@@ -298,12 +298,12 @@
     "tecnica": "Colagem de recortes de jornal e revista em madeira",
     "dimensoes": "35 x 20 x 8 cm",
     "preco": 220,
-    "thumb": "/img/tmb/04-09a.webp",
+    "thumb": "/img/tmb/04-09a.avif",
     "imagens_alta": [
       "/img/otm/04-09a.avif",
-      "/img/otm/04-09b.webp",
-      "/img/otm/04-09c.webp",
-      "/img/otm/04-09d.webp"
+      "/img/otm/04-09b.avif",
+      "/img/otm/04-09c.avif",
+      "/img/otm/04-09d.avif"
     ]
   },
   "04-10": {
@@ -313,12 +313,12 @@
     "tecnica": "Escultura em cerâmica com acabamento envelhecido",
     "dimensoes": "50 x 15 x 15 cm",
     "preco": 600,
-    "thumb": "/img/tmb/04-10a.webp",
+    "thumb": "/img/tmb/04-10a.avif",
     "imagens_alta": [
-      "/img/otm/04-10a.webp",
-      "/img/otm/04-10b.webp",
-      "/img/otm/04-10c.webp",
-      "/img/otm/04-10d.webp"
+      "/img/otm/04-10a.avif",
+      "/img/otm/04-10b.avif",
+      "/img/otm/04-10c.avif",
+      "/img/otm/04-10d.avif"
     ]
   },
   "04-11": {
@@ -328,12 +328,12 @@
     "tecnica": "Acrílica sobre compensado naval",
     "dimensoes": "30 x 30 x 1 cm",
     "preco": 180,
-    "thumb": "/img/tmb/04-11a.webp",
+    "thumb": "/img/tmb/04-11a.avif",
     "imagens_alta": [
-      "/img/otm/04-11a.webp",
-      "/img/otm/04-11b.webp",
-      "/img/otm/04-11c.webp",
-      "/img/otm/04-11d.webp"
+      "/img/otm/04-11a.avif",
+      "/img/otm/04-11b.avif",
+      "/img/otm/04-11c.avif",
+      "/img/otm/04-11d.avif"
     ]
   },
   "04-12": {
@@ -343,12 +343,12 @@
     "tecnica": "Montagem com objetos de vidro e metal",
     "dimensoes": "28 x 20 x 10 cm",
     "preco": 550,
-    "thumb": "/img/tmb/04-12a.webp",
+    "thumb": "/img/tmb/04-12a.avif",
     "imagens_alta": [
-      "/img/otm/04-12a.webp",
-      "/img/otm/04-12b.webp",
-      "/img/otm/04-12c.webp",
-      "/img/otm/04-12d.webp"
+      "/img/otm/04-12a.avif",
+      "/img/otm/04-12b.avif",
+      "/img/otm/04-12c.avif",
+      "/img/otm/04-12d.avif"
     ]
   },
   "04-13": {
@@ -358,12 +358,12 @@
     "tecnica": "Pintura em tecido com bordado manual",
     "dimensoes": "55 x 40 x 2 cm",
     "preco": 320,
-    "thumb": "/img/tmb/04-13a.webp",
+    "thumb": "/img/tmb/04-13a.avif",
     "imagens_alta": [
-      "/img/otm/04-13a.webp",
-      "/img/otm/04-13b.webp",
-      "/img/otm/04-13c.webp",
-      "/img/otm/04-13d.webp"
+      "/img/otm/04-13a.avif",
+      "/img/otm/04-13b.avif",
+      "/img/otm/04-13c.avif",
+      "/img/otm/04-13d.avif"
     ]
   },
   "04-14": {
@@ -373,12 +373,12 @@
     "tecnica": "Impressão digital sobre PVC com iluminação interna",
     "dimensoes": "60 x 60 x 12 cm",
     "preco": 900,
-    "thumb": "/img/tmb/04-14a.webp",
+    "thumb": "/img/tmb/04-14a.avif",
     "imagens_alta": [
-      "/img/otm/04-14a.webp",
-      "/img/otm/04-14b.webp",
-      "/img/otm/04-14c.webp",
-      "/img/otm/04-14d.webp"
+      "/img/otm/04-14a.avif",
+      "/img/otm/04-14b.avif",
+      "/img/otm/04-14c.avif",
+      "/img/otm/04-14d.avif"
     ]
   },
   "04-15": {
@@ -388,12 +388,12 @@
     "tecnica": "Instalação sonora com caixas de madeira",
     "dimensoes": "120 x 30 x 20 cm",
     "preco": 750,
-    "thumb": "/img/tmb/04-15a.webp",
+    "thumb": "/img/tmb/04-15a.avif",
     "imagens_alta": [
-      "/img/otm/04-15a.webp",
-      "/img/otm/04-15b.webp",
-      "/img/otm/04-15c.webp",
-      "/img/otm/04-15d.webp"
+      "/img/otm/04-15a.avif",
+      "/img/otm/04-15b.avif",
+      "/img/otm/04-15c.avif",
+      "/img/otm/04-15d.avif"
     ]
   }
 }
