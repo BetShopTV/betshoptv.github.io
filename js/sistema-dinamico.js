@@ -5,7 +5,7 @@ class BetShopDinamico {
     this.produtos = []
     this.produtosFiltrados = []
     this.filtrosAtivos = new Set()
-    this.urlJSON = "https://drive.google.com/file/d/14NQ1ZdXVFt-8nONhBowAMpNC6GbE6XKq/view?usp=drive_link" // Você vai substituir pela URL real
+    this.urlJSON = "https://docs.google.com/spreadsheets/d/1qDtC6v3eIiedlGpgR5pF1WrUmU0Gr39F4d2jhr9wHj0/" // Você vai substituir pela URL real
     this.init()
   }
 
@@ -18,8 +18,8 @@ class BetShopDinamico {
   async carregarProdutos() {
     try {
       // URL do Google Sheets público (você precisa configurar isso)
-      const SHEET_ID = "1nhfRJm8H6WIK0OJhCSnf9hkMHMEI3sbE"
-      const urlPlanilha = `https://script.google.com/macros/s/AKfycbzwl4YQpJlx_PzgKpkzfjhZJF-j8-TxliqWNaISYwQpqtIlbCTTU3SGEcGDzzBDUfMG/exec`
+      const SHEET_ID = "1qDtC6v3eIiedlGpgR5pF1WrUmU0Gr39F4d2jhr9wHj0"
+      const urlPlanilha = `https://script.google.com/macros/s/AKfycbxfVkjSUnv7wvXnhPLPWi42c2sCai0AgVvlXJldyri_HjqYrc72fi6k7bipI9nd10JO/exec`
 
       // Para teste, ainda usando dados de exemplo até você configurar o Apps Script
       console.log("Tentando carregar da planilha:", SHEET_ID)
