@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BetShopTV — Galeria de Ofertas (GDO) — Teste</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Instrução: coloque suas fontes .woff2 em /fonts/ e ajuste @font-face em styles.css se desejar -->
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="site-header">
+      <div class="header-inner">
+        <h1 class="brand">BETSHOPTV — GALERIA DE OFERTAS</h1>
+      </div>
+    </header>
+
+    <!-- Controls -->
+    <section class="controls container" id="controls">
+      <div id="filter-buttons" class="filters"></div>
+      <div class="sort">
+        <button id="toggle-sort" class="btn">+ RECENTES</button>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <main class="container" id="gallery-root">
+      <div id="gallery-columns" class="columns">
+        <!-- Columns rendered by JS -->
+      </div>
+    </main>
+
+    <!-- Active Tabs / Carousel (favorites / offers) -->
+    <div id="active-section" class="active-section hidden"></div>
+
+    <!-- Shopping Bar -->
+    <div class="shopping-bar" id="shopping-bar">
+      <div class="shopping-inner container">
+        <div class="tab" id="rifas-tab">
+          <div class="tab-title">RIFAS</div>
+          <div class="tab-count" id="fav-count">__</div>
+        </div>
+        <div class="tab" id="ofertas-tab">
+          <div class="tab-title">OFERTAS</div>
+          <div class="tab-count" id="cart-count">__</div>
+        </div>
+
+        <div class="total">
+          <div>TOTAL</div>
+          <div id="total-price">R$ __</div>
+        </div>
+
+        <div class="finalize">
+          <div>FINALIZAR<br/>COMPRA</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height: 64px;"></div> <!-- bottom spacing -->
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
