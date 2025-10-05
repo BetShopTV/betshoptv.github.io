@@ -1,6 +1,6 @@
 // 🔗 URL do seu Apps Script
 const GOOGLE_APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbydfqi0G8PnmvshPSbGjWZnWBjOKA965l4TbVqvS3YQYO9bcYulknvMjUn3V2AEFxSV/exec";
+  "https://script.google.com/macros/s/AKfycbyrc64j6KRAP5gRPQfACsAw_lX3HixxTQktfJlor6eilbRjTIXmJVDTm9MW8Zp8LYcu/exec";
 
 const CACHE_KEY = "betshop_products";
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
