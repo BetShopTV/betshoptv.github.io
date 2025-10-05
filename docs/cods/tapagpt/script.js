@@ -2,8 +2,8 @@
 const GOOGLE_APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbyrc64j6KRAP5gRPQfACsAw_lX3HixxTQktfJlor6eilbRjTIXmJVDTm9MW8Zp8LYcu/exec";
 
-const CACHE_KEY = "betshop_products";
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+const CACHE_KEY = "oferta_pintosa";
+const CACHE_DURATION = 1 * 60 * 1000; // 5 minutos
 
 let products = [];
 let favorites = [];
