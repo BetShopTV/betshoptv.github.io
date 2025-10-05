@@ -86,7 +86,7 @@ h1{font-size:1.2rem;margin:0 0 1rem}
 .heart.active{background:var(--accent);color:var(--white)}
 
 /* footer / BARRA SHOPPING */
-.footer-bar{position:fixed;left:0;right:0;bottom:0;background:var(--accent);color:var(--white);height:var(--footer-h);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:9999;font-weight:700}
+.footer-bar{position:fixed;left:0;right:0;bottom:0;background:#2b2424;color:var(--white);height:var(--footer-h);display:flex;align-items:center;justify-content:space-between;padding:0 27vw;z-index:9999;font-weight:700}
 .footer-left{display:flex;align-items:center;gap:8px}
 .footer-dot{width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .footer-dot svg{fill:var(--white)}
@@ -94,18 +94,18 @@ h1{font-size:1.2rem;margin:0 0 1rem}
 .panel-btn{background:transparent;border:0;color:var(--white);font-weight:700;cursor:pointer;position:relative;padding:8px}
 
 /* expanded panel (overlay above footer) */
-.panel-expanded{position:fixed;left:0;right:0;bottom:var(--footer-h);background:#bebab0;max-height:45vh;border-top:1px solid #2b2424;display:none;padding:12px;z-index:9998;overflow:hidden}
+.panel-expanded{position:fixed;left:0;right:0;bottom:var(--footer-h);background:#bebab0;max-height:45vh;border-top:1px solid #2b2424;display:none;padding:0 27vw;z-index:9998;overflow:hidden}
 .panel-row{display:flex;align-items:center;gap:12px;height:100%}
 .mini-list{display:flex;gap:12px;overflow-x:auto;align-items:center;padding:8px 4px}
 .mini-item{flex:0 0 auto;display:flex;gap:8px;align-items:center;border:1px solid #2b2424;padding:6px;background:transparent}
 .mini-thumb{width:42px;height:50px;object-fit:cover; border:1px solid #2b2424}
 /* Customização do scrollbar */
 .mini-list::-webkit-scrollbar {
-  height: 8px; /* altura da barra horizontal */
-}
+  height: 12px; /* altura da barra horizontal */
+  }
 
 .mini-list::-webkit-scrollbar-thumb {
-  background-color: #ff0000; /* vermelho */
+  background-color: #bebab0; border: 12px solid #2b2424; border-top: 0px ; border-bottom: 0px; border-left: 12px solid #2b2424; /* vermelho */
 }
 
 .mini-list::-webkit-scrollbar-track {
@@ -118,7 +118,8 @@ h1{font-size:1.2rem;margin:0 0 1rem}
 @media(max-width:768px){
   .col{flex-basis:calc(33.333% - 8px)}
 .mini-thumb{width:33px;height:42px;object-fit:cover; border:1px solid #2b2424}
-  .footer-bar{padding:0 8px}
+  .footer-bar{padding:0 12px}
+  .panel-expanded{padding: 0 12px;}
   .slide img{max-width:100%;max-height: 66vh; object-fit:contain}
 }
 </style>
