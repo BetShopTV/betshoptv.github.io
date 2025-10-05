@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BetShopTV - Galeria de Ofertas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- HEADER MOBILE -->
+    <header class="header-mobile" id="headerMobile">
+        <!-- Grid 14 colunas -->
+        <div class="header-grid">
+            <!-- Logo (A1-C3) -->
+            <div class="logo-area">
+                <img src="https://betshoptv.com/elementos/LOGO_verm_FUNDO_branco.png" alt="BetShopTV.com">
+            </div>
+            
+            <!-- Login (A4-C4) -->
+            <button class="btn-login">LOGIN</button>
+            
+            <!-- Espaço vazio (D1-E4) -->
+            <div class="empty-space"></div>
+            
+            <!-- Navegação Row 1 -->
+            <button class="btn-nav">CARTELA DE RIFAS</button>
+            <button class="btn-nav">COMO FUNCIONA?</button>
+            
+            <!-- Navegação Row 2 -->
+            <button class="btn-nav btn-active">GALERIA DE OFERTAS</button>
+            <button class="btn-nav">SOBRE O PROJETO</button>
+            
+            <!-- Row 3: Filtros e Modo -->
+            <button class="btn-toggle" id="btnFiltros">FILTROS</button>
+            <div class="empty-cell"></div>
+            <button class="btn-toggle btn-active" id="btnModo">MODO</button>
+            <button class="btn-submenu btn-active" id="btnModoSubmenu">SELEÇÃO</button>
+            <div class="empty-space-right"></div>
+            
+            <!-- Row 4: Grupo e números (aparece quando FILTROS aberto) -->
+            <div class="filtros-content" id="filtrosContent">
+                <button class="btn-grupo disabled">GRUPO</button>
+                <button class="btn-numero disabled">02</button>
+                
+                <!-- Row 5: Números 03-07 -->
+                <button class="btn-numero" data-grupo="03">03</button>
+                <button class="btn-numero" data-grupo="04">04</button>
+                <button class="btn-numero disabled">05</button>
+                <button class="btn-numero disabled">06</button>
+                <button class="btn-numero disabled">07</button>
+                
+                <!-- Row 6: 08, Disponíveis, Recentes -->
+                <button class="btn-numero disabled">08</button>
+                <button class="btn-filter" id="btnDisponiveis">DISPONÍVEIS</button>
+                <button class="btn-filter" id="btnRecentes">RECENTES</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner Rifas -->
+    <div class="banner-rifas">
+        <div class="banner-content">
+            <p>Confira as peças de <em>Chop Shop AV</em>, que serão distribuídas entre no mínimo 17 pessoas sorteadas na <strong>RIFA</strong>.</p>
+            <button class="btn-saiba-mais">SAIBA MAIS</button>
+        </div>
+    </div>
+
+    <!-- GALERIA -->
+    <main class="galeria" id="galeria">
+        <!-- Peças serão inseridas aqui via JavaScript -->
+        <div class="loading">Carregando peças...</div>
+    </main>
+
+    <!-- BARRA SHOPPING -->
+    <footer class="barra-shopping">
+        <button class="btn-central" id="btnCentral">
+            CENTRAL de APOSTAS
+        </button>
+        
+        <div class="shopping-icons">
+            <button class="icon-btn" id="btnRifas">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <path d="M3 9h18M9 3v18"/>
+                </svg>
+                <span class="counter" id="counterRifas">0</span>
+            </button>
+            
+            <button class="icon-btn" id="btnFavoritos">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                <span class="counter" id="counterFavoritos">18</span>
+            </button>
+            
+            <button class="icon-btn" id="btnOfertas">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="9" cy="21" r="1"/>
+                    <circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                <span class="counter" id="counterOfertas">5</span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- LIGHTBOX CENTRAL DE APOSTAS -->
+    <div class="lightbox" id="lightboxCentral">
+        <div class="lightbox-content">
+            <button class="btn-close" id="btnCloseLightbox">&times;</button>
+            <h2>CENTRAL de APOSTAS</h2>
+            
+            <div class="central-sections">
+                <!-- Rifas -->
+                <div class="central-section" id="sectionRifas">
+                    <h3>RIFAS (3)</h3>
+                    <div class="items-list">
+                        <div class="item">X104 / Nude - R$ 80</div>
+                        <div class="item">X108 / Ocre Italiano - R$ 80</div>
+                        <div class="item">X114 / Precioso Momento - R$ 80</div>
+                    </div>
+                </div>
+                
+                <!-- Favoritos -->
+                <div class="central-section" id="sectionFavoritos">
+                    <h3>FAVORITOS (18)</h3>
+                    <div class="items-list">
+                        <!-- Itens favoritados aparecerão aqui -->
+                    </div>
+                </div>
+                
+                <!-- Ofertas -->
+                <div class="central-section" id="sectionOfertas">
+                    <h3>OFERTAS (5)</h3>
+                    <div class="items-list">
+                        <!-- Itens no carrinho aparecerão aqui -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="central-footer">
+                <div class="total">TOTAL: R$ <span id="totalValue">240,00</span></div>
+                <button class="btn-finalizar">FINALIZAR COMPRA</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
