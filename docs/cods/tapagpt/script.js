@@ -1,13 +1,35 @@
-// 🔗 URL do seu Apps Script
-const GOOGLE_APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxBcJOceCU_v-BW3vTRf8quWoeMuVCGFMUbTf5nndGmPoApod5J8V5fShpoX29UTg40tA/exec";
+// URL do seu Apps Script
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_JylkCMmfey9jqxPaphwRd9qpONpDA824IeGwg8ssGLWShswWjdJQuHXwDXHC3COZ/exec";
 
-const CACHE_KEY = "oferta-pintosa";
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+window.onload = async () => {
+  document.getElementById("galeria").innerHTML = "<p>Carregando produtos...</p>";
+  try {
+    const res = await fetch(GOOGLE_APPS_SCRIPT_URL, { cache: "no-store" });
+    const data = await res.json();
+    if (!data.produtos || !data.produtos.length) throw new Error("Nenhum produto recebido.");
+    renderGallery(data.produtos);
+  } catch (err) {
+    document.getElementById("galeria").innerHTML = `<p>Erro ao carregar: ${err.message}</p>`;
+  }
+};
 
-let products = [];
-let favorites = [];
-let cart = [];
+function renderGallery(produtos) {
+  const galeria = document.getElementById("galeria");
+  galeria.innerHTML = "";
+
+  produtos.forEach(p => {
+    const item = document.createElement("div");
+    item.className = "produto";
+    item.innerHTML = `
+      <img src="https://betshoptv.com/img/tmb/${p.imagens?.[0] || 'placeholder.jpg'}" alt="${p.titulo}">
+      <h3>${p.titulo}</h3>
+      <p class="preco">R$ ${p.preco}</p>
+      <p class="status ${p.disponivel ? 'disp' : 'indisp'}">${p.disponivel ? "Disponível" : "Indisponível"}</p>
+    `;
+    galeria.appendChild(item);
+  });
+}
+
 
 // 🚀 Inicia quando a página carrega
 window.onload = async () => {
