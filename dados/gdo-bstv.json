@@ -1,14 +1,14 @@
 {
-  "ultimaAtualizacao": "2025-10-06T06:51:20.239Z",
+  "ultimaAtualizacao": "2025-10-06T06:57:36.608Z",
   "total": 22,
   "produtos": [
     {
       "id": "0301",
-      "titulo": "03/01 ? A DAN?A DO MAXIXE PQP",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "titulo": "03/01 É A DANÇA DO MAXIXE PQP",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
       "dimensao": "57 x 18 x 10 cm",
       "preco": 150,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -35,11 +35,11 @@
     },
     {
       "id": "0302",
-      "titulo": "03/02 C?mera fotogr?fica 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "titulo": "03/02 Câmera fotográfica 01",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
       "dimensao": "21 x 21 x 09 cm",
       "preco": 150,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -62,10 +62,10 @@
     {
       "id": "0303",
       "titulo": "03/03 Polaroid 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
       "dimensao": "23 x 25 x 08 cm",
       "preco": 150,
-      "status": "em an?lise",
+      "status": "em análise",
       "disponivel": false,
       "imagens": [
         {
@@ -87,11 +87,11 @@
     },
     {
       "id": "0304",
-      "titulo": "03/04 Auto R?dio 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica e esc?pulas.",
+      "titulo": "03/04 Auto Rádio 01",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica e escápulas.",
       "dimensao": "27 x 18 x 06 cm",
       "preco": 150,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -108,11 +108,11 @@
     },
     {
       "id": "0305",
-      "titulo": "03/05 TV Port?til 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "titulo": "03/05 TV Portátil 01",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
       "dimensao": "25 x 21 x 07 cm",
       "preco": 200,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -135,10 +135,10 @@
     {
       "id": "0306",
       "titulo": "03/06 Stereo System 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
       "dimensao": "25 x 16 x 16 cm",
       "preco": 150,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -155,11 +155,11 @@
     },
     {
       "id": "0307",
-      "titulo": "03/07 Super Tel?o 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica, suporte angular e parafuso.",
+      "titulo": "03/07 Super Telão 01",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica, suporte angular e parafuso.",
       "dimensao": "10 x 7,5 x 5,5 cm",
       "preco": 150,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -176,11 +176,11 @@
     },
     {
       "id": "0308",
-      "titulo": "03/08 Auto R?dio 02",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "titulo": "03/08 Auto Rádio 02",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
       "dimensao": "12,5 x 11,5 x 5 cm",
       "preco": 250,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -203,10 +203,10 @@
     {
       "id": "0309",
       "titulo": "03/09 Conjunto de som e imagem 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
       "dimensao": "25 x 20,5 x 6,5 cm",
       "preco": 150,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -224,10 +224,10 @@
     {
       "id": "0310",
       "titulo": "03/10 Filmadora 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
       "dimensao": "27,5 x 24,5 x 4 cm",
       "preco": 150,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -250,10 +250,10 @@
     {
       "id": "0311",
       "titulo": "03/11 Microcomputador 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
       "dimensao": "23 x 23,5 x 10 cm",
       "preco": 150,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -276,10 +276,10 @@
     {
       "id": "0312",
       "titulo": "03/12 Microcomputador 02",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica e ganchos.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica e ganchos.",
       "dimensao": "27 x 20,5 x 3 cm",
       "preco": 250,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -301,11 +301,11 @@
     },
     {
       "id": "0313",
-      "titulo": "03/13 C?mera fotogr?fica 02",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e pregos.",
+      "titulo": "03/13 Câmera fotográfica 02",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e pregos.",
       "dimensao": "51 x 20,5 x 13 cm",
       "preco": 250,
-      "status": "em an?lise",
+      "status": "em análise",
       "disponivel": false,
       "imagens": [
         {
@@ -328,10 +328,10 @@
     {
       "id": "0401",
       "titulo": "04/01 TV 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA e prego.",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e prego.",
       "dimensao": "60 x 20,5 x 4 cm",
       "preco": 1800,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -349,10 +349,10 @@
     {
       "id": "0402",
       "titulo": "04/02 Filmadora 02",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA",
       "dimensao": "27 x 20,5 x 6 cm",
       "preco": 250,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -370,10 +370,10 @@
     {
       "id": "0403",
       "titulo": "04/03 Filmadora 03",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, ",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, ",
       "dimensao": "30 x 37 x 7 cm",
       "preco": 400,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -395,11 +395,11 @@
     },
     {
       "id": "0404",
-      "titulo": "04/04 Tel?o 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, bra?adeiras e parafusos.",
+      "titulo": "04/04 Telão 01",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, braçadeiras e parafusos.",
       "dimensao": "30 x 20,5 x 6,5 cm",
       "preco": 300,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -417,10 +417,10 @@
     {
       "id": "0405",
       "titulo": "04/05 Microcomputador 03",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, tinta acr?lica, aneis de borracha nitr?lica e ganchos.",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, tinta acrílica, aneis de borracha nitrílica e ganchos.",
       "dimensao": "19 x 37 x 12 cm",
       "preco": 350,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -447,11 +447,11 @@
     },
     {
       "id": "0406",
-      "titulo": "04/06 Auto R?dio 03",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, chapa uni?o, arruela e parafusos.",
+      "titulo": "04/06 Auto Rádio 03",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, chapa união, arruela e parafusos.",
       "dimensao": "27 x 20 x 6 cm",
       "preco": 300,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -479,10 +479,10 @@
     {
       "id": "0407",
       "titulo": "04/07 Videocassete 01",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, bra?adeira e parafusos.",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, braçadeira e parafusos.",
       "dimensao": "26 x 19 x 5 cm",
       "preco": 250,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
@@ -509,11 +509,11 @@
     },
     {
       "id": "0408",
-      "titulo": "04/08 Super Tel?o 02",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA e ferragens.",
+      "titulo": "04/08 Super Telão 02",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e ferragens.",
       "dimensao": "53 x 15 x 3 cm",
       "preco": 250,
-      "status": "em an?lise",
+      "status": "em análise",
       "disponivel": false,
       "imagens": [
         {
@@ -539,7 +539,7 @@
       "tecnica": "EVA Tijolinho",
       "dimensao": "8 x 88 x 8 cm",
       "preco": 888,
-      "status": "dispon?vel",
+      "status": "disponível",
       "disponivel": true,
       "imagens": [
         {
