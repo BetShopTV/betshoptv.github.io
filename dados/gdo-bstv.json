@@ -1,5 +1,5 @@
 {
-  "ultimaAtualizacao": "2025-10-06T22:15:13.627Z",
+  "ultimaAtualizacao": "2025-10-06T22:21:06.693Z",
   "total": 22,
   "produtos": [
     {
@@ -8,8 +8,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado, chapa união, porcas e parafusos. ",
       "dimensao": "57 x 18 x 10 cm",
       "preco": 150,
-      "status": "disponível",
-      "disponivel": true,
+      "status": "indisponível",
+      "disponivel": false,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-01a.avif",
@@ -39,8 +39,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
       "dimensao": "21 x 21 x 09 cm",
       "preco": 150,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-02a.avif",
@@ -91,8 +91,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica e escápulas.",
       "dimensao": "27 x 18 x 06 cm",
       "preco": 150,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-04a.avif",
@@ -112,8 +112,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
       "dimensao": "25 x 21 x 07 cm",
       "preco": 200,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-05a.avif",
@@ -138,8 +138,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado, suporte angular e parafuso.",
       "dimensao": "25 x 16 x 16 cm",
       "preco": 150,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-06a.avif",
@@ -180,8 +180,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado, chapa união e parafusos.",
       "dimensao": "12,5 x 11,5 x 5 cm",
       "preco": 250,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-08a.avif",
@@ -206,8 +206,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado e presilhas metálicas.",
       "dimensao": "25 x 20,5 x 6,5 cm",
       "preco": 150,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-09a.avif",
@@ -227,8 +227,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
       "dimensao": "27,5 x 24,5 x 4 cm",
       "preco": 150,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-10a.avif",
@@ -331,8 +331,8 @@
       "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e prego.",
       "dimensao": "60 x 20,5 x 4 cm",
       "preco": 1800,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/04-01a.avif",
@@ -352,8 +352,8 @@
       "tecnica": "Impressão offset em papel couché transferida para refugo de EVA",
       "dimensao": "27 x 20,5 x 6 cm",
       "preco": 250,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/04-02a.avif",
@@ -373,8 +373,8 @@
       "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, ",
       "dimensao": "30 x 37 x 7 cm",
       "preco": 400,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/04-03a.avif",
@@ -399,8 +399,8 @@
       "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, braçadeiras e parafusos.",
       "dimensao": "30 x 20,5 x 6,5 cm",
       "preco": 300,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/04-04a.avif",
@@ -420,8 +420,8 @@
       "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, tinta acrílica, aneis de borracha nitrílica e ganchos.",
       "dimensao": "19 x 37 x 12 cm",
       "preco": 350,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/04-05a.avif",
@@ -451,8 +451,8 @@
       "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, chapa união, arruela e parafusos.",
       "dimensao": "27 x 20 x 6 cm",
       "preco": 300,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/04-06a.avif",
@@ -482,8 +482,8 @@
       "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, braçadeira e parafusos.",
       "dimensao": "26 x 19 x 5 cm",
       "preco": 250,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/04-07a.avif",
