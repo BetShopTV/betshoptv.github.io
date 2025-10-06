@@ -83,6 +83,7 @@ const endpoint = "https://script.google.com/macros/s/AKfycbyFU0r43A3QdaMch1POe_b
 async function carregarOfertas() {
   const loading = document.getElementById("loading");
   const container = document.getElementById("ofertas");
+
   try {
     const res = await fetch(endpoint);
     const data = await res.json();
@@ -90,7 +91,8 @@ async function carregarOfertas() {
 
     const produtosValidos = data.produtos.filter(p =>
       (p.imagens && p.imagens.length > 0) ||
-      (p.img_peca && p.img_peca !== "")
+      (p.img_peca && p.img_peca !== "") ||
+      (p.arquivos_img && p.arquivos_img !== "")
     );
 
     if (produtosValidos.length === 0) {
@@ -104,11 +106,28 @@ async function carregarOfertas() {
       const card = document.createElement("div");
       card.className = "oferta";
 
-      // tenta usar thumb, depois opt, depois fallback
-      const img = prod.imagens?.[0]?.thumb || prod.imagens?.[0]?.opt || prod.imagens?.[0]?.fallback || "https://betshoptv.com/img/fallback/semimagem.jpg";
+      // pega o nome base do arquivo da planilha
+      let arquivoBase = "";
+      if (Array.isArray(prod.imagens) && prod.imagens.length > 0 && prod.imagens[0].thumb) {
+        // do JSON gerado
+        arquivoBase = prod.imagens[0].thumb.split("/").pop().replace(".avif","");
+      } else if (prod.arquivos_img) {
+        // se vier como string simples
+        arquivoBase = prod.arquivos_img.split(",")[0].trim();
+      } else if (prod.img_peca) {
+        arquivoBase = prod.img_peca.trim();
+      }
+
+      // monta URLs corretas conforme pastas reais
+      const imgThumb = `https://betshoptv.com/img/tmb/${arquivoBase}.avif`;
+      const imgOtm = `https://betshoptv.com/img/otm/${arquivoBase}.avif`;
+      const imgFallback = `https://betshoptv.com/img/fallback/${arquivoBase}.jpg`;
 
       card.innerHTML = `
-        <img src="${img}" alt="${prod.titulo}">
+        <picture>
+          <source srcset="${imgThumb}" type="image/avif">
+          <img src="${imgFallback}" alt="${prod.titulo}" style="width:100%;border-radius:6px;">
+        </picture>
         <h3>${prod.titulo || "Sem título"}</h3>
         <p>${prod.tecnica ? prod.tecnica : ""}${prod.dimensao ? " — " + prod.dimensao : ""}</p>
         <p><strong>${prod.preco ? "R$ " + prod.preco : ""}</strong></p>
@@ -125,9 +144,9 @@ async function carregarOfertas() {
   }
 }
 
-// executa quando a página carregar
 window.addEventListener("DOMContentLoaded", carregarOfertas);
 </script>
+
 
 </body>
 </html>
