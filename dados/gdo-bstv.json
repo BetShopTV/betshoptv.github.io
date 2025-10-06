@@ -1,0 +1,554 @@
+{
+  "ultimaAtualizacao": "2025-10-06T06:15:55.989Z",
+  "total": 22,
+  "produtos": [
+    {
+      "id": "0301",
+      "titulo": "03/01 PEEEEER FAVOOOOREEEE",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "dimensao": "57 x 18 x 10 cm",
+      "preco": 150,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-01a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-01a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-01a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-01b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-01b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-01b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-01c.avif",
+          "opt": "https://betshoptv.com/img/opt/03-01c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-01c.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-01d.avif",
+          "opt": "https://betshoptv.com/img/opt/03-01d.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-01d.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0302",
+      "titulo": "03/02 C?mera fotogr?fica 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "dimensao": "21 x 21 x 09 cm",
+      "preco": 150,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-02a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-02a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-02a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-02b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-02b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-02b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-02c.avif",
+          "opt": "https://betshoptv.com/img/opt/03-02c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-02c.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0303",
+      "titulo": "03/03 Polaroid 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "dimensao": "23 x 25 x 08 cm",
+      "preco": 150,
+      "status": "em an?lise",
+      "disponivel": false,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-03a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-03a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-03a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-03b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-03b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-03b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-03c.avif",
+          "opt": "https://betshoptv.com/img/opt/03-03c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-03c.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0304",
+      "titulo": "03/04 Auto R?dio 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica e esc?pulas.",
+      "dimensao": "27 x 18 x 06 cm",
+      "preco": 150,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-04a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-04a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-04a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-04b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-04b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-04b.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0305",
+      "titulo": "03/05 TV Port?til 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "dimensao": "25 x 21 x 07 cm",
+      "preco": 200,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-05a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-05a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-05a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-05b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-05b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-05b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-05c.avif",
+          "opt": "https://betshoptv.com/img/opt/03-05c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-05c.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0306",
+      "titulo": "03/06 Stereo System 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "dimensao": "25 x 16 x 16 cm",
+      "preco": 150,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-06a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-06a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-06a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-06b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-06b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-06b.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0307",
+      "titulo": "03/07 Super Tel?o 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica, suporte angular e parafuso.",
+      "dimensao": "10 x 7,5 x 5,5 cm",
+      "preco": 150,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-07a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-07a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-07a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-07b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-07b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-07b.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0308",
+      "titulo": "03/08 Auto R?dio 02",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "dimensao": "12,5 x 11,5 x 5 cm",
+      "preco": 250,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-08a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-08a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-08a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-08b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-08b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-08b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-08c.avif",
+          "opt": "https://betshoptv.com/img/opt/03-08c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-08c.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0309",
+      "titulo": "03/09 Conjunto de som e imagem 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "dimensao": "25 x 20,5 x 6,5 cm",
+      "preco": 150,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-09a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-09a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-09a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-09b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-09b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-09b.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0310",
+      "titulo": "03/10 Filmadora 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "dimensao": "27,5 x 24,5 x 4 cm",
+      "preco": 150,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-10a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-10a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-10a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-10b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-10b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-10b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-10c.avif",
+          "opt": "https://betshoptv.com/img/opt/03-10c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-10c.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0311",
+      "titulo": "03/11 Microcomputador 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, ",
+      "dimensao": "23 x 23,5 x 10 cm",
+      "preco": 150,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-11a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-11a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-11a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-11b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-11b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-11b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-11c.avif",
+          "opt": "https://betshoptv.com/img/opt/03-11c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-11c.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0312",
+      "titulo": "03/12 Microcomputador 02",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica e ganchos.",
+      "dimensao": "27 x 20,5 x 3 cm",
+      "preco": 250,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-12a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-12a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-12a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-12b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-12b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-12b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-12c.avif",
+          "opt": "https://betshoptv.com/img/opt/03-12c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-12c.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0313",
+      "titulo": "03/13 C?mera fotogr?fica 02",
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e pregos.",
+      "dimensao": "51 x 20,5 x 13 cm",
+      "preco": 250,
+      "status": "em an?lise",
+      "disponivel": false,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-13a.avif",
+          "opt": "https://betshoptv.com/img/opt/03-13a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-13a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-13b.avif",
+          "opt": "https://betshoptv.com/img/opt/03-13b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-13b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-13c.avif",
+          "opt": "https://betshoptv.com/img/opt/03-13c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-13c.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0401",
+      "titulo": "04/01 TV 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA e prego.",
+      "dimensao": "60 x 20,5 x 4 cm",
+      "preco": 1800,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-01a.avif",
+          "opt": "https://betshoptv.com/img/opt/04-01a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-01a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-01b.avif",
+          "opt": "https://betshoptv.com/img/opt/04-01b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-01b.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0402",
+      "titulo": "04/02 Filmadora 02",
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA",
+      "dimensao": "27 x 20,5 x 6 cm",
+      "preco": 250,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-02a.avif",
+          "opt": "https://betshoptv.com/img/opt/04-02a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-02a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-02b.avif",
+          "opt": "https://betshoptv.com/img/opt/04-02b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-02b.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0403",
+      "titulo": "04/03 Filmadora 03",
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, ",
+      "dimensao": "30 x 37 x 7 cm",
+      "preco": 400,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-03a.avif",
+          "opt": "https://betshoptv.com/img/opt/04-03a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-03a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-03b.avif",
+          "opt": "https://betshoptv.com/img/opt/04-03b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-03b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-03c.avif",
+          "opt": "https://betshoptv.com/img/opt/04-03c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-03c.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0404",
+      "titulo": "04/04 Tel?o 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, bra?adeiras e parafusos.",
+      "dimensao": "30 x 20,5 x 6,5 cm",
+      "preco": 300,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-04a.avif",
+          "opt": "https://betshoptv.com/img/opt/04-04a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-04a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-04b.avif",
+          "opt": "https://betshoptv.com/img/opt/04-04b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-04b.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0405",
+      "titulo": "04/05 Microcomputador 03",
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, tinta acr?lica, aneis de borracha nitr?lica e ganchos.",
+      "dimensao": "19 x 37 x 12 cm",
+      "preco": 350,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-05a.avif",
+          "opt": "https://betshoptv.com/img/opt/04-05a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-05a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-05b.avif",
+          "opt": "https://betshoptv.com/img/opt/04-05b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-05b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-05c.avif",
+          "opt": "https://betshoptv.com/img/opt/04-05c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-05c.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-05d.avif",
+          "opt": "https://betshoptv.com/img/opt/04-05d.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-05d.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0406",
+      "titulo": "04/06 Auto R?dio 03",
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, chapa uni?o, arruela e parafusos.",
+      "dimensao": "27 x 20 x 6 cm",
+      "preco": 300,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-06a.avif",
+          "opt": "https://betshoptv.com/img/opt/04-06a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-06a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-06b.avif",
+          "opt": "https://betshoptv.com/img/opt/04-06b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-06b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-06c.avif",
+          "opt": "https://betshoptv.com/img/opt/04-06c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-06c.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-06d.avif",
+          "opt": "https://betshoptv.com/img/opt/04-06d.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-06d.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0407",
+      "titulo": "04/07 Videocassete 01",
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, bra?adeira e parafusos.",
+      "dimensao": "26 x 19 x 5 cm",
+      "preco": 250,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-07a.avif",
+          "opt": "https://betshoptv.com/img/opt/04-07a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-07a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-07b.avif",
+          "opt": "https://betshoptv.com/img/opt/04-07b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-07b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-07c.avif",
+          "opt": "https://betshoptv.com/img/opt/04-07c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-07c.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-07d.avif",
+          "opt": "https://betshoptv.com/img/opt/04-07d.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-07d.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0408",
+      "titulo": "04/08 Super Tel?o 02",
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA e ferragens.",
+      "dimensao": "53 x 15 x 3 cm",
+      "preco": 250,
+      "status": "em an?lise",
+      "disponivel": false,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-08a.avif",
+          "opt": "https://betshoptv.com/img/opt/04-08a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-08a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-08b.avif",
+          "opt": "https://betshoptv.com/img/opt/04-08b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-08b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-08c.avif",
+          "opt": "https://betshoptv.com/img/opt/04-08c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-08c.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0409",
+      "titulo": "04/09 LANLA",
+      "tecnica": "EVA Tijolinho",
+      "dimensao": "8 x 88 x 8 cm",
+      "preco": 888,
+      "status": "dispon?vel",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/04-09a.avif",
+          "opt": "https://betshoptv.com/img/opt/04-09a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/04-09a.jpg"
+        }
+      ]
+    }
+  ],
+  "backupUrl": "https://drive.google.com/uc?id=1XPzpwZdDjLKx-6lsQeWalEYKSYBjVC4W"
+}
