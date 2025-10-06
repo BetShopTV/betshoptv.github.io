@@ -1,114 +1,455 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galeria de Ofertas - Teste</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BSTV — Galeria / Feed (Teste Visual)</title>
+
+<!-- Fontes do betshoptv (conforme seu repositório de fonts) -->
+<link rel="preload" href="https://betshoptv.com/fonts/Roboto-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://betshoptv.com/fonts/Roboto-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://betshoptv.com/fonts/Roboto_Condensed-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-  body { font-family: 'Segoe UI', sans-serif; background: #fafafa; margin:0; }
-  header { background:#222; color:#fff; padding:12px 20px; }
-  h1 { font-size:1.4em; margin:0; }
-  #ofertas { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; padding:20px; }
-  .oferta { background:#fff; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,0.15); overflow:hidden; text-align:center; }
-  .oferta img { width:100%; height:180px; object-fit:cover; }
-  .oferta h3 { margin:8px 0 4px 0; font-size:1em; }
-  .oferta p { margin:2px 0; font-size:0.9em; color:#444; }
-  .oferta input { margin-top:6px; }
-  #checkout { margin:20px; padding:20px; background:#fff; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,0.1); }
-  button { background:#2b2424; color:white; padding:8px 16px; border:none; border-radius:4px; cursor:pointer; }
-  button:hover { background:#444; }
+/* ===== Fonts (fallbacks) ===== */
+@font-face {
+  font-family: "Roboto";
+  src: url("https://betshoptv.com/fonts/Roboto-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("https://betshoptv.com/fonts/Roboto-Bold.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Roboto Condensed";
+  src: url("https://betshoptv.com/fonts/Roboto_Condensed-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+
+/* ===== Palette (inspired by globals.css) ===== */
+:root{
+  --bstv-preto: #2b2424;
+  --bstv-branco: #ffffff;
+  --bstv-cinza: #bebab0;
+  --bstv-vermelho: #ff0000;
+  --bg: var(--bstv-cinza);
+  --text: var(--bstv-preto);
+  --card: #fff;
+  --radius: 10px;
+  --footer-h: clamp(56px,7vh,78px);
+  --max-width: 1200px;
+  --gap: 16px;
+}
+
+/* ===== Base ===== */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:"Roboto Condensed", "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding-bottom: calc(var(--footer-h) + 12px); /* space for footer */
+}
+
+/* ===== Layout ===== */
+.wrapper{max-width:var(--max-width); margin:18px auto; padding:0 16px;}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.header h1{font-size:1.05rem;margin:0;font-weight:700}
+.controls{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+
+/* toggle view */
+.view-toggle{border:2px solid var(--bstv-preto); background:transparent; color:var(--bstv-preto); padding:8px 12px;font-weight:700;border-radius:6px; cursor:pointer}
+.view-toggle.active{background:var(--bstv-preto); color:var(--bstv-branco)}
+
+/* ===== Gallery 3-col ===== */
+.gallery { display:grid; grid-template-columns:repeat(3, 1fr); gap:var(--gap); margin-bottom:20px; }
+.card{ background:var(--card); border-radius:var(--radius); overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.06); display:flex;flex-direction:column; }
+.card .thumb{ width:100%; height:200px; object-fit:cover; display:block; background:#eee; }
+.card .meta{ padding:12px; display:flex; flex-direction:column; gap:6px; }
+.title-row{display:flex;justify-content:space-between;align-items:center; gap:8px}
+.titulo{font-weight:700;font-size:1rem}
+.badge{font-size:0.8rem;padding:6px 8px;border-radius:6px;border:2px solid var(--bstv-preto);}
+
+/* action */
+.card .actions{display:flex;gap:8px;padding:12px;border-top:1px solid #eee}
+.btn{flex:1;padding:8px 10px;border-radius:6px;border:2px solid var(--bstv-preto); background:transparent; font-weight:700; cursor:pointer}
+.btn.primary{background:var(--bstv-preto); color:var(--bstv-branco)}
+.btn.ghost{background:transparent;color:var(--bstv-preto)}
+
+/* ===== Feed (horizontal carousel) ===== */
+.feed{display:flex;gap:12px;overflow-x:auto;padding:12px 6px;margin-bottom:20px;scroll-snap-type:x mandatory}
+.feed-item{flex:0 0 calc(80vw); max-width:720px; scroll-snap-align:center; background:var(--card); border-radius:10px; overflow:hidden; box-shadow:0 8px 18px rgba(0,0,0,0.08);}
+.feed-item img{width:100%; height:60vh; object-fit:contain; background:#f6f6f6}
+.feed-meta{padding:12px; display:flex;justify-content:space-between;align-items:center}
+
+/* ===== Checkout / selection summary (sticky on mobile) ===== */
+.selection-panel{position:sticky; top:12px; background:transparent; margin-bottom:14px; display:flex;gap:12px; align-items:center}
+.summary{background:var(--card); padding:10px;border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.06); display:flex; gap:12px; align-items:center}
+.summary small{display:block;font-size:0.8rem;color:#666}
+.summary .total{font-weight:800;font-size:1.05rem}
+
+/* ===== Footer / Barra Shopping ===== */
+.footer-bar{position:fixed; left:0; right:0; bottom:0; height:var(--footer-h); background:var(--bstv-preto); color:var(--bstv-branco); display:flex;align-items:center;justify-content:space-between;padding:10px 6vw; z-index:9999; gap:12px}
+.footer-left{display:flex;align-items:center;gap:12px}
+.footer-dot{width:46px;height:46px;border-radius:8px;background:transparent;border:2px solid var(--bstv-branco); display:flex;align-items:center;justify-content:center; font-weight:700}
+.footer-panels{display:flex;align-items:center;gap:12px}
+.total-box{background:transparent;padding:8px 12px;border-radius:8px;border:2px solid rgba(255,255,255,0.08); font-weight:700}
+
+/* mobile tweaks */
+@media(max-width:900px){
+  .gallery{grid-template-columns:repeat(2,1fr)}
+  .card .thumb{height:160px}
+}
+@media(max-width:600px){
+  .gallery{grid-template-columns:1fr}
+  .feed-item{flex:0 0 92vw}
+  .card .thumb{height:220px}
+  .header h1{font-size:1rem}
+  .footer-bar{padding:8px 12px}
+  .selection-panel{position:static;margin-bottom:10px}
+}
 </style>
 </head>
 <body>
-<header><h1>Galeria de Ofertas - Teste</h1></header>
 
-<div id="ofertas"></div>
+<div class="wrapper">
+  <div class="header">
+    <h1>BSTVeeeeeeeeeeeeeeeeeeeeeee — Galeria de Ofertas</h1>
+    <div style="margin-left:auto" class="controls">
+      <button id="btnViewGallery" class="view-toggle active">GALERIA</button>
+      <button id="btnViewFeed" class="view-toggle">FEED</button>
+    </div>
+  </div>
 
-<div id="checkout">
-  <h2>Finalizar Compra</h2>
-  <label>Nome: <input id="nome"></label><br><br>
-  <label>Email: <input id="email"></label><br><br>
-  <label>Telefone: <input id="telefone"></label><br><br>
-  <button onclick="finalizarCompra()">Enviar Compra</button>
+  <div class="selection-panel" aria-live="polite">
+    <div class="summary">
+      <div>
+        <small>Selecionados</small>
+        <div id="selCount" class="total">0</div>
+      </div>
+      <div style="min-width:1px">
+        <small>Total</small>
+        <div id="selTotal" class="total">R$ 0,00</div>
+      </div>
+      <div style="margin-left:12px">
+        <button id="btnCheckout" class="btn primary">Finalizar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEED (hidden by default) -->
+  <div id="feed" class="feed" style="display:none;">
+    <!-- feed items populated by JS -->
+  </div>
+
+  <!-- GALLERY -->
+  <div id="gallery" class="gallery">
+    <!-- gallery cards populated by JS -->
+  </div>
+</div>
+
+<!-- Footer / Barra Shopping -->
+<div class="footer-bar" role="region" aria-label="Barra de compras">
+  <div class="footer-left">
+    <div class="footer-dot" id="btnCart">🛍<div style="font-size:.7rem;margin-top:2px" id="cartCount">0</div></div>
+    <div class="footer-dot" id="btnRifa">🎟<div style="font-size:.7rem;margin-top:2px" id="rifaCount">0</div></div>
+    <div class="footer-dot" id="btnLikes">♥<div style="font-size:.7rem;margin-top:2px" id="likesCount">0</div></div>
+  </div>
+  <div class="footer-panels">
+    <div class="total-box" id="footerTotal">R$ 0,00</div>
+    <button id="openCart" class="btn ghost">Carrinho</button>
+  </div>
+</div>
+
+<!-- Modal / Lightbox minimal para checkout (mobile-friendly) -->
+<div id="checkoutModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:10000">
+  <div style="width:min(680px,95%);background:white;border-radius:12px;padding:18px;max-height:90vh;overflow:auto">
+    <h3>Finalizar Compra</h3>
+    <div id="checkoutItems" style="margin-bottom:12px"></div>
+    <label>Nome:<br><input id="chNome" style="width:100%;padding:8px;margin-top:6px"></label><br><br>
+    <label>Email:<br><input id="chEmail" style="width:100%;padding:8px;margin-top:6px"></label><br><br>
+    <label>Telefone:<br><input id="chPhone" style="width:100%;padding:8px;margin-top:6px"></label><br><br>
+    <div style="display:flex;gap:8px">
+      <button id="btnSend" class="btn primary">Enviar Compra</button>
+      <button id="btnClose" class="btn ghost">Fechar</button>
+    </div>
+    <div id="sendStatus" style="margin-top:12px;color:#666;font-size:.95rem"></div>
+  </div>
 </div>
 
 <script>
-// 🔹 URL do JSON com catálogo
-const CATALOGO_URL = "https://betshoptv.com/dados/gdo-bstv.json";
-
-// 🔹 URL do Apps Script
+/* ================= CONFIG ================= */
+const CATALOG_URL = "https://betshoptv.com/dados/gdo-bstv.json"; // onde está o JSON público (pode apontar para GitHub também)
 const GAS_URL = "https://script.google.com/macros/s/AKfycbxtf5gvxlptz4K8bom1tog0sKW68ejbKtNC3LWUZ3ldDJo9airXGWIXDP00t18FzC0/exec";
 
-let catalogo = [];
-let selecionados = [];
+/* Código login inicial (inicia CR030 conforme pedido) */
+let nextCodigoSeq = 30; // CR030 -> 30
 
-// carregar catálogo
-fetch(CATALOGO_URL)
-  .then(r => r.json())
-  .then(data => {
-    catalogo = data.produtos || [];
-    const container = document.getElementById("ofertas");
-    catalogo.forEach((p,i) => {
-      const div = document.createElement("div");
-      div.className = "oferta";
-      div.innerHTML = `
-        <img src="${p.imagens[0]?.otm}" alt="${p.titulo}">
-        <h3>${p.titulo}</h3>
-        <p><em>${p.tecnica}</em></p>
-        <p>${p.dimensao}</p>
-        <p><strong>R$ ${p.preco}</strong></p>
-        <input type="checkbox" value="${i}" onchange="toggleSelecao(this)"> Selecionar
-      `;
-      container.appendChild(div);
+function nextCodigoLogin() {
+  nextCodigoSeq++;
+  const seq = String(nextCodigoSeq).padStart(2,'0');
+  return 'CR' + seq;
+}
+
+/* ================= State ================= */
+let catalog = [];
+let selected = []; // array of product objects
+
+/* util formatting */
+function moneyBR(v){ return 'R$ ' + Number(v||0).toFixed(2).replace('.',','); }
+function sumSelected(){ return selected.reduce((s,p)=>s+ (Number(p.preco)||0),0); }
+
+/* ================= UI helpers ================= */
+function updateSummaryUI(){
+  document.getElementById('selCount').textContent = selected.length;
+  document.getElementById('selTotal').textContent = moneyBR(sumSelected());
+  document.getElementById('footerTotal').textContent = moneyBR(sumSelected());
+  document.getElementById('cartCount').textContent = selected.length;
+  document.getElementById('likesCount').textContent = catalog.filter(p=>p.isFavorited).length;
+  // rifas placeholder
+  document.getElementById('rifaCount').textContent = 0;
+}
+
+/* ================= Renderers ================= */
+function renderGallery(){
+  const g = document.getElementById('gallery');
+  g.innerHTML = '';
+  catalog.forEach((p, idx) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <img class="thumb" src="${(p.imagens && p.imagens[0] && (p.imagens[0].otm || p.imagens[0])) || 'https://via.placeholder.com/600x400?text=No+Image'}" alt="${p.titulo}">
+      <div class="meta">
+        <div class="title-row">
+          <div class="titulo">${p.titulo || p.apelido || 'Sem título'}</div>
+          <div class="badge">${p.grupo || ''}-${p.peca || ''}</div>
+        </div>
+        <div style="font-size:.9rem;color:#666">${p.tecnica || ''} • ${p.dimensoes || ''}</div>
+        <div style="flex:1"></div>
+      </div>
+      <div class="actions">
+        <button class="btn ghost" data-idx="${idx}" data-action="fav">${p.isFavorited ? '♥' : '♡'} Favorito</button>
+        <button class="btn primary" data-idx="${idx}" data-action="add">ADICIONAR</button>
+      </div>
+    `;
+    g.appendChild(card);
+  });
+
+  // attach handlers
+  document.querySelectorAll('.card .btn').forEach(b=>{
+    b.addEventListener('click', (ev)=>{
+      const idx = Number(b.dataset.idx);
+      const action = b.dataset.action;
+      const prod = catalog[idx];
+      if(action === 'add'){
+        // toggle selected (allow duplicates? we assume unique selection per piece)
+        if(!selected.includes(prod)) selected.push(prod);
+        b.textContent = 'ADICIONADO';
+        b.disabled = true;
+      } else if(action === 'fav'){
+        prod.isFavorited = !prod.isFavorited;
+        renderGallery();
+      }
+      updateSummaryUI();
     });
-  })
-  .catch(err => console.error("Erro ao carregar catálogo:", err));
+  });
+}
 
-function toggleSelecao(chk) {
-  const idx = parseInt(chk.value);
-  if (chk.checked) {
-    selecionados.push(catalogo[idx]);
-  } else {
-    selecionados = selecionados.filter(p => p !== catalogo[idx]);
+function renderFeed(){
+  const f = document.getElementById('feed');
+  f.innerHTML = '';
+  catalog.forEach((p, idx) => {
+    const item = document.createElement('div');
+    item.className = 'feed-item';
+    item.innerHTML = `
+      <img src="${(p.imagens && p.imagens[0] && (p.imagens[0].opt || p.imagens[0].otm || p.imagens[0])) || 'https://via.placeholder.com/1000x700?text=No+Image'}" alt="${p.titulo}">
+      <div class="feed-meta">
+        <div>
+          <div style="font-weight:800">${p.titulo || p.apelido || 'Sem título'}</div>
+          <div style="color:#666;font-size:.95rem">${p.tecnica || ''} • ${p.dimensoes || ''}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-weight:800">${moneyBR(p.preco)}</div>
+          <div style="margin-top:8px">
+            <button class="btn ghost" data-idx="${idx}" data-action="fav">♥</button>
+            <button class="btn primary" data-idx="${idx}" data-action="add">ADICIONAR</button>
+          </div>
+        </div>
+      </div>
+    `;
+    f.appendChild(item);
+  });
+
+  // attach handlers
+  f.querySelectorAll('.btn').forEach(b=>{
+    b.addEventListener('click', ()=> {
+      const idx = Number(b.dataset.idx);
+      const action = b.dataset.action;
+      const prod = catalog[idx];
+      if(action === 'add'){
+        if(!selected.includes(prod)) selected.push(prod);
+        updateSummaryUI();
+        b.textContent = 'ADICIONADO';
+        b.disabled = true;
+      } else if(action === 'fav'){
+        prod.isFavorited = !prod.isFavorited;
+        renderFeed();
+        updateSummaryUI();
+      }
+    });
+  });
+}
+
+/* ================= Data loading ================= */
+async function loadCatalog(){
+  try {
+    const res = await fetch(CATALOG_URL, {cache: 'no-store'});
+    if(!res.ok) throw new Error('Erro ao buscar JSON');
+    const data = await res.json();
+    // Expected shape: { produtos: [ { id, grupo, peca, titulo, apelido, preco, imagens:[{otm, opt,...}], tecnica, dimensoes } ] }
+    catalog = (data.produtos || data).map(p=>{
+      // normalize a bit
+      return {
+        id: p.id || `${p.grupo || '0'}-${p.peca || '0'}a`,
+        grupo: p.grupo || '',
+        peca: p.peca || '',
+        titulo: p.titulo || p.apelido || '',
+        apelido: p.apelido || '',
+        preco: Number(p.preco || p.preco_peca || 0),
+        imagens: (p.imagens && p.imagens.map(i => (typeof i === 'string' ? i : (i.otm||i.opt||i)))) || [],
+        tecnica: p.tecnica || p.tecnica || '',
+        dimensoes: p.dimensoes || p.dimensao || '',
+        isFavorited: false
+      };
+    });
+    renderGallery();
+    renderFeed();
+    updateSummaryUI();
+  } catch(err){
+    console.error(err);
+    document.getElementById('gallery').innerHTML = '<div style="padding:20px">Erro ao carregar catálogo — verifique a URL do JSON.</div>';
   }
 }
 
-function finalizarCompra() {
-  if (selecionados.length === 0) { alert("Selecione pelo menos 1 peça!"); return; }
-  const nome = document.getElementById("nome").value;
-  const email = document.getElementById("email").value;
-  const telefone = document.getElementById("telefone").value;
+/* ================= Toggle Views ================= */
+document.getElementById('btnViewGallery').addEventListener('click', ()=>{
+  document.getElementById('gallery').style.display = '';
+  document.getElementById('feed').style.display = 'none';
+  document.getElementById('btnViewGallery').classList.add('active');
+  document.getElementById('btnViewFeed').classList.remove('active');
+});
+document.getElementById('btnViewFeed').addEventListener('click', ()=>{
+  document.getElementById('gallery').style.display = 'none';
+  document.getElementById('feed').style.display = 'flex';
+  document.getElementById('btnViewFeed').classList.add('active');
+  document.getElementById('btnViewGallery').classList.remove('active');
+});
 
-  const ids = selecionados.map(p => p.id).join(";");
-  const precos = selecionados.map(p => p.preco).join(";");
-  const total = selecionados.reduce((s,p)=>s+parseFloat(p.preco),0);
+/* ================= Checkout UI ================= */
+const checkoutModal = document.getElementById('checkoutModal');
+document.getElementById('btnCheckout').addEventListener('click', ()=>{
+  if(selected.length === 0) { alert('Selecione ao menos 1 peça.'); return; }
+  const list = document.getElementById('checkoutItems');
+  list.innerHTML = '';
+  selected.forEach(p => {
+    const el = document.createElement('div');
+    el.style.display = 'flex';
+    el.style.justifyContent = 'space-between';
+    el.style.padding = '6px 0';
+    el.innerHTML = `<div>${p.titulo} <small style="color:#666">(${p.grupo}-${p.peca})</small></div><div style="font-weight:800">${moneyBR(p.preco)}</div>`;
+    list.appendChild(el);
+  });
+  document.getElementById('chNome').value = '';
+  document.getElementById('chEmail').value = '';
+  document.getElementById('chPhone').value = '';
+  document.getElementById('sendStatus').textContent = '';
+  checkoutModal.style.display = 'flex';
+});
+document.getElementById('btnClose').addEventListener('click', ()=> checkoutModal.style.display = 'none');
 
-  const payload = {
-    id_peca: ids,
-    nome, email, telefone,
-    preco_pago: total.toFixed(2),
-    preco: precos,
-    desconto: "0",
-    cidade: "",
-    pais: "BR",
-    email_enviado: "FALSE",
-    fonte_utm: (new URLSearchParams(window.location.search)).get("utm_source") || "",
-    dispositivo: navigator.userAgent,
-    forma: "PIX",
-    _subject: `COMPRA / ${nome} / R$ ${total.toFixed(2)}`
+/* ================= Send to Apps Script =================
+   IMPORTANT: each piece must be recorded as individual row.
+   We'll send one POST per piece with codigo_login incrementing.
+*/
+async function sendPurchaseData(buyer){
+  const statusEl = document.getElementById('sendStatus');
+  statusEl.textContent = 'Enviando...';
+  const results = [];
+  // For each selected piece, send a POST. codigo_login will be generated here (CR030 ...).
+  for(const p of selected){
+    const codigo = 'CR' + String(nextCodigoSeq).padStart(2,'0'); // use current sequence
+    // advance for next (so first is CR030 -> then increment)
+    nextCodigoSeq++;
+    // build payload - match VENDAS_OFERTAS expected columns
+    const payload = {
+      codigo_login: codigo,
+      id_peca: p.id,
+      nome: buyer.nome || '',
+      email: buyer.email || '',
+      telefone: buyer.telefone || '',
+      preco_pago: (p.preco || 0).toFixed(2),
+      preco_peca: (p.preco || 0).toFixed(2),
+      desconto: '0',
+      cidade: buyer.cidade || '',
+      pais: buyer.pais || 'BR',
+      email_enviado: 'FALSE',
+      fonte_utm: (new URLSearchParams(window.location.search)).get('utm_source') || '',
+      dispositivo: navigator.userAgent || '',
+      FormaPagamento: 'PIX',
+      _subject: `COMPRA / ${buyer.nome || 'SEM NOME'} / R$ ${(p.preco||0).toFixed(2)}`
+    };
+
+    try {
+      // fire-and-forget POST (no-cors)
+      const fd = new FormData();
+      Object.entries(payload).forEach(([k,v]) => fd.append(k, v));
+      fetch(GAS_URL, { method: 'POST', body: fd, mode: 'no-cors' });
+      // fallback GET ping
+      const qs = new URLSearchParams([...fd.entries()]).toString();
+      (new Image()).src = GAS_URL + '?' + qs + '&t=' + Date.now();
+      results.push({id:p.id, codigo, status:'sent'});
+    } catch(err){
+      console.warn('Envio falhou para', p.id, err);
+      results.push({id:p.id, codigo, status:'error', error: String(err)});
+    }
+    // small pause to reduce bursts (helps with Sheets contention)
+    await new Promise(r => setTimeout(r, 180)); // 180ms
+  }
+  return results;
+}
+
+/* handle send button */
+document.getElementById('btnSend').addEventListener('click', async ()=>{
+  const buyer = {
+    nome: document.getElementById('chNome').value.trim(),
+    email: document.getElementById('chEmail').value.trim(),
+    telefone: document.getElementById('chPhone').value.trim(),
+    cidade: '',
+    pais: 'BR'
   };
+  if(!buyer.nome || !buyer.email) { alert('Nome e e-mail são obrigatórios.'); return; }
+  document.getElementById('sendStatus').textContent = 'Enviando dados...';
+  document.getElementById('btnSend').disabled = true;
+  const res = await sendPurchaseData(buyer);
+  document.getElementById('sendStatus').textContent = 'Envio concluído. Linhas previstas: ' + res.length;
+  // optionally clear selection
+  selected = [];
+  renderGallery();
+  renderFeed();
+  updateSummaryUI();
+  document.getElementById('btnSend').disabled = false;
+  // close modal after a short delay
+  setTimeout(()=> checkoutModal.style.display = 'none', 900);
+});
 
-  enviarVendaParaPlanilha(payload);
-  alert("Compra enviada! Verifique a planilha VENDAS_OFERTAS.");
-}
+/* ================= Init ================= */
+loadCatalog();
+updateSummaryUI();
 
-function enviarVendaParaPlanilha(payload) {
-  const fd = new FormData();
-  Object.entries(payload).forEach(([k,v]) => fd.append(k, v));
-  fetch(GAS_URL, { method:"POST", body:fd, mode:"no-cors" });
-  const qs = new URLSearchParams([...fd.entries()]).toString();
-  (new Image()).src = GAS_URL+"?"+qs+"&t="+Date.now();
-}
 </script>
 </body>
 </html>
