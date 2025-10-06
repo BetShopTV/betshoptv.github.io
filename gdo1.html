@@ -78,7 +78,8 @@
 <div id="ofertas"></div>
 
 <script>
-const endpoint = "https://script.google.com/macros/s/AKfycbyFU0r43A3QdaMch1POe_b8CprB3jzpJe7AnoUBK0NoccMABKVre3xnrAjuMRCdgldPYA/exec";
+const endpoint =
+  "https://script.google.com/macros/s/AKfycbyFU0r43A3QdaMch1POe_b8CprB3jzpJe7AnoUBK0NoccMABKVre3xnrAjuMRCdgldPYA/exec";
 
 async function carregarOfertas() {
   const loading = document.getElementById("loading");
@@ -89,13 +90,11 @@ async function carregarOfertas() {
     const data = await res.json();
     console.log("JSON recebido:", data);
 
-    const produtosValidos = data.produtos.filter(p =>
-      (p.imagens && p.imagens.length > 0) ||
-      (p.img_peca && p.img_peca !== "") ||
-      (p.arquivos_img && p.arquivos_img !== "")
+    const produtosValidos = data.produtos.filter(
+      p => p.arquivos_img || (p.imagens && p.imagens.length)
     );
 
-    if (produtosValidos.length === 0) {
+    if (!produtosValidos.length) {
       loading.textContent = "Nenhuma peça encontrada 😢";
       return;
     }
@@ -106,36 +105,47 @@ async function carregarOfertas() {
       const card = document.createElement("div");
       card.className = "oferta";
 
-      // pega o nome base do arquivo da planilha
-      let arquivoBase = "";
-      if (Array.isArray(prod.imagens) && prod.imagens.length > 0 && prod.imagens[0].thumb) {
-        // do JSON gerado
-        arquivoBase = prod.imagens[0].thumb.split("/").pop().replace(".avif","");
-      } else if (prod.arquivos_img) {
-        // se vier como string simples
-        arquivoBase = prod.arquivos_img.split(",")[0].trim();
-      } else if (prod.img_peca) {
-        arquivoBase = prod.img_peca.trim();
+      // pega direto o nome que vem da planilha
+      let nomeImg = "";
+      if (prod.arquivos_img) {
+        nomeImg = prod.arquivos_img.split(",")[0].trim();
+      } else if (prod.imagens?.length) {
+        // se o JSON gerou lista de objetos, tenta extrair o campo opt/thumb
+        nomeImg = prod.imagens[0].opt
+          ?.split("/")
+          .pop()
+          .replace(".avif", "")
+          .trim();
       }
 
-      // monta URLs corretas conforme pastas reais
-      const imgThumb = `https://betshoptv.com/img/tmb/${arquivoBase}.avif`;
-      const imgOtm = `https://betshoptv.com/img/otm/${arquivoBase}.avif`;
-      const imgFallback = `https://betshoptv.com/img/fallback/${arquivoBase}.jpg`;
+      // monta os caminhos conforme tuas pastas reais
+      const imgThumb = `https://betshoptv.com/img/tmb/${nomeImg}.avif`;
+      const imgGrande = `https://betshoptv.com/img/otm/${nomeImg}.avif`;
+      const imgFallback = `https://betshoptv.com/img/fallback/${nomeImg}.jpg`;
 
       card.innerHTML = `
         <picture>
           <source srcset="${imgThumb}" type="image/avif">
-          <img src="${imgFallback}" alt="${prod.titulo}" style="width:100%;border-radius:6px;">
+          <img src="${imgFallback}" alt="${prod.titulo}" 
+               style="width:100%;border-radius:6px;cursor:pointer;">
         </picture>
         <h3>${prod.titulo || "Sem título"}</h3>
-        <p>${prod.tecnica ? prod.tecnica : ""}${prod.dimensao ? " — " + prod.dimensao : ""}</p>
+        <p>${prod.tecnica ? prod.tecnica : ""}${
+        prod.dimensao ? " — " + prod.dimensao : ""
+      }</p>
         <p><strong>${prod.preco ? "R$ " + prod.preco : ""}</strong></p>
-        ${prod.disponivel
-          ? '<button>Comprar</button>'
-          : '<p style="color:#ff0000;">Indisponível</p>'
+        ${
+          prod.disponivel
+            ? '<button>Comprar</button>'
+            : '<p style="color:#ff0000;">Indisponível</p>'
         }
       `;
+
+      // clica na imagem pra abrir a versão maior
+      card.querySelector("img").addEventListener("click", () => {
+        window.open(imgGrande, "_blank");
+      });
+
       container.appendChild(card);
     });
   } catch (err) {
@@ -146,6 +156,7 @@ async function carregarOfertas() {
 
 window.addEventListener("DOMContentLoaded", carregarOfertas);
 </script>
+
 
 
 </body>
