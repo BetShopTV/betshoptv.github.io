@@ -3,153 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BetShopTV.com ⦿ Galeria de Ofertas</title>
+<title>Galeria de Ofertas - Teste</title>
 <style>
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #fafafa;
-    margin: 0;
-    padding: 0;
-  }
-  header {
-    background: #222;
-    color: #fff;
-    padding: 12px 20px;
-  }
-  h1 { font-size: 1.4em; margin: 0; }
-  #ofertas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    padding: 20px;
-  }
-  .oferta {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-    overflow: hidden;
-    text-align: center;
-    transition: transform 0.2s ease;
-  }
-  .oferta:hover {
-    transform: scale(1.02);
-  }
-  .oferta img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-bottom: 1px solid #eee;
-  }
-  .oferta h3 {
-    font-size: 1em;
-    margin: 10px 0 0 0;
-  }
-  .oferta p {
-    margin: 4px 0;
-    font-size: 0.9em;
-    color: #444;
-  }
-  .oferta button {
-    margin: 10px 0 14px 0;
-    padding: 6px 12px;
-    background: #2b2424;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .oferta button:hover {
-    background: #444;
-  }
-  #loading {
-    text-align: center;
-    padding: 20px;
-    color: #666;
-  }
+  body { font-family: 'Segoe UI', sans-serif; background: #fafafa; margin:0; }
+  header { background:#222; color:#fff; padding:12px 20px; }
+  h1 { font-size:1.4em; margin:0; }
+  #ofertas { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; padding:20px; }
+  .oferta { background:#fff; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,0.15); overflow:hidden; text-align:center; }
+  .oferta img { width:100%; height:180px; object-fit:cover; }
+  .oferta h3 { margin:8px 0 4px 0; font-size:1em; }
+  .oferta p { margin:2px 0; font-size:0.9em; color:#444; }
+  .oferta input { margin-top:6px; }
+  #checkout { margin:20px; padding:20px; background:#fff; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,0.1); }
+  button { background:#2b2424; color:white; padding:8px 16px; border:none; border-radius:4px; cursor:pointer; }
+  button:hover { background:#444; }
 </style>
 </head>
 <body>
+<header><h1>Galeria de Ofertas - Teste</h1></header>
 
-<header>
-  <h1>TA -----QUASY---- INDOOOO, TA WINDOOOOWS!!</h1>
-</header>
+<div id="ofertas"></div>
 
-<div id="loading">Carregando peças babadeiraishhhh...</div>
+<div id="checkout">
+  <h2>Finalizar Compra</h2>
+  <label>Nome: <input id="nome"></label><br><br>
+  <label>Email: <input id="email"></label><br><br>
+  <label>Telefone: <input id="telefone"></label><br><br>
+  <button onclick="finalizarCompra()">Enviar Compra</button>
+</div>
+
 <script>
-fetch("https://betshoptv.com/dados/gdo-bstv.json")
-  .then(response => {
-    if (!response.ok) throw new Error("Erro ao carregar JSON");
-    return response.json();
-  })
+// 🔹 URL do JSON com catálogo
+const CATALOGO_URL = "https://betshoptv.com/dados/gdo-bstv.json";
+
+// 🔹 URL do Apps Script
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxtf5gvxlptz4K8bom1tog0sKW68ejbKtNC3LWUZ3ldDJo9airXGWIXDP00t18FzC0/exec";
+
+let catalogo = [];
+let selecionados = [];
+
+// carregar catálogo
+fetch(CATALOGO_URL)
+  .then(r => r.json())
   .then(data => {
-    console.log("Catálogo carregado:", data);
-    // Aqui você pode popular o site
-    const container = document.getElementById("catalogo");
-    data.produtos.forEach(p => {
+    catalogo = data.produtos || [];
+    const container = document.getElementById("ofertas");
+    catalogo.forEach((p,i) => {
       const div = document.createElement("div");
+      div.className = "oferta";
       div.innerHTML = `
-        <h3>${p.titulo}</h3>
         <img src="${p.imagens[0]?.otm}" alt="${p.titulo}">
-        <p>${p.tecnica}</p>
+        <h3>${p.titulo}</h3>
+        <p><em>${p.tecnica}</em></p>
         <p>${p.dimensao}</p>
         <p><strong>R$ ${p.preco}</strong></p>
+        <input type="checkbox" value="${i}" onchange="toggleSelecao(this)"> Selecionar
       `;
       container.appendChild(div);
     });
   })
-  .catch(err => console.error("Erro ao ler JSON:", err));
-</script>
+  .catch(err => console.error("Erro ao carregar catálogo:", err));
 
-<div id="catalogo"></div>
-<script>
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxtf5gvxlptz4K8bom1tog0sKW68ejbKtNC3LWUZ3ldDJo9airXGWIXDP00t18FzC0/exec';
-
-// payload = object com campos (ver exemplo abaixo)
-function enviarVendaParaPlanilha(payload) {
-  try {
-    const fd = new FormData();
-    Object.entries(payload).forEach(([k,v]) => fd.append(k, v == null ? '' : v.toString()));
-
-    // POST non-blocking (no-cors evita erro CORS, mas impede leitura da resposta)
-    fetch(GAS_URL, { method: 'POST', body: fd, mode: 'no-cors' });
-
-    // fallback redundante por GET (imagem)
-    const qs = new URLSearchParams([...fd.entries()]).toString();
-    (new Image()).src = GAS_URL + '?' + qs + '&t=' + Date.now();
-
-    console.log('Envio para planilha disparado (fire-and-forget).');
-  } catch (err) {
-    console.warn('Falha ao enviar para planilha (JS):', err);
+function toggleSelecao(chk) {
+  const idx = parseInt(chk.value);
+  if (chk.checked) {
+    selecionados.push(catalogo[idx]);
+  } else {
+    selecionados = selecionados.filter(p => p !== catalogo[idx]);
   }
 }
 
-/* EXEMPLO de uso: montar payload e chamar */
-function exemploEnviar(selectedItems, checkoutData, totalPrice) {
-  const ids = selectedItems.map(i => i.id).join(';'); // se tiver varias peças
-  const precos = selectedItems.map(i => i.preco).join(';');
+function finalizarCompra() {
+  if (selecionados.length === 0) { alert("Selecione pelo menos 1 peça!"); return; }
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+  const telefone = document.getElementById("telefone").value;
+
+  const ids = selecionados.map(p => p.id).join(";");
+  const precos = selecionados.map(p => p.preco).join(";");
+  const total = selecionados.reduce((s,p)=>s+parseFloat(p.preco),0);
 
   const payload = {
     id_peca: ids,
-    nome: checkoutData.nome || '',
-    email: checkoutData.email || '',
-    telefone: checkoutData.telefone || '',
-    preco_pago: totalPrice.toFixed(2),
+    nome, email, telefone,
+    preco_pago: total.toFixed(2),
     preco: precos,
-    desconto: checkoutData.desconto || '0',
-    cidade: checkoutData.cidade || '',
-    pais: checkoutData.pais || 'BR',
-    email_enviado: 'FALSE',
-    fonte_utm: (new URLSearchParams(window.location.search)).get('utm_source') || '',
+    desconto: "0",
+    cidade: "",
+    pais: "BR",
+    email_enviado: "FALSE",
+    fonte_utm: (new URLSearchParams(window.location.search)).get("utm_source") || "",
     dispositivo: navigator.userAgent,
-    forma: checkoutData.paymentMethod || 'PIX',
-    _subject: `COMPRA / ${checkoutData.nome || 'SEM NOME'} / R$ ${totalPrice.toFixed(2)}`
+    forma: "PIX",
+    _subject: `COMPRA / ${nome} / R$ ${total.toFixed(2)}`
   };
 
   enviarVendaParaPlanilha(payload);
+  alert("Compra enviada! Verifique a planilha VENDAS_OFERTAS.");
+}
+
+function enviarVendaParaPlanilha(payload) {
+  const fd = new FormData();
+  Object.entries(payload).forEach(([k,v]) => fd.append(k, v));
+  fetch(GAS_URL, { method:"POST", body:fd, mode:"no-cors" });
+  const qs = new URLSearchParams([...fd.entries()]).toString();
+  (new Image()).src = GAS_URL+"?"+qs+"&t="+Date.now();
 }
 </script>
-
-
-
 </body>
 </html>
