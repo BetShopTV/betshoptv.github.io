@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BetShop TV — Galeria Dinâmica (GDO_PINTOSA)</title>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #fafafa;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background: #222;
+    color: #fff;
+    padding: 12px 20px;
+  }
+  h1 { font-size: 1.4em; margin: 0; }
+  #ofertas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+  .oferta {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  .oferta:hover {
+    transform: scale(1.02);
+  }
+  .oferta img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+  }
+  .oferta h3 {
+    font-size: 1em;
+    margin: 10px 0 0 0;
+  }
+  .oferta p {
+    margin: 4px 0;
+    font-size: 0.9em;
+    color: #444;
+  }
+  .oferta button {
+    margin: 10px 0 14px 0;
+    padding: 6px 12px;
+    background: #2b2424;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .oferta button:hover {
+    background: #444;
+  }
+  #loading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>BetShop TV — Galeria Dinâmica (Teste GDO)</h1>
+</header>
+
+<div id="loading">Carregando produtos...</div>
+<div id="ofertas"></div>
+
+<script>
+const endpoint = "https://script.google.com/macros/s/AKfycbyFU0r43A3QdaMch1POe_b8CprB3jzpJe7AnoUBK0NoccMABKVre3xnrAjuMRCdgldPYA/exec";
+
+async function carregarOfertas() {
+  const loading = document.getElementById("loading");
+  const container = document.getElementById("ofertas");
+  try {
+    const res = await fetch(endpoint);
+    const data = await res.json();
+    console.log("JSON recebido:", data);
+
+    const produtosValidos = data.produtos.filter(p =>
+      (p.imagens && p.imagens.length > 0) ||
+      (p.img_peca && p.img_peca !== "")
+    );
+
+    if (produtosValidos.length === 0) {
+      loading.textContent = "Nenhuma peça encontrada 😢";
+      return;
+    }
+
+    loading.style.display = "none";
+
+    produtosValidos.forEach(prod => {
+      const card = document.createElement("div");
+      card.className = "oferta";
+
+      // tenta usar thumb, depois opt, depois fallback
+      const img = prod.imagens?.[0]?.thumb || prod.imagens?.[0]?.opt || prod.imagens?.[0]?.fallback || "https://betshoptv.com/img/fallback/semimagem.jpg";
+
+      card.innerHTML = `
+        <img src="${img}" alt="${prod.titulo}">
+        <h3>${prod.titulo || "Sem título"}</h3>
+        <p>${prod.tecnica ? prod.tecnica : ""}${prod.dimensao ? " — " + prod.dimensao : ""}</p>
+        <p><strong>${prod.preco ? "R$ " + prod.preco : ""}</strong></p>
+        ${prod.disponivel
+          ? '<button>Comprar</button>'
+          : '<p style="color:#ff0000;">Indisponível</p>'
+        }
+      `;
+      container.appendChild(card);
+    });
+  } catch (err) {
+    console.error("Erro ao carregar JSON:", err);
+    loading.textContent = "Erro ao carregar produtos 😭";
+  }
+}
+
+// executa quando a página carregar
+window.addEventListener("DOMContentLoaded", carregarOfertas);
+</script>
+
+</body>
+</html>
