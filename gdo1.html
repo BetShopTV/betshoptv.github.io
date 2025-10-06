@@ -71,91 +71,36 @@
 <body>
 
 <header>
-  <h1>BetShop TV — Galeria Dinâmica (Teste GDO OH GOD WHY GOD WHYYYYYY)</h1>
+  <h1>TOMARA MARAVIGLIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA)</h1>
 </header>
 
-<div id="loading">Carregando produtos...</div>
-<div id="ofertas"></div>
-
+<div id="loading">Carregando peças babadeiraishhhh...</div>
 <script>
-const endpoint =
-  "https://script.google.com/macros/s/AKfycbyFU0r43A3QdaMch1POe_b8CprB3jzpJe7AnoUBK0NoccMABKVre3xnrAjuMRCdgldPYA/exec";
-
-async function carregarOfertas() {
-  const loading = document.getElementById("loading");
-  const container = document.getElementById("ofertas");
-
-  try {
-    const res = await fetch(endpoint);
-    const data = await res.json();
-    console.log("JSON recebido:", data);
-
-    const produtosValidos = data.produtos.filter(
-      p => p.arquivos_img || (p.imagens && p.imagens.length)
-    );
-
-    if (!produtosValidos.length) {
-      loading.textContent = "Nenhuma peça encontrada 😢";
-      return;
-    }
-
-    loading.style.display = "none";
-
-    produtosValidos.forEach(prod => {
-      const card = document.createElement("div");
-      card.className = "oferta";
-
-      // pega direto o nome que vem da planilha
-      let nomeImg = "";
-      if (prod.arquivos_img) {
-        nomeImg = prod.arquivos_img.split(",")[0].trim();
-      } else if (prod.imagens?.length) {
-        // se o JSON gerou lista de objetos, tenta extrair o campo opt/thumb
-        nomeImg = prod.imagens[0].opt
-          ?.split("/")
-          .pop()
-          .replace(".avif", "")
-          .trim();
-      }
-
-      // monta os caminhos conforme tuas pastas reais
-      const imgThumb = `https://betshoptv.com/img/tmb/${nomeImg}.avif`;
-      const imgGrande = `https://betshoptv.com/img/otm/${nomeImg}.avif`;
-      const imgFallback = `https://betshoptv.com/img/fallback/${nomeImg}.jpg`;
-
-      card.innerHTML = `
-        <picture>
-          <source srcset="${imgThumb}" type="image/avif">
-          <img src="${imgFallback}" alt="${prod.titulo}" 
-               style="width:100%;border-radius:6px;cursor:pointer;">
-        </picture>
-        <h3>${prod.titulo || "Sem título"}</h3>
-        <p>${prod.tecnica ? prod.tecnica : ""}${
-        prod.dimensao ? " — " + prod.dimensao : ""
-      }</p>
-        <p><strong>${prod.preco ? "R$ " + prod.preco : ""}</strong></p>
-        ${
-          prod.disponivel
-            ? '<button>Comprar</button>'
-            : '<p style="color:#ff0000;">Indisponível</p>'
-        }
+fetch("https://betshoptv.com/dados/gdo-bstv.json")
+  .then(response => {
+    if (!response.ok) throw new Error("Erro ao carregar JSON");
+    return response.json();
+  })
+  .then(data => {
+    console.log("Catálogo carregado:", data);
+    // Aqui você pode popular o site
+    const container = document.getElementById("catalogo");
+    data.produtos.forEach(p => {
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <h3>${p.titulo}</h3>
+        <img src="${p.imagens[0]?.opt}" alt="${p.titulo}">
+        <p>${p.tecnica}</p>
+        <p>${p.dimensao}</p>
+        <p><strong>R$ ${p.preco}</strong></p>
       `;
-
-      // clica na imagem pra abrir a versão maior
-      card.querySelector("img").addEventListener("click", () => {
-        window.open(imgGrande, "_blank");
-      });
-
-      container.appendChild(card);
+      container.appendChild(div);
     });
-  } catch (err) {
-    console.error("Erro ao carregar JSON:", err);
-    loading.textContent = "Erro ao carregar produtos 😭";
-  }
-}
-
-window.addEventListener("DOMContentLoaded", carregarOfertas);
+  })
+  .catch(err => console.error("Erro ao ler JSON:", err));
 </script>
+
+<div id="catalogo"></div>
 
 
 
