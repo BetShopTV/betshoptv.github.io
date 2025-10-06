@@ -2,7 +2,7 @@
 const GOOGLE_APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbz_JylkCMmfey9jqxPaphwRd9qpONpDA824IeGwg8ssGLWShswWjdJQuHXwDXHC3COZ/exec";
 
-const CACHE_KEY = "oferta_pintosa";
+const CACHE_KEY = "oferta-pintosa";
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
 
 let products = [];
