@@ -1,5 +1,5 @@
 {
-  "ultimaAtualizacao": "2025-10-06T22:00:14.255Z",
+  "ultimaAtualizacao": "2025-10-06T22:06:05.537Z",
   "total": 22,
   "produtos": [
     {
@@ -39,8 +39,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
       "dimensao": "21 x 21 x 09 cm",
       "preco": 150,
-      "status": "disponível",
-      "disponivel": true,
+      "status": "em análise",
+      "disponivel": false,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-02a.avif",
@@ -138,8 +138,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado, suporte angular e parafuso.",
       "dimensao": "25 x 16 x 16 cm",
       "preco": 150,
-      "status": "disponível",
-      "disponivel": true,
+      "status": "em análise",
+      "disponivel": false,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-06a.avif",
@@ -227,8 +227,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
       "dimensao": "27,5 x 24,5 x 4 cm",
       "preco": 150,
-      "status": "disponível",
-      "disponivel": true,
+      "status": "em análise",
+      "disponivel": false,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-10a.avif",
@@ -279,8 +279,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica e ganchos.",
       "dimensao": "27 x 20,5 x 3 cm",
       "preco": 250,
-      "status": "disponível",
-      "disponivel": true,
+      "status": "em análise",
+      "disponivel": false,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-12a.avif",
