@@ -1,9 +1,9 @@
 // 🔗 URL do seu Apps Script
 const GOOGLE_APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbyrc64j6KRAP5gRPQfACsAw_lX3HixxTQktfJlor6eilbRjTIXmJVDTm9MW8Zp8LYcu/exec";
+  "https://script.google.com/macros/s/AKfycbz_JylkCMmfey9jqxPaphwRd9qpONpDA824IeGwg8ssGLWShswWjdJQuHXwDXHC3COZ/exec";
 
 const CACHE_KEY = "oferta_pintosa";
-const CACHE_DURATION = 1 * 60 * 1000; // 5 minutos
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
 
 let products = [];
 let favorites = [];
