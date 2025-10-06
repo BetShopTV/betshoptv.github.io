@@ -1,5 +1,5 @@
 {
-  "ultimaAtualizacao": "2025-10-06T21:45:16.209Z",
+  "ultimaAtualizacao": "2025-10-06T21:51:05.721Z",
   "total": 22,
   "produtos": [
     {
@@ -65,7 +65,7 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado, braçadeira e parafusos.",
       "dimensao": "23 x 25 x 08 cm",
       "preco": 150,
-      "status": "em análise",
+      "status": "disponível",
       "disponivel": false,
       "imagens": [
         {
@@ -91,8 +91,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica e escápulas.",
       "dimensao": "27 x 18 x 06 cm",
       "preco": 150,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-04a.avif",
@@ -180,8 +180,8 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado, chapa união e parafusos.",
       "dimensao": "12,5 x 11,5 x 5 cm",
       "preco": 250,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/03-08a.avif",
@@ -305,7 +305,7 @@
       "tecnica": "Impressão offset em papel couché transferida para EVA estampado e pregos.",
       "dimensao": "51 x 20,5 x 13 cm",
       "preco": 250,
-      "status": "em análise",
+      "status": "disponível",
       "disponivel": false,
       "imagens": [
         {
@@ -482,8 +482,8 @@
       "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, braçadeira e parafusos.",
       "dimensao": "26 x 19 x 5 cm",
       "preco": 250,
-      "status": "em análise",
-      "disponivel": false,
+      "status": "disponível",
+      "disponivel": true,
       "imagens": [
         {
           "thumb": "https://betshoptv.com/img/tmb/04-07a.avif",
@@ -513,7 +513,7 @@
       "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e ferragens.",
       "dimensao": "53 x 15 x 3 cm",
       "preco": 250,
-      "status": "em análise",
+      "status": "indisponível",
       "disponivel": false,
       "imagens": [
         {
@@ -535,9 +535,9 @@
     },
     {
       "id": "0409",
-      "titulo": "04/09 LANLA",
+      "titulo": "04/09 Telefone 01",
       "tecnica": "EVA Tijolinho",
-      "dimensao": "8 x 88 x 8 cm",
+      "dimensao": "52 x 27 x 6 cm",
       "preco": 888,
       "status": "disponível",
       "disponivel": true,
