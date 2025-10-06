@@ -1,79 +1,61 @@
 body {
   margin: 0;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Helvetica Neue", Arial, sans-serif;
   background: #bebab0;
   color: #2b2424;
 }
 
-.header {
+header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   background: #ff0000;
-  padding: 10px 16px;
-  color: white;
-}
-
-.logo {
-  height: 48px;
-}
-
-button {
-  background: #2b2424;
-  color: #bebab0;
-  border: none;
-  padding: 8px 14px;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 4px;
-}
-
-button:hover {
-  background: #ff0000;
-  color: white;
+  color: #fff;
+  padding: 12px 20px;
 }
 
 .galeria {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  gap: 12px;
   padding: 16px;
-  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
 .produto {
   background: #fff;
+  border-radius: 6px;
   border: 2px solid #2b2424;
-  width: 160px;
+  overflow: hidden;
   text-align: center;
-  position: relative;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 .produto img {
   width: 100%;
-  display: block;
+  height: 180px;
+  object-fit: cover;
 }
 
 .produto h3 {
+  font-size: 1em;
+  margin: 8px 0;
+}
+
+.preco {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+.status {
   font-size: 0.9em;
-  margin: 6px 0;
+  padding: 4px;
 }
 
-.fav-btn {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
+.status.disp {
+  color: green;
 }
 
-.footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #2b2424;
-  color: white;
-  padding: 10px 20px;
+.status.indisp {
+  color: gray;
+  text-decoration: line-through;
 }
