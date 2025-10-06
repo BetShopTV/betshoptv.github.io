@@ -31,156 +31,55 @@
   </div>
 
   <div id="status" class="loading">Carregando produtos...</div>
-  <div id="galeria"></div>
+<div id="ofertas" style="display:grid; gap:20px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); padding:20px;"></div>
+
 
   <h3>TORCIDA MOREIRAAAAAAAAA!!!<br>Debug / JSON (raw)</h3>
   <textarea id="jsonRaw" readonly></textarea>
 
-  <script>
-    // COLE AQUI A URL DO SEU APPS SCRIPT (web app) OU A URL DO JSON NO DRIVE
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbydfqi0G8PnmvshPSbGjWZnWBjOKA965l4TbVqvS3YQYO9bcYulknvMjUn3V2AEFxSV/exec'; // ex: https://script.google.com/macros/s/XXX/exec
-    // const SCRIPT_URL = 'https://drive.google.com/uc?id=FILEID'; // alternativa
+<script>
+const endpoint = "https://script.google.com/macros/s/AKfycbyFU0r43A3QdaMch1POe_b8CprB3jzpJe7AnoUBK0NoccMABKVre3xnrAjuMRCdgldPYA/exec";
 
-    // --- Código do sistema (versão completa e self-contained baseada no seu v0-sistema-dinamico-js-03) ---
-    class BetShopDinamico {
-      constructor() {
-        this.produtos = []
-        this.produtosFiltrados = []
-        this.filtrosAtivos = new Set()
-        this.urlJSON = SCRIPT_URL
-        this.init()
-      }
+async function carregarOfertas() {
+  try {
+    const res = await fetch(endpoint);
+    const data = await res.json();
+    console.log("JSON recebido:", data); // veja no console do navegador
 
-      async init(){
-        document.getElementById('status').innerText = 'Carregando produtos...'
-        try {
-          await this.carregarProdutos()
-          this.renderizarGaleria()
-          this.atualizarStatus()
-        } catch (err) {
-          console.error('Erro init:', err)
-          document.getElementById('status').innerText = 'Erro ao inicializar (ver console)'
+    const container = document.getElementById("ofertas");
+    container.innerHTML = ""; // limpa antes de preencher
+
+    data.produtos.forEach(prod => {
+      const card = document.createElement("div");
+      card.className = "oferta";
+      card.style.border = "1px solid #ccc";
+      card.style.padding = "10px";
+      card.style.textAlign = "center";
+      card.style.borderRadius = "8px";
+      card.style.background = prod.disponivel ? "#fff" : "#f5f5f5";
+      card.style.opacity = prod.disponivel ? "1" : "0.6";
+
+      card.innerHTML = `
+        <img src="${prod.imagens[0]}" alt="${prod.titulo}" style="width:100%;border-radius:6px;">
+        <h3>${prod.titulo}</h3>
+        <p>${prod.tecnica || ''} ${prod.dimensao ? '— ' + prod.dimensao : ''}</p>
+        <p><strong>R$ ${prod.preco || ''}</strong></p>
+        ${
+          prod.disponivel
+            ? '<button style="padding:6px 12px;border:none;background:#2b2424;color:#fff;border-radius:4px;">Comprar</button>'
+            : '<span style="color:#ff0000;">Indisponível</span>'
         }
-      }
+      `;
+      container.appendChild(card);
+    });
+  } catch (err) {
+    console.error("Erro ao carregar ofertas:", err);
+  }
+}
 
-      async carregarProdutos(){
-        console.log('Tentando carregar de:', this.urlJSON)
-        if(this.urlJSON && !this.urlJSON.includes('COLE_AQUI')) {
-          try {
-            const res = await fetch(this.urlJSON, {cache:'no-store'})
-            console.log('Resposta fetch status', res.status)
-            const dados = await res.json()
-            console.log('Dados recebidos:', dados)
-            this.produtos = dados.produtos || []
-            this.produtosFiltrados = [...this.produtos]
-            document.getElementById('jsonRaw').value = JSON.stringify(dados, null, 2)
-            return
-          } catch (fetchErr) {
-            console.warn('Fetch falhou, usando fallback local. Erro:', fetchErr)
-            document.getElementById('jsonRaw').value = 'Erro ao buscar JSON: ' + fetchErr.toString()
-          }
-        }
+// executa assim que a página carrega
+window.addEventListener("DOMContentLoaded", carregarOfertas);
+</script>
 
-        // fallback: usa dados de exemplo (mesmo que você tem no sistema-dinamico original)
-        const dadosExemplo = this.dadosReaisDaPlanilha()
-        this.produtos = dadosExemplo.produtos
-        this.produtosFiltrados = [...this.produtos]
-        document.getElementById('jsonRaw').value = JSON.stringify(dadosExemplo, null, 2)
-      }
-
-      dadosReaisDaPlanilha(){
-        // versão reduzida do seu exemplo (copiada do sistema original)
-        return {
-          ultimaAtualizacao: new Date().toISOString(),
-          totalProdutos: 1,
-          produtos: [
-            { id:'3-1a', grupo:'3', peca:'1', titulo:'EXEMPLO 01', apelido:'Teste', preco:200, precoVenda:'', disponivel:true, imagens:['03-01a.avif'], tecnica:'EVA', dimensoes:'20x10x5', emExposicao:'', extra:'' }
-          ]
-        }
-      }
-
-      filtrarTodos(){
-        this.filtrosAtivos.clear()
-        this.produtosFiltrados = [...this.produtos]
-        this.renderizarGaleria()
-        this.atualizarBotoes()
-      }
-
-      filtrarGrupo(grupo){
-        const key = `grupo-${grupo}`
-        if(this.filtrosAtivos.has(key)) this.filtrosAtivos.delete(key)
-        else this.filtrosAtivos.add(key)
-        this.aplicarFiltros()
-      }
-
-      filtrarDisponivel(){
-        if(this.filtrosAtivos.has('disponivel')) this.filtrosAtivos.delete('disponivel')
-        else this.filtrosAtivos.add('disponivel')
-        this.aplicarFiltros()
-      }
-
-      aplicarFiltros(){
-        const grupos = Array.from(this.filtrosAtivos).filter(f=>f.startsWith('grupo-')).map(f=>f.replace('grupo-',''))
-        this.produtosFiltrados = this.produtos.filter(p=>{
-          let ok = true
-          if(grupos.length>0) ok = ok && grupos.includes(String(p.grupo).padStart(2,'0')) || grupos.includes(String(p.grupo))
-          if(this.filtrosAtivos.has('disponivel')) ok = ok && Boolean(p.disponivel)
-          return ok
-        })
-        this.renderizarGaleria()
-        this.atualizarBotoes()
-        this.atualizarStatus()
-      }
-
-      renderizarGaleria(){
-        const gal = document.getElementById('galeria')
-        if(!gal) return
-        if(this.produtosFiltrados.length === 0){
-          gal.innerHTML = '<p>Nenhum produto encontrado com os filtros selecionados.</p>'
-          return
-        }
-        gal.innerHTML = this.produtosFiltrados.map(prod => `
-          <div class="produto ${!prod.disponivel ? 'indisponivel' : ''}">
-            <h3>${prod.titulo || '(sem título)'}</h3>
-            ${prod.apelido ? `<p><em>"${prod.apelido}"</em></p>` : ''}
-            <p class="meta"><strong>Preço:</strong> ${prod.preco ? `R$ ${prod.preco}` : '—' } ${prod.precoVenda ? `(venda R$ ${prod.precoVenda})` : ''}</p>
-            <p class="meta"><strong>Grupo:</strong> ${prod.grupo} | <strong>Peça:</strong> ${prod.peca}</p>
-            <p class="meta"><strong>Técnica:</strong> ${prod.tecnica || '—'}</p>
-            <p class="meta"><strong>Dimensões:</strong> ${prod.dimensoes || '—'}</p>
-            <p class="meta"><strong>Status:</strong> ${prod.disponivel ? '✅ Disponível' : '❌ Vendida'}</p>
-            <p class="meta"><strong>Imagens:</strong> ${(prod.imagens||[]).join(', ')}</p>
-          </div>
-        `).join('')
-      }
-
-      atualizarBotoes(){
-        document.querySelectorAll('.filtros button').forEach(b=>b.classList.remove('ativo'))
-        this.filtrosAtivos.forEach(f=>{
-          if(f.startsWith('grupo-')){
-            const g = f.replace('grupo-','')
-            document.querySelectorAll(`button`).forEach(btn=>{
-              if(btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`filtrarGrupo('${g}')`)) btn.classList.add('ativo')
-            })
-          } else if(f==='disponivel'){
-            document.querySelectorAll(`button`).forEach(btn=>{
-              if(btn.getAttribute('onclick') && btn.getAttribute('onclick').includes('filtrarDisponivel()')) btn.classList.add('ativo')
-            })
-          }
-        })
-      }
-
-      atualizarStatus(){
-        const s = document.getElementById('status')
-        s.innerHTML = `Mostrando ${this.produtosFiltrados.length} de ${this.produtos.length} produtos ${this.filtrosAtivos.size>0?`(${this.filtrosAtivos.size} filtros)` : ''}`
-      }
-    }
-
-    // instância global e funções globais pra compatibilidade com os botões inline
-    let sistema
-    window.onload = ()=> { sistema = new BetShopDinamico() }
-    function filtrarTodos(){ sistema.filtrarTodos() }
-    function filtrarGrupo(g){ sistema.filtrarGrupo(g) }
-    function filtrarDisponivel(){ sistema.filtrarDisponivel() }
-  </script>
 </body>
 </html>
