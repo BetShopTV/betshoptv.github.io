@@ -1,11 +1,11 @@
 {
-  "ultimaAtualizacao": "2025-10-06T09:06:07.120Z",
+  "ultimaAtualizacao": "2025-10-06T09:12:34.731Z",
   "total": 22,
   "produtos": [
     {
       "id": "0301",
-      "titulo": "03/01 Lããããã~~AÃÃÃÃÃÃÃ",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
+      "titulo": "03/01 Rádio 01",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, chapa união, porcas e parafusos. ",
       "dimensao": "57 x 18 x 10 cm",
       "preco": 150,
       "status": "disponível",
@@ -36,7 +36,7 @@
     {
       "id": "0302",
       "titulo": "03/02 Câmera fotográfica 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
       "dimensao": "21 x 21 x 09 cm",
       "preco": 150,
       "status": "disponível",
@@ -62,7 +62,7 @@
     {
       "id": "0303",
       "titulo": "03/03 Polaroid 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, braçadeira e parafusos.",
       "dimensao": "23 x 25 x 08 cm",
       "preco": 150,
       "status": "em análise",
@@ -109,7 +109,7 @@
     {
       "id": "0305",
       "titulo": "03/05 TV Portátil 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
       "dimensao": "25 x 21 x 07 cm",
       "preco": 200,
       "status": "disponível",
@@ -135,7 +135,7 @@
     {
       "id": "0306",
       "titulo": "03/06 Stereo System 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, suporte angular e parafuso.",
       "dimensao": "25 x 16 x 16 cm",
       "preco": 150,
       "status": "disponível",
@@ -177,7 +177,7 @@
     {
       "id": "0308",
       "titulo": "03/08 Auto Rádio 02",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, chapa união e parafusos.",
       "dimensao": "12,5 x 11,5 x 5 cm",
       "preco": 250,
       "status": "disponível",
