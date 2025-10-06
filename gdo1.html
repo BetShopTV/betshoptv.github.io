@@ -101,6 +101,53 @@ fetch("https://betshoptv.com/dados/gdo-bstv.json")
 </script>
 
 <div id="catalogo"></div>
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/COLE_AQUI_SEU_ID/exec';
+
+// payload = object com campos (ver exemplo abaixo)
+function enviarVendaParaPlanilha(payload) {
+  try {
+    const fd = new FormData();
+    Object.entries(payload).forEach(([k,v]) => fd.append(k, v == null ? '' : v.toString()));
+
+    // POST non-blocking (no-cors evita erro CORS, mas impede leitura da resposta)
+    fetch(GAS_URL, { method: 'POST', body: fd, mode: 'no-cors' });
+
+    // fallback redundante por GET (imagem)
+    const qs = new URLSearchParams([...fd.entries()]).toString();
+    (new Image()).src = GAS_URL + '?' + qs + '&t=' + Date.now();
+
+    console.log('Envio para planilha disparado (fire-and-forget).');
+  } catch (err) {
+    console.warn('Falha ao enviar para planilha (JS):', err);
+  }
+}
+
+/* EXEMPLO de uso: montar payload e chamar */
+function exemploEnviar(selectedItems, checkoutData, totalPrice) {
+  const ids = selectedItems.map(i => i.id).join(';'); // se tiver varias peças
+  const precos = selectedItems.map(i => i.preco).join(';');
+
+  const payload = {
+    id_peca: ids,
+    nome: checkoutData.nome || '',
+    email: checkoutData.email || '',
+    telefone: checkoutData.telefone || '',
+    preco_pago: totalPrice.toFixed(2),
+    preco: precos,
+    desconto: checkoutData.desconto || '0',
+    cidade: checkoutData.cidade || '',
+    pais: checkoutData.pais || 'BR',
+    email_enviado: 'FALSE',
+    fonte_utm: (new URLSearchParams(window.location.search)).get('utm_source') || '',
+    dispositivo: navigator.userAgent,
+    forma: checkoutData.paymentMethod || 'PIX',
+    _subject: `COMPRA / ${checkoutData.nome || 'SEM NOME'} / R$ ${totalPrice.toFixed(2)}`
+  };
+
+  enviarVendaParaPlanilha(payload);
+}
+</script>
 
 
 
