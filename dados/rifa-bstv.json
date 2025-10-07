@@ -1,5 +1,5 @@
 {
-  "atualizado": "07-10-2025 05:38:36",
+  "atualizado": "07-10-2025 07:08:35",
   "totalRifas": 170,
   "rifas": [
     {
@@ -11,7 +11,7 @@
     {
       "id_rifa": "002",
       "hex_rifa": "#B22222",
-      "botao_rifa": "X002 / 5? avenida",
+      "botao_rifa": "X002 / 5ª avenida",
       "status_rifa": ""
     },
     {
@@ -29,7 +29,7 @@
     {
       "id_rifa": "005",
       "hex_rifa": "#FFE4E1",
-      "botao_rifa": "X005 / Algod?o doce",
+      "botao_rifa": "X005 / Algodão doce",
       "status_rifa": ""
     },
     {
@@ -71,13 +71,13 @@
     {
       "id_rifa": "012",
       "hex_rifa": "#1E90FF",
-      "botao_rifa": "X012 / Azul Eclesi?stico",
+      "botao_rifa": "X012 / Azul Eclesiástico",
       "status_rifa": ""
     },
     {
       "id_rifa": "013",
       "hex_rifa": "#0000FF",
-      "botao_rifa": "X013 / Azul bi?nico",
+      "botao_rifa": "X013 / Azul biônico",
       "status_rifa": ""
     },
     {
@@ -137,7 +137,7 @@
     {
       "id_rifa": "023",
       "hex_rifa": "#6F4E37",
-      "botao_rifa": "X023 / Caf?",
+      "botao_rifa": "X023 / Café",
       "status_rifa": ""
     },
     {
@@ -149,7 +149,7 @@
     {
       "id_rifa": "025",
       "hex_rifa": "#8B4513",
-      "botao_rifa": "X025 / Camur?a",
+      "botao_rifa": "X025 / Camurça",
       "status_rifa": ""
     },
     {
@@ -167,19 +167,19 @@
     {
       "id_rifa": "028",
       "hex_rifa": "#FFA07A",
-      "botao_rifa": "X028 / Casamento do Ver?o",
+      "botao_rifa": "X028 / Casamento do Verão",
       "status_rifa": ""
     },
     {
       "id_rifa": "029",
       "hex_rifa": "#87CEEB",
-      "botao_rifa": "X029 / Chafariz da Pra?a",
+      "botao_rifa": "X029 / Chafariz da Praça",
       "status_rifa": ""
     },
     {
       "id_rifa": "030",
       "hex_rifa": "#696969",
-      "botao_rifa": "X030 / Cinza Tecnol?gico",
+      "botao_rifa": "X030 / Cinza Tecnológico",
       "status_rifa": ""
     },
     {
@@ -191,7 +191,7 @@
     {
       "id_rifa": "032",
       "hex_rifa": "#FFFFFF",
-      "botao_rifa": "X032 / Cl?ssico",
+      "botao_rifa": "X032 / Clássico",
       "status_rifa": ""
     },
     {
@@ -209,7 +209,7 @@
     {
       "id_rifa": "035",
       "hex_rifa": "#FF7F50",
-      "botao_rifa": "X035 / Coral n?o tem igual",
+      "botao_rifa": "X035 / Coral não tem igual",
       "status_rifa": ""
     },
     {
@@ -233,13 +233,13 @@
     {
       "id_rifa": "039",
       "hex_rifa": "#ADD8E6",
-      "botao_rifa": "X039 / C?u da Ant?rtida",
+      "botao_rifa": "X039 / Céu da Antártida",
       "status_rifa": ""
     },
     {
       "id_rifa": "040",
       "hex_rifa": "#FF0000",
-      "botao_rifa": "X040 / De repente, paix?o",
+      "botao_rifa": "X040 / De repente, paixão",
       "status_rifa": ""
     },
     {
@@ -269,7 +269,7 @@
     {
       "id_rifa": "045",
       "hex_rifa": "#FA8072",
-      "botao_rifa": "X045 / Dieta hoje n?o",
+      "botao_rifa": "X045 / Dieta hoje não",
       "status_rifa": ""
     },
     {
@@ -281,7 +281,7 @@
     {
       "id_rifa": "047",
       "hex_rifa": "#FF69B4",
-      "botao_rifa": "X047 / Do?ura da Primavera",
+      "botao_rifa": "X047 / Doçura da Primavera",
       "status_rifa": ""
     },
     {
@@ -305,7 +305,7 @@
     {
       "id_rifa": "051",
       "hex_rifa": "#4B0082",
-      "botao_rifa": "X051 / Encontro ?s escuras",
+      "botao_rifa": "X051 / Encontro às escuras",
       "status_rifa": ""
     },
     {
@@ -323,7 +323,7 @@
     {
       "id_rifa": "054",
       "hex_rifa": "#FF6347",
-      "botao_rifa": "X054 / Expl?cita",
+      "botao_rifa": "X054 / Explícita",
       "status_rifa": ""
     },
     {
@@ -335,7 +335,7 @@
     {
       "id_rifa": "056",
       "hex_rifa": "#4682B4",
-      "botao_rifa": "X056 / Fazendo v?rios nadas",
+      "botao_rifa": "X056 / Fazendo vários nadas",
       "status_rifa": ""
     },
     {
@@ -365,7 +365,7 @@
     {
       "id_rifa": "061",
       "hex_rifa": "#FAF0E6",
-      "botao_rifa": "X061 / Fran?a",
+      "botao_rifa": "X061 / França",
       "status_rifa": ""
     },
     {
@@ -377,7 +377,7 @@
     {
       "id_rifa": "063",
       "hex_rifa": "#FFD700",
-      "botao_rifa": "X063 / Garota ver?o",
+      "botao_rifa": "X063 / Garota verão",
       "status_rifa": ""
     },
     {
@@ -389,13 +389,13 @@
     {
       "id_rifa": "065",
       "hex_rifa": "#F4A460",
-      "botao_rifa": "X065 / Gel?ia de Cupua?u",
+      "botao_rifa": "X065 / Geléia de Cupuaçu",
       "status_rifa": ""
     },
     {
       "id_rifa": "066",
       "hex_rifa": "#DAA520",
-      "botao_rifa": "X066 / Gl?ria da Colheita",
+      "botao_rifa": "X066 / Glória da Colheita",
       "status_rifa": ""
     },
     {
@@ -413,13 +413,13 @@
     {
       "id_rifa": "069",
       "hex_rifa": "#2F4F4F",
-      "botao_rifa": "X069 / Grande Metr?pole",
+      "botao_rifa": "X069 / Grande Metrópole",
       "status_rifa": ""
     },
     {
       "id_rifa": "070",
       "hex_rifa": "#9370DB",
-      "botao_rifa": "X070 / Harmonia Lil?s",
+      "botao_rifa": "X070 / Harmonia Lilás",
       "status_rifa": ""
     },
     {
@@ -437,7 +437,7 @@
     {
       "id_rifa": "073",
       "hex_rifa": "#6A5ACD",
-      "botao_rifa": "X073 / Intui??o Divina",
+      "botao_rifa": "X073 / Intuição Divina",
       "status_rifa": ""
     },
     {
@@ -473,7 +473,7 @@
     {
       "id_rifa": "079",
       "hex_rifa": "#D8BFD8",
-      "botao_rifa": "X079 / Lil?s Esplendoroso",
+      "botao_rifa": "X079 / Lilás Esplendoroso",
       "status_rifa": ""
     },
     {
@@ -569,7 +569,7 @@
     {
       "id_rifa": "095",
       "hex_rifa": "#B8860B",
-      "botao_rifa": "X095 / Mostarda em Gr?o",
+      "botao_rifa": "X095 / Mostarda em Grão",
       "status_rifa": ""
     },
     {
@@ -581,19 +581,19 @@
     {
       "id_rifa": "097",
       "hex_rifa": "#FFB6C1",
-      "botao_rifa": "X097 / Mo?a Bonita",
+      "botao_rifa": "X097 / Moça Bonita",
       "status_rifa": ""
     },
     {
       "id_rifa": "098",
       "hex_rifa": "#800000",
-      "botao_rifa": "X098 / Na d?vida, vinho!",
+      "botao_rifa": "X098 / Na dúvida, vinho!",
       "status_rifa": ""
     },
     {
       "id_rifa": "099",
       "hex_rifa": "#FF4500",
-      "botao_rifa": "X099 / Nariz de palha?o",
+      "botao_rifa": "X099 / Nariz de palhaço",
       "status_rifa": ""
     },
     {
@@ -641,7 +641,7 @@
     {
       "id_rifa": "107",
       "hex_rifa": "#DC143C",
-      "botao_rifa": "X107 / N?o mexe comigo",
+      "botao_rifa": "X107 / Não mexe comigo",
       "status_rifa": ""
     },
     {
@@ -665,7 +665,7 @@
     {
       "id_rifa": "111",
       "hex_rifa": "#A0522D",
-      "botao_rifa": "X111 / Pinh?o",
+      "botao_rifa": "X111 / Pinhão",
       "status_rifa": ""
     },
     {
@@ -707,25 +707,25 @@
     {
       "id_rifa": "118",
       "hex_rifa": "#FFC0CB",
-      "botao_rifa": "X118 / P?tala",
+      "botao_rifa": "X118 / Pétala",
       "status_rifa": ""
     },
     {
       "id_rifa": "119",
       "hex_rifa": "#FFFFFF",
-      "botao_rifa": "X119 / P?tala branca",
+      "botao_rifa": "X119 / Pétala branca",
       "status_rifa": ""
     },
     {
       "id_rifa": "120",
       "hex_rifa": "#FFDAB9",
-      "botao_rifa": "X120 / P?ra Madura",
+      "botao_rifa": "X120 / Pêra Madura",
       "status_rifa": ""
     },
     {
       "id_rifa": "121",
       "hex_rifa": "#FFE4C4",
-      "botao_rifa": "X121 / P? de P?ssego",
+      "botao_rifa": "X121 / Pó de Pêssego",
       "status_rifa": ""
     },
     {
@@ -797,19 +797,19 @@
     {
       "id_rifa": "133",
       "hex_rifa": "#F5DEB3",
-      "botao_rifa": "X133 / Roupa de Beb?",
+      "botao_rifa": "X133 / Roupa de Bebê",
       "status_rifa": ""
     },
     {
       "id_rifa": "134",
       "hex_rifa": "#8A2BE2",
-      "botao_rifa": "X134 / Roxo m?stico",
+      "botao_rifa": "X134 / Roxo místico",
       "status_rifa": ""
     },
     {
       "id_rifa": "135",
       "hex_rifa": "#FFA07A",
-      "botao_rifa": "X135 / Salm?o P?lido",
+      "botao_rifa": "X135 / Salmão Pálido",
       "status_rifa": ""
     },
     {
@@ -827,7 +827,7 @@
     {
       "id_rifa": "138",
       "hex_rifa": "#FFB6C1",
-      "botao_rifa": "X138 / Sensa??o de Rosas",
+      "botao_rifa": "X138 / Sensação de Rosas",
       "status_rifa": ""
     },
     {
@@ -857,7 +857,7 @@
     {
       "id_rifa": "143",
       "hex_rifa": "#FFD700",
-      "botao_rifa": "X143 / Sol?rio",
+      "botao_rifa": "X143 / Solário",
       "status_rifa": ""
     },
     {
@@ -875,13 +875,13 @@
     {
       "id_rifa": "146",
       "hex_rifa": "#708090",
-      "botao_rifa": "X146 / S?lvia",
+      "botao_rifa": "X146 / Sálvia",
       "status_rifa": ""
     },
     {
       "id_rifa": "147",
       "hex_rifa": "#F5DEB3",
-      "botao_rifa": "X147 / S? d? nude",
+      "botao_rifa": "X147 / Só dá nude",
       "status_rifa": ""
     },
     {
@@ -923,7 +923,7 @@
     {
       "id_rifa": "154",
       "hex_rifa": "#7FFFD4",
-      "botao_rifa": "X154 / Trevo P?lido",
+      "botao_rifa": "X154 / Trevo Pálido",
       "status_rifa": ""
     },
     {
@@ -935,7 +935,7 @@
     {
       "id_rifa": "156",
       "hex_rifa": "#F5DEB3",
-      "botao_rifa": "X156 / T? bege!",
+      "botao_rifa": "X156 / Tô bege!",
       "status_rifa": ""
     },
     {
@@ -947,19 +947,19 @@
     {
       "id_rifa": "158",
       "hex_rifa": "#D2B48C",
-      "botao_rifa": "X158 / Urso de Pel?cia",
+      "botao_rifa": "X158 / Urso de Pelúcia",
       "status_rifa": ""
     },
     {
       "id_rifa": "159",
       "hex_rifa": "#FF8C00",
-      "botao_rifa": "X159 / Val?ncia",
+      "botao_rifa": "X159 / Valência",
       "status_rifa": ""
     },
     {
       "id_rifa": "160",
       "hex_rifa": "#4682B4",
-      "botao_rifa": "X160 / Vaso de Hort?nsia",
+      "botao_rifa": "X160 / Vaso de Hortênsia",
       "status_rifa": ""
     },
     {
@@ -977,7 +977,7 @@
     {
       "id_rifa": "163",
       "hex_rifa": "#B22222",
-      "botao_rifa": "X163 / Vermelha obsess?o",
+      "botao_rifa": "X163 / Vermelha obsessão",
       "status_rifa": ""
     },
     {
@@ -1001,7 +1001,7 @@
     {
       "id_rifa": "167",
       "hex_rifa": "#F8F8FF",
-      "botao_rifa": "X167 / Via L?ctea",
+      "botao_rifa": "X167 / Via Láctea",
       "status_rifa": ""
     },
     {
