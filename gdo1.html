@@ -385,23 +385,21 @@ async function sendPurchaseData(buyer){
     // advance for next (so first is CR030 -> then increment)
     nextCodigoSeq++;
     // build payload - match VENDAS_OFERTAS expected columns
-    const payload = {
-      codigo_login: codigo,
-      id_peca: p.id,
-      nome: buyer.nome || '',
-      email: buyer.email || '',
-      telefone: buyer.telefone || '',
-      preco_pago: (p.preco || 0).toFixed(2),
-      preco_peca: (p.preco || 0).toFixed(2),
-      desconto: '0',
-      cidade: buyer.cidade || '',
-      pais: buyer.pais || 'BR',
-      email_enviado: 'FALSE',
-      fonte_utm: (new URLSearchParams(window.location.search)).get('utm_source') || '',
-      dispositivo: navigator.userAgent || '',
-      FormaPagamento: 'PIX',
-      _subject: `COMPRA / ${buyer.nome || 'SEM NOME'} / R$ ${(p.preco||0).toFixed(2)}`
-    };
+const payload = {
+  action: "checkout", // força cair no gravarCheckout
+  codigo_login: codigo,
+  peca_foi: p.id,                  // 👈 mudou
+  nome: buyer.nome || '',
+  email: buyer.email || '',
+  telefone: buyer.telefone || '',
+  preco_total: (p.preco || 0).toFixed(2),  // 👈 mudou
+  cidade: buyer.cidade || '',
+  pais: buyer.pais || 'BR',
+  fonte_utm: (new URLSearchParams(window.location.search)).get('utm_source') || '',
+  dispositivo: navigator.userAgent || '',
+  formapagamento: 'PIX'            // 👈 mudou
+};
+
 
     try {
       // fire-and-forget POST (no-cors)
