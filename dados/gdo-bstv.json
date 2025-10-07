@@ -1,759 +1,603 @@
 {
-  "ultimaAtualizacao": "2025-10-07T03:30:14.050Z",
-  "total": 27,
+  "atualizado": "2025-10-07T07:19:19.070Z",
   "produtos": [
     {
-      "id": "0301",
-      "titulo": "03/01 Rádio 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, chapa união, porcas e parafusos. ",
+      "apelido": "Brinc?o Pendente",
+      "id_peca": "0301",
+      "titulo_peca": "aaaaaa",
+      "img_peca": 4,
       "dimensao": "57 x 18 x 10 cm",
-      "preco": 150,
-      "status": "indisponível",
-      "disponivel": false,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-01a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-01a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-01a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-01b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-01b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-01b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-01c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-01c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-01c.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-01d.avif",
-          "otm": "https://betshoptv.com/img/otm/03-01d.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-01d.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, chapa uni?o, porcas e parafusos. ",
+      "preco_peca": 150,
+      "status_peca": "INDISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-01a, 03-01b, 03-01c, 03-01d",
+      "repete": "",
+      "titulo_completo": "03/01 aaaaaa",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "01",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0302",
-      "titulo": "03/02 Câmera fotográfica 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
+      "apelido": "Roberta Close",
+      "id_peca": "0302",
+      "titulo_peca": "C?mera fotogr?fica 01",
+      "img_peca": 3,
       "dimensao": "21 x 21 x 09 cm",
-      "preco": 150,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-02a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-02a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-02a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-02b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-02b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-02b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-02c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-02c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-02c.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e parafusos.",
+      "preco_peca": 150,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-02a, 03-02b, 03-02c",
+      "repete": "",
+      "titulo_completo": "03/02 C?mera fotogr?fica 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "02",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0303",
-      "titulo": "03/03 Polaroid 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, braçadeira e parafusos.",
+      "apelido": "Casquinha Sorvete",
+      "id_peca": "0303",
+      "titulo_peca": "Polaroid 01",
+      "img_peca": 3,
       "dimensao": "23 x 25 x 08 cm",
-      "preco": 150,
-      "status": "disponível",
-      "disponivel": false,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-03a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-03a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-03a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-03b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-03b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-03b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-03c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-03c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-03c.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, bra?adeira e parafusos.",
+      "preco_peca": 150,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-03a, 03-03b, 03-03c",
+      "repete": "",
+      "titulo_completo": "03/03 Polaroid 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "03",
+      "VENDILDO": "x",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0304",
-      "titulo": "03/04 Auto Rádio 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica e escápulas.",
+      "apelido": "H?lice Tubular",
+      "id_peca": "0304",
+      "titulo_peca": "Auto R?dio 01",
+      "img_peca": 2,
       "dimensao": "27 x 18 x 06 cm",
-      "preco": 150,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-04a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-04a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-04a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-04b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-04b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-04b.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica e esc?pulas.",
+      "preco_peca": 150,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-04a, 03-04b",
+      "repete": "",
+      "titulo_completo": "03/04 Auto R?dio 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "04",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0305",
-      "titulo": "03/05 TV Portátil 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
+      "apelido": "Display TV",
+      "id_peca": "0305",
+      "titulo_peca": "TV Port?til 01",
+      "img_peca": 3,
       "dimensao": "25 x 21 x 07 cm",
-      "preco": 200,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-05a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-05a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-05a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-05b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-05b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-05b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-05c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-05c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-05c.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e parafusos.",
+      "preco_peca": 200,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-05a, 03-05b, 03-05c",
+      "repete": "",
+      "titulo_completo": "03/05 TV Port?til 01",
+      "foi_promo": "SIM",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "05",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0306",
-      "titulo": "03/06 Stereo System 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, suporte angular e parafuso.",
+      "apelido": "Motel Fu?on",
+      "id_peca": "0306",
+      "titulo_peca": "Stereo System 01",
+      "img_peca": 2,
       "dimensao": "25 x 16 x 16 cm",
-      "preco": 150,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-06a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-06a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-06a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-06b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-06b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-06b.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, suporte angular e parafuso.",
+      "preco_peca": 150,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-06a, 03-06b",
+      "repete": "",
+      "titulo_completo": "03/06 Stereo System 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "06",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0307",
-      "titulo": "03/07 Super Telão 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica, suporte angular e parafuso.",
+      "apelido": "SuperTel?o Fl?on",
+      "id_peca": "0307",
+      "titulo_peca": "Super Tel?o 01",
+      "img_peca": 2,
       "dimensao": "10 x 7,5 x 5,5 cm",
-      "preco": 150,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-07a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-07a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-07a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-07b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-07b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-07b.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica, suporte angular e parafuso.",
+      "preco_peca": 150,
+      "status_peca": "EM AN?LISE",
+      "codigo_login": "",
+      "arquivos_img": "03-07a, 03-07b",
+      "repete": "",
+      "titulo_completo": "03/07 Super Tel?o 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "07",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0308",
-      "titulo": "03/08 Auto Rádio 02",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, chapa união e parafusos.",
+      "apelido": "Moinho Buraco",
+      "id_peca": "0308",
+      "titulo_peca": "Auto R?dio 02",
+      "img_peca": 3,
       "dimensao": "12,5 x 11,5 x 5 cm",
-      "preco": 250,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-08a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-08a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-08a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-08b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-08b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-08b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-08c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-08c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-08c.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, chapa uni?o e parafusos.",
+      "preco_peca": 250,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-08a, 03-08b, 03-08c",
+      "repete": "",
+      "titulo_completo": "03/08 Auto R?dio 02",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "08",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0309",
-      "titulo": "03/09 Conjunto de som e imagem 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e presilhas metálicas.",
+      "apelido": "Abra?o Brasil",
+      "id_peca": "0309",
+      "titulo_peca": "Conjunto de som e imagem 01",
+      "img_peca": 2,
       "dimensao": "25 x 20,5 x 6,5 cm",
-      "preco": 150,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-09a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-09a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-09a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-09b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-09b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-09b.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e presilhas met?licas.",
+      "preco_peca": 150,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-09a, 03-09b",
+      "repete": "",
+      "titulo_completo": "03/09 Conjunto de som e imagem 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "09",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0310",
-      "titulo": "03/10 Filmadora 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
+      "apelido": "MeChamaDeGostoso",
+      "id_peca": "0310",
+      "titulo_peca": "Filmadora 01",
+      "img_peca": 3,
       "dimensao": "27,5 x 24,5 x 4 cm",
-      "preco": 150,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-10a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-10a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-10a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-10b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-10b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-10b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-10c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-10c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-10c.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e parafusos.",
+      "preco_peca": 150,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-10a, 03-10b, 03-10c",
+      "repete": "",
+      "titulo_completo": "03/10 Filmadora 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "10",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0311",
-      "titulo": "03/11 Microcomputador 01",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, presilhas metálicas e parafuso. ",
+      "apelido": "Funcion?rio Globo",
+      "id_peca": "0311",
+      "titulo_peca": "Microcomputador 01",
+      "img_peca": 3,
       "dimensao": "23 x 23,5 x 10 cm",
-      "preco": 150,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-11a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-11a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-11a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-11b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-11b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-11b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-11c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-11c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-11c.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, presilhas met?licas e parafuso. ",
+      "preco_peca": 150,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-11a, 03-11b, 03-11c",
+      "repete": "",
+      "titulo_completo": "03/11 Microcomputador 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "11",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0312",
-      "titulo": "03/12 Microcomputador 02",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica e ganchos.",
+      "apelido": "Faculdades BR",
+      "id_peca": "0312",
+      "titulo_peca": "Microcomputador 02",
+      "img_peca": 3,
       "dimensao": "27 x 20,5 x 3 cm",
-      "preco": 250,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-12a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-12a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-12a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-12b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-12b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-12b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-12c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-12c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-12c.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica e ganchos.",
+      "preco_peca": 250,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-12a, 03-12b, 03-12c",
+      "repete": "",
+      "titulo_completo": "03/12 Microcomputador 02",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "12",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0313",
-      "titulo": "03/13 Câmera fotográfica 02",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e pregos.",
+      "apelido": "Yashica Mila",
+      "id_peca": "0313",
+      "titulo_peca": "C?mera fotogr?fica 02",
+      "img_peca": 3,
       "dimensao": "51 x 20,5 x 13 cm",
-      "preco": 250,
-      "status": "disponível",
-      "disponivel": false,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-13a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-13a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-13a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-13b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-13b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-13b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-13c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-13c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-13c.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e pregos.",
+      "preco_peca": 250,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "03-13a, 03-13b, 03-13c",
+      "repete": "",
+      "titulo_completo": "03/13 C?mera fotogr?fica 02",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "03",
+      "num_peca": "13",
+      "VENDILDO": "x",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0314",
-      "titulo": "03/14",
-      "tecnica": "",
-      "dimensao": "",
-      "preco": "",
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-14a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-14a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-14a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-14b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-14b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-14b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-14c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-14c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-14c.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-14d.avif",
-          "otm": "https://betshoptv.com/img/otm/03-14d.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-14d.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-14e.avif",
-          "otm": "https://betshoptv.com/img/otm/03-14e.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-14e.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-14f.avif",
-          "otm": "https://betshoptv.com/img/otm/03-14f.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-14f.jpg"
-        }
-      ]
-    },
-    {
-      "id": "0315",
-      "titulo": "03/15",
-      "tecnica": "",
-      "dimensao": "",
-      "preco": "",
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-15a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-15a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-15a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-15b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-15b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-15b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-15c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-15c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-15c.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-15d.avif",
-          "otm": "https://betshoptv.com/img/otm/03-15d.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-15d.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-15e.avif",
-          "otm": "https://betshoptv.com/img/otm/03-15e.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-15e.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-15f.avif",
-          "otm": "https://betshoptv.com/img/otm/03-15f.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-15f.jpg"
-        }
-      ]
-    },
-    {
-      "id": "0316",
-      "titulo": "03/16",
-      "tecnica": "",
-      "dimensao": "",
-      "preco": "",
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-16a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-16a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-16a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-16b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-16b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-16b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-16c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-16c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-16c.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-16d.avif",
-          "otm": "https://betshoptv.com/img/otm/03-16d.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-16d.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-16e.avif",
-          "otm": "https://betshoptv.com/img/otm/03-16e.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-16e.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-16f.avif",
-          "otm": "https://betshoptv.com/img/otm/03-16f.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-16f.jpg"
-        }
-      ]
-    },
-    {
-      "id": "0317",
-      "titulo": "03/17",
-      "tecnica": "",
-      "dimensao": "",
-      "preco": "",
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-17a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-17a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-17a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-17b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-17b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-17b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-17c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-17c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-17c.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-17d.avif",
-          "otm": "https://betshoptv.com/img/otm/03-17d.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-17d.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-17e.avif",
-          "otm": "https://betshoptv.com/img/otm/03-17e.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-17e.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-17f.avif",
-          "otm": "https://betshoptv.com/img/otm/03-17f.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-17f.jpg"
-        }
-      ]
-    },
-    {
-      "id": "0318",
-      "titulo": "03/18",
-      "tecnica": "",
-      "dimensao": "",
-      "preco": "",
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-18a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-18a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-18a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-18b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-18b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-18b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-18c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-18c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-18c.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-18d.avif",
-          "otm": "https://betshoptv.com/img/otm/03-18d.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-18d.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-18e.avif",
-          "otm": "https://betshoptv.com/img/otm/03-18e.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-18e.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/03-18f.avif",
-          "otm": "https://betshoptv.com/img/otm/03-18f.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-18f.jpg"
-        }
-      ]
-    },
-    {
-      "id": "0401",
-      "titulo": "04/01 TV 01",
-      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e prego.",
+      "apelido": "Figueiredo Tortura",
+      "id_peca": "0401",
+      "titulo_peca": "TV 01",
+      "img_peca": 2,
       "dimensao": "60 x 20,5 x 4 cm",
-      "preco": 1800,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-01a.avif",
-          "otm": "https://betshoptv.com/img/otm/04-01a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-01a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-01b.avif",
-          "otm": "https://betshoptv.com/img/otm/04-01b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-01b.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA e prego.",
+      "preco_peca": 1800,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "04-01a, 04-01b",
+      "repete": "",
+      "titulo_completo": "04/01 TV 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "04",
+      "num_peca": "01",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0402",
-      "titulo": "04/02 Filmadora 02",
-      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA",
+      "apelido": "Boni comendo",
+      "id_peca": "0402",
+      "titulo_peca": "Filmadora 02",
+      "img_peca": 2,
       "dimensao": "27 x 20,5 x 6 cm",
-      "preco": 250,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-02a.avif",
-          "otm": "https://betshoptv.com/img/otm/04-02a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-02a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-02b.avif",
-          "otm": "https://betshoptv.com/img/otm/04-02b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-02b.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA",
+      "preco_peca": 250,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "04-02a, 04-02b",
+      "repete": "",
+      "titulo_completo": "04/02 Filmadora 02",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "04",
+      "num_peca": "02",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0403",
-      "titulo": "04/03 Filmadora 03",
-      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, ",
+      "apelido": "Rodeio G?meas",
+      "id_peca": "0403",
+      "titulo_peca": "Filmadora 03",
+      "img_peca": 3,
       "dimensao": "30 x 37 x 7 cm",
-      "preco": 400,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-03a.avif",
-          "otm": "https://betshoptv.com/img/otm/04-03a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-03a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-03b.avif",
-          "otm": "https://betshoptv.com/img/otm/04-03b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-03b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-03c.avif",
-          "otm": "https://betshoptv.com/img/otm/04-03c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-03c.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, ",
+      "preco_peca": 400,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "04-03a, 04-03b, 04-03c",
+      "repete": "",
+      "titulo_completo": "04/03 Filmadora 03",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "04",
+      "num_peca": "03",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0404",
-      "titulo": "04/04 Telão 01",
-      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, braçadeiras e parafusos.",
+      "apelido": "Flip Charge",
+      "id_peca": "0404",
+      "titulo_peca": "Tel?o 01",
+      "img_peca": 2,
       "dimensao": "30 x 20,5 x 6,5 cm",
-      "preco": 300,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-04a.avif",
-          "otm": "https://betshoptv.com/img/otm/04-04a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-04a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-04b.avif",
-          "otm": "https://betshoptv.com/img/otm/04-04b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-04b.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, bra?adeiras e parafusos.",
+      "preco_peca": 300,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "04-04a, 04-04b",
+      "repete": "",
+      "titulo_completo": "04/04 Tel?o 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "04",
+      "num_peca": "04",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0405",
-      "titulo": "04/05 Microcomputador 03",
-      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, tinta acrílica, aneis de borracha nitrílica e ganchos.",
+      "apelido": "Bombomz?o",
+      "id_peca": "0405",
+      "titulo_peca": "Microcomputador 03",
+      "img_peca": 4,
       "dimensao": "19 x 37 x 12 cm",
-      "preco": 350,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-05a.avif",
-          "otm": "https://betshoptv.com/img/otm/04-05a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-05a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-05b.avif",
-          "otm": "https://betshoptv.com/img/otm/04-05b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-05b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-05c.avif",
-          "otm": "https://betshoptv.com/img/otm/04-05c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-05c.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-05d.avif",
-          "otm": "https://betshoptv.com/img/otm/04-05d.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-05d.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, tinta acr?lica, aneis de borracha nitr?lica e ganchos.",
+      "preco_peca": 350,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "04-05a, 04-05b, 04-05c, 04-05d",
+      "repete": "",
+      "titulo_completo": "04/05 Microcomputador 03",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "04",
+      "num_peca": "05",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0406",
-      "titulo": "04/06 Auto Rádio 03",
-      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, chapa união, arruela e parafusos.",
+      "apelido": "Orqu?dea",
+      "id_peca": "0406",
+      "titulo_peca": "Auto R?dio 03",
+      "img_peca": 4,
       "dimensao": "27 x 20 x 6 cm",
-      "preco": 300,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-06a.avif",
-          "otm": "https://betshoptv.com/img/otm/04-06a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-06a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-06b.avif",
-          "otm": "https://betshoptv.com/img/otm/04-06b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-06b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-06c.avif",
-          "otm": "https://betshoptv.com/img/otm/04-06c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-06c.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-06d.avif",
-          "otm": "https://betshoptv.com/img/otm/04-06d.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-06d.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, chapa uni?o, arruela e parafusos.",
+      "preco_peca": 300,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "04-06a, 04-06b, 04-06c, 04-06d",
+      "repete": "",
+      "titulo_completo": "04/06 Auto R?dio 03",
+      "foi_promo": "2025-08-03T00:00:00.000Z",
+      "tags": "",
+      "num_grupo": "04",
+      "num_peca": "06",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0407",
-      "titulo": "04/07 Videocassete 01",
-      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, braçadeira e parafusos.",
+      "apelido": "Sil Buarque",
+      "id_peca": "0407",
+      "titulo_peca": "Videocassete 01",
+      "img_peca": 4,
       "dimensao": "26 x 19 x 5 cm",
-      "preco": 250,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-07a.avif",
-          "otm": "https://betshoptv.com/img/otm/04-07a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-07a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-07b.avif",
-          "otm": "https://betshoptv.com/img/otm/04-07b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-07b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-07c.avif",
-          "otm": "https://betshoptv.com/img/otm/04-07c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-07c.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-07d.avif",
-          "otm": "https://betshoptv.com/img/otm/04-07d.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-07d.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, bra?adeira e parafusos.",
+      "preco_peca": 250,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "04-07a, 04-07b, 04-07c, 04-07d",
+      "repete": "",
+      "titulo_completo": "04/07 Videocassete 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "04",
+      "num_peca": "07",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0408",
-      "titulo": "04/08 Super Telão 02",
-      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e ferragens.",
+      "apelido": "BRASIL MILION?RIO",
+      "id_peca": "0408",
+      "titulo_peca": "Super Tel?o 02",
+      "img_peca": 3,
       "dimensao": "53 x 15 x 3 cm",
-      "preco": 250,
-      "status": "indisponível",
-      "disponivel": false,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-08a.avif",
-          "otm": "https://betshoptv.com/img/otm/04-08a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-08a.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-08b.avif",
-          "otm": "https://betshoptv.com/img/otm/04-08b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-08b.jpg"
-        },
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-08c.avif",
-          "otm": "https://betshoptv.com/img/otm/04-08c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-08c.jpg"
-        }
-      ]
+      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA e ferragens.",
+      "preco_peca": 250,
+      "status_peca": "INDISPON?VEL",
+      "codigo_login": "CR029",
+      "arquivos_img": "04-08a, 04-08b, 04-08c",
+      "repete": "",
+      "titulo_completo": "04/08 Super Tel?o 02",
+      "foi_promo": "2025-07-03T00:00:00.000Z",
+      "tags": "",
+      "num_grupo": "04",
+      "num_peca": "08",
+      "VENDILDO": "",
+      "combo2": "Claudia Hersz",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     },
     {
-      "id": "0409",
-      "titulo": "04/09 Telefone 01",
-      "tecnica": "EVA Tijolinho",
+      "apelido": "Tech Cowboy",
+      "id_peca": "0409",
+      "titulo_peca": "Telefone 01",
+      "img_peca": "",
       "dimensao": "52 x 27 x 6 cm",
-      "preco": 888,
-      "status": "disponível",
-      "disponivel": true,
-      "imagens": [
-        {
-          "thumb": "https://betshoptv.com/img/tmb/04-09a.avif",
-          "otm": "https://betshoptv.com/img/otm/04-09a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/04-09a.jpg"
-        }
-      ]
+      "tecnica": "EVA Tijolinho",
+      "preco_peca": 888,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "",
+      "repete": "",
+      "titulo_completo": "04/09 Telefone 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "04",
+      "num_peca": "09",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
+    },
+    {
+      "apelido": "Antena Niemeyer",
+      "id_peca": "0501",
+      "titulo_peca": "Antena Parab?lica 01",
+      "img_peca": 4,
+      "dimensao": 20,
+      "tecnica": "blemba",
+      "preco_peca": 1000,
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "05-01a, 05-01b, 05-01c, 05-01d",
+      "repete": "",
+      "titulo_completo": "05/01 Antena Parab?lica 01",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "05",
+      "num_peca": "01",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
+    },
+    {
+      "apelido": "S?o Pinto Abaporu",
+      "id_peca": "0502",
+      "titulo_peca": "",
+      "img_peca": "",
+      "dimensao": "",
+      "tecnica": "",
+      "preco_peca": "",
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "",
+      "repete": "",
+      "titulo_completo": "05/02",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "05",
+      "num_peca": "02",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
+    },
+    {
+      "apelido": "Anjo Ang?lica",
+      "id_peca": "0503",
+      "titulo_peca": "",
+      "img_peca": "",
+      "dimensao": "",
+      "tecnica": "",
+      "preco_peca": "",
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "",
+      "repete": "",
+      "titulo_completo": "05/03",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "05",
+      "num_peca": "03",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
+    },
+    {
+      "apelido": "CABALLERO ON 03/94",
+      "id_peca": "0801",
+      "titulo_peca": "Auto R?dio 04",
+      "img_peca": "",
+      "dimensao": "",
+      "tecnica": "",
+      "preco_peca": "",
+      "status_peca": "DISPON?VEL",
+      "codigo_login": "",
+      "arquivos_img": "",
+      "repete": "",
+      "titulo_completo": "08/01 Auto R?dio 04",
+      "foi_promo": "",
+      "tags": "",
+      "num_grupo": "08",
+      "num_peca": "01",
+      "VENDILDO": "",
+      "combo2": "",
+      "combo3": "",
+      "combo4": "",
+      "combo5": ""
     }
-  ],
-  "backupUrl": "https://drive.google.com/uc?id=1XPzpwZdDjLKx-6lsQeWalEYKSYBjVC4W"
+  ]
 }
