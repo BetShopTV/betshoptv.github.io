@@ -317,7 +317,7 @@ async function loadCatalog(){
         id: p.id || `${p.grupo || '0'}-${p.peca || '0'}a`,
         grupo: p.grupo || '',
         peca: p.peca || '',
-        titulo: p.titulo || p.apelido || '',
+        titulo: p.titulo || p.titulo_completo || '',
         apelido: p.apelido || '',
         preco: Number(p.preco || p.preco_peca || 0),
         imagens: (p.imagens && p.imagens.map(i => (typeof i === 'string' ? i : (i.otm||i.opt||i)))) || [],
