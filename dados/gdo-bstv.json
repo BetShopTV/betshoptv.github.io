@@ -1,71 +1,7 @@
 {
-  "atualizado": "07-10-2025 07:12:35",
-  "totalProdutos": 21,
+  "atualizado": "07-10-2025 07:21:10",
+  "totalProdutos": 19,
   "produtos": [
-    {
-      "id_peca": "0301",
-      "titulo_completo": "03/01 Rádio 01",
-      "dimensao": "57 x 18 x 10 cm",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, chapa união, porcas e parafusos. ",
-      "preco_peca": 150,
-      "status_peca": "INDISPONÍVEL",
-      "arquivos_img": "03-01a, 03-01b, 03-01c, 03-01d",
-      "imagens": [
-        {
-          "tmb": "https://betshoptv.com/img/tmb/03-01a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-01a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-01a.jpg",
-          "code": "03-01a"
-        },
-        {
-          "tmb": "https://betshoptv.com/img/tmb/03-01b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-01b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-01b.jpg",
-          "code": "03-01b"
-        },
-        {
-          "tmb": "https://betshoptv.com/img/tmb/03-01c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-01c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-01c.jpg",
-          "code": "03-01c"
-        },
-        {
-          "tmb": "https://betshoptv.com/img/tmb/03-01d.avif",
-          "otm": "https://betshoptv.com/img/otm/03-01d.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-01d.jpg",
-          "code": "03-01d"
-        }
-      ]
-    },
-    {
-      "id_peca": "0302",
-      "titulo_completo": "03/02 Câmera fotográfica 01",
-      "dimensao": "21 x 21 x 09 cm",
-      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
-      "preco_peca": 150,
-      "status_peca": "DISPONÍVEL",
-      "arquivos_img": "03-02a, 03-02b, 03-02c",
-      "imagens": [
-        {
-          "tmb": "https://betshoptv.com/img/tmb/03-02a.avif",
-          "otm": "https://betshoptv.com/img/otm/03-02a.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-02a.jpg",
-          "code": "03-02a"
-        },
-        {
-          "tmb": "https://betshoptv.com/img/tmb/03-02b.avif",
-          "otm": "https://betshoptv.com/img/otm/03-02b.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-02b.jpg",
-          "code": "03-02b"
-        },
-        {
-          "tmb": "https://betshoptv.com/img/tmb/03-02c.avif",
-          "otm": "https://betshoptv.com/img/otm/03-02c.avif",
-          "fallback": "https://betshoptv.com/img/fallback/03-02c.jpg",
-          "code": "03-02c"
-        }
-      ]
-    },
     {
       "id_peca": "0303",
       "titulo_completo": "03/03 Polaroid 01",
