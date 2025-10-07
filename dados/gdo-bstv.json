@@ -1,6 +1,6 @@
 {
-  "atualizado": "07-10-2025 05:38:35",
-  "totalProdutos": 26,
+  "atualizado": "07-10-2025 05:42:41",
+  "totalProdutos": 21,
   "produtos": [
     {
       "id_peca": "0301",
@@ -565,26 +565,6 @@
       ]
     },
     {
-      "id_peca": "0408",
-      "titulo_completo": "04/08 Super Tel?o 02",
-      "dimensao": "53 x 15 x 3 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA e ferragens.",
-      "preco_peca": 250,
-      "status_peca": "INDISPON?VEL",
-      "arquivos_img": "",
-      "imagens": []
-    },
-    {
-      "id_peca": "0409",
-      "titulo_completo": "04/09 Telefone 01",
-      "dimensao": "52 x 27 x 6 cm",
-      "tecnica": "EVA Tijolinho",
-      "preco_peca": 888,
-      "status_peca": "DISPON?VEL",
-      "arquivos_img": "",
-      "imagens": []
-    },
-    {
       "id_peca": "0501",
       "titulo_completo": "05/01 Antena Parab?lica 01",
       "dimensao": 20,
@@ -618,36 +598,6 @@
           "code": "05-01d"
         }
       ]
-    },
-    {
-      "id_peca": "0502",
-      "titulo_completo": "05/02",
-      "dimensao": "",
-      "tecnica": "",
-      "preco_peca": 0,
-      "status_peca": "DISPON?VEL",
-      "arquivos_img": "",
-      "imagens": []
-    },
-    {
-      "id_peca": "0503",
-      "titulo_completo": "05/03",
-      "dimensao": "",
-      "tecnica": "",
-      "preco_peca": 0,
-      "status_peca": "DISPON?VEL",
-      "arquivos_img": "",
-      "imagens": []
-    },
-    {
-      "id_peca": "0801",
-      "titulo_completo": "08/01 Auto R?dio 04",
-      "dimensao": "",
-      "tecnica": "",
-      "preco_peca": 0,
-      "status_peca": "DISPON?VEL",
-      "arquivos_img": "",
-      "imagens": []
     }
   ]
 }
