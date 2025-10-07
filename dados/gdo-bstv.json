@@ -1,5 +1,5 @@
 {
-  "atualizado": "2025-10-07T07:39:02.126Z",
+  "atualizado": "2025-10-07T07:39:38.035Z",
   "produtos": [
     {
       "apelido": "Brinc?o Pendente",
@@ -465,13 +465,13 @@
       "apelido": "BRASIL MILION?RIO",
       "id_peca": "0408",
       "titulo_peca": "Super Tel?o 02",
-      "img_peca": 3,
+      "img_peca": "",
       "dimensao": "53 x 15 x 3 cm",
       "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA e ferragens.",
       "preco_peca": 250,
       "status_peca": "INDISPON?VEL",
       "codigo_login": "CR029",
-      "arquivos_img": "04-08a, 04-08b, 04-08c",
+      "arquivos_img": "",
       "repete": "",
       "titulo_completo": "04/08 Super Tel?o 02",
       "foi_promo": "2025-07-03T00:00:00.000Z",
