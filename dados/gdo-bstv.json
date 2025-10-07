@@ -1,6 +1,6 @@
 {
-  "ultimaAtualizacao": "2025-10-07T01:30:26.483Z",
-  "total": 22,
+  "ultimaAtualizacao": "2025-10-07T01:36:05.429Z",
+  "total": 27,
   "produtos": [
     {
       "id": "0301",
@@ -322,6 +322,211 @@
           "thumb": "https://betshoptv.com/img/tmb/03-13c.avif",
           "otm": "https://betshoptv.com/img/otm/03-13c.avif",
           "fallback": "https://betshoptv.com/img/fallback/03-13c.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0314",
+      "titulo": "03/14",
+      "tecnica": "",
+      "dimensao": "",
+      "preco": "",
+      "status": "disponível",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-14a.avif",
+          "otm": "https://betshoptv.com/img/otm/03-14a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-14a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-14b.avif",
+          "otm": "https://betshoptv.com/img/otm/03-14b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-14b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-14c.avif",
+          "otm": "https://betshoptv.com/img/otm/03-14c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-14c.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-14d.avif",
+          "otm": "https://betshoptv.com/img/otm/03-14d.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-14d.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-14e.avif",
+          "otm": "https://betshoptv.com/img/otm/03-14e.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-14e.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-14f.avif",
+          "otm": "https://betshoptv.com/img/otm/03-14f.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-14f.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0315",
+      "titulo": "03/15",
+      "tecnica": "",
+      "dimensao": "",
+      "preco": "",
+      "status": "disponível",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-15a.avif",
+          "otm": "https://betshoptv.com/img/otm/03-15a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-15a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-15b.avif",
+          "otm": "https://betshoptv.com/img/otm/03-15b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-15b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-15c.avif",
+          "otm": "https://betshoptv.com/img/otm/03-15c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-15c.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-15d.avif",
+          "otm": "https://betshoptv.com/img/otm/03-15d.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-15d.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-15e.avif",
+          "otm": "https://betshoptv.com/img/otm/03-15e.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-15e.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-15f.avif",
+          "otm": "https://betshoptv.com/img/otm/03-15f.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-15f.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0316",
+      "titulo": "03/16",
+      "tecnica": "",
+      "dimensao": "",
+      "preco": "",
+      "status": "disponível",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-16a.avif",
+          "otm": "https://betshoptv.com/img/otm/03-16a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-16a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-16b.avif",
+          "otm": "https://betshoptv.com/img/otm/03-16b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-16b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-16c.avif",
+          "otm": "https://betshoptv.com/img/otm/03-16c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-16c.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-16d.avif",
+          "otm": "https://betshoptv.com/img/otm/03-16d.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-16d.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-16e.avif",
+          "otm": "https://betshoptv.com/img/otm/03-16e.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-16e.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-16f.avif",
+          "otm": "https://betshoptv.com/img/otm/03-16f.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-16f.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0317",
+      "titulo": "03/17",
+      "tecnica": "",
+      "dimensao": "",
+      "preco": "",
+      "status": "disponível",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-17a.avif",
+          "otm": "https://betshoptv.com/img/otm/03-17a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-17a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-17b.avif",
+          "otm": "https://betshoptv.com/img/otm/03-17b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-17b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-17c.avif",
+          "otm": "https://betshoptv.com/img/otm/03-17c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-17c.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-17d.avif",
+          "otm": "https://betshoptv.com/img/otm/03-17d.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-17d.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-17e.avif",
+          "otm": "https://betshoptv.com/img/otm/03-17e.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-17e.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-17f.avif",
+          "otm": "https://betshoptv.com/img/otm/03-17f.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-17f.jpg"
+        }
+      ]
+    },
+    {
+      "id": "0318",
+      "titulo": "03/18",
+      "tecnica": "",
+      "dimensao": "",
+      "preco": "",
+      "status": "disponível",
+      "disponivel": true,
+      "imagens": [
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-18a.avif",
+          "otm": "https://betshoptv.com/img/otm/03-18a.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-18a.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-18b.avif",
+          "otm": "https://betshoptv.com/img/otm/03-18b.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-18b.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-18c.avif",
+          "otm": "https://betshoptv.com/img/otm/03-18c.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-18c.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-18d.avif",
+          "otm": "https://betshoptv.com/img/otm/03-18d.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-18d.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-18e.avif",
+          "otm": "https://betshoptv.com/img/otm/03-18e.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-18e.jpg"
+        },
+        {
+          "thumb": "https://betshoptv.com/img/tmb/03-18f.avif",
+          "otm": "https://betshoptv.com/img/otm/03-18f.avif",
+          "fallback": "https://betshoptv.com/img/fallback/03-18f.jpg"
         }
       ]
     },
