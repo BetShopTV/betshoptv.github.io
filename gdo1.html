@@ -118,7 +118,9 @@ body{
 
 <div class="wrapper">
   <div class="header">
-    <h1>BSTVeeeeeeeeeeeeeeeeeeeeeee — Galeria de Ofertas</h1>
+    <h1>BSTVeeeeeeeeeeeeeeeeeeeeee — Galeria de Ofertas</h1>
+    <br>
+    <button onclick="enviarCheckout()">Enviar Checkout</button>
     <div style="margin-left:auto" class="controls">
       <button id="btnViewGallery" class="view-toggle active">GALERIA</button>
       <button id="btnViewFeed" class="view-toggle">FEED</button>
@@ -187,18 +189,25 @@ const CATALOG_URL = "https://betshoptv.com/dados/gdo-bstv.json"; // onde está o
 const GAS_URL = "https://script.google.com/macros/s/AKfycbxtf5gvxlptz4K8bom1tog0sKW68ejbKtNC3LWUZ3ldDJo9airXGWIXDP00t18FzC0/exec";
 
 /* Código pra ABA CHECKOUT etc */
-  async function enviarCheckout(dados) {
-  const body = new URLSearchParams({
-    action: 'checkout',
-    nome: dados.nome,
-    email: dados.email,
-    telefone: dados.telefone,
-    peca_foi: dados.pecas.join(','),
-    rifa_foi: dados.rifas.join(','),
-    fav_peca: dados.favoritos.join(','),
-    preco_total: dados.total
-  });
-  await fetch(GAS_URL, { method: 'POST', body });
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyFU0r43A3QdaMch1POe_b8CprB3jzpJe7AnoUBK0NoccMABKVre3xnrAjuMRCdgldPYA/exec";
+
+async function enviarCheckout() {
+  const dados = {
+    nome: document.getElementById("nome").value,
+    email: document.getElementById("email").value,
+    telefone: document.getElementById("telefone").value,
+    peca_foi: "301,302,303",
+    rifa_foi: "",
+    fav_peca: "101,102",
+    preco_total: "450"
+  };
+
+  const formData = new FormData();
+  for (const k in dados) formData.append(k, dados[k]);
+
+  const resp = await fetch(GAS_URL, { method: "POST", body: formData });
+  const json = await resp.json();
+  console.log("Resposta do GAS:", json);
 }
 /* Código login inicial (inicia CR030 conforme pedido) */  
 let nextCodigoSeq = 30; // CR030 -> 30
