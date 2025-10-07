@@ -1,14 +1,14 @@
 {
-  "atualizado": "07-10-2025 06:00:15",
+  "atualizado": "07-10-2025 06:07:35",
   "totalProdutos": 21,
   "produtos": [
     {
       "id_peca": "0301",
       "titulo_completo": "03/01 BABABABA",
       "dimensao": "57 x 18 x 10 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, chapa uni?o, porcas e parafusos. ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, chapa união, porcas e parafusos. ",
       "preco_peca": 150,
-      "status_peca": "INDISPON?VEL",
+      "status_peca": "INDISPONÍVEL",
       "arquivos_img": "03-01a, 03-01b, 03-01c, 03-01d",
       "imagens": [
         {
@@ -39,11 +39,11 @@
     },
     {
       "id_peca": "0302",
-      "titulo_completo": "03/02 C?mera fotogr?fica 01",
+      "titulo_completo": "03/02 Câmera fotográfica 01",
       "dimensao": "21 x 21 x 09 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e parafusos.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
       "preco_peca": 150,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "03-02a, 03-02b, 03-02c",
       "imagens": [
         {
@@ -70,9 +70,9 @@
       "id_peca": "0303",
       "titulo_completo": "03/03 Polaroid 01",
       "dimensao": "23 x 25 x 08 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, bra?adeira e parafusos.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, braçadeira e parafusos.",
       "preco_peca": 150,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "03-03a, 03-03b, 03-03c",
       "imagens": [
         {
@@ -97,11 +97,11 @@
     },
     {
       "id_peca": "0304",
-      "titulo_completo": "03/04 Auto R?dio 01",
+      "titulo_completo": "03/04 Auto Rádio 01",
       "dimensao": "27 x 18 x 06 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica e esc?pulas.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica e escápulas.",
       "preco_peca": 150,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "03-04a, 03-04b",
       "imagens": [
         {
@@ -120,11 +120,11 @@
     },
     {
       "id_peca": "0305",
-      "titulo_completo": "03/05 TV Port?til 01",
+      "titulo_completo": "03/05 TV Portátil 01",
       "dimensao": "25 x 21 x 07 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e parafusos.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
       "preco_peca": 200,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "03-05a, 03-05b, 03-05c",
       "imagens": [
         {
@@ -151,9 +151,9 @@
       "id_peca": "0306",
       "titulo_completo": "03/06 Stereo System 01",
       "dimensao": "25 x 16 x 16 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, suporte angular e parafuso.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, suporte angular e parafuso.",
       "preco_peca": 150,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "03-06a, 03-06b",
       "imagens": [
         {
@@ -172,11 +172,11 @@
     },
     {
       "id_peca": "0307",
-      "titulo_completo": "03/07 Super Tel?o 01",
+      "titulo_completo": "03/07 Super Telão 01",
       "dimensao": "10 x 7,5 x 5,5 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica, suporte angular e parafuso.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica, suporte angular e parafuso.",
       "preco_peca": 150,
-      "status_peca": "EM AN?LISE",
+      "status_peca": "EM ANÁLISE",
       "arquivos_img": "03-07a, 03-07b",
       "imagens": [
         {
@@ -195,11 +195,11 @@
     },
     {
       "id_peca": "0308",
-      "titulo_completo": "03/08 Auto R?dio 02",
+      "titulo_completo": "03/08 Auto Rádio 02",
       "dimensao": "12,5 x 11,5 x 5 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, chapa uni?o e parafusos.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, chapa união e parafusos.",
       "preco_peca": 250,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "03-08a, 03-08b, 03-08c",
       "imagens": [
         {
@@ -226,9 +226,9 @@
       "id_peca": "0309",
       "titulo_completo": "03/09 Conjunto de som e imagem 01",
       "dimensao": "25 x 20,5 x 6,5 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e presilhas met?licas.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e presilhas metálicas.",
       "preco_peca": 150,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "03-09a, 03-09b",
       "imagens": [
         {
@@ -249,9 +249,9 @@
       "id_peca": "0310",
       "titulo_completo": "03/10 Filmadora 01",
       "dimensao": "27,5 x 24,5 x 4 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e parafusos.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e parafusos.",
       "preco_peca": 150,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "03-10a, 03-10b, 03-10c",
       "imagens": [
         {
@@ -278,9 +278,9 @@
       "id_peca": "0311",
       "titulo_completo": "03/11 Microcomputador 01",
       "dimensao": "23 x 23,5 x 10 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, presilhas met?licas e parafuso. ",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, presilhas metálicas e parafuso. ",
       "preco_peca": 150,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "03-11a, 03-11b, 03-11c",
       "imagens": [
         {
@@ -307,9 +307,9 @@
       "id_peca": "0312",
       "titulo_completo": "03/12 Microcomputador 02",
       "dimensao": "27 x 20,5 x 3 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado, tinta acr?lica e ganchos.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica e ganchos.",
       "preco_peca": 250,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "03-12a, 03-12b, 03-12c",
       "imagens": [
         {
@@ -334,11 +334,11 @@
     },
     {
       "id_peca": "0313",
-      "titulo_completo": "03/13 C?mera fotogr?fica 02",
+      "titulo_completo": "03/13 Câmera fotográfica 02",
       "dimensao": "51 x 20,5 x 13 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para EVA estampado e pregos.",
+      "tecnica": "Impressão offset em papel couché transferida para EVA estampado e pregos.",
       "preco_peca": 250,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "03-13a, 03-13b, 03-13c",
       "imagens": [
         {
@@ -365,9 +365,9 @@
       "id_peca": "0401",
       "titulo_completo": "04/01 TV 01",
       "dimensao": "60 x 20,5 x 4 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA e prego.",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e prego.",
       "preco_peca": 1800,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "04-01a, 04-01b",
       "imagens": [
         {
@@ -388,9 +388,9 @@
       "id_peca": "0402",
       "titulo_completo": "04/02 Filmadora 02",
       "dimensao": "27 x 20,5 x 6 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA",
       "preco_peca": 250,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "04-02a, 04-02b",
       "imagens": [
         {
@@ -411,9 +411,9 @@
       "id_peca": "0403",
       "titulo_completo": "04/03 Filmadora 03",
       "dimensao": "30 x 37 x 7 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, ",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, ",
       "preco_peca": 400,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "04-03a, 04-03b, 04-03c",
       "imagens": [
         {
@@ -438,11 +438,11 @@
     },
     {
       "id_peca": "0404",
-      "titulo_completo": "04/04 Tel?o 01",
+      "titulo_completo": "04/04 Telão 01",
       "dimensao": "30 x 20,5 x 6,5 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, bra?adeiras e parafusos.",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, braçadeiras e parafusos.",
       "preco_peca": 300,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "04-04a, 04-04b",
       "imagens": [
         {
@@ -463,9 +463,9 @@
       "id_peca": "0405",
       "titulo_completo": "04/05 Microcomputador 03",
       "dimensao": "19 x 37 x 12 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, tinta acr?lica, aneis de borracha nitr?lica e ganchos.",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, tinta acrílica, aneis de borracha nitrílica e ganchos.",
       "preco_peca": 350,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "04-05a, 04-05b, 04-05c, 04-05d",
       "imagens": [
         {
@@ -496,11 +496,11 @@
     },
     {
       "id_peca": "0406",
-      "titulo_completo": "04/06 Auto R?dio 03",
+      "titulo_completo": "04/06 Auto Rádio 03",
       "dimensao": "27 x 20 x 6 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, chapa uni?o, arruela e parafusos.",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, chapa união, arruela e parafusos.",
       "preco_peca": 300,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "04-06a, 04-06b, 04-06c, 04-06d",
       "imagens": [
         {
@@ -533,9 +533,9 @@
       "id_peca": "0407",
       "titulo_completo": "04/07 Videocassete 01",
       "dimensao": "26 x 19 x 5 cm",
-      "tecnica": "Impress?o offset em papel couch? transferida para refugo de EVA, bra?adeira e parafusos.",
+      "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, braçadeira e parafusos.",
       "preco_peca": 250,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "04-07a, 04-07b, 04-07c, 04-07d",
       "imagens": [
         {
@@ -566,11 +566,11 @@
     },
     {
       "id_peca": "0501",
-      "titulo_completo": "05/01 Antena Parab?lica 01",
+      "titulo_completo": "05/01 Antena Parabólica 01",
       "dimensao": 20,
       "tecnica": "blemba",
       "preco_peca": 1000,
-      "status_peca": "DISPON?VEL",
+      "status_peca": "DISPONÍVEL",
       "arquivos_img": "05-01a, 05-01b, 05-01c, 05-01d",
       "imagens": [
         {
