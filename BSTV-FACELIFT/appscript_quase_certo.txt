@@ -1,0 +1,76 @@
+/*********************************************************
+ 🎨 BSTV - Catálogo Público (GDO_PINTOSA)
+----------------------------------------------------------
+ Versão com detecção automática de cabeçalhos
+**********************************************************/
+
+const SHEET_ID = '1SmcxdBkiRSz_Fi08Bd3mO11yfAxkHRiFfN5OsN-cms0';
+const SHEET_NAME = 'BOTA_TUDO';
+const DRIVE_FILENAME = 'gdo-bstv.json';
+
+function gerarJSON() {
+  const planilha = SpreadsheetApp.openById(SHEET_ID);
+  const aba = planilha.getSheetByName(SHEET_NAME);
+  const dados = aba.getDataRange().getValues();
+  if (!dados || dados.length < 2) throw new Error("Planilha vazia!");
+
+  // normaliza cabeçalho
+  const cabecalho = dados[0].map(h => h.toString().trim().toLowerCase());
+  Logger.log("Cabeçalhos detectados: " + JSON.stringify(cabecalho));
+  const linhas = dados.slice(1);
+
+  const produtos = linhas.map(linha => {
+    const row = {};
+    cabecalho.forEach((col, i) => row[col] = linha[i]);
+
+    const id = row["id_peca"] || "";
+    const titulo = row["titulo_completo"] || row["titulo_peca"] || "";
+    const tecnica = row["tecnica"] || "";
+    const dimensao = row["dimensao"] || "";
+    const preco = row["preco_peca"] || "";
+    const status = (row["status_peca"] || "").toString().toLowerCase();
+    const vendildo = row["vendildo"] || "";
+    const arquivos = (row["arquivos_img"] || "")
+      .toString()
+      .split(",")
+      .map(x => x.trim())
+      .filter(Boolean);
+
+    const disponivel = !vendildo && status !== "indisponível" && status !== "em análise";
+    const imagens = arquivos.map(arq => ({
+      thumb: `https://betshoptv.com/img/tmb/${arq}.avif`,
+      opt: `https://betshoptv.com/img/opt/${arq}.avif`,
+      fallback: `https://betshoptv.com/img/fallback/${arq}.jpg`
+    }));
+
+    return { id, titulo, tecnica, dimensao, preco, status, disponivel, imagens };
+  }).filter(p => p.id);
+
+  return {
+    ultimaAtualizacao: new Date().toISOString(),
+    total: produtos.length,
+    produtos
+  };
+}
+
+function salvarJSONNoDrive(dados) {
+  const json = JSON.stringify(dados, null, 2);
+  const arquivos = DriveApp.getFilesByName(DRIVE_FILENAME);
+  let f;
+  if (arquivos.hasNext()) {
+    f = arquivos.next();
+    f.setContent(json);
+  } else {
+    f = DriveApp.createFile(DRIVE_FILENAME, json, 'application/json');
+  }
+  f.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return "https://drive.google.com/uc?id=" + f.getId();
+}
+
+function doGet() {
+  const json = gerarJSON();
+  const backup = salvarJSONNoDrive(json);
+  json.backupUrl = backup;
+  return ContentService.createTextOutput(JSON.stringify(json))
+    .setMimeType(ContentService.MimeType.JSON);
+}
