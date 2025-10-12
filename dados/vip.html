@@ -1,0 +1,73 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>BSTV — Teste bstv_data.json</title>
+<style>
+  body{font-family:system-ui, Roboto, Arial; margin:20px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+  .card{border:1px solid #ccc;padding:12px;border-radius:8px}
+  .tmb{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:6px}
+  .filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  select,button{padding:8px}
+  .rifas{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:6px}
+  .rifa-btn{height:42px;border-radius:6px;border:none;color:#000;font-weight:600}
+  .sold{opacity:.35;filter:grayscale(1)}
+</style>
+<div class="filters">
+  <select id="f-grupo"><option value="">GRUPO (todos)</option></select>
+  <select id="f-status"><option value="">STATUS (todos)</option></select>
+  <select id="f-tec"><option value="">TÉCNICA (todas)</option></select>
+  <button id="btn-clear">Limpar</button>
+</div>
+<div id="list" class="grid"></div>
+
+<h3>Rifas</h3>
+<div id="rifas" class="rifas"></div>
+
+<script>
+(async function(){
+  const res = await fetch('/dados/bstv_data.json', {cache:'no-store'});
+  const data = await res.json();
+
+  const cat = data.catalogo || [];
+  const rif = data.rifas || [];
+
+  // montar filtros
+  const sel = (id)=>document.getElementById(id);
+  const setOpts=(el,vals)=>[...new Set(vals.filter(Boolean))].sort().forEach(v=>{
+    const o=document.createElement('option'); o.value=v; o.textContent=v; el.appendChild(o);
+  });
+  setOpts(sel('f-grupo'),  cat.map(x=>x.grupo));
+  setOpts(sel('f-status'), cat.map(x=>x.status));
+  setOpts(sel('f-tec'),    cat.map(x=>x.tecnica));
+
+  const render = ()=>{
+    const g = sel('f-grupo').value, s = sel('f-status').value, t = sel('f-tec').value;
+    const filtered = cat.filter(x =>
+      (!g || x.grupo===g) && (!s || x.status===s) && (!t || x.tecnica===t)
+    );
+    const html = filtered.map(x=>{
+      const img = (x.imagens && x.imagens[0]) ? x.imagens[0].tmb : '';
+      return `<div class="card">
+        <img class="tmb" loading="lazy" src="${img}" alt="">
+        <div><strong>${x.titulo_completo || x.peca || x.id_peca}</strong></div>
+        <div>Grupo ${x.grupo} — ${x.tecnica||'-'} — ${x.dimensao||x.dimencao||'-'}</div>
+        <div>R$ ${Number(x.preco||0).toFixed(2)} — ${x.status||'-'}</div>
+        <div>❤️ ${(x.favoritos||0).toString().padStart(2,'0')}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('list').innerHTML = html;
+  };
+  render();
+  ['f-grupo','f-status','f-tec'].forEach(id=>sel(id).addEventListener('change',render));
+  document.getElementById('btn-clear').onclick=()=>{
+    ['f-grupo','f-status','f-tec'].forEach(id=>sel(id).value=''); render();
+  };
+
+  // rifas
+  document.getElementById('rifas').innerHTML = rif.map(r=>{
+    const sold = (r.status_rifa||'').toLowerCase()!=='disponível' ? 'sold' : '';
+    return `<button class="rifa-btn ${sold}" title="${r.botao_rifa}"
+      style="background:${r.hex_rifa||'#ddd'}">${r.botao_rifa||r.id_rifa}</button>`;
+  }).join('');
+})();
+</script>
