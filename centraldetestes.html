@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Central de Testes BSTV 07b</title>
+  <title>Central de Testes BSTV 08</title>
   <!-- QRCode.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -89,7 +90,7 @@
   </style>
 </head>
 <body>
-  <h1>Central de Testes BSTV 07</h1>
+  <h1>Central de Testes BSTV 08</h1>
   <div class="stats">
     TOTAL PEÇAS: <span id="totalPecas">0</span> |
     TOTAL RIFAS: <span id="totalRifas">0</span>
@@ -121,11 +122,8 @@
     <input type="hidden" name="nome" />
     <input type="hidden" name="email" />
     <input type="hidden" name="telefone" />
-    <!-- desativa captcha automático -->
     <input type="hidden" name="_captcha" value="false" />
-    <!-- define assunto do email -->
     <input type="hidden" name="_subject" value="Nova aposta na Central BSTV" />
-    <!-- redireciona para uma página de agradecimento se desejar -->
     <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html" />
   </form>
   <script>
@@ -134,6 +132,7 @@
     let selectedPieces = [];
     let selectedRifas = [];
 
+    // Carrega dados de pecas.json e rifas.json
     function fetchData() {
       Promise.all([
         fetch('/dados/pecas.json').then(r => r.ok ? r.json() : []),
@@ -147,39 +146,43 @@
         console.error('Erro ao carregar JSONs', err);
       });
     }
+
+    // Atualiza estatísticas no topo
     function updateStats() {
       const availPieces = pecasData.filter(p => {
         const st = p.status ? p.status.toString().trim().toLowerCase() : '';
-        return !st || st === 'disponivel';
+        return !(st.includes('vend')) && st !== 'vendidaaa';
       });
       const availRifas = rifasData.filter(r => {
-        const st = r.status_rifa ? r.status_rifa.toString().trim() : '';
+        const st = r.status_rifa ? r.status_rifa.toString().trim().toLowerCase() : '';
         return st === '';
       });
       document.getElementById('totalPecas').textContent = availPieces.length;
       document.getElementById('totalRifas').textContent = availRifas.length;
     }
+
+    // Renderiza a lista de peças e rifas
     function renderData() {
       const pecasGrid = document.getElementById('pecasGrid');
       pecasGrid.innerHTML = '';
       pecasData.forEach(p => {
         const st = p.status ? p.status.toString().trim().toLowerCase() : '';
-        if (!st || st === 'disponivel') {
+        if (!(st.includes('vend')) && st !== 'vendidaaa') {
           let imgId = '';
+          // usa apenas a primeira imagem declarada
           if (Array.isArray(p.imagens) && p.imagens.length > 0) {
-            imgId = (p.imagens[0] || '').toString().trim();
+            imgId = String(p.imagens[0]).trim();
           } else if (typeof p.imagens === 'string' && p.imagens.trim()) {
             imgId = p.imagens.split(/[;,]/)[0].trim();
           }
           if (!imgId) return;
-          // sempre usa a primeira imagem e adiciona .avif
           const thumbSrc = 'img/tmb/' + imgId + '.avif';
           const fallbackSrc = 'img/fallback/' + imgId + '.jpg';
           const div = document.createElement('div');
           div.className = 'item';
           const img = document.createElement('img');
           img.src = thumbSrc;
-          img.alt = p.titulo || p.id_peca;
+          img.alt = p.titulo || p.id_peca || '';
           img.onerror = function() {
             img.src = fallbackSrc;
           };
@@ -191,7 +194,7 @@
       const rifasGrid = document.getElementById('rifasGrid');
       rifasGrid.innerHTML = '';
       const availRifas = rifasData.filter(r => {
-        const st = r.status_rifa ? r.status_rifa.toString().trim() : '';
+        const st = r.status_rifa ? r.status_rifa.toString().trim().toLowerCase() : '';
         return st === '';
       });
       availRifas.forEach(r => {
@@ -208,6 +211,8 @@
         rifasGrid.appendChild(btn);
       });
     }
+
+    // Alterna seleção da peça
     function togglePiece(elem, p) {
       const i = selectedPieces.indexOf(p);
       if (i === -1) {
@@ -219,6 +224,8 @@
       }
       updateTotal();
     }
+
+    // Alterna seleção da rifa
     function toggleRifa(btn, r) {
       const i = selectedRifas.indexOf(r);
       if (i === -1) {
@@ -230,22 +237,26 @@
       }
       updateTotal();
     }
+
+    // Calcula total combinando peças e rifas (preço de rifas alterna 25/30)
     function updateTotal() {
       let total = 0;
       selectedPieces.forEach(p => {
         const val = parseFloat(String(p.preco).replace(/\./g, '').replace(',', '.'));
         if (!isNaN(val)) total += val;
       });
-      const n = selectedRifas.length;
-      if (n > 0) {
-        if (n % 2 === 0) {
-          total += 25 * n;
+      const nRifas = selectedRifas.length;
+      if (nRifas > 0) {
+        if (nRifas % 2 === 0) {
+          total += 25 * nRifas;
         } else {
-          total += 25 * (n - 1) + 30;
+          total += 25 * (nRifas - 1) + 30;
         }
       }
       document.getElementById('totalCash').textContent = total.toFixed(2).replace('.', ',');
     }
+
+    // Gera CRC16 para o BRCode
     function crc16_ccitt(buf) {
       let crc = 0xffff;
       for (let b of buf) {
@@ -258,7 +269,10 @@
       }
       return crc.toString(16).padStart(4, '0').toUpperCase();
     }
+
+    // Monta o payload do BRCode com valor em reais
     function gerarBRCode(valor) {
+      // Esta chave Pix e dados de beneficiário são apenas exemplos
       const chavePix = '00020101021126360014BR.GOV.BCB.PIX0114+55119999999940214Pagador BSTV52040000530398654';
       const valorStr = Number(valor).toFixed(2);
       const txtValor = valorStr.replace('.', '');
@@ -266,6 +280,8 @@
       const crc = crc16_ccitt((emv + '6304').split('').map(ch => ch.charCodeAt(0)));
       return emv + '6304' + crc;
     }
+
+    // Clique em GERAR PIX
     document.getElementById('gerarPix').addEventListener('click', () => {
       const totalStr = document.getElementById('totalCash').textContent;
       const valor = parseFloat(totalStr.replace('.', '').replace(',', '.'));
@@ -286,6 +302,8 @@
         });
       };
     });
+
+    // Clique em APOSTA! – preenche form e envia via FormSubmit
     document.getElementById('apostar').addEventListener('click', () => {
       const totalStr = document.getElementById('totalCash').textContent;
       const valor = parseFloat(totalStr.replace('.', '').replace(',', '.'));
@@ -306,13 +324,14 @@
       form.elements['email'].value = email;
       form.elements['telefone'].value = tel;
       form.submit();
-      // limpa seleção local
+      // limpa seleção local após envio
       selectedPieces = [];
       selectedRifas = [];
       document.querySelectorAll('.item.selected').forEach(el => el.classList.remove('selected'));
       document.querySelectorAll('.rifa-button.selected').forEach(el => el.classList.remove('selected'));
       updateTotal();
     });
+
     fetchData();
   </script>
 </body>
