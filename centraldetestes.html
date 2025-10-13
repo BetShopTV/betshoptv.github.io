@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Central de Testes BSTV</title>
+  <!-- Biblioteca de QRCode -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 1rem;
+      background: #f6f2ec;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .stats {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.2rem;
+    }
+    h2 {
+      margin-top: 2rem;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 0.5rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .item {
+      position: relative;
+      cursor: pointer;
+      border: 1px solid #e1d8c9;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #fff;
+      text-align: center;
+    }
+    .item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .item.selected {
+      outline: 3px solid #bd574f;
+    }
+    .rifas-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .rifa-button {
+      padding: 0.5rem 0.8rem;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .rifa-button.selected {
+      outline: 2px solid #bd574f;
+    }
+    #total-section {
+      margin: 2rem 0;
+      text-align: center;
+      font-size: 1.4rem;
+    }
+    #qrcode {
+      margin: 1rem auto;
+      width: 200px;
+      height: 200px;
+    }
+    #gerarPix,
+    #copiarPix,
+    #apostar {
+      padding: 0.6rem 1rem;
+      margin: 0.5rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #gerarPix { background: #bd574f; color: #fff; }
+    #copiarPix { background: #4a865a; color: #fff; display: none; }
+    #apostar { background: #2d6a8b; color: #fff; }
+  </style>
+</head>
+<body>
+  <h1>Central de Testes BSTV</h1>
+  <div class="stats">
+    TOTAL PEÇAS: <span id="totalPecas">0</span> &nbsp;|&nbsp;
+    TOTAL RIFAS: <span id="totalRifas">0</span>
+  </div>
+
+  <h2>PEÇAS</h2>
+  <div id="pecasGrid" class="grid"></div>
+
+  <h2>RIFAS SUGERIDAS</h2>
+  <div id="rifasGrid" class="rifas-grid"></div>
+
+  <div id="total-section">
+    TOTAL CASH: R$ <span id="totalCash">0,00</span>
+  </div>
+
+  <!-- Campos do comprador -->
+  <div id="userFields" style="text-align:center; margin-bottom: 1rem;">
+    <input type="text" id="inputNome" placeholder="Nome" style="margin:0.3rem; padding:0.5rem; border:1px solid #ccc; border-radius:4px; width:200px;" />
+    <input type="email" id="inputEmail" placeholder="E-mail" style="margin:0.3rem; padding:0.5rem; border:1px solid #ccc; border-radius:4px; width:200px;" />
+    <input type="tel" id="inputTelefone" placeholder="Telefone (opcional)" style="margin:0.3rem; padding:0.5rem; border:1px solid #ccc; border-radius:4px; width:200px;" />
+  </div>
+
+  <div style="text-align:center;">
+    <button id="gerarPix">GERAR PIX</button>
+    <button id="copiarPix">Copiar código PIX</button>
+  </div>
+  <div id="qrcode"></div>
+  <div style="text-align:center;">
+    <button id="apostar">APOSTA!</button>
+  </div>
+
+  <script>
+    // Variáveis globais
+    let pecasData = [];
+    let rifasData = [];
+    let selectedPieces = [];
+    let selectedRifas = [];
+
+    // Função para buscar dados JSON
+    function fetchData() {
+      Promise.all([
+        fetch('dados/pecas.json').then(res => res.json()),
+        fetch('dados/rifas.json').then(res => res.json())
+      ]).then(([pecas, rifas]) => {
+        pecasData = pecas;
+        rifasData = rifas;
+        renderData();
+        updateCounts();
+      }).catch(err => {
+        console.error('Erro ao carregar JSONs', err);
+      });
+    }
+
+    // Atualiza contadores de peças e rifas disponíveis
+    function updateCounts() {
+      // Conta peças disponíveis: considera disponíveis as que não possuem status
+      // ou cujo status esteja vazio (ex.: "", null) ou explicitamente "disponivel" (case‑insensitive).
+      const availablePecas = pecasData.filter(p => {
+        const st = p.status ? p.status.toString().toLowerCase().trim() : '';
+        return st === '' || st === 'disponivel';
+      });
+      document.getElementById('totalPecas').textContent = availablePecas.length;
+      // Conta rifas disponíveis: status_rifa vazio indica rifa livre
+      const availableRifas = rifasData.filter(r => {
+        const st = r.status_rifa ? r.status_rifa.toString().trim() : '';
+        return st === '';
+      });
+      document.getElementById('totalRifas').textContent = availableRifas.length;
+    }
+
+    // Renderiza as peças e rifas
+    function renderData() {
+      const grid = document.getElementById('pecasGrid');
+      grid.innerHTML = '';
+      pecasData.forEach(p => {
+        // Considera peça disponível se status vazio ou não for "vendida"
+        const status = p.status ? p.status.toString().toLowerCase() : '';
+        if (!status || status === 'disponivel') {
+          // Usa a primeira imagem (id) e monta o caminho do thumbnail
+          let thumbId = '';
+          if (Array.isArray(p.imagens) && p.imagens.length > 0) {
+            thumbId = p.imagens[0];
+          } else if (typeof p.imagens === 'string') {
+            thumbId = p.imagens.split(/[;,]/)[0].trim();
+          }
+          const thumbSrc = 'img/tmb/' + thumbId + '.avif';
+          const div = document.createElement('div');
+          div.className = 'item';
+          const img = document.createElement('img');
+          img.src = thumbSrc;
+          img.alt = p.titulo || p.id_peca;
+          img.onerror = function() {
+            // fallback para jpg
+            img.src = 'img/fallback/' + thumbId + '.jpg';
+          };
+          div.appendChild(img);
+          div.addEventListener('click', () => { togglePieceSelection(div, p); });
+          grid.appendChild(div);
+        }
+      });
+
+      // Renderiza rifas sugeridas (até 10)
+      const rifaGrid = document.getElementById('rifasGrid');
+      rifaGrid.innerHTML = '';
+      const availableRifas = rifasData.filter(r => !r.status_rifa || r.status_rifa.toString().trim() === '');
+      const suggested = availableRifas.slice(0, 10);
+      suggested.forEach(r => {
+        const btn = document.createElement('button');
+        btn.className = 'rifa-button';
+        // Usa a cor hex como background e o id ou numero como texto
+        btn.style.backgroundColor = r.hex || '#888';
+        btn.textContent = r.numero || r.id_rifa;
+        btn.addEventListener('click', () => { toggleRifaSelection(btn, r); });
+        rifaGrid.appendChild(btn);
+      });
+    }
+
+    // Adiciona ou remove peça do carrinho
+    function togglePieceSelection(elem, piece) {
+      const index = selectedPieces.indexOf(piece);
+      if (index === -1) {
+        selectedPieces.push(piece);
+        elem.classList.add('selected');
+      } else {
+        selectedPieces.splice(index, 1);
+        elem.classList.remove('selected');
+      }
+      updateTotal();
+    }
+
+    // Adiciona ou remove rifa do carrinho
+    function toggleRifaSelection(btn, rifa) {
+      const index = selectedRifas.indexOf(rifa);
+      if (index === -1) {
+        selectedRifas.push(rifa);
+        btn.classList.add('selected');
+      } else {
+        selectedRifas.splice(index, 1);
+        btn.classList.remove('selected');
+      }
+      updateTotal();
+    }
+
+    // Atualiza valor total (peças + rifas)
+    function updateTotal() {
+      let total = 0;
+      selectedPieces.forEach(p => {
+        const preco = parseFloat(String(p.preco).replace(',', '.'));
+        if (!isNaN(preco)) total += preco;
+      });
+      const nRifas = selectedRifas.length;
+      if (nRifas > 0) {
+        // 1 rifa = 30, cada adicional = +20
+        total += 30 + (nRifas - 1) * 20;
+      }
+      document.getElementById('totalCash').textContent = total.toFixed(2).replace('.', ',');
+    }
+
+    // Função CRC16 usada no BR Code
+    function crc16_ccitt(data) {
+      let crc = 0xFFFF;
+      for (let i = 0; i < data.length; i++) {
+        let x = ((crc >> 8) ^ data.charCodeAt(i)) & 0xFF;
+        x ^= x >> 4;
+        crc = (crc << 8) ^ (x << 12) ^ (x << 5) ^ x;
+      }
+      crc &= 0xFFFF;
+      return crc.toString(16).toUpperCase().padStart(4, '0');
+    }
+
+    // Gera código EMV (BR Code) para PIX com valor
+    function gerarBRCode(valor) {
+      const chavePix = 'betshoptv@gmail.com';
+      const nomeBeneficiario = 'BET SHOP TV';
+      const cidadeBeneficiario = 'SAO PAULO';
+      const valorFormatado = valor.toFixed(2);
+      // Monta a payload EMV (simplificada)
+      const emv = [
+        '000201',
+        '26', '14', '0014BR.GOV.BCB.PIX', '01' + chavePix.length + chavePix,
+        '52040000',
+        '5303986',
+        '54', valorFormatado.length.toString().padStart(2, '0'), valorFormatado,
+        '5802BR',
+        '59' + nomeBeneficiario.length.toString().padStart(2, '0') + nomeBeneficiario,
+        '60' + cidadeBeneficiario.length.toString().padStart(2, '0') + cidadeBeneficiario,
+        '6304'
+      ].join('');
+      const crc = crc16_ccitt(emv);
+      return emv + crc;
+    }
+
+    // Gera QR e mostra código PIX
+    document.getElementById('gerarPix').addEventListener('click', () => {
+      const totalValor = parseFloat(document.getElementById('totalCash').textContent.replace(',', '.'));
+      if (isNaN(totalValor) || totalValor <= 0) {
+        alert('Adicione peças ou rifas ao carrinho antes de gerar o PIX.');
+        return;
+      }
+      const brcode = gerarBRCode(totalValor);
+      const qrcodeDiv = document.getElementById('qrcode');
+      qrcodeDiv.innerHTML = '';
+      new QRCode(qrcodeDiv, { text: brcode, width: 200, height: 200 });
+      const copiarBtn = document.getElementById('copiarPix');
+      copiarBtn.style.display = 'inline-block';
+      copiarBtn.onclick = () => {
+        navigator.clipboard.writeText(brcode).then(() => {
+          copiarBtn.textContent = 'Copiado!';
+          setTimeout(() => { copiarBtn.textContent = 'Copiar código PIX'; }, 2000);
+        });
+      };
+    });
+
+    // Envia dados para Apps Script
+    document.getElementById('apostar').addEventListener('click', () => {
+      if (selectedPieces.length === 0 && selectedRifas.length === 0) {
+        alert('Seu carrinho está vazio. Selecione peças ou rifas.');
+        return;
+      }
+      const totalValor = parseFloat(document.getElementById('totalCash').textContent.replace(',', '.'));
+      // Captura dados do comprador
+      const nomeCliente = document.getElementById('inputNome').value.trim();
+      const emailCliente = document.getElementById('inputEmail').value.trim();
+      const telefoneCliente = document.getElementById('inputTelefone').value.trim();
+      const payload = {
+        pecas: selectedPieces.map(p => p.id_peca).join(','),
+        rifas: selectedRifas.map(r => r.id_rifa).join(','),
+        favoritas: 0, // contador de likes (pode ser ajustado se você capturar likes)
+        total: totalValor.toFixed(2),
+        nome: nomeCliente,
+        email: emailCliente,
+        telefone: telefoneCliente
+      };
+      // Endpoint do Apps Script (checkout_central.gs) – já configurado com BSTV_SIGILÃO
+      const endpoint = 'https://script.google.com/macros/s/AKfycbwOeHsHlwj_-lBpRKOPGq5GSkzslBS23tKhTwGLKwBICPeZGZ2_SVRxVEWqXNzhmcbY/exec';
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(res => res.json()).then(data => {
+        if (data && data.status === 'ok') {
+          alert('Compra registrada! ID da compra: ' + data.id_login);
+          // opcional: remover itens selecionados ou marcar como vendidos na interface
+        } else if (data && data.error) {
+          alert('Erro: ' + data.error);
+        }
+      }).catch(err => {
+        alert('Falha ao enviar: ' + err);
+      });
+    });
+
+    // Inicializa carregando os dados
+    fetchData();
+  </script>
+</body>
+</html>
