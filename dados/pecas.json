@@ -279,19 +279,5 @@
     "imagens": [
       "04-09a"
     ]
-  },
-  {
-    "id_peca": "0501",
-    "titulo": "05/01 Antena Parabólica 01",
-    "preco": 1000,
-    "status": "X",
-    "tecnica": "",
-    "dimensao": "20",
-    "imagens": [
-      "05-01a",
-      "05-01b",
-      "05-01c",
-      "05-01d"
-    ]
   }
 ]
