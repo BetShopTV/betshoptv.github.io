@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Central de Testes BSTV 09</title>
+  <title>Central de Testes BSTV 11</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -117,7 +117,7 @@
   </style>
 </head>
 <body>
-  <h1>Central de Testes BSTV 09</h1>
+  <h1>Central de Testes BSTV 11</h1>
   <div class="summary" id="totais">TOTAL PEÇAS: 0 | TOTAL RIFAS: 0</div>
 
   <h2>PEÇAS</h2>
@@ -144,7 +144,8 @@
     <button class="secondary-btn" id="apostaBtn">APOSTA!</button>
   </div>
 
-  <!-- Hidden form for FormSubmit (backup) -->
+  <!-- Formulário oculto para envio via FormSubmit -->
+  <!-- Esta versão utiliza apenas o endpoint hashado do FormSubmit, assim como em rifas.html. -->
   <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
     <input type="hidden" name="pecas" />
     <input type="hidden" name="rifas" />
@@ -153,25 +154,24 @@
     <input type="hidden" name="nome" />
     <input type="hidden" name="email" />
     <input type="hidden" name="telefone" />
+    <!-- Configurações do FormSubmit -->
     <input type="hidden" name="_captcha" value="false" />
     <input type="hidden" name="_subject" value="Nova aposta BSTV" />
+    <input type="hidden" name="_template" value="table" />
     <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html" />
   </form>
 
   <script>
-    // Configurações
+    // Endpoints dos JSON
     const PECAS_JSON_URL = '/dados/pecas.json';
     const RIFAS_JSON_URL = '/dados/rifas.json';
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwOeHsHlwj_-lBpRKOPGq5GSkzslBS23tKhTwGLKwBICPeZGZ2_SVRxVEWqXNzhmcbY/exec';
     const form = document.getElementById('hiddenForm');
 
-    // Estado
     let piecesData = [];
     let rifasData = [];
     let selectedPieces = new Set();
     let selectedRifas = new Set();
 
-    // Carrega JSONs e monta grids
     async function loadData() {
       try {
         const pecasResp = await fetch(PECAS_JSON_URL);
@@ -187,13 +187,13 @@
         console.error(err);
       }
     }
-
     function renderPieces() {
       const grid = document.getElementById('piecesGrid');
       grid.innerHTML = '';
       piecesData.forEach(piece => {
-        const firstImg = piece.imagens && piece.imagens.length ? piece.imagens[0] : null;
-        const thumbName = firstImg ? firstImg : '';
+        // Usa o primeiro item da lista de imagens como base para a miniatura
+        const firstImg = piece.imagens && piece.imagens.length ? piece.imagens[0] : '';
+        const thumbName = firstImg;
         const card = document.createElement('div');
         card.className = 'piece-card';
         card.innerHTML = `
@@ -205,7 +205,6 @@
         grid.appendChild(card);
       });
     }
-
     function renderRifas() {
       const grid = document.getElementById('rifasGrid');
       grid.innerHTML = '';
@@ -213,12 +212,12 @@
         const btn = document.createElement('button');
         btn.className = 'rifa-btn';
         btn.textContent = rifa.numero || rifa.id_rifa;
+        // Usa hex_rifa (ou hex) como cor de fundo
         btn.style.backgroundColor = rifa.hex_rifa || rifa.hex || '#999';
         btn.addEventListener('click', () => toggleRifa(rifa.id_rifa, btn));
         grid.appendChild(btn);
       });
     }
-
     function togglePiece(id, element) {
       if (selectedPieces.has(id)) {
         selectedPieces.delete(id);
@@ -241,6 +240,7 @@
     }
     function calculateRifaTotal(count) {
       if (count === 0) return 0;
+      // Preço das rifas: par = 25 * n, ímpar = 25 * (n - 1) + 30
       return count % 2 === 0 ? 25 * count : 25 * (count - 1) + 30;
     }
     function updateTotal() {
@@ -252,7 +252,7 @@
       const total = piecesTotal + rifasTotal;
       document.getElementById('totalCash').textContent = 'TOTAL CASH: R$ ' + total.toFixed(2).replace('.', ',');
     }
-
+    // Função para gerar CRC16-CCITT do BRCode
     function crc16_ccitt(str) {
       let crc = 0xffff;
       for (let i = 0; i < str.length; i++) {
@@ -263,8 +263,9 @@
       }
       return crc;
     }
+    // Gera BR Code/PIX com a chave de e-mail
     function gerarBRCode(valor) {
-      const chave = 'pix@meudominio.com';
+      const chave = 'betshoptv@gmail.com';
       const payloadFormatIndicator = '000201';
       const merchantAccountInfo = '26';
       const gui = '0014br.gov.bcb.pix';
@@ -291,7 +292,6 @@
       const checksum = crc.toString(16).toUpperCase().padStart(4, '0');
       return data + checksum;
     }
-
     function showPix() {
       const piecesTotal = Array.from(selectedPieces).reduce((sum, id) => {
         const p = piecesData.find(x => x.id_peca === id);
@@ -304,8 +304,7 @@
         return;
       }
       const brCode = gerarBRCode(total);
-      const pixCodeElem = document.getElementById('pixCode');
-      pixCodeElem.textContent = brCode;
+      document.getElementById('pixCode').textContent = brCode;
       const qrElem = document.getElementById('qrCode');
       qrElem.innerHTML = '';
       new QRCode(qrElem, {
@@ -320,7 +319,7 @@
       const pix = document.getElementById('pixCode').textContent;
       navigator.clipboard.writeText(pix).then(() => alert('Código PIX copiado!'));
     }
-    async function sendCheckout() {
+    function sendCheckout() {
       if (selectedPieces.size === 0 && selectedRifas.size === 0) {
         alert('Selecione ao menos uma peça ou rifa.');
         return;
@@ -328,32 +327,24 @@
       const nome = document.getElementById('nomeInput').value.trim();
       const email = document.getElementById('emailInput').value.trim();
       const fone = document.getElementById('foneInput').value.trim();
-      const piecesStr = Array.from(selectedPieces).join(',');
+      const pecasStr = Array.from(selectedPieces).join(',');
       const rifasStr = Array.from(selectedRifas).join(',');
       const totalValor = Array.from(selectedPieces).reduce((sum, id) => {
         const p = piecesData.find(x => x.id_peca === id);
         return sum + (p ? p.preco : 0);
       }, 0) + calculateRifaTotal(selectedRifas.size);
-      form.querySelector('input[name="pecas"]').value = piecesStr;
+      // Preenche inputs ocultos para FormSubmit
+      form.querySelector('input[name="pecas"]').value = pecasStr;
       form.querySelector('input[name="rifas"]').value = rifasStr;
       form.querySelector('input[name="favoritas"]').value = 0;
       form.querySelector('input[name="total"]').value = totalValor.toFixed(2);
       form.querySelector('input[name="nome"]').value = nome;
       form.querySelector('input[name="email"]').value = email;
       form.querySelector('input[name="telefone"]').value = fone;
-      const qs = new URLSearchParams({
-        pecas: piecesStr,
-        rifas: rifasStr,
-        favoritas: 0,
-        total: totalValor.toFixed(2),
-        nome: nome,
-        email: email,
-        telefone: fone
-      }).toString();
-      const img = new Image();
-      img.src = GAS_URL + '?' + qs + '&t=' + Date.now();
+      // Submete para FormSubmit
       form.submit();
       alert('Aposta enviada! Aguarde nossa confirmação.');
+      // Reseta estado local
       selectedPieces.clear();
       selectedRifas.clear();
       renderPieces();
