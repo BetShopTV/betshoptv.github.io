@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Central de Testes BSTV 06</title>
+  <title>Central de Testes BSTV 07</title>
   <!-- QRCode.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -89,7 +89,7 @@
   </style>
 </head>
 <body>
-  <h1>Central de Testes BSTV 06</h1>
+  <h1>Central de Testes BSTV 07</h1>
   <div class="stats">
     TOTAL PEÇAS: <span id="totalPecas">0</span> |
     TOTAL RIFAS: <span id="totalRifas">0</span>
@@ -112,14 +112,28 @@
   <div style="text-align:center; margin-top:1rem;">
     <button id="apostar">APOSTA!</button>
   </div>
+  <!-- Formulário oculto para envio via FormSubmit -->
+  <form id="checkoutForm" action="https://formsubmit.co/bstv.database@gmail.com" method="POST" style="display:none;">
+    <input type="hidden" name="pecas" />
+    <input type="hidden" name="rifas" />
+    <input type="hidden" name="favoritas" />
+    <input type="hidden" name="total" />
+    <input type="hidden" name="nome" />
+    <input type="hidden" name="email" />
+    <input type="hidden" name="telefone" />
+    <!-- desativa captcha automático -->
+    <input type="hidden" name="_captcha" value="false" />
+    <!-- define assunto do email -->
+    <input type="hidden" name="_subject" value="Nova aposta na Central BSTV" />
+    <!-- redireciona para uma página de agradecimento se desejar -->
+    <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html" />
+  </form>
   <script>
-    // Arrays para dados e seleções
     let pecasData = [];
     let rifasData = [];
     let selectedPieces = [];
     let selectedRifas = [];
 
-    // Carrega JSONs usando caminhos absolutos
     function fetchData() {
       Promise.all([
         fetch('/dados/pecas.json').then(r => r.ok ? r.json() : []),
@@ -133,7 +147,6 @@
         console.error('Erro ao carregar JSONs', err);
       });
     }
-
     function updateStats() {
       const availPieces = pecasData.filter(p => {
         const st = p.status ? p.status.toString().trim().toLowerCase() : '';
@@ -146,39 +159,37 @@
       document.getElementById('totalPecas').textContent = availPieces.length;
       document.getElementById('totalRifas').textContent = availRifas.length;
     }
-
     function renderData() {
       const pecasGrid = document.getElementById('pecasGrid');
       pecasGrid.innerHTML = '';
       pecasData.forEach(p => {
         const st = p.status ? p.status.toString().trim().toLowerCase() : '';
         if (!st || st === 'disponivel') {
-          // extrai primeiro ID da lista de imagens (antes do primeiro separador)
-          let thumbId = '';
+          let imgId = '';
           if (Array.isArray(p.imagens) && p.imagens.length > 0) {
-            thumbId = (p.imagens[0] || '').toString().trim();
+            imgId = (p.imagens[0] || '').toString().trim();
           } else if (typeof p.imagens === 'string' && p.imagens.trim()) {
-            thumbId = p.imagens.split(/[;,]/)[0].trim();
+            imgId = p.imagens.split(/[;,]/)[0].trim();
           }
-          if (!thumbId) return;
-          // se já termina em letra, usa como está; senão adiciona 'a'
-          const idWithSuffix = /[a-zA-Z]$/.test(thumbId) ? thumbId : thumbId + 'a';
+          if (!imgId) return;
+          // sempre usa a primeira imagem e adiciona .avif
+          const thumbSrc = 'img/tmb/' + imgId + '.avif';
+          const fallbackSrc = 'img/fallback/' + imgId + '.jpg';
           const div = document.createElement('div');
           div.className = 'item';
           const img = document.createElement('img');
-          img.src = 'img/tmb/' + idWithSuffix + '.avif';
+          img.src = thumbSrc;
           img.alt = p.titulo || p.id_peca;
           img.onerror = function() {
-            img.src = 'img/fallback/' + idWithSuffix + '.jpg';
+            img.src = fallbackSrc;
           };
           div.appendChild(img);
           div.addEventListener('click', () => { togglePiece(div, p); });
           pecasGrid.appendChild(div);
         }
       });
-      // rifas
-      const rifaGrid = document.getElementById('rifasGrid');
-      rifaGrid.innerHTML = '';
+      const rifasGrid = document.getElementById('rifasGrid');
+      rifasGrid.innerHTML = '';
       const availRifas = rifasData.filter(r => {
         const st = r.status_rifa ? r.status_rifa.toString().trim() : '';
         return st === '';
@@ -194,10 +205,9 @@
         }
         btn.textContent = r.numero || r.id_rifa;
         btn.addEventListener('click', () => { toggleRifa(btn, r); });
-        rifaGrid.appendChild(btn);
+        rifasGrid.appendChild(btn);
       });
     }
-
     function togglePiece(elem, p) {
       const i = selectedPieces.indexOf(p);
       if (i === -1) {
@@ -209,7 +219,6 @@
       }
       updateTotal();
     }
-
     function toggleRifa(btn, r) {
       const i = selectedRifas.indexOf(r);
       if (i === -1) {
@@ -221,17 +230,14 @@
       }
       updateTotal();
     }
-
     function updateTotal() {
       let total = 0;
       selectedPieces.forEach(p => {
-        // converte string de preço (pode ter ponto de milhar) para número
         const val = parseFloat(String(p.preco).replace(/\./g, '').replace(',', '.'));
         if (!isNaN(val)) total += val;
       });
       const n = selectedRifas.length;
       if (n > 0) {
-        // lógica: 1=30, 2=50, 3=80, 4=100, 5=130, 6=150...
         if (n % 2 === 0) {
           total += 25 * n;
         } else {
@@ -240,8 +246,6 @@
       }
       document.getElementById('totalCash').textContent = total.toFixed(2).replace('.', ',');
     }
-
-    // CRC16 (mesmo do rifas.html)
     function crc16_ccitt(buf) {
       let crc = 0xffff;
       for (let b of buf) {
@@ -262,7 +266,6 @@
       const crc = crc16_ccitt((emv + '6304').split('').map(ch => ch.charCodeAt(0)));
       return emv + '6304' + crc;
     }
-
     document.getElementById('gerarPix').addEventListener('click', () => {
       const totalStr = document.getElementById('totalCash').textContent;
       const valor = parseFloat(totalStr.replace('.', '').replace(',', '.'));
@@ -283,7 +286,6 @@
         });
       };
     });
-
     document.getElementById('apostar').addEventListener('click', () => {
       const totalStr = document.getElementById('totalCash').textContent;
       const valor = parseFloat(totalStr.replace('.', '').replace(',', '.'));
@@ -294,33 +296,23 @@
       const nome = document.getElementById('inputNome').value.trim();
       const email = document.getElementById('inputEmail').value.trim();
       const tel = document.getElementById('inputTelefone').value.trim();
-      const payload = {
-        pecas: selectedPieces.map(p => p.id_peca).join(','),
-        rifas: selectedRifas.map(r => r.id_rifa).join(','),
-        favoritas: 0,
-        total: valor.toFixed(2),
-        nome: nome,
-        email: email,
-        telefone: tel
-      };
-      const endpoint = 'https://script.google.com/macros/s/AKfycbwOeHsHlwj_-lBpRKOPGq5GSkzslBS23tKhTwGLKwBICPeZGZ2_SVRxVEWqXNzhmcbY/exec';
-      fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        mode: 'no-cors'
-      }).then(() => {
-        alert('Aposta enviada! Confira a planilha para confirmação.');
-        selectedPieces = [];
-        selectedRifas = [];
-        document.querySelectorAll('.item.selected').forEach(el => el.classList.remove('selected'));
-        document.querySelectorAll('.rifa-button.selected').forEach(el => el.classList.remove('selected'));
-        updateTotal();
-      }).catch(err => {
-        alert('Erro ao enviar: ' + err);
-      });
+      // Preenche os campos do formulário
+      const form = document.getElementById('checkoutForm');
+      form.elements['pecas'].value = selectedPieces.map(p => p.id_peca).join(',');
+      form.elements['rifas'].value = selectedRifas.map(r => r.id_rifa).join(',');
+      form.elements['favoritas'].value = '0';
+      form.elements['total'].value = valor.toFixed(2);
+      form.elements['nome'].value = nome;
+      form.elements['email'].value = email;
+      form.elements['telefone'].value = tel;
+      form.submit();
+      // limpa seleção local
+      selectedPieces = [];
+      selectedRifas = [];
+      document.querySelectorAll('.item.selected').forEach(el => el.classList.remove('selected'));
+      document.querySelectorAll('.rifa-button.selected').forEach(el => el.classList.remove('selected'));
+      updateTotal();
     });
-
     fetchData();
   </script>
 </body>
