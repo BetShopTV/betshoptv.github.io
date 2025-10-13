@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Central de Testes BSTV 11</title>
+  <title>Central de Testes BSTV 12</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -117,7 +117,7 @@
   </style>
 </head>
 <body>
-  <h1>Central de Testes BSTV 11</h1>
+  <h1>Central de Testes BSTV 12</h1>
   <div class="summary" id="totais">TOTAL PEÇAS: 0 | TOTAL RIFAS: 0</div>
 
   <h2>PEÇAS</h2>
@@ -145,7 +145,7 @@
   </div>
 
   <!-- Formulário oculto para envio via FormSubmit -->
-  <!-- Esta versão utiliza apenas o endpoint hashado do FormSubmit, assim como em rifas.html. -->
+  <!-- Esta versão usa FormSubmit como destino primário e envia também ao GAS para backup -->
   <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
     <input type="hidden" name="pecas" />
     <input type="hidden" name="rifas" />
@@ -166,6 +166,8 @@
     const PECAS_JSON_URL = '/dados/pecas.json';
     const RIFAS_JSON_URL = '/dados/rifas.json';
     const form = document.getElementById('hiddenForm');
+    // Endpoint do GAS para backup na aba CHECKOUT
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwOeHsHlwj_-lBpRKOPGq5GSkzslBS23tKhTwGLKwBICPeZGZ2_SVRxVEWqXNzhmcbY/exec';
 
     let piecesData = [];
     let rifasData = [];
@@ -191,7 +193,6 @@
       const grid = document.getElementById('piecesGrid');
       grid.innerHTML = '';
       piecesData.forEach(piece => {
-        // Usa o primeiro item da lista de imagens como base para a miniatura
         const firstImg = piece.imagens && piece.imagens.length ? piece.imagens[0] : '';
         const thumbName = firstImg;
         const card = document.createElement('div');
@@ -212,7 +213,6 @@
         const btn = document.createElement('button');
         btn.className = 'rifa-btn';
         btn.textContent = rifa.numero || rifa.id_rifa;
-        // Usa hex_rifa (ou hex) como cor de fundo
         btn.style.backgroundColor = rifa.hex_rifa || rifa.hex || '#999';
         btn.addEventListener('click', () => toggleRifa(rifa.id_rifa, btn));
         grid.appendChild(btn);
@@ -240,7 +240,6 @@
     }
     function calculateRifaTotal(count) {
       if (count === 0) return 0;
-      // Preço das rifas: par = 25 * n, ímpar = 25 * (n - 1) + 30
       return count % 2 === 0 ? 25 * count : 25 * (count - 1) + 30;
     }
     function updateTotal() {
@@ -252,7 +251,6 @@
       const total = piecesTotal + rifasTotal;
       document.getElementById('totalCash').textContent = 'TOTAL CASH: R$ ' + total.toFixed(2).replace('.', ',');
     }
-    // Função para gerar CRC16-CCITT do BRCode
     function crc16_ccitt(str) {
       let crc = 0xffff;
       for (let i = 0; i < str.length; i++) {
@@ -263,7 +261,6 @@
       }
       return crc;
     }
-    // Gera BR Code/PIX com a chave de e-mail
     function gerarBRCode(valor) {
       const chave = 'betshoptv@gmail.com';
       const payloadFormatIndicator = '000201';
@@ -341,6 +338,22 @@
       form.querySelector('input[name="nome"]').value = nome;
       form.querySelector('input[name="email"]').value = email;
       form.querySelector('input[name="telefone"]').value = fone;
+      // Backup: envia dados também ao GAS com FormData e fallback por GET
+      try {
+        const fd = new FormData();
+        fd.append('nome', nome);
+        fd.append('email', email);
+        fd.append('telefone', fone);
+        fd.append('pecas', pecasStr);
+        fd.append('rifas', rifasStr);
+        fd.append('favoritas', 0);
+        fd.append('total', totalValor.toFixed(2));
+        fetch(GAS_URL, { method: 'POST', body: fd, mode: 'no-cors' });
+        const qs = new URLSearchParams([...fd.entries()]).toString();
+        (new Image()).src = GAS_URL + '?' + qs + '&t=' + Date.now();
+      } catch (err) {
+        console.warn('Backup via GAS falhou:', err);
+      }
       // Submete para FormSubmit
       form.submit();
       alert('Aposta enviada! Aguarde nossa confirmação.');
