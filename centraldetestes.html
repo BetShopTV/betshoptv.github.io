@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -179,6 +180,7 @@
           } else if (typeof p.imagens === 'string') {
             thumbId = p.imagens.split(/[;,]/)[0].trim();
           }
+          // monta caminho de thumbnail apenas para arquivos terminados em 'a' (ex: 03-01a.avif)
           const thumbSrc = 'img/tmb/' + thumbId + 'a.avif';
           const div = document.createElement('div');
           div.className = 'item';
@@ -186,8 +188,8 @@
           img.src = thumbSrc;
           img.alt = p.titulo || p.id_peca;
           img.onerror = function() {
-            // fallback para jpg
-            img.src = 'img/fallback/' + thumbId + '.jpg';
+            // fallback para jpg (mesma regra: termina em 'a')
+            img.src = 'img/fallback/' + thumbId + 'a.jpg';
           };
           div.appendChild(img);
           div.addEventListener('click', () => { togglePieceSelection(div, p); });
@@ -195,16 +197,19 @@
         }
       });
 
-      // Renderiza rifas sugeridas (até 10)
+      // Renderiza todas as rifas disponíveis como botões simples
       const rifaGrid = document.getElementById('rifasGrid');
       rifaGrid.innerHTML = '';
-      const availableRifas = rifasData.filter(r => !r.status_rifa || r.status_rifa.toString().trim() === '');
-      const suggested = availableRifas.slice(0, 10);
-      suggested.forEach(r => {
+      const availableRifas = rifasData.filter(r => {
+        const st = r.status_rifa ? r.status_rifa.toString().trim() : '';
+        return st === '';
+      });
+      availableRifas.forEach(r => {
         const btn = document.createElement('button');
         btn.className = 'rifa-button';
-        // Usa a cor hex como background e o id ou numero como texto
-        btn.style.backgroundColor = r.hex || '#888';
+        // usa a cor hex (sem '#', mas se houver) como fundo; fallback cinza
+        btn.style.backgroundColor = r.hex ? r.hex : '#888';
+        // mostra o número ou o id da rifa
         btn.textContent = r.numero || r.id_rifa;
         btn.addEventListener('click', () => { toggleRifaSelection(btn, r); });
         rifaGrid.appendChild(btn);
