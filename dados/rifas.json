@@ -1,0 +1,1023 @@
+Quase sem espaço de armazenamento … Se você ficar sem espaço, não poderá salvar arquivos no Drive nem usar o Gmail.
+[
+  {
+    "id_rifa": "001",
+    "hex": "#FF4500",
+    "numero": 0,
+    "status_rifa": "x"
+  },
+  {
+    "id_rifa": "002",
+    "hex": "#B22222",
+    "numero": 0,
+    "status_rifa": "X"
+  },
+  {
+    "id_rifa": "003",
+    "hex": "#FF1493",
+    "numero": 0,
+    "status_rifa": "x"
+  },
+  {
+    "id_rifa": "004",
+    "hex": "#FF69B4",
+    "numero": 0,
+    "status_rifa": "X"
+  },
+  {
+    "id_rifa": "005",
+    "hex": "#FFE4E1",
+    "numero": 0,
+    "status_rifa": "X"
+  },
+  {
+    "id_rifa": "006",
+    "hex": "#FFDAB9",
+    "numero": 0,
+    "status_rifa": "X"
+  },
+  {
+    "id_rifa": "007",
+    "hex": "#FFD700",
+    "numero": 0,
+    "status_rifa": "X"
+  },
+  {
+    "id_rifa": "008",
+    "hex": "#8B0000",
+    "numero": 0,
+    "status_rifa": "X"
+  },
+  {
+    "id_rifa": "009",
+    "hex": "#87CEEB",
+    "numero": 0,
+    "status_rifa": "X"
+  },
+  {
+    "id_rifa": "010",
+    "hex": "#F5DEB3",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "011",
+    "hex": "#4682B4",
+    "numero": 0,
+    "status_rifa": "x"
+  },
+  {
+    "id_rifa": "012",
+    "hex": "#1E90FF",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "013",
+    "hex": "#0000FF",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "014",
+    "hex": "#D2B48C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "015",
+    "hex": "#FFFFF0",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "016",
+    "hex": "#FF6347",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "017",
+    "hex": "#32CD32",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "018",
+    "hex": "#000000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "019",
+    "hex": "#FF7F50",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "020",
+    "hex": "#FFC0CB",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "021",
+    "hex": "#FFD700",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "022",
+    "hex": "#DAA520",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "023",
+    "hex": "#6F4E37",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "024",
+    "hex": "#008000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "025",
+    "hex": "#8B4513",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "026",
+    "hex": "#D2B48C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "027",
+    "hex": "#DEB887",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "028",
+    "hex": "#FFA07A",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "029",
+    "hex": "#87CEEB",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "030",
+    "hex": "#696969",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "031",
+    "hex": "#808080",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "032",
+    "hex": "#FFFFFF",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "033",
+    "hex": "#A9A9A9",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "034",
+    "hex": "#C0C0C0",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "035",
+    "hex": "#FF7F50",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "036",
+    "hex": "#CD853F",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "037",
+    "hex": "#FFD700",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "038",
+    "hex": "#F08080",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "039",
+    "hex": "#ADD8E6",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "040",
+    "hex": "#FF0000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "041",
+    "hex": "#DC143C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "042",
+    "hex": "#FF8C00",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "043",
+    "hex": "#FFE4E1",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "044",
+    "hex": "#FFD700",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "045",
+    "hex": "#FA8072",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "046",
+    "hex": "#FF4500",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "047",
+    "hex": "#FF69B4",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "048",
+    "hex": "#483D8B",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "049",
+    "hex": "#DEB887",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "050",
+    "hex": "#FF1493",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "051",
+    "hex": "#4B0082",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "052",
+    "hex": "#FFD700",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "053",
+    "hex": "#FFFFFF",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "054",
+    "hex": "#FF6347",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "055",
+    "hex": "#228B22",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "056",
+    "hex": "#4682B4",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "057",
+    "hex": "#556B2F",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "058",
+    "hex": "#8A2BE2",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "059",
+    "hex": "#E30B5C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "060",
+    "hex": "#C71585",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "061",
+    "hex": "#FAF0E6",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "062",
+    "hex": "#B22222",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "063",
+    "hex": "#FFD700",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "064",
+    "hex": "#F0FFF0",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "065",
+    "hex": "#F4A460",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "066",
+    "hex": "#DAA520",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "067",
+    "hex": "#B0C4DE",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "068",
+    "hex": "#696969",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "069",
+    "hex": "#2F4F4F",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "070",
+    "hex": "#9370DB",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "071",
+    "hex": "#DC143C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "072",
+    "hex": "#4682B4",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "073",
+    "hex": "#6A5ACD",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "074",
+    "hex": "#4B0082",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "075",
+    "hex": "#006400",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "076",
+    "hex": "#5F9EA0",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "077",
+    "hex": "#FFFFF0",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "078",
+    "hex": "#FF8C00",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "079",
+    "hex": "#D8BFD8",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "080",
+    "hex": "#FAF0E6",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "081",
+    "hex": "#32CD32",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "082",
+    "hex": "#FFFFE0",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "083",
+    "hex": "#000000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "084",
+    "hex": "#9932CC",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "085",
+    "hex": "#A0522D",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "086",
+    "hex": "#8B4513",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "087",
+    "hex": "#A52A2A",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "088",
+    "hex": "#9370DB",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "089",
+    "hex": "#FFFAFA",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "090",
+    "hex": "#FF6347",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "091",
+    "hex": "#2F4F4F",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "092",
+    "hex": "#FFD700",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "093",
+    "hex": "#FF69B4",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "094",
+    "hex": "#DAA520",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "095",
+    "hex": "#B8860B",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "096",
+    "hex": "#DC143C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "097",
+    "hex": "#FFB6C1",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "098",
+    "hex": "#800000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "099",
+    "hex": "#FF4500",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "100",
+    "hex": "#DEB887",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "101",
+    "hex": "#00008B",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "102",
+    "hex": "#8B0000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "103",
+    "hex": "#FAEBD7",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "104",
+    "hex": "#D2B48C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "105",
+    "hex": "#CDAF95",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "106",
+    "hex": "#6A5ACD",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "107",
+    "hex": "#DC143C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "108",
+    "hex": "#B87333",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "109",
+    "hex": "#FF69B4",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "110",
+    "hex": "#FF4500",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "111",
+    "hex": "#A0522D",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "112",
+    "hex": "#228B22",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "113",
+    "hex": "#A0522D",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "114",
+    "hex": "#FF69B4",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "115",
+    "hex": "#B0C4DE",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "116",
+    "hex": "#FFFACD",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "117",
+    "hex": "#FFD700",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "118",
+    "hex": "#FFC0CB",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "119",
+    "hex": "#FFFFFF",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "120",
+    "hex": "#FFDAB9",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "121",
+    "hex": "#FFE4C4",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "122",
+    "hex": "#4682B4",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "123",
+    "hex": "#87CEEB",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "124",
+    "hex": "#FAEBD7",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "125",
+    "hex": "#708090",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "126",
+    "hex": "#FFB6C1",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "127",
+    "hex": "#FFC0CB",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "128",
+    "hex": "#CD5C5C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "129",
+    "hex": "#FF69B4",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "130",
+    "hex": "#FFDAB9",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "131",
+    "hex": "#DAA520",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "132",
+    "hex": "#800000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "133",
+    "hex": "#F5DEB3",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "134",
+    "hex": "#8A2BE2",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "135",
+    "hex": "#FFA07A",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "136",
+    "hex": "#DC143C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "137",
+    "hex": "#DC143C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "138",
+    "hex": "#FFB6C1",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "139",
+    "hex": "#191970",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "140",
+    "hex": "#FF0000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "141",
+    "hex": "#DAA520",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "142",
+    "hex": "#FFD700",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "143",
+    "hex": "#FFD700",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "144",
+    "hex": "#FFFACD",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "145",
+    "hex": "#32CD32",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "146",
+    "hex": "#708090",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "147",
+    "hex": "#F5DEB3",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "148",
+    "hex": "#FF0000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "149",
+    "hex": "#B22222",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "150",
+    "hex": "#696969",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "151",
+    "hex": "#D2B48C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "152",
+    "hex": "#8B4513",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "153",
+    "hex": "#8B4513",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "154",
+    "hex": "#7FFFD4",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "155",
+    "hex": "#008000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "156",
+    "hex": "#F5DEB3",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "157",
+    "hex": "#696969",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "158",
+    "hex": "#D2B48C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "159",
+    "hex": "#FF8C00",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "160",
+    "hex": "#4682B4",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "161",
+    "hex": "#87CEEB",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "162",
+    "hex": "#228B22",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "163",
+    "hex": "#B22222",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "164",
+    "hex": "#FF0000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "165",
+    "hex": "#8B0000",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "166",
+    "hex": "#DC143C",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "167",
+    "hex": "#F8F8FF",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "168",
+    "hex": "#8A2BE2",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "169",
+    "hex": "#4B0082",
+    "numero": 0,
+    "status_rifa": ""
+  },
+  {
+    "id_rifa": "170",
+    "hex": "#FF69B4",
+    "numero": 0,
+    "status_rifa": ""
+  }
+]
