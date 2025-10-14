@@ -1,858 +1,556 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GDO01 • Integração centraldetestes + Checkout PIX</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    :root { --radius: 16px; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --bg:#f8fafc; --brand:#111827; --rose:#ff0000; }
-    * { box-sizing: border-box; }
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", sans-serif; margin:0; color:var(--ink); background:var(--bg); }
-    header { position:sticky; top:0; z-index:50; backdrop-filter:saturate(180%) blur(10px); background:rgba(248,250,252,0.7); border-bottom:1px solid var(--line); }
-    header .bar { display:flex; gap:10px; align-items:center; padding:12px 16px; flex-wrap:wrap; }
-    .tag { font-size:12px; background:#e2e8f0; padding:4px 8px; border-radius:999px; }
-    main { max-width:1200px; margin:24px auto; padding:0 16px 120px; }
-    .actions { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin:12px 0 20px; }
-    input[type="search"], select { padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; background:white; min-width:220px; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px; }
-    .card { background:#fff; border:1px solid var(--line); border-radius: var(--radius); overflow:hidden; display:flex; flex-direction:column; box-shadow:0 1px 2px rgba(0,0,0,.04); }
-    .thumb { aspect-ratio: 4/3; background:#f1f5f9; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-    .thumb img { width:100%; height:100%; object-fit:cover; }
-    .content { padding:14px; display:flex; flex-direction:column; gap:8px; }
-    .title { font-weight:600; line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-    .price { display:flex; gap:8px; align-items:baseline; }
-    .price .now { font-size:20px; font-weight:700; color:#111827; }
-    .price .was { color:#6b7280; text-decoration: line-through; font-size:12px; }
-    .meta { color:#475569; font-size:12px; }
-    .btnrow { display:flex; gap:8px; margin-top:auto; }
-    .btn { flex:1; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; background:#fff; cursor:pointer; }
-    .btn.primary { background:#111827; color:#fff; border-color:#111827; }
-    .iconbtns { display:flex; gap:6px; }
-    .icon { border:1px solid #cbd5e1; background:#fff; border-radius:10px; padding:8px; cursor:pointer; min-width:40px; min-height:40px; display:grid; place-items:center; }
-    .icon.active { background:#111827; color:#fff; border-color:#111827; }
-    .icon svg { width:18px; height:18px; }
-    .footer { position:fixed; left:0; right:0; bottom:0; border-top:1px solid var(--line); background:#fff; padding:10px 16px; }
-    .footer .row { max-width:1200px; margin:0 auto; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-    .pill { background:#111827; color:#fff; padding:10px 14px; border-radius:999px; font-weight:600; }
-    .favbar { position:fixed; right:16px; bottom:86px; background:#0f172a; color:#fff; border-radius:14px; padding:10px 12px; box-shadow:0 8px 30px rgba(2,6,23,.3); max-width: 60vw; }
-    .favbar h4 { margin:0 0 8px; font-size:13px; font-weight:700; letter-spacing:.02em; text-transform:uppercase; opacity:.9; }
-    .favlist { display:flex; gap:8px; overflow:auto; }
-    .favchip { background:#111827; border:1px solid #475569; white-space:nowrap; padding:6px 10px; border-radius:999px; font-size:12px; display:flex; align-items:center; gap:6px; }
-    .muted { color:#64748b; }
-    .hidden { display:none !important; }
-    .sr { position:absolute; left:-9999px; }
-
-    /* CHECKOUT */
-    dialog.checkout { width:min(860px, 96vw); border:1px solid var(--line); border-radius:16px; padding:0; }
-    .co-head { padding:14px 16px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
-    .co-body { display:grid; grid-template-columns: 1.2fr .8fr; gap:0; min-height: 420px; }
-    .co-col { padding:16px; }
-    .co-aside { border-left:1px solid var(--line); background:#f9fafb; }
-    .row { display:flex; gap:10px; margin:.5rem 0; }
-    .row input { flex:1; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; background:white; }
-    .hr { border-top:1px dashed #cbd5e1; margin:12px 0; }
-    .qr { background:#fff; border:1px dashed #cbd5e1; border-radius:12px; padding:10px; min-height: 190px; display:flex; align-items:center; justify-content:center; }
-    .btn.copy { width:100%; }
-    .co-foot { padding:12px 16px; border-top:1px solid var(--line); display:flex; gap:10px; justify-content:flex-end; }
-    .small { font-size:12px; }
-
-    @media (max-width: 860px){ .co-body{ grid-template-columns: 1fr; } .co-aside{ border-left:none; border-top:1px solid var(--line);} }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BSTV — GDO01 integrado à Central</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{ --bg:#bebab0; --text:#2b2424; --accent:#ff0000; --white:#bebab0; --footer-h: clamp(46px,6vh,64px); }
+*{box-sizing:border-box}
+body{ margin:0; font-family:'Roboto Condensed',sans-serif; background:var(--bg); color:var(--text); padding:1vw 1vw 6.2rem; -webkit-font-smoothing:antialiased; }
+a{color:var(--accent);} h1{font-size:1.2rem;margin:0 0 1rem}
+/* gallery layout (3 col) */
+.container{max-width:1200px;margin:0 auto}
+.filter-bar{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:16px;}
+.filter-btn{padding:6px 12px;border:2px solid var(--accent);background:transparent;color:var(--accent);font-weight:700;cursor:pointer}
+.filter-btn.disabled{border:2px dashed #fff;background:#fff;color:var(--text);cursor:default}
+.shuffle-btn{border:2px dashed var(--accent)} .reset-btn{border:2px solid #2b2424;background:#2b2424;color:#fff} .recent-btn{border:2px solid var(--accent)}
+.gallery-container{display:flex;gap:clamp(4px,1.2vw,24px);max-width:1200px;margin:0 auto}
+.col{flex:1 1 calc(33.333% - 1.333vw); display:flex; flex-direction:column; gap:24px; max-width:calc((min(1200px,100vw)-4vw)/3);} 
+/* item */
+.gallery-item{display:flex;flex-direction:column; background:var(--bg); cursor:pointer; position:relative}
+.gallery-image{width:100%;height:auto;display:block;object-fit:cover}
+.item-code{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);font-family:'Roboto Mono',monospace;border:2px solid #2b2424;padding:.35vw .9vw;background:var(--bg);font-weight:700;font-size:clamp(.7rem,1.6vw,1.05rem)}
+.add-button{border:2px solid var(--accent);background:transparent;color:var(--accent);font-weight:700;padding:8px;text-transform:uppercase;cursor:pointer;margin-top:12px;margin-bottom:24px;width:100%;}
+/* FEED (post) */
+#feed { display: none; max-width: 1200px; margin: 0 auto 8rem; }
+.carousel { display: flex; gap: 24px; overflow-x: auto; align-items: center; }
+.carousel::-webkit-scrollbar { height: 8px; } .carousel::-webkit-scrollbar-thumb { background-color: #ff0000; } .carousel::-webkit-scrollbar-track { background: #bebab0; }
+.post{margin-bottom:28px}
+.carousel-wrap{border:2px solid #2b2424;padding:12px}
+.slide{flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+.slide img{max-width:100%;max-height: 88vh; object-fit:contain}
+.piece-info{padding:12px 8px;display:flex;flex-direction:column;gap:6px}
+.title-row{display:flex;justify-content:space-between;align-items:center}
+.piece-title,.piece-price{font-weight:700;font-size:clamp(1rem,2.2vw,1.1rem)}
+.piece-tech,.piece-dims{font-size:clamp(.85rem,1.6vw,1rem)}
+.actions-row{display:flex;gap:12px;padding:8px 12px}
+.btn{height:44px;border:2px solid var(--accent);background:transparent;color:var(--accent);font-weight:700;cursor:pointer;padding:0 14px}
+.btn.no-round{border-radius:0} .heart.active{background:var(--accent);color:var(--white)}
+/* footer / BARRA SHOPPING */
+.footer-bar{position:fixed;left:0;right:0;bottom:0;background:#2b2424;color:var(--white);height:var(--footer-h);display:flex;align-items:center;justify-content:space-between;padding:0 27vw;z-index:9999;font-weight:700}
+.footer-left{display:flex;align-items:center;gap:8px}
+.footer-dot{width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.footer-dot svg{fill:var(--white)}
+.footer-panels{display:flex;gap:8px;align-items:center}
+.panel-btn{background:transparent;border:0;color:var(--white);font-weight:700;cursor:pointer;position:relative;padding:8px}
+/* expanded panel */
+.panel-expanded{position:fixed;left:0;right:0;bottom:var(--footer-h);background:#bebab0;max-height:52vh;border-top:1px solid #2b2424;display:none;padding:0 27vw;z-index:9998;overflow:hidden}
+.panel-row{display:flex;align-items:center;gap:12px;height:100%}
+.mini-list{display:flex;gap:12px;overflow-x:auto;align-items:center;padding:8px 4px}
+.mini-item{flex:0 0 auto;display:flex;gap:8px;align-items:center;border:1px solid #2b2424;padding:6px;background:transparent}
+.mini-thumb{width:42px;height:50px;object-fit:cover; border:1px solid #2b2424}
+.mini-list::-webkit-scrollbar{height:12px}
+.mini-list::-webkit-scrollbar-thumb{background-color:#bebab0;border:12px solid #2b2424;border-top:0;border-bottom:0;border-left:12px solid #2b2424}
+.mini-list::-webkit-scrollbar-track{background:#bebab0}
+.total-box{padding:6px 10px;background:transparent;color:var(--white);font-weight:700}
+@media(max-width:768px){ .col{flex-basis:calc(33.333% - 8px)} .mini-thumb{width:33px;height:42px} .footer-bar{padding:0 12px} .panel-expanded{padding:0 12px;} .slide img{max-width:100%;max-height:66vh} }
+/* PIX area inside Cart Panel */
+.pix-area{border:2px dashed #2b2424; padding:10px; margin:10px 0; background:#fff}
+.pix-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pix-code{word-break:break-all; font-family:'Roboto Mono',monospace; font-size:.9rem; background:#fff; padding:6px; border:1px solid #2b2424}
+</style>
 </head>
 <body>
-  <header>
-    <div class="bar">
-      <strong>Integração</strong>
-      <span class="tag">centraldetestes → gdo01</span>
-      <span class="tag" id="testeStatus">Checkout com PIX dinâmico</span>
-      <span class="muted">Fonte: /dados/pecas.json • /dados/rifas.json</span>
+<div class="container">
+  <h1>Galeria de Ofertas — BSTV</h1>
+  <div class="filter-bar" id="groupsBar"></div>
+  <div id="gallery" class="gallery-container">
+    <div class="col" id="col0"></div><div class="col" id="col1"></div><div class="col" id="col2"></div>
+  </div>
+  <div id="feed"><div id="feedContent"></div></div>
+</div>
+<!-- BARRA SHOPPING -->
+<div class="footer-bar" id="footerBar" role="region" aria-label="Barra de compras">
+  <div class="footer-left">
+    <div id="backBtn" class="footer-dot" title="Voltar" aria-hidden="true" style="display:none;">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
     </div>
-  </header>
-
-  <main>
-    <div class="actions">
-      <input id="search" type="search" placeholder="Buscar peças…" />
-      <select id="sort">
-        <option value="relevancia">Ordenar por: Relevância</option>
-        <option value="preco_asc">Preço: menor → maior</option>
-        <option value="preco_desc">Preço: maior → menor</option>
-      </select>
-      <span id="count" class="muted"></span>
+    <div class="footer-dot" id="cartCountBtn" title="Carrinho" aria-expanded="false" aria-controls="cartPanel"> 🛍 <span id="cartCount" style="margin-left:6px">0</span></div>
+    <div class="footer-dot" id="rifaCountBtn" title="Rifas" aria-expanded="false" aria-controls="rifaPanel"> 🎟 <span id="rifaCount" style="margin-left:6px">0</span></div>
+    <div class="footer-dot" id="likesCountBtn" title="Favoritos" aria-expanded="false" aria-controls="likesPanel"> ♥ <span id="likesCount" style="margin-left:6px">0</span></div>
+  </div>
+  <div class="footer-panels">
+    <div class="total-box" id="totalBox">R$ 0,00</div>
+    <button class="panel-btn" id="openCartBtn" aria-controls="cartPanel">Carrinho</button>
+    <button class="panel-btn" id="openRifaBtn" aria-controls="rifaPanel">Rifa</button>
+    <button class="panel-btn" id="openLikesBtn" aria-controls="likesPanel">Favoritos</button>
+  </div>
+</div>
+<!-- expanded panels -->
+<div id="cartPanel" class="panel-expanded" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <strong>Carrinho</strong>
+    <button id="closeCart">✕</button>
+  </div>
+  <div style="height:12px"></div>
+  <div class="mini-list" id="cartList" aria-live="polite"></div>
+  <!-- PIX (centraldetestes) -->
+  <div class="pix-area">
+    <div class="pix-row">
+      <button class="filter-btn recent-btn" id="gerarPixBtn">GERAR PIX</button>
+      <button class="filter-btn reset-btn" id="copiaPixBtn" style="display:none;">Copiar código PIX</button>
+      <div class="total-box" id="cartTotalBox">R$ 0,00</div>
     </div>
-
-    <section id="grid" class="grid" aria-live="polite"></section>
-  </main>
-
-  <!-- Rodapé geral de compras (gdo01) -->
-  <div class="footer" id="rodapeCompras">
-    <div class="row">
-      <div>
-        <strong id="carrinhoQtd">0</strong> itens • <span>Total:</span> <span id="carrinhoTotal" class="pill">R$ 0,00</span>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <button class="btn" id="verFavoritos">Ver favoritos</button>
-        <button class="btn primary" id="finalizarCompra">Finalizar compra</button>
-      </div>
+    <div id="pixSection" style="display:none; margin-top:8px;">
+      <div id="pixCode" class="pix-code"></div>
+      <div id="qrCode" style="margin-top:8px"></div>
     </div>
   </div>
-
-  <!-- Barra de favoritos/likes -->
-  <aside class="favbar hidden" id="favbar">
-    <h4>Selecionados</h4>
-    <div id="favlist" class="favlist"></div>
-  </aside>
-
-  <!-- CHECKOUT MODAL -->
-  <dialog class="checkout" id="dlgCheckout">
-    <div class="co-head">
-      <strong>Fechamento de compra</strong>
-      <button class="btn" id="btnFecharCO">Fechar</button>
-    </div>
-    <div class="co-body">
-      <div class="co-col">
-        <h3>Seus dados</h3>
-        <div class="row"><input id="coNome" placeholder="Nome" required><input id="coEmail" type="email" placeholder="E-mail" required></div>
-        <div class="row"><input id="coWhats" placeholder="Telefone / WhatsApp"></div>
-        <div class="hr"></div>
-        <h3>Itens</h3>
-        <div id="coItens" class="small"></div>
-      </div>
-      <div class="co-col co-aside">
-        <h3>Pagamento (PIX)</h3>
-        <div class="qr" id="qrArea"><em class="muted">Geraremos o QR ao lado quando houver itens</em></div>
-        <div class="row"><button class="btn copy" id="btnCopiarPIX">PIX COPIA e COLA</button></div>
-        <div class="small muted">Valor: <strong id="coTotal">R$ 0,00</strong></div>
-      </div>
-    </div>
-    <div class="co-foot">
-      <button class="btn" id="btnVoltarCO">Voltar</button>
-      <button class="btn primary" id="btnEnviarCO">Enviar pedido</button>
-    </div>
-  </dialog>
-
-  <template id="tpl-card">
-    <article class="card" data-id="">
-      <div class="thumb">
-        <img alt="" loading="lazy" />
-      </div>
-      <div class="content">
-        <div class="title"></div>
-        <div class="price">
-          <span class="now"></span>
-          <span class="was"></span>
-        </div>
-        <div class="meta"></div>
-        <div class="btnrow">
-          <button class="btn add">Adicionar</button>
-          <div class="iconbtns">
-            <button class="icon like" title="Like" aria-pressed="false" aria-label="Dar like">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-6 0v4"></path><path d="M5 15h8a4 4 0 0 0 4-4 2 2 0 0 0-2-2H7l-2 6z"></path></svg>
-            </button>
-            <button class="icon fav" title="Favorito" aria-pressed="false" aria-label="Favoritar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1 7.8 7.8 7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </article>
-  </template>
-
-  <script>
-  /**
-   * ⚙️ CONFIG
-   */
-  const JSON_PECAS_URL = './dados/pecas.json';
-  const JSON_RIFAS_URL = './dados/rifas.json';
-  const GAS_CHECKOUT_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
-
-  // Mapeamento: pecas.json
-  // Campos reais: id_peca, titulo, preco, status, tecnica, dimensao, imagens (array)
-  const FIELD = {
-    id: 'id_peca',
-    titulo: 'titulo',
-    preco: 'preco',
-    status: 'status',
-    tecnica: 'tecnica',
-    dimensao: 'dimensao',
-    imagens: 'imagens',
-  };
-
-  // Estado ----------------------------------------------------------------------
-  const state = {
-    items: [],      // itens normalizados
-    filtered: [],   // itens após busca/ordenação
-    carrinho: new Map(), // id -> qtd
-    likes: new Set(JSON.parse(localStorage.getItem('gdo01:likes') || '[]')),
-    favs: new Set(JSON.parse(localStorage.getItem('gdo01:favs') || '[]')),
-    rifas: [],      // cores / info complementares
-    pixPayload: '',
-    qrCode: null,
-  };
-
-  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
-  const $ = (sel, root=document) => root.querySelector(sel);
-  const brl = n => (isFinite(n) ? n : 0).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
-
-  function persistReacoes(){
-    localStorage.setItem('gdo01:likes', JSON.stringify([...state.likes]));
-    localStorage.setItem('gdo01:favs', JSON.stringify([...state.favs]));
-  }
-
-  function normalizeItem(raw){
-    const id = raw[FIELD.id];
-    const titulo = raw[FIELD.titulo];
-    const preco = Number(raw[FIELD.preco]) || 0;
-    const status = (raw[FIELD.status]||'').toString().trim().toUpperCase();
-    const imagens = Array.isArray(raw[FIELD.imagens]) ? raw[FIELD.imagens] : [];
-    return {
-      id, titulo, preco, status,
-      tecnica: raw[FIELD.tecnica] || '',
-      dimensao: raw[FIELD.dimensao] || '',
-      imagem: imagens.length ? resolveImagem(imagens[0]) : '',
-      imagens: imagens.map(resolveImagem),
-      categoria: '', loja: '', url: '#', estoque: status === 'VENDIDAAA' ? false : true,
-    };
-  }
-
-  function resolveImagem(code){
-    // ajuste este padrão se seu repositório tiver outra pasta/extensão
-    return `./imagens/${code}.jpg`;
-  }
-
-  // Render ----------------------------------------------------------------------
-  function renderList(){
-    const grid = $('#grid');
-    grid.innerHTML = '';
-    for (const item of state.filtered){
-      const node = $('#tpl-card').content.firstElementChild.cloneNode(true);
-      node.dataset.id = item.id;
-      const img = $('img', node);
-      if (item.imagem) { img.src = item.imagem; img.alt = item.titulo; } else { img.alt = 'Sem imagem'; }
-      $('.title', node).textContent = item.titulo;
-      $('.now', node).textContent = brl(item.preco);
-      const was = $('.was', node); was.remove();
-      const meta = $('.meta', node);
-      meta.textContent = [item.dimensao, item.tecnica, item.estoque ? 'Em estoque' : 'Vendido'].filter(Boolean).join(' • ');
-
-      const likeBtn = $('.icon.like', node);
-      const favBtn  = $('.icon.fav', node);
-      if (state.likes.has(item.id)) likeBtn.classList.add('active'), likeBtn.setAttribute('aria-pressed','true');
-      if (state.favs.has(item.id))  favBtn.classList.add('active'),  favBtn.setAttribute('aria-pressed','true');
-
-      likeBtn.addEventListener('click', () => toggleLike(item.id, likeBtn));
-      favBtn.addEventListener('click',  () => toggleFav(item.id, favBtn));
-      $('.btn.add', node).addEventListener('click', () => addToCart(item.id));
-
-      grid.appendChild(node);
-    }
-    $('#count').textContent = `${state.filtered.length} itens`;
-  }
-
-  function renderFavbar(){
-    const bar = $('#favbar');
-    const list = $('#favlist');
-    list.innerHTML = '';
-    const selected = state.items.filter(x => state.favs.has(x.id) || state.likes.has(x.id));
-    if (!selected.length) { bar.classList.add('hidden'); return; }
-    bar.classList.remove('hidden');
-    for (const item of selected.slice(0, 30)){
-      const chip = document.createElement('button');
-      chip.className = 'favchip';
-      chip.innerHTML = `❤️ ${item.titulo}`;
-      chip.addEventListener('click', () => {
-        const el = document.querySelector(`[data-id="${item.id}"]`);
-        if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
-      });
-      list.appendChild(chip);
-    }
-  }
-
-  function updateFooter(){
-    const qtd = [...state.carrinho.values()].reduce((a,b)=>a+b,0);
-    const total = [...state.carrinho.entries()].reduce((acc,[id,q])=>{
-      const item = state.items.find(i=>i.id===id); return acc + (item ? item.preco*q : 0);
-    },0);
-    $('#carrinhoQtd').textContent = qtd;
-    $('#carrinhoTotal').textContent = brl(total);
-  }
-
-  // Interações ------------------------------------------------------------------
-  function toggleLike(id, btn){
-    if (state.likes.has(id)) { state.likes.delete(id); btn.classList.remove('active'); btn.setAttribute('aria-pressed','false'); }
-    else { state.likes.add(id); btn.classList.add('active'); btn.setAttribute('aria-pressed','true'); }
-    persistReacoes(); renderFavbar();
-  }
-  function toggleFav(id, btn){
-    if (state.favs.has(id)) { state.favs.delete(id); btn.classList.remove('active'); btn.setAttribute('aria-pressed','false'); }
-    else { state.favs.add(id); btn.classList.add('active'); btn.setAttribute('aria-pressed','true'); }
-    persistReacoes(); renderFavbar();
-  }
-  function addToCart(id){
-    const it = state.items.find(x=>x.id===id); if (!it || !it.estoque) { alert('Item indisponível.'); return; }
-    const q = state.carrinho.get(id) || 0; state.carrinho.set(id, q+1); updateFooter();
-  }
-
-  function applySearchSort(){
-    const q = $('#search').value.trim().toLowerCase();
-    const how = $('#sort').value;
-    state.filtered = state.items.filter(it => !q || it.titulo.toLowerCase().includes(q) || String(it.tecnica).toLowerCase().includes(q) || String(it.dimensao).toLowerCase().includes(q));
-    if (how === 'preco_asc') state.filtered.sort((a,b)=>a.preco-b.preco);
-    if (how === 'preco_desc') state.filtered.sort((a,b)=>b.preco-a.preco);
-    renderList(); renderFavbar();
-  }
-
-  // --------- PIX (mesmo algoritmo do central de rifas) ---------
-  function crc16_ccitt_ffff(data){
-    let crc = 0xFFFF;
-    for (let i = 0; i < data.length; i++) {
-      let x = ((crc >> 8) ^ data.charCodeAt(i)) & 0xff; x ^= x >> 4; crc = (crc << 8) ^ (x << 12) ^ (x << 5) ^ x;
-    }
-    crc &= 0xFFFF; return crc.toString(16).toUpperCase().padStart(4, '0');
-  }
-  function gerarBRCode(valor){
-    const chavePix = "betshoptv@gmail.com"; // ajuste se necessário
-    const nomeBeneficiario = "BET SHOP TV";
-    const cidadeBeneficiario = "SAO PAULO";
-    const txid = "***";
-    const nome = nomeBeneficiario.substring(0,25).toUpperCase().replace(/[^A-Z0-9 ]/g,'');
-    const cidade = cidadeBeneficiario.substring(0,15).toUpperCase().replace(/[^A-Z0-9 ]/g,'');
-    const valorFormatado = valor.toFixed(2);
-    const tlv = (id, v) => `${id}${v.length.toString().padStart(2,'0')}${v}`;
-    let payload = '000201';
-    payload += tlv('26', `0014BR.GOV.BCB.PIX01${chavePix.length.toString().padStart(2,'0')}${chavePix}`);
-    payload += '52040000'; payload += '5303986'; payload += tlv('54', valorFormatado); payload += '5802BR';
-    payload += tlv('59', nome); payload += tlv('60', cidade); payload += tlv('62', tlv('05', txid)); payload += '6304';
-    const checksum = crc16_ccitt_ffff(payload); return payload + checksum;
-  }
-
-  function ensureQRCode(text){
-    const el = $('#qrArea');
-    if (!text){ el.innerHTML = '<em class="muted">Selecione itens para gerar o QR</em>'; state.pixPayload=''; if(state.qrCode){ try{el.innerHTML='';}catch{} state.qrCode=null; } return; }
-    state.pixPayload = text; el.innerHTML = '';
-    state.qrCode = new QRCode(el, { text, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
-  }
-
-  // --------- CHECKOUT ---------
-  function abrirCheckout(){
-    const dlg = $('#dlgCheckout');
-    const total = calcularTotalNumerico();
-    $('#coTotal').textContent = brl(total);
-    const linhas = [...state.carrinho.entries()].map(([id,q]) => {
-      const it = state.items.find(x=>x.id===id); return `• ${it?.titulo || id}  ×${q} — ${brl((it?.preco||0)*q)}`;
-    });
-    const favs = state.items.filter(x=>state.favs.has(x.id)).map(x=>`❤ ${x.titulo}`);
-    const likes = state.items.filter(x=>state.likes.has(x.id)).map(x=>`👍 ${x.titulo}`);
-    $('#coItens').innerHTML = `<pre>${linhas.join('
-') || '—'}</pre><div class="hr"></div><div class="small">Favoritos: ${favs.join('; ') || '—'}<br>Likes: ${likes.join('; ') || '—'}</div>`;
-    ensureQRCode(total>0 ? gerarBRCode(total) : '');
-    dlg.showModal();
-  }
-
-  function calcularTotalNumerico(){
-    return [...state.carrinho.entries()].reduce((acc,[id,q])=>{ const it = state.items.find(x=>x.id===id); return acc + (it ? it.preco*q : 0); },0);
-  }
-
-  async function enviarCheckout(){
-    const nome = $('#coNome').value.trim();
-    const email = $('#coEmail').value.trim();
-    if (!nome || !email){ alert('Preencha nome e e-mail.'); return; }
-    const whats = $('#coWhats').value.trim();
-
-    const itens = [...state.carrinho.entries()].map(([id,q])=>{
-      const it = state.items.find(x=>x.id===id); return { id, titulo: it?.titulo||id, preco: it?.preco||0, qtd:q };
-    });
-    const total = calcularTotalNumerico();
-    const payload = {
-      origem: 'gdo01-integracao', timestamp: new Date().toISOString(),
-      cliente: { nome, email, whats },
-      itens,
-      total,
-      total_fmt: brl(total),
-      pix: { copiaecola: state.pixPayload },
-      likes: [...state.likes],
-      favs: [...state.favs],
-    };
-
-    // Envia como JSON (POST) para CHECKOUT_COMPRAS + fallback GET
-    try{
-      await fetch(GAS_CHECKOUT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload), mode:'no-cors' });
-      // Fallback GET por imagem (não bloqueia UI)
-      const qs = new URLSearchParams({ data: JSON.stringify(payload) }).toString();
-      (new Image()).src = GAS_CHECKOUT_URL + '?' + qs + '&t=' + Date.now();
-      alert('Pedido enviado! Você receberá a confirmação por e-mail/WhatsApp.');
-      $('#dlgCheckout').close();
-    }catch(err){
-      console.error(err); alert('Falha ao enviar. Tente novamente.');
-    }
-  }
-
-  // Boot ------------------------------------------------------------------------
-  async function boot(){
-    try{
-      const [pecas, rifas] = await Promise.all([
-        fetch(JSON_PECAS_URL, { cache:'no-store' }).then(r=>r.json()),
-        fetch(JSON_RIFAS_URL, { cache:'no-store' }).then(r=>r.json()).catch(()=>[]),
-      ]);
-      state.rifas = Array.isArray(rifas) ? rifas : [];
-      const rows = Array.isArray(pecas) ? pecas : [];
-      if (!rows.length) throw new Error('JSON de peças sem itens.');
-      state.items = rows.map(normalizeItem);
-      state.filtered = [...state.items];
-      applySearchSort();
-    }catch(err){
-      console.error(err);
-      $('#grid').innerHTML = `<div class="muted">Falha ao carregar dados: ${err.message}.<br>Verifique /dados/pecas.json e /dados/rifas.json.</div>`;
-    }
-
-    $('#search').addEventListener('input', applySearchSort);
-    $('#sort').addEventListener('change', applySearchSort);
-    $('#verFavoritos').addEventListener('click', () => $('#favbar').classList.toggle('hidden'));
-    $('#finalizarCompra').addEventListener('click', () => {
-      if ([...state.carrinho.values()].reduce((a,b)=>a+b,0) === 0){ alert('Adicione itens ao carrinho.'); return; }
-      abrirCheckout();
-    });
-
-    $('#btnFecharCO').addEventListener('click', ()=> $('#dlgCheckout').close());
-    $('#btnVoltarCO').addEventListener('click', ()=> $('#dlgCheckout').close());
-    $('#btnEnviarCO').addEventListener('click', enviarCheckout);
-    $('#btnCopiarPIX').addEventListener('click', async () => {
-      if (!state.pixPayload) return; const btn = $('#btnCopiarPIX');
-      try{ await navigator.clipboard.writeText(state.pixPayload); btn.textContent = 'PIX COPIADO!'; setTimeout(()=>btn.textContent='PIX COPIA e COLA', 2200); }
-      catch{ const t = document.createElement('textarea'); t.value=state.pixPayload; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); btn.textContent='PIX COPIADO!'; setTimeout(()=>btn.textContent='PIX COPIA e COLA', 2200); }
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', boot);
-  </script>
+  <div style="display:flex;gap:8px;align-items:center; margin:8px 0;">
+    <input id="nomeInput" placeholder="Nome" style="padding:8px;border:1px solid #2b2424;">
+    <input id="emailInput" placeholder="E-mail" type="email" style="padding:8px;border:1px solid #2b2424;">
+    <input id="foneInput" placeholder="Telefone (opcional)" style="padding:8px;border:1px solid #2b2424;">
+    <button id="apostaBtn" class="filter-btn">APOSTA!</button>
+  </div>
+</div>
+<div id="rifaPanel" class="panel-expanded" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center"><strong>Rifas</strong><button id="closeRifa">Fechar ✕</button></div>
+  <div style="height:12px"></div>
+  <div class="mini-list" id="rifaList"></div>
+</div>
+<div id="likesPanel" class="panel-expanded" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center"><strong>Favoritos</strong><button id="closeLikes">Fechar ✕</button></div>
+  <div style="height:12px"></div>
+  <div class="mini-list" id="likesList"></div>
+</div>
+<!-- Form oculto (igual centraldetestes) -->
+<form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
+  <input type="hidden" name="pecas" />
+  <input type="hidden" name="rifas" />
+  <input type="hidden" name="favoritas" />
+  <input type="hidden" name="total" />
+  <input type="hidden" name="nome" />
+  <input type="hidden" name="email" />
+  <input type="hidden" name="telefone" />
+  <input type="hidden" name="_captcha" value="false" />
+  <input type="hidden" name="_subject" value="Nova aposta BSTV" />
+  <input type="hidden" name="_template" value="table" />
+  <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html" />
+</form>
+<script>
+// ======= Endpoints =======
+const PECAS_JSON_URL = '/dados/pecas.json';
+const RIFAS_JSON_URL = '/dados/rifas.json';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+// ======= Estado =======
+let piecesData = []; let rifasData = [];
+let cart = []; let likes = new Set(); let selectedRifas = new Set();
+let activeGroups = new Set(); let recentDesc = true; let shuffled = false;
+// ======= Utils =======
+const formatMoney = v => 'R$ ' + Number(v||0).toFixed(2).replace('.',',');
+const byGroup = (a,b,desc=true)=>{ const [ga,na]=a.split('-'); const [gb,nb]=b.split('-'); return desc?((gb-ga)|| (nb-na)) : ((ga-gb)|| (na-nb)); };
+const groupOf = k => k.split('-')[0];
+// ======= Carregamento =======
+async function loadData(){
+  try{
+    const [pecasResp, rifasResp] = await Promise.all([ fetch(PECAS_JSON_URL), fetch(RIFAS_JSON_URL) ]);
+    const pecas = await pecasResp.json();
+    const rifas = await rifasResp.json();
+    piecesData = pecas.filter(p => String(p.status).toUpperCase() !== 'VENDIDAAA');
+    rifasData = rifas.filter(r => !r.status_rifa || String(r.status_rifa).trim() === '');
+    buildGroups();
+    renderGallery();
+    renderRifasPanel();
+    updateFooterCounts();
+  }catch(e){ console.error('Falha ao carregar JSON', e); }
+}
+// ======= Groups bar (02..08) do gdo01 =======
+function buildGroups(){
+  const wrap = document.getElementById('groupsBar'); wrap.innerHTML='';
+  const groups = [...new Set(piecesData.map(p=> (p.id_peca||'').slice(0,2)))].sort();
+  ['02','03','04','05','06','07','08'].forEach(g=>{
+    const btn = document.createElement('button'); btn.className='filter-btn'; btn.dataset.group=g; btn.textContent=g;
+    if(!groups.includes(g)) btn.classList.add('disabled');
+    btn.addEventListener('click', ()=>{ if(btn.classList.contains('disabled')) return; if(activeGroups.has(g)){activeGroups.delete(g); btn.classList.remove('active');} else { activeGroups.add(g); btn.classList.add('active'); } renderGallery(); });
+    wrap.appendChild(btn);
+  });
+  const shuffleBtn=document.createElement('button'); shuffleBtn.className='filter-btn shuffle-btn'; shuffleBtn.id='shuffleBtn'; shuffleBtn.textContent='SHUFFLE'; shuffleBtn.onclick=()=>{shuffled=!shuffled; renderGallery();}; wrap.appendChild(shuffleBtn);
+  const recentBtn=document.createElement('button'); recentBtn.className='filter-btn recent-btn'; recentBtn.id='recentBtn'; recentBtn.textContent='RECENTE 🠵'; recentBtn.onclick=(e)=>{ recentDesc=!recentDesc; e.target.innerText = recentDesc ? 'RECENTE 🠵' : 'RECENTE 🠷'; renderGallery(); }; wrap.appendChild(recentBtn);
+  const resetBtn=document.createElement('button'); resetBtn.className='filter-btn reset-btn'; resetBtn.id='resetBtn'; resetBtn.textContent='RESET'; resetBtn.onclick=()=>{ activeGroups.clear(); wrap.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); renderGallery(); }; wrap.appendChild(resetBtn);
+}
+// ======= Render da galeria (gdo01) usando pecas.json =======
+function firstThumbName(piece){ const img = (piece.imagens && piece.imagens[0]) || ''; return img; }
+function thumbURL(name){ return `img/tmb/${name}.avif`; }
+function fallbackURL(name){ return `img/fallback/${name}.jpg`; }
+function keyFromPiece(p){ const g = (p.id_peca||'').slice(0,2); const n = (p.id_peca||'').slice(3,5); return `${g}-${n}`; }
+function renderGallery(){
+  document.querySelectorAll('.col').forEach(c=>c.innerHTML='');
+  let keys = piecesData.map(p=> keyFromPiece(p));
+  if(activeGroups.size>0) keys = keys.filter(k=> activeGroups.has(groupOf(k)) );
+  keys.sort((a,b)=> byGroup(a,b,recentDesc)); if(shuffled) keys.sort(()=>Math.random()-0.5);
+  const byKey = Object.fromEntries(piecesData.map(p=>[keyFromPiece(p), p]));
+  keys.forEach((key,i)=>{
+    const piece = byKey[key]; if(!piece) return; const thumbName = firstThumbName(piece);
+    const item = document.createElement('div'); item.className='gallery-item';
+    const code = document.createElement('span'); code.className='item-code'; code.innerText=key.replace('-', '/');
+    const img = document.createElement('img'); img.className='gallery-image'; img.src = thumbURL(thumbName); img.alt=piece.titulo; img.onerror=function(){ this.onerror=null; this.src = fallbackURL(thumbName); };
+    const btn = document.createElement('button'); btn.className='add-button'; btn.innerText= cart.includes(piece.id_peca)?'REMOVER':'🛍 ADICIONAR AO CARRINHO';
+    btn.onclick=(ev)=>{ ev.stopPropagation(); toggleCart(piece.id_peca); btn.innerText= cart.includes(piece.id_peca)?'REMOVER':'🛍 ADICIONAR AO CARRINHO'; };
+    item.onclick=()=> openFeedFrom(key, byKey);
+    item.appendChild(code); item.appendChild(img); item.appendChild(btn);
+    document.getElementById('col' + (i%3)).appendChild(item);
+  });
+  updateFooterCounts();
+}
+// ======= Feed (visual de post) =======
+function openFeedFrom(startKey, byKey){
+  document.getElementById('gallery').style.display='none'; document.getElementById('feed').style.display='block'; document.getElementById('backBtn').style.display='flex';
+  const cont = document.getElementById('feedContent'); cont.innerHTML='';
+  let keys = Object.keys(byKey);
+  if(activeGroups.size>0) keys = keys.filter(k=> activeGroups.has(groupOf(k)) );
+  keys.sort((a,b)=> byGroup(a,b,recentDesc)); if(shuffled) keys.sort(()=>Math.random()-0.5);
+  keys.forEach(k=>{
+    const p = byKey[k]; const post = document.createElement('div'); post.className='post';
+    const wrap = document.createElement('div'); wrap.className='carousel-wrap'; const car = document.createElement('div'); car.className='carousel';
+    (p.imagens||[]).forEach(n=>{ const s=document.createElement('div'); s.className='slide'; const im=document.createElement('img'); im.src=thumbURL(n); im.onerror=function(){ this.onerror=null; this.src=fallbackURL(n); }; s.appendChild(im); car.appendChild(s); });
+    wrap.appendChild(car); post.appendChild(wrap);
+    const info = document.createElement('div'); info.className='piece-info';
+    const titleRow = document.createElement('div'); titleRow.className='title-row';
+    const t = document.createElement('div'); t.className='piece-title'; t.innerText = `${k.replace('-', '/')} ${p.titulo}`;
+    const pr = document.createElement('div'); pr.className='piece-price'; pr.innerText = formatMoney(p.preco);
+    titleRow.appendChild(t); titleRow.appendChild(pr); info.appendChild(titleRow);
+    const tech = document.createElement('div'); tech.className='piece-tech'; tech.innerText = p.tecnica || '';
+    const dims = document.createElement('div'); dims.className='piece-dims'; dims.innerText = p.dimensao || '';
+    info.appendChild(tech); info.appendChild(dims); post.appendChild(info);
+    const act = document.createElement('div'); act.className='actions-row';
+    const heart=document.createElement('button'); heart.className='btn no-round heart'; heart.innerText = likes.has(p.id_peca)?'♥':'♡'; if(likes.has(p.id_peca)) heart.classList.add('active'); heart.onclick=(ev)=>{ev.stopPropagation(); toggleLike(p.id_peca, heart);};
+    const cartbtn=document.createElement('button'); cartbtn.className='btn no-round'; cartbtn.innerText = cart.includes(p.id_peca)?'REMOVER':'ADICIONAR'; cartbtn.onclick=(ev)=>{ev.stopPropagation(); toggleCart(p.id_peca); cartbtn.innerText = cart.includes(p.id_peca)?'REMOVER':'ADICIONAR'; updateFooterCounts();};
+    act.appendChild(heart); act.appendChild(cartbtn); post.appendChild(act);
+    cont.appendChild(post);
+  });
+}
+// ======= Painéis (gdo01) =======
+function openPanel(id){ ['cartPanel','rifaPanel','likesPanel'].forEach(pid=>{ const el=document.getElementById(pid); if(pid===id){ el.style.display='block'; el.setAttribute('aria-hidden','false'); } else { el.style.display='none'; el.setAttribute('aria-hidden','true'); } });
+  document.getElementById('cartCountBtn').setAttribute('aria-expanded', id==='cartPanel');
+  document.getElementById('rifaCountBtn').setAttribute('aria-expanded', id==='rifaPanel');
+  document.getElementById('likesCountBtn').setAttribute('aria-expanded', id==='likesPanel');
+}
+function closePanels(){ openPanel(null); ['cartPanel','rifaPanel','likesPanel'].forEach(pid=>{document.getElementById(pid).style.display='none';}); }
+// ======= Ações =======
+function toggleCart(id){ const i=cart.indexOf(id); if(i>-1) cart.splice(i,1); else cart.push(id); updateFooterCounts(); renderCartList(); }
+function toggleLike(id, btn){ if(likes.has(id)) likes.delete(id); else likes.add(id); if(btn){btn.classList.toggle('active', likes.has(id)); btn.innerText = likes.has(id)?'♥':'♡';} updateFooterCounts(); renderLikesList(); }
+function toggleRifa(id){ if(selectedRifas.has(id)) selectedRifas.delete(id); else selectedRifas.add(id); updateFooterCounts(); renderRifasPanel(); }
+// ======= Totais =======
+function calculateRifaTotal(cnt){ if(cnt===0) return 0; return cnt%2===0 ? 25*cnt : 25*(cnt-1)+30; }
+function cartTotal(){ return cart.reduce((sum,id)=>{ const p=piecesData.find(x=>x.id_peca===id); return sum + (p? p.preco:0); },0); }
+function totalAll(){ return cartTotal() + calculateRifaTotal(selectedRifas.size); }
+function updateFooterCounts(){ document.getElementById('cartCount').innerText = cart.length; document.getElementById('likesCount').innerText = likes.size; document.getElementById('rifaCount').innerText = selectedRifas.size; document.getElementById('totalBox').innerText = formatMoney(totalAll()); document.getElementById('cartTotalBox').innerText = formatMoney(totalAll()); renderCartList(); renderLikesList(); }
+// ======= Render dos painéis =======
+function renderCartList(){ const list=document.getElementById('cartList'); list.innerHTML=''; cart.forEach(id=>{ const p=piecesData.find(x=>x.id_peca===id); if(!p) return; const el=document.createElement('div'); el.className='mini-item'; const img=document.createElement('img'); img.className='mini-thumb'; const tn=firstThumbName(p); img.src=thumbURL(tn); img.onerror=function(){ this.onerror=null; this.src=fallbackURL(tn); }; const txt=document.createElement('div'); txt.style.fontSize='.9rem'; txt.innerText=`${(p.id_peca||'').slice(0,2)}/${(p.id_peca||'').slice(3,5)} ${p.titulo}
+${formatMoney(p.preco)}`; el.appendChild(img); el.appendChild(txt); list.appendChild(el); }); }
+function renderLikesList(){ const list=document.getElementById('likesList'); list.innerHTML=''; [...likes].forEach(id=>{ const p=piecesData.find(x=>x.id_peca===id); if(!p) return; const el=document.createElement('div'); el.className='mini-item'; const img=document.createElement('img'); img.className='mini-thumb'; const tn=firstThumbName(p); img.src=thumbURL(tn); img.onerror=function(){ this.onerror=null; this.src=fallbackURL(tn); }; const txt=document.createElement('div'); txt.style.fontSize='.9rem'; txt.innerText=`${(p.id_peca||'').slice(0,2)}/${(p.id_peca||'').slice(3,5)} ${p.titulo}`; el.appendChild(img); el.appendChild(txt); list.appendChild(el); }); }
+function renderRifasPanel(){ const list=document.getElementById('rifaList'); list.innerHTML=''; rifasData.forEach(r=>{ const el=document.createElement('button'); el.className='filter-btn'; el.style.background= r.hex_rifa || r.hex || '#999'; el.style.color = '#fff'; el.style.borderColor = '#2b2424'; el.textContent = r.numero || r.id_rifa; if(selectedRifas.has(r.id_rifa)) el.classList.add('reset-btn'); el.onclick=()=>{ toggleRifa(r.id_rifa); el.classList.toggle('reset-btn', selectedRifas.has(r.id_rifa)); }; list.appendChild(el); }); }
+// ======= PIX (igual centraldetestes) =======
+function crc16_ccitt(str){ let crc=0xffff; for(let i=0;i<str.length;i++){ crc ^= str.charCodeAt(i) << 8; for(let j=0;j<8;j++){ crc = ((crc << 1) ^ ((crc & 0x8000)?0x1021:0)) & 0xffff; } } return crc; }
+function gerarBRCode(valor){ const chave='betshoptv@gmail.com'; const payloadFormatIndicator='000201'; const merchantAccountInfo='26'; const gui='0014br.gov.bcb.pix'; const key=String(chave.length).padStart(2,'0')+chave; const merchantInfo=merchantAccountInfo+gui+key; const transactionAmount=Number(valor).toFixed(2); const amount='540'+String(transactionAmount.length).padStart(2,'0')+transactionAmount; const country='5802BR'; const merchantCategoryCode='52040000'; const transactionCurrency='5303986'; const additionalDataField='62'; const referenceLabel='0012NARRATIVA'; const data=[payloadFormatIndicator, merchantInfo, merchantCategoryCode, transactionCurrency, country, amount, additionalDataField+String(referenceLabel.length).padStart(2,'0')+referenceLabel, '6304'].join(''); const crc = crc16_ccitt(data); const checksum = crc.toString(16).toUpperCase().padStart(4,'0'); return data + checksum; }
+function showPix(){ const total = totalAll(); if(total<=0){ alert('Selecione ao menos uma peça ou rifa.'); return; } const brc = gerarBRCode(total); document.getElementById('pixCode').textContent = brc; const qr = document.getElementById('qrCode'); qr.innerHTML=''; new QRCode(qr,{ text: brc, width: 200, height: 200 }); document.getElementById('pixSection').style.display='block'; document.getElementById('copiaPixBtn').style.display='inline-block'; }
+function copyPix(){ const pix = document.getElementById('pixCode').textContent; navigator.clipboard.writeText(pix).then(()=>alert('Código PIX copiado!')); }
+// ======= Envio (igual centraldetestes → FormSubmit + backup GAS) =======
+const form = document.getElementById('hiddenForm');
+function sendCheckout(){ if(cart.length===0 && selectedRifas.size===0){ alert('Selecione ao menos uma peça ou rifa.'); return; } const nome=document.getElementById('nomeInput').value.trim(); const email=document.getElementById('emailInput').value.trim(); const fone=document.getElementById('foneInput').value.trim(); const pecasStr = cart.join(','); const rifasStr = [...selectedRifas].join(','); const favsStr = [...likes].join(','); const totalValor = totalAll(); form.querySelector('input[name="pecas"]').value = pecasStr; form.querySelector('input[name="rifas"]').value = rifasStr; form.querySelector('input[name="favoritas"]').value = favsStr; form.querySelector('input[name="total"]').value = totalValor.toFixed(2); form.querySelector('input[name="nome"]').value = nome; form.querySelector('input[name="email"]').value = email; form.querySelector('input[name="telefone"]').value = fone; try{ const fd=new FormData(); fd.append('nome',nome); fd.append('email',email); fd.append('telefone',fone); fd.append('pecas',pecasStr); fd.append('rifas',rifasStr); fd.append('favoritas',favsStr); fd.append('total', totalValor.toFixed(2)); fetch(GAS_URL,{ method:'POST', body: fd, mode:'no-cors' }); const qs=new URLSearchParams([...fd.entries()]).toString(); (new Image()).src = GAS_URL + '?' + qs + '&t=' + Date.now(); }catch(err){ console.warn('Backup GAS falhou', err); } form.submit(); alert('Aposta enviada! Aguarde nossa confirmação.'); }
+// ======= Wiring =======
+document.getElementById('cartCountBtn').addEventListener('click', ()=>{ const visible = document.getElementById('cartPanel').style.display==='block'; openPanel(visible?null:'cartPanel'); });
+document.getElementById('rifaCountBtn').addEventListener('click', ()=>{ const visible = document.getElementById('rifaPanel').style.display==='block'; openPanel(visible?null:'rifaPanel'); });
+document.getElementById('likesCountBtn').addEventListener('click', ()=>{ const visible = document.getElementById('likesPanel').style.display==='block'; openPanel(visible?null:'likesPanel'); });
+document.getElementById('closeCart').addEventListener('click', ()=>closePanels());
+document.getElementById('closeRifa').addEventListener('click', ()=>closePanels());
+document.getElementById('closeLikes').addEventListener('click', ()=>closePanels());
+document.getElementById('backBtn').addEventListener('click', ()=>{ document.getElementById('feed').style.display='none'; document.getElementById('gallery').style.display='flex'; document.getElementById('backBtn').style.display='none'; closePanels(); });
+document.getElementById('gerarPixBtn').addEventListener('click', showPix);
+document.getElementById('copiaPixBtn').addEventListener('click', copyPix);
+document.getElementById('apostaBtn').addEventListener('click', sendCheckout);
+// ======= Boot =======
+(function(){ const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s.onload=loadData; document.head.appendChild(s); })();
+</script>
 </body>
 </html>
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GDO01 • Integração centraldetestes + Checkout PIX</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    :root { --radius: 16px; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --bg:#f8fafc; --brand:#111827; --rose:#ff0000; }
-    * { box-sizing: border-box; }
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", sans-serif; margin:0; color:var(--ink); background:var(--bg); }
-    header { position:sticky; top:0; z-index:50; backdrop-filter:saturate(180%) blur(10px); background:rgba(248,250,252,0.7); border-bottom:1px solid var(--line); }
-    header .bar { display:flex; gap:10px; align-items:center; padding:12px 16px; flex-wrap:wrap; }
-    .tag { font-size:12px; background:#e2e8f0; padding:4px 8px; border-radius:999px; }
-    main { max-width:1200px; margin:24px auto; padding:0 16px 120px; }
-    .actions { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin:12px 0 20px; }
-    input[type="search"], select { padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; background:white; min-width:220px; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px; }
-    .card { background:#fff; border:1px solid var(--line); border-radius: var(--radius); overflow:hidden; display:flex; flex-direction:column; box-shadow:0 1px 2px rgba(0,0,0,.04); }
-    .thumb { aspect-ratio: 4/3; background:#f1f5f9; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-    .thumb img { width:100%; height:100%; object-fit:cover; }
-    .content { padding:14px; display:flex; flex-direction:column; gap:8px; }
-    .title { font-weight:600; line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-    .price { display:flex; gap:8px; align-items:baseline; }
-    .price .now { font-size:20px; font-weight:700; color:#111827; }
-    .price .was { color:#6b7280; text-decoration: line-through; font-size:12px; }
-    .meta { color:#475569; font-size:12px; }
-    .btnrow { display:flex; gap:8px; margin-top:auto; }
-    .btn { flex:1; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; background:#fff; cursor:pointer; }
-    .btn.primary { background:#111827; color:#fff; border-color:#111827; }
-    .iconbtns { display:flex; gap:6px; }
-    .icon { border:1px solid #cbd5e1; background:#fff; border-radius:10px; padding:8px; cursor:pointer; min-width:40px; min-height:40px; display:grid; place-items:center; }
-    .icon.active { background:#111827; color:#fff; border-color:#111827; }
-    .icon svg { width:18px; height:18px; }
-    .footer { position:fixed; left:0; right:0; bottom:0; border-top:1px solid var(--line); background:#fff; padding:10px 16px; }
-    .footer .row { max-width:1200px; margin:0 auto; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-    .pill { background:#111827; color:#fff; padding:10px 14px; border-radius:999px; font-weight:600; }
-    .favbar { position:fixed; right:16px; bottom:86px; background:#0f172a; color:#fff; border-radius:14px; padding:10px 12px; box-shadow:0 8px 30px rgba(2,6,23,.3); max-width: 60vw; }
-    .favbar h4 { margin:0 0 8px; font-size:13px; font-weight:700; letter-spacing:.02em; text-transform:uppercase; opacity:.9; }
-    .favlist { display:flex; gap:8px; overflow:auto; }
-    .favchip { background:#111827; border:1px solid #475569; white-space:nowrap; padding:6px 10px; border-radius:999px; font-size:12px; display:flex; align-items:center; gap:6px; }
-    .muted { color:#64748b; }
-    .hidden { display:none !important; }
-    .sr { position:absolute; left:-9999px; }
-
-    /* CHECKOUT */
-    dialog.checkout { width:min(860px, 96vw); border:1px solid var(--line); border-radius:16px; padding:0; }
-    .co-head { padding:14px 16px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
-    .co-body { display:grid; grid-template-columns: 1.2fr .8fr; gap:0; min-height: 420px; }
-    .co-col { padding:16px; }
-    .co-aside { border-left:1px solid var(--line); background:#f9fafb; }
-    .row { display:flex; gap:10px; margin:.5rem 0; }
-    .row input { flex:1; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; background:white; }
-    .hr { border-top:1px dashed #cbd5e1; margin:12px 0; }
-    .qr { background:#fff; border:1px dashed #cbd5e1; border-radius:12px; padding:10px; min-height: 190px; display:flex; align-items:center; justify-content:center; }
-    .btn.copy { width:100%; }
-    .co-foot { padding:12px 16px; border-top:1px solid var(--line); display:flex; gap:10px; justify-content:flex-end; }
-    .small { font-size:12px; }
-
-    @media (max-width: 860px){ .co-body{ grid-template-columns: 1fr; } .co-aside{ border-left:none; border-top:1px solid var(--line);} }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BSTV — GDO01 integrado à Central</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{ --bg:#bebab0; --text:#2b2424; --accent:#ff0000; --white:#bebab0; --footer-h: clamp(46px,6vh,64px); }
+*{box-sizing:border-box}
+body{ margin:0; font-family:'Roboto Condensed',sans-serif; background:var(--bg); color:var(--text); padding:1vw 1vw 6.2rem; -webkit-font-smoothing:antialiased; }
+a{color:var(--accent);} h1{font-size:1.2rem;margin:0 0 1rem}
+/* gallery layout (3 col) */
+.container{max-width:1200px;margin:0 auto}
+.filter-bar{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:16px;}
+.filter-btn{padding:6px 12px;border:2px solid var(--accent);background:transparent;color:var(--accent);font-weight:700;cursor:pointer}
+.filter-btn.disabled{border:2px dashed #fff;background:#fff;color:var(--text);cursor:default}
+.shuffle-btn{border:2px dashed var(--accent)} .reset-btn{border:2px solid #2b2424;background:#2b2424;color:#fff} .recent-btn{border:2px solid var(--accent)}
+.gallery-container{display:flex;gap:clamp(4px,1.2vw,24px);max-width:1200px;margin:0 auto}
+.col{flex:1 1 calc(33.333% - 1.333vw); display:flex; flex-direction:column; gap:24px; max-width:calc((min(1200px,100vw)-4vw)/3);} 
+/* item */
+.gallery-item{display:flex;flex-direction:column; background:var(--bg); cursor:pointer; position:relative}
+.gallery-image{width:100%;height:auto;display:block;object-fit:cover}
+.item-code{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);font-family:'Roboto Mono',monospace;border:2px solid #2b2424;padding:.35vw .9vw;background:var(--bg);font-weight:700;font-size:clamp(.7rem,1.6vw,1.05rem)}
+.add-button{border:2px solid var(--accent);background:transparent;color:var(--accent);font-weight:700;padding:8px;text-transform:uppercase;cursor:pointer;margin-top:12px;margin-bottom:24px;width:100%;}
+/* FEED (post) */
+#feed { display: none; max-width: 1200px; margin: 0 auto 8rem; }
+.carousel { display: flex; gap: 24px; overflow-x: auto; align-items: center; }
+.carousel::-webkit-scrollbar { height: 8px; } .carousel::-webkit-scrollbar-thumb { background-color: #ff0000; } .carousel::-webkit-scrollbar-track { background: #bebab0; }
+.post{margin-bottom:28px}
+.carousel-wrap{border:2px solid #2b2424;padding:12px}
+.slide{flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+.slide img{max-width:100%;max-height: 88vh; object-fit:contain}
+.piece-info{padding:12px 8px;display:flex;flex-direction:column;gap:6px}
+.title-row{display:flex;justify-content:space-between;align-items:center}
+.piece-title,.piece-price{font-weight:700;font-size:clamp(1rem,2.2vw,1.1rem)}
+.piece-tech,.piece-dims{font-size:clamp(.85rem,1.6vw,1rem)}
+.actions-row{display:flex;gap:12px;padding:8px 12px}
+.btn{height:44px;border:2px solid var(--accent);background:transparent;color:var(--accent);font-weight:700;cursor:pointer;padding:0 14px}
+.btn.no-round{border-radius:0} .heart.active{background:var(--accent);color:var(--white)}
+/* footer / BARRA SHOPPING */
+.footer-bar{position:fixed;left:0;right:0;bottom:0;background:#2b2424;color:var(--white);height:var(--footer-h);display:flex;align-items:center;justify-content:space-between;padding:0 27vw;z-index:9999;font-weight:700}
+.footer-left{display:flex;align-items:center;gap:8px}
+.footer-dot{width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.footer-dot svg{fill:var(--white)}
+.footer-panels{display:flex;gap:8px;align-items:center}
+.panel-btn{background:transparent;border:0;color:var(--white);font-weight:700;cursor:pointer;position:relative;padding:8px}
+/* expanded panel */
+.panel-expanded{position:fixed;left:0;right:0;bottom:var(--footer-h);background:#bebab0;max-height:52vh;border-top:1px solid #2b2424;display:none;padding:0 27vw;z-index:9998;overflow:hidden}
+.panel-row{display:flex;align-items:center;gap:12px;height:100%}
+.mini-list{display:flex;gap:12px;overflow-x:auto;align-items:center;padding:8px 4px}
+.mini-item{flex:0 0 auto;display:flex;gap:8px;align-items:center;border:1px solid #2b2424;padding:6px;background:transparent}
+.mini-thumb{width:42px;height:50px;object-fit:cover; border:1px solid #2b2424}
+.mini-list::-webkit-scrollbar{height:12px}
+.mini-list::-webkit-scrollbar-thumb{background-color:#bebab0;border:12px solid #2b2424;border-top:0;border-bottom:0;border-left:12px solid #2b2424}
+.mini-list::-webkit-scrollbar-track{background:#bebab0}
+.total-box{padding:6px 10px;background:transparent;color:var(--white);font-weight:700}
+@media(max-width:768px){ .col{flex-basis:calc(33.333% - 8px)} .mini-thumb{width:33px;height:42px} .footer-bar{padding:0 12px} .panel-expanded{padding:0 12px;} .slide img{max-width:100%;max-height:66vh} }
+/* PIX area inside Cart Panel */
+.pix-area{border:2px dashed #2b2424; padding:10px; margin:10px 0; background:#fff}
+.pix-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pix-code{word-break:break-all; font-family:'Roboto Mono',monospace; font-size:.9rem; background:#fff; padding:6px; border:1px solid #2b2424}
+</style>
 </head>
 <body>
-  <header>
-    <div class="bar">
-      <strong>Integração</strong>
-      <span class="tag">centraldetestes → gdo01</span>
-      <span class="tag" id="testeStatus">Checkout com PIX dinâmico</span>
-      <span class="muted">Fonte: /dados/pecas.json • /dados/rifas.json</span>
+<div class="container">
+  <h1>Galeria de Ofertas — BSTV</h1>
+  <div class="filter-bar" id="groupsBar"></div>
+  <div id="gallery" class="gallery-container">
+    <div class="col" id="col0"></div><div class="col" id="col1"></div><div class="col" id="col2"></div>
+  </div>
+  <div id="feed"><div id="feedContent"></div></div>
+</div>
+<!-- BARRA SHOPPING -->
+<div class="footer-bar" id="footerBar" role="region" aria-label="Barra de compras">
+  <div class="footer-left">
+    <div id="backBtn" class="footer-dot" title="Voltar" aria-hidden="true" style="display:none;">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
     </div>
-  </header>
-
-  <main>
-    <div class="actions">
-      <input id="search" type="search" placeholder="Buscar peças…" />
-      <select id="sort">
-        <option value="relevancia">Ordenar por: Relevância</option>
-        <option value="preco_asc">Preço: menor → maior</option>
-        <option value="preco_desc">Preço: maior → menor</option>
-      </select>
-      <span id="count" class="muted"></span>
+    <div class="footer-dot" id="cartCountBtn" title="Carrinho" aria-expanded="false" aria-controls="cartPanel"> 🛍 <span id="cartCount" style="margin-left:6px">0</span></div>
+    <div class="footer-dot" id="rifaCountBtn" title="Rifas" aria-expanded="false" aria-controls="rifaPanel"> 🎟 <span id="rifaCount" style="margin-left:6px">0</span></div>
+    <div class="footer-dot" id="likesCountBtn" title="Favoritos" aria-expanded="false" aria-controls="likesPanel"> ♥ <span id="likesCount" style="margin-left:6px">0</span></div>
+  </div>
+  <div class="footer-panels">
+    <div class="total-box" id="totalBox">R$ 0,00</div>
+    <button class="panel-btn" id="openCartBtn" aria-controls="cartPanel">Carrinho</button>
+    <button class="panel-btn" id="openRifaBtn" aria-controls="rifaPanel">Rifa</button>
+    <button class="panel-btn" id="openLikesBtn" aria-controls="likesPanel">Favoritos</button>
+  </div>
+</div>
+<!-- expanded panels -->
+<div id="cartPanel" class="panel-expanded" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <strong>Carrinho</strong>
+    <button id="closeCart">✕</button>
+  </div>
+  <div style="height:12px"></div>
+  <div class="mini-list" id="cartList" aria-live="polite"></div>
+  <!-- PIX (centraldetestes) -->
+  <div class="pix-area">
+    <div class="pix-row">
+      <button class="filter-btn recent-btn" id="gerarPixBtn">GERAR PIX</button>
+      <button class="filter-btn reset-btn" id="copiaPixBtn" style="display:none;">Copiar código PIX</button>
+      <div class="total-box" id="cartTotalBox">R$ 0,00</div>
     </div>
-
-    <section id="grid" class="grid" aria-live="polite"></section>
-  </main>
-
-  <!-- Rodapé geral de compras (gdo01) -->
-  <div class="footer" id="rodapeCompras">
-    <div class="row">
-      <div>
-        <strong id="carrinhoQtd">0</strong> itens • <span>Total:</span> <span id="carrinhoTotal" class="pill">R$ 0,00</span>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <button class="btn" id="verFavoritos">Ver favoritos</button>
-        <button class="btn primary" id="finalizarCompra">Finalizar compra</button>
-      </div>
+    <div id="pixSection" style="display:none; margin-top:8px;">
+      <div id="pixCode" class="pix-code"></div>
+      <div id="qrCode" style="margin-top:8px"></div>
     </div>
   </div>
-
-  <!-- Barra de favoritos/likes -->
-  <aside class="favbar hidden" id="favbar">
-    <h4>Selecionados</h4>
-    <div id="favlist" class="favlist"></div>
-  </aside>
-
-  <!-- CHECKOUT MODAL -->
-  <dialog class="checkout" id="dlgCheckout">
-    <div class="co-head">
-      <strong>Fechamento de compra</strong>
-      <button class="btn" id="btnFecharCO">Fechar</button>
-    </div>
-    <div class="co-body">
-      <div class="co-col">
-        <h3>Seus dados</h3>
-        <div class="row"><input id="coNome" placeholder="Nome" required><input id="coEmail" type="email" placeholder="E-mail" required></div>
-        <div class="row"><input id="coWhats" placeholder="Telefone / WhatsApp"></div>
-        <div class="hr"></div>
-        <h3>Itens</h3>
-        <div id="coItens" class="small"></div>
-      </div>
-      <div class="co-col co-aside">
-        <h3>Pagamento (PIX)</h3>
-        <div class="qr" id="qrArea"><em class="muted">Geraremos o QR ao lado quando houver itens</em></div>
-        <div class="row"><button class="btn copy" id="btnCopiarPIX">PIX COPIA e COLA</button></div>
-        <div class="small muted">Valor: <strong id="coTotal">R$ 0,00</strong></div>
-      </div>
-    </div>
-    <div class="co-foot">
-      <button class="btn" id="btnVoltarCO">Voltar</button>
-      <button class="btn primary" id="btnEnviarCO">Enviar pedido</button>
-    </div>
-  </dialog>
-
-  <template id="tpl-card">
-    <article class="card" data-id="">
-      <div class="thumb">
-        <img alt="" loading="lazy" />
-      </div>
-      <div class="content">
-        <div class="title"></div>
-        <div class="price">
-          <span class="now"></span>
-          <span class="was"></span>
-        </div>
-        <div class="meta"></div>
-        <div class="btnrow">
-          <button class="btn add">Adicionar</button>
-          <div class="iconbtns">
-            <button class="icon like" title="Like" aria-pressed="false" aria-label="Dar like">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-6 0v4"></path><path d="M5 15h8a4 4 0 0 0 4-4 2 2 0 0 0-2-2H7l-2 6z"></path></svg>
-            </button>
-            <button class="icon fav" title="Favorito" aria-pressed="false" aria-label="Favoritar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1 7.8 7.8 7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </article>
-  </template>
-
-  <script>
-  /**
-   * ⚙️ CONFIG
-   */
-  const JSON_PECAS_URL = './dados/pecas.json';
-  const JSON_RIFAS_URL = './dados/rifas.json';
-  const GAS_CHECKOUT_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
-
-  // Mapeamento: pecas.json
-  // Campos reais: id_peca, titulo, preco, status, tecnica, dimensao, imagens (array)
-  const FIELD = {
-    id: 'id_peca',
-    titulo: 'titulo',
-    preco: 'preco',
-    status: 'status',
-    tecnica: 'tecnica',
-    dimensao: 'dimensao',
-    imagens: 'imagens',
-  };
-
-  // Estado ----------------------------------------------------------------------
-  const state = {
-    items: [],      // itens normalizados
-    filtered: [],   // itens após busca/ordenação
-    carrinho: new Map(), // id -> qtd
-    likes: new Set(JSON.parse(localStorage.getItem('gdo01:likes') || '[]')),
-    favs: new Set(JSON.parse(localStorage.getItem('gdo01:favs') || '[]')),
-    rifas: [],      // cores / info complementares
-    pixPayload: '',
-    qrCode: null,
-  };
-
-  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
-  const $ = (sel, root=document) => root.querySelector(sel);
-  const brl = n => (isFinite(n) ? n : 0).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
-
-  function persistReacoes(){
-    localStorage.setItem('gdo01:likes', JSON.stringify([...state.likes]));
-    localStorage.setItem('gdo01:favs', JSON.stringify([...state.favs]));
-  }
-
-  function normalizeItem(raw){
-    const id = raw[FIELD.id];
-    const titulo = raw[FIELD.titulo];
-    const preco = Number(raw[FIELD.preco]) || 0;
-    const status = (raw[FIELD.status]||'').toString().trim().toUpperCase();
-    const imagens = Array.isArray(raw[FIELD.imagens]) ? raw[FIELD.imagens] : [];
-    return {
-      id, titulo, preco, status,
-      tecnica: raw[FIELD.tecnica] || '',
-      dimensao: raw[FIELD.dimensao] || '',
-      imagem: imagens.length ? resolveImagem(imagens[0]) : '',
-      imagens: imagens.map(resolveImagem),
-      categoria: '', loja: '', url: '#', estoque: status === 'VENDIDAAA' ? false : true,
-    };
-  }
-
-  function resolveImagem(code){
-    // ajuste este padrão se seu repositório tiver outra pasta/extensão
-    return `./imagens/${code}.jpg`;
-  }
-
-  // Render ----------------------------------------------------------------------
-  function renderList(){
-    const grid = $('#grid');
-    grid.innerHTML = '';
-    for (const item of state.filtered){
-      const node = $('#tpl-card').content.firstElementChild.cloneNode(true);
-      node.dataset.id = item.id;
-      const img = $('img', node);
-      if (item.imagem) { img.src = item.imagem; img.alt = item.titulo; } else { img.alt = 'Sem imagem'; }
-      $('.title', node).textContent = item.titulo;
-      $('.now', node).textContent = brl(item.preco);
-      const was = $('.was', node); was.remove();
-      const meta = $('.meta', node);
-      meta.textContent = [item.dimensao, item.tecnica, item.estoque ? 'Em estoque' : 'Vendido'].filter(Boolean).join(' • ');
-
-      const likeBtn = $('.icon.like', node);
-      const favBtn  = $('.icon.fav', node);
-      if (state.likes.has(item.id)) likeBtn.classList.add('active'), likeBtn.setAttribute('aria-pressed','true');
-      if (state.favs.has(item.id))  favBtn.classList.add('active'),  favBtn.setAttribute('aria-pressed','true');
-
-      likeBtn.addEventListener('click', () => toggleLike(item.id, likeBtn));
-      favBtn.addEventListener('click',  () => toggleFav(item.id, favBtn));
-      $('.btn.add', node).addEventListener('click', () => addToCart(item.id));
-
-      grid.appendChild(node);
-    }
-    $('#count').textContent = `${state.filtered.length} itens`;
-  }
-
-  function renderFavbar(){
-    const bar = $('#favbar');
-    const list = $('#favlist');
-    list.innerHTML = '';
-    const selected = state.items.filter(x => state.favs.has(x.id) || state.likes.has(x.id));
-    if (!selected.length) { bar.classList.add('hidden'); return; }
-    bar.classList.remove('hidden');
-    for (const item of selected.slice(0, 30)){
-      const chip = document.createElement('button');
-      chip.className = 'favchip';
-      chip.innerHTML = `❤️ ${item.titulo}`;
-      chip.addEventListener('click', () => {
-        const el = document.querySelector(`[data-id="${item.id}"]`);
-        if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
-      });
-      list.appendChild(chip);
-    }
-  }
-
-  function updateFooter(){
-    const qtd = [...state.carrinho.values()].reduce((a,b)=>a+b,0);
-    const total = [...state.carrinho.entries()].reduce((acc,[id,q])=>{
-      const item = state.items.find(i=>i.id===id); return acc + (item ? item.preco*q : 0);
-    },0);
-    $('#carrinhoQtd').textContent = qtd;
-    $('#carrinhoTotal').textContent = brl(total);
-  }
-
-  // Interações ------------------------------------------------------------------
-  function toggleLike(id, btn){
-    if (state.likes.has(id)) { state.likes.delete(id); btn.classList.remove('active'); btn.setAttribute('aria-pressed','false'); }
-    else { state.likes.add(id); btn.classList.add('active'); btn.setAttribute('aria-pressed','true'); }
-    persistReacoes(); renderFavbar();
-  }
-  function toggleFav(id, btn){
-    if (state.favs.has(id)) { state.favs.delete(id); btn.classList.remove('active'); btn.setAttribute('aria-pressed','false'); }
-    else { state.favs.add(id); btn.classList.add('active'); btn.setAttribute('aria-pressed','true'); }
-    persistReacoes(); renderFavbar();
-  }
-  function addToCart(id){
-    const it = state.items.find(x=>x.id===id); if (!it || !it.estoque) { alert('Item indisponível.'); return; }
-    const q = state.carrinho.get(id) || 0; state.carrinho.set(id, q+1); updateFooter();
-  }
-
-  function applySearchSort(){
-    const q = $('#search').value.trim().toLowerCase();
-    const how = $('#sort').value;
-    state.filtered = state.items.filter(it => !q || it.titulo.toLowerCase().includes(q) || String(it.tecnica).toLowerCase().includes(q) || String(it.dimensao).toLowerCase().includes(q));
-    if (how === 'preco_asc') state.filtered.sort((a,b)=>a.preco-b.preco);
-    if (how === 'preco_desc') state.filtered.sort((a,b)=>b.preco-a.preco);
-    renderList(); renderFavbar();
-  }
-
-  // --------- PIX (mesmo algoritmo do central de rifas) ---------
-  function crc16_ccitt_ffff(data){
-    let crc = 0xFFFF;
-    for (let i = 0; i < data.length; i++) {
-      let x = ((crc >> 8) ^ data.charCodeAt(i)) & 0xff; x ^= x >> 4; crc = (crc << 8) ^ (x << 12) ^ (x << 5) ^ x;
-    }
-    crc &= 0xFFFF; return crc.toString(16).toUpperCase().padStart(4, '0');
-  }
-  function gerarBRCode(valor){
-    const chavePix = "betshoptv@gmail.com"; // ajuste se necessário
-    const nomeBeneficiario = "BET SHOP TV";
-    const cidadeBeneficiario = "SAO PAULO";
-    const txid = "***";
-    const nome = nomeBeneficiario.substring(0,25).toUpperCase().replace(/[^A-Z0-9 ]/g,'');
-    const cidade = cidadeBeneficiario.substring(0,15).toUpperCase().replace(/[^A-Z0-9 ]/g,'');
-    const valorFormatado = valor.toFixed(2);
-    const tlv = (id, v) => `${id}${v.length.toString().padStart(2,'0')}${v}`;
-    let payload = '000201';
-    payload += tlv('26', `0014BR.GOV.BCB.PIX01${chavePix.length.toString().padStart(2,'0')}${chavePix}`);
-    payload += '52040000'; payload += '5303986'; payload += tlv('54', valorFormatado); payload += '5802BR';
-    payload += tlv('59', nome); payload += tlv('60', cidade); payload += tlv('62', tlv('05', txid)); payload += '6304';
-    const checksum = crc16_ccitt_ffff(payload); return payload + checksum;
-  }
-
-  function ensureQRCode(text){
-    const el = $('#qrArea');
-    if (!text){ el.innerHTML = '<em class="muted">Selecione itens para gerar o QR</em>'; state.pixPayload=''; if(state.qrCode){ try{el.innerHTML='';}catch{} state.qrCode=null; } return; }
-    state.pixPayload = text; el.innerHTML = '';
-    state.qrCode = new QRCode(el, { text, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
-  }
-
-  // --------- CHECKOUT ---------
-  function abrirCheckout(){
-    const dlg = $('#dlgCheckout');
-    const total = calcularTotalNumerico();
-    $('#coTotal').textContent = brl(total);
-    const linhas = [...state.carrinho.entries()].map(([id,q]) => {
-      const it = state.items.find(x=>x.id===id); return `• ${it?.titulo || id}  ×${q} — ${brl((it?.preco||0)*q)}`;
-    });
-    const favs = state.items.filter(x=>state.favs.has(x.id)).map(x=>`❤ ${x.titulo}`);
-    const likes = state.items.filter(x=>state.likes.has(x.id)).map(x=>`👍 ${x.titulo}`);
-    $('#coItens').innerHTML = `<pre>${linhas.join('
-') || '—'}</pre><div class="hr"></div><div class="small">Favoritos: ${favs.join('; ') || '—'}<br>Likes: ${likes.join('; ') || '—'}</div>`;
-    ensureQRCode(total>0 ? gerarBRCode(total) : '');
-    dlg.showModal();
-  }
-
-  function calcularTotalNumerico(){
-    return [...state.carrinho.entries()].reduce((acc,[id,q])=>{ const it = state.items.find(x=>x.id===id); return acc + (it ? it.preco*q : 0); },0);
-  }
-
-  async function enviarCheckout(){
-    const nome = $('#coNome').value.trim();
-    const email = $('#coEmail').value.trim();
-    if (!nome || !email){ alert('Preencha nome e e-mail.'); return; }
-    const whats = $('#coWhats').value.trim();
-
-    const itens = [...state.carrinho.entries()].map(([id,q])=>{
-      const it = state.items.find(x=>x.id===id); return { id, titulo: it?.titulo||id, preco: it?.preco||0, qtd:q };
-    });
-    const total = calcularTotalNumerico();
-    const payload = {
-      origem: 'gdo01-integracao', timestamp: new Date().toISOString(),
-      cliente: { nome, email, whats },
-      itens,
-      total,
-      total_fmt: brl(total),
-      pix: { copiaecola: state.pixPayload },
-      likes: [...state.likes],
-      favs: [...state.favs],
-    };
-
-    // Envia como JSON (POST) para CHECKOUT_COMPRAS + fallback GET
-    try{
-      await fetch(GAS_CHECKOUT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload), mode:'no-cors' });
-      // Fallback GET por imagem (não bloqueia UI)
-      const qs = new URLSearchParams({ data: JSON.stringify(payload) }).toString();
-      (new Image()).src = GAS_CHECKOUT_URL + '?' + qs + '&t=' + Date.now();
-      alert('Pedido enviado! Você receberá a confirmação por e-mail/WhatsApp.');
-      $('#dlgCheckout').close();
-    }catch(err){
-      console.error(err); alert('Falha ao enviar. Tente novamente.');
-    }
-  }
-
-  // Boot ------------------------------------------------------------------------
-  async function boot(){
-    try{
-      const [pecas, rifas] = await Promise.all([
-        fetch(JSON_PECAS_URL, { cache:'no-store' }).then(r=>r.json()),
-        fetch(JSON_RIFAS_URL, { cache:'no-store' }).then(r=>r.json()).catch(()=>[]),
-      ]);
-      state.rifas = Array.isArray(rifas) ? rifas : [];
-      const rows = Array.isArray(pecas) ? pecas : [];
-      if (!rows.length) throw new Error('JSON de peças sem itens.');
-      state.items = rows.map(normalizeItem);
-      state.filtered = [...state.items];
-      applySearchSort();
-    }catch(err){
-      console.error(err);
-      $('#grid').innerHTML = `<div class="muted">Falha ao carregar dados: ${err.message}.<br>Verifique /dados/pecas.json e /dados/rifas.json.</div>`;
-    }
-
-    $('#search').addEventListener('input', applySearchSort);
-    $('#sort').addEventListener('change', applySearchSort);
-    $('#verFavoritos').addEventListener('click', () => $('#favbar').classList.toggle('hidden'));
-    $('#finalizarCompra').addEventListener('click', () => {
-      if ([...state.carrinho.values()].reduce((a,b)=>a+b,0) === 0){ alert('Adicione itens ao carrinho.'); return; }
-      abrirCheckout();
-    });
-
-    $('#btnFecharCO').addEventListener('click', ()=> $('#dlgCheckout').close());
-    $('#btnVoltarCO').addEventListener('click', ()=> $('#dlgCheckout').close());
-    $('#btnEnviarCO').addEventListener('click', enviarCheckout);
-    $('#btnCopiarPIX').addEventListener('click', async () => {
-      if (!state.pixPayload) return; const btn = $('#btnCopiarPIX');
-      try{ await navigator.clipboard.writeText(state.pixPayload); btn.textContent = 'PIX COPIADO!'; setTimeout(()=>btn.textContent='PIX COPIA e COLA', 2200); }
-      catch{ const t = document.createElement('textarea'); t.value=state.pixPayload; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); btn.textContent='PIX COPIADO!'; setTimeout(()=>btn.textContent='PIX COPIA e COLA', 2200); }
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', boot);
-  </script>
+  <div style="display:flex;gap:8px;align-items:center; margin:8px 0;">
+    <input id="nomeInput" placeholder="Nome" style="padding:8px;border:1px solid #2b2424;">
+    <input id="emailInput" placeholder="E-mail" type="email" style="padding:8px;border:1px solid #2b2424;">
+    <input id="foneInput" placeholder="Telefone (opcional)" style="padding:8px;border:1px solid #2b2424;">
+    <button id="apostaBtn" class="filter-btn">APOSTA!</button>
+  </div>
+</div>
+<div id="rifaPanel" class="panel-expanded" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center"><strong>Rifas</strong><button id="closeRifa">Fechar ✕</button></div>
+  <div style="height:12px"></div>
+  <div class="mini-list" id="rifaList"></div>
+</div>
+<div id="likesPanel" class="panel-expanded" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center"><strong>Favoritos</strong><button id="closeLikes">Fechar ✕</button></div>
+  <div style="height:12px"></div>
+  <div class="mini-list" id="likesList"></div>
+</div>
+<!-- Form oculto (igual centraldetestes) -->
+<form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
+  <input type="hidden" name="pecas" />
+  <input type="hidden" name="rifas" />
+  <input type="hidden" name="favoritas" />
+  <input type="hidden" name="total" />
+  <input type="hidden" name="nome" />
+  <input type="hidden" name="email" />
+  <input type="hidden" name="telefone" />
+  <input type="hidden" name="_captcha" value="false" />
+  <input type="hidden" name="_subject" value="Nova aposta BSTV" />
+  <input type="hidden" name="_template" value="table" />
+  <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html" />
+</form>
+<script>
+// ======= Endpoints =======
+const PECAS_JSON_URL = '/dados/pecas.json';
+const RIFAS_JSON_URL = '/dados/rifas.json';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+// ======= Estado =======
+let piecesData = []; let rifasData = [];
+let cart = []; let likes = new Set(); let selectedRifas = new Set();
+let activeGroups = new Set(); let recentDesc = true; let shuffled = false;
+// ======= Utils =======
+const formatMoney = v => 'R$ ' + Number(v||0).toFixed(2).replace('.',',');
+const byGroup = (a,b,desc=true)=>{ const [ga,na]=a.split('-'); const [gb,nb]=b.split('-'); return desc?((gb-ga)|| (nb-na)) : ((ga-gb)|| (na-nb)); };
+const groupOf = k => k.split('-')[0];
+// ======= Carregamento =======
+async function loadData(){
+  try{
+    const [pecasResp, rifasResp] = await Promise.all([ fetch(PECAS_JSON_URL), fetch(RIFAS_JSON_URL) ]);
+    const pecas = await pecasResp.json();
+    const rifas = await rifasResp.json();
+    piecesData = pecas.filter(p => String(p.status).toUpperCase() !== 'VENDIDAAA');
+    rifasData = rifas.filter(r => !r.status_rifa || String(r.status_rifa).trim() === '');
+    buildGroups();
+    renderGallery();
+    renderRifasPanel();
+    updateFooterCounts();
+  }catch(e){ console.error('Falha ao carregar JSON', e); }
+}
+// ======= Groups bar (02..08) do gdo01 =======
+function buildGroups(){
+  const wrap = document.getElementById('groupsBar'); wrap.innerHTML='';
+  const groups = [...new Set(piecesData.map(p=> (p.id_peca||'').slice(0,2)))].sort();
+  ['02','03','04','05','06','07','08'].forEach(g=>{
+    const btn = document.createElement('button'); btn.className='filter-btn'; btn.dataset.group=g; btn.textContent=g;
+    if(!groups.includes(g)) btn.classList.add('disabled');
+    btn.addEventListener('click', ()=>{ if(btn.classList.contains('disabled')) return; if(activeGroups.has(g)){activeGroups.delete(g); btn.classList.remove('active');} else { activeGroups.add(g); btn.classList.add('active'); } renderGallery(); });
+    wrap.appendChild(btn);
+  });
+  const shuffleBtn=document.createElement('button'); shuffleBtn.className='filter-btn shuffle-btn'; shuffleBtn.id='shuffleBtn'; shuffleBtn.textContent='SHUFFLE'; shuffleBtn.onclick=()=>{shuffled=!shuffled; renderGallery();}; wrap.appendChild(shuffleBtn);
+  const recentBtn=document.createElement('button'); recentBtn.className='filter-btn recent-btn'; recentBtn.id='recentBtn'; recentBtn.textContent='RECENTE 🠵'; recentBtn.onclick=(e)=>{ recentDesc=!recentDesc; e.target.innerText = recentDesc ? 'RECENTE 🠵' : 'RECENTE 🠷'; renderGallery(); }; wrap.appendChild(recentBtn);
+  const resetBtn=document.createElement('button'); resetBtn.className='filter-btn reset-btn'; resetBtn.id='resetBtn'; resetBtn.textContent='RESET'; resetBtn.onclick=()=>{ activeGroups.clear(); wrap.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); renderGallery(); }; wrap.appendChild(resetBtn);
+}
+// ======= Render da galeria (gdo01) usando pecas.json =======
+function firstThumbName(piece){ const img = (piece.imagens && piece.imagens[0]) || ''; return img; }
+function thumbURL(name){ return `img/tmb/${name}.avif`; }
+function fallbackURL(name){ return `img/fallback/${name}.jpg`; }
+function keyFromPiece(p){ const g = (p.id_peca||'').slice(0,2); const n = (p.id_peca||'').slice(3,5); return `${g}-${n}`; }
+function renderGallery(){
+  document.querySelectorAll('.col').forEach(c=>c.innerHTML='');
+  let keys = piecesData.map(p=> keyFromPiece(p));
+  if(activeGroups.size>0) keys = keys.filter(k=> activeGroups.has(groupOf(k)) );
+  keys.sort((a,b)=> byGroup(a,b,recentDesc)); if(shuffled) keys.sort(()=>Math.random()-0.5);
+  const byKey = Object.fromEntries(piecesData.map(p=>[keyFromPiece(p), p]));
+  keys.forEach((key,i)=>{
+    const piece = byKey[key]; if(!piece) return; const thumbName = firstThumbName(piece);
+    const item = document.createElement('div'); item.className='gallery-item';
+    const code = document.createElement('span'); code.className='item-code'; code.innerText=key.replace('-', '/');
+    const img = document.createElement('img'); img.className='gallery-image'; img.src = thumbURL(thumbName); img.alt=piece.titulo; img.onerror=function(){ this.onerror=null; this.src = fallbackURL(thumbName); };
+    const btn = document.createElement('button'); btn.className='add-button'; btn.innerText= cart.includes(piece.id_peca)?'REMOVER':'🛍 ADICIONAR AO CARRINHO';
+    btn.onclick=(ev)=>{ ev.stopPropagation(); toggleCart(piece.id_peca); btn.innerText= cart.includes(piece.id_peca)?'REMOVER':'🛍 ADICIONAR AO CARRINHO'; };
+    item.onclick=()=> openFeedFrom(key, byKey);
+    item.appendChild(code); item.appendChild(img); item.appendChild(btn);
+    document.getElementById('col' + (i%3)).appendChild(item);
+  });
+  updateFooterCounts();
+}
+// ======= Feed (visual de post) =======
+function openFeedFrom(startKey, byKey){
+  document.getElementById('gallery').style.display='none'; document.getElementById('feed').style.display='block'; document.getElementById('backBtn').style.display='flex';
+  const cont = document.getElementById('feedContent'); cont.innerHTML='';
+  let keys = Object.keys(byKey);
+  if(activeGroups.size>0) keys = keys.filter(k=> activeGroups.has(groupOf(k)) );
+  keys.sort((a,b)=> byGroup(a,b,recentDesc)); if(shuffled) keys.sort(()=>Math.random()-0.5);
+  keys.forEach(k=>{
+    const p = byKey[k]; const post = document.createElement('div'); post.className='post';
+    const wrap = document.createElement('div'); wrap.className='carousel-wrap'; const car = document.createElement('div'); car.className='carousel';
+    (p.imagens||[]).forEach(n=>{ const s=document.createElement('div'); s.className='slide'; const im=document.createElement('img'); im.src=thumbURL(n); im.onerror=function(){ this.onerror=null; this.src=fallbackURL(n); }; s.appendChild(im); car.appendChild(s); });
+    wrap.appendChild(car); post.appendChild(wrap);
+    const info = document.createElement('div'); info.className='piece-info';
+    const titleRow = document.createElement('div'); titleRow.className='title-row';
+    const t = document.createElement('div'); t.className='piece-title'; t.innerText = `${k.replace('-', '/')} ${p.titulo}`;
+    const pr = document.createElement('div'); pr.className='piece-price'; pr.innerText = formatMoney(p.preco);
+    titleRow.appendChild(t); titleRow.appendChild(pr); info.appendChild(titleRow);
+    const tech = document.createElement('div'); tech.className='piece-tech'; tech.innerText = p.tecnica || '';
+    const dims = document.createElement('div'); dims.className='piece-dims'; dims.innerText = p.dimensao || '';
+    info.appendChild(tech); info.appendChild(dims); post.appendChild(info);
+    const act = document.createElement('div'); act.className='actions-row';
+    const heart=document.createElement('button'); heart.className='btn no-round heart'; heart.innerText = likes.has(p.id_peca)?'♥':'♡'; if(likes.has(p.id_peca)) heart.classList.add('active'); heart.onclick=(ev)=>{ev.stopPropagation(); toggleLike(p.id_peca, heart);};
+    const cartbtn=document.createElement('button'); cartbtn.className='btn no-round'; cartbtn.innerText = cart.includes(p.id_peca)?'REMOVER':'ADICIONAR'; cartbtn.onclick=(ev)=>{ev.stopPropagation(); toggleCart(p.id_peca); cartbtn.innerText = cart.includes(p.id_peca)?'REMOVER':'ADICIONAR'; updateFooterCounts();};
+    act.appendChild(heart); act.appendChild(cartbtn); post.appendChild(act);
+    cont.appendChild(post);
+  });
+}
+// ======= Painéis (gdo01) =======
+function openPanel(id){ ['cartPanel','rifaPanel','likesPanel'].forEach(pid=>{ const el=document.getElementById(pid); if(pid===id){ el.style.display='block'; el.setAttribute('aria-hidden','false'); } else { el.style.display='none'; el.setAttribute('aria-hidden','true'); } });
+  document.getElementById('cartCountBtn').setAttribute('aria-expanded', id==='cartPanel');
+  document.getElementById('rifaCountBtn').setAttribute('aria-expanded', id==='rifaPanel');
+  document.getElementById('likesCountBtn').setAttribute('aria-expanded', id==='likesPanel');
+}
+function closePanels(){ openPanel(null); ['cartPanel','rifaPanel','likesPanel'].forEach(pid=>{document.getElementById(pid).style.display='none';}); }
+// ======= Ações =======
+function toggleCart(id){ const i=cart.indexOf(id); if(i>-1) cart.splice(i,1); else cart.push(id); updateFooterCounts(); renderCartList(); }
+function toggleLike(id, btn){ if(likes.has(id)) likes.delete(id); else likes.add(id); if(btn){btn.classList.toggle('active', likes.has(id)); btn.innerText = likes.has(id)?'♥':'♡';} updateFooterCounts(); renderLikesList(); }
+function toggleRifa(id){ if(selectedRifas.has(id)) selectedRifas.delete(id); else selectedRifas.add(id); updateFooterCounts(); renderRifasPanel(); }
+// ======= Totais =======
+function calculateRifaTotal(cnt){ if(cnt===0) return 0; return cnt%2===0 ? 25*cnt : 25*(cnt-1)+30; }
+function cartTotal(){ return cart.reduce((sum,id)=>{ const p=piecesData.find(x=>x.id_peca===id); return sum + (p? p.preco:0); },0); }
+function totalAll(){ return cartTotal() + calculateRifaTotal(selectedRifas.size); }
+function updateFooterCounts(){ document.getElementById('cartCount').innerText = cart.length; document.getElementById('likesCount').innerText = likes.size; document.getElementById('rifaCount').innerText = selectedRifas.size; document.getElementById('totalBox').innerText = formatMoney(totalAll()); document.getElementById('cartTotalBox').innerText = formatMoney(totalAll()); renderCartList(); renderLikesList(); }
+// ======= Render dos painéis =======
+function renderCartList(){ const list=document.getElementById('cartList'); list.innerHTML=''; cart.forEach(id=>{ const p=piecesData.find(x=>x.id_peca===id); if(!p) return; const el=document.createElement('div'); el.className='mini-item'; const img=document.createElement('img'); img.className='mini-thumb'; const tn=firstThumbName(p); img.src=thumbURL(tn); img.onerror=function(){ this.onerror=null; this.src=fallbackURL(tn); }; const txt=document.createElement('div'); txt.style.fontSize='.9rem'; txt.innerText=`${(p.id_peca||'').slice(0,2)}/${(p.id_peca||'').slice(3,5)} ${p.titulo}
+${formatMoney(p.preco)}`; el.appendChild(img); el.appendChild(txt); list.appendChild(el); }); }
+function renderLikesList(){ const list=document.getElementById('likesList'); list.innerHTML=''; [...likes].forEach(id=>{ const p=piecesData.find(x=>x.id_peca===id); if(!p) return; const el=document.createElement('div'); el.className='mini-item'; const img=document.createElement('img'); img.className='mini-thumb'; const tn=firstThumbName(p); img.src=thumbURL(tn); img.onerror=function(){ this.onerror=null; this.src=fallbackURL(tn); }; const txt=document.createElement('div'); txt.style.fontSize='.9rem'; txt.innerText=`${(p.id_peca||'').slice(0,2)}/${(p.id_peca||'').slice(3,5)} ${p.titulo}`; el.appendChild(img); el.appendChild(txt); list.appendChild(el); }); }
+function renderRifasPanel(){ const list=document.getElementById('rifaList'); list.innerHTML=''; rifasData.forEach(r=>{ const el=document.createElement('button'); el.className='filter-btn'; el.style.background= r.hex_rifa || r.hex || '#999'; el.style.color = '#fff'; el.style.borderColor = '#2b2424'; el.textContent = r.numero || r.id_rifa; if(selectedRifas.has(r.id_rifa)) el.classList.add('reset-btn'); el.onclick=()=>{ toggleRifa(r.id_rifa); el.classList.toggle('reset-btn', selectedRifas.has(r.id_rifa)); }; list.appendChild(el); }); }
+// ======= PIX (igual centraldetestes) =======
+function crc16_ccitt(str){ let crc=0xffff; for(let i=0;i<str.length;i++){ crc ^= str.charCodeAt(i) << 8; for(let j=0;j<8;j++){ crc = ((crc << 1) ^ ((crc & 0x8000)?0x1021:0)) & 0xffff; } } return crc; }
+function gerarBRCode(valor){ const chave='betshoptv@gmail.com'; const payloadFormatIndicator='000201'; const merchantAccountInfo='26'; const gui='0014br.gov.bcb.pix'; const key=String(chave.length).padStart(2,'0')+chave; const merchantInfo=merchantAccountInfo+gui+key; const transactionAmount=Number(valor).toFixed(2); const amount='540'+String(transactionAmount.length).padStart(2,'0')+transactionAmount; const country='5802BR'; const merchantCategoryCode='52040000'; const transactionCurrency='5303986'; const additionalDataField='62'; const referenceLabel='0012NARRATIVA'; const data=[payloadFormatIndicator, merchantInfo, merchantCategoryCode, transactionCurrency, country, amount, additionalDataField+String(referenceLabel.length).padStart(2,'0')+referenceLabel, '6304'].join(''); const crc = crc16_ccitt(data); const checksum = crc.toString(16).toUpperCase().padStart(4,'0'); return data + checksum; }
+function showPix(){ const total = totalAll(); if(total<=0){ alert('Selecione ao menos uma peça ou rifa.'); return; } const brc = gerarBRCode(total); document.getElementById('pixCode').textContent = brc; const qr = document.getElementById('qrCode'); qr.innerHTML=''; new QRCode(qr,{ text: brc, width: 200, height: 200 }); document.getElementById('pixSection').style.display='block'; document.getElementById('copiaPixBtn').style.display='inline-block'; }
+function copyPix(){ const pix = document.getElementById('pixCode').textContent; navigator.clipboard.writeText(pix).then(()=>alert('Código PIX copiado!')); }
+// ======= Envio (igual centraldetestes → FormSubmit + backup GAS) =======
+const form = document.getElementById('hiddenForm');
+function sendCheckout(){ if(cart.length===0 && selectedRifas.size===0){ alert('Selecione ao menos uma peça ou rifa.'); return; } const nome=document.getElementById('nomeInput').value.trim(); const email=document.getElementById('emailInput').value.trim(); const fone=document.getElementById('foneInput').value.trim(); const pecasStr = cart.join(','); const rifasStr = [...selectedRifas].join(','); const favsStr = [...likes].join(','); const totalValor = totalAll(); form.querySelector('input[name="pecas"]').value = pecasStr; form.querySelector('input[name="rifas"]').value = rifasStr; form.querySelector('input[name="favoritas"]').value = favsStr; form.querySelector('input[name="total"]').value = totalValor.toFixed(2); form.querySelector('input[name="nome"]').value = nome; form.querySelector('input[name="email"]').value = email; form.querySelector('input[name="telefone"]').value = fone; try{ const fd=new FormData(); fd.append('nome',nome); fd.append('email',email); fd.append('telefone',fone); fd.append('pecas',pecasStr); fd.append('rifas',rifasStr); fd.append('favoritas',favsStr); fd.append('total', totalValor.toFixed(2)); fetch(GAS_URL,{ method:'POST', body: fd, mode:'no-cors' }); const qs=new URLSearchParams([...fd.entries()]).toString(); (new Image()).src = GAS_URL + '?' + qs + '&t=' + Date.now(); }catch(err){ console.warn('Backup GAS falhou', err); } form.submit(); alert('Aposta enviada! Aguarde nossa confirmação.'); }
+// ======= Wiring =======
+document.getElementById('cartCountBtn').addEventListener('click', ()=>{ const visible = document.getElementById('cartPanel').style.display==='block'; openPanel(visible?null:'cartPanel'); });
+document.getElementById('rifaCountBtn').addEventListener('click', ()=>{ const visible = document.getElementById('rifaPanel').style.display==='block'; openPanel(visible?null:'rifaPanel'); });
+document.getElementById('likesCountBtn').addEventListener('click', ()=>{ const visible = document.getElementById('likesPanel').style.display==='block'; openPanel(visible?null:'likesPanel'); });
+document.getElementById('closeCart').addEventListener('click', ()=>closePanels());
+document.getElementById('closeRifa').addEventListener('click', ()=>closePanels());
+document.getElementById('closeLikes').addEventListener('click', ()=>closePanels());
+document.getElementById('backBtn').addEventListener('click', ()=>{ document.getElementById('feed').style.display='none'; document.getElementById('gallery').style.display='flex'; document.getElementById('backBtn').style.display='none'; closePanels(); });
+document.getElementById('gerarPixBtn').addEventListener('click', showPix);
+document.getElementById('copiaPixBtn').addEventListener('click', copyPix);
+document.getElementById('apostaBtn').addEventListener('click', sendCheckout);
+// ======= Boot =======
+(function(){ const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s.onload=loadData; document.head.appendChild(s); })();
+</script>
 </body>
 </html>
