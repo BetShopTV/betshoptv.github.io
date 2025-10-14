@@ -6,259 +6,199 @@
 <title>BSTV — Central de Apostas</title>
 <style>
 :root{
-  --vermelho:#ff0000;
-  --bege:#bebab0;
-  --preto:#2b2424;
-  --branco:#ffffff;
-  --footer-h:60px;
-  --thumb-h:110px;
-  font-family:'Roboto Condensed',sans-serif;
+  --vermelho:#ff0000; --bege:#bebab0; --preto:#2b2424; --branco:#fff;
+  --footer-h:60px; --thumb-h:110px;
 }
 body{
-  margin:0;
-  background:var(--bege);
-  color:var(--preto);
-  -webkit-font-smoothing:antialiased;
+  margin:0;background:var(--bege);color:var(--preto);
+  font-family:"Roboto Condensed",sans-serif;
+  padding-bottom:var(--footer-h);
 }
 /* === GALERIA === */
 .galeria{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:16px;
-  padding:20px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:16px;padding:20px;
 }
-.item{
-  position:relative;
-  cursor:pointer;
-}
-.item img{
-  width:100%;
-  height:auto;
-  display:block;
-  object-fit:cover;
-}
+.item{position:relative;cursor:pointer;}
+.item img{width:100%;display:block;object-fit:cover;}
 .heart{
-  position:absolute;
-  top:8px; right:8px;
-  font-size:22px;
-  background:transparent;
-  border:none;
+  position:absolute;top:8px;right:8px;width:22px;height:22px;
+  border:none;background:url('https://betshoptv.github.io/elementos/ticon-FAV-OFF-p2.avif') center/contain no-repeat;
   cursor:pointer;
-  color:var(--bege);
 }
-.heart.active{ color:var(--vermelho); }
-/* === CENTRAL DE APOSTAS === */
-.central-bar{
-  position:fixed;
-  bottom:0;
-  left:0;
-  width:100%;
-  background:var(--vermelho);
-  height:var(--footer-h);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:3vw;
+.heart.active{background-image:url('https://betshoptv.github.io/elementos/ticon-FAV-ON-v.avif');}
+/* === CENTRAL === */
+.footer{
+  position:fixed;left:0;right:0;bottom:0;height:var(--footer-h);
+  background:var(--vermelho);display:flex;align-items:center;justify-content:center;gap:30px;
   z-index:1001;
 }
-.central-bar img.icon{
-  height:32px;
-  cursor:pointer;
-  filter:grayscale(1) brightness(.7);
-  transition:filter .3s ease;
+.footer img.icon{height:32px;cursor:pointer;filter:grayscale(1) brightness(.8);}
+.footer img.icon.active{filter:none;}
+.panel{
+  position:fixed;left:0;bottom:var(--footer-h);width:100%;
+  background:var(--branco);border-top:4px solid var(--vermelho);
+  display:none;flex-direction:column;align-items:center;z-index:1000;
 }
-.central-bar img.icon.active{
-  filter:none;
-}
-/* === PAINEL === */
-.central-panel{
-  position:fixed;
-  left:0;
-  bottom:-220px;
-  width:100%;
-  background:var(--branco);
-  z-index:1000;
-  transition:bottom .3s ease;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  border-top:4px solid var(--vermelho);
-}
-.central-panel.open{
-  bottom:var(--footer-h);
-}
+.panel.open{display:flex;}
 .thumbs{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  padding:10px;
-  width:100%;
-  background:var(--branco);
+  display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;width:100%;padding:10px;background:var(--branco);
 }
-.thumbs::-webkit-scrollbar{
-  height:6px;
-}
-.thumbs::-webkit-scrollbar-thumb{
-  background:var(--vermelho);
-}
-.thumbs::-webkit-scrollbar-track{
-  background:var(--bege);
-}
-.thumb{
-  position:relative;
-  flex:0 0 auto;
-  height:var(--thumb-h);
-  aspect-ratio:1/1;
-  border:1px solid var(--preto);
-}
-.thumb img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+.thumbs::-webkit-scrollbar{height:6px;}
+.thumbs::-webkit-scrollbar-thumb{background:var(--vermelho);}
+.thumbs::-webkit-scrollbar-track{background:var(--bege);}
+.thumb{position:relative;flex:0 0 auto;height:var(--thumb-h);aspect-ratio:1/1;border:1px solid var(--preto);}
+.thumb img{width:100%;height:100%;object-fit:cover;}
 .thumb button.x{
-  position:absolute;
-  top:4px;
-  right:4px;
-  background:rgba(0,0,0,.7);
-  color:var(--branco);
-  border:none;
-  font-size:14px;
-  width:20px;
-  height:20px;
-  cursor:pointer;
+  position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);color:var(--branco);
+  border:none;width:20px;height:20px;cursor:pointer;
 }
 .finalizar{
-  margin:8px;
-  padding:10px 18px;
-  background:var(--preto);
-  color:var(--branco);
-  font-weight:bold;
-  border:none;
-  cursor:pointer;
+  margin:10px;padding:10px 18px;font-weight:bold;background:var(--preto);
+  color:var(--branco);border:none;cursor:pointer;
 }
 .hidden{display:none;}
 </style>
 </head>
 <body>
-<!-- === GALERIA === -->
+<!-- GALERIA -->
 <div class="galeria" id="galeria"></div>
 
-<!-- === BARRA === -->
-<div class="central-bar" id="centralBar">
-  <img id="btnPecas" src="https://betshoptv.com/elementos/ticon-SHOP-c.avif" alt="Peças" class="icon"/>
-  <img id="btnRifas" src="https://betshoptv.com/elementos/ticon-RIFA-c.avif" alt="Rifas" class="icon"/>
-  <img id="btnFavs" src="https://betshoptv.com/elementos/ticon-FAV-ON-c.avif" alt="Favoritos" class="icon"/>
-</div>
-
-<!-- === PAINEL === -->
-<div class="central-panel" id="centralPanel">
+<!-- CENTRAL -->
+<div class="panel" id="panel">
   <div class="thumbs" id="thumbsContainer"></div>
   <button id="finalizarBtn" class="finalizar hidden">FINALIZAR APOSTA</button>
 </div>
 
+<div class="footer" id="footer">
+  <img id="btnPecas" src="https://betshoptv.com/elementos/ticon-SHOP-c.avif" class="icon" alt="Peças"/>
+  <img id="btnRifas" src="https://betshoptv.com/elementos/ticon-RIFA-c.avif" class="icon" alt="Rifas"/>
+  <img id="btnFavs"  src="https://betshoptv.com/elementos/ticon-FAV-ON-c.avif" class="icon" alt="Favoritos"/>
+</div>
+
 <script>
-// === Mock de dados ===
-const pecas = [
-  {id:'0409', img:'https://picsum.photos/id/909/600/800'},
-  {id:'0408', img:'https://picsum.photos/id/908/600/800'},
-  {id:'0407', img:'https://picsum.photos/id/907/600/800'},
-  {id:'0406', img:'https://picsum.photos/id/906/600/800'},
-  {id:'0405', img:'https://picsum.photos/id/905/600/800'},
-  {id:'0404', img:'https://picsum.photos/id/904/600/800'}
-];
-let selectedPecas=[], selectedFavs=[], selectedRifas=[];
-let activeTab=null;
-const galeria=document.getElementById('galeria');
-const panel=document.getElementById('centralPanel');
-const thumbsContainer=document.getElementById('thumbsContainer');
-const finalizarBtn=document.getElementById('finalizarBtn');
-const icons={
-  pecas:document.getElementById('btnPecas'),
-  rifas:document.getElementById('btnRifas'),
-  favs:document.getElementById('btnFavs')
-};
-// === Renderiza galeria (ordem por linha, maior -> menor) ===
+const PECAS_JSON_URL='/dados/pecas.json';
+const RIFAS_JSON_URL='/dados/rifas.json';
+let pecas=[], rifas=[];
+let carrinho=[], favoritos=new Set(), rifasSelecionadas=new Set();
+let abaAtiva=null;
+
+// ===== CARREGAMENTO =====
+async function carregarDados(){
+  try{
+    const [r1,r2]=await Promise.all([fetch(PECAS_JSON_URL),fetch(RIFAS_JSON_URL)]);
+    pecas=(await r1.json()).filter(p=>p.status!=="VENDIDAAA");
+    rifas=await r2.json();
+    renderGaleria();
+  }catch(e){console.error('Erro ao carregar JSONs',e);}
+}
+
+// ===== GALERIA =====
 function renderGaleria(){
-  galeria.innerHTML='';
-  pecas.sort((a,b)=>b.id.localeCompare(a.id));
+  const g=document.getElementById('galeria'); g.innerHTML='';
+  // ordenação maior->menor
+  pecas.sort((a,b)=>b.id_peca.localeCompare(a.id_peca));
   pecas.forEach(p=>{
     const div=document.createElement('div');
     div.className='item';
-    div.innerHTML=`<img src="${p.img}" alt="">
-      <button class="heart ${selectedFavs.includes(p.id)?'active':''}">♥</button>`;
-    div.onclick=()=>togglePeca(p.id);
-    const heart=div.querySelector('.heart');
-    heart.onclick=(e)=>{e.stopPropagation();toggleFav(p.id,heart);};
-    galeria.appendChild(div);
+    div.innerHTML=`<img src="img/tmb/${(p.imagens||[])[0]}.avif" 
+                      onerror="this.src='img/fallback/${(p.imagens||[])[0]}.jpg'">
+                   <button class="heart ${favoritos.has(p.id_peca)?'active':''}"></button>`;
+    div.onclick=()=>toggleCarrinho(p.id_peca);
+    const h=div.querySelector('.heart');
+    h.onclick=(e)=>{e.stopPropagation();toggleFavorito(p.id_peca,h);};
+    g.appendChild(div);
   });
 }
-// === Toggle peças / favs ===
-function togglePeca(id){
-  if(selectedPecas.includes(id)) selectedPecas=selectedPecas.filter(x=>x!==id);
-  else selectedPecas.push(id);
+
+// ===== AÇÕES GALERIA =====
+function toggleCarrinho(id){
+  const i=carrinho.indexOf(id);
+  if(i>-1) carrinho.splice(i,1); else carrinho.push(id);
   renderGaleria();
-  if(activeTab==='pecas') renderThumbs();
+  if(abaAtiva==='pecas') renderThumbs();
 }
-function toggleFav(id,btn){
-  if(selectedFavs.includes(id)) selectedFavs=selectedFavs.filter(x=>x!==id);
-  else selectedFavs.push(id);
-  btn.classList.toggle('active',selectedFavs.includes(id));
-  if(activeTab==='favs') renderThumbs();
+function toggleFavorito(id,btn){
+  if(favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
+  btn.classList.toggle('active',favoritos.has(id));
+  if(abaAtiva==='fav') renderThumbs();
 }
-// === Abas ===
-Object.entries(icons).forEach(([tipo,el])=>{
-  el.addEventListener('click',()=>{
-    if(activeTab===tipo) closePanel();
-    else openPanel(tipo);
-  });
-});
-function openPanel(tipo){
-  activeTab=tipo;
+
+// ===== ABAS =====
+const panel=document.getElementById('panel');
+document.getElementById('btnPecas').onclick=()=>toggleAba('pecas');
+document.getElementById('btnRifas').onclick=()=>toggleAba('rifas');
+document.getElementById('btnFavs').onclick =()=>toggleAba('fav');
+
+function toggleAba(tipo){
+  if(abaAtiva===tipo){fecharPainel();return;}
+  abaAtiva=tipo; abrirPainel();
+}
+function abrirPainel(){
   panel.classList.add('open');
-  Object.entries(icons).forEach(([t,el])=>{
-    el.classList.toggle('active',t===tipo);
-    el.src=`https://betshoptv.com/elementos/ticon-${t.toUpperCase()}-${t===tipo?'b':'c'}.avif`;
-  });
   renderThumbs();
+  atualizarIcones();
 }
-function closePanel(){
+function fecharPainel(){
   panel.classList.remove('open');
-  activeTab=null;
-  Object.entries(icons).forEach(([t,el])=>{
-    el.classList.remove('active');
-    el.src=`https://betshoptv.com/elementos/ticon-${t.toUpperCase()}-c.avif`;
-  });
+  abaAtiva=null;
+  atualizarIcones();
 }
-// === Fechar fora ou ESC ===
+document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharPainel();});
 document.addEventListener('click',e=>{
-  if(!panel.contains(e.target)&&!document.getElementById('centralBar').contains(e.target)) closePanel();
+  if(!panel.contains(e.target)&&!document.getElementById('footer').contains(e.target)) fecharPainel();
 });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closePanel(); });
-// === Thumbs ===
+
+// ===== RENDER THUMBS =====
 function renderThumbs(){
-  thumbsContainer.innerHTML='';
-  const lista=activeTab==='pecas'?selectedPecas:
-               activeTab==='rifas'?selectedRifas:
-               selectedFavs;
-  lista.forEach(id=>{
-    const p=pecas.find(x=>x.id===id)||{img:'https://picsum.photos/200'};
-    const d=document.createElement('div');
-    d.className='thumb';
-    d.innerHTML=`<img src="${p.img}"><button class="x">&times;</button>`;
-    d.querySelector('.x').onclick=()=>removeItem(id);
-    thumbsContainer.appendChild(d);
+  const thumbs=document.getElementById('thumbsContainer');
+  thumbs.innerHTML='';
+  let lista=[];
+  if(abaAtiva==='pecas') lista=carrinho.map(id=>pecas.find(p=>p.id_peca===id)).filter(Boolean);
+  if(abaAtiva==='rifas') lista=rifas.filter(r=>rifasSelecionadas.has(r.id_rifa));
+  if(abaAtiva==='fav')   lista=[...favoritos].map(id=>pecas.find(p=>p.id_peca===id)).filter(Boolean);
+
+  lista.forEach(item=>{
+    const div=document.createElement('div');
+    div.className='thumb';
+    const imgSrc=item.img || (item.imagens&&item.imagens[0]) || '';
+    div.innerHTML=`<img src="img/tmb/${imgSrc}.avif" 
+                       onerror="this.src='img/fallback/${imgSrc}.jpg'">
+                   <button class="x">&times;</button>`;
+    div.querySelector('.x').onclick=()=>removerItem(item);
+    thumbs.appendChild(div);
   });
-  finalizarBtn.classList.toggle('hidden',lista.length===0 || !panel.classList.contains('open'));
+  document.getElementById('finalizarBtn')
+    .classList.toggle('hidden',lista.length===0 || !panel.classList.contains('open'));
 }
-function removeItem(id){
-  if(activeTab==='pecas') selectedPecas=selectedPecas.filter(x=>x!==id);
-  if(activeTab==='rifas') selectedRifas=selectedRifas.filter(x=>x!==id);
-  if(activeTab==='favs') selectedFavs=selectedFavs.filter(x=>x!==id);
+
+// ===== REMOÇÃO E SINCRONISMO =====
+function removerItem(item){
+  if(abaAtiva==='pecas'){
+    carrinho=carrinho.filter(x=>x!==item.id_peca);
+  }else if(abaAtiva==='rifas'){
+    rifasSelecionadas.delete(item.id_rifa);
+  }else if(abaAtiva==='fav'){
+    favoritos.delete(item.id_peca);
+  }
   renderGaleria(); renderThumbs();
 }
-// === Inicializa ===
-renderGaleria();
+
+// ===== ATUALIZA ÍCONES =====
+function atualizarIcones(){
+  const icones={
+    pecas:document.getElementById('btnPecas'),
+    rifas:document.getElementById('btnRifas'),
+    fav:document.getElementById('btnFavs')
+  };
+  Object.entries(icones).forEach(([tipo,el])=>{
+    const ativo=(tipo===abaAtiva);
+    el.src=`https://betshoptv.com/elementos/ticon-${tipo==='fav'?'FAV-ON':tipo.toUpperCase()}-${ativo?'b':'c'}.avif`;
+    el.classList.toggle('active',ativo);
+  });
+}
+
+carregarDados();
 </script>
 </body>
 </html>
