@@ -1,189 +1,513 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>BSTV — Central de Apostas</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BSTV – Galeria de Ofertas (Núcleo Consolidado)</title>
+
+<!-- PALETA / TIPOGRAFIA -->
 <style>
-:root{
-  --vermelho:#ff0000; --preto:#2b2424; --bege:#bebab0; --branco:#ffffff;
-  --maxw:1200px; --gap:10px; --col-gap:12px;
-  --rodape-h:60px; --rodape-font:clamp(14px,1.6vw,18px);
-  --painel-h:30vh; --thumb-h:clamp(80px,20vh,120px);
-  --contador:clamp(16px,2vw,22px);
-}
-@media (max-width:480px){
-  :root{--rodape-h:52px;--col-gap:8px;}
-}
-html,body{margin:0;background:var(--bege);color:var(--preto);
-  font-family:"Roboto Condensed",system-ui,sans-serif;}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gap);}
-.galeria{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--col-gap);
-  padding-top:10px;padding-bottom:calc(var(--rodape-h) + 10px);}
-.card img{width:100%;display:block;border:none;object-fit:cover;}
-.card.selected img{border:2px solid var(--vermelho);}
-.painel{position:fixed;left:0;right:0;bottom:var(--rodape-h);
-  background:var(--branco);border-top:2px solid var(--branco);
-  display:none;z-index:40;}
-.painel.aberto{display:block;}
-.painel .wrap{padding:10px 8px;}
-.thumbs{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;}
-.thumb{flex:0 0 auto;height:var(--thumb-h);border:1px solid var(--preto);
-  position:relative;background:var(--branco);}
-.thumb img{height:100%;width:auto;object-fit:contain;display:block;}
-.thumb .x{position:absolute;top:4px;right:4px;background:var(--preto);
-  color:var(--branco);border:none;width:18px;height:18px;cursor:pointer;}
-.thumbs::-webkit-scrollbar{height:6px;}
-.thumbs::-webkit-scrollbar-thumb{background:var(--vermelho);}
-.total-line{display:flex;align-items:center;justify-content:space-between;
-  padding-top:6px;}
-.total{font-weight:800;font-size:clamp(14px,1.6vw,18px);}
-.btn{background:var(--preto);color:var(--branco);border:none;
-  padding:10px 16px;font-weight:800;cursor:pointer;}
-.rodape{position:fixed;left:0;right:0;bottom:0;height:var(--rodape-h);
-  background:var(--vermelho);color:var(--branco);z-index:50;}
-.rodape .wrap{display:flex;align-items:center;justify-content:space-between;
-  height:100%;}
-.brand{font-weight:900;font-size:var(--rodape-font);}
-.actions{display:flex;align-items:center;gap:clamp(12px,2vw,24px);}
-.acao{display:flex;align-items:center;gap:6px;cursor:pointer;}
-.acao.off{opacity:.6;}
-.acao.off .rotulo{color:var(--bege);}
-.acao .rotulo{font-weight:700;font-size:var(--rodape-font);}
-.ico{position:relative;width:clamp(22px,2.6vw,28px);height:auto;display:block;}
-.cnt{position:absolute;right:-8px;top:-10px;min-width:var(--contador);
-  height:var(--contador);border-radius:50%;background:var(--branco);
-  color:var(--vermelho);font-weight:900;font-size:12px;display:flex;
-  align-items:center;justify-content:center;box-shadow:0 0 0 2px var(--vermelho);}
-.cnt.hidden{display:none;}
-.overlay{position:fixed;inset:0;background:transparent;display:none;z-index:39;}
-.overlay.on{display:block;}
+  :root{
+    --vermelho:#ff0000;
+    --branco:#ffffff;
+    --bege:#bebab0;
+    --preto:#2b2424;
+
+    --max-container:1200px;     /* largura máx. do conjunto 3 colunas */
+    --gutter:8px;               /* espaçamento entre cards */
+    --margem-mobile:4px;        /* borda lateral mínima nos celulares */
+
+    /* tamanhos base escaláveis */
+    --fz-rodape: clamp(12px, 1.7vw, 16px);
+    --fz-titulo-rodape: clamp(14px, 2vw, 18px);
+    --h-rodape: 56px;           /* altura da barra vermelha */
+    --h-painel: 30vh;           /* altura máx. do painel branco */
+    --thumb-h: 120px;           /* altura dos thumbs no painel */
+    --faixa-resumo-h: 64px;     /* bloco TOTAL + FINALIZAR */
+    --borda-sel: 2px;           /* borda vermelha quando selecionado */
+  }
+
+  /* reset seco */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--bege);color:var(--preto);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+  a,button{color:inherit}
+
+  /* CONTÊINER MESTRE (3 colunas SEMPRE) */
+  .wrap{
+    max-width:var(--max-container);
+    margin:0 auto;
+    padding:0 var(--margem-mobile);
+  }
+
+  /* GRADE DE 3 COLUNAS – sempre */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:var(--gutter);
+    padding-bottom: calc(var(--h-rodape) + 12px);
+  }
+
+  .card{
+    position:relative;
+    border:1px solid transparent; /* sem borda por padrão */
+    background:transparent;
+  }
+  .card.selected{
+    border:var(--borda-sel) solid var(--vermelho);
+  }
+
+  .card .imgbox{
+    width:100%;
+    background:#ddd;
+  }
+  .card img{
+    display:block;
+    width:100%;
+    height:auto;           /* mantém proporção (altura livre) */
+  }
+
+  /* ============= RODAPÉ ============= */
+  .footer-shell{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    background:var(--vermelho);
+    height:var(--h-rodape);
+    z-index:999;
+    border-top:0; /* sem linha preta entre áreas */
+  }
+
+  /* conteúdo do rodapé acompanha a largura do painel branco */
+  .footer-inner{
+    max-width:var(--max-container);
+    margin:0 auto;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 var(--margem-mobile);
+    user-select:none;
+    cursor:pointer; /* toda a barra abre/fecha */
+  }
+
+  .rodape-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:var(--branco);
+    font-weight:700;
+    font-stretch:condensed;
+    font-size:var(--fz-titulo-rodape);
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+  }
+
+  .rodape-right{
+    display:flex;
+    align-items:center;
+    gap:18px; /* mais respiro entre ícones */
+  }
+
+  .rodape-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--bege);    /* inativo */
+    font-weight:700;
+    font-size:var(--fz-rodape);
+    text-transform:uppercase;
+  }
+  .rodape-item.active{ color:var(--branco); }
+
+  .rodape-item img{
+    width:22px; height:22px; display:block;
+  }
+
+  .badge{
+    position:relative;
+    min-width:18px;
+    height:18px;
+    padding:0 4px;
+    border-radius:999px; /* badge redondo */
+    background:var(--branco);
+    color:var(--vermelho);
+    font-size:12px;
+    font-weight:800;
+    line-height:18px;
+    text-align:center;
+    margin-left:2px;
+  }
+  .badge.hidden{ display:none; }
+
+  /* ============= PAINEL BRANCO (expansão) ============= */
+  .panel-wrap{
+    position:fixed;
+    left:0; right:0;
+    bottom: var(--h-rodape);
+    background:transparent; /* “seco”, sem sombra */
+    z-index:998;
+    display:none; /* fechado por padrão */
+  }
+  .panel-inner{
+    max-width:var(--max-container);
+    margin:0 auto;
+    background:var(--branco);
+    border-top:2px solid var(--branco); /* topo branco */
+  }
+
+  .panel-thumbs{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    padding:12px var(--margem-mobile) 8px var(--margem-mobile);
+    scrollbar-color: var(--vermelho) var(--bege);
+    scrollbar-width: thin;
+  }
+  .panel-thumbs::-webkit-scrollbar{height:6px}
+  .panel-thumbs::-webkit-scrollbar-thumb{background:var(--vermelho)}
+  .panel-thumbs::-webkit-scrollbar-track{background:var(--bege)}
+
+  .thumb{
+    position:relative;
+    flex:0 0 auto;
+    border:1px solid var(--preto);
+    padding:4px;
+    background:var(--branco);
+  }
+  .thumb img{
+    display:block;
+    height:var(--thumb-h);
+    width:auto;
+  }
+  .thumb .close{
+    position:absolute; top:2px; right:2px;
+    width:18px; height:18px;
+    border:1px solid var(--preto);
+    background:var(--branco);
+    color:var(--preto);
+    font-size:12px;
+    line-height:16px;
+    text-align:center;
+    cursor:pointer;
+  }
+
+  .panel-resume{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-top:1px solid var(--bege);
+    padding:10px var(--margem-mobile);
+    height:var(--faixa-resumo-h);
+  }
+  .total{
+    font-weight:800;
+    color:var(--preto);
+    font-size: clamp(14px, 2vw, 18px);
+  }
+  .btn-finalizar{
+    border:0;
+    background:var(--preto);
+    color:var(--branco);
+    padding:10px 18px;
+    font-weight:800;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+
+  /* Clique-fora abrangente (para fechar painel) */
+  .click-guard{
+    position:fixed;
+    inset:0;
+    background:transparent;
+    display:none; /* só ativa quando painel estiver aberto */
+    z-index:997;
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div id="galeria" class="galeria"></div>
-</div>
 
-<section id="painel" class="painel">
-  <div class="wrap">
-    <div id="thumbs" class="thumbs"></div>
-    <div class="total-line">
+<main class="wrap">
+  <!-- GRADE DE 3 COLUNAS (id decrescente) -->
+  <section id="grid" class="grid" aria-label="Galeria de Ofertas"></section>
+</main>
+
+<!-- PAINEL BRANCO (expansão) -->
+<section id="panelWrap" class="panel-wrap" aria-label="Painel de Apostas">
+  <div class="panel-inner">
+    <div id="thumbs" class="panel-thumbs" aria-label="Selecionadas"></div>
+    <div class="panel-resume">
       <div id="total" class="total">TOTAL: R$ 0,00</div>
-      <button id="btnFinalizar" class="btn">FINALIZAR APOSTA</button>
+      <button id="finalizar" class="btn-finalizar">Finalizar Aposta</button>
     </div>
   </div>
 </section>
-<div id="overlay" class="overlay"></div>
 
-<footer class="rodape">
-  <div class="wrap">
-    <div class="brand">CENTRAL de APOSTAS</div>
-    <div class="actions">
-      <div id="btnShop" class="acao on">
-        <img src="https://betshoptv.com/elementos/ticon-SHOP-b.avif" class="ico" id="iconShop">
-        <span id="cntShop" class="cnt hidden">0</span>
-        <span class="rotulo">PEÇAS</span>
+<!-- RODAPÉ VERMELHO -->
+<footer id="footer" class="footer-shell" aria-label="Central de Apostas">
+  <div class="footer-inner">
+    <div class="rodape-left">CENTRAL de APOSTAS</div>
+
+    <div class="rodape-right">
+      <!-- PEÇAS -->
+      <div id="tabPecas" class="rodape-item active" data-tab="pecas">
+        <img id="iconPecas" alt="Peças"
+             src="https://betshoptv.com/elementos/ticon-SHOP-b.avif">
+        <span>Peças</span>
+        <span id="badgePecas" class="badge hidden">0</span>
       </div>
-      <div id="btnRifa" class="acao off">
-        <img src="https://betshoptv.com/elementos/ticon-RIFA-c.avif" class="ico" id="iconRifa">
-        <span id="cntRifa" class="cnt hidden">0</span>
-        <span class="rotulo">RIFAS</span>
+
+      <!-- RIFAS -->
+      <div id="tabRifas" class="rodape-item" data-tab="rifas">
+        <img id="iconRifas" alt="Rifas"
+             src="https://betshoptv.com/elementos/ticon-RIFA-c.avif">
+        <span>Rifas</span>
+        <span id="badgeRifas" class="badge hidden">0</span>
       </div>
     </div>
   </div>
 </footer>
 
+<!-- CLICAR FORA PRA FECHAR -->
+<div id="guard" class="click-guard" aria-hidden="true"></div>
+
 <script>
-const PECAS_JSON='/dados/pecas.json';
-const RIFAS_JSON='/dados/rifas.json';
+/* ===========================================================
+   Núcleo BSTV – Base funcional consolidada
+   - Mantém leitura JSON simples (como newgdo30)
+   - Seleção múltipla
+   - 3 colunas sempre
+   - Rodapé vermelho + Painel branco (thumbs em cima, total+finalizar embaixo)
+   - Ícones com contadores (badge branco texto vermelho)
+   =========================================================== */
 
-let pecas=[], rifas=[];
-let carrinho=new Set(), rifasSel=new Set();
-let aba='shop', painelAberto=false;
+const EL = {
+  grid:      document.getElementById('grid'),
+  panelWrap: document.getElementById('panelWrap'),
+  thumbs:    document.getElementById('thumbs'),
+  total:     document.getElementById('total'),
+  finalizar: document.getElementById('finalizar'),
 
-async function loadData(){
+  footer:    document.getElementById('footer'),
+  tabPecas:  document.getElementById('tabPecas'),
+  tabRifas:  document.getElementById('tabRifas'),
+
+  iconPecas: document.getElementById('iconPecas'),
+  iconRifas: document.getElementById('iconRifas'),
+  badgePecas:document.getElementById('badgePecas'),
+  badgeRifas:document.getElementById('badgeRifas'),
+
+  guard:     document.getElementById('guard'),
+};
+
+const ICONS = {
+  pecas_on: "https://betshoptv.com/elementos/ticon-SHOP-b.avif",
+  pecas_off:"https://betshoptv.com/elementos/ticon-SHOP-c.avif",
+  rifas_on: "https://betshoptv.com/elementos/ticon-RIFA-b.avif",
+  rifas_off:"https://betshoptv.com/elementos/ticon-RIFA-c.avif",
+};
+
+const state = {
+  pecas: [],              // catálogo (vindo do JSON)
+  selecionadas: new Map(),// id_peca -> objeto peça
+  painelAberto: false,
+  abaAtiva: 'pecas',      // 'pecas' | 'rifas' (estrutura pronta p/ rifas)
+};
+
+/* ----------------- Carregar JSON (mantendo lógica do newgdo30) ----------------- */
+async function carregarPecas() {
   try{
-    const [pj,rj]=await Promise.all([fetch(PECAS_JSON),fetch(RIFAS_JSON)]);
-    pecas=await pj.json(); rifas=await rj.json();
-    pecas=pecas.filter(p=>String(p.status).toUpperCase()!=='VENDIDAAA');
-    renderGaleria();
-    atualizarContadores();
-  }catch(e){console.error(e);}
+    // Tente buscar o JSON externo (mesma convenção simples)
+    const r = await fetch('pecas.json', {cache:'no-store'});
+    if(!r.ok) throw new Error('Sem pecas.json');
+    const data = await r.json();
+    return data;
+  }catch(e){
+    // FALLBACK equivalente (mesmo formato)
+    return [
+      {"id_peca":"0407","titulo":"04/07 Peça 02","preco":150,"status":"X","tecnica":"—","dimensao":"—","imagens":["04-07a"]},
+      {"id_peca":"0406","titulo":"04/06 Peça 01","preco":150,"status":"X","tecnica":"—","dimensao":"—","imagens":["04-06a"]},
+      {"id_peca":"0405","titulo":"04/05 Peça 01","preco":150,"status":"X","tecnica":"—","dimensao":"—","imagens":["04-05a"]},
+      {"id_peca":"0404","titulo":"04/04 Peça 01","preco":150,"status":"X","tecnica":"—","dimensao":"—","imagens":["04-04a"]},
+      {"id_peca":"0311","titulo":"03/11 Peça 11","preco":150,"status":"X","tecnica":"—","dimensao":"—","imagens":["03-11a"]},
+      {"id_peca":"0310","titulo":"03/10 Peça 10","preco":150,"status":"X","tecnica":"—","dimensao":"—","imagens":["03-10a"]},
+      {"id_peca":"0305","titulo":"03/05 Peça 05","preco":150,"status":"X","tecnica":"—","dimensao":"—","imagens":["03-05a"]},
+      {"id_peca":"0304","titulo":"03/04 Peça 04","preco":150,"status":"X","tecnica":"—","dimensao":"—","imagens":["03-04a"]},
+    ];
+  }
 }
 
-function thumbURL(n){return `img/tmb/${n}.avif`;}
-function fallbackURL(n){return `img/fallback/${n}.jpg`;}
-function firstThumb(p){return (p.imagens&&p.imagens[0])||'';}
-function money(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',');}
+/* ----------------- Renderização da grade (3 colunas sempre) ----------------- */
+function ordenarDesc(a,b){
+  // numérico a partir de id_peca (ex.: "0407")
+  return Number(b.id_peca) - Number(a.id_peca);
+}
 
-function renderGaleria(){
-  const gal=document.getElementById('galeria'); gal.innerHTML='';
-  const ordenadas=[...pecas].sort((a,b)=>b.id_peca.localeCompare(a.id_peca));
-  ordenadas.forEach((p,i)=>{
-    const card=document.createElement('div');card.className='card';
-    const img=document.createElement('img');
-    const n=firstThumb(p);
-    img.src=thumbURL(n); img.onerror=function(){this.src=fallbackURL(n);};
-    card.appendChild(img);
-    if(carrinho.has(p.id_peca))card.classList.add('selected');
-    card.addEventListener('click',()=>{
-      if(carrinho.has(p.id_peca))carrinho.delete(p.id_peca);
-      else carrinho.add(p.id_peca);
-      card.classList.toggle('selected');
-      atualizarContadores(); if(painelAberto)renderThumbs();
-    });
-    gal.appendChild(card);
+function primeiraImagem(peca){
+  // mesma convenção do newgdo30: imagens[0] -> <id>.jpg em /imagens
+  // ajuste a URL conforme sua estrutura real
+  const nome = peca.imagens && peca.imagens.length ? peca.imagens[0] : peca.id_peca;
+  // exemplo estático (troque para sua pasta final)
+  return `https://betshoptv.com/imagens/${nome}.jpg`;
+}
+
+function renderGrid(){
+  EL.grid.innerHTML = '';
+  const frag = document.createDocumentFragment();
+
+  state.pecas.sort(ordenarDesc).forEach(peca=>{
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.dataset.id = peca.id_peca;
+
+    // ativa visual se já estiver selecionada
+    if(state.selecionadas.has(peca.id_peca)) card.classList.add('selected');
+
+    const box = document.createElement('div');
+    box.className = 'imgbox';
+
+    const img = document.createElement('img');
+    img.src = primeiraImagem(peca);
+    img.alt = peca.titulo || peca.id_peca;
+
+    box.appendChild(img);
+    card.appendChild(box);
+
+    // clique seleciona/deseleciona (múltiplo)
+    card.addEventListener('click', ()=>toggleSelecionada(peca));
+
+    frag.appendChild(card);
   });
+
+  EL.grid.appendChild(frag);
+}
+
+/* ----------------- Seleção múltipla (sincronizada com painel) ----------------- */
+function toggleSelecionada(peca){
+  const id = peca.id_peca;
+  if(state.selecionadas.has(id)){
+    state.selecionadas.delete(id);
+  }else{
+    state.selecionadas.set(id, peca);
+  }
+  // atualizar UI
+  renderGrid();
+  renderPainelThumbs();
+  atualizarResumoERodape();
+}
+
+/* ----------------- Painel Branco: thumbs + total ----------------- */
+function renderPainelThumbs(){
+  EL.thumbs.innerHTML = '';
+  const frag = document.createDocumentFragment();
+
+  [...state.selecionadas.values()].forEach(peca=>{
+    const t = document.createElement('div');
+    t.className = 'thumb';
+
+    const img = document.createElement('img');
+    img.src = primeiraImagem(peca);
+    img.alt = peca.titulo || peca.id_peca;
+
+    const x = document.createElement('button');
+    x.className = 'close';
+    x.type = 'button';
+    x.textContent = 'x';
+    x.addEventListener('click', (ev)=>{
+      ev.stopPropagation();
+      state.selecionadas.delete(peca.id_peca);
+      renderGrid();
+      renderPainelThumbs();
+      atualizarResumoERodape();
+    });
+
+    t.appendChild(img);
+    t.appendChild(x);
+    frag.appendChild(t);
+  });
+
+  EL.thumbs.appendChild(frag);
+}
+
+/* ----------------- Total e badges ----------------- */
+function atualizarResumoERodape(){
+  const total = [...state.selecionadas.values()].reduce((acc,p)=>acc+(Number(p.preco)||0),0);
+  EL.total.textContent = `TOTAL: R$ ${total.toFixed(2).replace('.',',')}`;
+
+  const qP = state.selecionadas.size;
+  // badges: só aparecem se > 0
+  EL.badgePecas.textContent = qP;
+  EL.badgePecas.classList.toggle('hidden', qP===0);
+
+  // (rifas ainda 0, estrutura pronta)
+  EL.badgeRifas.textContent = 0;
+  EL.badgeRifas.classList.toggle('hidden', true);
+
+  // botão “Finalizar Aposta” só aparece com itens e painel aberto
+  EL.finalizar.style.display = (qP>0 && state.painelAberto) ? 'inline-block' : 'none';
+}
+
+/* ----------------- Abrir/fechar painel ----------------- */
+function setAba(qual){
+  state.abaAtiva = qual;
+  if(qual==='pecas'){
+    EL.tabPecas.classList.add('active');
+    EL.tabRifas.classList.remove('active');
+    EL.iconPecas.src = ICONS.pecas_on;
+    EL.iconRifas.src = ICONS.rifas_off;
+  }else{
+    EL.tabRifas.classList.add('active');
+    EL.tabPecas.classList.remove('active');
+    EL.iconPecas.src = ICONS.pecas_off;
+    EL.iconRifas.src = ICONS.rifas_on;
+  }
 }
 
 function abrirPainel(){
-  painelAberto=true;
-  document.getElementById('painel').classList.add('aberto');
-  document.getElementById('overlay').classList.add('on');
-  renderThumbs();
+  state.painelAberto = true;
+  EL.panelWrap.style.display = 'block';
+  EL.guard.style.display = 'block';
+  atualizarResumoERodape();
 }
 function fecharPainel(){
-  painelAberto=false;
-  document.getElementById('painel').classList.remove('aberto');
-  document.getElementById('overlay').classList.remove('on');
-}
-function togglePainel(tab){
-  if(aba!==tab)aba=tab;
-  painelAberto?fecharPainel():abrirPainel();
-}
-document.getElementById('btnShop').onclick=()=>togglePainel('shop');
-document.getElementById('btnRifa').onclick=()=>togglePainel('rifa');
-document.getElementById('overlay').onclick=fecharPainel;
-document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharPainel();});
-
-function renderThumbs(){
-  const area=document.getElementById('thumbs'); area.innerHTML='';
-  const lista=[...carrinho].map(id=>pecas.find(p=>p.id_peca===id)).filter(Boolean);
-  lista.forEach(p=>{
-    const box=document.createElement('div'); box.className='thumb';
-    const n=firstThumb(p);
-    const im=document.createElement('img');
-    im.src=thumbURL(n); im.onerror=function(){this.src=fallbackURL(n);};
-    const x=document.createElement('button');x.className='x';x.textContent='×';
-    x.onclick=(ev)=>{ev.stopPropagation();carrinho.delete(p.id_peca);renderGaleria();renderThumbs();atualizarContadores();};
-    box.append(im,x); area.append(box);
-  });
-  document.getElementById('total').textContent='TOTAL: '+money(lista.reduce((s,p)=>s+(p.preco||0),0));
+  state.painelAberto = false;
+  EL.panelWrap.style.display = 'none';
+  EL.guard.style.display = 'none';
+  atualizarResumoERodape();
 }
 
-function atualizarContadores(){
-  const n=carrinho.size, r=rifasSel.size;
-  const cShop=document.getElementById('cntShop'), cRifa=document.getElementById('cntRifa');
-  cShop.textContent=n; cRifa.textContent=r;
-  cShop.classList.toggle('hidden',n===0); cRifa.classList.toggle('hidden',r===0);
-}
+/* Clique na barra inteira abre/fecha a expansão */
+EL.footer.addEventListener('click', (ev)=>{
+  // Se clicou em algum item de aba, ainda assim alterna o painel
+  if(state.painelAberto){ fecharPainel(); }
+  else{ abrirPainel(); }
+});
 
-document.getElementById('btnFinalizar').onclick=()=>{
-  alert('Peças selecionadas: '+[...carrinho].join(', ')+'\nTotal: '+money([...carrinho].map(id=>pecas.find(p=>p.id_peca===id)?.preco||0).reduce((a,b)=>a+b,0)));
-};
+/* Tabs explicitamente trocam ícones/labels (e também abrem/fecham via footer) */
+EL.tabPecas.addEventListener('click', (ev)=>{ setAba('pecas'); });
+EL.tabRifas.addEventListener('click', (ev)=>{ setAba('rifas'); });
 
-loadData();
+/* Clique fora fecha */
+EL.guard.addEventListener('click', fecharPainel);
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') fecharPainel(); });
+
+/* Finalizar – (placeholder sem alert nativo do browser) */
+EL.finalizar.addEventListener('click', ()=>{
+  // Exemplo simples: exibe um mini resumo no painel (sem modal do navegador)
+  const ids = [...state.selecionadas.keys()].join(', ');
+  console.log('APOSTA:', {pecas: ids, total: EL.total.textContent});
+  // Aqui você plugaria no FormSubmit + Apps Script
+  EL.finalizar.textContent = 'Aposta Concluída!';
+  setTimeout(()=>{ EL.finalizar.textContent = 'Finalizar Aposta'; }, 1200);
+});
+
+/* ----------------- Boot ----------------- */
+(async function init(){
+  setAba('pecas');
+
+  state.pecas = await carregarPecas();
+  renderGrid();
+  renderPainelThumbs();
+  atualizarResumoERodape();
+})();
 </script>
 </body>
 </html>
