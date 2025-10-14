@@ -2,141 +2,174 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BSTV — Central de Apostasssssssssssssssssssssssssssssssssss</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Preview Central de Apostas — BSTV</title>
 <style>
-:root{
-  --red:#ff0000; --ink:#2b2424; --bg:#bebab0; --dark:#242b2b; --white:#fff;
-  --footer-h: clamp(54px,7vh,66px);
-  --panel-h: 25vh;
-  --thumb-h: 120px;
+:root {
+  --vermelho: #ff0000;
+  --bege: #bebab0;
+  --preto: #2b2424;
+  --branco: #ffffff;
+  --footer-h: 60px;
+  --thumb-h: 110px;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:var(--bg);color:var(--ink);
-  font-family:"Roboto Condensed",sans-serif;
-  overflow-x:hidden;padding-bottom:var(--footer-h);
+body {
+  margin: 0; background: var(--bege); font-family: "Roboto Condensed", sans-serif;
+  display: flex; flex-direction: column; min-height: 100vh;
 }
-.container{max-width:1200px;margin:0 auto;padding:10px;}
-.masonry{column-count:3;column-gap:8px;}
-.card{break-inside:avoid;position:relative;margin-bottom:8px;cursor:pointer;}
-.card img{width:100%;display:block;}
-.code{position:absolute;left:6px;top:6px;background:var(--bg);border:2px solid var(--ink);padding:2px 6px;font-weight:700;}
-.heart{position:absolute;right:6px;top:6px;width:22px;height:22px;border:0;background:url('https://betshoptv.github.io/elementos/ticon-FAV-OFF-p2.avif') center/contain no-repeat;cursor:pointer;}
-.heart.active{background-image:url('https://betshoptv.github.io/elementos/ticon-FAV-ON-v.avif');}
-.card.flash::after{content:"";position:absolute;inset:0;background:var(--red);opacity:0;transition:opacity .25s;pointer-events:none;}
-.card.flash.active::after{opacity:.25;}
-.footer{
-  position:fixed;left:0;right:0;bottom:0;height:var(--footer-h);
-  background:var(--red);display:flex;align-items:center;justify-content:center;gap:24px;z-index:1000;
+main { flex: 1; padding: 20px; text-align: center; }
+.central-bar {
+  position: fixed; bottom: 0; left: 0; width: 100%; height: var(--footer-h);
+  background: var(--vermelho);
+  display: flex; justify-content: center; align-items: center; gap: 4vw;
+  z-index: 1000; transition: bottom .3s ease;
 }
-.footer .icon{position:relative;cursor:pointer;}
-.footer img{width:30px;height:30px;}
-.badge{position:absolute;right:-8px;top:-6px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#fff;color:var(--red);font-size:.7rem;font-weight:700;display:none;align-items:center;justify-content:center;}
-.badge.show{display:flex}
-
-/* painel expandido */
-.panel{
-  position:fixed;left:0;right:0;bottom:var(--footer-h);
-  height:0;background:var(--bg);overflow:hidden;transition:height .3s ease;z-index:999;
+.central-bar img.icon {
+  height: 32px; cursor: pointer; filter: grayscale(1) brightness(0.7);
+  transition: filter .3s ease;
 }
-.panel.open{height:var(--panel-h);}
-.thumbs-wrap{display:flex;flex-direction:column;height:100%;}
-.thumbs{
-  flex:1;background:#fff;margin:6px 8px 0;padding:8px;display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;
+.central-bar img.icon.active { filter: none; }
+.central-panel {
+  position: fixed; left: 0; bottom: -240px; width: 100%;
+  background: var(--bege); transition: bottom .3s ease;
+  z-index: 999; display: flex; flex-direction: column; align-items: center;
 }
-.thumbs::-webkit-scrollbar{height:4px;}
-.thumbs::-webkit-scrollbar-thumb{background-color:var(--red);}
-.thumbs::-webkit-scrollbar-track{background:#bebab0;}
-.thumb{position:relative;flex:0 0 auto;height:var(--thumb-h);border:1px solid var(--ink);background:#fff;}
-.thumb img{height:100%;width:auto;object-fit:cover;display:block;}
-.thumb .x{position:absolute;right:4px;top:4px;background:#000a;color:#fff;border:0;width:22px;height:22px;font-weight:700;cursor:pointer;}
-.thumb-progress{height:4px;background:#bebab0;margin:2px 8px;border-radius:2px;overflow:hidden;}
-.thumb-progress span{display:block;height:100%;width:0;background:var(--red);transition:width .1s;}
-.panel-actions{display:flex;justify-content:flex-end;padding:6px 10px;}
-#finalizar{background:var(--ink);color:#fff;border:2px solid var(--ink);padding:8px 14px;font-weight:800;cursor:pointer;}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--footer-h) + var(--panel-h) + 10px);background:var(--dark);color:#fff;padding:6px 10px;font-weight:700;display:none;}
-.toast.show{display:block}
+.central-panel.open { bottom: var(--footer-h); }
+.thumbs-wrap {
+  background: var(--branco); width: 100%;
+  overflow-x: auto; white-space: nowrap; display: flex; gap: 10px; padding: 10px;
+}
+.thumbs-wrap::-webkit-scrollbar { height: 6px; }
+.thumbs-wrap::-webkit-scrollbar-thumb { background: var(--vermelho); }
+.thumbs-wrap::-webkit-scrollbar-track { background: var(--bege); }
+.thumb {
+  position: relative; flex: 0 0 auto;
+  height: var(--thumb-h); aspect-ratio: 1/1;
+  border: 1px solid var(--preto);
+}
+.thumb img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.thumb button.x {
+  position: absolute; top: 4px; right: 4px;
+  background: rgba(0,0,0,0.7); color: var(--branco);
+  border: none; font-size: 14px; line-height: 1; cursor: pointer;
+  width: 20px; height: 20px;
+}
+.thumb-progress {
+  width: 100%; height: 3px; background: var(--bege);
+}
+.thumb-progress span {
+  display: block; height: 3px; background: var(--vermelho); width: 0%;
+}
+.finalizar {
+  margin: 10px; padding: 10px 18px; font-weight: bold;
+  background: var(--preto); color: var(--branco); border: none;
+  cursor: pointer;
+}
+.hidden { display: none; }
 </style>
 </head>
 <body>
-<div class="container"><div class="masonry" id="masonry"></div></div>
+<main>
+  <h1>Preview Central de Apostas</h1>
+  <p>Use os ícones abaixo para abrir/fechar a aba e ver a rolagem horizontal.</p>
+</main>
 
-<div class="panel" id="panel">
-  <div class="thumbs-wrap">
-    <div class="thumbs" id="thumbs"></div>
-    <div class="thumb-progress"><span id="thumbProgressBar"></span></div>
-    <div class="panel-actions"><button id="finalizar" style="display:none;">FINALIZAR APOSTA</button></div>
-  </div>
+<div id="centralBar" class="central-bar">
+  <img id="btnPecas" src="https://betshoptv.com/elementos/ticon-SHOP-c.avif" alt="Peças" class="icon"/>
+  <img id="btnRifas" src="https://betshoptv.com/elementos/ticon-RIFA-c.avif" alt="Rifas" class="icon"/>
+  <img id="btnFavs" src="https://betshoptv.com/elementos/ticon-FAV-ON-c.avif" alt="Favoritos" class="icon"/>
 </div>
 
-<div class="footer" id="footer">
-  <div class="icon" id="tabShop"><img id="shopIcon" src="https://betshoptv.github.io/elementos/ticon-SHOP-c.avif"/><span class="badge" id="badgeShop"></span></div>
-  <div class="icon" id="tabRifa"><img id="rifaIcon" src="https://betshoptv.github.io/elementos/ticon-RIFA-c.avif"/><span class="badge" id="badgeRifa"></span></div>
-  <div class="icon" id="tabFav"><img id="favIcon" src="https://betshoptv.github.io/elementos/ticon-FAV-ON-c.avif"/><span class="badge" id="badgeFav"></span></div>
+<div id="centralPanel" class="central-panel">
+  <div class="thumbs-wrap" id="thumbsContainer"></div>
+  <div class="thumb-progress"><span id="thumbBar"></span></div>
+  <button id="finalizarBtn" class="finalizar hidden">FINALIZAR APOSTA</button>
 </div>
-
-<div class="toast" id="toast">Peça adicionada</div>
 
 <script>
-const PECAS_JSON_URL='/dados/pecas.json';
-let pieces=[],cart=[],favs=new Set(),activeTab='shop',panelOpen=false;
+const icons = {
+  pecas: document.getElementById('btnPecas'),
+  rifas: document.getElementById('btnRifas'),
+  favs: document.getElementById('btnFavs')
+};
+const panel = document.getElementById('centralPanel');
+const bar = document.getElementById('centralBar');
+const finalizarBtn = document.getElementById('finalizarBtn');
+const thumbsContainer = document.getElementById('thumbsContainer');
+const thumbBar = document.getElementById('thumbBar');
 
-const fmt=v=>'R$ '+Number(v||0).toFixed(2).replace('.',',');
+let activeTab = null;
+let items = {
+  pecas: [
+    {id:1,img:'https://picsum.photos/id/100/200/200'},
+    {id:2,img:'https://picsum.photos/id/200/200/200'},
+    {id:3,img:'https://picsum.photos/id/300/200/200'}
+  ],
+  rifas: [
+    {id:4,img:'https://picsum.photos/id/400/200/200'},
+    {id:5,img:'https://picsum.photos/id/500/200/200'}
+  ],
+  favs: [
+    {id:6,img:'https://picsum.photos/id/600/200/200'}
+  ]
+};
 
-async function boot(){const r=await fetch(PECAS_JSON_URL);pieces=await r.json();renderGallery();updateBadges();}
-function renderGallery(){
- const root=document.getElementById('masonry');root.innerHTML='';
- pieces.forEach(p=>{
-  const c=document.createElement('div');c.className='card flash';
-  const img=document.createElement('img');img.src='img/tmb/'+(p.imagens||[])[0]+'.avif';img.onerror=()=>img.src='img/fallback/'+(p.imagens||[])[0]+'.jpg';
-  const code=document.createElement('span');code.className='code';code.textContent=p.id_peca;
-  const h=document.createElement('button');h.className='heart';if(favs.has(p.id_peca))h.classList.add('active');
-  h.onclick=e=>{e.stopPropagation();toggleFav(p.id_peca,h);};
-  c.onclick=()=>toggleCart(p.id_peca,c);
-  c.append(img,code,h);root.append(c);
- });
+// abrir/fechar painel
+Object.entries(icons).forEach(([tipo, el])=>{
+  el.addEventListener('click',()=>{
+    if(activeTab===tipo){ closePanel(); }
+    else{ openPanel(tipo); }
+  });
+});
+
+function openPanel(tipo){
+  activeTab=tipo;
+  panel.classList.add('open');
+  Object.entries(icons).forEach(([t,el])=>{
+    el.classList.toggle('active',t===tipo);
+    el.src=`https://betshoptv.com/elementos/ticon-${t.toUpperCase()}-${t===tipo?'b':'c'}.avif`;
+  });
+  renderThumbs();
 }
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),900);}
-function toggleCart(id,el){const i=cart.indexOf(id),add=i===-1;if(add)cart.push(id);else cart.splice(i,1);
- if(el){el.classList.add('active');setTimeout(()=>el.classList.remove('active'),180);}
- updateBadges();if(panelOpen&&activeTab==='shop')renderPanel();showToast(add?'Peça adicionada':'Peça removida');}
-function toggleFav(id,btn){if(favs.has(id))favs.delete(id);else favs.add(id);if(btn)btn.classList.toggle('active',favs.has(id));updateBadges();if(panelOpen&&activeTab==='fav')renderPanel();}
-function updateBadges(){
- const s=document.getElementById('badgeShop');s.textContent=cart.length;s.classList.toggle('show',cart.length>0);
- const f=document.getElementById('badgeFav');f.textContent=favs.size;f.classList.toggle('show',favs.size>0);
- document.getElementById('shopIcon').src=cart.length>0?'https://betshoptv.github.io/elementos/ticon-SHOP-b.avif':'https://betshoptv.github.io/elementos/ticon-SHOP-c.avif';
- document.getElementById('favIcon').src=favs.size>0?'https://betshoptv.github.io/elementos/ticon-FAV-ON-b.avif':'https://betshoptv.github.io/elementos/ticon-FAV-ON-c.avif';
+function closePanel(){
+  panel.classList.remove('open');
+  activeTab=null;
+  Object.entries(icons).forEach(([t,el])=>{
+    el.classList.remove('active');
+    el.src=`https://betshoptv.com/elementos/ticon-${t.toUpperCase()}-c.avif`;
+  });
 }
-function openPanel(){panelOpen=true;document.getElementById('panel').classList.add('open');renderPanel();}
-function closePanel(){panelOpen=false;document.getElementById('panel').classList.remove('open');}
-function setTab(t){activeTab=t;openPanel();}
-function renderPanel(){
- const list=document.getElementById('thumbs');list.innerHTML='';
- let items=[];if(activeTab==='shop')items=cart.map(id=>pieces.find(p=>p.id_peca===id)).filter(Boolean);
- if(activeTab==='fav')items=[...favs].map(id=>pieces.find(p=>p.id_peca===id)).filter(Boolean);
- items.forEach(p=>{
-  const w=document.createElement('div');w.className='thumb';
-  const img=document.createElement('img');img.src='img/tmb/'+(p.imagens||[])[0]+'.avif';img.onerror=()=>img.src='img/fallback/'+(p.imagens||[])[0]+'.jpg';
-  const x=document.createElement('button');x.className='x';x.textContent='×';
-  x.onclick=()=>{if(activeTab==='shop')toggleCart(p.id_peca);if(activeTab==='fav')toggleFav(p.id_peca);};
-  w.append(img,x);list.append(w);
- });
- const fin=document.getElementById('finalizar');
- fin.style.display=(cart.length>0||activeTab==='fav'&&favs.size>0)?'block':'none';
- updateProgress();
+// fechar clicando fora / ESC
+document.addEventListener('click',e=>{
+  if(!bar.contains(e.target)&&!panel.contains(e.target))closePanel();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==="Escape")closePanel();
+});
+
+function renderThumbs(){
+  thumbsContainer.innerHTML='';
+  const lista = items[activeTab]||[];
+  lista.forEach(obj=>{
+    const div=document.createElement('div');
+    div.className='thumb';
+    div.innerHTML=`<img src="${obj.img}"><button class="x">&times;</button>`;
+    div.querySelector('.x').onclick=()=>removeItem(obj.id);
+    thumbsContainer.appendChild(div);
+  });
+  finalizarBtn.classList.toggle('hidden',lista.length===0);
 }
-function updateProgress(){
- const el=document.getElementById('thumbs');const bar=document.getElementById('thumbProgressBar');
- const scrollW=el.scrollWidth-el.clientWidth;if(scrollW<=0){bar.style.width='0%';return;}
- const pct=(el.scrollLeft/scrollW)*100;bar.style.width=pct+'%';
+function removeItem(id){
+  items[activeTab]=items[activeTab].filter(x=>x.id!==id);
+  renderThumbs();
 }
-document.getElementById('thumbs').addEventListener('scroll',updateProgress);
-document.getElementById('tabShop').onclick=()=>setTab('shop');
-document.getElementById('tabRifa').onclick=()=>setTab('rifa');
-document.getElementById('tabFav').onclick=()=>setTab('fav');
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel();});
-boot();
+// barra de progresso da rolagem
+thumbsContainer.addEventListener('scroll',()=>{
+  const ratio = thumbsContainer.scrollLeft/(thumbsContainer.scrollWidth-thumbsContainer.clientWidth);
+  thumbBar.style.width=`${ratio*100}%`;
+});
 </script>
 </body>
 </html>
