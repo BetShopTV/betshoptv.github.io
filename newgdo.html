@@ -1,375 +1,437 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Galeria de Ofertas — Central de Apostas</title>
-
-<!-- Tipografia base -->
-<link rel="preload" href="/fonts/Roboto_Condensed-Regular.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/Roboto_Condensed-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BSTV — Galeria de Ofertas</title>
 
 <style>
-:root{
-  --bg:#bebab0;
-  --ink:#2b2424;
-  --red:#ff0000;
-  --white:#ffffff;
-  --footer-h: 72px;
-  --panel-max: 38vh;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0; background:var(--bg); color:var(--ink);
-  font-family:"Roboto Condensed","Roboto","Helvetica Neue",Arial,sans-serif;
-  -webkit-font-smoothing:antialiased; padding-bottom:var(--footer-h);
-}
+  :root{
+    --vermelho:#ff0000;
+    --preto:#2b2424;
+    --bege:#bebab0;
+    --branco:#ffffff;
 
-/* ===== GRADE 3 colunas (sem corações/numeração) ===== */
-.container{max-width:1200px;margin:0 auto;padding:8px}
-.gallery{display:flex;gap:clamp(6px,1.2vw,16px)}
-.col{flex:1 1 33%;display:flex;flex-direction:column;gap:clamp(8px,1.4vw,18px)}
-.card{position:relative;background:transparent;cursor:pointer;display:block}
-.card img{width:100%;height:auto;display:block;object-fit:cover;border:2px solid rgba(0,0,0,0.12)}
-.card.selected img{outline:3px solid var(--red)}
+    /* largura máxima do conteúdo (3 colunas) */
+    --wrap: 1200px;
 
-/* ===== RODAPÉ ===== */
-.footer{
-  position:fixed;left:0;right:0;bottom:0;height:var(--footer-h);
-  background:var(--red); color:var(--white); z-index:1000;
-  display:flex; align-items:center; gap:16px; padding:0 clamp(10px,2vw,24px);
-  user-select:none;
-  border-top:0; /* sem borda! */
-}
-.footer .brand{font-weight:900; letter-spacing:.3px; font-size:clamp(16px,2.4vw,22px)}
-.actions{display:flex;gap:20px;margin-left:auto;align-items:center}
-.action{
-  display:flex; align-items:center; gap:8px; cursor:pointer;
-  color:#f7f7f7; text-transform:uppercase; font-weight:800; letter-spacing:.4px;
-  opacity:.95;
-}
-.action.inactive{color:#e7e7e7; opacity:.6}
-.action img{height:26px;width:auto;display:block}
-.badge{
-  position:relative; display:inline-block; line-height:1;
-}
-.badge .dot{
-  position:absolute; top:-10px; right:-12px; background:#fff; color:var(--red);
-  border-radius:999px; font-weight:900; font-size:13px; min-width:22px; height:22px;
-  display:flex; align-items:center; justify-content:center; padding:0 6px;
-  box-shadow:0 0 0 2px var(--red);
-}
+    /* medidas base */
+    --gap: 10px;
+    --col-gap: 12px;
+    --thumb-h: 92px;           /* altura dos thumbs no painel */
+    --rodape-h: 56px;          /* altura da barra vermelha */
+    --rodape-icon: 22px;       /* tamanho base dos ícones do rodapé */
+    --rodape-font: 16px;       /* tipografia base da barra */
+    --painel-maxh: 30vh;       /* altura máx. do painel branco */
+    --borda-sel: 2px;          /* borda vermelha imgs selecionadas */
+    --contador-size: 18px;     /* bolinha contador ícone */
+  }
 
-/* ===== PAINEL EXPANSÃO ===== */
-.panel-wrap{
-  position:fixed; left:0; right:0; bottom:var(--footer-h);
-  display:none; z-index:999; /* aparece acima do conteúdo e abaixo do footer vermelho que sobe */
-}
-.panel{
-  margin:0 auto; max-width:1200px; background:#fff; border-top:2px solid var(--ink);
-  box-shadow:0 -1px 0 rgba(0,0,0,.05);
-  padding:8px 8px 12px;
-}
-.thumb-row{
-  display:flex; gap:10px; overflow-x:auto; padding:6px 4px 2px; align-items:flex-start;
-}
-.thumb{
-  position:relative; flex:0 0 auto; border:2px solid var(--ink); background:#fff;
-  padding:6px; min-width:130px; max-width:160px;
-}
-.thumb img{display:block; width:100%; height:auto; object-fit:cover}
-.thumb .close{
-  position:absolute; right:4px; top:4px; background:var(--ink); color:#fff; border:0;
-  width:22px; height:22px; cursor:pointer; font-weight:900; line-height:1; padding:0;
-}
-.thumb-row::-webkit-scrollbar{height:8px}
-.thumb-row::-webkit-scrollbar-thumb{background:var(--red)}
-.thumb-row::-webkit-scrollbar-track{background:#e6e0d8}
+  /* Responsivo – ajuste leve no mobile */
+  @media (max-width: 480px){
+    :root{
+      --wrap: 100%;
+      --col-gap: 8px;
+      --rodape-h: 52px;
+      --rodape-icon: 20px;
+      --rodape-font: 14px;
+      --thumb-h: 80px;
+      --contador-size: 16px;
+    }
+  }
 
-/* total + finalizar */
-.panel-bottom{
-  display:flex; justify-content:space-between; align-items:center; gap:12px;
-  padding:8px 2px 0;
-}
-.total{font-weight:900; color:var(--ink); font-size:18px}
-.finalizar{
-  background:#111; color:#fff; border:0; font-weight:900; cursor:pointer;
-  padding:10px 16px; text-transform:uppercase; letter-spacing:.4px;
-}
+  html,body{
+    margin:0; padding:0;
+    background:var(--bege);
+    color:var(--preto);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    overflow-x:hidden;
+  }
 
-/* overlay invisível p/ click fora */
-.backdrop{
-  position:fixed; inset:0; background:transparent; display:none; z-index:998;
-}
+  .wrap{
+    width:100%;
+    max-width:var(--wrap);
+    margin:0 auto;
+    padding:0 var(--gap);
+    box-sizing:border-box;
+  }
 
-/* util */
-.hidden{display:none !important}
+  /* ===================== GALERIA ===================== */
+  .galeria{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: auto;
+    gap: var(--col-gap);
+    margin-bottom: calc(var(--rodape-h) + 12px);
+  }
+  .card{
+    position:relative;
+  }
+  .card img{
+    display:block;
+    width:100%;
+    height:auto;          /* altura livre: preserva proporção */
+    border: none;
+    box-sizing:border-box;
+  }
+  .card.selected img{
+    border: var(--borda-sel) solid var(--vermelho);
+  }
+  /* ===================== RODAPÉ ===================== */
+  .rodape{
+    position:fixed; inset:auto 0 0 0;
+    height: var(--rodape-h);
+    background: var(--vermelho);
+    color: var(--branco);
+    z-index: 40;
+    user-select:none;
+  }
+  .rodape .wrap{
+    height:100%;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px;
+  }
+  .rodape__titulo{
+    font-weight: 800; letter-spacing: .3px;
+    font-size: var(--rodape-font);
+    text-transform: none;
+  }
+  .rodape__acoes{
+    display:flex; align-items:center; gap:18px;
+  }
+  .acao{
+    display:flex; align-items:center; gap:8px;
+    cursor:pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .acao .rotulo{
+    font-size: var(--rodape-font);
+    font-weight: 700;
+    transition: opacity .15s linear;
+  }
+  .acao.off .ico{ filter: grayscale(100%) brightness(0) invert(88%); } /* p/ cinza #bebab0 */
+  .acao.off .rotulo{ color: var(--bege); }
+  .acao.on .ico{ filter:none; }
+  .acao.on .rotulo{ color: var(--branco); }
 
-/* responsivo */
-@media (max-width:720px){
-  .footer{height:64px}
-  :root{ --footer-h: 64px; }
-  .action img{height:22px}
-  .thumb{min-width:110px}
-  .total{font-size:16px}
-}
+  .ico{
+    width: var(--rodape-icon); height: var(--rodape-icon); display:inline-block;
+    background-size:contain; background-repeat:no-repeat; background-position:center;
+    position:relative;
+  }
+  /* Contador circular branco com número vermelho */
+  .ico .cnt{
+    position:absolute; right:-10px; top:-10px;
+    min-width: var(--contador-size); height: var(--contador-size);
+    padding:0 5px; border-radius: 999px;
+    background: var(--branco); color: var(--vermelho);
+    font-weight: 800; font-size: 12px; line-height: var(--contador-size);
+    text-align:center;
+    display:none;
+  }
+  .ico.has-items .cnt{ display:inline-block; }
+
+  /* ícones */
+  .ico-shop{ background-image:url('https://betshoptv.com/elementos/ticon-SHOP-b.avif'); }
+  .acao.off .ico-shop{ background-image:url('https://betshoptv.com/elementos/ticon-SHOP-c.avif'); }
+
+  .ico-rifa{ background-image:url('https://betshoptv.com/elementos/ticon-RIFA-b.avif'); }
+  .acao.off .ico-rifa{ background-image:url('https://betshoptv.com/elementos/ticon-RIFA-c.avif'); }
+
+  /* ===================== PAINEL (expansão) ===================== */
+  .painel{
+    position: fixed; left:0; right:0; bottom: var(--rodape-h);
+    background: var(--branco);
+    border-top: 2px solid var(--branco);
+    z-index: 39; /* abaixo da barra vermelha */
+    display:none;
+  }
+  .painel.aberto{ display:block; }
+  .painel .wrap{ padding-top: 12px; padding-bottom: 12px; }
+
+  /* faixa de thumbs */
+  .thumbs{
+    display:flex; align-items:flex-start; gap:12px;
+    overflow-x:auto; overflow-y:hidden;
+    max-height: calc(var(--painel-maxh) - 70px);
+    padding-bottom:10px;
+  }
+  .thumb{
+    position:relative;
+    flex: 0 0 auto;
+    height: var(--thumb-h);
+    border:1px solid #ddd;
+    display:flex; align-items:center; justify-content:center;
+    background:#fff;
+  }
+  .thumb img{
+    height:100%; width:auto; display:block; object-fit:contain;
+  }
+  .thumb .x{
+    position:absolute; top:4px; right:4px;
+    background:#000; color:#fff; font-size:11px;
+    width:18px; height:18px; line-height:18px; text-align:center; cursor:pointer;
+  }
+
+  /* barra de rolagem horizontal vermelha */
+  .thumbs::-webkit-scrollbar{ height:6px; }
+  .thumbs::-webkit-scrollbar-thumb{ background: var(--vermelho); }
+  .thumbs::-webkit-scrollbar-track{ background: #eee; }
+
+  /* linha TOTAL + botão */
+  .total-linha{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px; padding-top:8px;
+  }
+  .total{
+    font-weight:800; color: var(--preto);
+  }
+  .btn{
+    background:#111; color:#fff; border:none; cursor:pointer;
+    padding:10px 16px; font-weight:800; letter-spacing:.3px;
+  }
+
+  /* clique-fora */
+  .overlay{
+    position: fixed; inset:0; background: transparent; display:none; z-index:38;
+  }
+  .overlay.on{ display:block; }
+
+  /* util */
+  .hidden{ display:none !important; }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <div id="gallery" class="gallery">
-    <div class="col" id="col0"></div>
-    <div class="col" id="col1"></div>
-    <div class="col" id="col2"></div>
-  </div>
-</div>
+  <main class="wrap">
+    <section id="galeria" class="galeria" aria-label="Galeria de 3 colunas"></section>
+  </main>
 
-<!-- EXPANSÃO (branca) -->
-<div id="backdrop" class="backdrop" aria-hidden="true"></div>
-<div id="panelWrap" class="panel-wrap" aria-hidden="true">
-  <div class="panel" role="region" aria-label="Itens selecionados">
-    <div id="thumbRow" class="thumb-row"></div>
-    <div class="panel-bottom">
-      <div class="total" id="totalBox">TOTAL: R$ 0,00</div>
-      <button id="finalizarBtn" class="finalizar hidden">Finalizar Aposta</button>
+  <!-- Painel de seleção (acima do rodapé) -->
+  <section id="painel" class="painel" aria-live="polite">
+    <div class="wrap">
+      <div id="thumbs" class="thumbs" aria-label="Itens selecionados (rolagem horizontal)"></div>
+      <div class="total-linha">
+        <div id="total" class="total">TOTAL: R$ 0,00</div>
+        <button id="btnFinalizar" class="btn" type="button">FINALIZAR APOSTA</button>
+      </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<!-- RODAPÉ -->
-<div class="footer" id="footer">
-  <div class="brand">CENTRAL de APOSTAS</div>
-  <div class="actions">
-    <div id="btnShop" class="action inactive" data-tab="shop" role="button" aria-controls="panelWrap" aria-expanded="false">
-      <span class="badge">
-        <img id="iconShop" src="/elementos/ticon-SHOP-c.avif" alt="Peças">
-        <span id="countShop" class="dot hidden">0</span>
-      </span>
-      <span>Peças</span>
+  <!-- Área de clique-fora -->
+  <div id="overlay" class="overlay" tabindex="-1"></div>
+
+  <!-- Rodapé -->
+  <footer class="rodape" id="rodape">
+    <div class="wrap">
+      <div class="rodape__titulo">CENTRAL de APOSTAS</div>
+      <nav class="rodape__acoes" aria-label="Abas da central">
+        <div id="tabShop" class="acao on" data-tab="shop" role="button" aria-pressed="true">
+          <span class="ico ico-shop"><span class="cnt" id="cntShop">0</span></span>
+          <span class="rotulo">PEÇAS</span>
+        </div>
+        <div id="tabRifa" class="acao off" data-tab="rifa" role="button" aria-pressed="false">
+          <span class="ico ico-rifa"><span class="cnt" id="cntRifa">0</span></span>
+          <span class="rotulo">RIFAS</span>
+        </div>
+      </nav>
     </div>
-    <div id="btnRifa" class="action inactive" data-tab="rifa" role="button" aria-controls="panelWrap" aria-expanded="false">
-      <span class="badge">
-        <img id="iconRifa" src="/elementos/ticon-RIFA-c.avif" alt="Rifas">
-        <span id="countRifa" class="dot hidden">0</span>
-      </span>
-      <span>Rifas</span>
-    </div>
-  </div>
-</div>
+  </footer>
 
 <script>
-/* =================== Endpoints =================== */
-const PECAS_JSON_URL = '/dados/pecas.json';
-const RIFAS_JSON_URL = '/dados/rifas.json';
+/* ======================== DADOS (fetch + fallback) ======================== */
+const PATH_PECAS = '/dados/pecas.json';
+const PATH_RIFAS = '/dados/rifas.json';
 
-/* =================== Estado =================== */
-let piecesData = [];         // pecas.json (somente disponíveis)
-let rifasData  = [];         // rifas.json (somente disponíveis)
-const selectedPieces = new Set();   // id_peca
-const selectedRifas  = new Set();   // id_rifa
-let openTab = null; // 'shop' | 'rifa' | null
+const fallbackPecas = Array.from({length:12}).map((_,i)=>({
+  id: (409 - i).toString().padStart(4,'0'),
+  titulo: `Peça ${409 - i}`,
+  preco: 150 + (i%3)*50,
+  img: `https://picsum.photos/seed/bstv${i}/900/1200`
+}));
 
-/* =================== Utils =================== */
-const money = v => 'R$ ' + Number(v||0).toFixed(2).replace('.', ',');
-const idKey = p => (p.id_peca||'');
-const firstThumb = p => (p.imagens && p.imagens[0]) || '';
-const tmb = name => `img/tmb/${name}.avif`;
-const tmbFallback = name => `img/fallback/${name}.jpg`;
+const fallbackRifas = []; // sem conteúdo por ora
 
-/* rifa: par 25 cada; ímpar = (n-1)*25 + 30 */
-function rifaTotal(cnt){ if(!cnt) return 0; return (cnt%2===0) ? 25*cnt : 25*(cnt-1)+30; }
-function piecesTotal(){
-  let sum=0;
-  selectedPieces.forEach(id=>{
-    const p = piecesData.find(x=>x.id_peca===id);
-    if(p) sum += Number(p.preco||0);
-  });
-  return sum;
-}
-function totalAll(){ return piecesTotal() + rifaTotal(selectedRifas.size); }
-
-/* =================== Carregamento =================== */
-async function loadData(){
+async function loadJSON(url, fallback){
   try{
-    const [pecasResp, rifasResp] = await Promise.all([ fetch(PECAS_JSON_URL), fetch(RIFAS_JSON_URL) ]);
-    const pecas = await pecasResp.json();
-    const rifas = await rifasResp.json();
-
-    // filtra apenas disponíveis
-    piecesData = (pecas||[]).filter(p => (String(p.status||'').toUpperCase() !== 'VENDIDAAA'));
-    rifasData  = (rifas||[]).filter(r => !(r.status_rifa && String(r.status_rifa).trim() !== ''));
-
-    renderGallery();
-    refreshFooter();
+    const r = await fetch(url, {cache:'no-store'});
+    if(!r.ok) throw 0;
+    const j = await r.json();
+    return j && j.length ? j : fallback;
   }catch(e){
-    console.error('Falha ao carregar JSON', e);
+    return fallback;
   }
 }
 
-/* =================== Galeria: 3 colunas / ordem por linha, desc =================== */
-function renderGallery(){
-  // limpa colunas
-  for(let i=0;i<3;i++) document.getElementById('col'+i).innerHTML='';
+/* ======================== ESTADO ======================== */
+let PECAS = [];
+let RIFAS = [];
+const sel = { shop: new Map(), rifa: new Map() }; // id -> item
+let painelAberto = false;
+let abaAtiva = 'shop'; // 'shop' | 'rifa'
 
-  // ordena desc pelo id (ex: "0409", "0408", ...)
-  const ordered = [...piecesData].sort((a,b)=> (b.id_peca||'').localeCompare(a.id_peca||''));
+/* ======================== DOM REFS ======================== */
+const galeriaEl = document.getElementById('galeria');
+const painelEl  = document.getElementById('painel');
+const overlayEl = document.getElementById('overlay');
+const thumbsEl  = document.getElementById('thumbs');
+const totalEl   = document.getElementById('total');
+const btnFinal  = document.getElementById('btnFinalizar');
 
-  // distribui por linha: 0->col0, 1->col1, 2->col2, 3->col0, ...
-  ordered.forEach((p, idx)=>{
-    const col = document.getElementById('col'+(idx%3));
-    const card = document.createElement('a');
-    card.className = 'card' + (selectedPieces.has(p.id_peca)?' selected':'');
-    card.href = 'javascript:void(0)';
+const tabShop   = document.getElementById('tabShop');
+const tabRifa   = document.getElementById('tabRifa');
+const cntShop   = document.getElementById('cntShop');
+const cntRifa   = document.getElementById('cntRifa');
+
+/* ======================== HELPERS ======================== */
+const fmt = v => v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+
+function atualizarContadores(){
+  const nShop = sel.shop.size;
+  const nRifa = sel.rifa.size;
+
+  cntShop.textContent = nShop;
+  cntRifa.textContent = nRifa;
+
+  tabShop.querySelector('.ico').classList.toggle('has-items', nShop>0);
+  tabRifa.querySelector('.ico').classList.toggle('has-items', nRifa>0);
+}
+function totalSelecionado(){
+  let total = 0;
+  sel.shop.forEach(it => total += Number(it.preco||0));
+  sel.rifa.forEach(it => total += Number(it.preco||0));
+  return total;
+}
+function setAba(tab){
+  abaAtiva = tab;
+  tabShop.classList.toggle('on', tab==='shop');
+  tabShop.classList.toggle('off', tab!=='shop');
+  tabRifa.classList.toggle('on', tab==='rifa');
+  tabRifa.classList.toggle('off', tab!=='rifa');
+
+  if(painelAberto) abrirPainel(); // força refresh do conteúdo
+}
+function abrirPainel(){
+  painelAberto = true;
+  painelEl.classList.add('aberto');
+  overlayEl.classList.add('on');
+  renderThumbs();
+  totalEl.textContent = `TOTAL: ${fmt(totalSelecionado())}`;
+}
+function fecharPainel(){
+  painelAberto = false;
+  painelEl.classList.remove('aberto');
+  overlayEl.classList.remove('on');
+}
+function togglePainel(tab){
+  if(tab) setAba(tab);
+  painelAberto ? fecharPainel() : abrirPainel();
+}
+
+/* ======================== RENDER GALERIA ======================== */
+function renderGaleria(lista){
+  galeriaEl.innerHTML = '';
+  // ordem: linha por linha, id decrescente
+  const itens = [...lista].sort((a,b)=> Number(b.id) - Number(a.id));
+
+  for(const it of itens){
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.dataset.id = it.id;
+    card.dataset.preco = it.preco;
+    card.dataset.tipo = 'shop'; // só peças nesta galeria por enquanto
+
     const img = document.createElement('img');
-    const n = firstThumb(p);
-    img.src = tmb(n);
-    img.alt = p.titulo || p.id_peca;
-    img.onerror = function(){ this.onerror=null; this.src = tmbFallback(n); };
+    img.alt = it.titulo || `Peça ${it.id}`;
+    img.src = it.img;
     card.appendChild(img);
-    card.addEventListener('click', ()=> togglePiece(p.id_peca));
-    col.appendChild(card);
-  });
-}
 
-/* =================== Seleção =================== */
-function togglePiece(id){
-  if(selectedPieces.has(id)) selectedPieces.delete(id); else selectedPieces.add(id);
-  renderGallery();
-  if(openTab==='shop') renderPanelThumbs(); // mantém sincronizado
-  refreshFooter();
-}
+    // estado selecionado?
+    if(sel.shop.has(it.id)) card.classList.add('selected');
 
-function toggleRifa(id){
-  if(selectedRifas.has(id)) selectedRifas.delete(id); else selectedRifas.add(id);
-  if(openTab==='rifa') renderPanelThumbs();
-  refreshFooter();
-}
-
-/* =================== Painel (expansão) =================== */
-const panelWrap  = document.getElementById('panelWrap');
-const thumbRow   = document.getElementById('thumbRow');
-const totalBox   = document.getElementById('totalBox');
-const finalizar  = document.getElementById('finalizarBtn');
-const backdrop   = document.getElementById('backdrop');
-
-function openPanel(tab){
-  openTab = tab;
-  // marca ícones ativos/inativos + ícone colorido
-  setIcons();
-
-  // renderiza conteúdo
-  renderPanelThumbs();
-
-  // mostra expansão
-  panelWrap.style.display='block';
-  backdrop.style.display='block';
-
-  // mostra botão finalizar só se houver itens
-  finalizar.classList.toggle('hidden', (selectedPieces.size+selectedRifas.size)===0);
-
-  // scroll horizontal começa no fim (último adicionado)
-  setTimeout(()=> { thumbRow.scrollLeft = thumbRow.scrollWidth; }, 0);
-}
-function closePanel(){
-  openTab = null; setIcons();
-  panelWrap.style.display='none';
-  backdrop.style.display='none';
-}
-
-function setIcons(){
-  const shopActive = (openTab==='shop');
-  const rifaActive = (openTab==='rifa');
-
-  const btnShop = document.getElementById('btnShop');
-  const btnRifa = document.getElementById('btnRifa');
-  const iconShop = document.getElementById('iconShop');
-  const iconRifa = document.getElementById('iconRifa');
-
-  btnShop.classList.toggle('inactive', !shopActive);
-  btnRifa.classList.toggle('inactive', !rifaActive);
-
-  iconShop.src = shopActive ? '/elementos/ticon-SHOP-b.avif' : '/elementos/ticon-SHOP-c.avif';
-  iconRifa.src = rifaActive ? '/elementos/ticon-RIFA-b.avif' : '/elementos/ticon-RIFA-c.avif';
-
-  btnShop.setAttribute('aria-expanded', shopActive);
-  btnRifa.setAttribute('aria-expanded', rifaActive);
-}
-
-function renderPanelThumbs(){
-  thumbRow.innerHTML='';
-
-  if(openTab==='shop'){
-    // mostrar thumbs das peças
-    selectedPieces.forEach(id=>{
-      const p = piecesData.find(x=>x.id_peca===id);
-      if(!p) return;
-      const n = firstThumb(p);
-      const box = document.createElement('div'); box.className='thumb';
-      const img = document.createElement('img');
-      img.src=tmb(n); img.onerror=function(){this.onerror=null;this.src=tmbFallback(n);};
-      const x = document.createElement('button'); x.className='close'; x.textContent='×';
-      x.title='Remover'; x.onclick=()=>{ selectedPieces.delete(id); renderGallery(); renderPanelThumbs(); refreshFooter(); };
-      box.appendChild(img); box.appendChild(x);
-      thumbRow.appendChild(box);
-    });
-  }else if(openTab==='rifa'){
-    // thumbs de rifas: criamos botões coloridos com o número
-    selectedRifas.forEach(id=>{
-      const r = rifasData.find(x=>x.id_rifa===id || x.numero===id);
-      const box = document.createElement('div'); box.className='thumb';
-      const inner = document.createElement('div');
-      inner.style="display:flex;align-items:center;justify-content:center;height:80px;font-weight:900;font-size:22px;border:2px solid var(--ink);";
-      inner.textContent = r ? (r.numero || r.id_rifa) : id;
-      const x = document.createElement('button'); x.className='close'; x.textContent='×';
-      x.title='Remover'; x.onclick=()=>{ selectedRifas.delete(id); renderPanelThumbs(); refreshFooter(); };
-      box.appendChild(inner); box.appendChild(x);
-      thumbRow.appendChild(box);
+    // clique alterna seleção
+    card.addEventListener('click', ()=>{
+      const id = it.id;
+      if(sel.shop.has(id)){
+        sel.shop.delete(id);
+        card.classList.remove('selected');
+      }else{
+        sel.shop.set(id, it);
+        card.classList.add('selected');
+      }
+      atualizarContadores();
+      if(painelAberto) renderThumbs();
+      totalEl.textContent = `TOTAL: ${fmt(totalSelecionado())}`;
     });
 
-    // também mostramos botões de rifas disponíveis para selecionar rapidamente?
-    // (mantemos simples nesta etapa para focar no fluxo)
+    galeriaEl.appendChild(card);
   }
-
-  // total + botão finalizar
-  totalBox.textContent = 'TOTAL: ' + money(totalAll());
-  finalizar.classList.toggle('hidden', (selectedPieces.size+selectedRifas.size)===0);
 }
 
-/* =================== Footer (contadores e cliques) =================== */
-function refreshFooter(){
-  const cShop = document.getElementById('countShop');
-  const cRifa = document.getElementById('countRifa');
+/* ======================== THUMBS (PAINEL) ======================== */
+function renderThumbs(){
+  thumbsEl.innerHTML = '';
+  const mapa = abaAtiva==='shop' ? sel.shop : sel.rifa;
 
-  const nShop = selectedPieces.size;
-  const nRifa = selectedRifas.size;
+  // ordem de adição (inserção) – do mais recente pro mais antigo
+  const arr = [...mapa.values()];
+  for(const it of arr){
+    const t = document.createElement('div');
+    t.className = 'thumb';
+    t.dataset.id = it.id;
+    const im = document.createElement('img');
+    im.src = it.img; im.alt = it.titulo || it.id;
+    t.appendChild(im);
 
-  cShop.textContent = nShop; cRifa.textContent = nRifa;
-  cShop.classList.toggle('hidden', nShop===0);
-  cRifa.classList.toggle('hidden', nRifa===0);
+    const x = document.createElement('span');
+    x.className = 'x'; x.textContent = '×';
+    x.title = 'Remover';
+    x.addEventListener('click', (ev)=>{
+      ev.stopPropagation();
+      if(abaAtiva==='shop'){
+        sel.shop.delete(it.id);
+        // remover borda na galeria
+        const c = galeriaEl.querySelector(`.card[data-id="${it.id}"]`);
+        if(c) c.classList.remove('selected');
+      }else{
+        sel.rifa.delete(it.id);
+      }
+      renderThumbs();
+      atualizarContadores();
+      totalEl.textContent = `TOTAL: ${fmt(totalSelecionado())}`;
+    });
+    t.appendChild(x);
+
+    thumbsEl.appendChild(t);
+  }
 }
 
-/* eventos de abrir/fechar painel */
-document.getElementById('btnShop').addEventListener('click', ()=>{
-  if(openTab==='shop'){ closePanel(); } else { openPanel('shop'); }
-});
-document.getElementById('btnRifa').addEventListener('click', ()=>{
-  if(openTab==='rifa'){ closePanel(); } else { openPanel('rifa'); }
-});
-backdrop.addEventListener('click', closePanel);
-document.addEventListener('keydown', (ev)=>{ if(ev.key==='Escape') closePanel(); });
+/* ======================== EVENTOS GLOBAIS ======================== */
+tabShop.addEventListener('click', ()=> togglePainel('shop'));
+tabRifa.addEventListener('click', ()=> togglePainel('rifa'));
 
-document.getElementById('finalizarBtn').addEventListener('click', ()=>{
-  if((selectedPieces.size+selectedRifas.size)===0) return;
-  const pecas = [...selectedPieces].join(',');
-  const rifas = [...selectedRifas].join(',');
-  alert('Resumo da aposta:\nPeças: '+pecas+'\nRifas: '+rifas+'\nTotal: '+money(totalAll()));
-  // Aqui manteremos só o preview funcional. Integração FormSubmit/GAS entra na próxima etapa.
+document.getElementById('rodape').addEventListener('click', (e)=>{
+  // clique na faixa vermelha fora dos botões também alterna
+  const isBtn = e.target.closest('.acao');
+  if(!isBtn) togglePainel(abaAtiva);
 });
 
-/* =================== Boot =================== */
-loadData();
+overlayEl.addEventListener('click', fecharPainel);
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') fecharPainel(); });
+
+btnFinal.addEventListener('click', ()=>{
+  // só alerta-resumo por enquanto
+  const pecas = [...sel.shop.keys()].join(',');
+  const rifas = [...sel.rifa.keys()].join(',');
+  alert(`Resumo da aposta:\nPeças: ${pecas}\nRifas: ${rifas}\nTotal: ${fmt(totalSelecionado())}`);
+});
+
+/* ======================== BOOT ======================== */
+(async function init(){
+  PECAS = await loadJSON(PATH_PECAS, fallbackPecas);
+  RIFAS = await loadJSON(PATH_RIFAS, fallbackRifas);
+  renderGaleria(PECAS);
+  atualizarContadores();
+})();
 </script>
 </body>
 </html>
