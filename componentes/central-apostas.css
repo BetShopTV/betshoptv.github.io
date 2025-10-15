@@ -1,0 +1,38 @@
+<!-- CENTRAL DE APOSTAS — componente mestre BSTV -->
+<link rel="stylesheet" href="/css/central-apostas.css">
+
+<!-- Painel branco (expansão) -->
+<section id="panel" class="panel" aria-hidden="true">
+  <div id="thumbs" class="thumbs-row"></div>
+  <div class="panel-footer">
+    <div id="total" class="total">TOTAL: R$ 0,00</div>
+    <button id="finalizar" class="panel-btn">FINALIZAR APOSTA</button>
+  </div>
+</section>
+
+<!-- Rodapé vermelho fixo -->
+<footer class="footer" id="footer">
+  <div class="footer-inner">
+    <div class="footer-left">CENTRAL de APOSTAS</div>
+    <div class="footer-tabs">
+      <!-- Aba de Peças -->
+      <div id="tabShop" class="tab inactive" role="button" aria-label="Peças selecionadas">
+        <div class="ico ico-shop">
+          <span id="badgeShop" class="badge hidden">0</span>
+        </div>
+        <span>PEÇAS</span>
+      </div>
+
+      <!-- Aba de Rifas -->
+      <div id="tabRifa" class="tab inactive" role="button" aria-label="Rifas selecionadas">
+        <div class="ico ico-rifa">
+          <span id="badgeRifa" class="badge hidden">0</span>
+        </div>
+        <span>RIFAS</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Script principal -->
+<script src="/js/central-apostas.js" defer></script>
