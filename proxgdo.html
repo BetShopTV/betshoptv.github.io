@@ -1,516 +1,538 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TOMARA</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="preload" href="/fonts/Roboto_Condensed-Regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/Roboto_Condensed-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Galeria de Ofertas — BSTV (masonry)</title>
 
-<!-- PALETA / TIPOGRAFIA -->
 <style>
-:root {
-  --bg: #bebab0;
-  --ink: #2b2424;
-  --red: #ff0000;
-  --white: #ffffff;
-  --footer-h: clamp(64px, 9vh, 72px);
-  --panel-max-h: 30vh;
-}
+  :root{
+    --red:#ff0000;
+    --ink:#2b2424;
+    --muted:#bebab0;
+    --bg:#d0cbbf4d;   /* leve, só p/ contraste com as obras */
+    --white:#ffffff;
+    --maxW:1200px;
+    --gap:6px;
+    --thumbH:132px;      /* altura dos thumbs no painel */
+    --panelMaxH:30vh;    /* altura max do painel branco (expansão) */
+  }
 
-* { box-sizing: border-box; }
+  html,body{
+    margin:0;
+    padding:0;
+    background:#c9c4b8;           /* “sitezão atrás” */
+    color:var(--ink);
+    font-family: "Roboto Condensed", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    letter-spacing:.1px;
+  }
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: "Roboto Condensed", "Roboto", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  padding-bottom: var(--footer-h);
-}
+  /* ====== WRAPPER LIMITA LARGURA (3 colunas) ====== */
+  .page{
+    max-width:var(--maxW);
+    margin:0 auto;
+  }
 
-/* =================== GERAL =================== */
+  /* ====== GALERIA MASONRY (3 colunas SEMPRE) ====== */
+  .gallery{
+    column-count:3;         /* 3 colunas em todas as larguras (pedido) */
+    column-gap:var(--gap);
+    padding:var(--gap);
+  }
+  .gallery-item{
+    break-inside:avoid;
+    display:inline-block;
+    width:100%;
+    margin:0 0 var(--gap) 0;
+    background:transparent;
+    position:relative;
+  }
+  .gallery-item .card{
+    outline:2px solid transparent;
+    transition:outline-color .1s linear;
+  }
+  .gallery-item.selected .card{
+    outline:2px solid var(--red);  /* borda vermelha ao selecionar */
+  }
+  .card img{
+    display:block;
+    width:100%;
+    height:auto;            /* sem corte, sem distorção */
+  }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 4px;
-}
+  /* ====== PAINEL BRANCO (EXPANSÃO) ====== */
+  .panel-wrap{
+    max-width:var(--maxW);
+    margin:0 auto;
+    position:relative;
+  }
+  .panel{
+    background:var(--white);
+    border-top:2px solid var(--white);  /* topo branco */
+    max-height:var(--panelMaxH);
+    display:none;   /* controlado pelo JS */
+    padding:10px 10px 14px;
+  }
+  .panel.open{ display:block; }
 
-.gallery {
-  display: flex;
-  gap: clamp(6px, 1vw, 16px);
-}
+  .thumbs-row{
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+    overflow-x:auto;
+    scrollbar-width:thin;
+  }
+  .thumbs-row::-webkit-scrollbar{
+    height:4px;
+  }
+  .thumbs-row::-webkit-scrollbar-thumb{
+    background:var(--red);
+  }
+  .thumbs-row::-webkit-scrollbar-track{
+    background:var(--muted);
+  }
 
-.col {
-  flex: 1 1 33%;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(8px, 1.4vw, 18px);
-}
+  .tmb{
+    position:relative;
+    flex:0 0 auto;
+    height:var(--thumbH);
+    aspect-ratio:3/4;
+    border:1px solid var(--muted);
+    background:#eee;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .tmb img{
+    height:100%;
+    width:auto;
+    display:block;
+  }
+  .tmb .x{
+    position:absolute;
+    top:4px;
+    right:4px;
+    width:18px;
+    height:18px;
+    background:var(--ink);
+    color:var(--white);
+    font-size:12px;
+    line-height:18px;
+    text-align:center;
+    cursor:pointer;
+    user-select:none;
+  }
 
-.card {
-  background: transparent;
-  cursor: pointer;
-  display: block;
-}
+  .panel-footer{
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .total{
+    font-weight:700;
+    font-size:18px;
+  }
+  .btn{
+    background:#111;
+    color:#fff;
+    border:none;
+    font-weight:700;
+    padding:12px 18px;
+    cursor:pointer;
+    text-transform:uppercase;
+    letter-spacing:.3px;
+  }
 
-.card img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  display: block;
-  border: none;
-}
+  /* ====== RODAPÉ (BARRA VERMELHA) ====== */
+  .footer{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    background:var(--red);
+    color:var(--white);
+    z-index:50;
+  }
+  .footer .bar-inner{
+    max-width:var(--maxW);
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:12px 12px 10px;
+  }
+  .brand{
+    margin-right:auto;
+    font-weight:900;
+    text-transform:uppercase;
+  }
 
-.card.selected img {
-  border: 2px solid var(--red);
-}
+  .tab{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+    user-select:none;
+    font-weight:700;
+    color:var(--muted);  /* off */
+  }
+  .tab.active{ color:var(--white); }
+  .tab .ico{
+    position:relative;
+    width:28px; height:28px;
+    flex:0 0 28px;
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position:center;
+    filter:brightness(0) invert(1); /* branco */
+    opacity:.9;
+  }
+  .tab.off .ico{
+    filter:none;  /* icon “branco” troca pro arquivo -b (branco), mas cor do texto fica off */
+    opacity:.5;
+  }
+  .tab .badge{
+    position:absolute;
+    right:-8px; top:-8px;
+    min-width:18px;
+    height:18px;
+    padding:0 5px;
+    border-radius:9px;
+    background:#fff;
+    color:var(--red);
+    font-size:12px;
+    font-weight:900;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
 
-/* =================== PAINEL =================== */
+  /* ícones do rodapé (caminho público fornecido) */
+  .ico-shop{ background-image:url("elementos/ticon-SHOP-b.avif"); }
+  .ico-rifa{ background-image:url("elementos/ticon-RIFA-b.avif"); }
+  .tab.off .ico-shop{ background-image:url("elementos/ticon-SHOP-c.avif"); }
+  .tab.off .ico-rifa{ background-image:url("elementos/ticon-RIFA-c.avif"); }
 
-.panel-wrap {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: var(--footer-h);
-  display: none;
-  z-index: 999;
-}
+  /* ====== INTERATIVO ====== */
+  .clickable{ cursor:pointer; }
+  .hidden{ display:none !important; }
 
-.panel {
-  background: var(--white);
-  max-width: 1200px;
-  margin: 0 auto;
-  border-top: 2px solid var(--white);
-  padding: 8px 8px 12px;
-  max-height: var(--panel-max-h);
-  overflow: hidden;
-}
-
-.thumb-row {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 6px 4px 2px;
-  align-items: flex-start;
-  scrollbar-color: var(--red) var(--bg);
-  scrollbar-width: thin;
-}
-
-.thumb {
-  position: relative;
-  flex: 0 0 auto;
-  padding: 6px;
-  min-width: 130px;
-  max-width: 160px;
-  border: 1px solid var(--ink);
-  background: var(--white);
-}
-
-.thumb img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-.thumb .close {
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  background: var(--ink);
-  color: var(--white);
-  border: 0;
-  width: 22px;
-  height: 22px;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-/* Total + Finalizar */
-.panel-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 8px;
-}
-
-.total {
-  font-weight: 900;
-  color: var(--ink);
-  font-size: clamp(16px, 1.8vw, 20px);
-}
-
-.finalizar {
-  background: var(--ink);
-  color: var(--white);
-  border: 0;
-  font-weight: 900;
-  cursor: pointer;
-  padding: 10px 16px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  font-size: clamp(14px, 1.5vw, 16px);
-}
-
-.backdrop {
-  position: fixed;
-  inset: 0;
-  background: transparent;
-  display: none;
-  z-index: 998;
-}
-
-.hidden {
-  display: none !important;
-}
-
-/* =================== RODAPÉ =================== */
-
-.footer {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: var(--footer-h);
-  background: var(--red);
-  color: var(--white);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  padding: 0 clamp(10px, 2vw, 24px);
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.footer .brand {
-  font-weight: 900;
-  font-size: clamp(14px, 1.8vw, 20px);
-  letter-spacing: 0.3px;
-}
-
-.actions {
-  display: flex;
-  gap: clamp(12px, 2vw, 28px);
-  margin-left: auto;
-  align-items: center;
-}
-
-.action {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  color: var(--white);
-  text-transform: uppercase;
-  font-weight: 800;
-  letter-spacing: 0.4px;
-  font-size: clamp(13px, 1.5vw, 18px);
-}
-
-.action img {
-  height: clamp(22px, 3vw, 30px);
-}
-
-.action.inactive {
-  color: var(--bg);
-}
-
-.badge {
-  position: relative;
-  display: inline-block;
-}
-
-.badge .dot {
-  position: absolute;
-  top: -10px;
-  right: -12px;
-  background: var(--white);
-  color: var(--red);
-  border-radius: 999px;
-  font-weight: 900;
-  font-size: clamp(11px, 1.4vw, 14px);
-  min-width: clamp(16px, 2vw, 22px);
-  height: clamp(16px, 2vw, 22px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 0 2px var(--red);
-  padding: 0 6px;
-}
-
+  /* ====== RESPONSIVO ====== */
+  @media (max-width:768px){
+    :root{
+      --gap:4px;
+      --thumbH:108px;
+    }
+    .footer .bar-inner{ gap:14px; padding:10px; }
+    .brand{ font-size:14px; }
+    .tab{ font-size:14px; gap:6px; }
+    .tab .ico{ width:24px; height:24px; flex-basis:24px; }
+    .tab .badge{ right:-7px; top:-7px; min-width:16px; height:16px; font-size:11px; }
+    .total{ font-size:16px; }
+    .btn{ padding:10px 14px; font-size:14px; }
+  }
 </style>
 </head>
 <body>
 
-  <div class="container">
-    <div id="gallery" class="gallery">
-      <div class="col" id="col0"></div>
-      <div class="col" id="col1"></div>
-      <div class="col" id="col2"></div>
+  <main class="page">
+    <!-- Galeria em “masonry” (3 colunas) -->
+    <section id="gallery" class="gallery" aria-live="polite">
+      <!-- itens via JS -->
+    </section>
+
+    <!-- Painel branco (expansão) -->
+    <div class="panel-wrap">
+      <section id="panel" class="panel" aria-hidden="true">
+        <!-- Linha superior: thumbs com rolagem horizontal -->
+        <div id="thumbs" class="thumbs-row" tabindex="0" aria-label="Itens selecionados (rolagem horizontal)"></div>
+
+        <!-- Linha inferior: total + finalizar -->
+        <div class="panel-footer">
+          <div id="total" class="total">TOTAL: R$ 0,00</div>
+          <button id="finalizar" class="btn" type="button">FINALIZAR APOSTA</button>
+        </div>
+      </section>
     </div>
-  </div>
+  </main>
 
-  <div id="backdrop" class="backdrop" aria-hidden="true"></div>
+  <!-- RODAPÉ — barra fixa -->
+  <footer class="footer" role="contentinfo">
+    <div class="bar-inner">
+      <div class="brand">CENTRAL de APOSTAS</div>
 
-  <div id="panelWrap" class="panel-wrap" aria-hidden="true">
-    <div class="panel" role="region" aria-label="Itens selecionados">
-      <div id="thumbRow" class="thumb-row"></div>
-      <div class="panel-bottom">
-        <div class="total" id="totalBox">TOTAL: R$ 0,00</div>
-        <button id="finalizarBtn" class="finalizar hidden">Finalizar Aposta</button>
+      <div id="tabShop" class="tab off" data-tab="shop" aria-controls="panel">
+        <div class="ico ico-shop">
+          <span id="badgeShop" class="badge hidden">0</span>
+        </div>
+        <span>PEÇAS</span>
+      </div>
+
+      <div id="tabRifa" class="tab off" data-tab="rifa" aria-controls="panel">
+        <div class="ico ico-rifa">
+          <span id="badgeRifa" class="badge hidden">0</span>
+        </div>
+        <span>RIFAS</span>
       </div>
     </div>
-  </div>
-
-  <div class="footer" id="footer">
-    <div class="brand">CENTRAL de APOSTAS</div>
-    <div class="actions">
-      <div id="btnShop" class="action inactive" data-tab="shop" role="button" aria-controls="panelWrap" aria-expanded="false">
-        <span class="badge">
-          <img id="iconShop" src="/elementos/ticon-SHOP-c.avif" alt="Peças">
-          <span id="countShop" class="dot hidden">0</span>
-        </span>
-        <span>Peças</span>
-      </div>
-      <div id="btnRifa" class="action inactive" data-tab="rifa" role="button" aria-controls="panelWrap" aria-expanded="false">
-        <span class="badge">
-          <img id="iconRifa" src="/elementos/ticon-RIFA-c.avif" alt="Rifas">
-          <span id="countRifa" class="dot hidden">0</span>
-        </span>
-        <span>Rifas</span>
-      </div>
-    </div>
-  </div>
-
+  </footer>
 
 <script>
-
+/* =================== Endpoints =================== */
 const PECAS_JSON_URL = '/dados/pecas.json';
 const RIFAS_JSON_URL = '/dados/rifas.json';
 
-let piecesData = [];
-let rifasData = [];
-const selectedPieces = new Set();
-const selectedRifas = new Set();
-let openTab = null;
+/* =================== Estado =================== */
+let piecesData = [];     // pecas.json (somente disponíveis)
+let rifasData  = [];     // rifas.json (somente disponíveis)
+const selectedPieces = new Set();  // id_peca
+const selectedRifas  = new Set();  // id_rifa
+let openTab = null;                 // 'shop' | 'rifa' | null
 
-const money = v => 'R$ ' + Number(v || 0).toFixed(2).replace('.', ',');
-const idKey = p => (p.id_peca || '');
+/* =================== Utils =================== */
+const money = v => 'R$ ' + Number(v||0).toFixed(2).replace('.', ',');
+const idKey  = p => (p.id_peca||p.id_rifa||'');
 const firstThumb = p => (p.imagens && p.imagens[0]) || '';
 const tmb = name => `img/tmb/${name}.avif`;
 const tmbFallback = name => `img/fallback/${name}.jpg`;
 
-function rifaTotal(cnt) {
-  if (!cnt) return 0;
-  return (cnt % 2 === 0) ? 25 * cnt : 25 * (cnt - 1) + 30;
+function byId(id){ return document.getElementById(id); }
+function fmtNumber(n){ return (n>99? '99+' : String(n)); }
+
+/* =================== DOM Refs =================== */
+const $gallery  = byId('gallery');
+const $panel    = byId('panel');
+const $thumbs   = byId('thumbs');
+const $total    = byId('total');
+const $final    = byId('finalizar');
+const $tabShop  = byId('tabShop');
+const $tabRifa  = byId('tabRifa');
+const $badgeShop= byId('badgeShop');
+const $badgeRifa= byId('badgeRifa');
+
+/* =================== Loader de JSON =================== */
+async function loadJSON(url){
+  const r = await fetch(url, { cache: 'no-store' });
+  if(!r.ok) throw new Error('Falha ao carregar '+url);
+  return r.json();
 }
 
-function piecesTotal() {
-  let sum = 0;
-  selectedPieces.forEach(id => {
-    const p = piecesData.find(x => x.id_peca === id);
-    if (p) sum += Number(p.preco || 0);
+function sortDescById(arr){
+  return [...arr].sort((a,b)=>{
+    const ai = parseInt(idKey(a).replace(/\D/g,''),10);
+    const bi = parseInt(idKey(b).replace(/\D/g,''),10);
+    return bi - ai; // maior primeiro (mais recente)
   });
-  return sum;
 }
 
-function totalAll() {
-  return piecesTotal() + rifaTotal(selectedRifas.size);
-}
+/* =================== Render da Galeria (Masonry) =================== */
+function renderGallery(){
+  $gallery.innerHTML = '';
 
-async function loadData() {
-  try {
-    const [pecasResp, rifasResp] = await Promise.all([
-      fetch(PECAS_JSON_URL),
-      fetch(RIFAS_JSON_URL)
-    ]);
-    const pecas = await pecasResp.json();
-    const rifas = await rifasResp.json();
+  // Apenas peças (galeria principal). Rifas ficam só no rodapé/expansão.
+  const items = sortDescById(piecesData);
 
-    piecesData = (pecas || []).filter(p => String(p.status || '').toUpperCase() !== 'VENDIDAAA');
-    rifasData = (rifas || []).filter(r => !(r.status_rifa && String(r.status_rifa).trim() !== ''));
+  for(const p of items){
+    const id   = p.id_peca;
+    const imgN = firstThumb(p);
+    const fig  = document.createElement('figure');
+    fig.className = 'gallery-item clickable';
+    fig.dataset.id = id;
 
-    renderGallery();
-    refreshFooter();
-  } catch (e) {
-    console.error('Erro ao carregar os dados JSON', e);
-  }
-}
+    const card = document.createElement('div');
+    card.className = 'card';
 
-function renderGallery() {
-  for (let i = 0; i < 3; i++) document.getElementById('col' + i).innerHTML = '';
-
-  const ordered = [...piecesData].sort((a, b) =>
-    (b.id_peca || '').localeCompare(a.id_peca || '')
-  );
-
-  ordered.forEach((p, idx) => {
-    const col = document.getElementById('col' + (idx % 3));
-    const card = document.createElement('a');
-    card.className = 'card' + (selectedPieces.has(p.id_peca) ? ' selected' : '');
-    card.href = 'javascript:void(0)';
     const img = document.createElement('img');
-    const n = firstThumb(p);
-    img.src = tmb(n);
-    img.alt = p.titulo || p.id_peca;
-    img.onerror = function () {
-      this.onerror = null;
-      this.src = tmbFallback(n);
-    };
+    img.src = tmb(imgN);
+    img.alt = p.titulo || id;
+    img.onerror = ()=> img.src = tmbFallback(imgN);
+
     card.appendChild(img);
-    card.addEventListener('click', () => togglePiece(p.id_peca));
-    col.appendChild(card);
-  });
+    fig.appendChild(card);
+
+    // selected visual
+    if(selectedPieces.has(id)) fig.classList.add('selected');
+
+    // toggle seleção (adiciona/retira do carrinho)
+    fig.addEventListener('click', e=>{
+      togglePiece(id);
+    });
+
+    $gallery.appendChild(fig);
+  }
 }
 
-function togglePiece(id) {
-  if (selectedPieces.has(id)) selectedPieces.delete(id);
+/* =================== Seleção / Carrinho =================== */
+function togglePiece(id){
+  if(selectedPieces.has(id)) selectedPieces.delete(id);
   else selectedPieces.add(id);
-
-  renderGallery();
-  if (openTab === 'shop') renderPanelThumbs();
-  refreshFooter();
+  refreshUI();
 }
 
-function toggleRifa(id) {
-  if (selectedRifas.has(id)) selectedRifas.delete(id);
+function removePiece(id){
+  if(selectedPieces.delete(id)) refreshUI();
+}
+
+function toggleRifa(id){
+  if(selectedRifas.has(id)) selectedRifas.delete(id);
   else selectedRifas.add(id);
-
-  if (openTab === 'rifa') renderPanelThumbs();
-  refreshFooter();
+  refreshUI();
+}
+function removeRifa(id){
+  if(selectedRifas.delete(id)) refreshUI();
 }
 
-// PANEL CONTROL
-const panelWrap = document.getElementById('panelWrap');
-const thumbRow = document.getElementById('thumbRow');
-const totalBox = document.getElementById('totalBox');
-const finalizar = document.getElementById('finalizarBtn');
-const backdrop = document.getElementById('backdrop');
-
-function openPanel(tab) {
-  openTab = tab;
-  setIcons();
-  renderPanelThumbs();
-  panelWrap.style.display = 'block';
-  backdrop.style.display = 'block';
-  finalizar.classList.toggle('hidden', (selectedPieces.size + selectedRifas.size) === 0);
-  setTimeout(() => { thumbRow.scrollLeft = thumbRow.scrollWidth; }, 0);
+/* =================== Painel / Rodapé =================== */
+function openPanel(tab){
+  openTab = tab; // 'shop' | 'rifa'
+  $panel.classList.add('open');
+  $panel.setAttribute('aria-hidden','false');
+  updateTabsVisual();
+  renderPanel();
 }
-
-function closePanel() {
+function closePanel(){
   openTab = null;
-  setIcons();
-  panelWrap.style.display = 'none';
-  backdrop.style.display = 'none';
+  $panel.classList.remove('open');
+  $panel.setAttribute('aria-hidden','true');
+  updateTabsVisual();
+}
+function togglePanel(tab){
+  if(openTab === tab){ closePanel(); return; }
+  openPanel(tab);
 }
 
-function setIcons() {
-  const shopActive = (openTab === 'shop');
-  const rifaActive = (openTab === 'rifa');
+function updateTabsVisual(){
+  // SHOP
+  const hasShop = selectedPieces.size>0;
+  $tabShop.classList.toggle('active', openTab==='shop');
+  $tabShop.classList.toggle('off', !hasShop || openTab!=='shop');
+  $badgeShop.textContent = fmtNumber(selectedPieces.size);
+  $badgeShop.classList.toggle('hidden', selectedPieces.size===0);
 
-  const btnShop = document.getElementById('btnShop');
-  const btnRifa = document.getElementById('btnRifa');
-  const iconShop = document.getElementById('iconShop');
-  const iconRifa = document.getElementById('iconRifa');
-
-  btnShop.classList.toggle('inactive', !shopActive);
-  btnRifa.classList.toggle('inactive', !rifaActive);
-
-  iconShop.src = shopActive ? '/elementos/ticon-SHOP-b.avif' : '/elementos/ticon-SHOP-c.avif';
-  iconRifa.src = rifaActive ? '/elementos/ticon-RIFA-b.avif' : '/elementos/ticon-RIFA-c.avif';
-
-  btnShop.setAttribute('aria-expanded', shopActive);
-  btnRifa.setAttribute('aria-expanded', rifaActive);
+  // RIFA
+  const hasRifa = selectedRifas.size>0;
+  $tabRifa.classList.toggle('active', openTab==='rifa');
+  $tabRifa.classList.toggle('off', !hasRifa || openTab!=='rifa');
+  $badgeRifa.textContent = fmtNumber(selectedRifas.size);
+  $badgeRifa.classList.toggle('hidden', selectedRifas.size===0);
 }
 
-function renderPanelThumbs() {
-  thumbRow.innerHTML = '';
-
-  if (openTab === 'shop') {
-    selectedPieces.forEach(id => {
-      const p = piecesData.find(x => x.id_peca === id);
-      if (!p) return;
-      const n = firstThumb(p);
-      const box = document.createElement('div');
-      box.className = 'thumb';
-      const img = document.createElement('img');
-      img.src = tmb(n);
-      img.onerror = function () { this.onerror = null; this.src = tmbFallback(n); };
-      const x = document.createElement('button');
-      x.className = 'close';
-      x.textContent = '×';
-      x.onclick = () => {
-        selectedPieces.delete(id);
-        renderGallery();
-        renderPanelThumbs();
-        refreshFooter();
-      };
-      box.appendChild(img);
-      box.appendChild(x);
-      thumbRow.appendChild(box);
-    });
-  } else if (openTab === 'rifa') {
-    selectedRifas.forEach(id => {
-      const r = rifasData.find(x => x.id_rifa === id || x.numero === id);
-      const box = document.createElement('div');
-      box.className = 'thumb';
-      const inner = document.createElement('div');
-      inner.style = "display:flex;align-items:center;justify-content:center;height:80px;font-weight:900;font-size:22px;border:2px solid var(--ink);";
-      inner.textContent = r ? (r.numero || r.id_rifa) : id;
-      const x = document.createElement('button');
-      x.className = 'close';
-      x.textContent = '×';
-      x.onclick = () => {
-        selectedRifas.delete(id);
-        renderPanelThumbs();
-        refreshFooter();
-      };
-      box.appendChild(inner);
-      box.appendChild(x);
-      thumbRow.appendChild(box);
-    });
+function renderPanel(){
+  // thumbs
+  $thumbs.innerHTML = '';
+  let items = [];
+  if(openTab==='shop'){
+    items = sortDescById(piecesData.filter(p=>selectedPieces.has(p.id_peca)));
+  }else if(openTab==='rifa'){
+    items = sortDescById(rifasData.filter(r=>selectedRifas.has(r.id_rifa)));
+  }else{
+    // se o painel abriu por botão sem tab, prioriza o que tiver itens
+    if(selectedPieces.size) { openTab='shop'; updateTabsVisual(); return renderPanel(); }
+    if(selectedRifas.size)  { openTab='rifa'; updateTabsVisual(); return renderPanel(); }
+    // nada selecionado: fecha
+    closePanel();
+    return;
   }
 
-  totalBox.textContent = 'TOTAL: ' + money(totalAll());
-  finalizar.classList.toggle('hidden', (selectedPieces.size + selectedRifas.size) === 0);
+  for(const it of items){
+    const tn = firstThumb(it);
+    const box = document.createElement('div');
+    box.className = 'tmb';
+    const im = document.createElement('img');
+    im.src = tmb(tn);
+    im.alt = (it.titulo || idKey(it));
+    im.onerror = ()=> im.src = tmbFallback(tn);
+
+    const x = document.createElement('div');
+    x.className='x';
+    x.textContent='×';
+    x.title='Remover';
+    x.addEventListener('click', e=>{
+      e.stopPropagation();
+      if(openTab==='shop') removePiece(it.id_peca);
+      else removeRifa(it.id_rifa);
+    });
+
+    box.appendChild(im);
+    box.appendChild(x);
+    $thumbs.appendChild(box);
+  }
+
+  // total
+  const totalPieces = piecesData
+    .filter(p=>selectedPieces.has(p.id_peca))
+    .reduce((acc,p)=> acc + Number(p.preco||0), 0);
+  const totalRifas = rifasData
+    .filter(r=>selectedRifas.has(r.id_rifa))
+    .reduce((acc,r)=> acc + Number(r.preco||0), 0);
+
+  $total.textContent = 'TOTAL: ' + money(totalPieces + totalRifas);
 }
 
-function refreshFooter() {
-  const cShop = document.getElementById('countShop');
-  const cRifa = document.getElementById('countRifa');
-  const nShop = selectedPieces.size;
-  const nRifa = selectedRifas.size;
-  cShop.textContent = nShop;
-  cRifa.textContent = nRifa;
-  cShop.classList.toggle('hidden', nShop === 0);
-  cRifa.classList.toggle('hidden', nRifa === 0);
-}
-
-document.getElementById('btnShop').addEventListener('click', () => {
-  if (openTab === 'shop') closePanel();
-  else openPanel('shop');
+/* ===== Eventos de rodapé ===== */
+$tabShop.addEventListener('click', ()=>{
+  if(!selectedPieces.size){ return; } // não abre se vazio
+  togglePanel('shop');
 });
-document.getElementById('btnRifa').addEventListener('click', () => {
-  if (openTab === 'rifa') closePanel();
-  else openPanel('rifa');
-});
-backdrop.addEventListener('click', closePanel);
-document.addEventListener('keydown', ev => {
-  if (ev.key === 'Escape') closePanel();
+$tabRifa.addEventListener('click', ()=>{
+  if(!selectedRifas.size){ return; }
+  togglePanel('rifa');
 });
 
-document.getElementById('finalizarBtn').addEventListener('click', () => {
-  if ((selectedPieces.size + selectedRifas.size) === 0) return;
+/* ===== Fechar painel por ESC ou clique fora ===== */
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape') closePanel();
+});
+document.addEventListener('click', e=>{
+  const withinPanel = e.target.closest('#panel');
+  const withinFooter = e.target.closest('.footer');
+  const withinGallery= e.target.closest('.gallery-item');
+  if(!withinPanel && !withinFooter && !withinGallery){
+    // clique fora da “central” e fora da galeria => fecha
+    closePanel();
+  }
+});
+
+/* ===== Finalizar (placeholder) ===== */
+$final.addEventListener('click', ()=>{
+  // Apenas mostra resumo local – sem alert() nativo do browser no futuro
   const pecas = [...selectedPieces].join(',');
   const rifas = [...selectedRifas].join(',');
-  alert(`Resumo da aposta:\nPeças: ${pecas}\nRifas: ${rifas}\nTotal: ${money(totalAll())}`);
+  const totalPieces = piecesData.filter(p=>selectedPieces.has(p.id_peca)).reduce((a,p)=>a+Number(p.preco||0),0);
+  const totalRifas = rifasData.filter(r=>selectedRifas.has(r.id_rifa)).reduce((a,r)=>a+Number(r.preco||0),0);
+  const total = totalPieces + totalRifas;
+
+  console.log({
+    pecas,
+    rifas,
+    total
+  });
+  // Aqui depois conectamos ao Apps Script / formsubmit, mantendo UI.
 });
 
-loadData();
+/* =================== Boot =================== */
+(async function boot(){
+  try{
+    // carrega JSON
+    const rawPieces = await loadJSON(PECAS_JSON_URL);
+    const rawRifas  = await loadJSON(RIFAS_JSON_URL);
 
-  
+    // apenas disponíveis (status diferente de “VENDIDAAA”)
+    piecesData = rawPieces.filter(p => String(p.status||'').toUpperCase() !== 'VENDIDAAA');
+    rifasData  = rawRifas.filter(r => String(r.status||'').toUpperCase() !== 'VENDIDAAA');
+
+    renderGallery();
+    updateTabsVisual();
+  }catch(err){
+    console.error(err);
+  }
+})();
+
+function refreshUI(){
+  renderGallery();
+  updateTabsVisual();
+  if(openTab){ renderPanel(); }
+}
 </script>
 </body>
 </html>
