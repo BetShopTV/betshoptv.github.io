@@ -23,7 +23,7 @@ html,body{height:100%}
 body{
   margin:0; background:var(--bg); color:var(--ink);
   font-family:"Roboto Condensed", sans-serif;
-  -webkit-font-smoothing:antialiased; padding-bottom:var(--footer-h);
+  -webkit-font-smoothing:antialiased;   padding-bottom: clamp(66px, 8vh, 88px);
 }
 
 /* ===== GRADE 3 colunas (sem corações/numeração) ===== */
@@ -36,7 +36,8 @@ body{
 
 /* ===== RODAPÉ ===== */
 .footer{
-  position:fixed;left:0;right:0;bottom:0;height:var(--footer-h);
+  .footer {
+  position:fixed;left:0;right:0;bottom:0; height: clamp(52px, calc(3vh + 1vw), 72px);
   background:var(--red); color:var(--white); z-index:1000;
   display:flex; align-items:center; gap:16px; padding:0 clamp(10px,2vw,24px);
   user-select:none;
