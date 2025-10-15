@@ -1,38 +1,231 @@
-<!-- CENTRAL DE APOSTAS — componente mestre BSTV -->
-<link rel="stylesheet" href="/css/central-apostas.css">
+/* ===========================================================
+   CENTRAL DE APOSTAS — ESTILO MESTRE BSTV
+   =========================================================== */
 
-<!-- Painel branco (expansão) -->
-<section id="panel" class="panel" aria-hidden="true">
-  <div id="thumbs" class="thumbs-row"></div>
-  <div class="panel-footer">
-    <div id="total" class="total">TOTAL: R$ 0,00</div>
-    <button id="finalizar" class="panel-btn">FINALIZAR APOSTA</button>
-  </div>
-</section>
+/* ---------- VARIÁVEIS DE IDENTIDADE BSTV ---------- */
+:root {
+  --vermelho: #ff0000;
+  --branco: #ffffff;
+  --cinza: #bebab0;
+  --preto: #2b2424;
+  --largura-max: 1200px;
+  --altura-painel: 30vh;
+  --altura-rodape: 64px;
+}
 
-<!-- Rodapé vermelho fixo -->
-<footer class="footer" id="footer">
-  <div class="footer-inner">
-    <div class="footer-left">CENTRAL de APOSTAS</div>
-    <div class="footer-tabs">
-      <!-- Aba de Peças -->
-      <div id="tabShop" class="tab inactive" role="button" aria-label="Peças selecionadas">
-        <div class="ico ico-shop">
-          <span id="badgeShop" class="badge hidden">0</span>
-        </div>
-        <span>PEÇAS</span>
-      </div>
+/* ---------- GERAL ---------- */
+body {
+  margin: 0;
+  padding-bottom: calc(var(--altura-painel) + var(--altura-rodape));
+  background: var(--cinza);
+  color: var(--preto);
+  font-family: "Roboto Condensed", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
 
-      <!-- Aba de Rifas -->
-      <div id="tabRifa" class="tab inactive" role="button" aria-label="Rifas selecionadas">
-        <div class="ico ico-rifa">
-          <span id="badgeRifa" class="badge hidden">0</span>
-        </div>
-        <span>RIFAS</span>
-      </div>
-    </div>
-  </div>
-</footer>
+/* ---------- RODAPÉ ---------- */
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--vermelho);
+  color: var(--branco);
+  z-index: 100;
+  border-top: 1px solid var(--vermelho);
+}
 
-<!-- Script principal -->
-<script src="/js/central-apostas.js" defer></script>
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--largura-max);
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.footer-left {
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.footer-tabs {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--cinza);
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  user-select: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.tab.active {
+  color: var(--branco);
+}
+
+.tab .ico {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.tab .badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--branco);
+  color: var(--vermelho);
+  font-weight: 900;
+  font-size: 12px;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ÍCONES */
+.ico-shop {
+  background-image: url("/elementos/ticon-SHOP-b.avif");
+}
+.ico-rifa {
+  background-image: url("/elementos/ticon-RIFA-b.avif");
+}
+.tab.inactive .ico-shop {
+  background-image: url("/elementos/ticon-SHOP-c.avif");
+}
+.tab.inactive .ico-rifa {
+  background-image: url("/elementos/ticon-RIFA-c.avif");
+}
+
+/* ---------- PAINEL BRANCO ---------- */
+.panel {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--altura-rodape);
+  background: var(--branco);
+  border-top: 2px solid var(--branco);
+  max-height: var(--altura-painel);
+  overflow: hidden;
+  padding: 10px;
+  z-index: 99;
+  box-sizing: border-box;
+}
+
+.panel.open {
+  display: block;
+}
+
+/* Linha de thumbs */
+.thumbs-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--vermelho) var(--cinza);
+}
+.thumbs-row::-webkit-scrollbar {
+  height: 4px;
+}
+.thumbs-row::-webkit-scrollbar-thumb {
+  background: var(--vermelho);
+}
+.thumbs-row::-webkit-scrollbar-track {
+  background: var(--cinza);
+}
+
+/* Cada thumb */
+.tmb {
+  position: relative;
+  flex: 0 0 auto;
+  height: 50px;
+  border: 1px solid var(--preto);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tmb img {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+.tmb .x {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  background: var(--preto);
+  color: var(--branco);
+  cursor: pointer;
+}
+
+/* Rodapé do painel */
+.panel-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.total {
+  font-size: 1rem;
+}
+
+.panel-btn {
+  background: var(--preto);
+  color: var(--branco);
+  border: none;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+/* ---------- RESPONSIVIDADE ---------- */
+@media (max-width: 768px) {
+  .footer-inner {
+    padding: 8px;
+  }
+  .footer-left {
+    font-size: 0.9rem;
+  }
+  .tab {
+    font-size: 0.85rem;
+    gap: 4px;
+  }
+  .tab .ico {
+    width: 22px;
+    height: 22px;
+  }
+  .tab .badge {
+    top: -5px;
+    right: -5px;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+  }
+}
