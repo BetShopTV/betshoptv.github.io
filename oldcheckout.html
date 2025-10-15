@@ -1,0 +1,102 @@
+      <!doctype html>
+      <html lang="pt-BR">
+      <head>
+      <meta charset="utf-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>
+      <title>BSTV — GDO01 integrado à Central</title>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+      <style>
+      :root{--bg:#bebab0;--text:#2b2424;--accent:#ff0000;--white:#bebab0;--footer-h:clamp(46px,6vh,64px)}
+      *{box-sizing:border-box}
+      body{margin:0;font-family:'Roboto Condensed',sans-serif;background:var(--bg);color:var(--text);padding:1vw 1vw 6.2rem}
+      .container{max-width:1200px;margin:0 auto}
+      .gallery-container{display:flex;gap:clamp(4px,1.2vw,24px);max-width:1200px;margin:0 auto}
+      .col{flex:1 1 calc(33.333% - 1.333vw);display:flex;flex-direction:column;gap:24px}
+      .gallery-item{display:flex;flex-direction:column;cursor:pointer;position:relative;background:var(--bg)}
+      .gallery-image{width:100%;height:auto;object-fit:cover;border:1px solid #2b2424}
+      .item-code{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);font-weight:700;border:2px solid #2b2424;padding:.35vw .9vw;background:var(--bg)}
+      .add-button{border:2px solid var(--accent);background:transparent;color:var(--accent);font-weight:700;padding:8px;text-transform:uppercase;cursor:pointer;margin-top:8px;margin-bottom:8px;width:100%;transition:.2s}
+      .add-button:hover{background:var(--accent);color:#fff}
+      .footer-bar{position:fixed;left:0;right:0;bottom:0;background:#2b2424;color:var(--white);height:var(--footer-h);display:flex;align-items:center;justify-content:space-between;padding:0 6vw;z-index:9999;font-weight:700}
+      .footer-left{display:flex;align-items:center;gap:16px}
+      .footer-dot{cursor:pointer;font-size:1.1rem}
+      .panel-expanded{position:fixed;left:0;right:0;bottom:var(--footer-h);background:#bebab0;max-height:70vh;border-top:1px solid #2b2424;display:none;padding:1rem 6vw;overflow-y:auto;z-index:9998}
+      .mini-list{display:flex;flex-direction:column;gap:6px;margin:6px 0}
+      .mini-item{display:flex;align-items:center;gap:8px;border:1px solid #2b2424;padding:6px;background:#fff}
+      .mini-thumb{width:42px;height:50px;object-fit:cover;border:1px solid #2b2424}
+      .total-box{padding:6px 10px;font-weight:700}
+      .pix-area{border:2px dashed #2b2424;padding:10px;margin:10px 0;background:#fff;text-align:center}
+      .pix-code{word-break:break-all;font-family:monospace;font-size:.9rem;background:#fff;padding:6px;border:1px solid #2b2424}
+      input{padding:8px;border:1px solid #2b2424;width:100%;max-width:260px}
+      #buyerData{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:10px 0}
+      #apostaBtn{background:var(--accent);color:#fff;border:2px solid var(--accent);padding:10px 20px;font-weight:700;cursor:pointer;border-radius:6px;margin-top:10px}
+      #apostaBtn:hover{background:#fff;color:var(--accent)}
+      @media(max-width:768px){.footer-bar{padding:0 12px}.panel-expanded{padding:1rem 12px}}
+      </style>
+      </head>
+      <body>
+      <div class="container">
+        <h1>Galeria de Ofertas — BSTV</h1>
+        <div id="gallery" class="gallery-container">
+          <div class="col" id="col0"></div>
+          <div class="col" id="col1"></div>
+          <div class="col" id="col2"></div>
+        </div>
+      </div>
+      <div class="footer-bar">
+        <div class="footer-left">
+          <div class="footer-dot" id="cartBtn">🛍 <span id="cartCount">0</span></div>
+          <div class="footer-dot" id="likeBtn">♥ <span id="likeCount">0</span></div>
+          <div class="footer-dot" id="totalBox">R$ 0,00</div>
+        </div>
+      </div>
+      <div class="panel-expanded" id="cartPanel">
+        <h3 style="margin-top:0">Carrinho</h3>
+        <div id="cartList" class="mini-list"></div>
+        <div class="pix-area">
+          <button id="gerarPixBtn">Gerar PIX</button>
+          <button id="copiarPixBtn" style="display:none">Copiar PIX</button>
+          <div id="pixSection" style="display:none;margin-top:8px">
+            <div id="pixCode" class="pix-code"></div>
+            <div id="qrCode"></div>
+          </div>
+        </div>
+        <div id="buyerData">
+          <input id="nomeInput" placeholder="Nome" required>
+          <input id="emailInput" type="email" placeholder="E-mail" required>
+          <input id="foneInput" placeholder="Telefone (opcional)">
+        </div>
+        <div style="text-align:center">
+          <button id="apostaBtn">APOSTAR!</button>
+        </div>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+      <script>
+      const PECAS_JSON_URL='/dados/pecas.json';
+      const GAS_URL='https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+      let data=[],cart=[],likes=new Set();
+      const format=v=>'R$ '+Number(v||0).toFixed(2).replace('.',',');
+      const thumbURL=n=>`img/tmb/${n}.avif`;
+      const fallbackURL=n=>`img/fallback/${n}.jpg`;
+      async function loadData(){try{const res=await fetch(PECAS_JSON_URL);data=await res.json();renderGallery();}catch(e){console.error(e)}}
+      function renderGallery(){document.querySelectorAll('.col').forEach(c=>c.innerHTML='');data.forEach((p,i)=>{const item=document.createElement('div');item.className='gallery-item';const img=document.createElement('img');img.className='gallery-image';const n=(p.imagens||[])[0]||'';img.src=thumbURL(n);img.onerror=function(){this.src=fallbackURL(n)};const code=document.createElement('span');code.className='item-code';code.textContent=p.id_peca;const btn=document.createElement('button');btn.className='add-button';btn.textContent=cart.includes(p.id_peca)?'REMOVER':'🛍 ADICIONAR';btn.onclick=e=>{e.stopPropagation();toggleCart(p.id_peca);btn.textContent=cart.includes(p.id_peca)?'REMOVER':'🛍 ADICIONAR';};const heart=document.createElement('button');heart.textContent=likes.has(p.id_peca)?'♥':'♡';heart.style.border='none';heart.style.background='transparent';heart.style.cursor='pointer';heart.style.fontSize='1.2rem';heart.onclick=e=>{e.stopPropagation();toggleLike(p.id_peca,heart);};item.append(img,code,btn,heart);document.getElementById('col'+(i%3)).append(item);});updateFooter();}
+      function toggleCart(id){const i=cart.indexOf(id);if(i>-1)cart.splice(i,1);else cart.push(id);updateFooter();renderCart();}
+      function toggleLike(id,el){if(likes.has(id))likes.delete(id);else likes.add(id);el.textContent=likes.has(id)?'♥':'♡';updateFooter();}
+      function updateFooter(){document.getElementById('cartCount').textContent=cart.length;document.getElementById('likeCount').textContent=likes.size;document.getElementById('totalBox').textContent=format(total());}
+      function total(){return cart.reduce((a,id)=>{const p=data.find(x=>x.id_peca===id);return a+(p?p.preco:0)},0)}
+      function renderCart(){const list=document.getElementById('cartList');list.innerHTML='';cart.forEach(id=>{const p=data.find(x=>x.id_peca===id);if(!p)return;const el=document.createElement('div');el.className='mini-item';const im=document.createElement('img');im.className='mini-thumb';const n=(p.imagens||[])[0]||'';im.src=thumbURL(n);im.onerror=function(){this.src=fallbackURL(n)};const txt=document.createElement('div');txt.textContent=p.titulo+' - '+format(p.preco);el.append(im,txt);list.append(el)});}
+      // PIX
+      function crc16_ccitt(str){let crc=0xffff;for(let i=0;i<str.length;i++){crc^=str.charCodeAt(i)<<8;for(let j=0;j<8;j++){crc=((crc<<1)^(crc&0x8000?0x1021:0))&0xffff;}}return crc;}
+      function gerarBRCode(valor){const chave='betshoptv@gmail.com';let s='00020126360014br.gov.bcb.pix01'+String(chave.length).padStart(2,'0')+chave+'520400005303986540'+String(valor.toFixed(2).length).padStart(2,'0')+valor.toFixed(2)+'5802BR5913BET SHOP TV6009SAO PAULO62070503***6304';return s+crc16_ccitt(s).toString(16).toUpperCase().padStart(4,'0');}
+      function gerarPix(){const valor=total();if(valor<=0){alert('Carrinho vazio');return;}const code=gerarBRCode(valor);document.getElementById('pixCode').textContent=code;document.getElementById('pixSection').style.display='block';document.getElementById('copiarPixBtn').style.display='inline';const qr=document.getElementById('qrCode');qr.innerHTML='';new QRCode(qr,{text:code,width:180,height:180});}
+      function copiarPix(){navigator.clipboard.writeText(document.getElementById('pixCode').textContent).then(()=>alert('Código PIX copiado!'));}
+      async function enviarAposta(){if(cart.length===0){alert('Carrinho vazio!');return;}const nome=document.getElementById('nomeInput').value.trim();const email=document.getElementById('emailInput').value.trim();const telefone=document.getElementById('foneInput').value.trim();if(!nome||!email){alert('Preencha nome e e-mail.');return;}const pecasStr=cart.join(',');const favsStr=[...likes].join(',')||'0';const totalValor=total().toFixed(2);const payload={timestamp:new Date().toLocaleString('pt-BR'),nome,email,telefone,pecas:pecasStr,rifas:'',favoritas:favsStr,total:totalValor};try{await fetch(GAS_URL,{method:'POST',body:new URLSearchParams(payload),mode:'no-cors'});}catch(e){console.warn('Falha ao enviar',e);}alert('Aposta concluída!');cart=[];likes.clear();updateFooter();renderCart();document.getElementById('nomeInput').value='';document.getElementById('emailInput').value='';document.getElementById('foneInput').value='';document.getElementById('cartPanel').style.display='none';}
+      // Events
+      document.getElementById('cartBtn').onclick=()=>{const p=document.getElementById('cartPanel');p.style.display=p.style.display==='block'?'none':'block';};
+      document.getElementById('gerarPixBtn').onclick=gerarPix;
+      document.getElementById('copiarPixBtn').onclick=copiarPix;
+      document.getElementById('apostaBtn').onclick=enviarAposta;
+      loadData();
+      </script>
+      </body>
+      </html>
