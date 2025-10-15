@@ -15,7 +15,7 @@
   --ink:#2b2424;
   --red:#ff0000;
   --white:#ffffff;
-  --footer-h: 72px;
+  --footer-h: clamp(66px, calc(4.2vh + 1.8vw), 88px);
   --panel-max: 30vh;
 }
 *{box-sizing:border-box}
@@ -23,7 +23,7 @@ html,body{height:100%}
 body{
   margin:0; background:var(--bg); color:var(--ink);
   font-family:"Roboto Condensed", sans-serif;
-  -webkit-font-smoothing:antialiased;   padding-bottom: clamp(66px, 8vh, 88px);
+  -webkit-font-smoothing:antialiased; padding-bottom:var(--footer-h);
 }
 
 /* ===== GRADE 3 colunas (sem corações/numeração) ===== */
@@ -36,8 +36,7 @@ body{
 
 /* ===== RODAPÉ ===== */
 .footer{
-  .footer {
-  position:fixed;left:0;right:0;bottom:0; height: clamp(52px, calc(3vh + 1vw), 72px);
+  position:fixed;left:0;right:0;bottom:0;height:var(--footer-h);
   background:var(--red); color:var(--white); z-index:1000;
   display:flex; align-items:center; gap:16px; padding:0 clamp(10px,2vw,24px);
   user-select:none;
@@ -131,7 +130,7 @@ body{
     <div class="col" id="col2"></div>
   </div>
 </div>
-
+  <br><br><br><br><br><br>
 <!-- EXPANSÃO (branca) -->
 <div id="backdrop" class="backdrop" aria-hidden="true"></div>
 <div id="panelWrap" class="panel-wrap" aria-hidden="true">
