@@ -1,448 +1,222 @@
-// script.js
-(() => {
-  /* Config */
-  const CACHE_KEY = "betshop_products";
-  const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-  const GOOGLE_APPS_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbydfqi0G8PnmvshPSbGjWZnWBjOKA965l4TbVqvS3YQYO9bcYulknvMjUn3V2AEFxSV/exec";
+const PECAS_JSON_URL = '/dados/pecas.json';
+const RIFAS_JSON_URL = '/dados/rifas.json';
 
-  /* DOM refs */
-  const galleryRoot = document.getElementById("gallery-columns");
-  const filterButtonsContainer = document.getElementById("filter-buttons");
-  const toggleSortBtn = document.getElementById("toggle-sort");
-  const rifasTab = document.getElementById("rifas-tab");
-  const ofertasTab = document.getElementById("ofertas-tab");
-  const favCountEl = document.getElementById("fav-count");
-  const cartCountEl = document.getElementById("cart-count");
-  const totalPriceEl = document.getElementById("total-price");
-  const activeSectionEl = document.getElementById("active-section");
+let piecesData = [];
+let rifasData = [];
+const selectedPieces = new Set();
+const selectedRifas = new Set();
+let openTab = null;
 
-  /* State */
-  let products = [];
-  let loading = true;
-  let error = null;
-  let activeFilters = new Set(["TODAS"]);
-  let sortOrder = "desc";
-  let selectedItems = loadSelectedItems(); // cart
-  let favorites = loadFavorites(); // set of ids
+const money = v => 'R$ ' + Number(v || 0).toFixed(2).replace('.', ',');
+const idKey = p => (p.id_peca || '');
+const firstThumb = p => (p.imagens && p.imagens[0]) || '';
+const tmb = name => `img/tmb/${name}.avif`;
+const tmbFallback = name => `img/fallback/${name}.jpg`;
 
-  /* Helpers: cache */
-  function getCachedProducts() {
-    try {
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        const { data, timestamp } = JSON.parse(cached);
-        if (Date.now() - timestamp < CACHE_DURATION) {
-          console.log("[v0] Using cached products data");
-          return data;
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    }
-    return null;
-  }
+function rifaTotal(cnt) {
+  if (!cnt) return 0;
+  return (cnt % 2 === 0) ? 25 * cnt : 25 * (cnt - 1) + 30;
+}
 
-  function setCachedProducts(data) {
-    try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  /* Load saved favorites/cart */
-  function loadFavorites() {
-    try {
-      const raw = localStorage.getItem("betshop_favs");
-      return raw ? new Set(JSON.parse(raw)) : new Set();
-    } catch (e) {
-      return new Set();
-    }
-  }
-  function saveFavorites() {
-    try {
-      localStorage.setItem("betshop_favs", JSON.stringify(Array.from(favorites)));
-    } catch {}
-  }
-
-  function loadSelectedItems() {
-    try {
-      const raw = localStorage.getItem("betshop_cart");
-      return raw ? JSON.parse(raw) : [];
-    } catch (e) {
-      return [];
-    }
-  }
-  function saveSelectedItems() {
-    try {
-      localStorage.setItem("betshop_cart", JSON.stringify(selectedItems));
-    } catch {}
-  }
-
-  /* Emergency fallback product */
-  const EMERGENCY_PRODUCTS = [
-    {
-      id: "3-1a",
-      grupo: "3",
-      peca: "1",
-      titulo: "03/01 Produto Emergência",
-      apelido: "Produto de Backup",
-      preco: 150,
-      precoVenda: 0,
-      disponivel: true,
-      imagens: ["03-01a.avif"],
-      tecnica: "Material Padrão",
-      dimensoes: "50 x 20 x 5 cm",
-      emExposicao: "",
-      cores: "",
-      tags: "",
-      ondeRepete: "",
-      extra: "",
-      promocao: "",
-    },
-  ];
-
-  /* Fetching */
-  async function fetchProductsFromGoogleSheets() {
-    console.log("[v0] Fetching products from Google Sheets...");
-    const res = await fetch(GOOGLE_APPS_SCRIPT_URL, { headers: { Accept: "application/json" } });
-    if (!res.ok) throw new Error("HTTP error " + res.status);
-    const data = await res.json();
-    if (!data.produtos || !Array.isArray(data.produtos)) throw new Error("Invalid data structure");
-    const transformed = data.produtos.map((item) => ({
-      id: item.id || `${item.grupo}-${item.peca}a`,
-      grupo: String(item.grupo || "3"),
-      peca: String(item.peca || "1"),
-      titulo: item.titulo || "Produto sem título",
-      apelido: item.apelido || "",
-      preco: Number(item.preco) || 0,
-      precoVenda: Number(item.precoVenda) || 0,
-      disponivel: !item.precoVenda || item.precoVenda === 0 || item.precoVenda === "",
-      imagens: item.imagens || [`${item.grupo}-${item.peca}a.avif`],
-      tecnica: item.tecnica || "",
-      dimensoes: item.dimensoes || "",
-      emExposicao: item.emExposicao || "",
-      cores: item.cores || "",
-      tags: item.tags || "",
-      ondeRepete: item.ondeRepete || "",
-      extra: item.extra || "",
-      promocao: item.promocao || "",
-    }));
-    return transformed;
-  }
-
-  /* Render skeletons while loading */
-  function renderSkeletons() {
-    galleryRoot.innerHTML = "";
-    const cols = 3;
-    for (let c = 0; c < cols; c++) {
-      const col = document.createElement("div");
-      col.className = "col";
-      for (let i = 0; i < 6; i++) {
-        const sk = document.createElement("div");
-        sk.className = "card skeleton";
-        sk.style.minHeight = "200px";
-        col.appendChild(sk);
-      }
-      galleryRoot.appendChild(col);
-    }
-  }
-
-  /* Render filters (groups + Disponíveis + Todas) */
-  function renderFilterButtons(groups) {
-    filterButtonsContainer.innerHTML = "";
-    const allBtn = createFilterButton("TODAS");
-    filterButtonsContainer.appendChild(allBtn);
-
-    groups.forEach((g) => {
-      const btn = createFilterButton(g);
-      filterButtonsContainer.appendChild(btn);
-    });
-
-    const availBtn = createFilterButton("DISPONÍVEIS");
-    filterButtonsContainer.appendChild(availBtn);
-  }
-
-  function createFilterButton(name) {
-    const btn = document.createElement("button");
-    btn.className = "btn";
-    btn.textContent = name === "TODAS" ? "TODAS" : name.padStart(2, "0");
-    if (activeFilters.has(name)) btn.classList.add("active");
-    btn.addEventListener("click", () => {
-      handleFilterClick(name);
-    });
-    return btn;
-  }
-
-  function handleFilterClick(filter) {
-    if (filter === "TODAS") {
-      activeFilters = new Set(["TODAS"]);
-    } else {
-      activeFilters.delete("TODAS");
-      if (activeFilters.has(filter)) activeFilters.delete(filter);
-      else activeFilters.add(filter);
-      if (activeFilters.size === 0) activeFilters = new Set(["TODAS"]);
-    }
-    render();
-  }
-
-  /* Sorting toggle */
-  toggleSortBtn.addEventListener("click", () => {
-    sortOrder = sortOrder === "desc" ? "asc" : "desc";
-    toggleSortBtn.textContent = sortOrder === "desc" ? "+ RECENTES" : "- RECENTES";
-    render();
+function piecesTotal() {
+  let sum = 0;
+  selectedPieces.forEach(id => {
+    const p = piecesData.find(x => x.id_peca === id);
+    if (p) sum += Number(p.preco || 0);
   });
+  return sum;
+}
 
-  /* Utility: get image url & fallback */
-  function getImageUrl(prod) {
-    const primary = prod.imagens && prod.imagens[0] ? prod.imagens[0] : `${prod.grupo}-${prod.peca}a.avif`;
-    // Attempt to use repo /public/img/tmb path (relative)
-    // If you prefer external host, change prefix to full URL like http://betshoptv.com/img/tmb/
-    return `img/tmb/${primary}`;
+function totalAll() {
+  return piecesTotal() + rifaTotal(selectedRifas.size);
+}
+
+async function loadData() {
+  try {
+    const [pecasResp, rifasResp] = await Promise.all([
+      fetch(PECAS_JSON_URL),
+      fetch(RIFAS_JSON_URL)
+    ]);
+    const pecas = await pecasResp.json();
+    const rifas = await rifasResp.json();
+
+    piecesData = (pecas || []).filter(p => String(p.status || '').toUpperCase() !== 'VENDIDAAA');
+    rifasData = (rifas || []).filter(r => !(r.status_rifa && String(r.status_rifa).trim() !== ''));
+
+    renderGallery();
+    refreshFooter();
+  } catch (e) {
+    console.error('Erro ao carregar os dados JSON', e);
   }
-  function getFallbackImageUrl(prod) {
-    const primary = prod.imagens && prod.imagens[0] ? prod.imagens[0] : `${prod.grupo}-${prod.peca}a.avif`;
-    const fallback = primary.replace(".avif", ".jpg");
-    return `img/fallback/${fallback}`;
-  }
+}
 
-  /* Render products */
-  function renderProducts(list) {
-    galleryRoot.innerHTML = "";
-    const columns = distributeIntoColumns(list, 3);
-    columns.forEach((colItems) => {
-      const col = document.createElement("div");
-      col.className = "col";
-      colItems.forEach((product) => {
-        const cardWrap = document.createElement("div");
-        cardWrap.className = "mb-3";
-        const card = document.createElement("div");
-        card.className = "card";
-        card.style.position = "relative";
+function renderGallery() {
+  for (let i = 0; i < 3; i++) document.getElementById('col' + i).innerHTML = '';
 
-        const img = document.createElement("img");
-        img.alt = product.titulo;
-        img.loading = "lazy";
-        img.src = getImageUrl(product);
-        img.onerror = function () {
-          this.onerror = null;
-          this.src = getFallbackImageUrl(product);
-        };
+  const ordered = [...piecesData].sort((a, b) =>
+    (b.id_peca || '').localeCompare(a.id_peca || '')
+  );
 
-        // Favorite
-        const favBtn = document.createElement("button");
-        favBtn.className = "favorite-btn";
-        favBtn.title = "Favoritar";
-        favBtn.innerHTML = favorites.has(product.id) ? "♥" : "♡";
-        favBtn.addEventListener("click", (ev) => {
-          ev.stopPropagation();
-          toggleFavorite(product.id);
-        });
-
-        card.appendChild(img);
-        card.appendChild(favBtn);
-        cardWrap.appendChild(card);
-
-        // Action (Add/Remove)
-        if (product.disponivel) {
-          const action = document.createElement("button");
-          action.className = "action";
-          const inCart = selectedItems.some((p) => p.id === product.id);
-          action.textContent = inCart ? "REMOVER" : "ADICIONAR";
-          action.style.backgroundColor = inCart ? "#2b2424" : "#bebab0";
-          action.style.color = inCart ? "#bebab0" : "#2b2424";
-          action.addEventListener("click", () => toggleCart(product));
-          cardWrap.appendChild(action);
-        } else {
-          const spacer = document.createElement("div");
-          spacer.style.height = "0";
-          cardWrap.appendChild(spacer);
-        }
-
-        col.appendChild(cardWrap);
-      });
-      galleryRoot.appendChild(col);
-    });
-  }
-
-  /* Distribute into columns */
-  function distributeIntoColumns(items, n) {
-    const cols = Array.from({ length: n }, () => []);
-    items.forEach((it, idx) => {
-      cols[idx % n].push(it);
-    });
-    return cols;
-  }
-
-  /* Get filtered products */
-  function getFilteredProducts() {
-    let filtered = products.slice();
-    if (!activeFilters.has("TODAS")) {
-      const groupFilters = Array.from(activeFilters).filter((f) => f !== "DISPONÍVEIS");
-      const hasAvailableFilter = activeFilters.has("DISPONÍVEIS");
-      if (groupFilters.length > 0) filtered = filtered.filter((p) => groupFilters.includes(p.grupo));
-      if (hasAvailableFilter) filtered = filtered.filter((p) => p.disponivel);
-    }
-    filtered.sort((a, b) => {
-      const grupoA = parseInt(a.grupo), grupoB = parseInt(b.grupo);
-      const pecaA = parseInt(a.peca), pecaB = parseInt(b.peca);
-      if (grupoA !== grupoB) return sortOrder === "desc" ? grupoB - grupoA : grupoA - grupoB;
-      return sortOrder === "desc" ? pecaB - pecaA : pecaA - pecaB;
-    });
-    return filtered;
-  }
-
-  /* Toggle favorite */
-  function toggleFavorite(id) {
-    if (favorites.has(id)) favorites.delete(id);
-    else favorites.add(id);
-    saveFavorites();
-    render(); // re-render counts & UI
-  }
-
-  /* Toggle cart */
-  function toggleCart(prod) {
-    const exists = selectedItems.find((p) => p.id === prod.id);
-    if (exists) {
-      selectedItems = selectedItems.filter((p) => p.id !== prod.id);
-    } else {
-      selectedItems.push(prod);
-    }
-    saveSelectedItems();
-    render();
-  }
-
-  function removeFromSelected(id) {
-    selectedItems = selectedItems.filter((p) => p.id !== id);
-    saveSelectedItems();
-    render();
-  }
-
-  /* UI for active section (favorites / offers) */
-  function renderActiveSection(which) {
-    if (!which) {
-      activeSectionEl.classList.add("hidden");
-      activeSectionEl.innerHTML = "";
-      return;
-    }
-    activeSectionEl.classList.remove("hidden");
-    activeSectionEl.innerHTML = ""; // fill with items
-    if (which === "rifas") {
-      const favItems = products.filter((p) => favorites.has(p.id));
-      if (favItems.length === 0) {
-        const msg = document.createElement("div");
-        msg.style.color = "#2b2424";
-        msg.style.fontWeight = "700";
-        msg.innerHTML = "Nenhum número selecionado.<br/>Aposte na RIFA!";
-        activeSectionEl.appendChild(msg);
-        return;
-      }
-      favItems.forEach((item) => {
-        const wrap = document.createElement("div");
-        wrap.style.marginRight = "8px";
-        const img = document.createElement("img");
-        img.src = getImageUrl(item);
-        img.style.height = "112px";
-        img.onerror = () => (img.src = getFallbackImageUrl(item));
-        wrap.appendChild(img);
-        const rm = document.createElement("button");
-        rm.textContent = "X";
-        rm.style.position = "absolute";
-        rm.addEventListener("click", () => toggleFavorite(item.id));
-        wrap.appendChild(rm);
-        activeSectionEl.appendChild(wrap);
-      });
-    } else if (which === "ofertas") {
-      if (selectedItems.length === 0) {
-        const msg = document.createElement("div");
-        msg.style.color = "#2b2424";
-        msg.style.fontWeight = "700";
-        msg.innerHTML = "Nenhuma oferta selecionada.";
-        activeSectionEl.appendChild(msg);
-        return;
-      }
-      selectedItems.forEach((item) => {
-        const wrap = document.createElement("div");
-        wrap.style.marginRight = "8px";
-        const img = document.createElement("img");
-        img.src = getImageUrl(item);
-        img.style.height = "112px";
-        img.onerror = () => (img.src = getFallbackImageUrl(item));
-        wrap.appendChild(img);
-        const rm = document.createElement("button");
-        rm.textContent = "X";
-        rm.addEventListener("click", () => removeFromSelected(item.id));
-        wrap.appendChild(rm);
-        activeSectionEl.appendChild(wrap);
-      });
-    }
-  }
-
-  /* Render counts & totals */
-  function renderCounts() {
-    favCountEl.textContent = favorites.size === 0 ? "__" : String(favorites.size).padStart(2, "0");
-    cartCountEl.textContent = selectedItems.length === 0 ? "__" : String(selectedItems.length).padStart(2, "0");
-    const total = selectedItems.reduce((s, it) => s + (it.preco || 0), 0);
-    totalPriceEl.textContent = total === 0 ? "R$ __" : `R$ ${Math.round(total)}`;
-  }
-
-  /* Main render */
-  function render() {
-    if (loading) {
-      renderSkeletons();
-      return;
-    }
-    // Filters
-    const groups = Array.from(new Set(products.map((p) => p.grupo))).sort((a, b) => a - b);
-    renderFilterButtons(groups);
-
-    // Filtered products
-    const filtered = getFilteredProducts();
-    renderProducts(filtered);
-
-    // Counts
-    renderCounts();
-  }
-
-  /* Setup shopping bar interactions */
-  let activeSection = null;
-  rifasTab.addEventListener("click", () => {
-    activeSection = activeSection === "rifas" ? null : "rifas";
-    renderActiveSection(activeSection);
+  ordered.forEach((p, idx) => {
+    const col = document.getElementById('col' + (idx % 3));
+    const card = document.createElement('a');
+    card.className = 'card' + (selectedPieces.has(p.id_peca) ? ' selected' : '');
+    card.href = 'javascript:void(0)';
+    const img = document.createElement('img');
+    const n = firstThumb(p);
+    img.src = tmb(n);
+    img.alt = p.titulo || p.id_peca;
+    img.onerror = function () {
+      this.onerror = null;
+      this.src = tmbFallback(n);
+    };
+    card.appendChild(img);
+    card.addEventListener('click', () => togglePiece(p.id_peca));
+    col.appendChild(card);
   });
-  ofertasTab.addEventListener("click", () => {
-    activeSection = activeSection === "ofertas" ? null : "ofertas";
-    renderActiveSection(activeSection);
-  });
+}
 
-  /* Initial bootstrap */
-  async function init() {
-    loading = true;
-    renderSkeletons();
+function togglePiece(id) {
+  if (selectedPieces.has(id)) selectedPieces.delete(id);
+  else selectedPieces.add(id);
 
-    // try cache
-    const cached = getCachedProducts();
-    if (cached) {
-      products = cached;
-      loading = false;
-      render();
-      return;
-    }
+  renderGallery();
+  if (openTab === 'shop') renderPanelThumbs();
+  refreshFooter();
+}
 
-    // fetch
-    try {
-      products = await fetchProductsFromGoogleSheets();
-      setCachedProducts(products);
-    } catch (err) {
-      console.error(err);
-      products = EMERGENCY_PRODUCTS;
-    } finally {
-      loading = false;
-      render();
-    }
+function toggleRifa(id) {
+  if (selectedRifas.has(id)) selectedRifas.delete(id);
+  else selectedRifas.add(id);
+
+  if (openTab === 'rifa') renderPanelThumbs();
+  refreshFooter();
+}
+
+// PANEL CONTROL
+const panelWrap = document.getElementById('panelWrap');
+const thumbRow = document.getElementById('thumbRow');
+const totalBox = document.getElementById('totalBox');
+const finalizar = document.getElementById('finalizarBtn');
+const backdrop = document.getElementById('backdrop');
+
+function openPanel(tab) {
+  openTab = tab;
+  setIcons();
+  renderPanelThumbs();
+  panelWrap.style.display = 'block';
+  backdrop.style.display = 'block';
+  finalizar.classList.toggle('hidden', (selectedPieces.size + selectedRifas.size) === 0);
+  setTimeout(() => { thumbRow.scrollLeft = thumbRow.scrollWidth; }, 0);
+}
+
+function closePanel() {
+  openTab = null;
+  setIcons();
+  panelWrap.style.display = 'none';
+  backdrop.style.display = 'none';
+}
+
+function setIcons() {
+  const shopActive = (openTab === 'shop');
+  const rifaActive = (openTab === 'rifa');
+
+  const btnShop = document.getElementById('btnShop');
+  const btnRifa = document.getElementById('btnRifa');
+  const iconShop = document.getElementById('iconShop');
+  const iconRifa = document.getElementById('iconRifa');
+
+  btnShop.classList.toggle('inactive', !shopActive);
+  btnRifa.classList.toggle('inactive', !rifaActive);
+
+  iconShop.src = shopActive ? '/elementos/ticon-SHOP-b.avif' : '/elementos/ticon-SHOP-c.avif';
+  iconRifa.src = rifaActive ? '/elementos/ticon-RIFA-b.avif' : '/elementos/ticon-RIFA-c.avif';
+
+  btnShop.setAttribute('aria-expanded', shopActive);
+  btnRifa.setAttribute('aria-expanded', rifaActive);
+}
+
+function renderPanelThumbs() {
+  thumbRow.innerHTML = '';
+
+  if (openTab === 'shop') {
+    selectedPieces.forEach(id => {
+      const p = piecesData.find(x => x.id_peca === id);
+      if (!p) return;
+      const n = firstThumb(p);
+      const box = document.createElement('div');
+      box.className = 'thumb';
+      const img = document.createElement('img');
+      img.src = tmb(n);
+      img.onerror = function () { this.onerror = null; this.src = tmbFallback(n); };
+      const x = document.createElement('button');
+      x.className = 'close';
+      x.textContent = '×';
+      x.onclick = () => {
+        selectedPieces.delete(id);
+        renderGallery();
+        renderPanelThumbs();
+        refreshFooter();
+      };
+      box.appendChild(img);
+      box.appendChild(x);
+      thumbRow.appendChild(box);
+    });
+  } else if (openTab === 'rifa') {
+    selectedRifas.forEach(id => {
+      const r = rifasData.find(x => x.id_rifa === id || x.numero === id);
+      const box = document.createElement('div');
+      box.className = 'thumb';
+      const inner = document.createElement('div');
+      inner.style = "display:flex;align-items:center;justify-content:center;height:80px;font-weight:900;font-size:22px;border:2px solid var(--ink);";
+      inner.textContent = r ? (r.numero || r.id_rifa) : id;
+      const x = document.createElement('button');
+      x.className = 'close';
+      x.textContent = '×';
+      x.onclick = () => {
+        selectedRifas.delete(id);
+        renderPanelThumbs();
+        refreshFooter();
+      };
+      box.appendChild(inner);
+      box.appendChild(x);
+      thumbRow.appendChild(box);
+    });
   }
 
-  // Initialize
-  init();
-})();
+  totalBox.textContent = 'TOTAL: ' + money(totalAll());
+  finalizar.classList.toggle('hidden', (selectedPieces.size + selectedRifas.size) === 0);
+}
+
+function refreshFooter() {
+  const cShop = document.getElementById('countShop');
+  const cRifa = document.getElementById('countRifa');
+  const nShop = selectedPieces.size;
+  const nRifa = selectedRifas.size;
+  cShop.textContent = nShop;
+  cRifa.textContent = nRifa;
+  cShop.classList.toggle('hidden', nShop === 0);
+  cRifa.classList.toggle('hidden', nRifa === 0);
+}
+
+document.getElementById('btnShop').addEventListener('click', () => {
+  if (openTab === 'shop') closePanel();
+  else openPanel('shop');
+});
+document.getElementById('btnRifa').addEventListener('click', () => {
+  if (openTab === 'rifa') closePanel();
+  else openPanel('rifa');
+});
+backdrop.addEventListener('click', closePanel);
+document.addEventListener('keydown', ev => {
+  if (ev.key === 'Escape') closePanel();
+});
+
+document.getElementById('finalizarBtn').addEventListener('click', () => {
+  if ((selectedPieces.size + selectedRifas.size) === 0) return;
+  const pecas = [...selectedPieces].join(',');
+  const rifas = [...selectedRifas].join(',');
+  alert(`Resumo da aposta:\nPeças: ${pecas}\nRifas: ${rifas}\nTotal: ${money(totalAll())}`);
+});
+
+loadData();
