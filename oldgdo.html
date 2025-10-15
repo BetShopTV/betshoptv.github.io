@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>GDO_27</title>
+    <style>
+      :root {
+        --red: #ff0000;
+        --ink: #2b2424;
+        --bg: #bebab0;
+        --dark: #242b2b;
+        --white: #fff;
+        --footer-h: clamp(54px, 7vh, 66px);
+        --panel-h: 25vh;
+        --thumb-h: 120px;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Roboto Condensed", sans-serif;
+        overflow-x: hidden;
+        padding-bottom: var(--footer-h);
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 10px;
+      }
+      .masonry {
+        column-count: 3;
+        column-gap: 8px;
+      }
+      .card {
+        break-inside: avoid;
+        position: relative;
+        margin-bottom: 8px;
+        cursor: pointer;
+      }
+      .card img {
+        width: 100%;
+        display: block;
+      }
+      .heart {
+        position: absolute;
+        right: 6px;
+        top: 6px;
+        width: 22px;
+        height: 22px;
+        border: 0;
+        background: url("https://betshoptv.github.io/elementos/ticon-FAV-OFF-p2.avif")
+          center/contain no-repeat;
+        cursor: pointer;
+      }
+      .heart.active {
+        background-image: url("https://betshoptv.github.io/elementos/ticon-FAV-ON-v.avif");
+      }
+      .card.flash::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--red);
+        opacity: 0;
+        transition: opacity 0.25s;
+        pointer-events: none;
+      }
+      .card.flash.active::after {
+        opacity: 0.25;
+      }
+      .footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: var(--footer-h);
+        background: var(--red);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        z-index: 1000;
+      }
+      .footer .icon {
+        position: relative;
+        cursor: pointer;
+      }
+      .footer img {
+        width: 30px;
+        height: 30px;
+      }
+      .badge {
+        position: absolute;
+        right: -8px;
+        top: -6px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--red);
+        font-size: 0.7rem;
+        font-weight: 700;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .badge.show {
+        display: flex;
+      }
+
+      /* painel expandido */
+      .panel {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: var(--footer-h);
+        height: 0;
+        background: var(--bg);
+        overflow: hidden;
+        transition: height 0.3s ease;
+        z-index: 999;
+      }
+      .panel.open {
+        height: var(--panel-h);
+      }
+      .thumbs-wrap {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      .thumbs {
+        flex: 1;
+        background: #fff;
+        margin: 6px 8px 0;
+        padding: 8px;
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+      .thumbs::-webkit-scrollbar {
+        height: 4px;
+      }
+      .thumbs::-webkit-scrollbar-thumb {
+        background-color: var(--red);
+      }
+      .thumbs::-webkit-scrollbar-track {
+        background: #bebab0;
+      }
+      .thumb {
+        position: relative;
+        flex: 0 0 auto;
+        height: var(--thumb-h);
+        border: 1px solid var(--ink);
+        background: #fff;
+      }
+      .thumb img {
+        height: 100%;
+        width: auto;
+        object-fit: cover;
+        display: block;
+      }
+      .thumb .x {
+        position: absolute;
+        right: 4px;
+        top: 4px;
+        background: #000a;
+        color: #fff;
+        border: 0;
+        width: 22px;
+        height: 22px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .thumb-progress {
+        height: 4px;
+        background: #bebab0;
+        margin: 2px 8px;
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .thumb-progress span {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: var(--red);
+        transition: width 0.1s;
+      }
+      .panel-actions {
+        display: flex;
+        justify-content: flex-start;
+        padding: 0 10px 6px 10px;
+      }
+      #finalizar {
+        background: var(--ink);
+        color: #fff;
+        border: 2px solid var(--ink);
+        padding: 8px 14px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .toast {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: calc(var(--footer-h) + var(--panel-h) + 10px);
+        background: var(--dark);
+        color: #fff;
+        padding: 6px 10px;
+        font-weight: 700;
+        display: none;
+      }
+      .toast.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container"><div class="masonry" id="masonry"></div></div>
+
+    <div class="panel" id="panel">
+      <div class="thumbs-wrap">
+        <div class="thumbs" id="thumbs"></div>
+        <div class="thumb-progress"><span id="thumbProgressBar"></span></div>
+        <div class="panel-actions">
+          <button id="finalizar" style="display: none">FINALIZAR APOSTA</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer" id="footer">
+      <div class="icon" id="tabShop">
+        <img
+          id="shopIcon"
+          src="https://betshoptv.github.io/elementos/ticon-SHOP-c.avif"
+        /><span class="badge" id="badgeShop"></span>
+      </div>
+      <div class="icon" id="tabRifa">
+        <img
+          id="rifaIcon"
+          src="https://betshoptv.github.io/elementos/ticon-RIFA-c.avif"
+        /><span class="badge" id="badgeRifa"></span>
+      </div>
+      <div class="icon" id="tabFav">
+        <img
+          id="favIcon"
+          src="https://betshoptv.github.io/elementos/ticon-FAV-ON-c.avif"
+        /><span class="badge" id="badgeFav"></span>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">Peça adicionada</div>
+
+    <script>
+      const PECAS_JSON_URL = "/dados/pecas.json";
+      let pieces = [],
+        cart = [],
+        favs = new Set(),
+        activeTab = "shop",
+        panelOpen = false;
+
+      const fmt = (v) =>
+        "R$ " +
+        Number(v || 0)
+          .toFixed(2)
+          .replace(".", ",");
+
+      async function boot() {
+        const r = await fetch(PECAS_JSON_URL);
+        pieces = await r.json();
+        renderGallery();
+        updateBadges();
+      }
+      function renderGallery() {
+        const root = document.getElementById("masonry");
+        root.innerHTML = "";
+        pieces.forEach((p) => {
+          const c = document.createElement("div");
+          c.className = "card flash";
+          const img = document.createElement("img");
+          img.src = "img/tmb/" + (p.imagens || [])[0] + ".avif";
+          img.onerror = () =>
+            (img.src = "img/fallback/" + (p.imagens || [])[0] + ".jpg");
+          const h = document.createElement("button");
+          h.className = "heart";
+          if (favs.has(p.id_peca)) h.classList.add("active");
+          h.onclick = (e) => {
+            e.stopPropagation();
+            toggleFav(p.id_peca, h);
+          };
+          c.onclick = () => toggleCart(p.id_peca, c);
+          c.append(img, h);
+          root.append(c);
+        });
+      }
+      function showToast(m) {
+        const t = document.getElementById("toast");
+        t.textContent = m;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 900);
+      }
+      function toggleCart(id, el) {
+        const i = cart.indexOf(id),
+          add = i === -1;
+        if (add) cart.push(id);
+        else cart.splice(i, 1);
+        if (el) {
+          el.classList.add("active");
+          setTimeout(() => el.classList.remove("active"), 180);
+        }
+        updateBadges();
+        if (panelOpen && activeTab === "shop") renderPanel();
+        showToast(add ? "Peça adicionada" : "Peça removida");
+      }
+      function toggleFav(id, btn) {
+        if (favs.has(id)) favs.delete(id);
+        else favs.add(id);
+        if (btn) btn.classList.toggle("active", favs.has(id));
+        updateBadges();
+        if (panelOpen && activeTab === "fav") renderPanel();
+      }
+      function updateBadges() {
+        const s = document.getElementById("badgeShop");
+        s.textContent = cart.length;
+        s.classList.toggle("show", cart.length > 0);
+        const f = document.getElementById("badgeFav");
+        f.textContent = favs.size;
+        f.classList.toggle("show", favs.size > 0);
+        document.getElementById("shopIcon").src =
+          cart.length > 0
+            ? "https://betshoptv.github.io/elementos/ticon-SHOP-b.avif"
+            : "https://betshoptv.github.io/elementos/ticon-SHOP-c.avif";
+        document.getElementById("favIcon").src =
+          favs.size > 0
+            ? "https://betshoptv.github.io/elementos/ticon-FAV-ON-b.avif"
+            : "https://betshoptv.github.io/elementos/ticon-FAV-ON-c.avif";
+      }
+      function openPanel() {
+        panelOpen = true;
+        document.getElementById("panel").classList.add("open");
+        renderPanel();
+      }
+      function closePanel() {
+        panelOpen = false;
+        document.getElementById("panel").classList.remove("open");
+      }
+      function setTab(t) {
+        activeTab = t;
+        openPanel();
+      }
+      function renderPanel() {
+        const list = document.getElementById("thumbs");
+        list.innerHTML = "";
+        let items = [];
+        if (activeTab === "shop")
+          items = cart
+            .map((id) => pieces.find((p) => p.id_peca === id))
+            .filter(Boolean);
+        if (activeTab === "fav")
+          items = [...favs]
+            .map((id) => pieces.find((p) => p.id_peca === id))
+            .filter(Boolean);
+        items.forEach((p) => {
+          const w = document.createElement("div");
+          w.className = "thumb";
+          const img = document.createElement("img");
+          img.src = "img/tmb/" + (p.imagens || [])[0] + ".avif";
+          img.onerror = () =>
+            (img.src = "img/fallback/" + (p.imagens || [])[0] + ".jpg");
+          const x = document.createElement("button");
+          x.className = "x";
+          x.textContent = "×";
+          x.onclick = () => {
+            if (activeTab === "shop") toggleCart(p.id_peca);
+            if (activeTab === "fav") toggleFav(p.id_peca);
+          };
+          w.append(img, x);
+          list.append(w);
+        });
+        const fin = document.getElementById("finalizar");
+        fin.style.display =
+          cart.length > 0 || (activeTab === "fav" && favs.size > 0)
+            ? "block"
+            : "none";
+        updateProgress();
+      }
+      function updateProgress() {
+        const el = document.getElementById("thumbs");
+        const bar = document.getElementById("thumbProgressBar");
+        const scrollW = el.scrollWidth - el.clientWidth;
+        if (scrollW <= 0) {
+          bar.style.width = "0%";
+          return;
+        }
+        const pct = (el.scrollLeft / scrollW) * 100;
+        bar.style.width = pct + "%";
+      }
+      document
+        .getElementById("thumbs")
+        .addEventListener("scroll", updateProgress);
+      document.getElementById("tabShop").onclick = () => setTab("shop");
+      document.getElementById("tabRifa").onclick = () => setTab("rifa");
+      document.getElementById("tabFav").onclick = () => setTab("fav");
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closePanel();
+      });
+      boot();
+    </script>
+  </body>
+</html>
