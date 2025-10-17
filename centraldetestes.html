@@ -1,263 +1,176 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Central de Testes BSTV 13</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
-    :root {
-      --cor-fundo: #bebab0;
-      --cor-texto: #2b2424;
-      --cor-destaque: #ff0000;
-      --cor-branco: #fff;
-      --cor-secundaria: #267ba5;
-    }
-
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
-      font-family: 'Roboto Condensed', sans-serif;
-      background-color: var(--cor-fundo);
-      color: var(--cor-texto);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 0;
+      background-color: #f4f0e9;
+      color: #333;
     }
-
-    header {
-      width: 100%;
-      padding: 14px 0;
-      background-color: var(--cor-destaque);
-      color: var(--cor-branco);
+    h1 {
       text-align: center;
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: 1px;
+      margin-top: 1rem;
     }
-
-    main {
-      width: 95%;
-      max-width: 980px;
-      margin: 1rem auto 3rem;
-      background: var(--cor-fundo);
-      border: 2px solid var(--cor-texto);
-      border-radius: 4px;
-      padding: 1rem;
-    }
-
     h2 {
-      margin-top: 1.5rem;
-      margin-bottom: 0.5rem;
-      border-bottom: 2px solid var(--cor-texto);
-      padding-bottom: 0.2rem;
-      text-transform: uppercase;
-      font-size: 1rem;
+      margin-top: 1rem;
+      padding-left: 0.5rem;
     }
-
     .summary {
       text-align: center;
-      margin: 1rem 0;
-      font-weight: bold;
-      border: 2px dashed var(--cor-texto);
-      padding: 0.4rem;
-      background: var(--cor-branco);
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
     }
-
     .grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
+      margin: 0 1rem;
     }
-
     .piece-card {
-      width: 120px;
-      border: 2px solid var(--cor-texto);
-      border-radius: 3px;
-      background-color: var(--cor-branco);
-      text-align: center;
-      padding: 0.3rem;
+      width: 110px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+      padding: 0.25rem;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      text-align: center;
     }
-
     .piece-card.selected {
-      border-color: var(--cor-destaque);
-      transform: scale(1.04);
+      border-color: #4caf50;
     }
-
     .piece-card img {
       width: 100%;
       height: 80px;
       object-fit: cover;
-      border-radius: 3px;
+      border-radius: 4px;
     }
-
     .rifa-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 0.4rem;
+      gap: 0.3rem;
+      margin: 0 1rem;
+      margin-bottom: 1rem;
     }
-
     .rifa-btn {
-      border: 2px solid #2b2424;
+      padding: 0.3rem 0.4rem;
+      border: none;
       border-radius: 4px;
-      padding: 0.4rem 0.5rem;
-      font-size: 0.85rem;
-      color: var(--branco);
+      font-size: 0.8rem;
       cursor: pointer;
-      font-weight: bold;
-      background: var(--cor-texto);
-      color: var(--cor-branco);
-      transition: 0.2s ease;
+      color: #fff;
     }
-
     .rifa-btn.selected {
-      background: var(--cor-destaque);
-      color: var(--cor-branco);
+      box-shadow: 0 0 0 2px #333 inset;
     }
-
     .total {
       text-align: center;
-      font-size: 1.3rem;
-      margin: 1.4rem 0;
-      background: var(--cor-branco);
-      border: 2px solid var(--cor-texto);
-      display: inline-block;
-      padding: 0.4rem 0.8rem;
-      border-radius: 4px;
+      font-size: 1.2rem;
+      margin-top: 1rem;
     }
-
     .fields {
       display: flex;
       justify-content: center;
       gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-top: 1.5rem;
-      margin-bottom: 1rem;
+      margin: 1rem 0;
     }
-
     .fields input {
-      padding: 0.6rem;
-      border: 2px solid var(--cor-texto);
+      padding: 0.5rem;
+      border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 0.9rem;
-      background: var(--cor-fundo);
-      color: var(--cor-texto);
-      flex: 1 1 200px;
     }
-
-    .fields input::placeholder {
-      color: var(--cor-texto);
-      opacity: 0.8;
-    }
-
     .actions {
       text-align: center;
-      margin-top: 1rem;
+      margin-bottom: 2rem;
     }
-
     .primary-btn, .secondary-btn {
-      padding: 0.6rem 1.8rem;
+      padding: 0.5rem 1.5rem;
+      border: none;
       border-radius: 4px;
-      font-size: 1rem;
-      font-weight: bold;
-      border: 2px solid transparent;
+      font-size: 0.9rem;
       cursor: pointer;
-      transition: 0.3s;
     }
-
     .primary-btn {
-      background-color: var(--cor-destaque);
-      color: var(--cor-branco);
-      border-color: var(--cor-destaque);
+      background-color: #e35d5b;
+      color: white;
     }
-
     .secondary-btn {
-      background-color: var(--cor-secundaria);
-      color: var(--cor-branco);
-      border-color: var(--cor-secundaria);
+      background-color: #267ba5;
+      color: white;
     }
-
-    .primary-btn:hover { background-color: #d40000; }
-    .secondary-btn:hover { background-color: #1b5d80; }
-
     #pixSection {
       display: none;
       text-align: center;
       margin-top: 1rem;
     }
-
     #qrCode {
-      margin-top: 1rem;
+      margin-top: 0.5rem;
     }
 
-    footer {
-      text-align: center;
-      font-size: 0.85rem;
-      padding: 1rem;
-      color: #444;
-    }
+    
   </style>
 </head>
 <body>
-  <header>🧾 Central de Testes BSTV 13</header>
+  <h1>Central de Testes BSTV 13</h1>
+  <div class="summary" id="totais">TOTAL PEÇAS: 0 | TOTAL RIFAS: 0</div>
 
-  <main>
-    <div class="summary" id="totais">TOTAL PEÇAS: 0 | TOTAL RIFAS: 0</div>
+  <h2>PEÇAS</h2>
+  <div class="grid" id="piecesGrid"></div>
 
-    <h2>Peças Disponíveis</h2>
-    <div class="grid" id="piecesGrid"></div>
+  <h2>RIFAS SUGERIDAS</h2>
+  <div class="rifa-buttons" id="rifasGrid"></div>
 
-    <h2>Rifas Sugeridas</h2>
-    <div class="rifa-buttons" id="rifasGrid"></div>
-
-    <div class="total" id="totalCash">TOTAL CASH: R$ 0,00</div>
-
-    <div class="fields">
-      <input type="text" id="nomeInput" placeholder="Nome completo" />
-      <input type="email" id="emailInput" placeholder="E-mail" />
-      <input type="tel" id="foneInput" placeholder="Telefone (opcional)" />
-    </div>
-
-    <div class="actions">
-      <button class="primary-btn" id="gerarPixBtn">GERAR PIX</button>
-      <button class="secondary-btn" id="copiaPixBtn" style="display:none;">Copiar código PIX</button>
-    </div>
-
+  <div class="total" id="totalCash">TOTAL CASH: R$ 0,00</div>
+  <div class="fields">
+    <input type="text" id="nomeInput" placeholder="Nome" />
+    <input type="email" id="emailInput" placeholder="E-mail" />
+    <input type="tel" id="foneInput" placeholder="Telefone (opcional)" />
+  </div>
+  <div class="actions">
+    <button class="primary-btn" id="gerarPixBtn">GERAR PIX</button>
+    <button class="secondary-btn" id="copiaPixBtn" style="display:none;">Copiar código PIX</button>
     <div id="pixSection">
-      <div id="pixCode" style="margin-top:1rem;word-break:break-all;"></div>
+      <div id="pixCode" style="margin-top:1rem;"></div>
       <div id="qrCode"></div>
     </div>
+  </div>
+  <div class="actions">
+    <button class="secondary-btn" id="apostaBtn">APOSTA!</button>
+  </div>
 
-    <div class="actions">
-      <button class="secondary-btn" id="apostaBtn">ENVIAR APOSTA</button>
-    </div>
-
-    <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
-      <input type="hidden" name="pecas" />
-      <input type="hidden" name="rifas" />
-      <input type="hidden" name="favoritas" />
-      <input type="hidden" name="total" />
-      <input type="hidden" name="nome" />
-      <input type="hidden" name="email" />
-      <input type="hidden" name="telefone" />
-      <input type="hidden" name="_captcha" value="false" />
-      <input type="hidden" name="_subject" value="Nova aposta BSTV" />
-      <input type="hidden" name="_template" value="table" />
-      <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html" />
-    </form>
-  </main>
-
-  <footer>© 2025 BetShopTV — Todos os direitos reservados</footer>
+  <!-- Formulário oculto para envio via FormSubmit -->
+  <!-- Esta versão usa FormSubmit como destino primário e envia também ao GAS para backup -->
+  <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
+    <input type="hidden" name="pecas" />
+    <input type="hidden" name="rifas" />
+    <input type="hidden" name="favoritas" />
+    <input type="hidden" name="total" />
+    <input type="hidden" name="nome" />
+    <input type="hidden" name="email" />
+    <input type="hidden" name="telefone" />
+    <!-- Configurações do FormSubmit -->
+    <input type="hidden" name="_captcha" value="false" />
+    <input type="hidden" name="_subject" value="Nova aposta BSTV" />
+    <input type="hidden" name="_template" value="table" />
+    <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html" />
+  </form>
 
   <script>
+    // Endpoints dos JSON
     const PECAS_JSON_URL = '/dados/pecas.json';
     const RIFAS_JSON_URL = '/dados/rifas.json';
     const form = document.getElementById('hiddenForm');
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+    // Endpoint do GAS para backup na aba CHECKOUT
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+
     let piecesData = [];
     let rifasData = [];
     let selectedPieces = new Set();
@@ -278,24 +191,23 @@
         console.error(err);
       }
     }
-
     function renderPieces() {
       const grid = document.getElementById('piecesGrid');
       grid.innerHTML = '';
       piecesData.forEach(piece => {
-        const firstImg = piece.imagens?.length ? piece.imagens[0] : '';
+        const firstImg = piece.imagens && piece.imagens.length ? piece.imagens[0] : '';
+        const thumbName = firstImg;
         const card = document.createElement('div');
         card.className = 'piece-card';
         card.innerHTML = `
-          <img src="img/tmb/${firstImg}.avif" onerror="this.onerror=null;this.src='img/fallback/${firstImg}.jpg';" alt="${piece.titulo}">
-          <div style="font-size:0.8rem;margin-top:0.25rem;">${piece.titulo}</div>
-          <div style="font-size:0.9rem;font-weight:bold;">R$ ${piece.preco.toFixed(2)}</div>
+          <img src="img/tmb/${thumbName}.avif" onerror="this.onerror=null;this.src='img/fallback/${thumbName}.jpg';" alt="${piece.titulo}">
+          <div style="font-size:0.7rem;margin-top:0.25rem;">${piece.titulo}</div>
+          <div style="font-size:0.8rem;font-weight:bold;">R$ ${piece.preco.toFixed(2)}</div>
         `;
         card.addEventListener('click', () => togglePiece(piece.id_peca, card));
         grid.appendChild(card);
       });
     }
-
     function renderRifas() {
       const grid = document.getElementById('rifasGrid');
       grid.innerHTML = '';
@@ -303,12 +215,11 @@
         const btn = document.createElement('button');
         btn.className = 'rifa-btn';
         btn.textContent = rifa.numero || rifa.id_rifa;
-        btn.style.backgroundColor = rifa.hex_rifa || rifa.hex || '#555';
+        btn.style.backgroundColor = rifa.hex_rifa || rifa.hex || '#999';
         btn.addEventListener('click', () => toggleRifa(rifa.id_rifa, btn));
         grid.appendChild(btn);
       });
     }
-
     function togglePiece(id, element) {
       if (selectedPieces.has(id)) {
         selectedPieces.delete(id);
@@ -319,7 +230,6 @@
       }
       updateTotal();
     }
-
     function toggleRifa(id, element) {
       if (selectedRifas.has(id)) {
         selectedRifas.delete(id);
@@ -330,12 +240,10 @@
       }
       updateTotal();
     }
-
     function calculateRifaTotal(count) {
       if (count === 0) return 0;
       return count % 2 === 0 ? 25 * count : 25 * (count - 1) + 30;
     }
-
     function updateTotal() {
       const piecesTotal = Array.from(selectedPieces).reduce((sum, id) => {
         const p = piecesData.find(x => x.id_peca === id);
@@ -345,7 +253,6 @@
       const total = piecesTotal + rifasTotal;
       document.getElementById('totalCash').textContent = 'TOTAL CASH: R$ ' + total.toFixed(2).replace('.', ',');
     }
-
     function crc16_ccitt(str) {
       let crc = 0xffff;
       for (let i = 0; i < str.length; i++) {
@@ -356,7 +263,6 @@
       }
       return crc;
     }
-
     function gerarBRCode(valor) {
       const chave = 'betshoptv@gmail.com';
       const payloadFormatIndicator = '000201';
@@ -370,7 +276,7 @@
       const merchantCategoryCode = '52040000';
       const transactionCurrency = '5303986';
       const additionalDataField = '62';
-      const referenceLabel = '0012BSTVTESTE';
+      const referenceLabel = '0012NARRATIVA';
       const data = [
         payloadFormatIndicator,
         merchantInfo,
@@ -385,7 +291,6 @@
       const checksum = crc.toString(16).toUpperCase().padStart(4, '0');
       return data + checksum;
     }
-
     function showPix() {
       const piecesTotal = Array.from(selectedPieces).reduce((sum, id) => {
         const p = piecesData.find(x => x.id_peca === id);
@@ -401,16 +306,18 @@
       document.getElementById('pixCode').textContent = brCode;
       const qrElem = document.getElementById('qrCode');
       qrElem.innerHTML = '';
-      new QRCode(qrElem, { text: brCode, width: 200, height: 200 });
+      new QRCode(qrElem, {
+        text: brCode,
+        width: 200,
+        height: 200
+      });
       document.getElementById('pixSection').style.display = 'block';
       document.getElementById('copiaPixBtn').style.display = 'inline-block';
     }
-
     function copyPix() {
       const pix = document.getElementById('pixCode').textContent;
       navigator.clipboard.writeText(pix).then(() => alert('Código PIX copiado!'));
     }
-
     function sendCheckout() {
       if (selectedPieces.size === 0 && selectedRifas.size === 0) {
         alert('Selecione ao menos uma peça ou rifa.');
@@ -425,7 +332,7 @@
         const p = piecesData.find(x => x.id_peca === id);
         return sum + (p ? p.preco : 0);
       }, 0) + calculateRifaTotal(selectedRifas.size);
-
+      // Preenche inputs ocultos para FormSubmit
       form.querySelector('input[name="pecas"]').value = pecasStr;
       form.querySelector('input[name="rifas"]').value = rifasStr;
       form.querySelector('input[name="favoritas"]').value = 0;
@@ -433,7 +340,7 @@
       form.querySelector('input[name="nome"]').value = nome;
       form.querySelector('input[name="email"]').value = email;
       form.querySelector('input[name="telefone"]').value = fone;
-
+      // Backup: envia dados também ao GAS com FormData e fallback por GET
       try {
         const fd = new FormData();
         fd.append('nome', nome);
@@ -444,13 +351,15 @@
         fd.append('favoritas', 0);
         fd.append('total', totalValor.toFixed(2));
         fetch(GAS_URL, { method: 'POST', body: fd, mode: 'no-cors' });
+        const qs = new URLSearchParams([...fd.entries()]).toString();
+        (new Image()).src = GAS_URL + '?' + qs + '&t=' + Date.now();
       } catch (err) {
         console.warn('Backup via GAS falhou:', err);
       }
-
+      // Submete para FormSubmit
       form.submit();
       alert('Aposta enviada! Aguarde nossa confirmação.');
-
+      // Reseta estado local
       selectedPieces.clear();
       selectedRifas.clear();
       renderPieces();
@@ -459,11 +368,9 @@
       document.getElementById('pixSection').style.display = 'none';
       document.getElementById('copiaPixBtn').style.display = 'none';
     }
-
     document.getElementById('gerarPixBtn').addEventListener('click', showPix);
     document.getElementById('copiaPixBtn').addEventListener('click', copyPix);
     document.getElementById('apostaBtn').addEventListener('click', sendCheckout);
-
     (function() {
       const script = document.createElement('script');
       script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
@@ -472,4 +379,4 @@
     })();
   </script>
 </body>
-</html>
+</html>    faça um update com o restante dos dados no código 
