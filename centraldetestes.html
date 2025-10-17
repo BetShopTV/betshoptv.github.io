@@ -163,49 +163,6 @@
     <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html" />
   </form>
 
-<!-- ============================= -->
-<!-- FORMULÁRIO DE APOSTA (VISÍVEL) -->
-<!-- ============================= -->
-<section id="formSection" style="padding:1.5rem;text-align:center;">
-  <h2 style="margin-bottom:1rem;">Dados do Apostador</h2>
-
-  <form id="visibleForm" style="max-width:400px;margin:auto;text-align:left;background:#fff;padding:1rem;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-    <label for="nomeInput" style="display:block;font-weight:bold;margin-bottom:0.2rem;">Nome</label>
-    <input type="text" id="nomeInput" name="nome" placeholder="Seu nome completo" required
-      style="width:100%;padding:0.5rem;margin-bottom:0.8rem;border:1px solid #ccc;border-radius:4px;font-size:0.9rem;">
-
-    <label for="emailInput" style="display:block;font-weight:bold;margin-bottom:0.2rem;">E-mail</label>
-    <input type="email" id="emailInput" name="email" placeholder="seuemail@exemplo.com" required
-      style="width:100%;padding:0.5rem;margin-bottom:0.8rem;border:1px solid #ccc;border-radius:4px;font-size:0.9rem;">
-
-    <label for="foneInput" style="display:block;font-weight:bold;margin-bottom:0.2rem;">Telefone (opcional)</label>
-    <input type="tel" id="foneInput" name="telefone" placeholder="(11) 99999-9999"
-      style="width:100%;padding:0.5rem;margin-bottom:1rem;border:1px solid #ccc;border-radius:4px;font-size:0.9rem;">
-
-    <div style="text-align:center;">
-      <button type="button" id="gerarPixBtn"
-        style="background-color:#267ba5;color:#fff;padding:0.6rem 1.2rem;border:none;border-radius:4px;cursor:pointer;">
-        Gerar PIX
-      </button>
-      <button type="button" id="apostaBtn"
-        style="background-color:#e35d5b;color:#fff;padding:0.6rem 1.2rem;border:none;border-radius:4px;cursor:pointer;margin-left:0.5rem;">
-        Enviar Aposta
-      </button>
-    </div>
-  </form>
-
-  <div id="pixSection" style="display:none;margin-top:2rem;">
-    <h3>Código PIX Gerado</h3>
-    <div id="pixCode" style="background:#f9f9f9;border:1px solid #ddd;border-radius:4px;padding:1rem;word-break:break-all;margin:0.5rem auto;max-width:400px;"></div>
-    <div id="qrCode" style="margin:1rem auto;"></div>
-    <button id="copiaPixBtn"
-      style="background:#009688;color:white;padding:0.6rem 1.2rem;border:none;border-radius:4px;cursor:pointer;">
-      Copiar código PIX
-    </button>
-  </div>
-</section>
-
-
   <script>
     // Endpoints dos JSON
     const PECAS_JSON_URL = '/dados/pecas.json';
