@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BetShopTV – Galeria + Feed + Rifas (Versão B)</title>
+<link rel="preconnect" href="https://betshoptv.com/fonts/">
+<style>
+  /* TOKENS */
+  :root{
+    --red:#ff0000; --ink:#2b2424; --beige:#bebab0; --white:#ffffff;
+    --bd-thin:1px; --bd-thick:2px;
+    --ff-cta:"Roboto Condensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --fs-h1:clamp(1.4rem,3vw,2rem); --fs-h2:clamp(1.1rem,2vw,1.4rem);
+    --fs-p:clamp(.9rem,1.2vw,1rem); --fs-sm:clamp(.78rem,1vw,.9rem);
+    --gap-xxs:4px; --gap-xs:6px; --gap-s:8px; --gap-m:12px; --gap-l:16px;
+  }
+  html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);}
+  /* Cabeçalho vermelho */
+  header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;border-bottom:var(--bd-thick) solid var(--ink);}
+  .hdr-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px var(--gap-m);}
+  .logo{font:700 var(--fs-h2)/1 var(--ff-cta);text-transform:uppercase;}
+  .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .nav a{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 10px;border:var(--bd-thin) solid #fff;color:#fff;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase}
+  .nav a:hover{background:#fff;color:var(--ink)}
+  /* Seções */
+  main{max-width:1200px;margin:0 auto;padding:var(--gap-m);}
+  section{margin-bottom:24px}
+  h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
+  /* Galeria 3 colunas SEMPRE */
+  .galeria{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-xs)}
+  .gal-item{border:var(--bd-thin) solid var(--ink);background:#fff;cursor:pointer}
+  .gal-item img{display:block;width:100%;height:auto}
+  .gal-item .ttl{padding:6px;font:700 var(--fs-sm)/1.2 var(--ff-cta)}
+  /* Feed (lista vertical) */
+  .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
+  .post{border:var(--bd-thin) solid var(--ink);background:#fff}
+  .post .carousel{display:flex;gap:var(--gap-xxs);overflow-x:auto;scroll-snap-type:x mandatory;padding:var(--gap-xxs);background:var(--white)}
+  .post .carousel img{flex:0 0 86%;max-width:86%;height:auto;scroll-snap-align:center;border:var(--bd-thin) solid var(--ink)}
+  .post .meta{padding:8px 10px}
+  .post .meta .linha1{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .preco{font:600 var(--fs-p)/1 var(--ff-body)}
+  .titulo{font:700 var(--fs-p)/1.2 var(--ff-cta)}
+  .ficha{font:400 var(--fs-sm)/1.4 var(--ff-body);opacity:.9}
+  .acoes{display:flex;gap:8px;margin-top:8px}
+  .btn{font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;border:var(--bd-thin) solid var(--ink);background:var(--ink);color:#fff;padding:6px 10px;cursor:pointer}
+  .btn--sec{background:var(--red);border-color:var(--ink)}
+  .btn:hover{filter:brightness(1.05)}
+  .fav{background:#fff;color:var(--ink)}
+  .fav.active{background:var(--red);color:#fff}
+  /* Rifas “tijolo” */
+  .rifas{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:var(--gap-xs)}
+  .rifa-btn{display:flex;align-items:center;justify-content:center;min-height:56px;text-align:center;padding:6px;border:var(--bd-thin) solid var(--ink);color:#fff;font:700 var(--fs-sm)/1.1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
+  .rifa-btn span{display:block}
+  .rifa-btn .ln2{opacity:.95}
+  .rifa-btn.sold{opacity:.45;cursor:not-allowed;filter:grayscale(1)}
+  /* Rodapé preto */
+  footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
+  .ftr-inner{max-width:1200px;margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px var(--gap-m)}
+  .contadores{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:#fff;color:var(--ink);border:var(--bd-thin) solid var(--ink);padding:4px 8px;font:700 var(--fs-sm)/1 var(--ff-cta)}
+  .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
+  /* Suporte a foco na peça via âncora */
+  .post:target{outline:2px solid var(--red)}
+  /* Scrollbars (opcional) */
+  .post .carousel::-webkit-scrollbar{height:6px}
+  .post .carousel::-webkit-scrollbar-thumb{background:var(--red)}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-inner">
+    <div class="logo">BetShopTV</div>
+    <nav class="nav">
+      <a href="#galeria">Galeria</a>
+      <a href="#feed">Feed</a>
+      <a href="#rifas">Rifas</a>
+      <a href="https://betshoptv.com/como.html">Como Funciona?</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- GALERIA 3 colunas -->
+  <section id="galeria">
+    <h2>Galeria (3 colunas sempre)</h2>
+    <div class="galeria" id="galeriaGrid"></div>
+  </section>
+
+  <!-- FEED (abre na peça clicada) -->
+  <section id="feed">
+    <h2>Feed</h2>
+    <div class="feed" id="feedList"></div>
+  </section>
+
+  <!-- RIFAS (tijolo) -->
+  <section id="rifas">
+    <h2>Rifas</h2>
+    <div class="rifas" id="rifasGrid"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="ftr-inner">
+    <div class="contadores">
+      <div class="pill" id="pillPecas">Peças: 0</div>
+      <div class="pill" id="pillRifas">Rifas: 0</div>
+      <div class="pill" id="pillFav">Favoritos: 0</div>
+    </div>
+    <button class="cta-final" id="btnCheckout">Finalizar</button>
+  </div>
+</footer>
+
+<!-- FormSubmit oculto (inclui favoritas) -->
+<form id="checkoutForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
+  <input type="hidden" name="pecas" id="fPecas">
+  <input type="hidden" name="rifas" id="fRifas">
+  <input type="hidden" name="favoritas" id="fFav">
+  <input type="hidden" name="_subject" value="Nova aposta BSTV">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
+  <input type="hidden" name="_captcha" value="false">
+</form>
+
+<script>
+/* ====== CONFIG ====== */
+const PECAS_JSON_URL = '/dados/pecas.json';
+const RIFAS_JSON_URL = '/dados/rifas.json';
+/* ====== STATE ====== */
+let pecas = [];        // array de peças
+let rifas = [];        // array de rifas
+const selecionadas = new Set(); // ids de peças selecionadas
+const rifasSel = new Set();     // ids de rifas selecionadas
+const favoritos = new Set(JSON.parse(localStorage.getItem('BSTV_FAV')||'[]')); // favoritos persistidos
+
+/* ====== HELPERS ====== */
+const fmt = v => 'R$ ' + Number(v||0).toFixed(2).replace('.',',');
+function imgWithFallback(srcAvif){
+  const img = new Image();
+  img.loading = 'lazy';
+  img.src = srcAvif;
+  img.onerror = () => {
+    if(srcAvif.endsWith('.avif')) img.src = srcAvif.replace('.avif','.jpg');
+  };
+  return img;
+}
+function updatePills(){
+  document.getElementById('pillPecas').textContent = 'Peças: ' + selecionadas.size;
+  document.getElementById('pillRifas').textContent = 'Rifas: ' + rifasSel.size;
+  document.getElementById('pillFav').textContent  = 'Favoritos: ' + favoritos.size;
+  localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos]));
+}
+
+/* ====== GALERIA (3 colunas) ====== */
+function renderGaleria(){
+  const grid = document.getElementById('galeriaGrid');
+  grid.innerHTML = '';
+  pecas.forEach(p => {
+    if (String(p.status).toUpperCase()==='VENDIDAAA') return;
+    const card = document.createElement('div');
+    card.className = 'gal-item';
+    // imagem principal = primeira de imagens[], seguindo seu padrão
+    const nome = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
+    const img = imgWithFallback('/img/tmb/'+nome+'.avif');
+    card.appendChild(img);
+    const ttl = document.createElement('div');
+    ttl.className='ttl';
+    ttl.textContent = p.titulo || ('Peça '+p.id_peca);
+    card.appendChild(ttl);
+    card.addEventListener('click', () => {
+      // deep link: #p=<id_peca>
+      location.hash = '#p='+encodeURIComponent(p.id_peca);
+      openFeedAt(p.id_peca);
+      // rolar para seção feed
+      document.getElementById('feed').scrollIntoView({behavior:'smooth'});
+    });
+    grid.appendChild(card);
+  });
+}
+
+/* ====== FEED (lista + carrossel) ====== */
+function renderFeed(){
+  const list = document.getElementById('feedList');
+  list.innerHTML = '';
+  pecas.forEach(p => {
+    if (String(p.status).toUpperCase()==='VENDIDAAA') return;
+    const post = document.createElement('article');
+    post.className = 'post';
+    post.id = 'post-'+p.id_peca;
+
+    // carrossel
+    const car = document.createElement('div');
+    car.className = 'carousel';
+    const imgs = Array.isArray(p.imagens) ? p.imagens : [];
+    imgs.forEach(nome => {
+      const img = imgWithFallback('/img/otm/'+nome+'.avif');
+      car.appendChild(img);
+    });
+    post.appendChild(car);
+
+    // meta
+    const meta = document.createElement('div'); meta.className='meta';
+    const linha1 = document.createElement('div'); linha1.className='linha1';
+    const t = document.createElement('div'); t.className='titulo'; t.textContent = p.titulo || ('Peça '+p.id_peca);
+    const preco = document.createElement('div'); preco.className='preco'; preco.textContent = fmt(p.preco);
+    linha1.appendChild(t); linha1.appendChild(preco);
+
+    const ficha = document.createElement('div'); ficha.className='ficha';
+    ficha.textContent = [p.tecnica, p.dimensao || p.dimencao || p.tamanho].filter(Boolean).join(' · ');
+
+    const acoes = document.createElement('div'); acoes.className='acoes';
+    const btnSel = document.createElement('button'); btnSel.className='btn'; btnSel.textContent='Selecionar';
+    const btnFav = document.createElement('button'); btnFav.className='btn fav'+(favoritos.has(p.id_peca)?' active':''); btnFav.textContent='❤️';
+
+    function refreshBtn(){
+      btnSel.textContent = selecionadas.has(p.id_peca)?'Remover':'Selecionar';
+    }
+    btnSel.addEventListener('click', () => {
+      if(selecionadas.has(p.id_peca)) selecionadas.delete(p.id_peca); else selecionadas.add(p.id_peca);
+      refreshBtn(); updatePills();
+    });
+    btnFav.addEventListener('click', () => {
+      if(favoritos.has(p.id_peca)) favoritos.delete(p.id_peca); else favoritos.add(p.id_peca);
+      btnFav.classList.toggle('active', favoritos.has(p.id_peca));
+      updatePills();
+    });
+    refreshBtn();
+    acoes.append(btnSel, btnFav);
+
+    meta.append(linha1, ficha, acoes);
+    post.appendChild(meta);
+    list.appendChild(post);
+  });
+}
+function openFeedAt(id){
+  const el = document.getElementById('post-'+id);
+  if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); el.focus?.(); }
+}
+
+/* ====== RIFAS (tijolo) ====== */
+function renderRifas(){
+  const grid = document.getElementById('rifasGrid');
+  grid.innerHTML='';
+  rifas.forEach(r=>{
+    const disponivel = !r.status_rifa || String(r.status_rifa).trim()==='';
+    const btn = document.createElement('button');
+    btn.type='button';
+    btn.className='rifa-btn'+(disponivel?'':' sold');
+    btn.style.backgroundColor = r.hex_rifa || r.hex || '#777';
+    const l1 = document.createElement('span'); l1.textContent = (r.numero || r.id_rifa || '').toString().toUpperCase();
+    const l2 = document.createElement('span'); l2.className='ln2'; l2.textContent = (r.nome || r.titulo || r.chamada || '').toString().toUpperCase();
+    btn.append(l1,l2);
+    if(disponivel){
+      btn.addEventListener('click',()=>{
+        if(rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa); else rifasSel.add(r.id_rifa);
+        btn.style.outline = rifasSel.has(r.id_rifa)?'2px solid #fff':'none';
+        updatePills();
+      });
+    }
+    grid.appendChild(btn);
+  });
+}
+
+/* ====== CHECKOUT (FormSubmit com favoritas) ====== */
+document.getElementById('btnCheckout').addEventListener('click', ()=>{
+  document.getElementById('fPecas').value = [...selecionadas].join(',');
+  document.getElementById('fRifas').value = [...rifasSel].join(',');
+  document.getElementById('fFav').value   = [...favoritos].join(',');
+  document.getElementById('checkoutForm').submit();
+});
+
+/* ====== BOOT ====== */
+(async function init(){
+  try{
+    const [pecasResp, rifasResp] = await Promise.all([
+      fetch(PECAS_JSON_URL), fetch(RIFAS_JSON_URL)
+    ]);
+    pecas = await pecasResp.json();
+    rifas = await rifasResp.json();
+  }catch(e){ console.warn('Falha ao carregar JSONs', e); pecas=[]; rifas=[]; }
+  renderGaleria();
+  renderFeed();
+  renderRifas();
+  updatePills();
+
+  // Se houver deep link #p=<id>, abrir feed nessa peça
+  const m = location.hash.match(/#p=([^&]+)/);
+  if(m){ openFeedAt(decodeURIComponent(m[1])); }
+})();
+</script>
+</body>
+</html>
