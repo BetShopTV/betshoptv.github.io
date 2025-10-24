@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BSTV (v. 09) — Safe header/footer</title>
+<title>BSTV (v. 12) — Safe header/footer</title>
 
 <!-- ====== STYLES (preserve visual look of v08) ====== -->
 <style>
@@ -101,6 +101,10 @@
   .rifas{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:var(--gap-xs)}
   .rifa-btn{display:flex;align-items:center;justify-content:center;min-height:56px;text-align:center;padding:6px;border:var(--bd-thin) solid var(--ink);color:#fff;font:700 var(--fs-sm)/1.1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
   .rifa-btn.sold{opacity:.45;cursor:not-allowed;filter:grayscale(1)}
+  .rifa-btn span { display:block; line-height:1.05; }
+.rifa-btn .ln1 { font-weight:700; font-size:0.92rem; }
+.rifa-btn .ln2 { opacity:0.95; font-size:0.82rem; margin-top:2px; }
+
 
   /* Footer (unchanged visually from v08) */
   footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
@@ -132,7 +136,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">11</div>
+      <div class="logo">12</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -305,26 +309,143 @@ function renderGaleria(){
     section.appendChild(list); app.appendChild(section);
   }
 
-  function renderRifas(){
-    const app = document.getElementById('app'); app.innerHTML = '';
-    const section = document.createElement('section'); section.id = 'rifas';
-    const grid = document.createElement('div'); grid.className = 'rifas';
-    rifas.forEach(r=>{
-      const disponivel = !r.status_rifa || String(r.status_rifa).trim()==='';
-      const btn = document.createElement('button');
-      btn.className = 'rifa-btn' + (disponivel ? '' : ' sold');
-      btn.style.backgroundColor = r.hex_rifa || r.hex || '#777';
-      btn.textContent = (r.numero || r.id_rifa || '').toString().toUpperCase();
-      if(disponivel){
-        btn.addEventListener('click', ()=> {
-          if(rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa); else rifasSel.add(r.id_rifa);
-          updatePills(); calcularTotal();
-        });
-      }
-      grid.appendChild(btn);
-    });
-    section.appendChild(grid); app.appendChild(section);
+/* ===== HELPERS for RIFAS labels, contrast and prices ===== */
+
+/**
+ * Create a DOM element containing up to 2 lines for the rifa label.
+ * Uses a smart-break around the middle if necessary.
+ * Returns a DocumentFragment or element ready to append.
+ */
+function formatRifaLabelDOM(rawText) {
+  const t = (rawText || '').toString().trim();
+  const frag = document.createDocumentFragment();
+
+  if (!t) {
+    const s = document.createElement('span'); s.className='ln1'; s.textContent = ''; frag.appendChild(s);
+    return frag;
   }
+
+  const maxSingleLine = 18; // adjust if you want longer single-line labels
+  if (t.length <= maxSingleLine) {
+    const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = t.toUpperCase();
+    frag.appendChild(s1);
+    return frag;
+  }
+
+  const mid = Math.floor(t.length / 2);
+  let breakPos = t.lastIndexOf(' ', mid);
+  if (breakPos < 3) breakPos = t.indexOf(' ', mid);
+  if (breakPos === -1) breakPos = maxSingleLine;
+
+  const part1 = t.slice(0, breakPos).trim();
+  const part2 = t.slice(breakPos).trim();
+
+  const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = (part1 || t).toUpperCase();
+  const s2 = document.createElement('span'); s2.className = 'ln2'; s2.textContent = (part2 || '').toUpperCase();
+  frag.appendChild(s1); frag.appendChild(s2);
+  return frag;
+}
+
+/**
+ * Return either '#000000' or '#ffffff' depending on perceptual luminance
+ * of the background color (hex). Implements WCAG luminance test.
+ */
+function getContrastColor(hex) {
+  if (!hex) return '#000000';
+  // normalize hex: #RRGGBB or RRGGBB or #RGB
+  let s = String(hex).trim().replace('#', '');
+  if (s.length === 3) {
+    s = s.split('').map(ch => ch + ch).join('');
+  }
+  if (s.length !== 6) return '#000000';
+  const r = parseInt(s.slice(0,2),16);
+  const g = parseInt(s.slice(2,4),16);
+  const b = parseInt(s.slice(4,6),16);
+  // convert sRGB to linear
+  const srgbToLinear = c => {
+    const cs = c/255;
+    return cs <= 0.03928 ? cs/12.92 : Math.pow((cs+0.055)/1.055, 2.4);
+  };
+  const R = srgbToLinear(r), G = srgbToLinear(g), B = srgbToLinear(b);
+  const L = 0.2126*R + 0.7152*G + 0.0722*B;
+  // threshold 0.179 (WCAG rule)
+  return L > 0.179 ? '#000000' : '#ffffff';
+}
+
+/**
+ * Calculate rifas total by rule:
+ * - if count === 0 => 0
+ * - if count is even: count * 25
+ * - if odd: (count - 1) * 25 + 30
+ */
+function calculateRifaTotal(count) {
+  count = Number(count || 0);
+  if (count <= 0) return 0;
+  if (count % 2 === 0) return 25 * count;
+  return 25 * (count - 1) + 30;
+}
+
+    
+function renderRifas(){
+  const app = document.getElementById('app'); // note: we only mutate #app
+  // if rifas page is a full page we can render inside #app; otherwise it may be a section
+  app.innerHTML = ''; 
+  const section = document.createElement('section'); section.id = 'rifas';
+  const grid = document.createElement('div'); grid.className = 'rifas';
+
+  rifas.forEach(r => {
+    // skip non-available if you want; but per existing logic, show even sold with .sold class
+    const disponivel = !r.status_rifa || String(r.status_rifa).trim() === '';
+
+    const btn = document.createElement('button');
+    btn.className = 'rifa-btn' + (disponivel ? '' : ' sold');
+
+    // background color (from r.hex_rifa or fallback)
+    const bg = r.hex_rifa || r.hex || '#777';
+    btn.style.backgroundColor = bg;
+
+    // Decide label text: prefer r.botao_rifa, else number/id
+    let rawLabel = '';
+    if (r.botao_rifa && String(r.botao_rifa).trim()) rawLabel = String(r.botao_rifa).trim();
+    else rawLabel = (r.numero || r.id_rifa || '').toString();
+
+    // remove leading "X" if present (per your instruction)
+    rawLabel = rawLabel.replace(/^\s*X\s*/i, '').trim();
+
+    // build label using DOM (safe) and append
+    const labelFragment = formatRifaLabelDOM(rawLabel);
+    // clear any existing children (not strictly necessary)
+    while(btn.firstChild) btn.removeChild(btn.firstChild);
+    btn.appendChild(labelFragment);
+
+    // set readable text color based on bg contrast
+    btn.style.color = getContrastColor(bg);
+
+    // store id for selection logic
+    btn.dataset.id = r.id_rifa;
+
+    // click handler only if available
+    if (disponivel) {
+      btn.addEventListener('click', () => {
+        if (rifasSel.has(r.id_rifa)) {
+          rifasSel.delete(r.id_rifa);
+          btn.style.outline = 'none';
+        } else {
+          rifasSel.add(r.id_rifa);
+          btn.style.outline = '2px solid #fff';
+        }
+        updatePills();
+        calcularTotal();
+      });
+    }
+
+    grid.appendChild(btn);
+  });
+
+  section.appendChild(grid);
+  app.appendChild(section);
+}
+
     /* ====== Navegação (corrige comportamento dos links e cliques) ====== */
 // showPage: renderiza a página pedida dentro de #app
 function showPage(page){
@@ -451,14 +572,25 @@ if(galleryItem){
     if(pR) pR.textContent = 'Rifas: ' + rifasSel.size;
     if(pF) pF.textContent = 'Favoritas: ' + favoritos.size;
   }
-  function calcularTotal(){
-    let total = 0;
-    selecionadas.forEach(id => { const p = pecas.find(x=>x.id_peca===id); if(p && p.preco) total += parseFloat(p.preco); });
-    rifasSel.forEach(id => { const r = rifas.find(x=>x.id_rifa===id); if(r && r.valor_rifa) total += parseFloat(r.valor_rifa); else total += 30; });
-    totalGeral = total;
-    const totalEl = document.querySelector('.total-display'); if(totalEl) totalEl.textContent = 'Total: ' + fmt(totalGeral);
-    const fTotal = document.getElementById('fTotal'); if(fTotal) fTotal.value = totalGeral.toFixed(2);
-  }
+function calcularTotal(){
+  let total = 0;
+  // pieces total
+  selecionadas.forEach(id => {
+    const p = pecas.find(x => x.id_peca === id);
+    if (p && p.preco) total += parseFloat(p.preco);
+  });
+  // rifas total = apply the parity rule, independent of per-rifa price
+  const rifasCount = rifasSel.size || 0;
+  const rifasTotal = calculateRifaTotal(rifasCount);
+  total += rifasTotal;
+
+  totalGeral = total;
+  const totalEl = document.querySelector('.total-display');
+  if (totalEl) totalEl.textContent = 'Total: ' + fmt(totalGeral);
+  const fTotal = document.getElementById('fTotal');
+  if (fTotal) fTotal.value = totalGeral.toFixed(2);
+}
+
 
   /* ====== Helper to open feed at id ====== */
   function openFeedAt(id){
