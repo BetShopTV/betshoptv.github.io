@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BSTV (v. 04)</title>
+<title>v.06</title>
 <link rel="preconnect" href="https://betshoptv.com/fonts/">
 <style>
   /* TOKENS */
@@ -61,48 +61,34 @@
   .contadores{display:flex;gap:8px;flex-wrap:wrap}
   .pill{background:#fff;color:var(--ink);border:var(--bd-thin) solid var(--ink);padding:4px 8px;font:700 var(--fs-sm)/1 var(--ff-cta)}
   .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
- /* Drawer / carrinho */
-#carrinho{position:relative;margin:0 0 24px}
-.cart-wrap{border:var(--bd-thin) solid var(--ink);background:#fff}
-.cart-tabs{display:flex;gap:6px;align-items:center;justify-content:flex-start;padding:6px;background:var(--beige);border-bottom:var(--bd-thin) solid var(--ink)}
-.cart-tab{border:var(--bd-thin) solid var(--ink);background:var(--ink);color:#fff;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;padding:6px 10px;cursor:pointer}
-.cart-tab.is-active{background:var(--red)}
-.cart-close{margin-left:auto;border:var(--bd-thin) solid var(--ink);background:#fff;color:var(--ink);font:700 var(--fs-sm)/1 var(--ff-cta);padding:6px 10px;cursor:pointer}
-.cart-body{padding:10px}
-.cart-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
-.cart-item{border:var(--bd-thin) solid var(--ink);background:#fff}
-.cart-item img{width:100%;height:auto;display:block;border-bottom:var(--bd-thin) solid var(--ink)}
-.cart-item .ci-meta{padding:6px}
-.cart-item .ci-ttl{font:700 var(--fs-sm)/1.2 var(--ff-cta)}
-.cart-item .ci-act{margin-top:6px;display:flex;gap:6px}
-.cart-item .btn-remove{border:var(--bd-thin) solid var(--ink);background:var(--red);color:#fff;font:700 var(--fs-sm)/1 var(--ff-cta);padding:4px 8px;cursor:pointer}
-  #checkout { background: var(--bege, #bebab0); padding: 20px; }
-.checkout-wrap { max-width: 480px; margin: 0 auto; background: #fff; border: 1px solid #2b2424; padding: 20px; border-radius: 8px; }
-.checkout-step h2 { font-family: var(--ff-cta, Roboto_Condensed-Bold); margin-bottom: 12px; }
-.checkout-step label { display:block; margin-top:10px; font-weight:700; font-size:14px; color:#2b2424; }
-.checkout-step input { width:100%; padding:8px; margin-top:4px; border:1px solid #aaa; border-radius:4px; font-size:14px; }
-.pix-placeholder { border:2px dashed #2b2424; height:160px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#2b2424; margin:20px 0; }
-.checkout-btns { display:flex; justify-content:space-between; gap:10px; margin-top:20px; }
-.btn-back, .btn-next { flex:1; padding:10px; font-weight:700; border:1px solid #2b2424; cursor:pointer; }
-.btn-back { background:#fff; color:#2b2424; }
-.btn-next { background:#2b2424; color:#fff; }
-footer .total-display { font-weight:700; margin-top:8px; font-size:15px; }
+  footer .total-display { font-weight:700; margin-top:8px; font-size:15px; }
+  /* Drawer / carrinho */
+  #carrinho{position:relative;margin:0 0 24px}
+  .cart-wrap{border:var(--bd-thin) solid var(--ink);background:#fff}
+  .cart-tabs{display:flex;gap:6px;align-items:center;justify-content:flex-start;padding:6px;background:var(--beige);border-bottom:var(--bd-thin) solid var(--ink)}
+  .cart-tab{border:var(--bd-thin) solid var(--ink);background:var(--ink);color:#fff;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;padding:6px 10px;cursor:pointer}
+  .cart-tab.is-active{background:var(--red)}
+  .cart-close{margin-left:auto;border:var(--bd-thin) solid var(--ink);background:#fff;color:var(--ink);font:700 var(--fs-sm)/1 var(--ff-cta);padding:6px 10px;cursor:pointer}
+  .cart-body{padding:10px}
+  .cart-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+  .cart-item{border:var(--bd-thin) solid var(--ink);background:#fff}
+  .cart-item img{width:100%;height:auto;display:block;border-bottom:var(--bd-thin) solid var(--ink)}
+  .cart-item .ci-meta{padding:6px}
+  .cart-item .ci-ttl{font:700 var(--fs-sm)/1.2 var(--ff-cta)}
+  .cart-item .ci-act{margin-top:6px;display:flex;gap:6px}
+  .cart-item .btn-remove{border:var(--bd-thin) solid var(--ink);background:var(--red);color:#fff;font:700 var(--fs-sm)/1 var(--ff-cta);padding:4px 8px;cursor:pointer}
+  /* Checkout */
+  #checkout { background: var(--beige); padding: 20px; }
+  .checkout-wrap { max-width: 480px; margin: 0 auto; background: #fff; border: 1px solid #2b2424; padding: 20px; border-radius: 8px; }
+  .checkout-step h2 { font-family: var(--ff-cta); margin-bottom: 12px; }
+  .checkout-step label { display:block; margin-top:10px; font-weight:700; font-size:14px; color:#2b2424; }
+  .checkout-step input { width:100%; padding:8px; margin-top:4px; border:1px solid #aaa; border-radius:4px; font-size:14px; }
+  .pix-placeholder { border:2px dashed #2b2424; height:160px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#2b2424; margin:20px 0; }
+  .checkout-btns { display:flex; justify-content:space-between; gap:10px; margin-top:20px; }
+  .btn-back, .btn-next { flex:1; padding:10px; font-weight:700; border:1px solid #2b2424; cursor:pointer; }
+  .btn-back { background:#fff; color:#2b2424; }
+  .btn-next { background:#2b2424; color:#fff; }
 
-/* ==================== */
-/* ESTILO CHECKOUT */
-/* ==================== */
-#checkout { background: var(--bege, #bebab0); padding: 20px; }
-.checkout-wrap { max-width: 480px; margin: 0 auto; background: #fff; border: 1px solid #2b2424; padding: 20px; border-radius: 8px; }
-.checkout-step h2 { font-family: var(--ff-cta, Roboto_Condensed-Bold); margin-bottom: 12px; }
-.checkout-step label { display:block; margin-top:10px; font-weight:700; font-size:14px; color:#2b2424; }
-.checkout-step input { width:100%; padding:8px; margin-top:4px; border:1px solid #aaa; border-radius:4px; font-size:14px; }
-.pix-placeholder { border:2px dashed #2b2424; height:160px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#2b2424; margin:20px 0; }
-.checkout-btns { display:flex; justify-content:space-between; gap:10px; margin-top:20px; }
-.btn-back, .btn-next { flex:1; padding:10px; font-weight:700; border:1px solid #2b2424; cursor:pointer; }
-.btn-back { background:#fff; color:#2b2424; }
-.btn-next { background:#2b2424; color:#fff; }
-footer .total-display { font-weight:700; margin-top:8px; font-size:15px; }
-  
   /* Suporte a foco na peça via âncora */
   .post:target{outline:2px solid var(--red)}
   /* Scrollbars (opcional) */
@@ -131,34 +117,33 @@ footer .total-display { font-weight:700; margin-top:8px; font-size:15px; }
   </section>
 
   <!-- FEED (abre na peça clicada) -->
-  <section id="feed">
+  <section id="feed" style="display:none;">
     <h2>Feed</h2>
     <div class="feed" id="feedList"></div>
   </section>
 
   <!-- RIFAS (tijolo) -->
-  <section id="rifas">
+  <section id="rifas" style="display:none;">
     <h2>Rifas</h2>
     <div class="rifas" id="rifasGrid"></div>
   </section>
 
   <!-- DRAWER / CARRINHO -->
-<section id="carrinho" style="display:none;">
-  <div class="cart-wrap">
-    <div class="cart-tabs">
-      <button class="cart-tab is-active" data-tab="pecas">Peças</button>
-      <button class="cart-tab" data-tab="rifas">Rifas</button>
-      <button class="cart-tab" data-tab="fav">Favoritas</button>
-      <button class="cart-close" id="cartClose">Fechar</button>
+  <section id="carrinho" style="display:none;">
+    <div class="cart-wrap">
+      <div class="cart-tabs">
+        <button class="cart-tab is-active" data-tab="pecas">Peças</button>
+        <button class="cart-tab" data-tab="rifas">Rifas</button>
+        <button class="cart-tab" data-tab="fav">Favoritas</button>
+        <button class="cart-close" id="cartClose">Fechar</button>
+      </div>
+      <div class="cart-body">
+        <div class="cart-list" id="cartPecas"></div>
+        <div class="cart-list" id="cartRifas" style="display:none;"></div>
+        <div class="cart-list" id="cartFav" style="display:none;"></div>
+      </div>
     </div>
-    <div class="cart-body">
-      <div class="cart-list" id="cartPecas"></div>
-      <div class="cart-list" id="cartRifas" style="display:none;"></div>
-      <div class="cart-list" id="cartFav" style="display:none;"></div>
-    </div>
-  </div>
-</section>
-
+  </section>
 </main>
 
 <footer>
@@ -168,10 +153,10 @@ footer .total-display { font-weight:700; margin-top:8px; font-size:15px; }
       <button class="pill" id="pillRifas">Rifas: 0</button>
       <button class="pill" id="pillFav">Favoritos: 0</button>
     </div>
+    <div class="total-display">Total: R$ 0,00</div>
     <button class="cta-final" id="btnCheckout">Finalizar</button>
   </div>
 </footer>
-
 
 <!-- ============================= -->
 <!-- SEÇÃO DE CHECKOUT (MULTIETAPAS) -->
@@ -231,11 +216,11 @@ footer .total-display { font-weight:700; margin-top:8px; font-size:15px; }
   <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
 </form>
 
-
 <script>
-/* ====== CONFIG ====== */
-const PECAS_JSON_URL = '/dados/pecas.json';
-const RIFAS_JSON_URL = '/dados/rifas.json';
+/* ====== CONFIG (URLs absolutas) ====== */
+const PECAS_JSON_URL = 'https://betshoptv.com/dados/pecas.json';
+const RIFAS_JSON_URL = 'https://betshoptv.com/dados/rifas.json';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
 
 /* ====== STATE ====== */
 let pecas = [];
@@ -243,6 +228,7 @@ let rifas = [];
 const selecionadas = new Set(); // peças selecionadas
 const rifasSel = new Set();     // rifas selecionadas
 const favoritos = new Set(JSON.parse(localStorage.getItem('BSTV_FAV')||'[]'));
+let totalGeral = 0;
 
 /* ====== HELPERS ====== */
 const fmt = v => 'R$ ' + Number(v||0).toFixed(2).replace('.',',');
@@ -259,16 +245,32 @@ function updatePills(){
   document.getElementById('pillFav').textContent   = 'Favoritos: ' + favoritos.size;
   localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos]));
 }
+function updateTotalFooter() {
+  document.querySelector('.total-display').textContent = `Total: ${fmt(totalGeral)}`;
+}
+function calcularTotal() {
+  let total = 0;
+  selecionadas.forEach(id => {
+    const p = pecas.find(x => x.id_peca === id);
+    if (p && p.preco) total += parseFloat(p.preco);
+  });
+  rifasSel.forEach(id => {
+    const r = rifas.find(x => x.id_rifa === id);
+    if (r && r.valor_rifa) total += parseFloat(r.valor_rifa);
+    else total += 30; // fallback se não houver preço no JSON
+  });
+  totalGeral = total;
+  updateTotalFooter();
+}
 
 /* ====== ROUTER (sem scroll; cortes secos) ====== */
-const routes = ['galeria','feed','rifas','carrinho'];
+const routes = ['galeria','feed','rifas','carrinho','checkout'];
 function showOnly(id){
   routes.forEach(r => {
     const el = document.getElementById(r);
     if(!el) return;
     el.style.display = (r===id) ? 'block' : 'none';
   });
-  // força topo do container sem animação
   window.scrollTo(0,0);
 }
 function navigateTo(route){
@@ -302,7 +304,6 @@ function renderGaleria(){
     ttl.textContent = p.titulo || ('Peça '+p.id_peca);
     card.appendChild(ttl);
     card.addEventListener('click', () => {
-      // deep link: abre feed e foca a peça
       openFeedAt(p.id_peca);
       navigateTo('feed');
     });
@@ -345,7 +346,7 @@ function renderFeed(){
     function refreshBtn(){ btnSel.textContent = selecionadas.has(p.id_peca)?'Remover':'Selecionar'; }
     btnSel.addEventListener('click', () => {
       if(selecionadas.has(p.id_peca)) selecionadas.delete(p.id_peca); else selecionadas.add(p.id_peca);
-      refreshBtn(); updatePills(); renderCart(); // atualiza carrinho
+      refreshBtn(); updatePills(); renderCart(); calcularTotal();
     });
     btnFav.addEventListener('click', () => {
       if(favoritos.has(p.id_peca)) favoritos.delete(p.id_peca); else favoritos.add(p.id_peca);
@@ -361,9 +362,7 @@ function renderFeed(){
   });
 }
 function openFeedAt(id){
-  // garante feed renderizado
   if(!document.getElementById('post-'+id)) renderFeed();
-  // foca no post alvo (sem scroll suave)
   const el = document.getElementById('post-'+id);
   if(el){ el.scrollIntoView({behavior:'auto', block:'start'}); el.focus?.(); }
 }
@@ -385,7 +384,7 @@ function renderRifas(){
       btn.addEventListener('click',()=>{
         if(rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa); else rifasSel.add(r.id_rifa);
         btn.style.outline = rifasSel.has(r.id_rifa)?'2px solid #fff':'none';
-        updatePills(); renderCart();
+        updatePills(); renderCart(); calcularTotal();
       });
     }
     grid.appendChild(btn);
@@ -411,7 +410,7 @@ function renderCart(tab='pecas'){
     meta.innerHTML = `<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div>
                       <div class="ci-act"><button class="btn-remove">Remover</button></div>`;
     meta.querySelector('.btn-remove').addEventListener('click', ()=>{
-      selecionadas.delete(id); updatePills(); renderCart(tab); renderFeed();
+      selecionadas.delete(id); updatePills(); renderCart(tab); renderFeed(); calcularTotal();
     });
     item.appendChild(meta); cP.appendChild(item);
   });
@@ -428,7 +427,7 @@ function renderCart(tab='pecas'){
     meta.innerHTML = `<div class="ci-ttl">${label}</div>
                       <div class="ci-act"><button class="btn-remove">Remover</button></div>`;
     meta.querySelector('.btn-remove').addEventListener('click', ()=>{
-      rifasSel.delete(id); updatePills(); renderCart(tab); renderRifas();
+      rifasSel.delete(id); updatePills(); renderCart(tab); renderRifas(); calcularTotal();
     });
     item.appendChild(meta); cR.appendChild(item);
   });
@@ -466,35 +465,7 @@ document.querySelectorAll('.cart-tab').forEach(b=>{
   b.addEventListener('click', ()=> renderCart(b.dataset.tab));
 });
 
-/* ====== CHECKOUT (fora de renderCart!) ====== */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
-let totalGeral = 0;
-
-function updateTotalFooter() {
-  const footer = document.querySelector('footer .ftr-inner');
-  let totalEl = footer.querySelector('.total-display');
-  if (!totalEl) {
-    totalEl = document.createElement('div');
-    totalEl.className = 'total-display';
-    footer.appendChild(totalEl);
-  }
-  totalEl.textContent = `Total: R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
-}
-function calcularTotal() {
-  let total = 0;
-  selecionadas.forEach(id => {
-    const p = pecas.find(x => x.id_peca === id);
-    if (p && p.preco) total += parseFloat(p.preco);
-  });
-  rifasSel.forEach(id => {
-    const r = rifas.find(x => x.id_rifa === id);
-    if (r && r.valor_rifa) total += parseFloat(r.valor_rifa);
-    else total += 30; // fallback
-  });
-  totalGeral = total;
-  updateTotalFooter();
-}
-
+/* ====== CHECKOUT ====== */
 const step1 = document.getElementById('step1');
 const step2 = document.getElementById('step2');
 const step3 = document.getElementById('step3');
@@ -506,7 +477,6 @@ document.getElementById('btnCheckout').onclick = () => {
   step2.style.display = 'none';
   step3.style.display = 'none';
 };
-
 document.getElementById('voltar1').onclick = () => navigateTo('carrinho');
 document.getElementById('prosseguir1').onclick = () => {
   const nome = document.getElementById('nome').value.trim();
@@ -542,18 +512,38 @@ document.getElementById('apostar').onclick = async () => {
     fd.append('rifas', [...rifasSel].join(','));
     fd.append('favoritas', [...favoritos].join(','));
     fd.append('total', totalGeral.toFixed(2));
-    await fetch(GAS_URL, { method: 'POST', body: fd });
+    await fetch(GAS_URL, { method: 'POST', body: fd, mode: 'no-cors' });
   } catch(e) {
     console.warn('Falha no envio ao GAS:', e);
   }
 
-  // 2) Envia para FormSubmit e redireciona
+  // 2) Envia para FormSubmit (que redireciona via _next)
   document.getElementById('hiddenForm').submit();
 };
 
-/* ====== Ajuste do router: inclui checkout ====== */
-const routes = ['galeria','feed','rifas','carrinho','checkout'];
-</script>
+/* ====== BOOT: carrega JSONs e renderiza ====== */
+async function init(){
+  try{
+    const [rp, rr] = await Promise.all([
+      fetch(PECAS_JSON_URL, {cache:'no-store'}),
+      fetch(RIFAS_JSON_URL, {cache:'no-store'})
+    ]);
+    pecas = await rp.json();
+    rifas = await rr.json();
 
+    // filtros básicos já aplicados nos renders (exclui VENDIDAAA / rifas com status)
+    renderGaleria();
+    renderFeed();
+    renderRifas();
+    updatePills();
+    calcularTotal();
+    navigateTo('galeria');
+  }catch(err){
+    console.error('Falha ao carregar JSONs:', err);
+    alert('Não foi possível carregar os itens agora. Tente novamente em instantes.');
+  }
+}
+window.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
