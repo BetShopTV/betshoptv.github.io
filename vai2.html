@@ -260,6 +260,37 @@
     });
     section.appendChild(grid); app.appendChild(section);
   }
+    /* ====== Navegação (corrige comportamento dos links e cliques) ====== */
+// showPage: renderiza a página pedida dentro de #app
+function showPage(page){
+  if(page === 'galeria') renderGaleria();
+  else if(page === 'feed') renderFeed();
+  else if(page === 'rifas') renderRifas();
+  else renderGaleria();
+  // depois de renderizar, atualiza pills/totais
+  updatePills();
+  calcularTotal();
+}
+
+// ligar os links do header (ex.: <a href="#galeria">)
+document.querySelectorAll('.nav a').forEach(a=>{
+  a.addEventListener('click', function(e){
+    const href = a.getAttribute('href') || '';
+    if(href.startsWith('#')){
+      e.preventDefault();
+      const target = href.slice(1);
+      showPage(target);
+      // se houver deep-link de peça em hash (ex: #p=123), respeitar
+      const m = location.hash.match(/#p=([^&]+)/);
+      if(m){
+        const id = decodeURIComponent(m[1]);
+        // se pedirmos feed, abrir na peça
+        if(target === 'feed') setTimeout(()=>openFeedAt(id), 120);
+      }
+    }
+  });
+});
+
 
   /* ====== Event delegation on #app ====== */
   function attachAppDelegation(){
