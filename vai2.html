@@ -183,13 +183,17 @@
   .rifa-btn .ln2 { font-size: 12px; }
 }
 
-/* Optional: ensure consistent spacing for a grid of buttons */
+/* Centraliza horizontalmente cada linha de botões; permite wrap; mantém alinhamento top */
 .rifas {
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  align-items:flex-start; /* align top so heights look uniform */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;                 /* já vinha usando gap de 8px (ajuste se necessário) */
+  align-items: flex-start;  /* garante as caixas todas com topo alinhado */
+  justify-content: center;  /* <--- centraliza o grupo na linha */
+  align-content: center;    /* centraliza as linhas em conjunto (quando houver múltiplas) */
+  padding: 6px 0;           /* pequeno espaçamento vertical */
 }
+
 
   @media (max-width:480px){
     .galeria{grid-template-columns:repeat(1,1fr)}
@@ -209,7 +213,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">13</div>
+      <div class="logo">13b</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -420,30 +424,47 @@ function formatRifaLabelDOM(rawText) {
 }
 
 /**
- * Return either '#000000' or '#ffffff' depending on perceptual luminance
- * of the background color (hex). Implements WCAG luminance test.
+ * Return either '#000000' or '#ffffff' depending on which yields the
+ * higher WCAG contrast ratio with the provided background color.
+ * If neither reaches 4.5:1, returns the one with the highest ratio anyway.
  */
 function getContrastColor(hex) {
   if (!hex) return '#000000';
-  // normalize hex: #RRGGBB or RRGGBB or #RGB
-  let s = String(hex).trim().replace('#', '');
-  if (s.length === 3) {
-    s = s.split('').map(ch => ch + ch).join('');
-  }
+  // normalize hex (remove #)
+  let s = String(hex).trim().replace('#','');
+  if (s.length === 3) s = s.split('').map(ch => ch+ch).join('');
   if (s.length !== 6) return '#000000';
-  const r = parseInt(s.slice(0,2),16);
-  const g = parseInt(s.slice(2,4),16);
-  const b = parseInt(s.slice(4,6),16);
-  // convert sRGB to linear
+
+  // parse RGB
+  const r = parseInt(s.slice(0,2), 16);
+  const g = parseInt(s.slice(2,4), 16);
+  const b = parseInt(s.slice(4,6), 16);
+
+  // helper: convert sRGB channel to linear value
   const srgbToLinear = c => {
-    const cs = c/255;
-    return cs <= 0.03928 ? cs/12.92 : Math.pow((cs+0.055)/1.055, 2.4);
+    const cs = c / 255;
+    return cs <= 0.03928 ? cs / 12.92 : Math.pow((cs + 0.055) / 1.055, 2.4);
   };
+
+  // relative luminance of background
   const R = srgbToLinear(r), G = srgbToLinear(g), B = srgbToLinear(b);
-  const L = 0.2126*R + 0.7152*G + 0.0722*B;
-  // threshold 0.179 (WCAG rule)
-  return L > 0.179 ? '#000000' : '#ffffff';
+  const Lbg = 0.2126 * R + 0.7152 * G + 0.0722 * B;
+
+  // luminance of black and white
+  const Lblack = 0; // luminance of black
+  const Lwhite = 1; // luminance of white
+
+  // contrast ratio formula: (L1 + 0.05) / (L2 + 0.05) where L1 >= L2
+  const contrastRatio = (L1, L2) => (Math.max(L1,L2) + 0.05) / (Math.min(L1,L2) + 0.05);
+
+  const contrastWithBlack = contrastRatio(Lbg, Lblack); // bg vs black
+  const contrastWithWhite = contrastRatio(Lbg, Lwhite); // bg vs white
+
+  // choose the color that gives higher contrast ratio
+  if (contrastWithBlack >= contrastWithWhite) return '#000000';
+  return '#ffffff';
 }
+
 
 /**
  * Calculate rifas total by rule:
