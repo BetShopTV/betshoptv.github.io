@@ -3,41 +3,54 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>v.06</title>
+<title>BSTV (v. 07)</title>
 <link rel="preconnect" href="https://betshoptv.com/fonts/">
 <style>
-  /* TOKENS */
+  /* ================= TOKENS & BASE ================= */
   :root{
     --red:#ff0000; --ink:#2b2424; --beige:#bebab0; --white:#ffffff;
     --bd-thin:1px; --bd-thick:2px;
-    --ff-cta:"Roboto Condensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
-    --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
-    --fs-h1:clamp(1.4rem,3vw,2rem); --fs-h2:clamp(1.1rem,2vw,1.4rem);
-    --fs-p:clamp(.9rem,1.2vw,1rem); --fs-sm:clamp(.78rem,1vw,.9rem);
-    --gap-xxs:4px; --gap-xs:6px; --gap-s:8px; --gap-m:12px; --gap-l:16px;
+    --ff-cta:"Roboto Condensed", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    --fs-h2:clamp(1.1rem,2vw,1.4rem);
+    --fs-p:clamp(.9rem,1.2vw,1rem);
+    --fs-sm:clamp(.78rem,1vw,.9rem);
+    --gap-xs:6px; --gap-s:8px; --gap-m:12px;
   }
   html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);}
-  /* Cabeçalho vermelho */
   header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;border-bottom:var(--bd-thick) solid var(--ink);}
   .hdr-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px var(--gap-m);}
   .logo{font:700 var(--fs-h2)/1 var(--ff-cta);text-transform:uppercase;}
   .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
   .nav a{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 10px;border:var(--bd-thin) solid #fff;color:#fff;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase}
   .nav a:hover{background:#fff;color:var(--ink)}
-  /* Seções */
   main{max-width:1200px;margin:0 auto;padding:var(--gap-m);}
   section{margin-bottom:24px}
   h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
-  /* Galeria 3 colunas SEMPRE */
+
+  /* ================ GALERIA (3 colunas sempre) ================ */
   .galeria{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-xs)}
-  .gal-item{border:var(--bd-thin) solid var(--ink);background:#fff;cursor:pointer}
+  .gal-item{border:var(--bd-thin) solid var(--ink);background:#fff;cursor:pointer; overflow:hidden}
   .gal-item img{display:block;width:100%;height:auto}
   .gal-item .ttl{padding:6px;font:700 var(--fs-sm)/1.2 var(--ff-cta)}
-  /* Feed (lista vertical) */
+
+  /* ================ FEED ================ */
   .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
-  .post{border:var(--bd-thin) solid var(--ink);background:#fff}
-  .post .carousel{display:flex;gap:var(--gap-xxs);overflow-x:auto;scroll-snap-type:x mandatory;padding:var(--gap-xxs);background:var(--white)}
-  .post .carousel img{flex:0 0 86%;max-width:86%;height:auto;scroll-snap-align:center;border:var(--bd-thin) solid var(--ink)}
+  .post{border:var(--bd-thin) solid var(--ink);background:#fff; overflow:hidden}
+  .post .carousel{
+    display:flex; gap:var(--gap-xs);
+    overflow-x:auto; scroll-snap-type:x mandatory;
+    background:var(--white); padding:var(--gap-xs);
+  }
+  /* <<< HERE: images fixed-height = 66% viewport, width 100%, preserve aspect (no deform) >>> */
+  .post .carousel img{
+    width:100%;
+    height:66vh;                 /* 66% of viewport height */
+    object-fit:cover;            /* preserves aspect ratio, no deformation */
+    scroll-snap-align:center;
+    border:var(--bd-thin) solid var(--ink);
+    display:block;
+  }
   .post .meta{padding:8px 10px}
   .post .meta .linha1{display:flex;justify-content:space-between;align-items:center;gap:8px}
   .preco{font:600 var(--fs-p)/1 var(--ff-body)}
@@ -45,24 +58,24 @@
   .ficha{font:400 var(--fs-sm)/1.4 var(--ff-body);opacity:.9}
   .acoes{display:flex;gap:8px;margin-top:8px}
   .btn{font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;border:var(--bd-thin) solid var(--ink);background:var(--ink);color:#fff;padding:6px 10px;cursor:pointer}
-  .btn--sec{background:var(--red);border-color:var(--ink)}
-  .btn:hover{filter:brightness(1.05)}
   .fav{background:#fff;color:var(--ink)}
   .fav.active{background:var(--red);color:#fff}
-  /* Rifas “tijolo” */
+
+  /* ================ RIFAS (tijolo) ================ */
   .rifas{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:var(--gap-xs)}
   .rifa-btn{display:flex;align-items:center;justify-content:center;min-height:56px;text-align:center;padding:6px;border:var(--bd-thin) solid var(--ink);color:#fff;font:700 var(--fs-sm)/1.1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
-  .rifa-btn span{display:block}
   .rifa-btn .ln2{opacity:.95}
   .rifa-btn.sold{opacity:.45;cursor:not-allowed;filter:grayscale(1)}
-  /* Rodapé preto */
+
+  /* ================ FOOTER ================ */
   footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
   .ftr-inner{max-width:1200px;margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px var(--gap-m)}
   .contadores{display:flex;gap:8px;flex-wrap:wrap}
   .pill{background:#fff;color:var(--ink);border:var(--bd-thin) solid var(--ink);padding:4px 8px;font:700 var(--fs-sm)/1 var(--ff-cta)}
   .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
-  footer .total-display { font-weight:700; margin-top:8px; font-size:15px; }
-  /* Drawer / carrinho */
+  .total-display{font-weight:700;margin-left:12px}
+
+  /* ================ CARRINHO (drawer) ================ */
   #carrinho{position:relative;margin:0 0 24px}
   .cart-wrap{border:var(--bd-thin) solid var(--ink);background:#fff}
   .cart-tabs{display:flex;gap:6px;align-items:center;justify-content:flex-start;padding:6px;background:var(--beige);border-bottom:var(--bd-thin) solid var(--ink)}
@@ -73,11 +86,10 @@
   .cart-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
   .cart-item{border:var(--bd-thin) solid var(--ink);background:#fff}
   .cart-item img{width:100%;height:auto;display:block;border-bottom:var(--bd-thin) solid var(--ink)}
-  .cart-item .ci-meta{padding:6px}
-  .cart-item .ci-ttl{font:700 var(--fs-sm)/1.2 var(--ff-cta)}
-  .cart-item .ci-act{margin-top:6px;display:flex;gap:6px}
-  .cart-item .btn-remove{border:var(--bd-thin) solid var(--ink);background:var(--red);color:#fff;font:700 var(--fs-sm)/1 var(--ff-cta);padding:4px 8px;cursor:pointer}
-  /* Checkout */
+  .ci-meta{padding:6px}
+  .btn-remove{border:var(--bd-thin) solid var(--ink);background:var(--red);color:#fff;padding:4px 8px;cursor:pointer}
+
+  /* ================ CHECKOUT ================ */
   #checkout { background: var(--beige); padding: 20px; }
   .checkout-wrap { max-width: 480px; margin: 0 auto; background: #fff; border: 1px solid #2b2424; padding: 20px; border-radius: 8px; }
   .checkout-step h2 { font-family: var(--ff-cta); margin-bottom: 12px; }
@@ -88,12 +100,6 @@
   .btn-back, .btn-next { flex:1; padding:10px; font-weight:700; border:1px solid #2b2424; cursor:pointer; }
   .btn-back { background:#fff; color:#2b2424; }
   .btn-next { background:#2b2424; color:#fff; }
-
-  /* Suporte a foco na peça via âncora */
-  .post:target{outline:2px solid var(--red)}
-  /* Scrollbars (opcional) */
-  .post .carousel::-webkit-scrollbar{height:6px}
-  .post .carousel::-webkit-scrollbar-thumb{background:var(--red)}
 </style>
 </head>
 <body>
@@ -158,12 +164,9 @@
   </div>
 </footer>
 
-<!-- ============================= -->
-<!-- SEÇÃO DE CHECKOUT (MULTIETAPAS) -->
-<!-- ============================= -->
+<!-- CHECKOUT MULTIETAPA -->
 <section id="checkout" style="display:none;">
   <div class="checkout-wrap">
-    <!-- ETAPA 1: DADOS PESSOAIS -->
     <div class="checkout-step" id="step1">
       <h2>Preencha seus dados</h2>
       <form id="dadosForm">
@@ -180,20 +183,16 @@
       </div>
     </div>
 
-    <!-- ETAPA 2: PAGAMENTO (PLACEHOLDER PIX) -->
     <div class="checkout-step" id="step2" style="display:none;">
       <h2>Realize o pagamento</h2>
       <p>Use o QR Code abaixo para simular o pagamento via PIX.</p>
-      <div class="pix-placeholder">
-        <div class="pix-code">QR CODE PIX</div>
-      </div>
+      <div class="pix-placeholder"><div class="pix-code">QR CODE PIX</div></div>
       <div class="checkout-btns">
         <button class="btn-back" id="voltar2">Voltar</button>
         <button class="btn-next" id="apostar">Apostar!</button>
       </div>
     </div>
 
-    <!-- ETAPA 3: CONFIRMAÇÃO -->
     <div class="checkout-step" id="step3" style="display:none;">
       <h2>Enviando sua aposta...</h2>
       <p>Por favor, aguarde um momento. Você será redirecionado para a página de confirmação.</p>
@@ -217,20 +216,20 @@
 </form>
 
 <script>
-/* ====== CONFIG (URLs absolutas) ====== */
+/* CONFIG */
 const PECAS_JSON_URL = 'https://betshoptv.com/dados/pecas.json';
 const RIFAS_JSON_URL = 'https://betshoptv.com/dados/rifas.json';
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
 
-/* ====== STATE ====== */
+/* STATE */
 let pecas = [];
 let rifas = [];
-const selecionadas = new Set(); // peças selecionadas
-const rifasSel = new Set();     // rifas selecionadas
+const selecionadas = new Set();
+const rifasSel = new Set();
 const favoritos = new Set(JSON.parse(localStorage.getItem('BSTV_FAV')||'[]'));
 let totalGeral = 0;
 
-/* ====== HELPERS ====== */
+/* HELPERS */
 const fmt = v => 'R$ ' + Number(v||0).toFixed(2).replace('.',',');
 function imgWithFallback(srcAvif){
   const img = new Image();
@@ -245,9 +244,7 @@ function updatePills(){
   document.getElementById('pillFav').textContent   = 'Favoritos: ' + favoritos.size;
   localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos]));
 }
-function updateTotalFooter() {
-  document.querySelector('.total-display').textContent = `Total: ${fmt(totalGeral)}`;
-}
+function updateTotalFooter() { document.querySelector('.total-display').textContent = `Total: ${fmt(totalGeral)}`; }
 function calcularTotal() {
   let total = 0;
   selecionadas.forEach(id => {
@@ -257,290 +254,134 @@ function calcularTotal() {
   rifasSel.forEach(id => {
     const r = rifas.find(x => x.id_rifa === id);
     if (r && r.valor_rifa) total += parseFloat(r.valor_rifa);
-    else total += 30; // fallback se não houver preço no JSON
+    else total += 30;
   });
   totalGeral = total;
   updateTotalFooter();
 }
 
-/* ====== ROUTER (sem scroll; cortes secos) ====== */
+/* ROUTER (cortes secos) */
 const routes = ['galeria','feed','rifas','carrinho','checkout'];
-function showOnly(id){
-  routes.forEach(r => {
-    const el = document.getElementById(r);
-    if(!el) return;
-    el.style.display = (r===id) ? 'block' : 'none';
-  });
-  window.scrollTo(0,0);
-}
-function navigateTo(route){
-  if(!routes.includes(route)) route = 'galeria';
-  showOnly(route);
-}
-document.querySelectorAll('.nav a').forEach(a=>{
-  a.addEventListener('click', (e)=>{
-    const href = a.getAttribute('href')||'';
-    if(href.startsWith('#')){
-      e.preventDefault();
-      const route = href.replace('#','');
-      navigateTo(route);
-    }
-  });
-});
+function showOnly(id){ routes.forEach(r => { const el = document.getElementById(r); if(!el) return; el.style.display = (r===id) ? 'block' : 'none'; }); window.scrollTo(0,0); }
+function navigateTo(route){ if(!routes.includes(route)) route = 'galeria'; showOnly(route); }
+document.querySelectorAll('.nav a').forEach(a=> a.addEventListener('click', (e)=>{ const href = a.getAttribute('href')||''; if(href.startsWith('#')){ e.preventDefault(); const route = href.replace('#',''); navigateTo(route); } }));
 
-/* ====== GALERIA (3 colunas sempre) ====== */
+/* GALERIA */
 function renderGaleria(){
   const grid = document.getElementById('galeriaGrid');
   grid.innerHTML = '';
   pecas.forEach(p => {
     if (String(p.status).toUpperCase()==='VENDIDAAA') return;
-    const card = document.createElement('div');
-    card.className = 'gal-item';
+    const card = document.createElement('div'); card.className = 'gal-item';
     const nome = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
     const img = imgWithFallback('/img/tmb/'+nome+'.avif');
     card.appendChild(img);
-    const ttl = document.createElement('div');
-    ttl.className='ttl';
-    ttl.textContent = p.titulo || ('Peça '+p.id_peca);
+    const ttl = document.createElement('div'); ttl.className='ttl'; ttl.textContent = p.titulo || ('Peça '+p.id_peca);
     card.appendChild(ttl);
-    card.addEventListener('click', () => {
-      openFeedAt(p.id_peca);
-      navigateTo('feed');
-    });
+    card.addEventListener('click', () => { openFeedAt(p.id_peca); navigateTo('feed'); });
     grid.appendChild(card);
   });
 }
 
-/* ====== FEED ====== */
+/* FEED */
 function renderFeed(){
   const list = document.getElementById('feedList');
   list.innerHTML = '';
   pecas.forEach(p => {
     if (String(p.status).toUpperCase()==='VENDIDAAA') return;
-    const post = document.createElement('article');
-    post.className = 'post';
-    post.id = 'post-'+p.id_peca;
-
-    const car = document.createElement('div');
-    car.className = 'carousel';
+    const post = document.createElement('article'); post.className = 'post'; post.id = 'post-'+p.id_peca;
+    const car = document.createElement('div'); car.className = 'carousel';
     const imgs = Array.isArray(p.imagens) ? p.imagens : [];
-    imgs.forEach(nome => {
-      const img = imgWithFallback('/img/otm/'+nome+'.avif');
-      car.appendChild(img);
-    });
+    imgs.forEach(nome => { const img = imgWithFallback('/img/otm/'+nome+'.avif'); car.appendChild(img); });
     post.appendChild(car);
-
     const meta = document.createElement('div'); meta.className='meta';
     const linha1 = document.createElement('div'); linha1.className='linha1';
     const t = document.createElement('div'); t.className='titulo'; t.textContent = p.titulo || ('Peça '+p.id_peca);
     const preco = document.createElement('div'); preco.className='preco'; preco.textContent = fmt(p.preco);
     linha1.appendChild(t); linha1.appendChild(preco);
-
-    const ficha = document.createElement('div'); ficha.className='ficha';
-    ficha.textContent = [p.tecnica, p.dimensao || p.dimencao || p.tamanho].filter(Boolean).join(' · ');
-
+    const ficha = document.createElement('div'); ficha.className='ficha'; ficha.textContent = [p.tecnica, p.dimensao || p.dimencao || p.tamanho].filter(Boolean).join(' · ');
     const acoes = document.createElement('div'); acoes.className='acoes';
     const btnSel = document.createElement('button'); btnSel.className='btn'; btnSel.textContent='Selecionar';
     const btnFav = document.createElement('button'); btnFav.className='btn fav'+(favoritos.has(p.id_peca)?' active':''); btnFav.textContent='❤️';
-
     function refreshBtn(){ btnSel.textContent = selecionadas.has(p.id_peca)?'Remover':'Selecionar'; }
-    btnSel.addEventListener('click', () => {
-      if(selecionadas.has(p.id_peca)) selecionadas.delete(p.id_peca); else selecionadas.add(p.id_peca);
-      refreshBtn(); updatePills(); renderCart(); calcularTotal();
-    });
-    btnFav.addEventListener('click', () => {
-      if(favoritos.has(p.id_peca)) favoritos.delete(p.id_peca); else favoritos.add(p.id_peca);
-      btnFav.classList.toggle('active', favoritos.has(p.id_peca));
-      updatePills(); renderCart();
-    });
-    refreshBtn();
-    acoes.append(btnSel, btnFav);
-
-    meta.append(linha1, ficha, acoes);
-    post.appendChild(meta);
-    list.appendChild(post);
+    btnSel.addEventListener('click', () => { if(selecionadas.has(p.id_peca)) selecionadas.delete(p.id_peca); else selecionadas.add(p.id_peca); refreshBtn(); updatePills(); renderCart(); calcularTotal(); });
+    btnFav.addEventListener('click', () => { if(favoritos.has(p.id_peca)) favoritos.delete(p.id_peca); else favoritos.add(p.id_peca); btnFav.classList.toggle('active', favoritos.has(p.id_peca)); updatePills(); renderCart(); });
+    refreshBtn(); acoes.append(btnSel, btnFav);
+    meta.append(linha1, ficha, acoes); post.appendChild(meta); list.appendChild(post);
   });
 }
-function openFeedAt(id){
-  if(!document.getElementById('post-'+id)) renderFeed();
-  const el = document.getElementById('post-'+id);
-  if(el){ el.scrollIntoView({behavior:'auto', block:'start'}); el.focus?.(); }
-}
+function openFeedAt(id){ if(!document.getElementById('post-'+id)) renderFeed(); const el = document.getElementById('post-'+id); if(el){ el.scrollIntoView({behavior:'auto', block:'start'}); el.focus?.(); } }
 
-/* ====== RIFAS (tijolo) ====== */
+/* RIFAS */
 function renderRifas(){
-  const grid = document.getElementById('rifasGrid');
-  grid.innerHTML='';
-  rifas.forEach(r=>{
+  const grid = document.getElementById('rifasGrid'); grid.innerHTML=''; rifas.forEach(r=>{
     const disponivel = !r.status_rifa || String(r.status_rifa).trim()==='';
-    const btn = document.createElement('button');
-    btn.type='button';
-    btn.className='rifa-btn'+(disponivel?'':' sold');
+    const btn = document.createElement('button'); btn.type='button'; btn.className='rifa-btn'+(disponivel?'':' sold');
     btn.style.backgroundColor = r.hex_rifa || r.hex || '#777';
     const l1 = document.createElement('span'); l1.textContent = (r.numero || r.id_rifa || '').toString().toUpperCase();
     const l2 = document.createElement('span'); l2.className='ln2'; l2.textContent = (r.nome || r.titulo || r.chamada || '').toString().toUpperCase();
     btn.append(l1,l2);
-    if(disponivel){
-      btn.addEventListener('click',()=>{
-        if(rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa); else rifasSel.add(r.id_rifa);
-        btn.style.outline = rifasSel.has(r.id_rifa)?'2px solid #fff':'none';
-        updatePills(); renderCart(); calcularTotal();
-      });
-    }
+    if(disponivel){ btn.addEventListener('click',()=>{ if(rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa); else rifasSel.add(r.id_rifa); btn.style.outline = rifasSel.has(r.id_rifa)?'2px solid #fff':'none'; updatePills(); renderCart(); calcularTotal(); }); }
     grid.appendChild(btn);
   });
 }
 
-/* ====== CARRINHO (abas + thumbs + remover) ====== */
+/* CARRINHO */
 function renderCart(tab='pecas'){
-  const cP = document.getElementById('cartPecas');
-  const cR = document.getElementById('cartRifas');
-  const cF = document.getElementById('cartFav');
-  cP.innerHTML = ''; cR.innerHTML=''; cF.innerHTML='';
-
-  // peças
-  [...selecionadas].forEach(id=>{
-    const p = pecas.find(x=>x.id_peca===id);
-    if(!p) return;
-    const item = document.createElement('div'); item.className='cart-item';
-    const nome = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
-    const img = imgWithFallback('/img/tmb/'+nome+'.avif');
-    item.appendChild(img);
-    const meta = document.createElement('div'); meta.className='ci-meta';
-    meta.innerHTML = `<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div>
-                      <div class="ci-act"><button class="btn-remove">Remover</button></div>`;
-    meta.querySelector('.btn-remove').addEventListener('click', ()=>{
-      selecionadas.delete(id); updatePills(); renderCart(tab); renderFeed(); calcularTotal();
-    });
+  const cP = document.getElementById('cartPecas'); const cR = document.getElementById('cartRifas'); const cF = document.getElementById('cartFav');
+  cP.innerHTML=''; cR.innerHTML=''; cF.innerHTML='';
+  [...selecionadas].forEach(id=>{ const p = pecas.find(x=>x.id_peca===id); if(!p) return; const item=document.createElement('div'); item.className='cart-item'; const nome=(p.imagens&&p.imagens[0])?p.imagens[0]:''; const img=imgWithFallback('/img/tmb/'+nome+'.avif'); item.appendChild(img);
+    const meta=document.createElement('div'); meta.className='ci-meta'; meta.innerHTML=`<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`;
+    meta.querySelector('.btn-remove').addEventListener('click',()=>{ selecionadas.delete(id); updatePills(); renderCart(tab); renderFeed(); calcularTotal(); });
     item.appendChild(meta); cP.appendChild(item);
   });
-
-  // rifas
-  [...rifasSel].forEach(id=>{
-    const r = rifas.find(x=>x.id_rifa===id);
-    const item = document.createElement('div'); item.className='cart-item';
-    const box = document.createElement('div');
-    box.style.cssText=`width:100%;height:100px;background:${r?.hex_rifa||'#999'};border-bottom:1px solid #2b2424`;
-    item.appendChild(box);
-    const meta = document.createElement('div'); meta.className='ci-meta';
-    const label = (r?.numero||id)+' · '+(r?.nome||r?.titulo||'Rifa');
-    meta.innerHTML = `<div class="ci-ttl">${label}</div>
-                      <div class="ci-act"><button class="btn-remove">Remover</button></div>`;
-    meta.querySelector('.btn-remove').addEventListener('click', ()=>{
-      rifasSel.delete(id); updatePills(); renderCart(tab); renderRifas(); calcularTotal();
-    });
-    item.appendChild(meta); cR.appendChild(item);
-  });
-
-  // favoritas
-  [...favoritos].forEach(id=>{
-    const p = pecas.find(x=>x.id_peca===id);
-    if(!p) return;
-    const item = document.createElement('div'); item.className='cart-item';
-    const nome = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
-    const img = imgWithFallback('/img/tmb/'+nome+'.avif');
-    item.appendChild(img);
-    const meta = document.createElement('div'); meta.className='ci-meta';
-    meta.innerHTML = `<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div>
-                      <div class="ci-act"><button class="btn-remove">Remover</button></div>`;
-    meta.querySelector('.btn-remove').addEventListener('click', ()=>{
-      favoritos.delete(id); updatePills(); renderCart(tab); renderFeed();
-    });
-    item.appendChild(meta); cF.appendChild(item);
-  });
-
-  // troca de abas
+  [...rifasSel].forEach(id=>{ const r=rifas.find(x=>x.id_rifa===id); const item=document.createElement('div'); item.className='cart-item'; const box=document.createElement('div'); box.style.cssText=`width:100%;height:100px;background:${r?.hex_rifa||'#999'};border-bottom:1px solid #2b2424`; item.appendChild(box); const meta=document.createElement('div'); meta.className='ci-meta'; const label=(r?.numero||id)+' · '+(r?.nome||r?.titulo||'Rifa'); meta.innerHTML=`<div class="ci-ttl">${label}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`; meta.querySelector('.btn-remove').addEventListener('click',()=>{ rifasSel.delete(id); updatePills(); renderCart(tab); renderRifas(); calcularTotal(); }); item.appendChild(meta); cR.appendChild(item); });
+  [...favoritos].forEach(id=>{ const p=pecas.find(x=>x.id_peca===id); if(!p) return; const item=document.createElement('div'); item.className='cart-item'; const nome=(p.imagens&&p.imagens[0])?p.imagens[0]:''; const img=imgWithFallback('/img/tmb/'+nome+'.avif'); item.appendChild(img); const meta=document.createElement('div'); meta.className='ci-meta'; meta.innerHTML=`<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`; meta.querySelector('.btn-remove').addEventListener('click',()=>{ favoritos.delete(id); updatePills(); renderCart(tab); renderFeed(); }); item.appendChild(meta); cF.appendChild(item); });
   document.querySelectorAll('.cart-tab').forEach(b=>b.classList.toggle('is-active', b.dataset.tab===tab));
-  cP.style.display = (tab==='pecas')?'grid':'none';
-  cR.style.display = (tab==='rifas')?'grid':'none';
-  cF.style.display = (tab==='fav')?'grid':'none';
+  cP.style.display=(tab==='pecas')?'grid':'none'; cR.style.display=(tab==='rifas')?'grid':'none'; cF.style.display=(tab==='fav')?'grid':'none';
 }
+document.getElementById('pillPecas').addEventListener('click',()=>{ renderCart('pecas'); navigateTo('carrinho'); });
+document.getElementById('pillRifas').addEventListener('click',()=>{ renderCart('rifas'); navigateTo('carrinho'); });
+document.getElementById('pillFav').addEventListener('click',()=>{ renderCart('fav'); navigateTo('carrinho'); });
+document.getElementById('cartClose')?.addEventListener('click',()=>navigateTo('galeria'));
+document.querySelectorAll('.cart-tab').forEach(b=>b.addEventListener('click',()=>renderCart(b.dataset.tab)));
 
-// abrir carrinho nas pílulas
-document.getElementById('pillPecas').addEventListener('click', ()=>{ renderCart('pecas'); navigateTo('carrinho'); });
-document.getElementById('pillRifas').addEventListener('click', ()=>{ renderCart('rifas'); navigateTo('carrinho'); });
-document.getElementById('pillFav').addEventListener('click',   ()=>{ renderCart('fav');   navigateTo('carrinho'); });
-document.getElementById('cartClose')?.addEventListener('click', ()=> navigateTo('galeria'));
-document.querySelectorAll('.cart-tab').forEach(b=>{
-  b.addEventListener('click', ()=> renderCart(b.dataset.tab));
-});
-
-/* ====== CHECKOUT ====== */
-const step1 = document.getElementById('step1');
-const step2 = document.getElementById('step2');
-const step3 = document.getElementById('step3');
-
-document.getElementById('btnCheckout').onclick = () => {
-  calcularTotal();
-  navigateTo('checkout');
-  step1.style.display = 'block';
-  step2.style.display = 'none';
-  step3.style.display = 'none';
-};
+/* CHECKOUT FLOW */
+const step1 = document.getElementById('step1'); const step2 = document.getElementById('step2'); const step3 = document.getElementById('step3');
+document.getElementById('btnCheckout').onclick = () => { calcularTotal(); navigateTo('checkout'); step1.style.display='block'; step2.style.display='none'; step3.style.display='none'; };
 document.getElementById('voltar1').onclick = () => navigateTo('carrinho');
-document.getElementById('prosseguir1').onclick = () => {
-  const nome = document.getElementById('nome').value.trim();
-  const email = document.getElementById('email').value.trim();
-  if (!nome || !email) { alert('Preencha nome e e-mail antes de prosseguir.'); return; }
-  step1.style.display = 'none'; step2.style.display = 'block';
-};
-document.getElementById('voltar2').onclick = () => { step2.style.display = 'none'; step1.style.display = 'block'; };
+document.getElementById('prosseguir1').onclick = () => { const nome=document.getElementById('nome').value.trim(); const email=document.getElementById('email').value.trim(); if(!nome||!email){ alert('Preencha nome e e-mail antes de prosseguir.'); return; } step1.style.display='none'; step2.style.display='block'; };
+document.getElementById('voltar2').onclick = () => { step2.style.display='none'; step1.style.display='block'; };
 
 document.getElementById('apostar').onclick = async () => {
-  step2.style.display = 'none'; step3.style.display = 'block';
+  step2.style.display='none'; step3.style.display='block';
+  const nome=document.getElementById('nome').value.trim(); const email=document.getElementById('email').value.trim(); const telefone=document.getElementById('telefone').value.trim();
+  document.getElementById('fNome').value=nome; document.getElementById('fEmail').value=email; document.getElementById('fTelefone').value=telefone;
+  document.getElementById('fPecas').value=[...selecionadas].join(','); document.getElementById('fRifas').value=[...rifasSel].join(','); document.getElementById('fFav').value=[...favoritos].join(','); document.getElementById('fTotal').value=totalGeral.toFixed(2);
 
-  const nome = document.getElementById('nome').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const telefone = document.getElementById('telefone').value.trim();
-
-  // Preenche form oculto (FormSubmit)
-  document.getElementById('fNome').value = nome;
-  document.getElementById('fEmail').value = email;
-  document.getElementById('fTelefone').value = telefone;
-  document.getElementById('fPecas').value = [...selecionadas].join(',');
-  document.getElementById('fRifas').value = [...rifasSel].join(',');
-  document.getElementById('fFav').value = [...favoritos].join(',');
-  document.getElementById('fTotal').value = totalGeral.toFixed(2);
-
-  // 1) Backup no GAS
+  // Backup GAS (no-cors)
   try {
-    const fd = new FormData();
-    fd.append('nome', nome);
-    fd.append('email', email);
-    fd.append('telefone', telefone);
-    fd.append('pecas', [...selecionadas].join(','));
-    fd.append('rifas', [...rifasSel].join(','));
-    fd.append('favoritas', [...favoritos].join(','));
-    fd.append('total', totalGeral.toFixed(2));
-    await fetch(GAS_URL, { method: 'POST', body: fd, mode: 'no-cors' });
-  } catch(e) {
-    console.warn('Falha no envio ao GAS:', e);
-  }
+    const fd=new FormData();
+    fd.append('nome',nome); fd.append('email',email); fd.append('telefone',telefone);
+    fd.append('pecas',[...selecionadas].join(',')); fd.append('rifas',[...rifasSel].join(',')); fd.append('favoritas',[...favoritos].join(','));
+    fd.append('total',totalGeral.toFixed(2));
+    await fetch(GAS_URL,{method:'POST',body:fd,mode:'no-cors'});
+  } catch(e){ console.warn('Falha no envio ao GAS:',e); }
 
-  // 2) Envia para FormSubmit (que redireciona via _next)
+  // Envia para FormSubmit (redireciona via _next)
   document.getElementById('hiddenForm').submit();
 };
 
-/* ====== BOOT: carrega JSONs e renderiza ====== */
+/* BOOT */
 async function init(){
   try{
-    const [rp, rr] = await Promise.all([
-      fetch(PECAS_JSON_URL, {cache:'no-store'}),
-      fetch(RIFAS_JSON_URL, {cache:'no-store'})
-    ]);
-    pecas = await rp.json();
-    rifas = await rr.json();
-
-    // filtros básicos já aplicados nos renders (exclui VENDIDAAA / rifas com status)
-    renderGaleria();
-    renderFeed();
-    renderRifas();
-    updatePills();
-    calcularTotal();
-    navigateTo('galeria');
+    const [rp,rr] = await Promise.all([ fetch(PECAS_JSON_URL,{cache:'no-store'}), fetch(RIFAS_JSON_URL,{cache:'no-store'}) ]);
+    if(!rp.ok || !rr.ok) throw new Error('JSON não carregou (status)'); 
+    pecas = await rp.json(); rifas = await rr.json();
+    renderGaleria(); renderFeed(); renderRifas(); updatePills(); calcularTotal(); navigateTo('galeria');
   }catch(err){
     console.error('Falha ao carregar JSONs:', err);
-    alert('Não foi possível carregar os itens agora. Tente novamente em instantes.');
+    alert('Não foi possível carregar os itens agora. Confira se /dados/pecas.json e /dados/rifas.json estão acessíveis.');
   }
 }
 window.addEventListener('DOMContentLoaded', init);
