@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -284,7 +285,7 @@ function renderGaleria(){
     const card=document.createElement('div'); card.className='gal-item';
     const nome=(p.imagens&&p.imagens[0])?p.imagens[0]:'';
     const img=imgWithFallback('/img/tmb/'+nome+'.avif'); card.appendChild(img);
-    const ttl=document.createElement('div'); ttl.className='ttl'; ttl.textContent=p.titulo||('Peça '+p.id_peca); card.appendChild(ttl);
+    const ttl=document.createElement('div');
     card.addEventListener('click', ()=>{ openFeedAt(p.id_peca); navigateTo('feed'); });
     grid.appendChild(card);
   });
