@@ -408,129 +408,32 @@ function renderCart(tab='pecas'){
     const img = imgWithFallback('/img/tmb/'+nome+'.avif');
     item.appendChild(img);
     const meta = document.createElement('div'); meta.className='ci-meta';
-    meta.innerHTML = `<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`;
+    meta.innerHTML = `<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div>
+                      <div class="ci-act"><button class="btn-remove">Remover</button></div>`;
     meta.querySelector('.btn-remove').addEventListener('click', ()=>{
       selecionadas.delete(id); updatePills(); renderCart(tab); renderFeed();
     });
     item.appendChild(meta); cP.appendChild(item);
   });
 
-  /* ==================== */
-/* CHECKOUT MULTIETAPA */
-/* ==================== */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
-
-let totalGeral = 0;
-
-// Atualiza o total R$ no rodapé
-function updateTotalFooter() {
-  const footer = document.querySelector('footer .ftr-inner');
-  let totalEl = footer.querySelector('.total-display');
-  if (!totalEl) {
-    totalEl = document.createElement('div');
-    totalEl.className = 'total-display';
-    footer.appendChild(totalEl);
-  }
-  totalEl.textContent = `Total: R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
-}
-
-// Calcula total (peças + rifas)
-function calcularTotal() {
-  let total = 0;
-  // valores baseados nos JSONs carregados globalmente
-  selecionadas.forEach(id => {
-    const p = pecas.find(x => x.id_peca === id);
-    if (p && p.preco) total += parseFloat(p.preco);
-  });
-  rifasSel.forEach(id => {
-    const r = rifas.find(x => x.id_rifa === id);
-    if (r && r.valor_rifa) total += parseFloat(r.valor_rifa);
-    else total += 30; // fallback se não tiver valor_rifa
-  });
-  totalGeral = total;
-  updateTotalFooter();
-}
-calcularTotal();
-
-// BOTÕES DE NAVEGAÇÃO ENTRE ETAPAS
-const step1 = document.getElementById('step1');
-const step2 = document.getElementById('step2');
-const step3 = document.getElementById('step3');
-
-document.getElementById('voltar1').onclick = () => navigateTo('carrinho');
-document.getElementById('prosseguir1').onclick = () => {
-  const nome = document.getElementById('nome').value.trim();
-  const email = document.getElementById('email').value.trim();
-  if (!nome || !email) { alert('Preencha nome e e-mail antes de prosseguir.'); return; }
-  step1.style.display = 'none'; step2.style.display = 'block';
-};
-
-document.getElementById('voltar2').onclick = () => {
-  step2.style.display = 'none'; step1.style.display = 'block';
-};
-
-document.getElementById('apostar').onclick = async () => {
-  step2.style.display = 'none'; step3.style.display = 'block';
-
-  const nome = document.getElementById('nome').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const telefone = document.getElementById('telefone').value.trim();
-
-  // Preenche o form oculto
-  document.getElementById('fNome').value = nome;
-  document.getElementById('fEmail').value = email;
-  document.getElementById('fTelefone').value = telefone;
-  document.getElementById('fPecas').value = [...selecionadas].join(',');
-  document.getElementById('fRifas').value = [...rifasSel].join(',');
-  document.getElementById('fFav').value = [...favoritos].join(',');
-  document.getElementById('fTotal').value = totalGeral.toFixed(2);
-
-  // 1️⃣ Envia para GAS (backup)
-  try {
-    const fd = new FormData();
-    fd.append('nome', nome);
-    fd.append('email', email);
-    fd.append('telefone', telefone);
-    fd.append('pecas', [...selecionadas].join(','));
-    fd.append('rifas', [...rifasSel].join(','));
-    fd.append('favoritas', [...favoritos].join(','));
-    fd.append('total', totalGeral.toFixed(2));
-    await fetch(GAS_URL, { method: 'POST', body: fd });
-  } catch (e) {
-    console.warn('Falha no envio ao GAS:', e);
-  }
-
-  // 2️⃣ Envia para FormSubmit
-  document.getElementById('hiddenForm').submit();
-};
-
-// Botão FINALIZAR abre o checkout
-document.getElementById('btnCheckout').onclick = () => {
-  calcularTotal();
-  navigateTo('checkout');
-  step1.style.display = 'block';
-  step2.style.display = 'none';
-  step3.style.display = 'none';
-  });
-
   // rifas
   [...rifasSel].forEach(id=>{
     const r = rifas.find(x=>x.id_rifa===id);
     const item = document.createElement('div'); item.className='cart-item';
-    // “thumb” para rifa = bloco de cor
     const box = document.createElement('div');
     box.style.cssText=`width:100%;height:100px;background:${r?.hex_rifa||'#999'};border-bottom:1px solid #2b2424`;
     item.appendChild(box);
     const meta = document.createElement('div'); meta.className='ci-meta';
     const label = (r?.numero||id)+' · '+(r?.nome||r?.titulo||'Rifa');
-    meta.innerHTML = `<div class="ci-ttl">${label}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`;
+    meta.innerHTML = `<div class="ci-ttl">${label}</div>
+                      <div class="ci-act"><button class="btn-remove">Remover</button></div>`;
     meta.querySelector('.btn-remove').addEventListener('click', ()=>{
       rifasSel.delete(id); updatePills(); renderCart(tab); renderRifas();
     });
     item.appendChild(meta); cR.appendChild(item);
   });
 
-  // favoritos
+  // favoritas
   [...favoritos].forEach(id=>{
     const p = pecas.find(x=>x.id_peca===id);
     if(!p) return;
@@ -539,7 +442,8 @@ document.getElementById('btnCheckout').onclick = () => {
     const img = imgWithFallback('/img/tmb/'+nome+'.avif');
     item.appendChild(img);
     const meta = document.createElement('div'); meta.className='ci-meta';
-    meta.innerHTML = `<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`;
+    meta.innerHTML = `<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div>
+                      <div class="ci-act"><button class="btn-remove">Remover</button></div>`;
     meta.querySelector('.btn-remove').addEventListener('click', ()=>{
       favoritos.delete(id); updatePills(); renderCart(tab); renderFeed();
     });
@@ -552,6 +456,7 @@ document.getElementById('btnCheckout').onclick = () => {
   cR.style.display = (tab==='rifas')?'grid':'none';
   cF.style.display = (tab==='fav')?'grid':'none';
 }
+
 // abrir carrinho nas pílulas
 document.getElementById('pillPecas').addEventListener('click', ()=>{ renderCart('pecas'); navigateTo('carrinho'); });
 document.getElementById('pillRifas').addEventListener('click', ()=>{ renderCart('rifas'); navigateTo('carrinho'); });
@@ -561,45 +466,93 @@ document.querySelectorAll('.cart-tab').forEach(b=>{
   b.addEventListener('click', ()=> renderCart(b.dataset.tab));
 });
 
-/* ====== FORM SUBMIT ====== */
-document.getElementById('btnCheckout').addEventListener('click', ()=>{
-  // popular campos do seu hiddenForm
+/* ====== CHECKOUT (fora de renderCart!) ====== */
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+let totalGeral = 0;
+
+function updateTotalFooter() {
+  const footer = document.querySelector('footer .ftr-inner');
+  let totalEl = footer.querySelector('.total-display');
+  if (!totalEl) {
+    totalEl = document.createElement('div');
+    totalEl.className = 'total-display';
+    footer.appendChild(totalEl);
+  }
+  totalEl.textContent = `Total: R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+}
+function calcularTotal() {
+  let total = 0;
+  selecionadas.forEach(id => {
+    const p = pecas.find(x => x.id_peca === id);
+    if (p && p.preco) total += parseFloat(p.preco);
+  });
+  rifasSel.forEach(id => {
+    const r = rifas.find(x => x.id_rifa === id);
+    if (r && r.valor_rifa) total += parseFloat(r.valor_rifa);
+    else total += 30; // fallback
+  });
+  totalGeral = total;
+  updateTotalFooter();
+}
+
+const step1 = document.getElementById('step1');
+const step2 = document.getElementById('step2');
+const step3 = document.getElementById('step3');
+
+document.getElementById('btnCheckout').onclick = () => {
+  calcularTotal();
+  navigateTo('checkout');
+  step1.style.display = 'block';
+  step2.style.display = 'none';
+  step3.style.display = 'none';
+};
+
+document.getElementById('voltar1').onclick = () => navigateTo('carrinho');
+document.getElementById('prosseguir1').onclick = () => {
+  const nome = document.getElementById('nome').value.trim();
+  const email = document.getElementById('email').value.trim();
+  if (!nome || !email) { alert('Preencha nome e e-mail antes de prosseguir.'); return; }
+  step1.style.display = 'none'; step2.style.display = 'block';
+};
+document.getElementById('voltar2').onclick = () => { step2.style.display = 'none'; step1.style.display = 'block'; };
+
+document.getElementById('apostar').onclick = async () => {
+  step2.style.display = 'none'; step3.style.display = 'block';
+
+  const nome = document.getElementById('nome').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const telefone = document.getElementById('telefone').value.trim();
+
+  // Preenche form oculto (FormSubmit)
+  document.getElementById('fNome').value = nome;
+  document.getElementById('fEmail').value = email;
+  document.getElementById('fTelefone').value = telefone;
   document.getElementById('fPecas').value = [...selecionadas].join(',');
   document.getElementById('fRifas').value = [...rifasSel].join(',');
-  document.getElementById('fFav').value   = [...favoritos].join(',');
-  // total/nome/email/telefone (preencha aqui se tiver inputs na tela)
-  // document.getElementById('fTotal').value = ...;
-  // document.getElementById('fNome').value  = ...;
-  // document.getElementById('fEmail').value = ...;
-  // document.getElementById('fTelefone').value = ...;
+  document.getElementById('fFav').value = [...favoritos].join(',');
+  document.getElementById('fTotal').value = totalGeral.toFixed(2);
 
-  // dispara o submit do seu formulário oculto
-  const form = document.getElementById('hiddenForm');
-  form.submit();
-});
-
-/* ====== BOOT ====== */
-(async function init(){
-  try{
-    const [pecasResp, rifasResp] = await Promise.all([
-      fetch(PECAS_JSON_URL), fetch(RIFAS_JSON_URL)
-    ]);
-    pecas = await pecasResp.json();
-    rifas = await rifasResp.json();
-  }catch(e){ console.warn('Falha ao carregar JSONs', e); pecas=[]; rifas=[]; }
-  renderGaleria(); renderFeed(); renderRifas(); updatePills();
-
-  // router inicial
-  const hash = (location.hash||'').replace('#','');
-  if(hash.startsWith('p=')){ // deep link para peça
-    const id = decodeURIComponent(hash.slice(2));
-    openFeedAt(id); navigateTo('feed');
-  } else if(routes.includes(hash)){
-    navigateTo(hash);
-  } else {
-    navigateTo('galeria');
+  // 1) Backup no GAS
+  try {
+    const fd = new FormData();
+    fd.append('nome', nome);
+    fd.append('email', email);
+    fd.append('telefone', telefone);
+    fd.append('pecas', [...selecionadas].join(','));
+    fd.append('rifas', [...rifasSel].join(','));
+    fd.append('favoritas', [...favoritos].join(','));
+    fd.append('total', totalGeral.toFixed(2));
+    await fetch(GAS_URL, { method: 'POST', body: fd });
+  } catch(e) {
+    console.warn('Falha no envio ao GAS:', e);
   }
-})();
+
+  // 2) Envia para FormSubmit e redireciona
+  document.getElementById('hiddenForm').submit();
+};
+
+/* ====== Ajuste do router: inclui checkout ====== */
+const routes = ['galeria','feed','rifas','carrinho','checkout'];
 </script>
 
 </body>
