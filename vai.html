@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BSTV (v. 07)</title>
+<title>BSTV (v. 08)</title>
 <link rel="preconnect" href="https://betshoptv.com/fonts/">
 <style>
   /* ================= TOKENS & BASE ================= */
@@ -28,7 +28,7 @@
   section{margin-bottom:24px}
   h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
 
-  /* ================ GALERIA (3 colunas sempre) ================ */
+  /* ================ GALERIA (3 colunas always) ================ */
   .galeria{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-xs)}
   .gal-item{border:var(--bd-thin) solid var(--ink);background:#fff;cursor:pointer; overflow:hidden}
   .gal-item img{display:block;width:100%;height:auto}
@@ -38,19 +38,36 @@
   .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
   .post{border:var(--bd-thin) solid var(--ink);background:#fff; overflow:hidden}
   .post .carousel{
-    display:flex; gap:var(--gap-xs);
-    overflow-x:auto; scroll-snap-type:x mandatory;
-    background:var(--white); padding:var(--gap-xs);
+    display:flex;
+    gap:var(--gap-xs);
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    background:var(--white);
+    padding:0;                 /* remove padding that caused offset */
+    align-items:center;
   }
-  /* <<< HERE: images fixed-height = 66% viewport, width 100%, preserve aspect (no deform) >>> */
+  /* image rules:
+     - width = 100% of the slide
+     - fixed height = up to 66vh
+     - min-height ensures small images still have presence
+     - box-sizing:border-box so borders are included and don't add extra pixels
+     - object-fit:cover keeps aspect without deformation
+  */
   .post .carousel img{
-    width:100%;
-    height:66vh;                 /* 66% of viewport height */
-    object-fit:cover;            /* preserves aspect ratio, no deformation */
-    scroll-snap-align:center;
-    border:var(--bd-thin) solid var(--ink);
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+    height: 66vh;          /* max height as requested (66% viewport) */
+    min-height: 220px;     /* sensible minimum so tiny images don't vanish */
+    max-height: 66vh;
+    object-fit: cover;     /* preserve aspect, may crop, no deformation */
+    scroll-snap-align: center;
+    border: var(--bd-thin) solid var(--ink);
+    box-sizing: border-box; /* important — border included in width -> no overflow/4px gap */
     display:block;
+    background: #000;      /* fallback while loading */
   }
+
   .post .meta{padding:8px 10px}
   .post .meta .linha1{display:flex;justify-content:space-between;align-items:center;gap:8px}
   .preco{font:600 var(--fs-p)/1 var(--ff-body)}
@@ -100,6 +117,8 @@
   .btn-back, .btn-next { flex:1; padding:10px; font-weight:700; border:1px solid #2b2424; cursor:pointer; }
   .btn-back { background:#fff; color:#2b2424; }
   .btn-next { background:#2b2424; color:#fff; }
+
+  /* remove custom scrollbar styling - we don't alter scroll colors here */
 </style>
 </head>
 <body>
@@ -157,7 +176,7 @@
     <div class="contadores">
       <button class="pill" id="pillPecas">Peças: 0</button>
       <button class="pill" id="pillRifas">Rifas: 0</button>
-      <button class="pill" id="pillFav">Favoritos: 0</button>
+      <button class="pill" id="pillFav">Favoritas: 0</button>
     </div>
     <div class="total-display">Total: R$ 0,00</div>
     <button class="cta-final" id="btnCheckout">Finalizar</button>
@@ -200,7 +219,7 @@
   </div>
 </section>
 
-<!-- FORMULÁRIO OCULTO (FormSubmit redundante) -->
+<!-- FORM OCULTO -->
 <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
   <input type="hidden" name="nome" id="fNome">
   <input type="hidden" name="email" id="fEmail">
@@ -221,120 +240,93 @@ const PECAS_JSON_URL = 'https://betshoptv.com/dados/pecas.json';
 const RIFAS_JSON_URL = 'https://betshoptv.com/dados/rifas.json';
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
 
-/* STATE */
+/* STATE: start with empty favoritas */
 let pecas = [];
 let rifas = [];
 const selecionadas = new Set();
 const rifasSel = new Set();
-const favoritos = new Set(JSON.parse(localStorage.getItem('BSTV_FAV')||'[]'));
+const favoritos = new Set(); // start empty on load
 let totalGeral = 0;
 
 /* HELPERS */
 const fmt = v => 'R$ ' + Number(v||0).toFixed(2).replace('.',',');
 function imgWithFallback(srcAvif){
-  const img = new Image();
-  img.loading = 'lazy';
-  img.src = srcAvif;
+  const img = new Image(); img.loading = 'lazy'; img.src = srcAvif;
   img.onerror = () => { if(srcAvif.endsWith('.avif')) img.src = srcAvif.replace('.avif','.jpg'); };
   return img;
 }
 function updatePills(){
   document.getElementById('pillPecas').textContent = 'Peças: ' + selecionadas.size;
   document.getElementById('pillRifas').textContent = 'Rifas: ' + rifasSel.size;
-  document.getElementById('pillFav').textContent   = 'Favoritos: ' + favoritos.size;
+  document.getElementById('pillFav').textContent   = 'Favoritas: ' + favoritos.size;
+  // persist favorites AFTER user marks them (we cleared at init)
   localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos]));
 }
-function updateTotalFooter() { document.querySelector('.total-display').textContent = `Total: ${fmt(totalGeral)}`; }
-function calcularTotal() {
+function updateTotalFooter(){ document.querySelector('.total-display').textContent = `Total: ${fmt(totalGeral)}`; }
+function calcularTotal(){
   let total = 0;
-  selecionadas.forEach(id => {
-    const p = pecas.find(x => x.id_peca === id);
-    if (p && p.preco) total += parseFloat(p.preco);
-  });
-  rifasSel.forEach(id => {
-    const r = rifas.find(x => x.id_rifa === id);
-    if (r && r.valor_rifa) total += parseFloat(r.valor_rifa);
-    else total += 30;
-  });
-  totalGeral = total;
-  updateTotalFooter();
+  selecionadas.forEach(id => { const p = pecas.find(x=>x.id_peca===id); if(p && p.preco) total += parseFloat(p.preco); });
+  rifasSel.forEach(id => { const r = rifas.find(x=>x.id_rifa===id); if(r && r.valor_rifa) total += parseFloat(r.valor_rifa); else total += 30; });
+  totalGeral = total; updateTotalFooter();
 }
 
-/* ROUTER (cortes secos) */
+/* ROUTER */
 const routes = ['galeria','feed','rifas','carrinho','checkout'];
-function showOnly(id){ routes.forEach(r => { const el = document.getElementById(r); if(!el) return; el.style.display = (r===id) ? 'block' : 'none'; }); window.scrollTo(0,0); }
-function navigateTo(route){ if(!routes.includes(route)) route = 'galeria'; showOnly(route); }
-document.querySelectorAll('.nav a').forEach(a=> a.addEventListener('click', (e)=>{ const href = a.getAttribute('href')||''; if(href.startsWith('#')){ e.preventDefault(); const route = href.replace('#',''); navigateTo(route); } }));
+function showOnly(id){ routes.forEach(r=>{ const el=document.getElementById(r); if(!el) return; el.style.display=(r===id)?'block':'none'; }); window.scrollTo(0,0); }
+function navigateTo(route){ if(!routes.includes(route)) route='galeria'; showOnly(route); }
+document.querySelectorAll('.nav a').forEach(a=> a.addEventListener('click', (e)=>{ const href=a.getAttribute('href')||''; if(href.startsWith('#')){ e.preventDefault(); navigateTo(href.replace('#','')); } }));
 
 /* GALERIA */
 function renderGaleria(){
-  const grid = document.getElementById('galeriaGrid');
-  grid.innerHTML = '';
-  pecas.forEach(p => {
-    if (String(p.status).toUpperCase()==='VENDIDAAA') return;
-    const card = document.createElement('div'); card.className = 'gal-item';
-    const nome = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
-    const img = imgWithFallback('/img/tmb/'+nome+'.avif');
-    card.appendChild(img);
-    const ttl = document.createElement('div'); ttl.className='ttl'; ttl.textContent = p.titulo || ('Peça '+p.id_peca);
-    card.appendChild(ttl);
-    card.addEventListener('click', () => { openFeedAt(p.id_peca); navigateTo('feed'); });
+  const grid=document.getElementById('galeriaGrid'); grid.innerHTML='';
+  pecas.forEach(p=>{
+    if(String(p.status).toUpperCase()==='VENDIDAAA') return;
+    const card=document.createElement('div'); card.className='gal-item';
+    const nome=(p.imagens&&p.imagens[0])?p.imagens[0]:'';
+    const img=imgWithFallback('/img/tmb/'+nome+'.avif'); card.appendChild(img);
+    const ttl=document.createElement('div'); ttl.className='ttl'; ttl.textContent=p.titulo||('Peça '+p.id_peca); card.appendChild(ttl);
+    card.addEventListener('click', ()=>{ openFeedAt(p.id_peca); navigateTo('feed'); });
     grid.appendChild(card);
   });
 }
 
 /* FEED */
 function renderFeed(){
-  const list = document.getElementById('feedList');
-  list.innerHTML = '';
-  pecas.forEach(p => {
-    if (String(p.status).toUpperCase()==='VENDIDAAA') return;
-    const post = document.createElement('article'); post.className = 'post'; post.id = 'post-'+p.id_peca;
-    const car = document.createElement('div'); car.className = 'carousel';
-    const imgs = Array.isArray(p.imagens) ? p.imagens : [];
-    imgs.forEach(nome => { const img = imgWithFallback('/img/otm/'+nome+'.avif'); car.appendChild(img); });
+  const list=document.getElementById('feedList'); list.innerHTML='';
+  pecas.forEach(p=>{
+    if(String(p.status).toUpperCase()==='VENDIDAAA') return;
+    const post=document.createElement('article'); post.className='post'; post.id='post-'+p.id_peca;
+    const car=document.createElement('div'); car.className='carousel';
+    const imgs=Array.isArray(p.imagens)?p.imagens:[];
+    imgs.forEach(nome=>{
+      const img=imgWithFallback('/img/otm/'+nome+'.avif');
+      car.appendChild(img);
+    });
     post.appendChild(car);
-    const meta = document.createElement('div'); meta.className='meta';
-    const linha1 = document.createElement('div'); linha1.className='linha1';
-    const t = document.createElement('div'); t.className='titulo'; t.textContent = p.titulo || ('Peça '+p.id_peca);
-    const preco = document.createElement('div'); preco.className='preco'; preco.textContent = fmt(p.preco);
+    const meta=document.createElement('div'); meta.className='meta';
+    const linha1=document.createElement('div'); linha1.className='linha1';
+    const t=document.createElement('div'); t.className='titulo'; t.textContent=p.titulo||('Peça '+p.id_peca);
+    const preco=document.createElement('div'); preco.className='preco'; preco.textContent=fmt(p.preco);
     linha1.appendChild(t); linha1.appendChild(preco);
-    const ficha = document.createElement('div'); ficha.className='ficha'; ficha.textContent = [p.tecnica, p.dimensao || p.dimencao || p.tamanho].filter(Boolean).join(' · ');
-    const acoes = document.createElement('div'); acoes.className='acoes';
-    const btnSel = document.createElement('button'); btnSel.className='btn'; btnSel.textContent='Selecionar';
-    const btnFav = document.createElement('button'); btnFav.className='btn fav'+(favoritos.has(p.id_peca)?' active':''); btnFav.textContent='❤️';
+    const ficha=document.createElement('div'); ficha.className='ficha'; ficha.textContent=[p.tecnica, p.dimensao||p.dimencao||p.tamanho].filter(Boolean).join(' · ');
+    const acoes=document.createElement('div'); acoes.className='acoes';
+    const btnSel=document.createElement('button'); btnSel.className='btn'; btnSel.textContent='Selecionar';
+    const btnFav=document.createElement('button'); btnFav.className='btn fav'+(favoritos.has(p.id_peca)?' active':''); btnFav.textContent='❤️';
     function refreshBtn(){ btnSel.textContent = selecionadas.has(p.id_peca)?'Remover':'Selecionar'; }
-    btnSel.addEventListener('click', () => { if(selecionadas.has(p.id_peca)) selecionadas.delete(p.id_peca); else selecionadas.add(p.id_peca); refreshBtn(); updatePills(); renderCart(); calcularTotal(); });
-    btnFav.addEventListener('click', () => { if(favoritos.has(p.id_peca)) favoritos.delete(p.id_peca); else favoritos.add(p.id_peca); btnFav.classList.toggle('active', favoritos.has(p.id_peca)); updatePills(); renderCart(); });
+    btnSel.addEventListener('click', ()=>{ if(selecionadas.has(p.id_peca)) selecionadas.delete(p.id_peca); else selecionadas.add(p.id_peca); refreshBtn(); updatePills(); renderCart(); calcularTotal(); });
+    btnFav.addEventListener('click', ()=>{ if(favoritos.has(p.id_peca)) favoritos.delete(p.id_peca); else favoritos.add(p.id_peca); btnFav.classList.toggle('active', favoritos.has(p.id_peca)); updatePills(); renderCart(); });
     refreshBtn(); acoes.append(btnSel, btnFav);
     meta.append(linha1, ficha, acoes); post.appendChild(meta); list.appendChild(post);
   });
 }
-function openFeedAt(id){ if(!document.getElementById('post-'+id)) renderFeed(); const el = document.getElementById('post-'+id); if(el){ el.scrollIntoView({behavior:'auto', block:'start'}); el.focus?.(); } }
+function openFeedAt(id){ if(!document.getElementById('post-'+id)) renderFeed(); const el=document.getElementById('post-'+id); if(el){ el.scrollIntoView({behavior:'auto', block:'start'}); el.focus?.(); } }
 
 /* RIFAS */
-function renderRifas(){
-  const grid = document.getElementById('rifasGrid'); grid.innerHTML=''; rifas.forEach(r=>{
-    const disponivel = !r.status_rifa || String(r.status_rifa).trim()==='';
-    const btn = document.createElement('button'); btn.type='button'; btn.className='rifa-btn'+(disponivel?'':' sold');
-    btn.style.backgroundColor = r.hex_rifa || r.hex || '#777';
-    const l1 = document.createElement('span'); l1.textContent = (r.numero || r.id_rifa || '').toString().toUpperCase();
-    const l2 = document.createElement('span'); l2.className='ln2'; l2.textContent = (r.nome || r.titulo || r.chamada || '').toString().toUpperCase();
-    btn.append(l1,l2);
-    if(disponivel){ btn.addEventListener('click',()=>{ if(rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa); else rifasSel.add(r.id_rifa); btn.style.outline = rifasSel.has(r.id_rifa)?'2px solid #fff':'none'; updatePills(); renderCart(); calcularTotal(); }); }
-    grid.appendChild(btn);
-  });
-}
+function renderRifas(){ const grid=document.getElementById('rifasGrid'); grid.innerHTML=''; rifas.forEach(r=>{ const disponivel = !r.status_rifa || String(r.status_rifa).trim()===''; const btn=document.createElement('button'); btn.type='button'; btn.className='rifa-btn'+(disponivel?'':' sold'); btn.style.backgroundColor=r.hex_rifa||r.hex||'#777'; const l1=document.createElement('span'); l1.textContent=(r.numero||r.id_rifa||'').toString().toUpperCase(); const l2=document.createElement('span'); l2.className='ln2'; l2.textContent=(r.nome||r.titulo||r.chamada||'').toString().toUpperCase(); btn.append(l1,l2); if(disponivel){ btn.addEventListener('click',()=>{ if(rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa); else rifasSel.add(r.id_rifa); btn.style.outline=rifasSel.has(r.id_rifa)?'2px solid #fff':'none'; updatePills(); renderCart(); calcularTotal(); }); } grid.appendChild(btn); }); }
 
 /* CARRINHO */
-function renderCart(tab='pecas'){
-  const cP = document.getElementById('cartPecas'); const cR = document.getElementById('cartRifas'); const cF = document.getElementById('cartFav');
-  cP.innerHTML=''; cR.innerHTML=''; cF.innerHTML='';
-  [...selecionadas].forEach(id=>{ const p = pecas.find(x=>x.id_peca===id); if(!p) return; const item=document.createElement('div'); item.className='cart-item'; const nome=(p.imagens&&p.imagens[0])?p.imagens[0]:''; const img=imgWithFallback('/img/tmb/'+nome+'.avif'); item.appendChild(img);
-    const meta=document.createElement('div'); meta.className='ci-meta'; meta.innerHTML=`<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`;
-    meta.querySelector('.btn-remove').addEventListener('click',()=>{ selecionadas.delete(id); updatePills(); renderCart(tab); renderFeed(); calcularTotal(); });
-    item.appendChild(meta); cP.appendChild(item);
-  });
+function renderCart(tab='pecas'){ const cP=document.getElementById('cartPecas'); const cR=document.getElementById('cartRifas'); const cF=document.getElementById('cartFav'); cP.innerHTML=''; cR.innerHTML=''; cF.innerHTML='';
+  [...selecionadas].forEach(id=>{ const p=pecas.find(x=>x.id_peca===id); if(!p) return; const item=document.createElement('div'); item.className='cart-item'; const nome=(p.imagens&&p.imagens[0])?p.imagens[0]:''; const img=imgWithFallback('/img/tmb/'+nome+'.avif'); item.appendChild(img); const meta=document.createElement('div'); meta.className='ci-meta'; meta.innerHTML=`<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`; meta.querySelector('.btn-remove').addEventListener('click',()=>{ selecionadas.delete(id); updatePills(); renderCart(tab); renderFeed(); calcularTotal(); }); item.appendChild(meta); cP.appendChild(item); });
   [...rifasSel].forEach(id=>{ const r=rifas.find(x=>x.id_rifa===id); const item=document.createElement('div'); item.className='cart-item'; const box=document.createElement('div'); box.style.cssText=`width:100%;height:100px;background:${r?.hex_rifa||'#999'};border-bottom:1px solid #2b2424`; item.appendChild(box); const meta=document.createElement('div'); meta.className='ci-meta'; const label=(r?.numero||id)+' · '+(r?.nome||r?.titulo||'Rifa'); meta.innerHTML=`<div class="ci-ttl">${label}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`; meta.querySelector('.btn-remove').addEventListener('click',()=>{ rifasSel.delete(id); updatePills(); renderCart(tab); renderRifas(); calcularTotal(); }); item.appendChild(meta); cR.appendChild(item); });
   [...favoritos].forEach(id=>{ const p=pecas.find(x=>x.id_peca===id); if(!p) return; const item=document.createElement('div'); item.className='cart-item'; const nome=(p.imagens&&p.imagens[0])?p.imagens[0]:''; const img=imgWithFallback('/img/tmb/'+nome+'.avif'); item.appendChild(img); const meta=document.createElement('div'); meta.className='ci-meta'; meta.innerHTML=`<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`; meta.querySelector('.btn-remove').addEventListener('click',()=>{ favoritos.delete(id); updatePills(); renderCart(tab); renderFeed(); }); item.appendChild(meta); cF.appendChild(item); });
   document.querySelectorAll('.cart-tab').forEach(b=>b.classList.toggle('is-active', b.dataset.tab===tab));
@@ -347,35 +339,37 @@ document.getElementById('cartClose')?.addEventListener('click',()=>navigateTo('g
 document.querySelectorAll('.cart-tab').forEach(b=>b.addEventListener('click',()=>renderCart(b.dataset.tab)));
 
 /* CHECKOUT FLOW */
-const step1 = document.getElementById('step1'); const step2 = document.getElementById('step2'); const step3 = document.getElementById('step3');
-document.getElementById('btnCheckout').onclick = () => { calcularTotal(); navigateTo('checkout'); step1.style.display='block'; step2.style.display='none'; step3.style.display='none'; };
-document.getElementById('voltar1').onclick = () => navigateTo('carrinho');
-document.getElementById('prosseguir1').onclick = () => { const nome=document.getElementById('nome').value.trim(); const email=document.getElementById('email').value.trim(); if(!nome||!email){ alert('Preencha nome e e-mail antes de prosseguir.'); return; } step1.style.display='none'; step2.style.display='block'; };
-document.getElementById('voltar2').onclick = () => { step2.style.display='none'; step1.style.display='block'; };
+const step1=document.getElementById('step1'), step2=document.getElementById('step2'), step3=document.getElementById('step3');
+document.getElementById('btnCheckout').onclick=()=>{ calcularTotal(); navigateTo('checkout'); step1.style.display='block'; step2.style.display='none'; step3.style.display='none'; };
+document.getElementById('voltar1').onclick=()=>navigateTo('carrinho');
+document.getElementById('prosseguir1').onclick=()=>{ const nome=document.getElementById('nome').value.trim(), email=document.getElementById('email').value.trim(); if(!nome||!email){ alert('Preencha nome e e-mail antes de prosseguir.'); return; } step1.style.display='none'; step2.style.display='block'; };
+document.getElementById('voltar2').onclick=()=>{ step2.style.display='none'; step1.style.display='block'; };
 
-document.getElementById('apostar').onclick = async () => {
+document.getElementById('apostar').onclick=async()=>{
   step2.style.display='none'; step3.style.display='block';
-  const nome=document.getElementById('nome').value.trim(); const email=document.getElementById('email').value.trim(); const telefone=document.getElementById('telefone').value.trim();
+  const nome=document.getElementById('nome').value.trim(), email=document.getElementById('email').value.trim(), telefone=document.getElementById('telefone').value.trim();
   document.getElementById('fNome').value=nome; document.getElementById('fEmail').value=email; document.getElementById('fTelefone').value=telefone;
   document.getElementById('fPecas').value=[...selecionadas].join(','); document.getElementById('fRifas').value=[...rifasSel].join(','); document.getElementById('fFav').value=[...favoritos].join(','); document.getElementById('fTotal').value=totalGeral.toFixed(2);
 
-  // Backup GAS (no-cors)
-  try {
-    const fd=new FormData();
-    fd.append('nome',nome); fd.append('email',email); fd.append('telefone',telefone);
+  try{
+    const fd=new FormData(); fd.append('nome',nome); fd.append('email',email); fd.append('telefone',telefone);
     fd.append('pecas',[...selecionadas].join(',')); fd.append('rifas',[...rifasSel].join(',')); fd.append('favoritas',[...favoritos].join(','));
     fd.append('total',totalGeral.toFixed(2));
     await fetch(GAS_URL,{method:'POST',body:fd,mode:'no-cors'});
-  } catch(e){ console.warn('Falha no envio ao GAS:',e); }
+  }catch(e){ console.warn('Falha no envio ao GAS:',e); }
 
-  // Envia para FormSubmit (redireciona via _next)
+  // submit to FormSubmit -> _next redirects to obrigado.html
   document.getElementById('hiddenForm').submit();
 };
 
 /* BOOT */
 async function init(){
   try{
-    const [rp,rr] = await Promise.all([ fetch(PECAS_JSON_URL,{cache:'no-store'}), fetch(RIFAS_JSON_URL,{cache:'no-store'}) ]);
+    // wipe previous favorites on load as requested (start at zero)
+    localStorage.removeItem('BSTV_FAV');
+    favoritos.clear();
+
+    const [rp,rr]=await Promise.all([ fetch(PECAS_JSON_URL,{cache:'no-store'}), fetch(RIFAS_JSON_URL,{cache:'no-store'}) ]);
     if(!rp.ok || !rr.ok) throw new Error('JSON não carregou (status)'); 
     pecas = await rp.json(); rifas = await rr.json();
     renderGaleria(); renderFeed(); renderRifas(); updatePills(); calcularTotal(); navigateTo('galeria');
