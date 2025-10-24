@@ -78,6 +78,68 @@
   .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
   .total-display{font-weight:700;margin-left:12px}
 
+/* ====== Masonry feed (Pinterest-like) ====== */
+/* Container using CSS columns (simple and robust) */
+.masonry {
+  column-gap: 12px;               /* gap between columns */
+  -webkit-column-gap: 12px;
+  /* for mobile-first, start with 2 cols, adjust in media queries */
+  column-count: 2;
+  -webkit-column-count: 2;
+}
+
+/* each item is a block so it flows into columns */
+.masonry-item {
+  display: inline-block;         /* inline-block so columns flow */
+  width: 100%;                   /* full width of column */
+  margin: 0 0 12px;              /* vertical spacing */
+  break-inside: avoid;           /* avoid breaking across columns */
+  -webkit-column-break-inside: avoid;
+  box-sizing: border-box;
+  border: 1px solid var(--ink);
+  background: #fff;
+  overflow: hidden;
+}
+
+/* the image fills the width and keeps aspect */
+.masonry-item img {
+  display: block;
+  width: 100%;
+  height: auto;                  /* natural height, preserves aspect */
+  object-fit: cover;             /* crop slightly if needed */
+  vertical-align: middle;
+}
+
+/* optional overlay for title on hover */
+.masonry-item .overlay {
+  position: relative;
+}
+.masonry-item .overlay .title-overlay {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  color: white;
+  background: rgba(0,0,0,0.45);
+  padding: 6px 8px;
+  font-family: var(--ff-cta);
+  font-weight:700;
+  font-size:0.9rem;
+  display: none; /* hidden by default; enable on hover if you want */
+}
+.masonry-item .overlay:hover .title-overlay { display:block; }
+
+/* panel with meta can be hidden or shown on click/expand */
+.masonry-item .meta-compact { display:none; }
+
+/* larger screens: more columns */
+@media (min-width: 900px) {
+  .masonry { column-count: 3; -webkit-column-count:3; }
+}
+@media (min-width: 1300px) {
+  .masonry { column-count: 4; -webkit-column-count:4; }
+}
+  
   /* responsive tweaks */
   @media (max-width:768px){
     .galeria{grid-template-columns:repeat(2,1fr)}
@@ -179,22 +241,70 @@
     section.appendChild(grid); app.appendChild(section);
   }
 
-  function renderFeed(){
-    const app = document.getElementById('app'); app.innerHTML = '';
-    const section = document.createElement('section'); section.id = 'feed';
-    const list = document.createElement('div'); list.id = 'feedList'; list.className = 'feed';
-    pecas.forEach(p => {
-      if(String(p.status).toUpperCase() === 'VENDIDAAA') return;
-      const post = document.createElement('article'); post.className = 'post'; post.id = 'post-' + p.id_peca;
+function renderFeed(){
+  const app = document.getElementById('app');
+  app.innerHTML = ''; // clear only the app
 
-      // carousel
-      const carousel = document.createElement('div'); carousel.className = 'carousel';
-      const imgs = Array.isArray(p.imagens) ? p.imagens : [];
-      imgs.forEach(name => {
-        const slide = document.createElement('div'); slide.className = 'carousel-slide';
-        const image = imgWithFallback('/img/otm/' + name + '.avif'); slide.appendChild(image);
-        carousel.appendChild(slide);
-      });
+  const section = document.createElement('section');
+  section.id = 'feed';
+
+  // header for feed if you want
+  const h = document.createElement('h2'); h.textContent = 'Feed';
+  section.appendChild(h);
+
+  // masonry container
+  const masonry = document.createElement('div');
+  masonry.className = 'masonry';
+  masonry.id = 'masonryFeed';
+
+  // create a masonry-item per piece (uses first image only)
+  pecas.forEach(p => {
+    if(String(p.status).toUpperCase() === 'VENDIDAAA') return;
+
+    const item = document.createElement('div');
+    item.className = 'masonry-item';
+    // store id for click handling
+    item.dataset.id = p.id_peca;
+
+    // overlay wrapper (if you want title on hover)
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+
+    // image (first image)
+    const firstImgName = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
+    const img = imgWithFallback('/img/otm/' + firstImgName + '.avif');
+    img.alt = p.titulo || ('Peça ' + p.id_peca);
+    // ensure no caption below — title removed from under the image
+    overlay.appendChild(img);
+
+    // optional title overlay (hidden by default; appears on hover)
+    const titleOv = document.createElement('div');
+    titleOv.className = 'title-overlay';
+    titleOv.textContent = p.titulo || '';
+    overlay.appendChild(titleOv);
+
+    item.appendChild(overlay);
+
+    // compact meta (hidden, used if user expands the card)
+    const meta = document.createElement('div');
+    meta.className = 'meta-compact';
+    // preserve data for details: title, price, dims etc.
+    meta.innerHTML = `<div style="padding:8px;font-weight:700">${p.titulo || ''}</div>
+                      <div style="padding:0 8px 8px;color:#333">${p.ficha || ''}</div>
+                      <div style="padding:0 8px 8px;font-weight:700">${fmt(p.preco)}</div>`;
+    item.appendChild(meta);
+
+    // append to masonry
+    masonry.appendChild(item);
+  });
+
+  section.appendChild(masonry);
+  app.appendChild(section);
+
+  // After building masonry, set up lazy behaviors if needed
+  // clicking a masonry-item opens the feed post (detail) - handled by delegation
+}
+);
 
       // progress bar
       const barWrap = document.createElement('div'); barWrap.className = 'carousel-bar-wrap';
@@ -249,10 +359,10 @@
       const btn = document.createElement('button');
       btn.className = 'rifa-btn' + (disponivel ? '' : ' sold');
       btn.style.backgroundColor = r.hex_rifa || r.hex || '#777';
-      btn.textContent = (r.numero || r.id_rifa || '').toString().toUpperCase();
+      btn.textContent = (r.numero || r.botao_rifa || '').toString().toUpperCase();
       if(disponivel){
         btn.addEventListener('click', ()=> {
-          if(rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa); else rifasSel.add(r.id_rifa);
+          if(rifasSel.has(r.id_rifa)) rifasSel.delete(r.botao_rifa); else rifasSel.add(r.id_rifa);
           updatePills(); calcularTotal();
         });
       }
@@ -293,26 +403,43 @@ document.querySelectorAll('.nav a').forEach(a=>{
 
 
   /* ====== Event delegation on #app ====== */
-  function attachAppDelegation(){
-    const app = document.getElementById('app');
-    app.addEventListener('click', (e) => {
-      const add = e.target.closest('[data-action="add"]');
-      if(add){
-        const id = add.dataset.id;
-        if(selecionadas.has(id)) selecionadas.delete(id); else selecionadas.add(id);
-        add.textContent = selecionadas.has(id) ? 'REMOVER' : 'ADICIONAR';
-        updatePills(); calcularTotal(); return;
+function attachAppDelegation(){
+  const app = document.getElementById('app');
+  if(!app) return;
+  app.addEventListener('click', function(e){
+    // add/remove action (existing)
+    const add = e.target.closest('[data-action="add"]');
+    if(add){
+      const id = add.dataset.id;
+      if(selecionadas.has(id)) selecionadas.delete(id); else selecionadas.add(id);
+      add.textContent = selecionadas.has(id) ? 'REMOVER' : 'ADICIONAR';
+      updatePills(); calcularTotal();
+      return;
+    }
+    // fav action (existing)
+    const fav = e.target.closest('[data-action="fav"]');
+    if(fav){
+      const id = fav.dataset.id;
+      if(favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
+      fav.classList.toggle('active', favoritos.has(id));
+      updatePills();
+      return;
+    }
+
+    // OPEN masonry item (new): click on masonry item opens feed with that piece highlighted
+    const masonryItem = e.target.closest('.masonry-item');
+    if(masonryItem){
+      const id = masonryItem.dataset.id;
+      if(id){
+        // open full feed and scroll to the post
+        renderFeed(); // ensure feed built
+        setTimeout(()=> openFeedAt(id), 60);
       }
-      const fav = e.target.closest('[data-action="fav"]');
-      if(fav){
-        const id = fav.dataset.id;
-        if(favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
-        fav.classList.toggle('active', favoritos.has(id));
-        updatePills();
-        return;
-      }
-    });
-  }
+      return;
+    }
+  });
+}
+
 
   /* ====== Footer bindings (only once) ====== */
   function attachBindings(){
