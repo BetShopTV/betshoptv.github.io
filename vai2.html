@@ -34,11 +34,11 @@
 /* ==== Galeria: Masonry (Pinterest-like) ==== */
 /* Usamos CSS columns para criar masonry simples e responsivo */
 .galeria {
-  column-gap: 12px;
-  -webkit-column-gap: 12px;
+  column-gap: 2px;
+  -webkit-column-gap: 2px;
   /* mobile first: 2 colunas */
-  column-count: 2;
-  -webkit-column-count: 2;
+  column-count: 3;
+  -webkit-column-count: 3;
   padding: 0;
   margin: 0;
 }
@@ -47,7 +47,7 @@
 .gal-item {
   display: inline-block;        /* inline-block para fluir nas colunas */
   width: 100%;                  /* ocupa 100% da coluna */
-  margin: 0 0 12px;             /* espaço vertical entre itens */
+  margin: 0 0 2px;             /* espaço vertical entre itens */
   break-inside: avoid;          /* evita quebrar o item entre colunas */
   -webkit-column-break-inside: avoid;
   box-sizing: border-box;
