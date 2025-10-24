@@ -97,13 +97,68 @@
   .meta .meta-footer{display:flex;justify-content:flex-end}
   .add-btn{border:2px solid var(--red);background:transparent;color:var(--red);padding:8px 12px;font-weight:700;cursor:pointer;font-family:var(--ff-cta)}
 
-  /* RIFAS grid (tijolos) */
-  .rifas{display:grid;grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:var(--gap-xs)}
-  .rifa-btn{display:flex;align-items:center;justify-content:center;min-height:56px;text-align:center;padding:6px;border:var(--bd-thin) solid var(--ink);color:#fff;font:700 var(--fs-sm)/1.1 var(--ff-cta);cursor:pointer}
-  .rifa-btn.sold{opacity:.45;cursor:not-allowed;filter:grayscale(1)}
-  .rifa-btn span { display:block; line-height:1.05; }
-.rifa-btn .ln1 { font-weight:500; font-size:0.82rem; }
-.rifa-btn .ln2 { font-size:0.82rem; margin-top:2px; }
+/* Register Roboto Condensed Medium hosted in your repo */
+/* ===== RIFAS: unified button look (fixed height, variable width, left-aligned text) ===== */
+/* Register Roboto Condensed Medium hosted in your repo */
+@font-face {
+  font-family: 'BC-RobotoCondensed-Med';
+  src: url('/fonts/Roboto_Condensed-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Base for rifa buttons */
+.rifa-btn {
+  display: inline-flex;               /* inline so width auto, but flex to align content */
+  align-items: center;                /* vertical centering */
+  justify-content: flex-start;        /* left aligned text */
+  gap: 8px;
+  box-sizing: border-box;
+  min-height: 56px;                   /* uniform height (desktop) */
+  padding: 10px 12px;                 /* inner spacing; adjust if needed */
+  border: 1px solid var(--ink);
+  background: var(--beige);           /* default background; JS may override */
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;                /* desktop: no wrap */
+  overflow: hidden;
+  font-family: 'BC-RobotoCondensed-Med', var(--ff-body);
+  font-weight: 500;                   /* same for both lines */
+  font-size: 14px;                    /* base size; responsive below */
+  line-height: 1.05;
+  color: inherit;                     /* color set by JS (contrast) or .selected */
+  border-radius: 2px;
+}
+
+/* Ensure texts are blocks stacked vertically if needed */
+.rifa-btn .ln1, .rifa-btn .ln2 {
+  display: block;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  white-space: normal; /* allow wrapping inside spans when permitted (we control with media query) */
+}
+
+/* Default two-line behavior but we force no visual weight difference */
+.rifa-btn .ln1 { font-size: 14px; }
+.rifa-btn .ln2 { font-size: 13px; opacity: 0.95; margin-top: 2px; }
+
+/* Selected state: white background, red text and border */
+.rifa-btn.selected {
+  background: #ffffff !important;
+  color: #ff0000 !important;
+  border-color: #ff0000 !important;
+}
+
+/* When selected, ensure ln1/ln2 inherit color */
+.rifa-btn.selected .ln1,
+.rifa-btn.selected .ln2 { color: #ff0000 !important; }
+
+/* Sold state (disabled look) — keep it but not interactive */
+.rifa-btn.sold { opacity: 0.45; pointer-events: none; filter: grayscale(1); }
+
+
 
 
   /* Footer (unchanged visually from v08) */
@@ -117,7 +172,25 @@
   /* responsive tweaks */
   @media (max-width:768px){
     .galeria{grid-template-columns:repeat(2,1fr)}
+  /* Mobile adjustments: allow wrapping, smaller height */
+  .rifa-btn {
+    min-height: 48px;
+    padding: 8px 10px;
+    font-size: 13px;
+    white-space: normal;    /* allow wrap on mobile */
   }
+  .rifa-btn .ln1 { font-size: 13px; }
+  .rifa-btn .ln2 { font-size: 12px; }
+}
+
+/* Optional: ensure consistent spacing for a grid of buttons */
+.rifas {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:flex-start; /* align top so heights look uniform */
+}
+
   @media (max-width:480px){
     .galeria{grid-template-columns:repeat(1,1fr)}
     .meta .linha1{flex-direction:column;align-items:flex-start}
@@ -136,7 +209,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">12b</div>
+      <div class="logo">13</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -385,55 +458,119 @@ function calculateRifaTotal(count) {
   return 25 * (count - 1) + 30;
 }
 
+/* ===== Helper: format label without forcing uppercase; produce up to 2 lines ===== */
+function formatRifaLabelDOM(rawText) {
+  const t = (rawText || '').toString().trim();
+  const frag = document.createDocumentFragment();
+  if (!t) {
+    const s = document.createElement('span'); s.className='ln1'; s.textContent = ''; frag.appendChild(s); return frag;
+  }
+
+  const maxSingleLine = 28; // larger than before - desktop will avoid wrap; mobile will wrap
+  // Prefer no transformation of case: keep as-is (user provided)
+  if (t.length <= maxSingleLine) {
+    const s1 = document.createElement('span'); s1.className='ln1'; s1.textContent = t;
+    frag.appendChild(s1); return frag;
+  }
+
+  // find a good break position: prefer space near middle, avoid very short second line
+  const mid = Math.floor(t.length / 2);
+  let breakPos = t.lastIndexOf(' ', mid);
+  if (breakPos < 3) {
+    breakPos = t.indexOf(' ', mid);
+  }
+  if (breakPos === -1) {
+    // fallback: split at maxSingleLine
+    breakPos = maxSingleLine;
+  }
+
+  // ensure second part is not too short (<3 chars). if so, shift break to previous space.
+  let part1 = t.slice(0, breakPos).trim();
+  let part2 = t.slice(breakPos).trim();
+  if (part2.length < 3) {
+    const prevSpace = t.lastIndexOf(' ', breakPos - 2);
+    if (prevSpace > 2) {
+      part1 = t.slice(0, prevSpace).trim();
+      part2 = t.slice(prevSpace).trim();
+    }
+  }
+
+  // Create spans preserving original case
+  const s1 = document.createElement('span'); s1.className='ln1'; s1.textContent = part1;
+  frag.appendChild(s1);
+  if (part2) {
+    const s2 = document.createElement('span'); s2.className='ln2'; s2.textContent = part2;
+    frag.appendChild(s2);
+  }
+  return frag;
+}
+
+
     
 function renderRifas(){
-  const app = document.getElementById('app'); // note: we only mutate #app
-  // if rifas page is a full page we can render inside #app; otherwise it may be a section
-  app.innerHTML = ''; 
+  const app = document.getElementById('app');
+  app.innerHTML = ''; // render inside #app
+
   const section = document.createElement('section'); section.id = 'rifas';
   const grid = document.createElement('div'); grid.className = 'rifas';
 
-  rifas.forEach(r => {
-    // skip non-available if you want; but per existing logic, show even sold with .sold class
+  rifas.forEach(r=>{
     const disponivel = !r.status_rifa || String(r.status_rifa).trim() === '';
 
     const btn = document.createElement('button');
     btn.className = 'rifa-btn' + (disponivel ? '' : ' sold');
 
-    // background color (from r.hex_rifa or fallback)
+    // background color from JSON
     const bg = r.hex_rifa || r.hex || '#777';
     btn.style.backgroundColor = bg;
 
-    // Decide label text: prefer r.botao_rifa, else number/id
+    // label selection: prefer botao_rifa, else numero or id
     let rawLabel = '';
     if (r.botao_rifa && String(r.botao_rifa).trim()) rawLabel = String(r.botao_rifa).trim();
     else rawLabel = (r.numero || r.id_rifa || '').toString();
 
-    // remove leading "X" if present (per your instruction)
+    // remove leading X if present (per your instruction)
     rawLabel = rawLabel.replace(/^\s*X\s*/i, '').trim();
 
-    // build label using DOM (safe) and append
-    const labelFragment = formatRifaLabelDOM(rawLabel);
-    // clear any existing children (not strictly necessary)
+    // append label DOM (no uppercase)
+    const frag = formatRifaLabelDOM(rawLabel);
     while(btn.firstChild) btn.removeChild(btn.firstChild);
-    btn.appendChild(labelFragment);
+    btn.appendChild(frag);
 
-    // set readable text color based on bg contrast
-    btn.style.color = getContrastColor(bg);
+    // left alignment (ensured by CSS, but reinforce)
+    btn.style.textAlign = 'left';
 
-    // store id for selection logic
+    // determine text color based on contrast (unless selected)
+    const contrast = getContrastColor(bg);
+    btn.style.color = contrast;
+
+    // store id
     btn.dataset.id = r.id_rifa;
 
-    // click handler only if available
+    // accessible label
+    btn.setAttribute('aria-label', rawLabel);
+
+    // click behavior (toggle selection)
     if (disponivel) {
       btn.addEventListener('click', () => {
-        if (rifasSel.has(r.id_rifa)) {
-          rifasSel.delete(r.id_rifa);
-          btn.style.outline = 'none';
+        // toggle selected class
+        const was = btn.classList.contains('selected');
+        if (was) {
+          btn.classList.remove('selected');
+          // revert to contrast-based color/border
+          btn.style.color = contrast;
+          btn.style.borderColor = ''; // CSS default will apply
         } else {
-          rifasSel.add(r.id_rifa);
-          btn.style.outline = '2px solid #fff';
+          btn.classList.add('selected');
+          // selected state: white bg, red text + red border
+          btn.style.backgroundColor = '#ffffff';
+          btn.style.color = '#ff0000';
+          btn.style.borderColor = '#ff0000';
         }
+        // update selection set (consistent with id)
+        if (rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa);
+        else rifasSel.add(r.id_rifa);
+
         updatePills();
         calcularTotal();
       });
@@ -445,6 +582,7 @@ function renderRifas(){
   section.appendChild(grid);
   app.appendChild(section);
 }
+
 
     /* ====== Navegação (corrige comportamento dos links e cliques) ====== */
 // showPage: renderiza a página pedida dentro de #app
