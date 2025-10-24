@@ -213,7 +213,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">13b</div>
+      <div class="logo">13c</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -428,43 +428,25 @@ function formatRifaLabelDOM(rawText) {
  * higher WCAG contrast ratio with the provided background color.
  * If neither reaches 4.5:1, returns the one with the highest ratio anyway.
  */
-function getContrastColor(hex) {
-  if (!hex) return '#000000';
-  // normalize hex (remove #)
-  let s = String(hex).trim().replace('#','');
-  if (s.length === 3) s = s.split('').map(ch => ch+ch).join('');
-  if (s.length !== 6) return '#000000';
-
-  // parse RGB
-  const r = parseInt(s.slice(0,2), 16);
-  const g = parseInt(s.slice(2,4), 16);
-  const b = parseInt(s.slice(4,6), 16);
-
-  // helper: convert sRGB channel to linear value
-  const srgbToLinear = c => {
-    const cs = c / 255;
-    return cs <= 0.03928 ? cs / 12.92 : Math.pow((cs + 0.055) / 1.055, 2.4);
-  };
-
-  // relative luminance of background
-  const R = srgbToLinear(r), G = srgbToLinear(g), B = srgbToLinear(b);
-  const Lbg = 0.2126 * R + 0.7152 * G + 0.0722 * B;
-
-  // luminance of black and white
-  const Lblack = 0; // luminance of black
-  const Lwhite = 1; // luminance of white
-
-  // contrast ratio formula: (L1 + 0.05) / (L2 + 0.05) where L1 >= L2
-  const contrastRatio = (L1, L2) => (Math.max(L1,L2) + 0.05) / (Math.min(L1,L2) + 0.05);
-
-  const contrastWithBlack = contrastRatio(Lbg, Lblack); // bg vs black
-  const contrastWithWhite = contrastRatio(Lbg, Lwhite); // bg vs white
-
-  // choose the color that gives higher contrast ratio
-  if (contrastWithBlack >= contrastWithWhite) return '#000000';
-  return '#ffffff';
-}
-
+// ===== getContrastColor (YIQ-based) =====
+const getContrastColor = (hexColor) => {
+  try {
+    if (!hexColor) return '#2b2424';
+    let s = String(hexColor).trim();
+    if (s.startsWith('#')) s = s.slice(1);
+    // support short hex like 'abc'
+    if (s.length === 3) s = s.split('').map(ch => ch + ch).join('');
+    if (s.length !== 6) return '#2b2424';
+    const r = parseInt(s.substring(0, 2), 16);
+    const g = parseInt(s.substring(2, 4), 16);
+    const b = parseInt(s.substring(4, 6), 16);
+    // YIQ formula
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return (yiq >= 128) ? '#2b2424' : '#ffffff';
+  } catch (e) {
+    return '#2b2424';
+  }
+};
 
 /**
  * Calculate rifas total by rule:
@@ -573,28 +555,46 @@ function renderRifas(){
 
     // click behavior (toggle selection)
     if (disponivel) {
-      btn.addEventListener('click', () => {
-        // toggle selected class
-        const was = btn.classList.contains('selected');
-        if (was) {
-          btn.classList.remove('selected');
-          // revert to contrast-based color/border
-          btn.style.color = contrast;
-          btn.style.borderColor = ''; // CSS default will apply
-        } else {
-          btn.classList.add('selected');
-          // selected state: white bg, red text + red border
-          btn.style.backgroundColor = '#ffffff';
-          btn.style.color = '#ff0000';
-          btn.style.borderColor = '#ff0000';
-        }
-        // update selection set (consistent with id)
-        if (rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa);
-        else rifasSel.add(r.id_rifa);
+btn.addEventListener('click', () => {
+  // só permite clique se disponível
+  if (!disponivel) return;
 
-        updatePills();
-        calcularTotal();
-      });
+  const isSelected = btn.classList.contains('selected');
+
+  if (isSelected) {
+    // DESELECIONAR: remove classe e RESTAURA cores originais
+    btn.classList.remove('selected');
+
+    // Restaura background original do rifa (cor vinda do JSON)
+    btn.style.backgroundColor = bg;
+
+    // Restaura cor do texto baseada no contraste original
+    btn.style.color = contrast;
+
+    // Restaura borda ao estilo do CSS (remova any inline border color)
+    btn.style.borderColor = '';
+
+    // remove outline se usado
+    btn.style.outline = '';
+  } else {
+    // SELECIONAR: aplica visual definido (branco bg, vermelho texto/borda)
+    btn.classList.add('selected');
+
+    btn.style.backgroundColor = '#ffffff';
+    btn.style.color = '#ff0000';
+    btn.style.borderColor = '#ff0000';
+    btn.style.outline = '';
+  }
+
+  // Sincroniza o conjunto rifasSel
+  if (rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa);
+  else rifasSel.add(r.id_rifa);
+
+  // Atualiza UI e cálculo
+  updatePills();
+  calcularTotal();
+});
+
     }
 
     grid.appendChild(btn);
