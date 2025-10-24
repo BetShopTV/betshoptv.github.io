@@ -31,11 +31,43 @@
   section{margin-bottom:24px}
   h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
 
-  /* Gallery 3 columns */
-  .galeria{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-xs)}
-  .gal-item{border:var(--bd-thin) solid var(--ink);background:#fff;cursor:pointer;overflow:hidden}
-  .gal-item img{display:block;width:100%;height:auto}
-  .gal-item .ttl{padding:6px;font:700 var(--fs-sm)/1.2 var(--ff-cta)}
+/* ==== Galeria: Masonry (Pinterest-like) ==== */
+/* Usamos CSS columns para criar masonry simples e responsivo */
+.galeria {
+  column-gap: 12px;
+  -webkit-column-gap: 12px;
+  /* mobile first: 2 colunas */
+  column-count: 2;
+  -webkit-column-count: 2;
+  padding: 0;
+  margin: 0;
+}
+
+/* Cada item flui nas colunas */
+.gal-item {
+  display: inline-block;        /* inline-block para fluir nas colunas */
+  width: 100%;                  /* ocupa 100% da coluna */
+  margin: 0 0 12px;             /* espaço vertical entre itens */
+  break-inside: avoid;          /* evita quebrar o item entre colunas */
+  -webkit-column-break-inside: avoid;
+  box-sizing: border-box;
+  border: var(--bd-thin) solid var(--ink);
+  background: #fff;
+  overflow: hidden;
+}
+
+/* Thumb: ocupa largura total da coluna e respeita proporção */
+.gal-item img {
+  display: block;
+  width: 100%;
+  height: auto;                /* mantém proporção natural */
+  object-fit: cover;           /* corta se necessário, sem deformar */
+  vertical-align: middle;
+  background: #000;
+}
+
+/* Remove o título que aparecia por baixo - garante que não mostre */
+.gal-item .ttl { display: none !important; }
 
   /* Feed/post / carousel (mobile-first) */
   .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
@@ -85,6 +117,14 @@
   @media (max-width:480px){
     .galeria{grid-template-columns:repeat(1,1fr)}
     .meta .linha1{flex-direction:column;align-items:flex-start}
+    /* Mais colunas em telas maiores */
+@media (min-width: 900px) {
+  .galeria { column-count: 3; -webkit-column-count: 3; }
+}
+@media (min-width: 1300px) {
+  .galeria { column-count: 4; -webkit-column-count: 4; }
+}
+
   }
 </style>
 </head>
@@ -162,22 +202,47 @@
   }
 
   /* ====== RENDERERS (ONLY mutate #app) ====== */
-  function renderGaleria(){
-    const app = document.getElementById('app'); app.innerHTML = '';
-    const section = document.createElement('section'); section.id = 'galeria';
-    const grid = document.createElement('div'); grid.className = 'galeria';
-    pecas.forEach(p => {
-      if(String(p.status).toUpperCase() === 'VENDIDAAA') return;
-      const card = document.createElement('div'); card.className = 'gal-item';
-      const nome = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
-      const img = imgWithFallback('/img/tmb/' + nome + '.avif'); card.appendChild(img);
-      const ttl = document.createElement('div'); ttl.className = 'ttl'; ttl.textContent = p.titulo || ('Peça ' + p.id_peca);
-      card.appendChild(ttl);
-      card.addEventListener('click', () => { showPage('feed'); openFeedAt(p.id_peca); });
-      grid.appendChild(card);
-    });
-    section.appendChild(grid); app.appendChild(section);
-  }
+function renderGaleria(){
+  const app = document.getElementById('app');
+  app.innerHTML = ''; // só manipula #app
+
+  const section = document.createElement('section');
+  section.id = 'galeria';
+
+  // masonry container
+  const masonry = document.createElement('div');
+  masonry.className = 'galeria';
+  masonry.id = 'masonryGallery';
+
+  pecas.forEach(p => {
+    if(String(p.status).toUpperCase() === 'VENDIDAAA') return;
+
+    const item = document.createElement('div');
+    item.className = 'gal-item';
+    item.dataset.id = p.id_peca; // para delegação de clique
+
+    // imagem: primeira disponível
+    const firstImg = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
+    const img = imgWithFallback('/img/tmb/' + firstImg + '.avif');
+    img.alt = p.titulo || ('Peça ' + p.id_peca);
+    item.appendChild(img);
+
+    // (opcional) título em overlay — se quiser um overlay em hover
+    // const overlay = document.createElement('div');
+    // overlay.className = 'title-overlay';
+    // overlay.textContent = p.titulo || '';
+    // item.appendChild(overlay);
+
+    masonry.appendChild(item);
+  });
+
+  section.appendChild(masonry);
+  app.appendChild(section);
+
+  // Nota: clique em item é tratado pela delegação do #app (attachAppDelegation)
+}
+
+
 
   function renderFeed(){
     const app = document.getElementById('app'); app.innerHTML = '';
@@ -309,8 +374,19 @@ document.querySelectorAll('.nav a').forEach(a=>{
         if(favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
         fav.classList.toggle('active', favoritos.has(id));
         updatePills();
-        return;
       }
+      // OPEN gallery item: click on a gallery thumbnail opens the feed at that piece
+const galleryItem = e.target.closest('.gal-item');
+if(galleryItem){
+  const id = galleryItem.dataset.id;
+  if(id){
+    // open full feed and scroll to the post
+    renderFeed();
+    // give the feed a moment to render then scroll
+    setTimeout(()=> openFeedAt(id), 80);
+  }
+  return;
+}
     });
   }
 
