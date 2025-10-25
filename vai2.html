@@ -200,7 +200,13 @@ const favoritos    = new Set(); // peças favoritas
 let totalGeral     = 0;
 
 /* ======================= HELPERS ======================= */
-const fmt = v => 'R$ ' + Number(v||0).toFixed(2).replace('.',',');
+// FORMATA EM PT-BR SEM CASAS DECIMAIS (ex.: R$ 1.500)
+const fmt = (v) => {
+  const n = Number(v || 0);
+  // arredonda para o inteiro mais próximo; se preferir “truncar”, troque por Math.floor(n)
+  const inteiro = Math.round(n);
+  return 'R$ ' + inteiro.toLocaleString('pt-BR');
+};
 
 function imgWithFallback(src){
   const img = new Image();
