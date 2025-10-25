@@ -272,36 +272,7 @@
   .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
   .total-display{font-weight:700;margin-left:12px}
 
-/* ===== Barra de selecionados ===== */
-#selectedBar{ position: sticky; bottom: calc(48px + 8px);
-  z-index: 18;
-  background: #bebab0;
-  border: 1px solid var(--ink);
-}
 
-/* chip de peça/favorita (miniatura + X) */
-.sel-chip{
-  display:flex; align-items:center; gap:6px;
-  border:1px solid var(--ink); background:#fff; color:var(--ink);
-  padding:4px 6px; scroll-snap-align:start;
-}
-.sel-chip img{width:54px;height:54px;object-fit:cover;border:1px solid var(--ink)}
-.sel-chip .x{
-  border:1px solid var(--red); color:var(--red); background:#fff;
-  font:700 var(--fs-sm)/1 var(--ff-cta); padding:2px 6px; cursor:pointer;
-}
-.sel-chip .x:hover{background:#ffecec}
-
-/* chip de rifa reaproveita visual do botão */
-.sel-rifa{
-  border:1px solid var(--red); color:var(--red); background:#fff;
-  font-family: 'BC-RobotoCondensed-Med', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
-  font-weight:500; font-size:14px; line-height:1.15;
-  padding:6px 10px; cursor:pointer; white-space:nowrap;
-}
-.sel-rifa.selected{
-  background:#2b2424; color:#bebab0; border-color:#2b2424;
-}
 
   
 </style>
@@ -311,7 +282,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">boradezoitaaaao</div>
+      <div class="logo">WREEEEE</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -804,118 +775,154 @@ function attachBindings(){
 
 /* ============== BARRA DE ITENS SELECIONADOS ============== */
 /* DOM mínimo (se não existir, cria) */
-function ensureSelectedBarDOM(){
-  if (document.getElementById('selectedBar')) return;
-  const bar=document.createElement('div');
-  bar.id='selectedBar';
-  bar.className='selected-bar is-hidden';
-  bar.setAttribute('aria-hidden','true');
-  bar.innerHTML = `
-    <div class="sb-inner">
-      <div class="sb-title"></div>
-      <div class="sb-wrap"></div>
-      <button type="button" class="sb-close" aria-label="Fechar">✕</button>
-    </div>`;
-  document.body.appendChild(bar);
-  bar.querySelector('.sb-close').addEventListener('click', hideSelectedBar);
+/* ============== BARRA DE ITENS SELECIONADOS ============== */
 
-  // liga as pílulas do rodapé
-  const pP=document.getElementById('pillPecas');
-  const pR=document.getElementById('pillRifas');
-  const pF=document.getElementById('pillFav');
-  if (pP) pP.addEventListener('click', ()=> toggleSelectedBar('pecas'));
-  if (pR) pR.addEventListener('click', ()=> toggleSelectedBar('rifas'));
-  if (pF) pF.addEventListener('click', ()=> toggleSelectedBar('favoritas'));
-}
-let selectedBarMode=null;
-
-function showSelectedBar(){
-  const bar=document.getElementById('selectedBar'); if(!bar) return;
-  bar.classList.remove('is-hidden'); bar.setAttribute('aria-hidden','false');
-}
-function hideSelectedBar(){
-  const bar=document.getElementById('selectedBar'); if(!bar) return;
-  bar.classList.add('is-hidden'); bar.setAttribute('aria-hidden','true');
-  selectedBarMode=null;
-}
-function maybeRefreshSelectedBar(){ if (selectedBarMode) renderSelectedBar(selectedBarMode); }
-
-function buildSBCardForPiece(pieceId, fromSet){
-  const p=pecas.find(x=>x.id_peca===pieceId); if(!p) return null;
-  const first=(p.imagens&&p.imagens[0])?p.imagens[0]:'';
-  const card=document.createElement('div'); card.className='sb-item'; card.dataset.id=pieceId;
-
-  const img=imgWithFallback('/img/tmb/'+first+'.avif'); img.className='sb-thumb';
-  img.alt=p.titulo||('Peça '+pieceId); card.appendChild(img);
-
-  const x=document.createElement('button'); x.className='sb-remove'; x.textContent='X';
-  x.setAttribute('aria-label','Remover '+(p.titulo||'peça'));
-  x.addEventListener('click', ()=>{
-    if (fromSet==='selecionadas') selecionadas.delete(pieceId);
-    else favoritos.delete(pieceId);
-    updatePills(); calcularTotal(); maybeRefreshSelectedBar();
-  });
-  card.appendChild(x);
-  return card;
-}
-function buildSBChipForRifa(rifaId){
-  const r=rifasById.get(rifaId); if(!r) return null;
-  const chip=document.createElement('button'); chip.className='sb-rifa'; chip.dataset.id=rifaId;
-  const bg=r.hex_rifa||r.hex||'#777'; chip.style.backgroundColor=bg; chip.style.color=getContrastColor(bg);
-  const raw=(r.botao_rifa && String(r.botao_rifa).trim()) ? String(r.botao_rifa).trim() : (r.numero||r.id_rifa||'').toString();
-  chip.appendChild(formatRifaLabelDOM(raw));
-  chip.addEventListener('click', ()=>{
-    rifasSel.delete(rifaId);
-    updatePills(); calcularTotal(); maybeRefreshSelectedBar();
-  });
-  return chip;
-}
-function renderSelectedBar(mode){
-  ensureSelectedBarDOM();
-  const bar=document.getElementById('selectedBar'); if(!bar) return;
-  selectedBarMode=mode;
-
-  bar.querySelector('.sb-title').textContent =
-    mode==='pecas'     ? 'Peças selecionadas'
-  : mode==='favoritas' ? 'Favoritas'
-  :                      'Rifas selecionadas';
-
-  const wrap=bar.querySelector('.sb-wrap'); wrap.innerHTML='';
-  if (mode==='pecas'){    [...selecionadas].forEach(id=>{ const c=buildSBCardForPiece(id,'selecionadas'); if(c) wrap.appendChild(c); }); }
-  else if (mode==='favoritas'){ [...favoritos].forEach(id=>{ const c=buildSBCardForPiece(id,'favoritos'); if(c) wrap.appendChild(c); }); }
-  else {                  [...rifasSel].forEach(id=>{ const c=buildSBChipForRifa(id); if(c) wrap.appendChild(c); }); }
-
-  showSelectedBar();
-}
-// estado da barra e utilitários
+/* Estado atual da barra (não duplique esta variável em outro ponto!) */
 let selectedBarMode = null;
 
+/* Garante que a barra exista (no seu HTML ela já existe), e liga o botão de fechar (se houver) */
+function ensureSelectedBarDOM(){
+  const bar   = document.getElementById('selectedBar');
+  const track = document.getElementById('selectedBarInner');
+  if (!bar || !track) return;
+
+  // (Opcional) se você quiser um botão fechar no futuro, capture aqui e ligue:
+  // const closeBtn = bar.querySelector('.sb-close'); if (closeBtn) closeBtn.addEventListener('click', hideSelectedBar);
+}
+
+/* Mostrar/ocultar usando a classe is-hidden (coerente com seu CSS) */
 function showSelectedBar(){
   const bar = document.getElementById('selectedBar');
   if (!bar) return;
-  bar.removeAttribute('hidden');        // <- mostra de verdade
-  bar.classList.add('open');            // opcional (se seu CSS usa)
+  bar.classList.remove('is-hidden');
+  bar.setAttribute('aria-hidden','false');
 }
-
 function hideSelectedBar(){
   const bar = document.getElementById('selectedBar');
   if (!bar) return;
-  bar.setAttribute('hidden','');        // <- esconde de verdade
-  bar.classList.remove('open');
+  bar.classList.add('is-hidden');
+  bar.setAttribute('aria-hidden','true');
   selectedBarMode = null;
 }
 
+/* Se a barra estiver aberta, re-renderiza seu conteúdo para refletir mudanças */
+function maybeRefreshSelectedBar(){
+  if (selectedBarMode) renderSelectedBar(selectedBarMode);
+}
+
+/* Cartão compacto para PEÇAS e FAVORITAS */
+function buildSBCardForPiece(pieceId, fromSet){
+  const p = pecas.find(x => x.id_peca === pieceId);
+  if (!p) return null;
+
+  const first = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
+  const card = document.createElement('div');
+  card.className = 'sb-item';
+  card.dataset.id = pieceId;
+
+  const img = imgWithFallback('/img/tmb/' + first + '.avif');
+  img.className = 'sb-thumb';
+  img.alt = p.titulo || ('Peça ' + pieceId);
+  card.appendChild(img);
+
+  const x = document.createElement('button');
+  x.className = 'sb-remove';
+  x.textContent = 'X';
+  x.setAttribute('aria-label', 'Remover ' + (p.titulo || 'peça'));
+  x.addEventListener('click', () => {
+    if (fromSet === 'selecionadas') selecionadas.delete(pieceId);
+    else favoritos.delete(pieceId);
+    updatePills();
+    calcularTotal();
+    maybeRefreshSelectedBar();
+  });
+  card.appendChild(x);
+
+  return card;
+}
+
+/* Chip compacto para RIFAS (mesmo rótulo que o botão) */
+function buildSBChipForRifa(rifaId){
+  const r = rifasById.get(rifaId);
+  if (!r) return null;
+
+  const chip = document.createElement('button');
+  chip.className = 'sb-rifa';
+  chip.dataset.id = rifaId;
+
+  const bg = r.hex_rifa || r.hex || '#777';
+  chip.style.backgroundColor = bg;
+  chip.style.color = getContrastColor(bg);
+
+  const raw = (r.botao_rifa && String(r.botao_rifa).trim())
+    ? String(r.botao_rifa).trim()
+    : (r.numero || r.id_rifa || '').toString();
+
+  chip.appendChild(formatRifaLabelDOM(raw.replace(/^\s*X\s*/i, '').trim()));
+
+  chip.addEventListener('click', () => {
+    // Clicar no chip = desselecionar a rifa
+    rifasSel.delete(rifaId);
+    updatePills();
+    calcularTotal();
+    maybeRefreshSelectedBar();
+
+    // Também “desticar” o botão da rifa na página de rifas, se ela estiver visível
+    const btn = document.querySelector(`.rifa-btn[data-id="${CSS.escape(rifaId)}"]`);
+    if (btn){
+      const bg0 = r.hex_rifa || r.hex || '#777';
+      btn.classList.remove('selected');
+      btn.style.backgroundColor = bg0;
+      btn.style.color = getContrastColor(bg0);
+      btn.style.borderColor = '';
+    }
+  });
+
+  return chip;
+}
+
+/* Recheia a faixa conforme o modo e mostra */
+function renderSelectedBar(mode){
+  ensureSelectedBarDOM();
+  const track = document.getElementById('selectedBarInner');
+  if (!track) return;
+
+  selectedBarMode = mode;
+  track.innerHTML = '';
+
+  if (mode === 'pecas'){
+    [...selecionadas].forEach(id => {
+      const card = buildSBCardForPiece(id, 'selecionadas');
+      if (card) track.appendChild(card);
+    });
+  } else if (mode === 'favoritas'){
+    [...favoritos].forEach(id => {
+      const card = buildSBCardForPiece(id, 'favoritos');
+      if (card) track.appendChild(card);
+    });
+  } else { // rifas
+    [...rifasSel].forEach(id => {
+      const chip = buildSBChipForRifa(id);
+      if (chip) track.appendChild(chip);
+    });
+  }
+
+  showSelectedBar();
+}
+
+/* Alterna a barra: se já está no mesmo modo e visível, recolhe; senão, abre/renderiza */
 function toggleSelectedBar(mode){
   const bar = document.getElementById('selectedBar');
   if (!bar) return;
-  if (selectedBarMode === mode && !bar.hasAttribute('hidden')){
+
+  const isHidden = bar.classList.contains('is-hidden');
+  if (!isHidden && selectedBarMode === mode){
     hideSelectedBar();
     return;
   }
-  selectedBarMode = mode;
-  renderSelectedBar(mode);  // repovoa a faixa
-  showSelectedBar();
+  renderSelectedBar(mode);
 }
+
 
 
 /* =========================== INIT ======================= */
