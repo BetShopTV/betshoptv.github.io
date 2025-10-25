@@ -110,50 +110,48 @@
 
 /* Base for rifa buttons */
 .rifa-btn {
-  display: inline-flex;               /* inline so width auto, but flex to align content */
-  align-items: center;                /* vertical centering */
-  justify-content: flex-start;        /* left aligned text */
-  gap: 8px;
+  display: inline-flex;             /* inline so width auto, but flex to stack lines */
+  flex-direction: column;           /* stack ln1 and ln2 vertically */
+  align-items: flex-start;          /* left + top alignment inside button */
+  justify-content: center;          /* center vertically if single-line */
+  gap: 2px;
   box-sizing: border-box;
-  min-height: 56px;                   /* uniform height (desktop) */
-  padding: 10px 12px;                 /* inner spacing; adjust if needed */
+  min-height: 56px;                 /* uniform height */
+  padding: 10px 12px;
   border: 1px solid var(--ink);
-  background: var(--beige);           /* default background; JS may override */
+  background: var(--beige);
   cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;                /* desktop: no wrap */
+  font-family: 'BC-RobotoCondensed-Med', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  font-weight: 500;                 /* same weight for ln1 and ln2 */
+  font-size: 14px;                  /* same size for ln1 and ln2 */
+  line-height: 1.15;
+  text-transform: none;             /* NEVER uppercase */
+  color: inherit;                   /* color set by JS (contrast) */
+  white-space: normal;              /* allow wrap inside the spans if necessary */
   overflow: hidden;
-  font-family: 'BC-RobotoCondensed-Med', var(--ff-body);
-  font-weight: 500;                   /* same for both lines */
-  font-size: 14px;                    /* base size; responsive below */
-  line-height: 1.05;
-  color: inherit;                     /* color set by JS (contrast) or .selected */
-  border-radius: 2px;
 }
 
-/* Ensure texts are blocks stacked vertically if needed */
-.rifa-btn .ln1, .rifa-btn .ln2 {
+/* ensure both spans use identical typographic rules */
+.rifa-btn .ln1,
+.rifa-btn .ln2 {
   display: block;
-  text-align: left;
   margin: 0;
   padding: 0;
-  white-space: normal; /* allow wrapping inside spans when permitted (we control with media query) */
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.15;
+  text-transform: none;             /* keep user's case */
+  text-align: left;                 /* left aligned text inside the button */
+  color: inherit;
 }
 
-/* Default two-line behavior but we force no visual weight difference */
-.rifa-btn .ln1 { font-size: 14px; }
-.rifa-btn .ln2 { font-size: 13px; opacity: 0.95; margin-top: 2px; }
-
-/* Selected state: white background, red text and border */
+/* Selected state (unchanged) */
 .rifa-btn.selected {
   background: #ffffff !important;
   color: #ff0000 !important;
   border-color: #ff0000 !important;
 }
-
-/* When selected, ensure ln1/ln2 inherit color */
-.rifa-btn.selected .ln1,
-.rifa-btn.selected .ln2 { color: #ff0000 !important; }
 
 /* Sold state (disabled look) — keep it but not interactive */
 .rifa-btn.sold { opacity: 0.45; pointer-events: none; filter: grayscale(1); }
@@ -173,14 +171,12 @@
   @media (max-width:768px){
     .galeria{grid-template-columns:repeat(2,1fr)}
   /* Mobile adjustments: allow wrapping, smaller height */
-  .rifa-btn {
-    min-height: 48px;
-    padding: 8px 10px;
-    font-size: 13px;
-    white-space: normal;    /* allow wrap on mobile */
+ .rifa-btn {
+    min-height: 42px;
+    padding: 6px 8px;
+    font-size: 12px;
   }
-  .rifa-btn .ln1 { font-size: 13px; }
-  .rifa-btn .ln2 { font-size: 12px; }
+  .rifa-btn .ln1, .rifa-btn .ln2 { font-size: 12px; line-height: 1.12; }
 }
 
 /* Centraliza horizontalmente cada linha de botões; permite wrap; mantém alinhamento top */
@@ -213,7 +209,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">14</div>
+      <div class="logo">VERSAO14C</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -388,40 +384,85 @@ function renderGaleria(){
 
 /* ===== HELPERS for RIFAS labels, contrast and prices ===== */
 
-/**
- * Create a DOM element containing up to 2 lines for the rifa label.
- * Uses a smart-break around the middle if necessary.
- * Returns a DocumentFragment or element ready to append.
- */
+/* ===== formatRifaLabelDOM (improved: avoids strange cuts) ===== */
 function formatRifaLabelDOM(rawText) {
-  const t = (rawText || '').toString().trim();
+  const t0 = (rawText || '').toString().trim();
   const frag = document.createDocumentFragment();
-
-  if (!t) {
-    const s = document.createElement('span'); s.className='ln1'; s.textContent = ''; frag.appendChild(s);
+  if (!t0) {
+    const s = document.createElement('span'); s.className = 'ln1'; s.textContent = ''; frag.appendChild(s); 
     return frag;
   }
 
-  const maxSingleLine = 18; // adjust if you want longer single-line labels
-  if (t.length <= maxSingleLine) {
-    const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = t.toUpperCase();
-    frag.appendChild(s1);
-    return frag;
+  // Tokenize by spaces, keep tokens; treat "/" as separate token if present.
+  let tokens = t0.split(/\s+/).filter(Boolean);
+
+  // Special-case: if pattern "NNN / Title..." keep the "NNN / Title" together initially
+  if (tokens.length >= 3 && tokens[1] === '/' ) {
+    // merge first three tokens as a single token to avoid breaking them
+    const merged = [ tokens.slice(0,3).join(' ') ].concat(tokens.slice(3));
+    tokens = merged;
   }
 
-  const mid = Math.floor(t.length / 2);
-  let breakPos = t.lastIndexOf(' ', mid);
-  if (breakPos < 3) breakPos = t.indexOf(' ', mid);
-  if (breakPos === -1) breakPos = maxSingleLine;
+  // If only one token, return single line
+  if (tokens.length === 1) {
+    const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = tokens[0];
+    frag.appendChild(s1); return frag;
+  }
 
-  const part1 = t.slice(0, breakPos).trim();
-  const part2 = t.slice(breakPos).trim();
+  const n = tokens.length;
+  const lengths = tokens.map(w => w.length);
+  const totalChars = lengths.reduce((a,b) => a+b, 0) + (n - 1); // include spaces count
 
-  const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = (part1 || t).toUpperCase();
-  const s2 = document.createElement('span'); s2.className = 'ln2'; s2.textContent = (part2 || '').toUpperCase();
-  frag.appendChild(s1); frag.appendChild(s2);
+  // prefix sums of token lengths
+  const prefix = new Array(n+1).fill(0);
+  for (let i=0;i<n;i++) prefix[i+1] = prefix[i] + lengths[i];
+
+  // function to compute left length including spaces
+  const leftLen = (i) => {
+    if (i <= 0) return 0;
+    return prefix[i] + (i - 1); // spaces between tokens on left
+  };
+
+  // find split index i (1..n-1) that minimizes abs(left-right) while avoiding tiny lines
+  let bestI = 1;
+  let bestDiff = Infinity;
+  const minLeftChars = 4;  // avoid very short first line
+  const minRightChars = 3; // avoid very short second line
+  for (let i = 1; i < n; i++) {
+    const left = leftLen(i);
+    const right = totalChars - left;
+    const diff = Math.abs(left - right);
+    // prefer splits where both sides are not too small
+    const leftOK = left >= minLeftChars;
+    const rightOK = right >= minRightChars;
+    // penalize splits that produce too-small sides
+    const penalty = (leftOK && rightOK) ? 0 : 20; 
+    if (diff + penalty < bestDiff) {
+      bestDiff = diff + penalty;
+      bestI = i;
+    }
+  }
+
+  // As a final safety: ensure second part isn't extremely short; if it is, move one token backward
+  let part1 = tokens.slice(0, bestI).join(' ');
+  let part2 = tokens.slice(bestI).join(' ');
+  if (part2.length < minRightChars && bestI > 1) {
+    bestI = Math.max(1, bestI - 1);
+    part1 = tokens.slice(0, bestI).join(' ');
+    part2 = tokens.slice(bestI).join(' ');
+  }
+
+  // Create spans without changing case
+  const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = part1;
+  frag.appendChild(s1);
+  if (part2 && part2.length > 0) {
+    const s2 = document.createElement('span'); s2.className = 'ln2'; s2.textContent = part2;
+    frag.appendChild(s2);
+  }
+
   return frag;
 }
+
 
 /**
  * Return either '#000000' or '#ffffff' depending on which yields the
