@@ -131,6 +131,27 @@
   .pill{background:var(--beige);color:var(--ink);border:var(--bd-thin) solid var(--beige);padding:4px 4px;font:700 var(--fs-sm)/1 var(--ff-cta)}
   .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
   .total-display{font-weight:700;margin-left:12px}
+  /* Estado visual do rodapé quando NÃO há seleção (total = 0) */
+footer.no-total #pillCompact,
+footer.no-total #ctaMain {
+  background: var(--ink);
+  color: var(--ink);
+  border: 0;              /* sem borda colorida */
+}
+
+/* Estado visual do CTA quando HÁ seleção (total > 0) */
+footer.has-total #ctaMain {
+  background: var(--red);
+  color: #fff;
+  border: 0;              /* sem borda */
+}
+
+/* Garantias de interação */
+#ctaMain[disabled] {
+  cursor: default;
+  opacity: 1;             /* mantemos legível mesmo desabilitado */
+}
+
 </style>
 
 </head>
@@ -676,6 +697,13 @@ function updatePills(){
       cta.disabled = true;
     }
   }
+    // marca estado no footer para o CSS reagir
+  const footer = document.querySelector('footer');
+  if (footer) {
+    footer.classList.toggle('has-total',  totalGeral > 0);
+    footer.classList.toggle('no-total',   totalGeral === 0);
+  }
+
 }
 
 
