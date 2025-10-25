@@ -72,7 +72,7 @@
   .carousel-slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;background:var(--beige);}
   .carousel-slide img{
     width:100%; max-height:42vh; min-height:200px;
-    object-fit:contain; background:var(--beige);
+    object-fit:contain; margin-right:10px; background:var(--beige);
   }
   /* remove a barra de progresso antiga */
   .carousel-bar-wrap{display:none!important}
@@ -121,6 +121,9 @@
   @media (max-width:768px){
     .rifa-btn{min-height:42px;padding:6px 8px;font-size:12px}
     .rifa-btn .ln1,.rifa-btn .ln2{font-size:12px;line-height:1.12}
+    .carousel-slide img{
+    width:100%; max-height:42vh; min-height:200px;
+    object-fit:contain; background:var(--beige);
   }
 
   /* ====== Footer (mantém visual v08) ====== */
