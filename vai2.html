@@ -154,7 +154,7 @@ footer{
 
 /* Botão grande, único, responsivo */
 .cta-main{
-  margin-left: auto;
+  margin-left: auto;                 /* gruda à direita */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -166,23 +166,17 @@ footer{
   font: 700 var(--fs-sm)/1 var(--ff-cta);
   text-transform: uppercase;
   cursor: pointer;
-  /* largura fluida no desktop (aprox. 40%) */
-  flex: 0 0 40%;
+  flex: 0 0 auto;                    /* largura = do conteúdo */
+  white-space: nowrap;               /* não quebra “APOSTAR R$ 250” */
 }
 
 /* Estado “desabilitado”: sem clique e “vazio” visualmente */
 .cta-main:disabled{
   background: transparent;
-  color: var(--beige);
-  border-color: var(--beige);
+  color: transparent;
+  border-color: transparent;
   cursor: default;
 }
-
-/* Mobile: botão ocupa ~88% da largura útil */
-@media (max-width: 768px){
-  .cta-main{ flex: 0 0 88%; }
-}
-
   /* CTA: largura do texto, sem quebrar, alinhado à direita pela .ftr-inner */
 .cta-final{
   width: auto;                 /* <— importante: não expandir */
@@ -715,13 +709,15 @@ function attachBindings(){
 /* ====== Pills compactas + controle de visibilidade ====== */
 function updatePills(){
   const compact = document.getElementById('pillCompact');
-  if (!compact) return;
+  const cta     = document.getElementById('ctaMain');
+  if (!compact || !cta) return;
 
-  const parts = [];
   const nP = selecionadas.size;
   const nR = rifasSel.size;
   const nF = favoritos.size;
 
+  // 1) Pills compactas — só aparecem se houver algo selecionado
+  const parts = [];
   if (nP) parts.push(`${nP} Peça${nP>1?'s':''}`);
   if (nR) parts.push(`${nR} Rifa${nR>1?'s':''}`);
   if (nF) parts.push(`${nF} Favorita${nF>1?'s':''}`);
@@ -733,22 +729,21 @@ function updatePills(){
     compact.style.display = 'none';
   }
 
-  // ANTES --- Mostrar/ocultar CTA conforme seleção (peças ou rifas)
-  // Atualiza CTA dinâmico
-  const cta = document.getElementById('btnCheckout');
-  if (cta){
-    const nP = selecionadas.size;
-    const nR = rifasSel.size;
-    const hasSelection = (nP > 0) || (nR > 0);
-    if (hasSelection){
-      cta.textContent = 'APOSTAR R$ ' + Math.round(totalGeral);
-    }
-    // (quando não há seleção, updatePills() já esconde o CTA)
+  // 2) CTA único — escondido quando total = 0
+  const hasSelection = (nP > 0) || (nR > 0);
+  if (!hasSelection){
+    cta.disabled = true;
+    cta.style.display = 'none';            // footer “vazio” quando nada selecionado
+    cta.textContent = 'FAÇAM SUAS APOSTAS!';
+    return;
   }
 
-
-
+  // Com seleção: mostra + rotula com o total sem decimais (fmt já não usa centavos)
+  cta.style.display = 'inline-flex';
+  cta.disabled = false;
+  cta.textContent = 'APOSTAR ' + fmt(totalGeral);
 }
+
 
 /* =============== Abrir peça dentro do feed ================= */
 function openFeedAt(id){
@@ -785,14 +780,21 @@ async function init(){
 
     pecas = await rp.json();
     rifas = await rr.json();
-
-    // render inicial conforme hash
+  
+    
+    // Render inicial: se não houver hash, cai na Galeria
     attachAppDelegation();
     attachBindings();
-    handleHashChange();
+
+    if (!location.hash) {
+      showPage('galeria', { updateHash:false });
+    } else {
+      handleHashChange();
+    }
 
     updatePills();
     calcularTotal();
+
   }catch(e){
     console.error('Init error', e);
     document.getElementById('app').innerHTML =
@@ -806,9 +808,10 @@ window.addEventListener('DOMContentLoaded', init);
   const footer = document.querySelector('footer');
   if (!footer) return;
   const mo = new MutationObserver(()=>{
-    if(!document.getElementById('btnCheckout')){
-      console.warn('Footer alterado: btnCheckout ausente. Verifique alterações acidentais no header/footer.');
-    }
+if(!document.getElementById('ctaMain')){
+  console.warn('Footer alterado: ctaMain ausente. Verifique alterações acidentais no header/footer.');
+}
+
   });
   mo.observe(footer, { childList:true, subtree:true });
 })();
