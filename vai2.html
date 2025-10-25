@@ -623,26 +623,52 @@ function renderRifas(){
     btn.style.textAlign = 'left';
     btn.setAttribute('aria-label', rawLabel);
 
-    if (disponivel){
-      btn.addEventListener('click', ()=>{
-        const wasSelected = btn.classList.contains('selected');
-        if (wasSelected){
-          btn.classList.remove('selected');
-          btn.style.backgroundColor = bg;
-          btn.style.color = getContrastColor(bg);
-          btn.style.borderColor = '';
-          rifasSel.delete(r.id_rifa);
-        }else{
-          btn.classList.add('selected');
-          btn.style.backgroundColor = '#ffffff';
-          btn.style.color = '#ff0000';
-          btn.style.borderColor = '#ff0000';
-          rifasSel.add(r.id_rifa);
-        }
-        updatePills();
-        calcularTotal();
-      });
+// click behavior (toggle selection)
+if (disponivel) {
+  btn.addEventListener('click', () => {
+    // só permite clique se disponível
+    if (!disponivel) return;
+
+    const isSelected = btn.classList.contains('selected');
+
+    if (isSelected) {
+      // DESELECIONAR: remove classe e RESTAURA cores originais
+      btn.classList.remove('selected');
+
+      // Restaura background original do rifa (cor vinda do JSON)
+      btn.style.backgroundColor = bg;
+
+      // Restaura cor do texto baseada no contraste original
+      btn.style.color = contrast;
+
+      // Restaura borda ao estilo do CSS (remova any inline border color)
+      btn.style.borderColor = '';
+
+      // remove outline se usado
+      btn.style.outline = '';
+    } else {
+      // SELECIONAR: aplica visual definido (branco bg, vermelho texto/borda)
+      btn.classList.add('selected');
+
+      btn.style.backgroundColor = '#ffffff';
+      btn.style.color = '#ff0000';
+      btn.style.borderColor = '#ff0000';
+      btn.style.outline = '';
     }
+
+    // Sincroniza o conjunto rifasSel
+    if (rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa);
+    else rifasSel.add(r.id_rifa);
+
+    // Atualiza UI e cálculo
+    updatePills();
+    calcularTotal();
+
+    // >>> AQUI entra a sincronização da barra de consulta:
+    maybeRefreshSelectedBar();
+  });
+}
+
 
     grid.appendChild(btn);
   });
