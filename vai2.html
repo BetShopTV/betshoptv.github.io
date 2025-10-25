@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BSTV (v. 12) — Safe header/footer</title>
+<title>,00 plural</title>
 
 <!-- ====== STYLES (preserve visual look of v08) ====== -->
 <style>
@@ -116,7 +116,7 @@
     display:block;margin:0;padding:0;font:inherit;text-transform:none;text-align:left;color:inherit;
   }
   .rifa-btn.selected{background:#fff!important;border-color:var(--red)!important;color:var(--red)!important}
-  .rifa-btn.sold{color: #FFFFFF; border:transparent; background: var(--beige); pointer-events:none;}
+  .rifa-btn.sold{opacity:.45;pointer-events:none;filter:grayscale(1)}
 
   @media (max-width:768px){
     .rifa-btn{min-height:42px;padding:6px 8px;font-size:12px}
@@ -125,80 +125,12 @@
   }
 
   /* ====== Footer (mantém visual v08) ====== */
-/* ====== Footer (CTA único dinâmico) ====== */
-/* ====== Footer (CTA único dinâmico) ====== */
-footer{
-  position: sticky;
-  bottom: 0;
-  background: var(--ink);
-  color: #fff;
-  border-top: var(--bd-thick) solid var(--ink);
-}
-.ftr-inner{
-  max-width: var(--app-max-width);
-  margin: 0 auto;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-}
-.contadores{display:flex;gap:8px;flex-wrap:wrap}
-.pill{
-  background: var(--beige);
-  color: var(--ink);
-  border: var(--bd-thin) solid var(--beige);
-  padding: 4px 6px;
-  font: 700 var(--fs-sm)/1 var(--ff-cta);
-}
-
-/* Botão grande, único, responsivo */
-.cta-main{
-  margin-left: auto;                 /* gruda à direita */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 14px;
-  min-height: 44px;
-  border: var(--bd-thin) solid #fff;
-  background: var(--red);
-  color: #fff;
-  font: 700 var(--fs-sm)/1 var(--ff-cta);
-  text-transform: uppercase;
-  cursor: pointer;
-  flex: 0 0 auto;                    /* largura = do conteúdo */
-  white-space: nowrap;               /* não quebra “APOSTAR R$ 250” */
-}
-
-/* Estado “desabilitado”: sem clique e “vazio” visualmente */
-.cta-main:disabled{
-  background: transparent;
-  color: transparent;
-  border-color: transparent;
-  cursor: default;
-}
-  /* CTA: largura do texto, sem quebrar, alinhado à direita pela .ftr-inner */
-.cta-final{
-  width: auto;                 /* <— importante: não expandir */
-  white-space: nowrap;         /* não quebrar “APOSTAR R$ 250” */
-  align-self: center;          /* verticalmente no meio da barra */
-  padding: 8px 16px;           /* mantém respiro interno */
-}
-
-/* Pill compacta: uma linha só tipo “1 Peça · 4 Rifas · 2 Favoritas” */
-.pill-compact{
-  display:inline-block;
-  background:#fff;
-  color:var(--ink);
-  border:var(--bd-thin) solid var(--ink);
-  padding:4px 8px;
-  font:700 var(--fs-sm)/1 var(--ff-cta);
-}
-
-/* utilitário para esconder sem colapsar layout do footer */
-.is-hidden { display:none !important; }
-
-
+  footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
+  .ftr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px}
+  .contadores{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:var(--beige);color:var(--ink);border:var(--bd-thin) solid var(--beige);padding:4px 4px;font:700 var(--fs-sm)/1 var(--ff-cta)}
+  .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
+  .total-display{font-weight:700;margin-left:12px}
 </style>
 
 </head>
@@ -206,7 +138,7 @@ footer{
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">V17-FACELIFT</div>
+      <div class="logo">,00 plural</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -223,18 +155,19 @@ footer{
   </main>
 
   <!-- ========== FOOTER (kept same as v08) ========== -->
-  <!-- ========== FOOTER (CTA único dinâmico) ========== -->
   <footer>
-<div class="contadores">
-  <span id="pillCompact" class="pill-compact" style="display:none;"></span>
-</div>
-
-
-      <!-- Botão único: muda rótulo e estado conforme total -->
-      <button class="cta-main" id="ctaMain" disabled>FAÇAM SUAS APOSTAS!</button>
+    <div class="ftr-inner">
+      <div class="contadores">
+        <button class="pill" id="pillPecas">0 Peças</button>
+        <button class="pill" id="pillRifas">0 Rifas</button>
+        <button class="pill" id="pillFav">0 Favoritas</button>
+      </div>
+      <div>
+        <span class="total-display">Total: R$ 0,00</span>
+      </div>
+      <button class="cta-final" id="btnCheckout">Finalizar</button>
     </div>
   </footer>
-
 
   <!-- Hidden Form (kept in footer area but declared here) -->
   <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
@@ -648,14 +581,10 @@ function attachAppDelegation(){
 
 /* =============== Checkout (igual ao que já funcionava) =============== */
 function attachBindings(){
-  const cta = document.getElementById('ctaMain');
-  if (!cta) return;
+  const checkoutBtn = document.getElementById('btnCheckout');
+  if (!checkoutBtn) return;
 
-  cta.onclick = (e)=>{
-    // Se estiver desabilitado, não faz nada
-    if (cta.disabled) return;
-
-    // Com total > 0, executamos o mesmo fluxo do “Finalizar” anterior
+  checkoutBtn.onclick = (e)=>{
     e.preventDefault();
     calcularTotal();
 
@@ -700,50 +629,49 @@ function attachBindings(){
         fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' });
       }catch(e){ console.warn('GAS backup falhou', e); }
 
+      // envia FormSubmit e redireciona para obrigado.html (já configurado no form)
       document.getElementById('hiddenForm').submit();
     };
   };
 }
 
 /* =============== Pills e Total ================= */
-/* ====== Pills compactas + controle de visibilidade ====== */
 function updatePills(){
-  const compact = document.getElementById('pillCompact');
-  const cta     = document.getElementById('ctaMain');
-  if (!compact || !cta) return;
+  const nbsp = '\u00A0'; // espaço não-quebrável
+  const pP = document.getElementById('pillPecas');
+  const pR = document.getElementById('pillRifas');
+  const pF = document.getElementById('pillFav');
 
-  const nP = selecionadas.size;
-  const nR = rifasSel.size;
-  const nF = favoritos.size;
+  // pluralização simples (opcional)
+  const lblPeca = selecionadas.size === 1 ? 'Peça' : 'Peças';
+  const lblRifa = rifasSel.size === 1 ? 'Rifa' : 'Rifas';
+  const lblFav  = favoritos.size === 1 ? 'Favorita' : 'Favoritas';
 
-  // 1) Pills compactas — só aparecem se houver algo selecionado
-  const parts = [];
-  if (nP) parts.push(`${nP} Peça${nP>1?'s':''}`);
-  if (nR) parts.push(`${nR} Rifa${nR>1?'s':''}`);
-  if (nF) parts.push(`${nF} Favorita${nF>1?'s':''}`);
-
-  if (parts.length){
-    compact.textContent = parts.join(' · ');
-    compact.style.display = 'inline-block';
-  } else {
-    compact.style.display = 'none';
-  }
-
-  // 2) CTA único — escondido quando total = 0
-  const hasSelection = (nP > 0) || (nR > 0);
-  if (!hasSelection){
-    cta.disabled = true;
-    cta.style.display = 'none';            // footer “vazio” quando nada selecionado
-    cta.textContent = 'FAÇAM SUAS APOSTAS!';
-    return;
-  }
-
-  // Com seleção: mostra + rotula com o total sem decimais (fmt já não usa centavos)
-  cta.style.display = 'inline-flex';
-  cta.disabled = false;
-  cta.textContent = 'APOSTAR ' + fmt(totalGeral);
+  if (pP) pP.textContent = `${selecionadas.size}${nbsp}${lblPeca}`;
+  if (pR) pR.textContent = `${rifasSel.size}${nbsp}${lblRifa}`;
+  if (pF) pF.textContent = `${favoritos.size}${nbsp}${lblFav}`;
 }
 
+function calcularTotal(){
+  let total = 0;
+
+  // total de peças
+  selecionadas.forEach(id => {
+    const p = pecas.find(x => x.id_peca === id);
+    if (p && p.preco) total += parseFloat(p.preco);
+  });
+
+  // total de rifas pela regra
+  total += calculateRifaTotal(rifasSel.size || 0);
+
+  totalGeral = total;
+
+  const totalEl = document.querySelector('.total-display');
+  if (totalEl) totalEl.textContent = 'Total: ' + fmt(totalGeral);
+
+  const fTotal = document.getElementById('fTotal');
+  if (fTotal) fTotal.value = totalGeral.toFixed(2);
+}
 
 /* =============== Abrir peça dentro do feed ================= */
 function openFeedAt(id){
@@ -780,21 +708,14 @@ async function init(){
 
     pecas = await rp.json();
     rifas = await rr.json();
-  
-    
-    // Render inicial: se não houver hash, cai na Galeria
+
+    // render inicial conforme hash
     attachAppDelegation();
     attachBindings();
-
-    if (!location.hash) {
-      showPage('galeria', { updateHash:false });
-    } else {
-      handleHashChange();
-    }
+    handleHashChange();
 
     updatePills();
     calcularTotal();
-
   }catch(e){
     console.error('Init error', e);
     document.getElementById('app').innerHTML =
@@ -808,10 +729,9 @@ window.addEventListener('DOMContentLoaded', init);
   const footer = document.querySelector('footer');
   if (!footer) return;
   const mo = new MutationObserver(()=>{
-if(!document.getElementById('ctaMain')){
-  console.warn('Footer alterado: ctaMain ausente. Verifique alterações acidentais no header/footer.');
-}
-
+    if(!document.getElementById('btnCheckout')){
+      console.warn('Footer alterado: btnCheckout ausente. Verifique alterações acidentais no header/footer.');
+    }
   });
   mo.observe(footer, { childList:true, subtree:true });
 })();
