@@ -183,6 +183,27 @@ footer{
   .cta-main{ flex: 0 0 88%; }
 }
 
+  /* CTA: largura do texto, sem quebrar, alinhado à direita pela .ftr-inner */
+.cta-final{
+  width: auto;                 /* <— importante: não expandir */
+  white-space: nowrap;         /* não quebrar “APOSTAR R$ 250” */
+  align-self: center;          /* verticalmente no meio da barra */
+  padding: 8px 16px;           /* mantém respiro interno */
+}
+
+/* Pill compacta: uma linha só tipo “1 Peça · 4 Rifas · 2 Favoritas” */
+.pill-compact{
+  display:inline-block;
+  background:#fff;
+  color:var(--ink);
+  border:var(--bd-thin) solid var(--ink);
+  padding:4px 8px;
+  font:700 var(--fs-sm)/1 var(--ff-cta);
+}
+
+/* utilitário para esconder sem colapsar layout do footer */
+.is-hidden { display:none !important; }
+
 
 </style>
 
@@ -210,12 +231,10 @@ footer{
   <!-- ========== FOOTER (kept same as v08) ========== -->
   <!-- ========== FOOTER (CTA único dinâmico) ========== -->
   <footer>
-    <div class="ftr-inner">
-      <div class="contadores">
-        <button class="pill" id="pillPecas">0&nbsp;Peças</button>
-        <button class="pill" id="pillRifas">0&nbsp;Rifas</button>
-        <button class="pill" id="pillFav">0&nbsp;Favoritas</button>
-      </div>
+<div class="contadores">
+  <span id="pillCompact" class="pill-compact" style="display:none;"></span>
+</div>
+
 
       <!-- Botão único: muda rótulo e estado conforme total -->
       <button class="cta-main" id="ctaMain" disabled>FAÇAM SUAS APOSTAS!</button>
@@ -693,52 +712,41 @@ function attachBindings(){
 }
 
 /* =============== Pills e Total ================= */
+/* ====== Pills compactas + controle de visibilidade ====== */
 function updatePills(){
-  const nbsp = '\u00A0'; // espaço não-quebrável
-  const pP = document.getElementById('pillPecas');
-  const pR = document.getElementById('pillRifas');
-  const pF = document.getElementById('pillFav');
+  const compact = document.getElementById('pillCompact');
+  if (!compact) return;
 
-  // pluralização simples (opcional)
-  const lblPeca = selecionadas.size === 1 ? 'Peça' : 'Peças';
-  const lblRifa = rifasSel.size === 1 ? 'Rifa' : 'Rifas';
-  const lblFav  = favoritos.size === 1 ? 'Favorita' : 'Favoritas';
+  const parts = [];
+  const nP = selecionadas.size;
+  const nR = rifasSel.size;
+  const nF = favoritos.size;
 
-  if (pP) pP.textContent = `${selecionadas.size}${nbsp}${lblPeca}`;
-  if (pR) pR.textContent = `${rifasSel.size}${nbsp}${lblRifa}`;
-  if (pF) pF.textContent = `${favoritos.size}${nbsp}${lblFav}`;
-}
+  if (nP) parts.push(`${nP} Peça${nP>1?'s':''}`);
+  if (nR) parts.push(`${nR} Rifa${nR>1?'s':''}`);
+  if (nF) parts.push(`${nF} Favorita${nF>1?'s':''}`);
 
-function calcularTotal(){
-  let total = 0;
-
-  // total de peças
-  selecionadas.forEach(id => {
-    const p = pecas.find(x => x.id_peca === id);
-    if (p && p.preco) total += parseFloat(p.preco);
-  });
-
-  // total de rifas pela regra
-  total += calculateRifaTotal(rifasSel.size || 0);
-
-  totalGeral = total;
-
-  const totalEl = document.querySelector('.total-display');
-  if (totalEl) totalEl.textContent = 'Total: ' + fmt(totalGeral);
-
-  const fTotal = document.getElementById('fTotal');
-  if (fTotal) fTotal.value = totalGeral.toFixed(2);
-    // ... (após atualizar totalGeral e o campo hidden fTotal)
-  const cta = document.getElementById('ctaMain');
-  if (cta){
-    if (totalGeral > 0){
-      cta.disabled = false;
-      cta.textContent = 'APOSTAR ' + fmt(totalGeral); // ex.: APOSTAR R$ 250
-    }else{
-      cta.disabled = true;
-      cta.textContent = 'FAÇAM SUAS APOSTAS!';
-    }
+  if (parts.length){
+    compact.textContent = parts.join(' · ');
+    compact.style.display = 'inline-block';
+  } else {
+    compact.style.display = 'none';
   }
+
+  // ANTES --- Mostrar/ocultar CTA conforme seleção (peças ou rifas)
+  // Atualiza CTA dinâmico
+  const cta = document.getElementById('btnCheckout');
+  if (cta){
+    const nP = selecionadas.size;
+    const nR = rifasSel.size;
+    const hasSelection = (nP > 0) || (nR > 0);
+    if (hasSelection){
+      cta.textContent = 'APOSTAR R$ ' + Math.round(totalGeral);
+    }
+    // (quando não há seleção, updatePills() já esconde o CTA)
+  }
+
+
 
 }
 
