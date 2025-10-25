@@ -579,14 +579,17 @@ function attachAppDelegation(){
 }
 
 /* =============== Checkout (igual ao que já funcionava) =============== */
+/* ====== Bind do CTA principal (checkout inline) ====== */
 function attachBindings(){
-  const checkoutBtn = document.getElementById('btnCheckout');
-  if (!checkoutBtn) return;
+  const cta = document.getElementById('ctaMain');
+  if (!cta) return;
 
-  checkoutBtn.onclick = (e)=>{
+  cta.onclick = (e) => {
+    if (cta.disabled) return;       // sem seleção, não faz nada
     e.preventDefault();
     calcularTotal();
 
+    // checkout minimalista inline (mesma lógica que você já usa)
     document.getElementById('app').innerHTML = `
       <section id="checkout">
         <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
@@ -601,21 +604,23 @@ function attachBindings(){
         </div>
       </section>`;
 
-    document.getElementById('voltarCheckout').onclick = ()=> handleHashChange();
-    document.getElementById('prosseguirCheckout').onclick = ()=>{
+    document.getElementById('voltarCheckout').onclick = () => handleHashChange();
+
+    document.getElementById('prosseguirCheckout').onclick = () => {
       const nome  = document.getElementById('nome').value.trim();
       const email = document.getElementById('email').value.trim();
-      if(!nome||!email){ alert('Preencha nome e e-mail'); return; }
+      if (!nome || !email) { alert('Preencha nome e e-mail'); return; }
 
+      // preenche form oculto
       document.getElementById('fNome').value  = nome;
       document.getElementById('fEmail').value = email;
       document.getElementById('fTelefone').value = (document.getElementById('telefone').value||'').trim();
       document.getElementById('fPecas').value = [...selecionadas].join(',');
       document.getElementById('fRifas').value = [...rifasSel].join(',');
       document.getElementById('fFav').value   = [...favoritos].join(',');
-      document.getElementById('fTotal').value = totalGeral.toFixed(2);
+      document.getElementById('fTotal').value = totalGeral.toFixed(2); // mantém 2 casas só para o form
 
-      // backup no GAS (sem bloquear UI)
+      // backup GAS (não bloqueia)
       try{
         const fd = new FormData();
         fd.append('nome', nome);
@@ -628,28 +633,51 @@ function attachBindings(){
         fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' });
       }catch(e){ console.warn('GAS backup falhou', e); }
 
-      // envia FormSubmit e redireciona para obrigado.html (já configurado no form)
+      // envia para FormSubmit → obrigado.html
       document.getElementById('hiddenForm').submit();
     };
   };
 }
 
+
 /* =============== Pills e Total ================= */
+/* ====== Footer: pills compactas + CTA dinâmico ====== */
 function updatePills(){
-  const nbsp = '\u00A0'; // espaço não-quebrável
-  const pP = document.getElementById('pillPecas');
-  const pR = document.getElementById('pillRifas');
-  const pF = document.getElementById('pillFav');
+  const nbsp = '\u00A0';                           // espaço não-quebrável
+  const pill = document.getElementById('pillCompact');
+  const cta  = document.getElementById('ctaMain');
 
-  // pluralização simples (opcional)
-  const lblPeca = selecionadas.size === 1 ? 'Peça' : 'Peças';
-  const lblRifa = rifasSel.size === 1 ? 'Rifa' : 'Rifas';
-  const lblFav  = favoritos.size === 1 ? 'Favorita' : 'Favoritas';
+  // monta lista só com contadores > 0 (mobile-friendly)
+  const parts = [];
+  if (selecionadas.size > 0) {
+    parts.push(`${selecionadas.size}${nbsp}${selecionadas.size === 1 ? 'Peça' : 'Peças'}`);
+  }
+  if (rifasSel.size > 0) {
+    parts.push(`${rifasSel.size}${nbsp}${rifasSel.size === 1 ? 'Rifa' : 'Rifas'}`);
+  }
+  if (favoritos.size > 0) {
+    parts.push(`${favoritos.size}${nbsp}${favoritos.size === 1 ? 'Favorita' : 'Favoritas'}`);
+  }
 
-  if (pP) pP.textContent = `${selecionadas.size}${nbsp}${lblPeca}`;
-  if (pR) pR.textContent = `${rifasSel.size}${nbsp}${lblRifa}`;
-  if (pF) pF.textContent = `${favoritos.size}${nbsp}${lblFav}`;
+  // mostra/oculta a pill compacta
+  if (pill) {
+    pill.textContent = parts.join(' · ');
+    pill.style.display = parts.length ? 'inline-block' : 'none';
+  }
+
+  // CTA único: label e estado
+  if (cta) {
+    if (totalGeral > 0) {
+      // fmt() já remove casas decimais
+      cta.textContent = `APOSTAR ${fmt(totalGeral)}`;
+      cta.disabled = false;
+    } else {
+      cta.textContent = 'FAÇAM SUAS APOSTAS!';
+      cta.disabled = true;
+    }
+  }
 }
+
 
 function calcularTotal(){
   let total = 0;
