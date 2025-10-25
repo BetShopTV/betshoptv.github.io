@@ -634,9 +634,9 @@ function updatePills(){
   const pP = document.getElementById('pillPecas');
   const pR = document.getElementById('pillRifas');
   const pF = document.getElementById('pillFav');
-  if (pP) pP.textContent = 'Peças: '     + selecionadas.size;
-  if (pR) pR.textContent = 'Rifas: '     + rifasSel.size;
-  if (pF) pF.textContent = 'Favoritas: ' + favoritos.size;
+  if (pP) pP.textContent = selecionadas.size  +   'Peças ';
+  if (pR) pR.textContent = rifasSel.size  +  'Rifas ';
+  if (pF) pF.textContent = favoritos.size  +  'Favoritas ';
 }
 
 function calcularTotal(){
