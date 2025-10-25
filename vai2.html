@@ -383,68 +383,144 @@ function renderGaleria(){
   // Nota: clique em item é tratado pela delegação do #app (attachAppDelegation)
 }
 
+// ===================== BEGIN REPLACE: HELPERS FOR FEED =====================
+/* ajusta padding do título com base na largura do preço */
+function setPricePadForPost(postEl) {
+  try {
+    const linha1 = postEl.querySelector('.linha1');
+    const preco = postEl.querySelector('.preco');
+    if (!linha1 || !preco) return;
+    const precoW = preco.offsetWidth || preco.getBoundingClientRect().width || 80;
+    linha1.style.setProperty('--price-pad', (precoW + 12) + 'px');
+  } catch (e) { /* silent */ }
+}
+
+/* aplica comportamento do heart e do add para um post recém-criado */
+function applyFeedButtonBehavior(postEl, p) {
+  // heart
+  const heart = postEl.querySelector('.heart');
+  if (heart) {
+    heart.onclick = () => {
+      const id = p.id_peca;
+      if (favoritos.has(id)) {
+        favoritos.delete(id); heart.classList.remove('selected');
+      } else {
+        favoritos.add(id); heart.classList.add('selected');
+      }
+      updatePills();
+      try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
+    };
+    if (favoritos.has(p.id_peca)) heart.classList.add('selected');
+  }
+
+  // add/remove
+  const addBtn = postEl.querySelector('.add-btn');
+  if (addBtn) {
+    addBtn.onclick = () => {
+      const id = p.id_peca;
+      const isSel = addBtn.classList.toggle('selected');
+      if (isSel) selecionadas.add(id); else selecionadas.delete(id);
+      updatePills();
+      calcularTotal();
+      addBtn.textContent = isSel ? 'REMOVER' : 'ADICIONAR';
+    };
+    if (selecionadas.has(p.id_peca)) { addBtn.classList.add('selected'); addBtn.textContent = 'REMOVER'; }
+  }
+}
+// ====================== END REPLACE: HELPERS FOR FEED ======================
 
 
-  function renderFeed(){
-    const app = document.getElementById('app'); app.innerHTML = '';
-    const section = document.createElement('section'); section.id = 'feed';
-    const list = document.createElement('div'); list.id = 'feedList'; list.className = 'feed';
-    pecas.forEach(p => {
-      if(String(p.status).toUpperCase() === 'VENDIDAAA') return;
-      const post = document.createElement('article'); post.className = 'post'; post.id = 'post-' + p.id_peca;
+// ===================== BEGIN REPLACE: renderFeed() =====================
+function renderFeed(){
+  const app = document.getElementById('app'); app.innerHTML = '';
+  const section = document.createElement('section'); section.id = 'feed';
+  const list = document.createElement('div'); list.id = 'feedList'; list.className = 'feed';
 
-      // carousel
-      const carousel = document.createElement('div'); carousel.className = 'carousel';
-      const imgs = Array.isArray(p.imagens) ? p.imagens : [];
-      imgs.forEach(name => {
-        const slide = document.createElement('div'); slide.className = 'carousel-slide';
-        const image = imgWithFallback('/img/otm/' + name + '.avif'); slide.appendChild(image);
-        carousel.appendChild(slide);
-      });
+  pecas.forEach(p => {
+    if (String(p.status).toUpperCase() === 'VENDIDAAA') return;
 
-      // progress bar
-      const barWrap = document.createElement('div'); barWrap.className = 'carousel-bar-wrap';
-      const bar = document.createElement('div'); bar.className = 'carousel-bar';
-      const pos = document.createElement('div'); pos.className = 'pos'; bar.appendChild(pos); barWrap.appendChild(bar);
+    const post = document.createElement('article'); post.className = 'post'; post.id = 'post-' + p.id_peca;
 
-      // meta
-      const meta = document.createElement('div'); meta.className = 'meta';
-      const l1 = document.createElement('div'); l1.className = 'linha1';
-      const t = document.createElement('div'); t.className = 'titulo'; t.textContent = p.titulo || ('Peça ' + p.id_peca);
-      const pr = document.createElement('div'); pr.className = 'preco'; pr.textContent = fmt(p.preco);
-      l1.appendChild(t); l1.appendChild(pr);
-      const desc = document.createElement('div'); desc.className = 'descricao'; desc.textContent = p.ficha || p.descricao || '';
-      const dims = document.createElement('div'); dims.className = 'dimens'; dims.textContent = p.dimensao || p.tamanho || '';
-      const footerMeta = document.createElement('div'); footerMeta.className = 'meta-footer';
-      const addBtn = document.createElement('button'); addBtn.className = 'add-btn'; addBtn.textContent = selecionadas.has(p.id_peca)?'REMOVER':'ADICIONAR';
-      addBtn.setAttribute('data-action','add'); addBtn.dataset.id = p.id_peca;
-      footerMeta.appendChild(addBtn);
-      // favorite btn
-      const favBtn = document.createElement('button'); favBtn.className = 'btn fav'; favBtn.textContent = '❤'; favBtn.style.marginLeft='8px';
-      favBtn.setAttribute('data-action','fav'); favBtn.dataset.id = p.id_peca;
-      l1.appendChild(favBtn);
-
-      meta.appendChild(l1); meta.appendChild(desc); meta.appendChild(dims); meta.appendChild(footerMeta);
-
-      post.appendChild(carousel); post.appendChild(barWrap); post.appendChild(meta);
-      list.appendChild(post);
-
-      // carousel behavior - update pos
-      (function(car, posEl){
-        const slides = car.querySelectorAll('.carousel-slide');
-        const total = slides.length || 1;
-        function update(){
-          const idx = Math.round(car.scrollLeft / car.clientWidth);
-          const pct = ((idx+1)/Math.max(1,total)) * 100;
-          posEl.style.width = pct + '%';
-        }
-        car.addEventListener('scroll', ()=>{ window.clearTimeout(car._t); car._t = setTimeout(update, 80); });
-        update();
-      })(carousel, pos.querySelector ? pos : pos);
+    // carousel
+    const carousel = document.createElement('div'); carousel.className = 'carousel';
+    const imgs = Array.isArray(p.imagens) ? p.imagens : [];
+    imgs.forEach(name=>{
+      const slide = document.createElement('div'); slide.className = 'carousel-slide';
+      const img = imgWithFallback('/img/otm/' + name + '.avif');
+      slide.appendChild(img);
+      carousel.appendChild(slide);
     });
 
-    section.appendChild(list); app.appendChild(section);
-  }
+    // bottom progress bar
+    const barWrap = document.createElement('div'); barWrap.className = 'carousel-bar-wrap';
+    const bar = document.createElement('div'); bar.className = 'carousel-bar';
+    const pos = document.createElement('div'); pos.className = 'pos'; bar.appendChild(pos); barWrap.appendChild(bar);
+
+    // meta
+    const meta = document.createElement('div'); meta.className = 'meta';
+
+    // linha1: title and price
+    const l1 = document.createElement('div'); l1.className = 'linha1';
+    const title = document.createElement('div'); title.className = 'titulo'; title.textContent = p.titulo || ('Peça ' + p.id_peca);
+    const price = document.createElement('div'); price.className = 'preco'; price.textContent = fmt(p.preco);
+    l1.appendChild(title); l1.appendChild(price);
+
+    // tecnica above dimensao
+    const tecnica = document.createElement('div'); tecnica.className = 'tecnica'; tecnica.textContent = p.tecnica || '';
+    const dims = document.createElement('div'); dims.className = 'dimens'; dims.textContent = p.dimensao || p.tamanho || '';
+
+    // footer actions
+    const footerMeta = document.createElement('div'); footerMeta.className = 'meta-footer';
+    const leftActions = document.createElement('div'); leftActions.className = 'left-actions';
+    const rightActions = document.createElement('div'); rightActions.className = 'right-actions';
+
+    const heartBtn = document.createElement('button'); heartBtn.className = 'heart';
+    heartBtn.setAttribute('aria-label', 'Favoritar ' + (p.titulo||''));
+    heartBtn.innerHTML = '❤';
+    leftActions.appendChild(heartBtn);
+
+    const addBtn = document.createElement('button'); addBtn.className = 'add-btn';
+    addBtn.textContent = selecionadas.has(p.id_peca) ? 'REMOVER' : 'ADICIONAR';
+    rightActions.appendChild(addBtn);
+
+    footerMeta.appendChild(leftActions); footerMeta.appendChild(rightActions);
+
+    // assemble meta
+    meta.appendChild(l1);
+    if (tecnica && tecnica.textContent) meta.appendChild(tecnica);
+    meta.appendChild(dims);
+    meta.appendChild(footerMeta);
+
+    // append post
+    post.appendChild(carousel);
+    post.appendChild(barWrap);
+    post.appendChild(meta);
+    list.appendChild(post);
+
+    // carousel position updater
+    (function(car, posEl){
+      const slides = car.querySelectorAll('.carousel-slide');
+      const total = slides.length || 1;
+      function updatePos(){
+        const idx = Math.round(car.scrollLeft / car.clientWidth);
+        const pct = ((idx+1)/Math.max(1,total)) * 100;
+        posEl.style.width = pct + '%';
+      }
+      car.addEventListener('scroll', ()=>{ window.clearTimeout(car._t); car._t = setTimeout(updatePos, 60); });
+      updatePos();
+    })(carousel, bar.querySelector('.pos'));
+
+    // price pad after added to DOM
+    setTimeout(()=> setPricePadForPost(post), 60);
+
+    // apply button behavior
+    applyFeedButtonBehavior(post, p);
+  });
+
+  section.appendChild(list); app.appendChild(section);
+}
+// ====================== END REPLACE: renderFeed() ======================
+
 
 /* ===== HELPERS for RIFAS labels, contrast and prices ===== */
 
