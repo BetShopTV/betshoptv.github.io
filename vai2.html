@@ -637,12 +637,19 @@ function attachBindings(){
 
 /* =============== Pills e Total ================= */
 function updatePills(){
+  const nbsp = '\u00A0'; // espaço não-quebrável
   const pP = document.getElementById('pillPecas');
   const pR = document.getElementById('pillRifas');
   const pF = document.getElementById('pillFav');
-  if (pP) pP.textContent = selecionadas.size  +   'Peças ';
-  if (pR) pR.textContent = rifasSel.size  +  'Rifas ';
-  if (pF) pF.textContent = favoritos.size  +  'Favoritas ';
+
+  // pluralização simples (opcional)
+  const lblPeca = selecionadas.size === 1 ? 'Peça' : 'Peças';
+  const lblRifa = rifasSel.size === 1 ? 'Rifa' : 'Rifas';
+  const lblFav  = favoritos.size === 1 ? 'Favorita' : 'Favoritas';
+
+  if (pP) pP.textContent = `${selecionadas.size}${nbsp}${lblPeca}`;
+  if (pR) pR.textContent = `${rifasSel.size}${nbsp}${lblRifa}`;
+  if (pF) pF.textContent = `${favoritos.size}${nbsp}${lblFav}`;
 }
 
 function calcularTotal(){
