@@ -281,7 +281,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">WREEEEE</div>
+      <div class="logo">afe</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -352,6 +352,140 @@ const rifasSel     = new Set();  // ids de rifas selecionadas
 const favoritos    = new Set();  // ids de peças favoritas
 
 let totalGeral = 0;
+
+/* ===== Selected Bar state & control ===== */
+let selectedBarMode = null;    // 'pecas' | 'rifas' | 'favoritas' | null
+let selectedBarVisible = false;
+
+function ensureSelectedBarContainer() {
+  if (!document.getElementById('selectedBar')) {
+    const el = document.createElement('div');
+    el.id = 'selectedBar';
+    el.setAttribute('aria-live', 'polite');
+    // insere logo antes do <footer> para ficar imediatamente acima
+    const footer = document.querySelector('footer');
+    (footer && footer.parentNode) && footer.parentNode.insertBefore(el, footer);
+  }
+}
+
+/* Esconde e limpa o painel */
+function hideSelectedBar() {
+  const bar = document.getElementById('selectedBar');
+  if (bar) {
+    bar.innerHTML = '';
+    bar.style.display = 'none';
+  }
+  selectedBarVisible = false;
+  selectedBarMode = null;
+}
+
+/* Re-render do conteúdo conforme o modo atual (é chamado após qualquer mudança) */
+function maybeRefreshSelectedBar() {
+  if (!selectedBarVisible || !selectedBarMode) return;
+  renderSelectedBar(selectedBarMode, /*onlyRefresh*/ true);
+}
+
+/* Renderiza o painel (modo: 'pecas' | 'rifas' | 'favoritas') */
+function renderSelectedBar(mode, onlyRefresh = false) {
+  ensureSelectedBarContainer();
+  const bar = document.getElementById('selectedBar');
+  if (!bar) return;
+
+  selectedBarMode = mode;
+
+  // estrutura basica
+  if (!onlyRefresh) bar.innerHTML = `
+    <div class="sel-wrap">
+      <div class="sel-strip" id="selStrip"></div>
+    </div>
+  `;
+  const strip = bar.querySelector('#selStrip');
+  if (!strip) return;
+  strip.innerHTML = '';
+
+  // popula conforme o modo
+  if (mode === 'pecas' || mode === 'favoritas') {
+    const sourceIds = (mode === 'pecas') ? [...selecionadas] : [...favoritos];
+    sourceIds.forEach(id => {
+      const p = pecas.find(x => x.id_peca === id);
+      if (!p) return;
+      const first = (p.imagens && p.imagens[0]) ? p.imagens[0] : null;
+      const tile = document.createElement('div');
+      tile.className = 'sel-thumb';
+      tile.innerHTML = `
+        <img src="/img/tmb/${first || ''}.jpg" alt="${p.titulo || id}" />
+        <button class="sel-remove" data-id="${id}" aria-label="Remover ${p.titulo || id}">x</button>
+      `;
+      strip.appendChild(tile);
+    });
+
+    // remover peça/favorita ao clicar no X
+    strip.addEventListener('click', e => {
+      const btn = e.target.closest('.sel-remove');
+      if (!btn) return;
+      const id = btn.dataset.id;
+      if (mode === 'pecas') {
+        selecionadas.delete(id);
+        // se estava “selecionado” no feed, reflita visual (se existir)
+        const addBtn = document.querySelector(`#post-${CSS.escape(id)} .add-btn`);
+        if (addBtn) { addBtn.classList.remove('selected'); addBtn.textContent = 'ADICIONAR'; }
+      } else {
+        favoritos.delete(id);
+        const heart = document.querySelector(`#post-${CSS.escape(id)} .heart`);
+        if (heart) heart.classList.remove('selected');
+      }
+      updatePills(); calcularTotal(); maybeRefreshSelectedBar();
+    }, { once:false });
+
+  } else if (mode === 'rifas') {
+    [...rifasSel].forEach(id => {
+      const r = rifas.find(x => x.id_rifa === id);
+      if (!r) return;
+      const bg = r.hex_rifa || r.hex || '#777';
+      const text = (r.botao_rifa && String(r.botao_rifa).trim()) ?
+                   String(r.botao_rifa).trim() : (r.numero || r.id_rifa || '').toString();
+      const chip = document.createElement('button');
+      chip.className = 'rifa-btn selected';
+      chip.style.backgroundColor = '#fff';
+      chip.style.borderColor = 'var(--red)';
+      chip.style.color = 'var(--red)';
+      chip.dataset.id = r.id_rifa;
+      chip.textContent = text.replace(/^\s*X\s*/i, '').trim();
+      strip.appendChild(chip);
+    });
+
+    // clicar no chip “desseleciona” a rifa
+    strip.addEventListener('click', e => {
+      const chip = e.target.closest('.rifa-btn');
+      if (!chip) return;
+      const id = chip.dataset.id;
+      rifasSel.delete(id);
+      // reflita no grid de rifas (se aberto)
+      const btn = document.querySelector(`.rifa-btn[data-id="${CSS.escape(id)}"]`);
+      if (btn) {
+        btn.classList.remove('selected');
+        btn.style.backgroundColor = '';
+        btn.style.color = '';
+        btn.style.borderColor = '';
+      }
+      updatePills(); calcularTotal(); maybeRefreshSelectedBar();
+    }, { once:false });
+  }
+
+  bar.style.display = 'block';
+  selectedBarVisible = true;
+}
+
+/* Alterna: se clicar no mesmo modo e estiver visível → esconde; se clicar em outro → troca conteúdo */
+function toggleSelectedBar(mode) {
+  if (selectedBarVisible && selectedBarMode === mode) {
+    hideSelectedBar();
+  } else {
+    renderSelectedBar(mode);
+  }
+}
+
+
 
 /* ======================== HELPERS ======================= */
 const fmt = v => 'R$ ' + Number(v||0).toFixed(2).replace('.',',');
@@ -754,10 +888,10 @@ function attachBindings(){
   const pillR = document.getElementById('pillRifas');
   const pillF = document.getElementById('pillFav');
 
-  if (pillP) pillP.addEventListener('click', (ev)=>{ ev.preventDefault(); toggleSelectedBar('pecas'); });
-  if (pillR) pillR.addEventListener('click', (ev)=>{ ev.preventDefault(); toggleSelectedBar('rifas'); });
-  if (pillF) pillF.addEventListener('click', (ev)=>{ ev.preventDefault(); toggleSelectedBar('favoritas'); });
-}
+  if (pillP) pillP.onclick = () => toggleSelectedBar('pecas');
+  if (pillR) pillR.onclick = () => toggleSelectedBar('rifas');
+  if (pillF) pillF.onclick = () => toggleSelectedBar('favoritas');
+
 
 
 /* ========== MONITORA footer (apenas aviso em console) ========== */
@@ -795,18 +929,6 @@ function showSelectedBar(){
   if (!bar) return;
   bar.classList.remove('is-hidden');
   bar.setAttribute('aria-hidden','false');
-}
-function hideSelectedBar(){
-  const bar = document.getElementById('selectedBar');
-  if (!bar) return;
-  bar.classList.add('is-hidden');
-  bar.setAttribute('aria-hidden','true');
-  selectedBarMode = null;
-}
-
-/* Se a barra estiver aberta, re-renderiza seu conteúdo para refletir mudanças */
-function maybeRefreshSelectedBar(){
-  if (selectedBarMode) renderSelectedBar(selectedBarMode);
 }
 
 /* Cartão compacto para PEÇAS e FAVORITAS */
@@ -880,34 +1002,6 @@ function buildSBChipForRifa(rifaId){
   return chip;
 }
 
-/* Recheia a faixa conforme o modo e mostra */
-function renderSelectedBar(mode){
-  ensureSelectedBarDOM();
-  const track = document.getElementById('selectedBarInner');
-  if (!track) return;
-
-  selectedBarMode = mode;
-  track.innerHTML = '';
-
-  if (mode === 'pecas'){
-    [...selecionadas].forEach(id => {
-      const card = buildSBCardForPiece(id, 'selecionadas');
-      if (card) track.appendChild(card);
-    });
-  } else if (mode === 'favoritas'){
-    [...favoritos].forEach(id => {
-      const card = buildSBCardForPiece(id, 'favoritos');
-      if (card) track.appendChild(card);
-    });
-  } else { // rifas
-    [...rifasSel].forEach(id => {
-      const chip = buildSBChipForRifa(id);
-      if (chip) track.appendChild(chip);
-    });
-  }
-
-  showSelectedBar();
-}
 
 /* Alterna a barra: se já está no mesmo modo e visível, recolhe; senão, abre/renderiza */
 function toggleSelectedBar(mode){
