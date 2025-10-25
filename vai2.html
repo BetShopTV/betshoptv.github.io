@@ -161,7 +161,7 @@
   html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);-webkit-font-smoothing:antialiased}
 
   /* ====== Header (mantém visual v08) ====== */
-  header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;border-bottom:var(--bd-thick) solid var(--ink)}
+  header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;}
   .hdr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px}
   .logo{font:700 var(--fs-h2)/1 var(--ff-cta);text-transform:uppercase}
   .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
@@ -281,7 +281,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">only an expert?</div>
+      <div class="logo">VAMOS FUGIR PROTRO LUGAR BEIBE?</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -337,546 +337,89 @@
 
   <!-- ====== SCRIPT: modular renderers, event delegation, footer bindings ====== -->
 <script>
-/* ======================== CONFIG ======================== */
+// ======================== CONFIG ========================
 const PECAS_JSON_URL = 'https://betshoptv.com/dados/pecas.json';
 const RIFAS_JSON_URL = 'https://betshoptv.com/dados/rifas.json';
 const GAS_URL        = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
 
-/* ======================== STATE ========================= */
+// ======================== STATE =========================
 let pecas = [];
 let rifas = [];
 let rifasById = new Map();
 
-const selecionadas = new Set();  // peças selecionadas
-const rifasSel     = new Set();  // ids de rifas selecionadas
-const favoritos    = new Set();  // ids de peças favoritas
+const selecionadas = new Set();
+const rifasSel     = new Set();
+const favoritos    = new Set();
 
 let totalGeral = 0;
+let selectedBarMode = null;
 
-
-
-
-/* ======================== HELPERS ======================= */
-const fmt = v => 'R$ ' + Number(v||0).toFixed(2).replace('.',',');
+// ======================== HELPERS =======================
+const fmt = v => 'R$ ' + Number(v || 0).toFixed(2).replace('.', ',');
 
 function imgWithFallback(src){
   const img = new Image();
   img.loading = 'lazy';
   img.src = src;
-  img.onerror = () => { if(src.endsWith('.avif')) img.src = src.replace('.avif','.jpg'); };
+  img.onerror = () => {
+    if(src.endsWith('.avif')) img.src = src.replace('.avif','.jpg');
+  };
   return img;
 }
 
-/* ===== contraste (YIQ) ===== */
 const getContrastColor = (hexColor) => {
   try {
     if (!hexColor) return '#2b2424';
-    let s = String(hexColor).trim();
-    if (s.startsWith('#')) s = s.slice(1);
-    if (s.length === 3) s = s.split('').map(ch => ch + ch).join('');
-    if (s.length !== 6) return '#2b2424';
-    const r = parseInt(s.substring(0, 2), 16);
-    const g = parseInt(s.substring(2, 4), 16);
-    const b = parseInt(s.substring(4, 6), 16);
-    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-    return (yiq >= 128) ? '#2b2424' : '#ffffff';
-  } catch (e) {
+    let s = hexColor.trim().replace(/^#/, '');
+    if (s.length === 3) s = s.split('').map(c => c+c).join('');
+    const r = parseInt(s.substring(0,2), 16);
+    const g = parseInt(s.substring(2,4), 16);
+    const b = parseInt(s.substring(4,6), 16);
+    const yiq = ((r*299)+(g*587)+(b*114))/1000;
+    return yiq >= 128 ? '#2b2424' : '#ffffff';
+  } catch {
     return '#2b2424';
   }
 };
 
-/* ===== split inteligente do label das rifas (máx 2 linhas, sem upper) ===== */
-function formatRifaLabelDOM(rawText) {
-  const t0 = (rawText || '').toString().trim();
-  const frag = document.createDocumentFragment();
-  if (!t0) { const s=document.createElement('span'); s.className='ln1'; s.textContent=''; frag.appendChild(s); return frag; }
-
-  let tokens = t0.split(/\s+/).filter(Boolean);
-  if (tokens.length >= 3 && tokens[1] === '/') { // mantém "NNN / Título" mais coeso
-    tokens = [ tokens.slice(0,3).join(' ') ].concat(tokens.slice(3));
-  }
-  if (tokens.length === 1){
-    const s1=document.createElement('span'); s1.className='ln1'; s1.textContent=tokens[0]; frag.appendChild(s1); return frag;
-  }
-
-  const n = tokens.length;
-  const lens = tokens.map(w=>w.length);
-  const totalChars = lens.reduce((a,b)=>a+b,0) + (n-1);
-  const pref = new Array(n+1).fill(0);
-  for (let i=0;i<n;i++) pref[i+1]=pref[i]+lens[i];
-  const leftLen = (i)=> (i<=0?0 : pref[i] + (i-1));
-
-  let bestI=1, best=Infinity;
-  const minL=4, minR=3;
-  for (let i=1;i<n;i++){
-    const L = leftLen(i), R = totalChars-L;
-    const diff = Math.abs(L-R) + ((L>=minL && R>=minR)?0:20);
-    if (diff<best){ best=diff; bestI=i; }
-  }
-  let part1 = tokens.slice(0,bestI).join(' ');
-  let part2 = tokens.slice(bestI).join(' ');
-  if (part2.length < minR && bestI>1){
-    bestI--; part1 = tokens.slice(0,bestI).join(' '); part2 = tokens.slice(bestI).join(' ');
-  }
-
-  const s1=document.createElement('span'); s1.className='ln1'; s1.textContent=part1; frag.appendChild(s1);
-  if (part2){ const s2=document.createElement('span'); s2.className='ln2'; s2.textContent=part2; frag.appendChild(s2); }
-  return frag;
-}
-
-/* ===== regra do total das rifas (paridade 25/30) ===== */
-function calculateRifaTotal(count) {
-  count = Number(count||0);
-  if (count<=0) return 0;
-  if (count%2===0) return 25*count;
-  return 25*(count-1) + 30;
-}
-
-/* ===== atualiza "pílulas" e total do rodapé ===== */
 function updatePills(){
-  const pP=document.getElementById('pillPecas');
-  const pR=document.getElementById('pillRifas');
-  const pF=document.getElementById('pillFav');
-  if(pP) pP.textContent = 'Peças: ' + selecionadas.size;
-  if(pR) pR.textContent = 'Rifas: ' + rifasSel.size;
-  if(pF) pF.textContent = 'Favoritas: ' + favoritos.size;
+  document.getElementById('pillPecas').textContent = 'Peças: ' + selecionadas.size;
+  document.getElementById('pillRifas').textContent = 'Rifas: ' + rifasSel.size;
+  document.getElementById('pillFav').textContent   = 'Favoritas: ' + favoritos.size;
 }
+
 function calcularTotal(){
   let total = 0;
-  selecionadas.forEach(id=>{
-    const p = pecas.find(x=>x.id_peca===id);
+  selecionadas.forEach(id => {
+    const p = pecas.find(x => x.id_peca === id);
     if (p && p.preco) total += parseFloat(p.preco);
   });
-  total += calculateRifaTotal(rifasSel.size||0);
-
+  total += rifasSel.size % 2 === 0 ? 25 * rifasSel.size : 25 * (rifasSel.size - 1) + 30;
   totalGeral = total;
-  const totalEl = document.querySelector('.total-display');
-  if (totalEl) totalEl.textContent = 'Total: ' + fmt(totalGeral);
-
-  const fTotal=document.getElementById('fTotal');
-  if (fTotal) fTotal.value = totalGeral.toFixed(2);
+  document.querySelector('.total-display').textContent = 'Total: ' + fmt(total);
+  document.getElementById('fTotal').value = total.toFixed(2);
 }
 
-/* ======================== GALERIA ======================= */
-function renderGaleria(){
-  const app=document.getElementById('app');
-  app.innerHTML='';
-  const section=document.createElement('section'); section.id='galeria';
-  const masonry=document.createElement('div'); masonry.className='galeria'; masonry.id='masonryGallery';
-
-  pecas.forEach(p=>{
-    if(String(p.status).toUpperCase()==='VENDIDAAA') return;
-    const item=document.createElement('div'); item.className='gal-item'; item.dataset.id=p.id_peca;
-    const first=(p.imagens&&p.imagens[0])?p.imagens[0]:'';
-    const img=imgWithFallback('/img/tmb/'+first+'.avif'); img.alt=p.titulo||('Peça '+p.id_peca);
-    item.appendChild(img);
-    masonry.appendChild(item);
-  });
-
-  section.appendChild(masonry);
-  app.appendChild(section);
+function maybeRefreshSelectedBar(){
+  if (selectedBarMode) renderSelectedBar(selectedBarMode);
 }
 
-/* ===== auxiliares do feed ===== */
-function setPricePadForPost(postEl){
-  try{
-    const linha1=postEl.querySelector('.linha1');
-    const preco=postEl.querySelector('.preco');
-    if(!linha1||!preco) return;
-    const w=preco.offsetWidth||preco.getBoundingClientRect().width||80;
-    linha1.style.setProperty('--price-pad', (w+12)+'px');
-  }catch(_){}
-}
-function applyFeedButtonBehavior(postEl, p){
-  // coração
-  const heart=postEl.querySelector('.heart');
-  if (heart){
-    heart.onclick=()=>{
-      const id=p.id_peca;
-      if (favoritos.has(id)) { favoritos.delete(id); heart.classList.remove('selected'); }
-      else { favoritos.add(id); heart.classList.add('selected'); }
-      updatePills(); maybeRefreshSelectedBar();
-      try{ localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); }catch(_){}
-    };
-    if (favoritos.has(p.id_peca)) heart.classList.add('selected');
-  }
-  // adicionar/remover peça
-  const addBtn=postEl.querySelector('.add-btn');
-  if (addBtn){
-    addBtn.onclick=()=>{
-      const id=p.id_peca;
-      const on = addBtn.classList.toggle('selected');
-      if (on) selecionadas.add(id); else selecionadas.delete(id);
-      addBtn.textContent= on?'REMOVER':'ADICIONAR';
-      updatePills(); calcularTotal(); maybeRefreshSelectedBar();
-    };
-    if (selecionadas.has(p.id_peca)){ addBtn.classList.add('selected'); addBtn.textContent='REMOVER'; }
-  }
-}
-
-/* ========================== FEED ======================== */
-function renderFeed(){
-  const app=document.getElementById('app'); app.innerHTML='';
-  const section=document.createElement('section'); section.id='feed';
-  const list=document.createElement('div'); list.id='feedList'; list.className='feed';
-
-  pecas.forEach(p=>{
-    if(String(p.status).toUpperCase()==='VENDIDAAA') return;
-
-    const post=document.createElement('article'); post.className='post'; post.id='post-'+p.id_peca;
-
-    // carousel
-    const carousel=document.createElement('div'); carousel.className='carousel';
-    (Array.isArray(p.imagens)?p.imagens:[]).forEach(name=>{
-      const slide=document.createElement('div'); slide.className='carousel-slide';
-      const img=imgWithFallback('/img/otm/'+name+'.avif');
-      slide.appendChild(img); carousel.appendChild(slide);
-    });
-
-    // barra de posição (base fixa, só a vermelha anda)
-    const barWrap=document.createElement('div'); barWrap.className='carousel-bar-wrap';
-    const bar=document.createElement('div'); bar.className='carousel-bar';
-    const pos=document.createElement('div'); pos.className='pos'; bar.appendChild(pos); barWrap.appendChild(bar);
-
-    // meta
-    const meta=document.createElement('div'); meta.className='meta';
-
-    const l1=document.createElement('div'); l1.className='linha1';
-    const title=document.createElement('div'); title.className='titulo'; title.textContent=p.titulo||('Peça '+p.id_peca);
-    const price=document.createElement('div'); price.className='preco';  price.textContent=fmt(p.preco);
-    l1.appendChild(title); l1.appendChild(price);
-
-    const tecnica=document.createElement('div'); tecnica.className='tecnica'; tecnica.textContent=(p.tecnica||'');
-    const dims=document.createElement('div');    dims.className='dimens';  dims.textContent=(p.dimensao||p.tamanho||'');
-
-    const footerMeta=document.createElement('div'); footerMeta.className='meta-footer';
-    const left=document.createElement('div'); left.className='left-actions';
-    const right=document.createElement('div'); right.className='right-actions';
-
-    const heartBtn=document.createElement('button'); heartBtn.className='heart'; heartBtn.innerHTML='❤';
-    heartBtn.setAttribute('aria-label','Favoritar '+(p.titulo||'')); left.appendChild(heartBtn);
-
-    const addBtn=document.createElement('button'); addBtn.className='add-btn';
-    addBtn.textContent= selecionadas.has(p.id_peca)?'REMOVER':'ADICIONAR'; right.appendChild(addBtn);
-
-    footerMeta.appendChild(left); footerMeta.appendChild(right);
-
-    meta.appendChild(l1);
-    if (tecnica && tecnica.textContent) meta.appendChild(tecnica);
-    meta.appendChild(dims);
-    meta.appendChild(footerMeta);
-
-    post.appendChild(carousel);
-    post.appendChild(barWrap);
-    post.appendChild(meta);
-    list.appendChild(post);
-
-    // posição da barrinha vermelha
-    (function(car, posEl){
-      const slides = car.querySelectorAll('.carousel-slide');
-      const total = slides.length||1;
-      function updatePos(){
-        const idx = Math.round(car.scrollLeft / car.clientWidth);
-        posEl.style.width = (((idx+1)/Math.max(1,total))*100)+'%';
-      }
-      car.addEventListener('scroll', ()=>{ window.clearTimeout(car._t); car._t=setTimeout(updatePos,60); });
-      updatePos();
-    })(carousel, bar.querySelector('.pos'));
-
-    setTimeout(()=>setPricePadForPost(post),60);
-    applyFeedButtonBehavior(post,p);
-  });
-
-  section.appendChild(list);
-  app.appendChild(section);
-}
-
-/* ========================== RIFAS ======================= */
-function renderRifas(){
-  const app=document.getElementById('app'); app.innerHTML='';
-  const section=document.createElement('section'); section.id='rifas';
-  const grid=document.createElement('div'); grid.className='rifas';
-
-  rifas.forEach(r=>{
-    const disponivel = !r.status_rifa || String(r.status_rifa).trim()==='';
-
-    const btn=document.createElement('button');
-    btn.className='rifa-btn'+(disponivel?'':' sold');
-    const bg=r.hex_rifa||r.hex||'#777';
-    btn.style.backgroundColor=bg;
-    btn.style.color=getContrastColor(bg);
-    btn.dataset.id=r.id_rifa;
-
-    let label = (r.botao_rifa && String(r.botao_rifa).trim())
-                ? String(r.botao_rifa).trim()
-                : (r.numero || r.id_rifa || '').toString();
-    label = label.replace(/^\s*X\s*/i,'').trim();
-
-    btn.appendChild(formatRifaLabelDOM(label));
-    btn.setAttribute('aria-label', label);
-
-    if (disponivel){
-      btn.addEventListener('click', ()=>{
-        const isSelected = btn.classList.toggle('selected');
-        if (isSelected){
-          rifasSel.add(r.id_rifa);
-          btn.style.backgroundColor='#ffffff';
-          btn.style.color='#ff0000';
-          btn.style.borderColor='#ff0000';
-        } else {
-          rifasSel.delete(r.id_rifa);
-          btn.style.backgroundColor=bg;
-          btn.style.color=getContrastColor(bg);
-          btn.style.borderColor='';
-        }
-        updatePills(); calcularTotal(); maybeRefreshSelectedBar();
-      });
-    }
-
-    grid.appendChild(btn);
-  });
-
-  section.appendChild(grid);
-  app.appendChild(section);
-}
-
-/* ===================== NAVEGAÇÃO (hash) ================= */
-function showPage(page, opts={}){
-  const updateHash = (typeof opts.updateHash==='boolean')?opts.updateHash:true;
-  const pieceId = opts.pieceId||null;
-
-  if (page==='galeria') renderGaleria();
-  else if (page==='feed'){ renderFeed(); if (pieceId) setTimeout(()=>openFeedAt(pieceId),80); }
-  else if (page==='rifas') renderRifas();
-  else renderGaleria();
-
-  updatePills(); calcularTotal();
-
-  if (updateHash){
-    let newHash=page;
-    if (pieceId){ const q=new URLSearchParams(); q.set('p',pieceId); newHash=`${page}?${q.toString()}`; }
-    if (location.hash!=='#'+newHash) location.hash=newHash;
-  }
-}
-function parseHash(){
-  const raw=(location.hash||'').slice(1);
-  if (!raw) return {page:'galeria', params:new URLSearchParams()};
-  const [pagePart,query]=raw.split('?');
-  return { page: (pagePart||'galeria'), params: new URLSearchParams(query||'') };
-}
-function handleHashChange(){
-  const {page,params}=parseHash();
-  if (page==='feed'){
-    const p=params.get('p');
-    if (p) showPage('feed',{updateHash:false,pieceId:p});
-    else   showPage('feed',{updateHash:false});
-  } else if (page==='rifas'){
-    showPage('rifas',{updateHash:false});
-  } else {
-    showPage('galeria',{updateHash:false});
-  }
-}
-window.addEventListener('hashchange', handleHashChange);
-
-document.querySelectorAll('.nav a').forEach(a=>{
-  a.addEventListener('click', e=>{
-    const href=a.getAttribute('href')||'';
-    if (href.startsWith('#')){
-      e.preventDefault();
-      const target=href.slice(1);
-      location.hash = (target==='feed') ? 'feed' : target;
-    }
-  });
-});
-
-/* =================== Delegação do #app ================== */
-function attachAppDelegation(){
-  const app=document.getElementById('app');
-  app.addEventListener('click', (e)=>{
-    // clique na thumb da galeria -> abre feed na peça
-    const item=e.target.closest('.gal-item');
-    if (item){
-      const id=item.dataset.id;
-      if (id) location.hash='feed?p='+encodeURIComponent(id);
-      return;
-    }
-  });
-}
-
-/* =================== Checkout (footer) ================== */
-function attachBindings(){
-  // botão Finalizar (mantém o que você já tinha)
-  const checkoutBtn = document.getElementById('btnCheckout');
-  if (checkoutBtn){
-    checkoutBtn.onclick = (e) => {
-      e.preventDefault();
-      calcularTotal();
-      document.getElementById('app').innerHTML = `
-        <section id="checkout">
-          <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
-            <h2>Preencha seus dados</h2>
-            <label>Nome *</label><input id="nome" type="text" style="width:100%">
-            <label>E-mail *</label><input id="email" type="email" style="width:100%">
-            <label>Telefone</label><input id="telefone" type="tel" style="width:100%">
-            <div style="display:flex;gap:8px;margin-top:12px">
-              <button id="voltarCheckout" style="flex:1">Voltar</button>
-              <button id="prosseguirCheckout" style="flex:1;background:var(--red);color:#fff">Prosseguir</button>
-            </div>
-          </div>
-        </section>`;
-      document.getElementById('voltarCheckout').onclick = ()=> renderGaleria();
-      document.getElementById('prosseguirCheckout').onclick = ()=> {
-        const nome = document.getElementById('nome').value.trim();
-        const email = document.getElementById('email').value.trim();
-        if(!nome||!email){ alert('Preencha nome e e-mail'); return; }
-        document.getElementById('fNome').value = nome;
-        document.getElementById('fEmail').value = email;
-        document.getElementById('fTelefone').value = document.getElementById('telefone').value.trim();
-        document.getElementById('fPecas').value = [...selecionadas].join(',');
-        document.getElementById('fRifas').value = [...rifasSel].join(',');
-        document.getElementById('fFav').value = [...favoritos].join(',');
-        document.getElementById('fTotal').value = totalGeral.toFixed(2);
-        try{
-          const fd = new FormData();
-          fd.append('nome', nome);
-          fd.append('email', email);
-          fd.append('telefone', document.getElementById('telefone').value.trim());
-          fd.append('pecas', [...selecionadas].join(','));
-          fd.append('rifas', [...rifasSel].join(','));
-          fd.append('favoritas', [...favoritos].join(','));
-          fd.append('total', totalGeral.toFixed(2));
-          fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' });
-        }catch(e){}
-        document.getElementById('hiddenForm').submit();
-      };
-    };
-  }
-
-  // >>> NOVO: listeners das pílulas do rodapé para abrir a barra <<<
-  const pillP = document.getElementById('pillPecas');
-  const pillR = document.getElementById('pillRifas');
-  const pillF = document.getElementById('pillFav');
-
-  if (pillP) pillP.onclick = () => toggleSelectedBar('pecas');
-  if (pillR) pillR.onclick = () => toggleSelectedBar('rifas');
-  if (pillF) pillF.onclick = () => toggleSelectedBar('favoritas');
-
-}
-
-/* ========== MONITORA footer (apenas aviso em console) ========== */
-(function(){
-  const footer=document.querySelector('footer');
-  if (!footer) return;
-  const mo=new MutationObserver(()=>{
-    if(!document.getElementById('btnCheckout')){
-      console.warn('Footer alterado: btnCheckout ausente. Verifique alterações acidentais.');
-    }
-  });
-  mo.observe(footer,{childList:true,subtree:true});
-})();
-
-/* ============== BARRA DE ITENS SELECIONADOS ============== */
-/* DOM mínimo (se não existir, cria) */
-/* ============== BARRA DE ITENS SELECIONADOS ============== */
-
-/* Estado atual da barra (não duplique esta variável em outro ponto!) */
-let selectedBarMode = null;
-
-/* Garante que a barra exista (no seu HTML ela já existe), e liga o botão de fechar (se houver) */
-function ensureSelectedBarDOM(){
-  const bar   = document.getElementById('selectedBar');
-  const track = document.getElementById('selectedBarInner');
-  if (!bar || !track) return;
-
-  // (Opcional) se você quiser um botão fechar no futuro, capture aqui e ligue:
-  // const closeBtn = bar.querySelector('.sb-close'); if (closeBtn) closeBtn.addEventListener('click', hideSelectedBar);
-}
-
-/* Mostrar/ocultar usando a classe is-hidden (coerente com seu CSS) */
+// ===================== SELECTED BAR =====================
 function showSelectedBar(){
   const bar = document.getElementById('selectedBar');
-  if (!bar) return;
   bar.classList.remove('is-hidden');
-  bar.setAttribute('aria-hidden','false');
+  bar.setAttribute('aria-hidden', 'false');
 }
 
-/* Cartão compacto para PEÇAS e FAVORITAS */
-function buildSBCardForPiece(pieceId, fromSet){
-  const p = pecas.find(x => x.id_peca === pieceId);
-  if (!p) return null;
-
-  const first = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
-  const card = document.createElement('div');
-  card.className = 'sb-item';
-  card.dataset.id = pieceId;
-
-  const img = imgWithFallback('/img/tmb/' + first + '.avif');
-  img.className = 'sb-thumb';
-  img.alt = p.titulo || ('Peça ' + pieceId);
-  card.appendChild(img);
-
-  const x = document.createElement('button');
-  x.className = 'sb-remove';
-  x.textContent = 'X';
-  x.setAttribute('aria-label', 'Remover ' + (p.titulo || 'peça'));
-  x.addEventListener('click', () => {
-    if (fromSet === 'selecionadas') selecionadas.delete(pieceId);
-    else favoritos.delete(pieceId);
-    updatePills();
-    calcularTotal();
-    maybeRefreshSelectedBar();
-  });
-  card.appendChild(x);
-
-  return card;
+function hideSelectedBar(){
+  const bar = document.getElementById('selectedBar');
+  bar.classList.add('is-hidden');
+  bar.setAttribute('aria-hidden', 'true');
+  selectedBarMode = null;
 }
 
-/* Chip compacto para RIFAS (mesmo rótulo que o botão) */
-function buildSBChipForRifa(rifaId){
-  const r = rifasById.get(rifaId);
-  if (!r) return null;
-
-  const chip = document.createElement('button');
-  chip.className = 'sb-rifa';
-  chip.dataset.id = rifaId;
-
-  const bg = r.hex_rifa || r.hex || '#777';
-  chip.style.backgroundColor = bg;
-  chip.style.color = getContrastColor(bg);
-
-  const raw = (r.botao_rifa && String(r.botao_rifa).trim())
-    ? String(r.botao_rifa).trim()
-    : (r.numero || r.id_rifa || '').toString();
-
-  chip.appendChild(formatRifaLabelDOM(raw.replace(/^\s*X\s*/i, '').trim()));
-
-  chip.addEventListener('click', () => {
-    // Clicar no chip = desselecionar a rifa
-    rifasSel.delete(rifaId);
-    updatePills();
-    calcularTotal();
-    maybeRefreshSelectedBar();
-
-    // Também “desticar” o botão da rifa na página de rifas, se ela estiver visível
-    const btn = document.querySelector(`.rifa-btn[data-id="${CSS.escape(rifaId)}"]`);
-    if (btn){
-      const bg0 = r.hex_rifa || r.hex || '#777';
-      btn.classList.remove('selected');
-      btn.style.backgroundColor = bg0;
-      btn.style.color = getContrastColor(bg0);
-      btn.style.borderColor = '';
-    }
-  });
-
-  return chip;
-}
-
-
-/* Alterna a barra: se já está no mesmo modo e visível, recolhe; senão, abre/renderiza */
 function toggleSelectedBar(mode){
   const bar = document.getElementById('selectedBar');
-  if (!bar) return;
-
   const isHidden = bar.classList.contains('is-hidden');
   if (!isHidden && selectedBarMode === mode){
     hideSelectedBar();
@@ -885,13 +428,65 @@ function toggleSelectedBar(mode){
   renderSelectedBar(mode);
 }
 
+function buildSBCardForPiece(id, fromSet){
+  const p = pecas.find(x => x.id_peca === id);
+  if (!p) return null;
+  const first = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
+  const card = document.createElement('div');
+  card.className = 'sb-item';
+  card.dataset.id = id;
+
+  const img = imgWithFallback('/img/tmb/' + first + '.avif');
+  img.className = 'sb-thumb';
+  card.appendChild(img);
+
+  const x = document.createElement('button');
+  x.className = 'sb-remove';
+  x.textContent = 'X';
+  x.onclick = () => {
+    if (fromSet === 'selecionadas') selecionadas.delete(id);
+    else favoritos.delete(id);
+    updatePills(); calcularTotal(); maybeRefreshSelectedBar();
+  };
+  card.appendChild(x);
+  return card;
+}
+
+function buildSBChipForRifa(id){
+  const r = rifasById.get(id);
+  if (!r) return null;
+
+  const chip = document.createElement('button');
+  chip.className = 'sb-rifa';
+  chip.dataset.id = id;
+  const bg = r.hex_rifa || r.hex || '#777';
+  chip.style.backgroundColor = bg;
+  chip.style.color = getContrastColor(bg);
+
+  const label = (r.botao_rifa || r.numero || r.id_rifa || '').toString().replace(/^X\s*/i, '').trim();
+  const span = document.createElement('span');
+  span.className = 'ln1';
+  span.textContent = label;
+  chip.appendChild(span);
+
+  chip.onclick = () => {
+    rifasSel.delete(id);
+    updatePills(); calcularTotal(); maybeRefreshSelectedBar();
+    const btn = document.querySelector(`.rifa-btn[data-id="${id}"]`);
+    if (btn){
+      btn.classList.remove('selected');
+      btn.style.backgroundColor = bg;
+      btn.style.color = getContrastColor(bg);
+      btn.style.borderColor = '';
+    }
+  };
+  return chip;
+}
+
 function renderSelectedBar(mode){
-  const bar = document.getElementById('selectedBar');
   const track = document.getElementById('selectedBarInner');
-  if (!bar || !track) return;
-
-  track.innerHTML = ''; // limpa
-
+  if (!track) return;
+  track.innerHTML = '';
   if (mode === 'pecas'){
     [...selecionadas].forEach(id => {
       const el = buildSBCardForPiece(id, 'selecionadas');
@@ -899,7 +494,7 @@ function renderSelectedBar(mode){
     });
   } else if (mode === 'favoritas'){
     [...favoritos].forEach(id => {
-      const el = buildSBCardForPiece(id, 'favoritos');
+      const el = buildSBCardForPiece(id, 'favoritas');
       if (el) track.appendChild(el);
     });
   } else if (mode === 'rifas'){
@@ -908,43 +503,40 @@ function renderSelectedBar(mode){
       if (el) track.appendChild(el);
     });
   }
-
   selectedBarMode = mode;
   showSelectedBar();
 }
 
+// ================ INIT E BINDINGS ====================
+function attachBindings(){
+  document.getElementById('pillPecas').onclick = () => toggleSelectedBar('pecas');
+  document.getElementById('pillRifas').onclick = () => toggleSelectedBar('rifas');
+  document.getElementById('pillFav').onclick   = () => toggleSelectedBar('favoritas');
+}
 
-/* =========================== INIT ======================= */
 async function init(){
-  try{
-    // zera favoritos persistidos (conforme pedido em versões anteriores)
+  try {
     localStorage.removeItem('BSTV_FAV'); favoritos.clear();
 
     const [rp, rr] = await Promise.all([
-      fetch(PECAS_JSON_URL,{cache:'no-store'}),
-      fetch(RIFAS_JSON_URL,{cache:'no-store'})
+      fetch(PECAS_JSON_URL, { cache: 'no-store' }),
+      fetch(RIFAS_JSON_URL, { cache: 'no-store' })
     ]);
-    if(!rp.ok||!rr.ok) throw new Error('Falha ao carregar JSONs');
-
     pecas = await rp.json();
     rifas = await rr.json();
-    rifasById = new Map(rifas.map(r=>[r.id_rifa, r]));
+    rifasById = new Map(rifas.map(r => [r.id_rifa, r]));
 
-    renderGaleria();
-    attachAppDelegation();
     attachBindings();
-    ensureSelectedBarDOM();
-
-    updatePills(); calcularTotal();
-    handleHashChange(); // processa deep-link inicial (#feed?p=ID etc.)
-  }catch(e){
-    console.error('Init error', e);
-    document.getElementById('app').innerHTML =
-      '<div style="padding:20px;color:#900;">Erro ao carregar dados. Veja o console.</div>';
+    updatePills();
+    calcularTotal();
+  } catch (e) {
+    console.error('Erro ao carregar dados:', e);
+    document.getElementById('app').innerHTML = '<p style="padding:20px;color:#900;">Erro ao carregar dados.</p>';
   }
 }
 window.addEventListener('DOMContentLoaded', init);
 </script>
+
 
 
 </body>
