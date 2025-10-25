@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BSTV (v. 12) — Safe header/footer</title>
+<title>BORA18?</title>
 
 <!-- ====== STYLES (preserve visual look of v08) ====== -->
 <style>
@@ -273,22 +273,10 @@
   .total-display{font-weight:700;margin-left:12px}
 
 /* ===== Barra de selecionados ===== */
-#selectedBar{
-  position: sticky; bottom: calc(48px + 8px); /* acima do rodapé; ajuste 48px se seu footer for diferente */
-  z-index: 9;
-  background: #ffffff;
+#selectedBar{ position: sticky; bottom: calc(48px + 8px);
+  z-index: 18;
+  background: #bebab0;
   border: 1px solid var(--ink);
-  padding: 8px 10px;
-  max-height: calc(3 * 48px); /* no máx. triplo da altura do rodapé */
-  overflow: hidden;
-}
-#selectedBar .sel-wrap{display:flex;flex-direction:column;gap:8px}
-#selectedBar .sel-strip{
-  display:flex; gap:8px;
-  overflow-x:auto;
-  padding-bottom:4px;
-  scroll-snap-type:x proximity;
-  border-bottom: 3px solid var(--red); /* trilho vermelho sempre visível */
 }
 
 /* chip de peça/favorita (miniatura + X) */
@@ -323,7 +311,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">torceni</div>
+      <div class="logo">boradezoitaaaao</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -744,48 +732,63 @@ function attachAppDelegation(){
 
 /* =================== Checkout (footer) ================== */
 function attachBindings(){
-  const checkoutBtn=document.getElementById('btnCheckout');
-  if (!checkoutBtn) return;
-  checkoutBtn.onclick=(e)=>{
-    e.preventDefault();
-    calcularTotal();
-    document.getElementById('app').innerHTML = `
-      <section id="checkout">
-        <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
-          <h2>Preencha seus dados</h2>
-          <label>Nome *</label><input id="nome" type="text" style="width:100%">
-          <label>E-mail *</label><input id="email" type="email" style="width:100%">
-          <label>Telefone</label><input id="telefone" type="tel" style="width:100%">
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <button id="voltarCheckout" style="flex:1">Voltar</button>
-            <button id="prosseguirCheckout" style="flex:1;background:var(--red);color:#fff">Prosseguir</button>
+  // botão Finalizar (mantém o que você já tinha)
+  const checkoutBtn = document.getElementById('btnCheckout');
+  if (checkoutBtn){
+    checkoutBtn.onclick = (e) => {
+      e.preventDefault();
+      calcularTotal();
+      document.getElementById('app').innerHTML = `
+        <section id="checkout">
+          <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
+            <h2>Preencha seus dados</h2>
+            <label>Nome *</label><input id="nome" type="text" style="width:100%">
+            <label>E-mail *</label><input id="email" type="email" style="width:100%">
+            <label>Telefone</label><input id="telefone" type="tel" style="width:100%">
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button id="voltarCheckout" style="flex:1">Voltar</button>
+              <button id="prosseguirCheckout" style="flex:1;background:var(--red);color:#fff">Prosseguir</button>
+            </div>
           </div>
-        </div>
-      </section>`;
-    document.getElementById('voltarCheckout').onclick=()=> showPage('galeria');
-    document.getElementById('prosseguirCheckout').onclick=()=>{
-      const nome=(document.getElementById('nome').value||'').trim();
-      const email=(document.getElementById('email').value||'').trim();
-      if (!nome||!email){ alert('Preencha nome e e-mail'); return; }
-      document.getElementById('fNome').value=nome;
-      document.getElementById('fEmail').value=email;
-      document.getElementById('fTelefone').value=(document.getElementById('telefone').value||'').trim();
-      document.getElementById('fPecas').value=[...selecionadas].join(',');
-      document.getElementById('fRifas').value=[...rifasSel].join(',');
-      document.getElementById('fFav').value=[...favoritos].join(',');
-      document.getElementById('fTotal').value=totalGeral.toFixed(2);
-      try{
-        const fd=new FormData();
-        fd.append('nome',nome); fd.append('email',email);
-        fd.append('telefone', (document.getElementById('telefone').value||'').trim());
-        fd.append('pecas',[...selecionadas].join(',')); fd.append('rifas',[...rifasSel].join(','));
-        fd.append('favoritas',[...favoritos].join(',')); fd.append('total', totalGeral.toFixed(2));
-        fetch(GAS_URL,{method:'POST',body:fd,mode:'no-cors'});
-      }catch(_){}
-      document.getElementById('hiddenForm').submit();
+        </section>`;
+      document.getElementById('voltarCheckout').onclick = ()=> renderGaleria();
+      document.getElementById('prosseguirCheckout').onclick = ()=> {
+        const nome = document.getElementById('nome').value.trim();
+        const email = document.getElementById('email').value.trim();
+        if(!nome||!email){ alert('Preencha nome e e-mail'); return; }
+        document.getElementById('fNome').value = nome;
+        document.getElementById('fEmail').value = email;
+        document.getElementById('fTelefone').value = document.getElementById('telefone').value.trim();
+        document.getElementById('fPecas').value = [...selecionadas].join(',');
+        document.getElementById('fRifas').value = [...rifasSel].join(',');
+        document.getElementById('fFav').value = [...favoritos].join(',');
+        document.getElementById('fTotal').value = totalGeral.toFixed(2);
+        try{
+          const fd = new FormData();
+          fd.append('nome', nome);
+          fd.append('email', email);
+          fd.append('telefone', document.getElementById('telefone').value.trim());
+          fd.append('pecas', [...selecionadas].join(','));
+          fd.append('rifas', [...rifasSel].join(','));
+          fd.append('favoritas', [...favoritos].join(','));
+          fd.append('total', totalGeral.toFixed(2));
+          fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' });
+        }catch(e){}
+        document.getElementById('hiddenForm').submit();
+      };
     };
-  };
+  }
+
+  // >>> NOVO: listeners das pílulas do rodapé para abrir a barra <<<
+  const pillP = document.getElementById('pillPecas');
+  const pillR = document.getElementById('pillRifas');
+  const pillF = document.getElementById('pillFav');
+
+  if (pillP) pillP.addEventListener('click', (ev)=>{ ev.preventDefault(); toggleSelectedBar('pecas'); });
+  if (pillR) pillR.addEventListener('click', (ev)=>{ ev.preventDefault(); toggleSelectedBar('rifas'); });
+  if (pillF) pillF.addEventListener('click', (ev)=>{ ev.preventDefault(); toggleSelectedBar('favoritas'); });
 }
+
 
 /* ========== MONITORA footer (apenas aviso em console) ========== */
 (function(){
@@ -884,10 +887,36 @@ function renderSelectedBar(mode){
 
   showSelectedBar();
 }
-function toggleSelectedBar(mode){
-  if (selectedBarMode===mode) hideSelectedBar();
-  else renderSelectedBar(mode);
+// estado da barra e utilitários
+let selectedBarMode = null;
+
+function showSelectedBar(){
+  const bar = document.getElementById('selectedBar');
+  if (!bar) return;
+  bar.removeAttribute('hidden');        // <- mostra de verdade
+  bar.classList.add('open');            // opcional (se seu CSS usa)
 }
+
+function hideSelectedBar(){
+  const bar = document.getElementById('selectedBar');
+  if (!bar) return;
+  bar.setAttribute('hidden','');        // <- esconde de verdade
+  bar.classList.remove('open');
+  selectedBarMode = null;
+}
+
+function toggleSelectedBar(mode){
+  const bar = document.getElementById('selectedBar');
+  if (!bar) return;
+  if (selectedBarMode === mode && !bar.hasAttribute('hidden')){
+    hideSelectedBar();
+    return;
+  }
+  selectedBarMode = mode;
+  renderSelectedBar(mode);  // repovoa a faixa
+  showSelectedBar();
+}
+
 
 /* =========================== INIT ======================= */
 async function init(){
