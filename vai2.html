@@ -62,7 +62,7 @@
   .carousel{
     display:flex;gap:var(--gap-xxs);
     overflow-x:auto;scroll-snap-type:x mandatory;
-    padding:0;border-bottom:var(--bd-thin) solid var(--ink);
+    padding:0;
     /* barra de rolagem inferior sempre visível e vermelha */
     scrollbar-color: var(--red) transparent;
   }
@@ -71,9 +71,8 @@
   .carousel::-webkit-scrollbar-thumb{background:var(--red)}
   .carousel-slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center}
   .carousel-slide img{
-    width:100%; max-height:66vh; min-height:200px;
-    object-fit:contain; background:#000;
-    border:var(--bd-thin) solid var(--ink);
+    width:100%; max-height:42vh; min-height:200px;
+    object-fit:contain; background:var(--beige);
   }
   /* remove a barra de progresso antiga */
   .carousel-bar-wrap{display:none!important}
