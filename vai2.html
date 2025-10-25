@@ -281,7 +281,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">afelele</div>
+      <div class="logo">only an expert?</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -885,6 +885,33 @@ function toggleSelectedBar(mode){
   renderSelectedBar(mode);
 }
 
+function renderSelectedBar(mode){
+  const bar = document.getElementById('selectedBar');
+  const track = document.getElementById('selectedBarInner');
+  if (!bar || !track) return;
+
+  track.innerHTML = ''; // limpa
+
+  if (mode === 'pecas'){
+    [...selecionadas].forEach(id => {
+      const el = buildSBCardForPiece(id, 'selecionadas');
+      if (el) track.appendChild(el);
+    });
+  } else if (mode === 'favoritas'){
+    [...favoritos].forEach(id => {
+      const el = buildSBCardForPiece(id, 'favoritos');
+      if (el) track.appendChild(el);
+    });
+  } else if (mode === 'rifas'){
+    [...rifasSel].forEach(id => {
+      const el = buildSBChipForRifa(id);
+      if (el) track.appendChild(el);
+    });
+  }
+
+  selectedBarMode = mode;
+  showSelectedBar();
+}
 
 
 /* =========================== INIT ======================= */
