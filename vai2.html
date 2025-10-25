@@ -337,33 +337,21 @@
 
   <!-- ====== SCRIPT: modular renderers, event delegation, footer bindings ====== -->
 <script>
-// ======================== CONFIG ========================
 const PECAS_JSON_URL = 'https://betshoptv.com/dados/pecas.json';
 const RIFAS_JSON_URL = 'https://betshoptv.com/dados/rifas.json';
 const GAS_URL        = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
 
-// ======================== STATE =========================
-let pecas = [];
-let rifas = [];
-let rifasById = new Map();
+let pecas = [], rifas = [], rifasById = new Map();
+const selecionadas = new Set(), rifasSel = new Set(), favoritos = new Set();
+let totalGeral = 0, selectedBarMode = null;
 
-const selecionadas = new Set();
-const rifasSel     = new Set();
-const favoritos    = new Set();
-
-let totalGeral = 0;
-let selectedBarMode = null;
-
-// ======================== HELPERS =======================
-const fmt = v => 'R$ ' + Number(v || 0).toFixed(2).replace('.', ',');
+const fmt = v => 'R$ ' + Number(v||0).toFixed(2).replace('.',',');
 
 function imgWithFallback(src){
   const img = new Image();
   img.loading = 'lazy';
   img.src = src;
-  img.onerror = () => {
-    if(src.endsWith('.avif')) img.src = src.replace('.avif','.jpg');
-  };
+  img.onerror = () => { if(src.endsWith('.avif')) img.src = src.replace('.avif','.jpg'); };
   return img;
 }
 
@@ -371,13 +359,13 @@ const getContrastColor = (hexColor) => {
   try {
     if (!hexColor) return '#2b2424';
     let s = hexColor.trim().replace(/^#/, '');
-    if (s.length === 3) s = s.split('').map(c => c+c).join('');
-    const r = parseInt(s.substring(0,2), 16);
-    const g = parseInt(s.substring(2,4), 16);
-    const b = parseInt(s.substring(4,6), 16);
-    const yiq = ((r*299)+(g*587)+(b*114))/1000;
+    if (s.length === 3) s = s.split('').map(c => c + c).join('');
+    const r = parseInt(s.substring(0, 2), 16);
+    const g = parseInt(s.substring(2, 4), 16);
+    const b = parseInt(s.substring(4, 6), 16);
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
     return yiq >= 128 ? '#2b2424' : '#ffffff';
-  } catch {
+  } catch (e) {
     return '#2b2424';
   }
 };
@@ -385,16 +373,16 @@ const getContrastColor = (hexColor) => {
 function updatePills(){
   document.getElementById('pillPecas').textContent = 'Peças: ' + selecionadas.size;
   document.getElementById('pillRifas').textContent = 'Rifas: ' + rifasSel.size;
-  document.getElementById('pillFav').textContent   = 'Favoritas: ' + favoritos.size;
+  document.getElementById('pillFav').textContent = 'Favoritas: ' + favoritos.size;
 }
 
 function calcularTotal(){
   let total = 0;
-  selecionadas.forEach(id => {
-    const p = pecas.find(x => x.id_peca === id);
+  selecionadas.forEach(id=>{
+    const p = pecas.find(x=>x.id_peca===id);
     if (p && p.preco) total += parseFloat(p.preco);
   });
-  total += rifasSel.size % 2 === 0 ? 25 * rifasSel.size : 25 * (rifasSel.size - 1) + 30;
+  total += (rifasSel.size % 2 === 0) ? 25 * rifasSel.size : 25 * (rifasSel.size - 1) + 30;
   totalGeral = total;
   document.querySelector('.total-display').textContent = 'Total: ' + fmt(total);
   document.getElementById('fTotal').value = total.toFixed(2);
@@ -404,28 +392,58 @@ function maybeRefreshSelectedBar(){
   if (selectedBarMode) renderSelectedBar(selectedBarMode);
 }
 
-// ===================== SELECTED BAR =====================
 function showSelectedBar(){
   const bar = document.getElementById('selectedBar');
-  bar.classList.remove('is-hidden');
-  bar.setAttribute('aria-hidden', 'false');
+  if (bar){
+    bar.classList.remove('is-hidden');
+    bar.setAttribute('aria-hidden','false');
+  }
 }
 
 function hideSelectedBar(){
   const bar = document.getElementById('selectedBar');
-  bar.classList.add('is-hidden');
-  bar.setAttribute('aria-hidden', 'true');
+  if (bar){
+    bar.classList.add('is-hidden');
+    bar.setAttribute('aria-hidden','true');
+  }
   selectedBarMode = null;
 }
 
 function toggleSelectedBar(mode){
   const bar = document.getElementById('selectedBar');
+  if (!bar) return;
   const isHidden = bar.classList.contains('is-hidden');
   if (!isHidden && selectedBarMode === mode){
     hideSelectedBar();
     return;
   }
   renderSelectedBar(mode);
+}
+
+function renderSelectedBar(mode){
+  const track = document.getElementById('selectedBarInner');
+  if (!track) return;
+  track.innerHTML = '';
+
+  if (mode === 'pecas'){
+    [...selecionadas].forEach(id => {
+      const el = buildSBCardForPiece(id, 'selecionadas');
+      if (el) track.appendChild(el);
+    });
+  } else if (mode === 'favoritas'){
+    [...favoritos].forEach(id => {
+      const el = buildSBCardForPiece(id, 'favoritos');
+      if (el) track.appendChild(el);
+    });
+  } else if (mode === 'rifas'){
+    [...rifasSel].forEach(id => {
+      const el = buildSBChipForRifa(id);
+      if (el) track.appendChild(el);
+    });
+  }
+
+  selectedBarMode = mode;
+  showSelectedBar();
 }
 
 function buildSBCardForPiece(id, fromSet){
@@ -449,6 +467,7 @@ function buildSBCardForPiece(id, fromSet){
     updatePills(); calcularTotal(); maybeRefreshSelectedBar();
   };
   card.appendChild(x);
+
   return card;
 }
 
@@ -459,15 +478,11 @@ function buildSBChipForRifa(id){
   const chip = document.createElement('button');
   chip.className = 'sb-rifa';
   chip.dataset.id = id;
+
   const bg = r.hex_rifa || r.hex || '#777';
   chip.style.backgroundColor = bg;
   chip.style.color = getContrastColor(bg);
-
-  const label = (r.botao_rifa || r.numero || r.id_rifa || '').toString().replace(/^X\s*/i, '').trim();
-  const span = document.createElement('span');
-  span.className = 'ln1';
-  span.textContent = label;
-  chip.appendChild(span);
+  chip.textContent = (r.botao_rifa || r.numero || r.id_rifa || '').toString().replace(/^X\s*/i, '').trim();
 
   chip.onclick = () => {
     rifasSel.delete(id);
@@ -480,38 +495,237 @@ function buildSBChipForRifa(id){
       btn.style.borderColor = '';
     }
   };
+
   return chip;
 }
-
-function renderSelectedBar(mode){
-  const track = document.getElementById('selectedBarInner');
-  if (!track) return;
-  track.innerHTML = '';
-  if (mode === 'pecas'){
-    [...selecionadas].forEach(id => {
-      const el = buildSBCardForPiece(id, 'selecionadas');
-      if (el) track.appendChild(el);
-    });
-  } else if (mode === 'favoritas'){
-    [...favoritos].forEach(id => {
-      const el = buildSBCardForPiece(id, 'favoritas');
-      if (el) track.appendChild(el);
-    });
-  } else if (mode === 'rifas'){
-    [...rifasSel].forEach(id => {
-      const el = buildSBChipForRifa(id);
-      if (el) track.appendChild(el);
-    });
-  }
-  selectedBarMode = mode;
-  showSelectedBar();
-}
-
-// ================ INIT E BINDINGS ====================
 function attachBindings(){
   document.getElementById('pillPecas').onclick = () => toggleSelectedBar('pecas');
   document.getElementById('pillRifas').onclick = () => toggleSelectedBar('rifas');
-  document.getElementById('pillFav').onclick   = () => toggleSelectedBar('favoritas');
+  document.getElementById('pillFav').onclick = () => toggleSelectedBar('favoritas');
+
+  document.getElementById('btnCheckout').onclick = () => {
+    calcularTotal();
+    document.getElementById('app').innerHTML = `
+      <section id="checkout">
+        <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
+          <h2>Preencha seus dados</h2>
+          <label>Nome *</label><input id="nome" type="text" style="width:100%">
+          <label>E-mail *</label><input id="email" type="email" style="width:100%">
+          <label>Telefone</label><input id="telefone" type="tel" style="width:100%">
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button id="voltarCheckout" style="flex:1">Voltar</button>
+            <button id="prosseguirCheckout" style="flex:1;background:var(--red);color:#fff">Prosseguir</button>
+          </div>
+        </div>
+      </section>
+    `;
+
+    document.getElementById('voltarCheckout').onclick = () => renderGaleria();
+    document.getElementById('prosseguirCheckout').onclick = () => {
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      if (!nome || !email){
+        alert('Preencha nome e e-mail');
+        return;
+      }
+
+      document.getElementById('fNome').value = nome;
+      document.getElementById('fEmail').value = email;
+      document.getElementById('fTelefone').value = document.getElementById('telefone').value.trim();
+      document.getElementById('fPecas').value = [...selecionadas].join(',');
+      document.getElementById('fRifas').value = [...rifasSel].join(',');
+      document.getElementById('fFav').value = [...favoritos].join(',');
+      document.getElementById('fTotal').value = totalGeral.toFixed(2);
+
+      try {
+        const fd = new FormData();
+        fd.append('nome', nome);
+        fd.append('email', email);
+        fd.append('telefone', document.getElementById('telefone').value.trim());
+        fd.append('pecas', [...selecionadas].join(','));
+        fd.append('rifas', [...rifasSel].join(','));
+        fd.append('favoritas', [...favoritos].join(','));
+        fd.append('total', totalGeral.toFixed(2));
+        fetch(GAS_URL, { method: 'POST', body: fd, mode: 'no-cors' });
+      } catch (e) {}
+
+      document.getElementById('hiddenForm').submit();
+    };
+  };
+}
+
+function renderGaleria(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  const section = document.createElement('section');
+  section.id = 'galeria';
+  const masonry = document.createElement('div');
+  masonry.className = 'galeria';
+  masonry.id = 'masonryGallery';
+
+  pecas.forEach(p => {
+    if (String(p.status).toUpperCase() === 'VENDIDAAA') return;
+    const item = document.createElement('div');
+    item.className = 'gal-item';
+    item.dataset.id = p.id_peca;
+    const first = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
+    const img = imgWithFallback('/img/tmb/' + first + '.avif');
+    img.alt = p.titulo || ('Peça ' + p.id_peca);
+    item.appendChild(img);
+    masonry.appendChild(item);
+  });
+
+  section.appendChild(masonry);
+  app.appendChild(section);
+}
+
+function renderRifas(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  const section = document.createElement('section');
+  section.id = 'rifas';
+  const grid = document.createElement('div');
+  grid.className = 'rifas';
+
+  rifas.forEach(r => {
+    const disponivel = !r.status_rifa || String(r.status_rifa).trim() === '';
+    const btn = document.createElement('button');
+    btn.className = 'rifa-btn' + (disponivel ? '' : ' sold');
+    const bg = r.hex_rifa || r.hex || '#777';
+    btn.style.backgroundColor = bg;
+    btn.style.color = getContrastColor(bg);
+    btn.dataset.id = r.id_rifa;
+    const label = (r.botao_rifa || r.numero || r.id_rifa || '').toString().replace(/^X\s*/i, '').trim();
+    btn.textContent = label;
+
+    if (disponivel){
+      btn.onclick = () => {
+        const selected = btn.classList.toggle('selected');
+        if (selected) {
+          rifasSel.add(r.id_rifa);
+          btn.style.backgroundColor = '#ffffff';
+          btn.style.color = '#ff0000';
+          btn.style.borderColor = '#ff0000';
+        } else {
+          rifasSel.delete(r.id_rifa);
+          btn.style.backgroundColor = bg;
+          btn.style.color = getContrastColor(bg);
+          btn.style.borderColor = '';
+        }
+        updatePills(); calcularTotal(); maybeRefreshSelectedBar();
+      };
+    }
+
+    grid.appendChild(btn);
+  });
+
+  section.appendChild(grid);
+  app.appendChild(section);
+}
+
+function renderFeed(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  const section = document.createElement('section');
+  section.id = 'feed';
+  const list = document.createElement('div');
+  list.className = 'feed';
+
+  pecas.forEach(p => {
+    if (String(p.status).toUpperCase() === 'VENDIDAAA') return;
+
+    const post = document.createElement('article');
+    post.className = 'post';
+    post.id = 'post-' + p.id_peca;
+
+    const carousel = document.createElement('div');
+    carousel.className = 'carousel';
+    (Array.isArray(p.imagens) ? p.imagens : []).forEach(name => {
+      const slide = document.createElement('div');
+      slide.className = 'carousel-slide';
+      const img = imgWithFallback('/img/otm/' + name + '.avif');
+      slide.appendChild(img);
+      carousel.appendChild(slide);
+    });
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    const l1 = document.createElement('div');
+    l1.className = 'linha1';
+    const title = document.createElement('div');
+    title.className = 'titulo';
+    title.textContent = p.titulo || ('Peça ' + p.id_peca);
+    const price = document.createElement('div');
+    price.className = 'preco';
+    price.textContent = fmt(p.preco);
+    l1.appendChild(title); l1.appendChild(price);
+
+    const tecnica = document.createElement('div');
+    tecnica.className = 'tecnica';
+    tecnica.textContent = p.tecnica || '';
+
+    const dims = document.createElement('div');
+    dims.className = 'dimens';
+    dims.textContent = p.dimensao || p.tamanho || '';
+
+    const footerMeta = document.createElement('div');
+    footerMeta.className = 'meta-footer';
+    const left = document.createElement('div');
+    left.className = 'left-actions';
+    const right = document.createElement('div');
+    right.className = 'right-actions';
+
+    const heartBtn = document.createElement('button');
+    heartBtn.className = 'heart';
+    heartBtn.innerHTML = '❤';
+    heartBtn.onclick = () => {
+      if (favoritos.has(p.id_peca)){
+        favoritos.delete(p.id_peca);
+        heartBtn.classList.remove('selected');
+      } else {
+        favoritos.add(p.id_peca);
+        heartBtn.classList.add('selected');
+      }
+      updatePills(); maybeRefreshSelectedBar();
+    };
+
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-btn';
+    addBtn.textContent = selecionadas.has(p.id_peca) ? 'REMOVER' : 'ADICIONAR';
+    addBtn.onclick = () => {
+      const selected = selecionadas.has(p.id_peca);
+      if (selected){
+        selecionadas.delete(p.id_peca);
+        addBtn.textContent = 'ADICIONAR';
+        addBtn.classList.remove('selected');
+      } else {
+        selecionadas.add(p.id_peca);
+        addBtn.textContent = 'REMOVER';
+        addBtn.classList.add('selected');
+      }
+      updatePills(); calcularTotal(); maybeRefreshSelectedBar();
+    };
+
+    if (favoritos.has(p.id_peca)) heartBtn.classList.add('selected');
+    if (selecionadas.has(p.id_peca)) addBtn.classList.add('selected');
+
+    left.appendChild(heartBtn);
+    right.appendChild(addBtn);
+    footerMeta.appendChild(left);
+    footerMeta.appendChild(right);
+
+    meta.appendChild(l1);
+    if (tecnica.textContent) meta.appendChild(tecnica);
+    meta.appendChild(dims);
+    meta.appendChild(footerMeta);
+
+    post.appendChild(carousel);
+    post.appendChild(meta);
+    list.appendChild(post);
+  });
+
+  section.appendChild(list);
+  app.appendChild(section);
 }
 
 async function init(){
@@ -519,23 +733,28 @@ async function init(){
     localStorage.removeItem('BSTV_FAV'); favoritos.clear();
 
     const [rp, rr] = await Promise.all([
-      fetch(PECAS_JSON_URL, { cache: 'no-store' }),
-      fetch(RIFAS_JSON_URL, { cache: 'no-store' })
+      fetch(PECAS_JSON_URL,{cache:'no-store'}),
+      fetch(RIFAS_JSON_URL,{cache:'no-store'})
     ]);
+
+    if (!rp.ok || !rr.ok) throw new Error('Falha ao carregar JSONs');
+
     pecas = await rp.json();
     rifas = await rr.json();
     rifasById = new Map(rifas.map(r => [r.id_rifa, r]));
 
+    renderGaleria();
     attachBindings();
     updatePills();
     calcularTotal();
-  } catch (e) {
-    console.error('Erro ao carregar dados:', e);
-    document.getElementById('app').innerHTML = '<p style="padding:20px;color:#900;">Erro ao carregar dados.</p>';
+  } catch (e){
+    console.error('Erro na inicialização', e);
+    document.getElementById('app').innerHTML = '<div style="padding:20px;color:#900;">Erro ao carregar dados.</div>';
   }
 }
 window.addEventListener('DOMContentLoaded', init);
 </script>
+
 
 
 
