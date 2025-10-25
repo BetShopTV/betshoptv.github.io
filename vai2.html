@@ -7,228 +7,167 @@
 
 <!-- ====== STYLES (preserve visual look of v08) ====== -->
 <style>
-/* ========= TOKENS ========= */
-:root{
-  --bg: #bebab0;           /* fundo principal do site */
-  --ink:#2b2424;           /* texto/base */
-  --red:#ff0000;           /* destaque */
-  --beige:#f6f2e9;
+  :root{
+    --red:#ff0000; --ink:#2b2424; --beige:#bebab0; --white:#ffffff;
+    --bd-thin:1px; --bd-thick:2px;
+    --ff-cta:"Roboto Condensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --fs-h1:clamp(1.4rem,3vw,2rem); --fs-h2:clamp(1.1rem,2vw,1.4rem);
+    --fs-p:clamp(.9rem,1.2vw,1rem); --fs-sm:clamp(.78rem,1vw,.9rem);
+    --gap-xxs:4px; --gap-xs:6px; --gap-s:8px; --gap-m:12px; --gap-l:16px;
+    --app-max-width:1200px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);-webkit-font-smoothing:antialiased}
+  /* Header (unchanged visually from v08) */
+  header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;border-bottom:var(--bd-thick) solid var(--ink);}
+  .hdr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px}
+  .logo{font:700 var(--fs-h2)/1 var(--ff-cta);text-transform:uppercase;}
+  .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .nav a{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 10px;border:var(--bd-thin) solid #fff;color:#fff;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase}
+  .nav a:hover{background:#fff;color:var(--ink)}
+  /* main#app (mountpoint) */
+  main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 16px; min-height:60vh;}
+  section{margin-bottom:24px}
+  h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
 
-  --bd-thin:1px;
-  --bd-thick:2px;
-
-  --gap-xxs:4px;
-  --gap-xs:6px;
-  --gap-s:10px;
-
-  --fs-sm:14px;
-  --ff-cta: "Roboto Condensed", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-  --app-max-width: 1280px;
+/* ==== Galeria: Masonry (Pinterest-like) ==== */
+/* Usamos CSS columns para criar masonry simples e responsivo */
+.galeria {
+  column-gap: 4px;
+  -webkit-column-gap: 4px;
+  /* mobile first: 2 colunas */
+  column-count: 3;
+  -webkit-column-count: 3;
+  padding: 0;
+  margin: 0;
 }
 
-/* Roboto Condensed Medium do seu repositório */
-@font-face{
-  font-family:"Roboto Condensed";
-  src:url("/fonts/Roboto_Condensed-Medium.woff2") format("woff2");
-  font-weight:500;
-  font-style:normal;
-  font-display:swap;
-}
-
-/* ========= RESETA/BASE ========= */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.35 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
-
-/* Links do header (se existirem) */
-.nav a{display:inline-block;padding:10px 12px;color:#fff;text-decoration:none}
-
-/* ========= GALERIA (MASONRY, SEMPRE 3 COLUNAS) ========= */
-.galeria{
-  column-count:3;
-  -webkit-column-count:3;
-  column-gap: var(--gap-xs);
-  max-width: var(--app-max-width);
-  margin: 0 auto;
-  padding: var(--gap-s);
-}
-.gal-item{
-  break-inside: avoid;
+/* Cada item flui nas colunas */
+.gal-item {
+  display: inline-block;        /* inline-block para fluir nas colunas */
+  width: 100%;                  /* ocupa 100% da coluna */
+  margin: 0 0 1px;             /* espaço vertical entre itens */
+  break-inside: avoid;          /* evita quebrar o item entre colunas */
   -webkit-column-break-inside: avoid;
-  margin: 0 0 var(--gap-xs);
-  border:var(--bd-thin) solid var(--ink);
-  background:#fff;
-  overflow:hidden;
-}
-.gal-item img{
-  display:block;
-  width:100%;
-  height:auto;               /* mantém proporção natural */
-  object-fit:cover;          /* corta sem deformar quando necessário */
-  background:#000;
-}
-/* Oculta qualquer título/legenda sob os thumbs na galeria */
-.gal-item .ttl{display:none !important}
-
-/* ========= FEED / POSTS ========= */
-.feed{
-  display:flex;
-  flex-direction:column;
-  gap:var(--gap-s);
-  max-width: var(--app-max-width);
-  margin: 0 auto;
-  padding: var(--gap-s);
-}
-.post{
-  border:var(--bd-thin) solid var(--ink);
-  background:#fff;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
+  box-sizing: border-box;
+  border: var(--bd-thin) solid var(--ink);
+  background: #fff;
+  overflow: hidden;
 }
 
-/* Carrossel horizontal com “scrollbar” vermelha sempre visível */
-.carousel{
-  display:flex;
-  gap:var(--gap-xxs);
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  padding:0;
-}
-.carousel-slide{
-  flex:0 0 100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  scroll-snap-align:center;
-}
-.carousel-slide img{
-  width:100%;
-  max-height:66vh;           /* altura máx. 66% da tela */
-  min-height:200px;
-  object-fit:contain;        /* nunca deforma a imagem */
-  display:block;
-  border:var(--bd-thin) solid var(--ink);
-  background:#000;           /* fallback de loading */
+/* Thumb: ocupa largura total da coluna e respeita proporção */
+.gal-item img {
+  display: block;
+  width: 100%;
+  height: auto;                /* mantém proporção natural */
+  object-fit: cover;           /* corta se necessário, sem deformar */
+  vertical-align: middle;
+  background: #000;
 }
 
-/* Scrollbar do carrossel (WebKit) */
-.carousel::-webkit-scrollbar{height:6px}
-.carousel::-webkit-scrollbar-track{background:#ddd}
-.carousel::-webkit-scrollbar-thumb{background:var(--red)}
-/* Firefox */
-.carousel{scrollbar-color: var(--red) #ddd; scrollbar-width: thin}
+/* Remove o título que aparecia por baixo - garante que não mostre */
+.gal-item .ttl { display: none !important; }
 
-/* Meta (título / preço / técnica / dimensões / ações) */
-.meta{padding:10px;display:flex;flex-direction:column;gap:8px}
-.meta .linha1{
-  display:flex;
-  align-items:flex-start;  /* preço alinha ao topo da 1ª linha do título */
-  gap:8px;
-}
-.titulo{
-  font-family:var(--ff-cta);
-  font-weight:700;
-  flex:1 1 auto;
-  min-width:0;             /* permite quebrar */
-}
-.preco{
-  font-weight:700;
-  white-space:nowrap;
-  margin-left:auto;        /* gruda à direita */
-}
-.descricao{font-size:14px;color:#333}
-.dimens{font-size:13px;color:#444}
-.meta .meta-footer{display:flex;gap:8px;justify-content:flex-end;align-items:center}
+  /* Feed/post / carousel (mobile-first) */
+  .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
+  .post{border:var(--bd-thin) solid var(--ink);background:#fff;overflow:hidden;display:flex;flex-direction:column}
+  .carousel{display:flex;gap:var(--gap-xxs);overflow-x:auto;scroll-snap-type:x mandatory;padding:0}
+  .carousel-slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center}
+  .carousel-slide img{
+    width:100%;
+    max-height:66vh;
+    min-height:200px;
+    object-fit:contain;
+    border:var(--bd-thin) solid var(--ink);
+    display:block;
+    box-sizing:border-box;
+    background:#000; /* loading fallback */
+  }
+  .carousel-bar-wrap{height:8px;padding:8px 10px}
+  .carousel-bar{height:6px;background:#ddd;border-radius:4px;overflow:hidden}
+  .carousel-bar .pos{height:100%;background:var(--red);width:0%;transition:width .18s linear}
 
-/* Botões de ação do feed (Adicionar/Remover e Coração) */
-.btn{
-  padding:8px 12px;
-  font:700 var(--fs-sm)/1 var(--ff-cta);
-  border:var(--bd-thin) solid var(--red);
-  color:var(--red);
-  background:#fff;
-  cursor:pointer;
-}
-.btn--inverted{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.btn--fullwhite{background:#fff;color:var(--red);border-color:var(--red)}
-.btn--heart{display:inline-flex;align-items:center;justify-content:center}
+  .meta{padding:10px;display:flex;flex-direction:column;gap:8px}
+  .meta .linha1{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .titulo{font-family:var(--ff-cta);font-weight:700}
+  .preco{font-weight:700}
+  .descricao{font-size:14px;color:#333}
+  .dimens{font-size:13px;color:#444}
+  .meta .meta-footer{display:flex;justify-content:flex-end}
+  .add-btn{border:2px solid var(--red);background:transparent;color:var(--red);padding:8px 12px;font-weight:700;cursor:pointer;font-family:var(--ff-cta)}
 
-/* ========= RIFAS (tijolos) ========= */
-.rifas{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;     /* centraliza as linhas */
-  align-items:flex-start;
-  align-content:center;
-  gap:8px;
-  padding:6px 0;
+/* Register Roboto Condensed Medium hosted in your repo */
+/* ===== RIFAS: unified button look (fixed height, variable width, left-aligned text) ===== */
+/* Register Roboto Condensed Medium hosted in your repo */
+@font-face {
+  font-family: 'BC-RobotoCondensed-Med';
+  src: url('/fonts/Roboto_Condensed-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
 
-/* Botão de rifa: altura fixa, largura variável; texto à esquerda; NUNCA uppercase */
-.rifa-btn{
-  display:inline-flex;
-  flex-direction:column;       /* ln1/ln2 empilhadas quando quebrar */
-  align-items:flex-start;
-  justify-content:center;
-  gap:2px;
-  min-height:56px;
-  padding:10px 12px;
-  border:var(--bd-thin) solid var(--ink);
-  background:var(--beige);
-  font:500 14px/1.15 "Roboto Condensed", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-  color:inherit;               /* cor definida via JS (contraste) */
-  white-space:normal;          /* permite quebra */
-  text-transform:none;         /* nunca uppercase */
+/* Base for rifa buttons */
+.rifa-btn {
+  display: inline-flex;             /* inline so width auto, but flex to stack lines */
+  flex-direction: column;           /* stack ln1 and ln2 vertically */
+  align-items: flex-start;          /* left + top alignment inside button */
+  justify-content: center;          /* center vertically if single-line */
+  gap: 2px;
+  box-sizing: border-box;
+  min-height: 56px;                 /* uniform height */
+  padding: 10px 12px;
+  border: 1px solid var(--ink);
+  background: var(--beige);
+  cursor: pointer;
+  font-family: 'BC-RobotoCondensed-Med', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  font-weight: 500;                 /* same weight for ln1 and ln2 */
+  font-size: 14px;                  /* same size for ln1 and ln2 */
+  line-height: 1.15;
+  text-transform: none;             /* NEVER uppercase */
+  color: inherit;                   /* color set by JS (contrast) */
+  white-space: normal;              /* allow wrap inside the spans if necessary */
+  overflow: hidden;
 }
+
+/* ensure both spans use identical typographic rules */
 .rifa-btn .ln1,
-.rifa-btn .ln2{
-  margin:0; padding:0;
-  font:inherit; line-height:1.15; text-transform:none; color:inherit; text-align:left;
+.rifa-btn .ln2 {
+  display: block;
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.15;
+  text-transform: none;             /* keep user's case */
+  text-align: left;                 /* left aligned text inside the button */
+  color: inherit;
 }
-.rifa-btn.selected{           /* estado selecionado */
-  background:#fff !important;
-  color:var(--red) !important;
-  border-color:var(--red) !important;
-}
-.rifa-btn.sold{opacity:.45;cursor:not-allowed;filter:grayscale(1)}
 
-/* ========= RODAPÉ FIXO ========= */
-footer{
-  position:sticky;
-  bottom:0;
-  background:var(--ink);
-  color:#fff;
-  border-top:var(--bd-thick) solid var(--ink);
+/* Selected state (unchanged) */
+.rifa-btn.selected {
+  background: #ffffff !important;
+  color: #ff0000 !important;
+  border-color: #ff0000 !important;
 }
-.ftr-inner{
-  max-width:var(--app-max-width);
-  margin:0 auto;
-  padding:10px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-.contadores{display:flex;gap:8px;flex-wrap:wrap}
-.pill{
-  background:#fff;color:var(--ink);
-  border:var(--bd-thin) solid var(--ink);
-  padding:4px 8px;
-  font:700 var(--fs-sm)/1 var(--ff-cta)
-}
-.cta-final{
-  background:var(--red);color:#fff;
-  border:var(--bd-thin) solid #fff;
-  padding:8px 12px;
-  font:700 var(--fs-sm)/1 var(--ff-cta);
-  text-transform:uppercase;
-  cursor:pointer
-}
-.total-display{font-weight:700;margin-left:12px}
 
-/* ========= RESPONSIVO básico ========= */
- /* responsive tweaks */
+/* Sold state (disabled look) — keep it but not interactive */
+.rifa-btn.sold { opacity: 0.45; pointer-events: none; filter: grayscale(1); }
+
+
+
+
+  /* Footer (unchanged visually from v08) */
+  footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
+  .ftr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px}
+  .contadores{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:#fff;color:var(--ink);border:var(--bd-thin) solid var(--ink);padding:4px 8px;font:700 var(--fs-sm)/1 var(--ff-cta)}
+  .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
+  .total-display{font-weight:700;margin-left:12px}
+
+  /* responsive tweaks */
   @media (max-width:768px){
     .galeria{grid-template-columns:repeat(2,1fr)}
   /* Mobile adjustments: allow wrapping, smaller height */
@@ -255,9 +194,6 @@ footer{
   @media (max-width:480px){
     .galeria{grid-template-columns:repeat(1,1fr)}
     .meta .linha1{flex-direction:column;align-items:flex-start}
-    .rifa-btn{min-height:42px;padding:6px 8px;font-size:12px}
-    .rifa-btn .ln1,.rifa-btn .ln2{font-size:12px;line-height:1.12}
-    
     /* Mais colunas em telas maiores */
 @media (min-width: 900px) {
   .galeria { column-count: 3; -webkit-column-count: 3; }
