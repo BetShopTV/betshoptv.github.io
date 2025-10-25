@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>,00 plural</title>
+<title>,00 patches</title>
 
 <!-- ====== STYLES (preserve visual look of v08) ====== -->
 <style>
@@ -138,7 +138,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">,00 plural</div>
+      <div class="logo">,00 patch addams</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -155,19 +155,17 @@
   </main>
 
   <!-- ========== FOOTER (kept same as v08) ========== -->
-  <footer>
-    <div class="ftr-inner">
-      <div class="contadores">
-        <button class="pill" id="pillPecas">0 Peças</button>
-        <button class="pill" id="pillRifas">0 Rifas</button>
-        <button class="pill" id="pillFav">0 Favoritas</button>
-      </div>
-      <div>
-        <span class="total-display">Total: R$ 0,00</span>
-      </div>
-      <button class="cta-final" id="btnCheckout">Finalizar</button>
+<footer>
+  <div class="ftr-inner">
+    <div class="contadores">
+      <span id="pillCompact" class="pill-compact" style="display:none;"></span>
     </div>
-  </footer>
+
+    <!-- Botão único: muda rótulo e estado conforme total -->
+    <button class="cta-main" id="ctaMain" disabled>FAÇAM SUAS APOSTAS!</button>
+  </div>
+</footer>
+
 
   <!-- Hidden Form (kept in footer area but declared here) -->
   <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
@@ -400,14 +398,15 @@ function renderFeed(){
       updatePills();
     });
 
-    add.addEventListener('click', () => {
-      const id = p.id_peca;
-      const isAdded = add.classList.toggle('added');
-      if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
-      add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
-      updatePills();
-      calcularTotal();
-    });
+add.addEventListener('click', () => {
+  const id = p.id_peca;
+  const isAdded = add.classList.toggle('added');
+  if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
+  add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
+  calcularTotal();     // <— calcula primeiro
+  updatePills();       // <— depois reflete no CTA/pills
+});
+
   });
 
   section.appendChild(list);
@@ -495,8 +494,8 @@ function renderRifas(){
           btn.style.borderColor = '#ff0000';
           rifasSel.add(r.id_rifa);
         }
-        updatePills();
         calcularTotal();
+        updatePills();
       });
     }
 
@@ -655,23 +654,27 @@ function updatePills(){
 function calcularTotal(){
   let total = 0;
 
-  // total de peças
+  // Peças
   selecionadas.forEach(id => {
     const p = pecas.find(x => x.id_peca === id);
     if (p && p.preco) total += parseFloat(p.preco);
   });
 
-  // total de rifas pela regra
-  total += calculateRifaTotal(rifasSel.size || 0);
+  // Rifas: regra de paridade
+  const nR = rifasSel.size || 0;
+  const totalRifas = (nR <= 0) ? 0 : (nR % 2 === 0 ? 25*nR : 25*(nR-1)+30);
+  total += totalRifas;
 
   totalGeral = total;
 
-  const totalEl = document.querySelector('.total-display');
-  if (totalEl) totalEl.textContent = 'Total: ' + fmt(totalGeral);
-
+  // Atualiza hidden form (mantém duas casas para o form)
   const fTotal = document.getElementById('fTotal');
   if (fTotal) fTotal.value = totalGeral.toFixed(2);
+
+  // Sincroniza CTA/pills após recalcular
+  updatePills();
 }
+
 
 /* =============== Abrir peça dentro do feed ================= */
 function openFeedAt(id){
