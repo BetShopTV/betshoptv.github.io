@@ -213,7 +213,7 @@
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">13c</div>
+      <div class="logo">14</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -605,36 +605,86 @@ btn.addEventListener('click', () => {
 }
 
 
-    /* ====== Navegação (corrige comportamento dos links e cliques) ====== */
-// showPage: renderiza a página pedida dentro de #app
-function showPage(page){
-  if(page === 'galeria') renderGaleria();
-  else if(page === 'feed') renderFeed();
-  else if(page === 'rifas') renderRifas();
+// ===== showPage with hash update and pieceId support =====
+function showPage(page, opts = {}) {
+  // opts = { updateHash: true/false, pieceId: '0311' }
+  const updateHash = (typeof opts.updateHash === 'boolean') ? opts.updateHash : true;
+  const pieceId = opts.pieceId || null;
+
+  if (page === 'galeria') renderGaleria();
+  else if (page === 'feed') {
+    renderFeed();
+    if (pieceId) setTimeout(() => openFeedAt(pieceId), 80);
+  }
+  else if (page === 'rifas') renderRifas();
   else renderGaleria();
-  // depois de renderizar, atualiza pills/totais
-  updatePills();
-  calcularTotal();
+
+  // update UI state
+  try { updatePills(); calcularTotal(); } catch(e){/* ignore */ }
+
+  // update location.hash unless asked not to
+  if (updateHash) {
+    let newHash = page;
+    if (pieceId) {
+      const params = new URLSearchParams(); params.set('p', pieceId);
+      newHash = `${page}?${params.toString()}`;
+    }
+    if (location.hash !== '#' + newHash) {
+      location.hash = newHash;
+    }
+  }
 }
 
-// ligar os links do header (ex.: <a href="#galeria">)
-document.querySelectorAll('.nav a').forEach(a=>{
+// ===== hash parsing and handler =====
+function parseHash() {
+  const raw = (location.hash || '').slice(1);
+  if (!raw) return { page: 'galeria', params: new URLSearchParams() };
+  const [pagePart, query] = raw.split('?');
+  const page = pagePart || 'galeria';
+  const params = new URLSearchParams(query || '');
+  return { page, params };
+}
+
+function handleHashChange() {
+  const { page, params } = parseHash();
+  if (page === 'feed') {
+    const p = params.get('p');
+    if (p) showPage('feed', { updateHash: false, pieceId: p });
+    else showPage('feed', { updateHash: false });
+  } else if (page === 'rifas') {
+    showPage('rifas', { updateHash: false });
+  } else if (page === 'galeria') {
+    showPage('galeria', { updateHash: false });
+  } else {
+    // fallback
+    showPage(page, { updateHash: false });
+  }
+}
+
+// ensure hash navigation works on back/forward
+window.addEventListener('hashchange', handleHashChange);
+
+    
+// ===== header links: set hash instead of calling showPage directly =====
+document.querySelectorAll('.nav a').forEach(a => {
   a.addEventListener('click', function(e){
     const href = a.getAttribute('href') || '';
-    if(href.startsWith('#')){
+    if (href.startsWith('#')) {
       e.preventDefault();
       const target = href.slice(1);
-      showPage(target);
-      // se houver deep-link de peça em hash (ex: #p=123), respeitar
-      const m = location.hash.match(/#p=([^&]+)/);
-      if(m){
-        const id = decodeURIComponent(m[1]);
-        // se pedirmos feed, abrir na peça
-        if(target === 'feed') setTimeout(()=>openFeedAt(id), 120);
+      // set hash -> hashchange handler will call showPage with updateHash:false
+      // This keeps navigation consistent and produces shareable URLs.
+      if (target === 'feed') {
+        // If you need a specific piece in the feed, you could encode it as #feed?p=ID
+        // For plain feed link, just set #feed
+        location.hash = 'feed';
+      } else {
+        location.hash = target;
       }
     }
   });
 });
+
 
 
   /* ====== Event delegation on #app ====== */
@@ -655,18 +705,18 @@ document.querySelectorAll('.nav a').forEach(a=>{
         fav.classList.toggle('active', favoritos.has(id));
         updatePills();
       }
-      // OPEN gallery item: click on a gallery thumbnail opens the feed at that piece
+// OPEN gallery item: clicking a gallery thumb navigates to #feed?p=ID
 const galleryItem = e.target.closest('.gal-item');
-if(galleryItem){
+if (galleryItem) {
   const id = galleryItem.dataset.id;
-  if(id){
-    // open full feed and scroll to the post
-    renderFeed();
-    // give the feed a moment to render then scroll
-    setTimeout(()=> openFeedAt(id), 80);
+  if (id) {
+    // set the proper hash; hashchange handler will render feed and open the piece
+    // we encode the piece id as query param p
+    location.hash = 'feed?p=' + encodeURIComponent(id);
   }
   return;
 }
+
     });
   }
 
@@ -751,12 +801,38 @@ function calcularTotal(){
 }
 
 
-  /* ====== Helper to open feed at id ====== */
-  function openFeedAt(id){
+// ===== openFeedAt: scroll to a post inside the feed (DO NOT change hash) =====
+function openFeedAt(id) {
+  // Ensure feed is rendered
+  // If feed not present, render it and then scroll
+  const attemptScroll = () => {
+    const el = document.getElementById('post-' + id);
+    if (el) {
+      // scroll into view smoothly and give focus for accessibility
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // For screen readers, focus the article's title if exists
+      try {
+        const title = el.querySelector('.titulo') || el.querySelector('h2');
+        if (title && title.focus) title.setAttribute('tabindex', '-1'), title.focus();
+      } catch (e) { /* ignore */ }
+      return true;
+    }
+    return false;
+  };
+
+  // If feed already exists, attempt immediate scroll
+  if (document.getElementById('feedList')) {
+    if (!attemptScroll()) {
+      // fallback: try again after small delay (in case render still finishing)
+      setTimeout(attemptScroll, 120);
+    }
+  } else {
+    // If feed not rendered, render it and then scroll
     renderFeed();
-    const el = document.getElementById('post-'+id);
-    if(el) el.scrollIntoView({behavior:'auto', block:'start'});
+    setTimeout(() => { attemptScroll(); }, 80);
   }
+}
+
 
   /* ====== INIT ====== */
   async function init(){
@@ -776,7 +852,11 @@ function calcularTotal(){
       attachBindings();
       // update UI states
       updatePills(); calcularTotal();
-    }catch(e){
+    // ensure initial hash is processed (deep-link on load)
+handleHashChange();
+}
+    
+    catch(e){
       console.error('Init error', e);
       document.getElementById('app').innerHTML = '<div style="padding:20px;color:#900;">Erro ao carregar dados. Veja console.</div>';
     }
