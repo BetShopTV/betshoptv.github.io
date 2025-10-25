@@ -125,12 +125,65 @@
   }
 
   /* ====== Footer (mantém visual v08) ====== */
-  footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
-  .ftr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px}
-  .contadores{display:flex;gap:8px;flex-wrap:wrap}
-  .pill{background:var(--beige);color:var(--ink);border:var(--bd-thin) solid var(--beige);padding:4px 4px;font:700 var(--fs-sm)/1 var(--ff-cta)}
-  .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
-  .total-display{font-weight:700;margin-left:12px}
+/* ====== Footer (CTA único dinâmico) ====== */
+/* ====== Footer (CTA único dinâmico) ====== */
+footer{
+  position: sticky;
+  bottom: 0;
+  background: var(--ink);
+  color: #fff;
+  border-top: var(--bd-thick) solid var(--ink);
+}
+.ftr-inner{
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+}
+.contadores{display:flex;gap:8px;flex-wrap:wrap}
+.pill{
+  background: var(--beige);
+  color: var(--ink);
+  border: var(--bd-thin) solid var(--beige);
+  padding: 4px 6px;
+  font: 700 var(--fs-sm)/1 var(--ff-cta);
+}
+
+/* Botão grande, único, responsivo */
+.cta-main{
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  min-height: 44px;
+  border: var(--bd-thin) solid #fff;
+  background: var(--red);
+  color: #fff;
+  font: 700 var(--fs-sm)/1 var(--ff-cta);
+  text-transform: uppercase;
+  cursor: pointer;
+  /* largura fluida no desktop (aprox. 40%) */
+  flex: 0 0 40%;
+}
+
+/* Estado “desabilitado”: sem clique e “vazio” visualmente */
+.cta-main:disabled{
+  background: transparent;
+  color: var(--beige);
+  border-color: var(--beige);
+  cursor: default;
+}
+
+/* Mobile: botão ocupa ~88% da largura útil */
+@media (max-width: 768px){
+  .cta-main{ flex: 0 0 88%; }
+}
+
+
 </style>
 
 </head>
@@ -155,19 +208,20 @@
   </main>
 
   <!-- ========== FOOTER (kept same as v08) ========== -->
+  <!-- ========== FOOTER (CTA único dinâmico) ========== -->
   <footer>
     <div class="ftr-inner">
       <div class="contadores">
-        <button class="pill" id="pillPecas">0 Peças</button>
-        <button class="pill" id="pillRifas">0 Rifas</button>
-        <button class="pill" id="pillFav">0 Favoritas</button>
+        <button class="pill" id="pillPecas">0&nbsp;Peças</button>
+        <button class="pill" id="pillRifas">0&nbsp;Rifas</button>
+        <button class="pill" id="pillFav">0&nbsp;Favoritas</button>
       </div>
-      <div>
-        <span class="total-display">Total: R$ 0,00</span>
-      </div>
-      <button class="cta-final" id="btnCheckout">Finalizar</button>
+
+      <!-- Botão único: muda rótulo e estado conforme total -->
+      <button class="cta-main" id="ctaMain" disabled>FAÇAM SUAS APOSTAS!</button>
     </div>
   </footer>
+
 
   <!-- Hidden Form (kept in footer area but declared here) -->
   <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
@@ -581,10 +635,14 @@ function attachAppDelegation(){
 
 /* =============== Checkout (igual ao que já funcionava) =============== */
 function attachBindings(){
-  const checkoutBtn = document.getElementById('btnCheckout');
-  if (!checkoutBtn) return;
+  const cta = document.getElementById('ctaMain');
+  if (!cta) return;
 
-  checkoutBtn.onclick = (e)=>{
+  cta.onclick = (e)=>{
+    // Se estiver desabilitado, não faz nada
+    if (cta.disabled) return;
+
+    // Com total > 0, executamos o mesmo fluxo do “Finalizar” anterior
     e.preventDefault();
     calcularTotal();
 
@@ -629,7 +687,6 @@ function attachBindings(){
         fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' });
       }catch(e){ console.warn('GAS backup falhou', e); }
 
-      // envia FormSubmit e redireciona para obrigado.html (já configurado no form)
       document.getElementById('hiddenForm').submit();
     };
   };
@@ -671,6 +728,18 @@ function calcularTotal(){
 
   const fTotal = document.getElementById('fTotal');
   if (fTotal) fTotal.value = totalGeral.toFixed(2);
+    // ... (após atualizar totalGeral e o campo hidden fTotal)
+  const cta = document.getElementById('ctaMain');
+  if (cta){
+    if (totalGeral > 0){
+      cta.disabled = false;
+      cta.textContent = 'APOSTAR ' + fmt(totalGeral); // ex.: APOSTAR R$ 250
+    }else{
+      cta.disabled = true;
+      cta.textContent = 'FAÇAM SUAS APOSTAS!';
+    }
+  }
+
 }
 
 /* =============== Abrir peça dentro do feed ================= */
