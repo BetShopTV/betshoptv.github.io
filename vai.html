@@ -380,6 +380,30 @@ async function confirmarPagamento(){
 
 /* ========= init ========= */
 render();
+
+  // === RECEBE DADOS DO INDEX VIA POSTMESSAGE ===
+window.addEventListener('message', (event) => {
+  // Segurança: só aceita de mesma origem
+  if (event.origin !== window.origin) return;
+
+  const data = event.data || {};
+  if (!data || typeof data !== 'object') return;
+
+  const { pecas, rifas, favoritas } = data;
+
+  if (Array.isArray(pecas)) {
+    pecasSel = new Set(pecas.map(String));
+  }
+  if (Array.isArray(rifas)) {
+    rifasSel = new Set(rifas.map(String));
+  }
+  if (Array.isArray(favoritas)) {
+    favSel = new Set(favoritas.map(String));
+  }
+
+  render(); // Re-renderiza com os dados recebidos
+});
+
 </script>
 </body>
 </html>
