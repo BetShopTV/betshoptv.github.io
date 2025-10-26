@@ -361,6 +361,8 @@ let favSel = new Set();
     });
 
     render();
+    window.parent.postMessage({ type: "checkout-ready" }, window.origin);
+
   </script>
 </body>
 </html>
