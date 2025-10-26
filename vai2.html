@@ -203,7 +203,7 @@ footer.has-total #ctaMain {
   backdrop-filter:saturate(1.1) blur(2px);
   display:none; z-index:9990;
 }
-#checkoutOverlay[aria-hidden="false"]{display:block}
+#checkoutOverlay:not([hidden]){display:block}
 
 #checkoutModal{
   position:fixed; inset:auto 0 0 0; /* encaixa entre header e footer */
@@ -215,7 +215,7 @@ footer.has-total #ctaMain {
   display:none; z-index:9991;
   overflow:auto;
 }
-#checkoutModal[aria-hidden="false"]{display:block}
+#checkoutModal:not([hidden]){display:block}
 
 /* cabeça/rodapé internos */
 .ck-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid var(--ink)}
@@ -854,26 +854,12 @@ function attachAppDelegation(){
 function attachBindings(){
   const cta = document.getElementById('ctaMain');
   if (!cta) return;
-
   cta.onclick = (e) => {
-    if (cta.disabled) return;       // sem seleção, não faz nada
     e.preventDefault();
-    calcularTotal();
+    if ((totalGeral||0) > 0) ckOpenModal();   // abre o modal de 3 etapas
+  };
+}
 
-    // checkout minimalista inline (mesma lógica que você já usa)
-    document.getElementById('app').innerHTML = `
-      <section id="checkout">
-        <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
-          <h2>Preencha seus dados</h2>
-          <label>Nome *</label><input id="nome" type="text" style="width:100%">
-          <label>E-mail *</label><input id="email" type="email" style="width:100%">
-          <label>Telefone</label><input id="telefone" type="tel" style="width:100%">
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <button id="voltarCheckout" style="flex:1">Voltar</button>
-            <button id="prosseguirCheckout" style="flex:1;background:var(--red);color:#fff">Prosseguir</button>
-          </div>
-        </div>
-      </section>`;
 
     document.getElementById('voltarCheckout').onclick = () => handleHashChange();
 
@@ -1529,92 +1515,8 @@ function ckValidateStep2(){
 
 
 
-/* === PATCH-02A: CHECKOUT – estado + abrir/fechar + navegação === */
-let ckOpen = false;
-let ckStep = 1; // 1=itens  2=dados  3=pagamento
+/* === APAGADO ABAIXO - PATCH-02A: CHECKOUT – estado + abrir/fechar + navegação === */
 
-const CK = {
-  overlay: () => document.getElementById('checkoutOverlay'),
-  modal:   () => document.getElementById('checkoutModal'),
-  // steps
-  s1: () => document.getElementById('ck-step1'),
-  s2: () => document.getElementById('ck-step2'),
-  s3: () => document.getElementById('ck-step3'),
-  // listas do passo 1
-  listR: () => document.getElementById('ck-rifas'),
-  listP: () => document.getElementById('ck-pecas'),
-  listF: () => document.getElementById('ck-favs'),
-  // totais
-  t1: () => document.getElementById('ck-total-s1'),
-  t2: () => document.getElementById('ck-total-s2'),
-  t3: () => document.getElementById('ck-total-s3'),
-  t3b:()=> document.getElementById('ck-total-s3b'),
-  // ações
-  prev1: () => document.getElementById('ck-prev-1'),
-  next1: () => document.getElementById('ck-next-1'),
-  prev2: () => document.getElementById('ck-prev-2'),
-  next2: () => document.getElementById('ck-next-2'),
-  prev3: () => document.getElementById('ck-prev-3'),
-  finish:() => document.getElementById('ck-finish'),
-  close: () => document.getElementById('ck-close'),
-  // PIX
-  pixQR:     () => document.getElementById('ck-pix-qr'),
-  pixCopy:   () => document.getElementById('ck-pix-copy'),
-  pixPayload:() => document.getElementById('ck-pix-payload'),
-  // tabs
-  tabPix: () => document.getElementById('ck-tab-pix'),
-  tabPP:  () => document.getElementById('ck-tab-pp'),
-  panePix:() => document.getElementById('ck-pane-pix'),
-  panePP: () => document.getElementById('ck-pane-pp'),
-  // form passo 2
-  fNome: () => document.getElementById('ck-nome'),
-  fEmail:() => document.getElementById('ck-email'),
-  fFone: () => document.getElementById('ck-fone'),
-};
-
-function ckOpenModal(){
-  const ov = CK.overlay(), md = CK.modal();
-  if (!ov || !md) return;
-  ov.hidden = false; md.hidden = false; ckOpen = true;
-  ckGoStep(1); ckRenderStep1(); ckSyncTotalsOnSteps();
-}
-function ckCloseModal(){
-  const ov = CK.overlay(), md = CK.modal();
-  if (!ov || !md) return;
-  ov.hidden = true; md.hidden = true; ckOpen = false;
-}
-function ckGoStep(step){
-  ckStep = step;
-  if (CK.s1()) CK.s1().hidden = (step!==1);
-  if (CK.s2()) CK.s2().hidden = (step!==2);
-  if (CK.s3()) CK.s3().hidden = (step!==3);
-  if (step===3) ckEnsurePixReady();
-}
-
-// abrir pelo CTA do rodapé (usa seu totalGeral)
-(function bindFooterCTA(){
-  const btn = document.getElementById('ctaMain');
-  const ov = CK.overlay(), md = CK.modal();
-  if (!btn || !ov || !md) return;
-  btn.addEventListener('click', (e)=>{
-    if ((totalGeral||0) <= 0) return;
-    ckOpenModal();
-  });
-  ov.addEventListener('click', ckCloseModal);
-  CK.close()?.addEventListener('click', ckCloseModal);
-})();
-
-// Navegação Voltar/Avançar das etapas
-(function bindStepNav(){
-  CK.prev1()?.addEventListener('click', ()=>{ /* nada no passo 1 */ });
-  CK.next1()?.addEventListener('click', ()=> ckGoStep(2));
-  CK.prev2()?.addEventListener('click', ()=> ckGoStep(1));
-  CK.next2()?.addEventListener('click', ()=> {
-    const ok = ckValidateStep2(); if (!ok) return;
-    ckGoStep(3);
-  });
-  CK.prev3()?.addEventListener('click', ()=> ckGoStep(2));
-})();
 
 
 
