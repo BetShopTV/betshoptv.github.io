@@ -1,409 +1,365 @@
-<!doctype html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt‑BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Checkout – Teste (Rifas + Peças + PIX + GAS + FormSubmit)</title>
-<link rel="preconnect" href="https://cdnjs.cloudflare.com">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>
-  :root{
-    --ink:#2b2424; --beige:#bebab0; --red:#ff0000; --white:#ffffff;
-  }
-  html,body{margin:0;background:var(--beige);color:var(--ink);font:16px/1.35 system-ui,-apple-system,Segoe UI,Arial}
-  .app{max-width:1200px;margin:0 auto;padding:16px}
-  .h1{font:700 1.3rem/1 system-ui;margin:0 0 12px}
-  /* Modal container */
-  .modal{
-    width:min(94vw,1100px); height:min(69vh,720px);
-    margin:0 auto; border:2px solid var(--red); background:var(--beige);
-    display:flex; flex-direction:column;
-  }
-  .bar{display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-bottom:2px solid var(--red)}
-  .ttl{font-weight:700}
-  .btn{border:1px solid var(--ink); background:var(--beige); color:var(--ink); padding:8px 12px; font-weight:700; cursor:pointer}
-  .btn.red{background:var(--red); color:#fff; border-color:var(--red)}
-  .btn:disabled{opacity:.5; cursor:not-allowed}
-  .sheet{flex:1; min-height:0; overflow:auto; padding:12px}
-  .foot{border-top:2px solid var(--red); display:flex; justify-content:space-between; align-items:center; padding:10px 12px}
-  .total{font-weight:700}
-  /* Step 1: tabela 3 colunas */
-  .row{display:grid; grid-template-columns:48px minmax(0,1fr) 110px; align-items:center; gap:8px; margin-bottom:8px}
-  .cat{grid-column:1/4; margin:14px 0 6px; font-weight:700}
-  .del{display:flex; align-items:center; justify-content:center}
-  .btn-x{width:36px;height:28px;border:1px solid var(--ink); background:var(--beige); color:var(--ink); font-weight:700; cursor:pointer}
-  .mid{min-width:0; display:flex; gap:8px; align-items:center}
-  .thumb{width:46px;height:46px;object-fit:cover;border:1px solid var(--ink); background:#fff}
-  .chip{display:inline-block; padding:6px 10px; border:1px solid var(--ink); background:#ddd; color:#000; font-weight:700; white-space:nowrap}
-  .price{justify-self:end; width:110px; text-align:right; border:1px solid var(--ink); background:#fff; padding:6px 8px; box-sizing:border-box; white-space:nowrap}
-  @media (max-width:520px){
-    .row{grid-template-columns:44px minmax(0,1fr) 96px}
-    .price{width:96px; padding:6px}
-  }
-  /* Step 2: formulário */
-  .form{max-width:780px}
-  .fg{margin:0 0 12px}
-  .fg label{display:block; font-weight:700; margin:0 0 4px}
-  .fg input{width:100%; height:42px; border:1px solid var(--ink); background:#fff; padding:8px 10px; box-sizing:border-box}
-  .hint{font-size:.9rem; opacity:.8}
-  /* Step 3: pagamento */
-  .tabs{display:flex; gap:8px; margin:0 0 12px}
-  .tab{flex:1; height:42px; border:1px solid var(--ink); background:var(--beige); color:var(--ink); font-weight:700; cursor:pointer}
-  .tab[aria-selected="true"]{background:var(--ink); color:var(--beige); border-color:var(--ink)}
-  .pane{display:none}
-  .pane[aria-hidden="false"]{display:flex}
-  .pix{gap:16px; align-items:flex-start}
-  .qrCol{display:flex; flex-direction:column; gap:8px; align-items:center}
-  .qrBox{width:180px; height:180px; display:flex; align-items:center; justify-content:center; border:1px solid var(--ink); background:#fff}
-  .copyBtn{border:1px solid var(--ink); background:var(--beige); color:var(--ink); height:40px; padding:0 12px; font-weight:700; cursor:pointer}
-  .info{flex:1; display:flex; flex-direction:column; gap:8px}
-  .card{border:1px solid var(--ink); background:#fff; padding:10px}
-  .center{text-align:center}
-</style>
+  <meta charset="utf‑8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --red: #FF0000;
+      --ink: #2B2424;
+      --white: #FFFFFF;
+      --gray: #BEBAB0;
+    }
+
+    html, body {
+      margin: 0;
+      background: var(--gray);
+      color: var(--ink);
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    .app {
+      max-width: 888px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 888px;
+      background: var(--gray);
+      border: 2px solid var(--red);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bar {
+      background: var(--red);
+      border-bottom: 2px solid var(--red);
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--white);
+    }
+
+    .sheet {
+      padding: 16px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .foot {
+      border-top: 2px solid var(--red);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+    }
+
+    .btn {
+      background: var(--gray);
+      color: var(--ink);
+      border: 2px solid var(--ink);
+      font-weight: bold;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+
+    .btn.red {
+      background: var(--red);
+      color: var(--white);
+      border-color: var(--red);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 48px minmax(0,1fr) 110px;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .cat {
+      grid-column: 2/3;
+      margin: 14px 0 6px;
+      font-weight: bold;
+    }
+
+    .btn-x {
+      width: 36px;
+      height: 36px;
+      background: var(--white);
+      border: 2px solid var(--ink);
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .thumb {
+      width: 46px;
+      height: 46px;
+      object-fit: cover;
+      background: var(--white);
+      border: 2px solid var(--ink);
+    }
+
+    .price {
+      justify-self: end;
+      width: 110px;
+      text-align: right;
+      padding: 6px 8px;
+      box-sizing: border-box;
+      white-space: nowrap;
+      background: none;
+      border: none;
+      color: var(--ink);
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .row {
+        grid-template-columns: 44px minmax(0,1fr) 96px;
+      }
+      .price {
+        width: 96px;
+        padding: 6px 4px;
+      }
+      .btn-x {
+        width: 34px;
+        height: 26px;
+      }
+      .thumb {
+        width: 42px;
+        height: 42px;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="app">
-  <h1 class="h1">Checkout de Teste (Sandbox)</h1>
+  <div class="app">
+    <h1>Checkout</h1>
 
-  <div class="modal" id="modal">
-    <div class="bar">
-      <div class="ttl" id="stepTitle">1 | CONFIRA SUAS APOSTAS</div>
-      <button class="btn" onclick="resetAll()">Fechar</button>
-    </div>
+    <div class="modal" id="modal">
+      <div class="bar">
+        <div id="stepTitle">1 | CONFIRA</div>
+      </div>
 
-    <div class="sheet" id="sheet"><!-- render por etapa --></div>
+      <div class="sheet" id="sheet"></div>
 
-    <div class="foot">
-      <div class="total" id="total">Total: R$ 0</div>
-      <div>
-        <button class="btn" id="btnVoltar" onclick="prevStep()">Voltar</button>
-        <button class="btn red" id="btnAvancar" onclick="nextStep()">Avançar</button>
+      <div class="foot">
+        <div id="total">Total: R$ 0</div>
+        <div>
+          <button class="btn" id="btnVoltar" onclick="prevStep()">Voltar</button>
+          <button class="btn red" id="btnAvancar" onclick="nextStep()">Avançar</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- FormSubmit oculto (preenchido via JS ao Confirmar) -->
-<form id="hiddenForm" method="POST" target="_self">
-  <!-- Substitua abaixo por seu endpoint real do FormSubmit -->
-  <!-- Ex.: https://formsubmit.co/betshoptv@gmail.com  ou  https://formsubmit.co/SEU_TOKEN -->
-  <!-- O JS setará dynamicamente o action = FORMSUBMIT_ACTION -->
-  <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
-  <input type="hidden" name="_subject" value="Novo pedido – BetShopTV">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="nome" id="fNome"> 
-  <input type="hidden" name="email" id="fEmail">
-  <input type="hidden" name="telefone" id="fTelefone">
-  <input type="hidden" name="pecas" id="fPecas">
-  <input type="hidden" name="rifas" id="fRifas">
-  <input type="hidden" name="favoritas" id="fFav">
-  <input type="hidden" name="total" id="fTotal">
-</form>
+  <form id="hiddenForm" method="POST">
+    <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_subject" value="Nova Aposta BSTV">
+    <input type="hidden" name="nome" id="fNome">
+    <input type="hidden" name="email" id="fEmail">
+    <input type="hidden" name="telefone" id="fTelefone">
+    <input type="hidden" name="pecas" id="fPecas">
+    <input type="hidden" name="rifas" id="fRifas">
+    <input type="hidden" name="favoritas" id="fFav">
+    <input type="hidden" name="total" id="fTotal">
+  </form>
 
-<script>
-/* ========= CONFIG ========= */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
-const FORMSUBMIT_ACTION = 'https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d'; // <<< TROCAR PELO SEU
+  <script>
+    const FORMSUBMIT_URL = "https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec";
 
-const CHAVE_PIX = 'betshoptv@gmail.com';           // chave para BR Code (teste)
-const PIX_NOME   = 'BetShopTV';                  // max 25 chars
-const PIX_CIDADE = 'SAO PAULO';                    // max 15 chars
-const PIX_TXID   = '***';
+    const rifasData = [
+      { id: "0301", label: "Rifa 0301" },
+      { id: "0302", label: "Rifa 0302" },
+      { id: "0303", label: "Rifa 0303" }
+    ];
+    const pecasData = [
+      { id: "0403", titulo: "Peça 0403", preco: 150, thumb: "https://via.placeholder.com/46" }
+    ];
+    const favoritasData = [
+      { id: "0407", titulo: "Favorita 0407", thumb: "https://via.placeholder.com/46" }
+    ];
 
-/* ========= MOCK DATA (substitua pela sua seleção real) ========= */
-const rifasData = [
-  { id:'155', label:'155 / Trilha Verde', hex:'#118C1F' },
-  { id:'157', label:'157 / Urban chic',   hex:'#868B93' },
-  { id:'156', label:'156 / Tô bege!',     hex:'#EBCB93' }
-];
-const pecasData = [
-  { id:'0405', titulo:'Polaroid 01', preco:150, thumb:'https://betshoptv.com/img/tmb/04-05a.avif' },
-  { id:'0402', titulo:'Auto Rádio 02', preco:200, thumb:'https://betshoptv.com/img/tmb/04-02a.avif' }
-];
-const favoritasData = [
-  { id:'0402', titulo:'Auto Rádio 02', thumb:'https://betshoptv.com/img/tmb/04-02a.avif' }
-];
+    let rifasSel = new Set(["0301"]);
+    let pecasSel = new Set(["0403"]);
+    let favSel = new Set(["0407"]);
+    let step = 1;
 
-/* Seleções ativas (começa com alguns para testar) */
-let rifasSel = new Set(['155','157','169']);  // 2 rifas (25 + 25)
-let pecasSel = new Set(['0405']);        // 1 peça (150)
-let favSel   = new Set(['0402']);        // 1 favorita (sem preço)
-let step = 1;
+    const fmt = v => 'R$ ' + Math.round(Number(v || 0));
+    const totalAtual = () => pecasData.filter(p => pecasSel.has(p.id)).reduce((s, p) => s + p.preco, 0);
 
-/* ===== Helpers gerais ===== */
-const fmt = v => 'R$ ' + Math.round(Number(v||0));
-function getContrast(hex){
-  if(!hex) return '#2b2424';
-  let s = String(hex).trim().replace('#','');
-  if(s.length===3) s = s.split('').map(c=>c+c).join('');
-  if(s.length!==6) return '#2b2424';
-  const r=parseInt(s.slice(0,2),16), g=parseInt(s.slice(2,4),16), b=parseInt(s.slice(4,6),16);
-  return ((r*299+g*587+b*114)/1000)>=128 ? '#2b2424':'#ffffff';
-}
-function calcRifasTotal(n){ if(n<=0) return 0; return (n%2===0)? n*25 : (n-1)*25 + 30; }
-function totalAtual(){
-  const pecasTotal = pecasData.filter(p=>pecasSel.has(p.id)).reduce((s,p)=>s+Number(p.preco||0),0);
-  return calcRifasTotal(rifasSel.size) + pecasTotal;
-}
+    function resetAll() {
+      location.reload();
+    }
 
-/* ===== Navegação ===== */
-function resetAll(){ location.reload(); }
-function prevStep(){ step=Math.max(1, step-1); render(); }
-function nextStep(){
-  if(step===1){ step=2; render(); return; }
-  if(step===2){
-    // valida campos
-    const nome = document.getElementById('inNome').value.trim();
-    const email= document.getElementById('inEmail').value.trim();
-    if(!nome || !email){ alert('Preencha Nome e E-mail.'); return; }
-    step=3; render(); return;
-  }
-  if(step===3){
-    confirmarPagamento(); // envia GAS + FormSubmit e redireciona
-  }
-}
+    function prevStep() {
+      step = Math.max(1, step - 1);
+      render();
+    }
 
-/* ===== Render por etapa ===== */
-function render(){
-  document.getElementById('stepTitle').textContent =
-    (step===1?'1 | CONFIRA SUAS APOSTAS': step===2?'2 | PREENCHA SEUS DADOS':'3 | PAGAMENTO');
+    function nextStep() {
+      if (step === 1) { step = 2; render(); return; }
+      if (step === 2) {
+        const nome = document.getElementById('inNome').value.trim();
+        const email = document.getElementById('inEmail').value.trim();
+        if (!nome || !email) { alert("Preencha nome e e‑mail."); return; }
+        step = 3; render(); return;
+      }
+      if (step === 3) { enviarDados(); return; }
+    }
 
-  const sheet = document.getElementById('sheet'); sheet.innerHTML = '';
-  document.getElementById('total').textContent = 'Total: ' + fmt(totalAtual());
-  document.getElementById('btnVoltar').disabled = (step===1);
-  document.getElementById('btnAvancar').textContent = (step===3?'Confirmar':'Avançar');
+    function render() {
+      document.getElementById("stepTitle").textContent =
+        step === 1 ? "1 | CONFIRA" : step === 2 ? "2 | DADOS" : "3 | PAGAMENTO";
+      document.getElementById("sheet").innerHTML = "";
+      document.getElementById("total").textContent = "Total: " + fmt(totalAtual());
+      document.getElementById("btnVoltar").disabled = step === 1;
+      document.getElementById("btnAvancar").textContent = step === 3 ? "Confirmar" : "Avançar";
 
-  if(step===1) renderStep1(sheet);
-  if(step===2) renderStep2(sheet);
-  if(step===3) renderStep3(sheet);
-}
+      if (step === 1) renderStep1();
+      if (step === 2) renderStep2();
+      if (step === 3) renderStep3();
+    }
 
-/* ===== STEP 1: Tabela (X | Meio | R$) ===== */
-function renderStep1(root){
-  // RIFAS
-  if(rifasSel.size){
-    root.appendChild(cat('RIFAS'));
-    const ids = [...rifasSel];
-    ids.forEach((id, idx)=>{
-      const r = rifasData.find(x=>x.id===id);
-      const chip = document.createElement('span');
-      chip.className='chip';
-      chip.style.background = r?.hex || '#ddd';
-      chip.style.color = getContrast(r?.hex||'#ddd');
-      chip.textContent = r?.label || id;
-      const price = (ids.length%2!==0 && idx===ids.length-1)? 30 : 25;
-      root.appendChild(row(()=>{ rifasSel.delete(id); render(); }, chip, fmt(price)));
+    function renderStep1() {
+      const root = document.getElementById("sheet");
+      // Categoria cabeçalhos
+      const divRifas = document.createElement("div");
+      divRifas.className = "cat";
+      divRifas.textContent = "RIFAS";
+      root.appendChild(divRifas);
+      rifasData.forEach(r => {
+        if (!rifasSel.has(r.id)) return;
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `
+          <button class="btn-x" onclick="rifasSel.delete('${r.id}'); render()">X</button>
+          <div class="mid">${r.label}</div>
+          <div class="price">${fmt(0)}</div>`;
+        root.appendChild(row);
+      });
+
+      const divPecas = document.createElement("div");
+      divPecas.className = "cat";
+      divPecas.textContent = "PEÇAS";
+      root.appendChild(divPecas);
+      pecasData.forEach(p => {
+        if (!pecasSel.has(p.id)) return;
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `
+          <button class="btn-x" onclick="pecasSel.delete('${p.id}'); render()">X</button>
+          <div class="mid"><img src="${p.thumb}" class="thumb"> ${p.titulo}</div>
+          <div class="price">${fmt(p.preco)}</div>`;
+        root.appendChild(row);
+      });
+
+      const divFav = document.createElement("div");
+      divFav.className = "cat";
+      divFav.textContent = "FAVORITAS";
+      root.appendChild(divFav);
+      favoritasData.forEach(f => {
+        if (!favSel.has(f.id)) return;
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `
+          <button class="btn-x" onclick="favSel.delete('${f.id}'); render()">X</button>
+          <div class="mid"><img src="${f.thumb}" class="thumb"> ${f.titulo}</div>
+          <div class="price">${fmt(0)}</div>`;
+        root.appendChild(row);
+      });
+    }
+
+    function renderStep2() {
+      const root = document.getElementById("sheet");
+      root.innerHTML = `
+        <div class="form">
+          <label for="inNome">Nome *</label>
+          <input id="inNome" type="text">
+          <label for="inEmail">Email *</label>
+          <input id="inEmail" type="email">
+          <label for="inTel">Telefone</label>
+          <input id="inTel" type="tel">
+        </div>`;
+    }
+
+    function renderStep3() {
+      const root = document.getElementById("sheet");
+      root.innerHTML = `<div>
+        <div class="qrBox" id="qrCode"></div>
+        <p><strong>Total:</strong> ${fmt(totalAtual())}</p>
+      </div>`;
+      new QRCode(document.getElementById("qrCode"), {
+        text: "PIX simulando...",
+        width: 170,
+        height: 170
+      });
+    }
+
+    function enviarDados() {
+      const nome = document.getElementById("inNome").value.trim();
+      const email = document.getElementById("inEmail").value.trim();
+      const telefone = document.getElementById("inTel").value.trim();
+      const pecas = [...pecasSel].join(",");
+      const rifas = [...rifasSel].join(",");
+      const favoritas = [...favSel].join(",");
+      const total = totalAtual();
+
+      document.getElementById("fNome").value = nome;
+      document.getElementById("fEmail").value = email;
+      document.getElementById("fTelefone").value = telefone;
+      document.getElementById("fPecas").value = pecas;
+      document.getElementById("fRifas").value = rifas;
+      document.getElementById("fFav").value = favoritas;
+      document.getElementById("fTotal").value = total;
+
+      try {
+        const fd = new FormData();
+        fd.append("nome", nome);
+        fd.append("email", email);
+        fd.append("telefone", telefone);
+        fd.append("pecas", pecas);
+        fd.append("rifas", rifas);
+        fd.append("favoritas", favoritas);
+        fd.append("total", String(total));
+        fetch(GAS_URL, { method: "POST", body: fd, mode: "no‑cors" });
+      } catch(e) {
+        console.warn("GAS falhou", e);
+      }
+
+      const form = document.getElementById("hiddenForm");
+      form.action = FORMSUBMIT_URL;
+      form.submit();
+    }
+
+    // === RECEBE DADOS VIA postMessage ===
+    window.addEventListener('message', (event) => {
+      if (event.origin !== window.origin) return;
+      const data = event.data || {};
+      if (!data || typeof data !== 'object') return;
+      const { pecas, rifas, favoritas } = data;
+      if (Array.isArray(pecas)) pecasSel = new Set(pecas.map(String));
+      if (Array.isArray(rifas)) rifasSel = new Set(rifas.map(String));
+      if (Array.isArray(favoritas)) favSel = new Set(favoritas.map(String));
+      render();
     });
-  }
-  // PEÇAS
-  const pecas = pecasData.filter(p=>pecasSel.has(p.id));
-  if(pecas.length){
-    root.appendChild(cat('PEÇAS'));
-    pecas.forEach(p=>{
-      const mid = document.createElement('div'); mid.className='mid';
-      const img = new Image(); img.src=p.thumb; img.alt=p.titulo; img.className='thumb';
-      const t = document.createElement('div'); t.textContent=p.titulo; mid.append(img,t);
-      root.appendChild(row(()=>{ pecasSel.delete(p.id); render(); }, mid, fmt(p.preco)));
-    });
-  }
-  // FAVORITAS
-  const favs = favoritasData.filter(p=>favSel.has(p.id));
-  if(favs.length){
-    root.appendChild(cat('FAVORITAS'));
-    favs.forEach(p=>{
-      const mid = document.createElement('div'); mid.className='mid';
-      const img = new Image(); img.src=p.thumb; img.alt=p.titulo; img.className='thumb';
-      const t = document.createElement('div'); t.textContent=p.titulo; mid.append(img,t);
-      root.appendChild(row(()=>{ favSel.delete(p.id); render(); }, mid, '—'));
-    });
-  }
-}
-function row(onDel, midNode, priceText){
-  const r = document.createElement('div'); r.className='row';
-  const cDel = document.createElement('div'); cDel.className='del';
-  const bx = document.createElement('button'); bx.className='btn-x'; bx.textContent='X'; bx.onclick=onDel; cDel.appendChild(bx);
-  const cMid = document.createElement('div'); cMid.className='mid'; cMid.appendChild(midNode);
-  const cPrice = document.createElement('div'); cPrice.className='price'; cPrice.textContent=priceText;
-  r.append(cDel,cMid,cPrice); return r;
-}
-function cat(label){ const d=document.createElement('div'); d.className='cat'; d.textContent=label; return d; }
 
-/* ===== STEP 2: Formulário ===== */
-function renderStep2(root){
-  const wrap = document.createElement('div'); wrap.className='form';
-  wrap.innerHTML = `
-    <div class="fg">
-      <label for="inNome">Nome *</label>
-      <input id="inNome" type="text" placeholder="Seu nome completo">
-    </div>
-    <div class="fg">
-      <label for="inEmail">E-mail *</label>
-      <input id="inEmail" type="email" placeholder="voce@exemplo.com">
-    </div>
-    <div class="fg">
-      <label for="inTel">Telefone (opcional)</label>
-      <input id="inTel" type="tel" placeholder="(DDD) 90000-0000">
-      <div class="hint">Usaremos para contato rápido via WhatsApp, se necessário.</div>
-    </div>
-  `;
-  root.appendChild(wrap);
-}
-
-/* ===== STEP 3: Pagamento ===== */
-function renderStep3(root){
-  const tabs = document.createElement('div'); tabs.className='tabs';
-  tabs.innerHTML = `
-    <button id="tPix" class="tab" role="tab" aria-selected="true">PIX</button>
-    <button id="tPP"  class="tab" role="tab" aria-selected="false">PayPal</button>
-  `;
-  root.appendChild(tabs);
-
-  // PIX pane
-  const pPix = document.createElement('section'); pPix.className='pane pix'; pPix.id='pPix'; pPix.setAttribute('aria-hidden','false');
-  pPix.innerHTML = `
-    <div class="qrCol">
-      <div class="qrBox" id="qrBox"></div>
-      <button class="copyBtn" id="btnCopy">PIX Copia e Cola</button>
-    </div>
-    <div class="info">
-      <div class="card"><strong>Total:</strong> <span id="pixTotal">${fmt(totalAtual())}</span></div>
-      <div class="card">
-        Pague pelo app do seu banco: aponte a câmera para o QR Code ou use o botão “PIX Copia e Cola”.
-      </div>
-    </div>
-  `;
-  root.appendChild(pPix);
-
-  // PayPal pane
-  const pPP = document.createElement('section'); pPP.className='pane'; pPP.id='pPP'; pPP.setAttribute('aria-hidden','true');
-  pPP.innerHTML = `
-    <div class="card center" style="width:100%">
-      <p>Opcional: pague via PayPal</p>
-      <p><a class="btn red" href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" target="_blank" rel="noopener">Pagar com PayPal</a></p>
-    </div>
-  `;
-  root.appendChild(pPP);
-
-  // abas
-  document.getElementById('tPix').onclick = () => {
-    document.getElementById('tPix').setAttribute('aria-selected','true');
-    document.getElementById('tPP').setAttribute('aria-selected','false');
-    pPix.setAttribute('aria-hidden','false'); pPP.setAttribute('aria-hidden','true');
-  };
-  document.getElementById('tPP').onclick = () => {
-    document.getElementById('tPP').setAttribute('aria-selected','true');
-    document.getElementById('tPix').setAttribute('aria-selected','false');
-    pPix.setAttribute('aria-hidden','true'); pPP.setAttribute('aria-hidden','false');
-  };
-
-  // Gera BR Code + QR
-  const payload = gerarBRCode(totalAtual());
-  new QRCode(document.getElementById('qrBox'), { text: payload, width: 170, height: 170, correctLevel: QRCode.CorrectLevel.M });
-  document.getElementById('btnCopy').onclick = () => copyPayload(payload);
-}
-
-/* ===== PIX helpers ===== */
-function crc16_ccitt_ffff(data){
-  let crc=0xFFFF;
-  for(let i=0;i<data.length;i++){
-    let x=((crc>>8)^data.charCodeAt(i))&0xff;
-    x^=x>>4;
-    crc=(crc<<8)^(x<<12)^(x<<5)^x;
-  }
-  crc&=0xFFFF; return crc.toString(16).toUpperCase().padStart(4,'0');
-}
-function gerarBRCode(valor){
-  const f=(id,val)=> id + String(val.length).padStart(2,'0') + val;
-  const nome   = PIX_NOME.substring(0,25).toUpperCase().replace(/[^\w ]/g,'').trim();
-  const cidade = PIX_CIDADE.substring(0,15).toUpperCase().replace(/[^\w ]/g,'').trim();
-  let pl = '000201';
-  pl += f('26', `0014BR.GOV.BCB.PIX01${String(CHAVE_PIX.length).padStart(2,'0')}${CHAVE_PIX}`);
-  pl += '52040000';
-  pl += '5303986';
-  pl += f('54', Number(valor).toFixed(2));
-  pl += '5802BR';
-  pl += f('59', nome);
-  pl += f('60', cidade);
-  pl += f('62', f('05', PIX_TXID));
-  pl += '6304';
-  return pl + crc16_ccitt_ffff(pl);
-}
-function copyPayload(text){
-  const done = ok => {
-    const b = document.getElementById('btnCopy');
-    b.textContent = ok ? 'PIX copiado!' : 'Erro ao copiar';
-    setTimeout(()=> b.textContent='PIX Copia e Cola', 1800);
-  };
-  if(navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(()=>done(true)).catch(()=>done(false));
-  else{
-    const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.top='-9999px';
-    document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); done(true);}catch(e){done(false);} document.body.removeChild(ta);
-  }
-}
-
-/* ===== Confirmar (GAS + FormSubmit) ===== */
-async function confirmarPagamento(){
-  const nome = (document.getElementById('inNome')?.value||'').trim();
-  const email= (document.getElementById('inEmail')?.value||'').trim();
-  const tel  = (document.getElementById('inTel')?.value||'').trim();
-  const pecas = [...pecasSel].join(',');
-  const rifas = [...rifasSel].join(',');
-  const fav   = [...favSel].join(',');
-  const total = totalAtual();
-
-  // 1) GAS (backup)
-  try{
-    const fd = new FormData();
-    fd.append('nome',nome); fd.append('email',email); fd.append('telefone',tel);
-    fd.append('pecas',pecas); fd.append('rifas',rifas); fd.append('favoritas',fav);
-    fd.append('total', String(total));
-    fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' });
-  }catch(e){ console.warn('GAS falhou', e); }
-
-  // 2) FormSubmit (principal)
-  try{
-    const form = document.getElementById('hiddenForm');
-    form.action = FORMSUBMIT_ACTION; // <<< precisa estar certo para funcionar
-    document.getElementById('fNome').value = nome;
-    document.getElementById('fEmail').value= email;
-    document.getElementById('fTelefone').value = tel;
-    document.getElementById('fPecas').value = pecas;
-    document.getElementById('fRifas').value = rifas;
-    document.getElementById('fFav').value   = fav;
-    document.getElementById('fTotal').value = total;
-    form.submit(); // redireciona para _next ao finalizar
-  }catch(e){
-    alert('Erro ao enviar pelo FormSubmit. Veja o console.');
-    console.error(e);
-  }
-}
-
-/* ========= init ========= */
-render();
-
-  // === RECEBE DADOS DO INDEX VIA POSTMESSAGE ===
-window.addEventListener('message', (event) => {
-  // Segurança: só aceita de mesma origem
-  if (event.origin !== window.origin) return;
-
-  const data = event.data || {};
-  if (!data || typeof data !== 'object') return;
-
-  const { pecas, rifas, favoritas } = data;
-
-  if (Array.isArray(pecas)) {
-    pecasSel = new Set(pecas.map(String));
-  }
-  if (Array.isArray(rifas)) {
-    rifasSel = new Set(rifas.map(String));
-  }
-  if (Array.isArray(favoritas)) {
-    favSel = new Set(favoritas.map(String));
-  }
-
-  render(); // Re-renderiza com os dados recebidos
-});
-
-</script>
+    render();
+  </script>
 </body>
 </html>
