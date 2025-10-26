@@ -195,9 +195,10 @@
       { id: "0407", titulo: "Favorita 0407", thumb: "https://via.placeholder.com/46" }
     ];
 
-    let rifasSel = new Set(["0301"]);
-    let pecasSel = new Set(["0403"]);
-    let favSel = new Set(["0407"]);
+let rifasSel = new Set();
+let pecasSel = new Set();
+let favSel = new Set();
+
     let step = 1;
 
     const fmt = v => 'R$ ' + Math.round(Number(v || 0));
