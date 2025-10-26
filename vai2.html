@@ -826,14 +826,15 @@ function abrirCheckout() {
   if (!box || !iframe) return;
   box.style.display = 'flex';
   document.body.style.overflow = 'hidden';
-  iframe.onload = () => {
-    const dados = {
-      pecas: [...pecasSel],    // ajuste conforme seleção no site
-      rifas: [...rifasSel],
-      favoritas: [...favSel]
-    };
-    iframe.contentWindow.postMessage(dados, window.origin);
+iframe.onload = () => {
+  const dados = {
+    pecas: [...selecionadas],
+    rifas: [...rifasSel],
+    favoritas: [...favoritos]
   };
+  iframe.contentWindow.postMessage(dados, window.origin);
+};
+
 }
 
 function fecharCheckout() {
