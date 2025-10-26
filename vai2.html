@@ -618,25 +618,12 @@ function attachBindings(){
   const cta = document.getElementById('ctaMain');
   if (!cta) return;
 
-  cta.onclick = (e) => {
-    if (cta.disabled) return;       // sem seleção, não faz nada
-    e.preventDefault();
-    calcularTotal();
+cta.onclick = (e) => {
+  if (cta.disabled) return;
+  e.preventDefault();
+  abrirCheckout(); // nova função que abre o iframe + envia os dados
+};
 
-    // checkout minimalista inline (mesma lógica que você já usa)
-    document.getElementById('app').innerHTML = `
-      <section id="checkout">
-        <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
-          <h2>Preencha seus dados</h2>
-          <label>Nome *</label><input id="nome" type="text" style="width:100%">
-          <label>E-mail *</label><input id="email" type="email" style="width:100%">
-          <label>Telefone</label><input id="telefone" type="tel" style="width:100%">
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <button id="voltarCheckout" style="flex:1">Voltar</button>
-            <button id="prosseguirCheckout" style="flex:1;background:var(--red);color:#fff">Prosseguir</button>
-          </div>
-        </div>
-      </section>`;
 
     document.getElementById('voltarCheckout').onclick = () => handleHashChange();
 
@@ -826,6 +813,9 @@ function abrirCheckout() {
   if (!box || !iframe) return;
   box.style.display = 'flex';
   document.body.style.overflow = 'hidden';
+
+  iframe.src = '/vai.html'; // ← GARANTA que esteja este caminho aqui!
+  
 iframe.onload = () => {
   const dados = {
     pecas: [...selecionadas],
