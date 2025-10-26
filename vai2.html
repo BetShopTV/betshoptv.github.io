@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>,00 patches</title>
+<title>,00 plural</title>
 
 <!-- ====== STYLES (preserve visual look of v08) ====== -->
 <style>
@@ -116,55 +116,21 @@
     display:block;margin:0;padding:0;font:inherit;text-transform:none;text-align:left;color:inherit;
   }
   .rifa-btn.selected{background:#fff!important;border-color:var(--red)!important;color:var(--red)!important}
-  .rifa-btn.sold{opacity:.24;filter:grayscale(1);pointer-events:none; background: #bebab0; color:#fff; border: 0px;}
+  .rifa-btn.sold{opacity:.45;pointer-events:none;filter:grayscale(1)}
 
   @media (max-width:768px){
-    .rifa-btn{min-height:42px;padding:5px 7px;font-size:11px}
-    .rifa-btn .ln1,.rifa-btn .ln2{font-size:11px;line-height:1.12}
+    .rifa-btn{min-height:42px;padding:6px 8px;font-size:12px}
+    .rifa-btn .ln1,.rifa-btn .ln2{font-size:12px;line-height:1.12}
 
   }
 
   /* ====== Footer (mantém visual v08) ====== */
-  
-    @font-face{
-    font-family:'BC-RobotoCondensed-Bold';
-    src:url('/fonts/Roboto_Condensed-Bold.woff2') format('woff2');
-    font-weight:900;font-style:normal;font-display:swap;
-  }
-  
   footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
   .ftr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px}
   .contadores{display:flex;gap:8px;flex-wrap:wrap}
   .pill{background:var(--beige);color:var(--ink);border:var(--bd-thin) solid var(--beige);padding:4px 4px;font:700 var(--fs-sm)/1 var(--ff-cta)}
-  .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font-size: 1em;font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;cursor:pointer}
-  .total-display{font-size: 1em;font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif; margin-left:12px}
-  /* Estado visual do rodapé quando NÃO há seleção (total = 0) */
-footer.no-total #pillCompact,
-footer.no-total #ctaMain {
-  background: var(--ink);
-  color: var(--ink);
-  border: 0;              /* sem borda colorida */
-}
-
-/* Estado visual do CTA quando HÁ seleção (total > 0) */
-footer.has-total #ctaMain {
-  background: var(--red);
-  color: #fff;
-  border: 0;              /* sem borda */
-  padding: 8px 12px;
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-right: 4px;
-  font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
-  font-size: 1em;
-}
-
-/* Garantias de interação */
-#ctaMain[disabled] {
-  cursor: default;
-  opacity: 1;             /* mantemos legível mesmo desabilitado */
-}
-
+  .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
+  .total-display{font-weight:700;margin-left:12px}
 </style>
 
 </head>
@@ -172,7 +138,7 @@ footer.has-total #ctaMain {
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">._.</div>
+      <div class="logo">,00 plural</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -189,17 +155,19 @@ footer.has-total #ctaMain {
   </main>
 
   <!-- ========== FOOTER (kept same as v08) ========== -->
-<footer>
-  <div class="ftr-inner">
-    <div class="contadores">
-      <span id="pillCompact" class="pill-compact" style="display:none;"></span>
+  <footer>
+    <div class="ftr-inner">
+      <div class="contadores">
+        <button class="pill" id="pillPecas">0 Peças</button>
+        <button class="pill" id="pillRifas">0 Rifas</button>
+        <button class="pill" id="pillFav">0 Favoritas</button>
+      </div>
+      <div>
+        <span class="total-display">Total: R$ 0,00</span>
+      </div>
+      <button class="cta-final" id="btnCheckout">Finalizar</button>
     </div>
-
-    <!-- Botão único: muda rótulo e estado conforme total -->
-    <button class="cta-main" id="ctaMain" disabled>FAÇAM SUAS APOSTAS!</button>
-  </div>
-</footer>
-
+  </footer>
 
   <!-- Hidden Form (kept in footer area but declared here) -->
   <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
@@ -432,15 +400,14 @@ function renderFeed(){
       updatePills();
     });
 
-add.addEventListener('click', () => {
-  const id = p.id_peca;
-  const isAdded = add.classList.toggle('added');
-  if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
-  add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
-  calcularTotal();     // <— calcula primeiro
-  updatePills();       // <— depois reflete no CTA/pills
-});
-
+    add.addEventListener('click', () => {
+      const id = p.id_peca;
+      const isAdded = add.classList.toggle('added');
+      if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
+      add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
+      updatePills();
+      calcularTotal();
+    });
   });
 
   section.appendChild(list);
@@ -528,8 +495,8 @@ function renderRifas(){
           btn.style.borderColor = '#ff0000';
           rifasSel.add(r.id_rifa);
         }
-        calcularTotal();
         updatePills();
+        calcularTotal();
       });
     }
 
@@ -613,17 +580,14 @@ function attachAppDelegation(){
 }
 
 /* =============== Checkout (igual ao que já funcionava) =============== */
-/* ====== Bind do CTA principal (checkout inline) ====== */
 function attachBindings(){
-  const cta = document.getElementById('ctaMain');
-  if (!cta) return;
+  const checkoutBtn = document.getElementById('btnCheckout');
+  if (!checkoutBtn) return;
 
-  cta.onclick = (e) => {
-    if (cta.disabled) return;       // sem seleção, não faz nada
+  checkoutBtn.onclick = (e)=>{
     e.preventDefault();
     calcularTotal();
 
-    // checkout minimalista inline (mesma lógica que você já usa)
     document.getElementById('app').innerHTML = `
       <section id="checkout">
         <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
@@ -638,23 +602,21 @@ function attachBindings(){
         </div>
       </section>`;
 
-    document.getElementById('voltarCheckout').onclick = () => handleHashChange();
-
-    document.getElementById('prosseguirCheckout').onclick = () => {
+    document.getElementById('voltarCheckout').onclick = ()=> handleHashChange();
+    document.getElementById('prosseguirCheckout').onclick = ()=>{
       const nome  = document.getElementById('nome').value.trim();
       const email = document.getElementById('email').value.trim();
-      if (!nome || !email) { alert('Preencha nome e e-mail'); return; }
+      if(!nome||!email){ alert('Preencha nome e e-mail'); return; }
 
-      // preenche form oculto
       document.getElementById('fNome').value  = nome;
       document.getElementById('fEmail').value = email;
       document.getElementById('fTelefone').value = (document.getElementById('telefone').value||'').trim();
       document.getElementById('fPecas').value = [...selecionadas].join(',');
       document.getElementById('fRifas').value = [...rifasSel].join(',');
       document.getElementById('fFav').value   = [...favoritos].join(',');
-      document.getElementById('fTotal').value = totalGeral.toFixed(2); // mantém 2 casas só para o form
+      document.getElementById('fTotal').value = totalGeral.toFixed(2);
 
-      // backup GAS (não bloqueia)
+      // backup no GAS (sem bloquear UI)
       try{
         const fd = new FormData();
         fd.append('nome', nome);
@@ -667,83 +629,49 @@ function attachBindings(){
         fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' });
       }catch(e){ console.warn('GAS backup falhou', e); }
 
-      // envia para FormSubmit → obrigado.html
+      // envia FormSubmit e redireciona para obrigado.html (já configurado no form)
       document.getElementById('hiddenForm').submit();
     };
   };
 }
 
-
 /* =============== Pills e Total ================= */
-/* ====== Footer: pills compactas + CTA dinâmico ====== */
 function updatePills(){
-  const nbsp = '\u00A0';                           // espaço não-quebrável
-  const pill = document.getElementById('pillCompact');
-  const cta  = document.getElementById('ctaMain');
+  const nbsp = '\u00A0'; // espaço não-quebrável
+  const pP = document.getElementById('pillPecas');
+  const pR = document.getElementById('pillRifas');
+  const pF = document.getElementById('pillFav');
 
-  // monta lista só com contadores > 0 (mobile-friendly)
-  const parts = [];
-  if (selecionadas.size > 0) {
-    parts.push(`${selecionadas.size}${nbsp}${selecionadas.size === 1 ? 'Peça' : 'Peças'}`);
-  }
-  if (rifasSel.size > 0) {
-    parts.push(`${rifasSel.size}${nbsp}${rifasSel.size === 1 ? 'Rifa' : 'Rifas'}`);
-  }
-  if (favoritos.size > 0) {
-    parts.push(`${favoritos.size}${nbsp}${favoritos.size === 1 ? 'Favorita' : 'Favoritas'}`);
-  }
+  // pluralização simples (opcional)
+  const lblPeca = selecionadas.size === 1 ? 'Peça' : 'Peças';
+  const lblRifa = rifasSel.size === 1 ? 'Rifa' : 'Rifas';
+  const lblFav  = favoritos.size === 1 ? 'Favorita' : 'Favoritas';
 
-  // mostra/oculta a pill compacta
-  if (pill) {
-    pill.textContent = parts.join(' · ');
-    pill.style.display = parts.length ? 'inline-block' : 'none';
-  }
-
-  // CTA único: label e estado
-  if (cta) {
-    if (totalGeral > 0) {
-      // fmt() já remove casas decimais
-      cta.textContent = `APOSTAR ${fmt(totalGeral)}`;
-      cta.disabled = false;
-    } else {
-      cta.textContent = 'FAÇAM SUAS APOSTAS!';
-      cta.disabled = true;
-    }
-  }
-    // marca estado no footer para o CSS reagir
-  const footer = document.querySelector('footer');
-  if (footer) {
-    footer.classList.toggle('has-total',  totalGeral > 0);
-    footer.classList.toggle('no-total',   totalGeral === 0);
-  }
-
+  if (pP) pP.textContent = `${selecionadas.size}${nbsp}${lblPeca}`;
+  if (pR) pR.textContent = `${rifasSel.size}${nbsp}${lblRifa}`;
+  if (pF) pF.textContent = `${favoritos.size}${nbsp}${lblFav}`;
 }
-
 
 function calcularTotal(){
   let total = 0;
 
-  // Peças
+  // total de peças
   selecionadas.forEach(id => {
     const p = pecas.find(x => x.id_peca === id);
     if (p && p.preco) total += parseFloat(p.preco);
   });
 
-  // Rifas: regra de paridade
-  const nR = rifasSel.size || 0;
-  const totalRifas = (nR <= 0) ? 0 : (nR % 2 === 0 ? 25*nR : 25*(nR-1)+30);
-  total += totalRifas;
+  // total de rifas pela regra
+  total += calculateRifaTotal(rifasSel.size || 0);
 
   totalGeral = total;
 
-  // Atualiza hidden form (mantém duas casas para o form)
+  const totalEl = document.querySelector('.total-display');
+  if (totalEl) totalEl.textContent = 'Total: ' + fmt(totalGeral);
+
   const fTotal = document.getElementById('fTotal');
   if (fTotal) fTotal.value = totalGeral.toFixed(2);
-
-  // Sincroniza CTA/pills após recalcular
-  updatePills();
 }
-
 
 /* =============== Abrir peça dentro do feed ================= */
 function openFeedAt(id){
@@ -809,57 +737,5 @@ window.addEventListener('DOMContentLoaded', init);
 })();
 </script>
 
-<!-- botão e lightbox -->
-<button onclick="abrirCheckout()">APOSTAR R$150</button>
-
-<div id="checkoutLightbox" style="display:none;position:fixed;inset:0;z-index:9999;background-color:rgba(0,0,0,0.85);justify-content:center;align-items:center;">
-  <iframe src="/vai.html" id="checkoutFrame" style="width:100%; max-width:888px; height:90vh; border:none;"></iframe>
-</div>
-
-
-<!-- script lightbox -->
-<script>
-// lightbox.js
-function abrirCheckout() {
-  const box = document.getElementById('checkoutLightbox');
-  const iframe = document.getElementById('checkoutFrame');
-  if (!box || !iframe) return;
-
-  // Salva dados atuais no localStorage
-  const dados = {
-    pecas: [...selecionadas],
-    rifas: [...rifasSel],
-    favoritas: [...favoritos]
-  };
-  localStorage.setItem('checkoutBSTV', JSON.stringify(dados));
-
-  // Mostra o lightbox e carrega o checkout
-  box.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-  iframe.src = '/vai.html'; // ou o caminho correto do checkout avulso
-}
-
-
-function fecharCheckout() {
-  const box = document.getElementById('checkoutLightbox');
-  if (!box) return;
-  box.style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') fecharCheckout();
-});
-
-document.addEventListener('click', (e) => {
-  const lightbox = document.getElementById('checkoutLightbox');
-  const iframe = document.getElementById('checkoutFrame');
-  if (!lightbox || lightbox.style.display === 'none') return;
-  if (!iframe.contains(e.target) && e.target !== iframe) {
-    fecharCheckout();
-  }
-});
-
-</script>
 </body>
 </html>
