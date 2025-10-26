@@ -809,5 +809,37 @@ window.addEventListener('DOMContentLoaded', init);
 })();
 </script>
 
+<!-- botão e lightbox -->
+<button onclick="abrirCheckout()">APOSTAR R$150</button>
+
+<div id="checkoutLightbox" style="display:none;position:fixed;inset:0;z-index:9999;background-color:rgba(0,0,0,0.85);justify-content:center;align-items:center;">
+  <iframe src="/vai.html" id="checkoutFrame" style="width:100%; max-width:888px; height:90vh; border:none;"></iframe>
+</div>
+
+
+<!-- script lightbox -->
+<script>
+function abrirCheckout() {
+  const box = document.getElementById('checkoutLightbox');
+  box.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function fecharCheckout() {
+  const box = document.getElementById('checkoutLightbox');
+  box.style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') fecharCheckout();
+});
+document.addEventListener('click', e => {
+  const lb = document.getElementById('checkoutLightbox');
+  if (!lb || lb.style.display === 'none') return;
+  const iframe = document.getElementById('checkoutFrame');
+  if (!iframe.contains(e.target) && e.target !== iframe) {
+    fecharCheckout();
+  }
+});
+</script>
 </body>
 </html>
