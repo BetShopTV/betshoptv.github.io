@@ -172,7 +172,7 @@ footer.has-total #ctaMain {
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">!!!!!!!!!!!!!!!!</div>
+      <div class="logo">pelo amor do senhor</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -821,9 +821,25 @@ window.addEventListener('DOMContentLoaded', init);
 <script>
 function abrirCheckout() {
   const box = document.getElementById('checkoutLightbox');
+  const iframe = document.getElementById('checkoutFrame');
+
+  if (!box || !iframe) return;
+
+  // Mostra o modal
   box.style.display = 'flex';
   document.body.style.overflow = 'hidden';
+
+  // Espera o iframe carregar e então envia os dados
+  iframe.onload = () => {
+    const dados = {
+      pecas: [...selecionadas],       // IDs como "0405"
+      rifas: [...rifasSel],           // IDs como "155"
+      favoritas: [...favoritos]       // IDs como "0402"
+    };
+    iframe.contentWindow.postMessage(dados, window.origin);
+  };
 }
+
 function fecharCheckout() {
   const box = document.getElementById('checkoutLightbox');
   box.style.display = 'none';
