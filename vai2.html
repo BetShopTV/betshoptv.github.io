@@ -810,22 +810,29 @@ window.addEventListener('DOMContentLoaded', init);
 function abrirCheckout() {
   const box = document.getElementById('checkoutLightbox');
   const iframe = document.getElementById('checkoutFrame');
+
   if (!box || !iframe) return;
+
   box.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 
-  iframe.src = '/vai.html'; // ← GARANTA que esteja este caminho aqui!
-  
-iframe.onload = () => {
-  const dados = {
-    pecas: [...selecionadas],
-    rifas: [...rifasSel],
-    favoritas: [...favoritos]
-  };
-  iframe.contentWindow.postMessage(dados, window.origin);
-};
+  iframe.src = '/vai.html?_=' + Date.now(); // força reload sempre
 
+  window.addEventListener('message', function esperar(msg) {
+    if (msg.data?.type === 'checkout-ready') {
+      window.removeEventListener('message', esperar); // remove após 1x
+
+      const dados = {
+        pecas: [...selecionadas],
+        rifas: [...rifasSel],
+        favoritas: [...favoritos]
+      };
+
+      iframe.contentWindow.postMessage(dados, window.origin);
+    }
+  });
 }
+
 
 function fecharCheckout() {
   const box = document.getElementById('checkoutLightbox');
