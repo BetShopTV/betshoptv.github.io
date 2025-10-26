@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt‑BR">
+<html lang="pt-BR">
 <head>
-  <meta charset="utf‑8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Checkout</title>
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root {
       --red: #FF0000;
@@ -14,29 +12,16 @@
       --gray: #BEBAB0;
     }
 
-    html, body {
+    body {
       margin: 0;
       background: var(--gray);
+      font-family: sans-serif;
       color: var(--ink);
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-    }
-
-    .app {
-      max-width: 888px;
-      margin: 0 auto;
-      padding: 16px;
-    }
-
-    h1 {
-      font-size: 1.6rem;
-      font-weight: bold;
-      margin-bottom: 16px;
     }
 
     .modal {
-      width: 100%;
       max-width: 888px;
+      margin: 40px auto;
       background: var(--gray);
       border: 2px solid var(--red);
       display: flex;
@@ -45,324 +30,131 @@
 
     .bar {
       background: var(--red);
-      border-bottom: 2px solid var(--red);
-      padding: 10px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       color: var(--white);
+      padding: 12px;
+      font-weight: bold;
     }
 
     .sheet {
       padding: 16px;
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .foot {
-      border-top: 2px solid var(--red);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 12px;
-    }
-
-    .btn {
-      background: var(--gray);
-      color: var(--ink);
-      border: 2px solid var(--ink);
-      font-weight: bold;
-      padding: 8px 14px;
-      cursor: pointer;
-    }
-
-    .btn.red {
-      background: var(--red);
-      color: var(--white);
-      border-color: var(--red);
     }
 
     .row {
       display: grid;
-      grid-template-columns: 48px minmax(0,1fr) 110px;
-      gap: 8px;
+      grid-template-columns: 40px 1fr 110px;
       align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .cat {
-      grid-column: 2/3;
-      margin: 14px 0 6px;
-      font-weight: bold;
-    }
-
-    .btn-x {
-      width: 36px;
-      height: 36px;
-      background: var(--white);
-      border: 2px solid var(--ink);
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .thumb {
-      width: 46px;
-      height: 46px;
-      object-fit: cover;
-      background: var(--white);
-      border: 2px solid var(--ink);
+      gap: 10px;
+      margin-bottom: 12px;
     }
 
     .price {
-      justify-self: end;
-      width: 110px;
-      text-align: right;
-      padding: 6px 8px;
-      box-sizing: border-box;
-      white-space: nowrap;
-      background: none;
-      border: none;
       color: var(--ink);
       font-weight: bold;
+      text-align: right;
     }
 
-    @media (max-width: 768px) {
-      .row {
-        grid-template-columns: 44px minmax(0,1fr) 96px;
-      }
-      .price {
-        width: 96px;
-        padding: 6px 4px;
-      }
-      .btn-x {
-        width: 34px;
-        height: 26px;
-      }
-      .thumb {
-        width: 42px;
-        height: 42px;
-      }
+    .thumb {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border: 2px solid var(--ink);
+      background: var(--white);
+    }
+
+    .cat {
+      margin: 24px 0 8px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <h1>Checkout</h1>
-
-    <div class="modal" id="modal">
-      <div class="bar">
-        <div id="stepTitle">1 | CONFIRA</div>
-      </div>
-
-      <div class="sheet" id="sheet"></div>
-
-      <div class="foot">
-        <div id="total">Total: R$ 0</div>
-        <div>
-          <button class="btn" id="btnVoltar" onclick="prevStep()">Voltar</button>
-          <button class="btn red" id="btnAvancar" onclick="nextStep()">Avançar</button>
-        </div>
-      </div>
-    </div>
+  <div class="modal">
+    <div class="bar">1 | CONFIRA SUAS APOSTAS</div>
+    <div class="sheet" id="sheet">Carregando...</div>
   </div>
 
-  <form id="hiddenForm" method="POST">
-    <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_subject" value="Nova Aposta BSTV">
-    <input type="hidden" name="nome" id="fNome">
-    <input type="hidden" name="email" id="fEmail">
-    <input type="hidden" name="telefone" id="fTelefone">
-    <input type="hidden" name="pecas" id="fPecas">
-    <input type="hidden" name="rifas" id="fRifas">
-    <input type="hidden" name="favoritas" id="fFav">
-    <input type="hidden" name="total" id="fTotal">
-  </form>
-
   <script>
-    const FORMSUBMIT_URL = "https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d";
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec";
-
+    // Dados mock para exibir corretamente
     const rifasData = [
       { id: "0301", label: "Rifa 0301" },
       { id: "0302", label: "Rifa 0302" },
       { id: "0303", label: "Rifa 0303" }
     ];
     const pecasData = [
-      { id: "0403", titulo: "Peça 0403", preco: 150, thumb: "https://via.placeholder.com/46" }
+      { id: "0403", titulo: "Camisa 0403", preco: 150, thumb: "https://via.placeholder.com/40" },
+      { id: "0405", titulo: "Camisa 0405", preco: 150, thumb: "https://via.placeholder.com/40" }
     ];
     const favoritasData = [
-      { id: "0407", titulo: "Favorita 0407", thumb: "https://via.placeholder.com/46" }
+      { id: "0402", titulo: "Favorita 0402", thumb: "https://via.placeholder.com/40" }
     ];
 
-let rifasSel = new Set();
-let pecasSel = new Set();
-let favSel = new Set();
-
-    let step = 1;
-
-    const fmt = v => 'R$ ' + Math.round(Number(v || 0));
-    const totalAtual = () => pecasData.filter(p => pecasSel.has(p.id)).reduce((s, p) => s + p.preco, 0);
-
-    function resetAll() {
-      location.reload();
-    }
-
-    function prevStep() {
-      step = Math.max(1, step - 1);
-      render();
-    }
-
-    function nextStep() {
-      if (step === 1) { step = 2; render(); return; }
-      if (step === 2) {
-        const nome = document.getElementById('inNome').value.trim();
-        const email = document.getElementById('inEmail').value.trim();
-        if (!nome || !email) { alert("Preencha nome e e‑mail."); return; }
-        step = 3; render(); return;
-      }
-      if (step === 3) { enviarDados(); return; }
-    }
+    // Sets de seleção (vazios inicialmente)
+    let rifasSel = new Set();
+    let pecasSel = new Set();
+    let favSel = new Set();
 
     function render() {
-      document.getElementById("stepTitle").textContent =
-        step === 1 ? "1 | CONFIRA" : step === 2 ? "2 | DADOS" : "3 | PAGAMENTO";
-      document.getElementById("sheet").innerHTML = "";
-      document.getElementById("total").textContent = "Total: " + fmt(totalAtual());
-      document.getElementById("btnVoltar").disabled = step === 1;
-      document.getElementById("btnAvancar").textContent = step === 3 ? "Confirmar" : "Avançar";
+      const root = document.getElementById('sheet');
+      root.innerHTML = '';
 
-      if (step === 1) renderStep1();
-      if (step === 2) renderStep2();
-      if (step === 3) renderStep3();
-    }
+      const addCat = (label) => {
+        const div = document.createElement('div');
+        div.className = 'cat';
+        div.textContent = label;
+        root.appendChild(div);
+      };
 
-    function renderStep1() {
-      const root = document.getElementById("sheet");
-      // Categoria cabeçalhos
-      const divRifas = document.createElement("div");
-      divRifas.className = "cat";
-      divRifas.textContent = "RIFAS";
-      root.appendChild(divRifas);
-      rifasData.forEach(r => {
-        if (!rifasSel.has(r.id)) return;
-        const row = document.createElement("div");
-        row.className = "row";
+      const addRow = (label, preco = 0, thumb = '') => {
+        const row = document.createElement('div');
+        row.className = 'row';
         row.innerHTML = `
-          <button class="btn-x" onclick="rifasSel.delete('${r.id}'); render()">X</button>
-          <div class="mid">${r.label}</div>
-          <div class="price">${fmt(0)}</div>`;
+          <div></div>
+          <div>${thumb ? `<img src="${thumb}" class="thumb">` : ''} ${label}</div>
+          <div class="price">R$ ${preco}</div>
+        `;
         root.appendChild(row);
-      });
+      };
 
-      const divPecas = document.createElement("div");
-      divPecas.className = "cat";
-      divPecas.textContent = "PEÇAS";
-      root.appendChild(divPecas);
-      pecasData.forEach(p => {
-        if (!pecasSel.has(p.id)) return;
-        const row = document.createElement("div");
-        row.className = "row";
-        row.innerHTML = `
-          <button class="btn-x" onclick="pecasSel.delete('${p.id}'); render()">X</button>
-          <div class="mid"><img src="${p.thumb}" class="thumb"> ${p.titulo}</div>
-          <div class="price">${fmt(p.preco)}</div>`;
-        root.appendChild(row);
-      });
-
-      const divFav = document.createElement("div");
-      divFav.className = "cat";
-      divFav.textContent = "FAVORITAS";
-      root.appendChild(divFav);
-      favoritasData.forEach(f => {
-        if (!favSel.has(f.id)) return;
-        const row = document.createElement("div");
-        row.className = "row";
-        row.innerHTML = `
-          <button class="btn-x" onclick="favSel.delete('${f.id}'); render()">X</button>
-          <div class="mid"><img src="${f.thumb}" class="thumb"> ${f.titulo}</div>
-          <div class="price">${fmt(0)}</div>`;
-        root.appendChild(row);
-      });
-    }
-
-    function renderStep2() {
-      const root = document.getElementById("sheet");
-      root.innerHTML = `
-        <div class="form">
-          <label for="inNome">Nome *</label>
-          <input id="inNome" type="text">
-          <label for="inEmail">Email *</label>
-          <input id="inEmail" type="email">
-          <label for="inTel">Telefone</label>
-          <input id="inTel" type="tel">
-        </div>`;
-    }
-
-    function renderStep3() {
-      const root = document.getElementById("sheet");
-      root.innerHTML = `<div>
-        <div class="qrBox" id="qrCode"></div>
-        <p><strong>Total:</strong> ${fmt(totalAtual())}</p>
-      </div>`;
-      new QRCode(document.getElementById("qrCode"), {
-        text: "PIX simulando...",
-        width: 170,
-        height: 170
-      });
-    }
-
-    function enviarDados() {
-      const nome = document.getElementById("inNome").value.trim();
-      const email = document.getElementById("inEmail").value.trim();
-      const telefone = document.getElementById("inTel").value.trim();
-      const pecas = [...pecasSel].join(",");
-      const rifas = [...rifasSel].join(",");
-      const favoritas = [...favSel].join(",");
-      const total = totalAtual();
-
-      document.getElementById("fNome").value = nome;
-      document.getElementById("fEmail").value = email;
-      document.getElementById("fTelefone").value = telefone;
-      document.getElementById("fPecas").value = pecas;
-      document.getElementById("fRifas").value = rifas;
-      document.getElementById("fFav").value = favoritas;
-      document.getElementById("fTotal").value = total;
-
-      try {
-        const fd = new FormData();
-        fd.append("nome", nome);
-        fd.append("email", email);
-        fd.append("telefone", telefone);
-        fd.append("pecas", pecas);
-        fd.append("rifas", rifas);
-        fd.append("favoritas", favoritas);
-        fd.append("total", String(total));
-        fetch(GAS_URL, { method: "POST", body: fd, mode: "no‑cors" });
-      } catch(e) {
-        console.warn("GAS falhou", e);
+      if (rifasSel.size) {
+        addCat('RIFAS');
+        rifasData.forEach(r => {
+          if (rifasSel.has(r.id)) addRow(r.label);
+        });
       }
 
-      const form = document.getElementById("hiddenForm");
-      form.action = FORMSUBMIT_URL;
-      form.submit();
+      if (pecasSel.size) {
+        addCat('PEÇAS');
+        pecasData.forEach(p => {
+          if (pecasSel.has(p.id)) addRow(p.titulo, p.preco, p.thumb);
+        });
+      }
+
+      if (favSel.size) {
+        addCat('FAVORITAS');
+        favoritasData.forEach(f => {
+          if (favSel.has(f.id)) addRow(f.titulo, 0, f.thumb);
+        });
+      }
+
+      if (!rifasSel.size && !pecasSel.size && !favSel.size) {
+        root.innerHTML = '<p>Nenhum item selecionado.</p>';
+      }
     }
 
-    // === RECEBE DADOS VIA postMessage ===
-    window.addEventListener('message', (event) => {
-      if (event.origin !== window.origin) return;
-      const data = event.data || {};
-      if (!data || typeof data !== 'object') return;
-      const { pecas, rifas, favoritas } = data;
-      if (Array.isArray(pecas)) pecasSel = new Set(pecas.map(String));
-      if (Array.isArray(rifas)) rifasSel = new Set(rifas.map(String));
-      if (Array.isArray(favoritas)) favSel = new Set(favoritas.map(String));
-      render();
-    });
+    // Lê do localStorage e atualiza as seleções
+    const salvar = localStorage.getItem('checkoutBSTV');
+    if (salvar) {
+      try {
+        const dados = JSON.parse(salvar);
+        if (Array.isArray(dados.rifas)) rifasSel = new Set(dados.rifas);
+        if (Array.isArray(dados.pecas)) pecasSel = new Set(dados.pecas);
+        if (Array.isArray(dados.favoritas)) favSel = new Set(dados.favoritas);
+      } catch (e) {
+        console.warn("Erro ao ler localStorage", e);
+      }
+    }
 
     render();
-    window.parent.postMessage({ type: "checkout-ready" }, window.origin);
-
   </script>
 </body>
 </html>
