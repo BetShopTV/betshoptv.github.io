@@ -1,227 +1,96 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BSTV (v. 08)</title>
-<link rel="preconnect" href="https://betshoptv.com/fonts/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Checkout – Teste (Rifas + Peças + PIX + GAS + FormSubmit)</title>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-  /* ================= TOKENS & BASE ================= */
   :root{
-    --red:#ff0000; --ink:#2b2424; --beige:#bebab0; --white:#ffffff;
-    --bd-thin:1px; --bd-thick:2px;
-    --ff-cta:"Roboto Condensed", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-    --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-    --fs-h2:clamp(1.1rem,2vw,1.4rem);
-    --fs-p:clamp(.9rem,1.2vw,1rem);
-    --fs-sm:clamp(.78rem,1vw,.9rem);
-    --gap-xs:6px; --gap-s:8px; --gap-m:12px;
+    --ink:#2b2424; --beige:#bebab0; --red:#ff0000; --white:#ffffff;
   }
-  html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);}
-  header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;border-bottom:var(--bd-thick) solid var(--ink);}
-  .hdr-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px var(--gap-m);}
-  .logo{font:700 var(--fs-h2)/1 var(--ff-cta);text-transform:uppercase;}
-  .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-  .nav a{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 10px;border:var(--bd-thin) solid #fff;color:#fff;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase}
-  .nav a:hover{background:#fff;color:var(--ink)}
-  main{max-width:1200px;margin:0 auto;padding:var(--gap-m);}
-  section{margin-bottom:24px}
-  h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
-
-  /* ================ GALERIA (3 colunas always) ================ */
-  .galeria{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-xs)}
-  .gal-item{border:var(--bd-thin) solid var(--ink);background:#fff;cursor:pointer; overflow:hidden}
-  .gal-item img{display:block;width:100%;height:auto}
-  .gal-item .ttl{padding:6px;font:700 var(--fs-sm)/1.2 var(--ff-cta)}
-
-  /* ================ FEED ================ */
-  .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
-  .post{border:var(--bd-thin) solid var(--ink);background:#fff; overflow:hidden}
-  .post .carousel{
-    display:flex;
-    gap:var(--gap-xs);
-    overflow-x:auto;
-    scroll-snap-type:x mandatory;
-    background:var(--white);
-    padding:0;                 /* remove padding that caused offset */
-    align-items:center;
+  html,body{margin:0;background:var(--beige);color:var(--ink);font:16px/1.35 system-ui,-apple-system,Segoe UI,Arial}
+  .app{max-width:1200px;margin:0 auto;padding:16px}
+  .h1{font:700 1.3rem/1 system-ui;margin:0 0 12px}
+  /* Modal container */
+  .modal{
+    width:min(94vw,1100px); height:min(69vh,720px);
+    margin:0 auto; border:2px solid var(--red); background:var(--beige);
+    display:flex; flex-direction:column;
   }
-  /* image rules:
-     - width = 100% of the slide
-     - fixed height = up to 66vh
-     - min-height ensures small images still have presence
-     - box-sizing:border-box so borders are included and don't add extra pixels
-     - object-fit:cover keeps aspect without deformation
-  */
-  .post .carousel img{
-    flex: 0 0 100%;
-    width: 100%;
-    max-width: 100%;
-    height: 66vh;          /* max height as requested (66% viewport) */
-    min-height: 220px;     /* sensible minimum so tiny images don't vanish */
-    max-height: 66vh;
-    object-fit: cover;     /* preserve aspect, may crop, no deformation */
-    scroll-snap-align: center;
-    border: var(--bd-thin) solid var(--ink);
-    box-sizing: border-box; /* important — border included in width -> no overflow/4px gap */
-    display:block;
-    background: #000;      /* fallback while loading */
+  .bar{display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-bottom:2px solid var(--red)}
+  .ttl{font-weight:700}
+  .btn{border:1px solid var(--ink); background:var(--beige); color:var(--ink); padding:8px 12px; font-weight:700; cursor:pointer}
+  .btn.red{background:var(--red); color:#fff; border-color:var(--red)}
+  .btn:disabled{opacity:.5; cursor:not-allowed}
+  .sheet{flex:1; min-height:0; overflow:auto; padding:12px}
+  .foot{border-top:2px solid var(--red); display:flex; justify-content:space-between; align-items:center; padding:10px 12px}
+  .total{font-weight:700}
+  /* Step 1: tabela 3 colunas */
+  .row{display:grid; grid-template-columns:48px minmax(0,1fr) 110px; align-items:center; gap:8px; margin-bottom:8px}
+  .cat{grid-column:1/4; margin:14px 0 6px; font-weight:700}
+  .del{display:flex; align-items:center; justify-content:center}
+  .btn-x{width:36px;height:28px;border:1px solid var(--ink); background:var(--beige); color:var(--ink); font-weight:700; cursor:pointer}
+  .mid{min-width:0; display:flex; gap:8px; align-items:center}
+  .thumb{width:46px;height:46px;object-fit:cover;border:1px solid var(--ink); background:#fff}
+  .chip{display:inline-block; padding:6px 10px; border:1px solid var(--ink); background:#ddd; color:#000; font-weight:700; white-space:nowrap}
+  .price{justify-self:end; width:110px; text-align:right; border:1px solid var(--ink); background:#fff; padding:6px 8px; box-sizing:border-box; white-space:nowrap}
+  @media (max-width:520px){
+    .row{grid-template-columns:44px minmax(0,1fr) 96px}
+    .price{width:96px; padding:6px}
   }
-
-  .post .meta{padding:8px 10px}
-  .post .meta .linha1{display:flex;justify-content:space-between;align-items:center;gap:8px}
-  .preco{font:600 var(--fs-p)/1 var(--ff-body)}
-  .titulo{font:700 var(--fs-p)/1.2 var(--ff-cta)}
-  .ficha{font:400 var(--fs-sm)/1.4 var(--ff-body);opacity:.9}
-  .acoes{display:flex;gap:8px;margin-top:8px}
-  .btn{font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;border:var(--bd-thin) solid var(--ink);background:var(--ink);color:#fff;padding:6px 10px;cursor:pointer}
-  .fav{background:#fff;color:var(--ink)}
-  .fav.active{background:var(--red);color:#fff}
-
-  /* ================ RIFAS (tijolo) ================ */
-  .rifas{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:var(--gap-xs)}
-  .rifa-btn{display:flex;align-items:center;justify-content:center;min-height:56px;text-align:center;padding:6px;border:var(--bd-thin) solid var(--ink);color:#fff;font:700 var(--fs-sm)/1.1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
-  .rifa-btn .ln2{opacity:.95}
-  .rifa-btn.sold{opacity:.45;cursor:not-allowed;filter:grayscale(1)}
-
-  /* ================ FOOTER ================ */
-  footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
-  .ftr-inner{max-width:1200px;margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px var(--gap-m)}
-  .contadores{display:flex;gap:8px;flex-wrap:wrap}
-  .pill{background:#fff;color:var(--ink);border:var(--bd-thin) solid var(--ink);padding:4px 8px;font:700 var(--fs-sm)/1 var(--ff-cta)}
-  .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;cursor:pointer}
-  .total-display{font-weight:700;margin-left:12px}
-
-  /* ================ CARRINHO (drawer) ================ */
-  #carrinho{position:relative;margin:0 0 24px}
-  .cart-wrap{border:var(--bd-thin) solid var(--ink);background:#fff}
-  .cart-tabs{display:flex;gap:6px;align-items:center;justify-content:flex-start;padding:6px;background:var(--beige);border-bottom:var(--bd-thin) solid var(--ink)}
-  .cart-tab{border:var(--bd-thin) solid var(--ink);background:var(--ink);color:#fff;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;padding:6px 10px;cursor:pointer}
-  .cart-tab.is-active{background:var(--red)}
-  .cart-close{margin-left:auto;border:var(--bd-thin) solid var(--ink);background:#fff;color:var(--ink);font:700 var(--fs-sm)/1 var(--ff-cta);padding:6px 10px;cursor:pointer}
-  .cart-body{padding:10px}
-  .cart-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
-  .cart-item{border:var(--bd-thin) solid var(--ink);background:#fff}
-  .cart-item img{width:100%;height:auto;display:block;border-bottom:var(--bd-thin) solid var(--ink)}
-  .ci-meta{padding:6px}
-  .btn-remove{border:var(--bd-thin) solid var(--ink);background:var(--red);color:#fff;padding:4px 8px;cursor:pointer}
-
-  /* ================ CHECKOUT ================ */
-  #checkout { background: var(--beige); padding: 20px; }
-  .checkout-wrap { max-width: 480px; margin: 0 auto; background: #fff; border: 1px solid #2b2424; padding: 20px; border-radius: 8px; }
-  .checkout-step h2 { font-family: var(--ff-cta); margin-bottom: 12px; }
-  .checkout-step label { display:block; margin-top:10px; font-weight:700; font-size:14px; color:#2b2424; }
-  .checkout-step input { width:100%; padding:8px; margin-top:4px; border:1px solid #aaa; border-radius:4px; font-size:14px; }
-  .pix-placeholder { border:2px dashed #2b2424; height:160px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#2b2424; margin:20px 0; }
-  .checkout-btns { display:flex; justify-content:space-between; gap:10px; margin-top:20px; }
-  .btn-back, .btn-next { flex:1; padding:10px; font-weight:700; border:1px solid #2b2424; cursor:pointer; }
-  .btn-back { background:#fff; color:#2b2424; }
-  .btn-next { background:#2b2424; color:#fff; }
-
-  /* remove custom scrollbar styling - we don't alter scroll colors here */
+  /* Step 2: formulário */
+  .form{max-width:780px}
+  .fg{margin:0 0 12px}
+  .fg label{display:block; font-weight:700; margin:0 0 4px}
+  .fg input{width:100%; height:42px; border:1px solid var(--ink); background:#fff; padding:8px 10px; box-sizing:border-box}
+  .hint{font-size:.9rem; opacity:.8}
+  /* Step 3: pagamento */
+  .tabs{display:flex; gap:8px; margin:0 0 12px}
+  .tab{flex:1; height:42px; border:1px solid var(--ink); background:var(--beige); color:var(--ink); font-weight:700; cursor:pointer}
+  .tab[aria-selected="true"]{background:var(--ink); color:var(--beige); border-color:var(--ink)}
+  .pane{display:none}
+  .pane[aria-hidden="false"]{display:flex}
+  .pix{gap:16px; align-items:flex-start}
+  .qrCol{display:flex; flex-direction:column; gap:8px; align-items:center}
+  .qrBox{width:180px; height:180px; display:flex; align-items:center; justify-content:center; border:1px solid var(--ink); background:#fff}
+  .copyBtn{border:1px solid var(--ink); background:var(--beige); color:var(--ink); height:40px; padding:0 12px; font-weight:700; cursor:pointer}
+  .info{flex:1; display:flex; flex-direction:column; gap:8px}
+  .card{border:1px solid var(--ink); background:#fff; padding:10px}
+  .center{text-align:center}
 </style>
 </head>
 <body>
-<header>
-  <div class="hdr-inner">
-    <div class="logo">BetShopTV</div>
-    <nav class="nav">
-      <a href="#galeria">Galeria</a>
-      <a href="#feed">Feed</a>
-      <a href="#rifas">Rifas</a>
-      <a href="https://betshoptv.com/como.html">Como Funciona?</a>
-    </nav>
-  </div>
-</header>
+<div class="app">
+  <h1 class="h1">Checkout de Teste (Sandbox)</h1>
 
-<main>
-  <!-- GALERIA 3 colunas -->
-  <section id="galeria">
-    <h2>Galeria (3 colunas sempre)</h2>
-    <div class="galeria" id="galeriaGrid"></div>
-  </section>
-
-  <!-- FEED (abre na peça clicada) -->
-  <section id="feed" style="display:none;">
-    <h2>Feed</h2>
-    <div class="feed" id="feedList"></div>
-  </section>
-
-  <!-- RIFAS (tijolo) -->
-  <section id="rifas" style="display:none;">
-    <h2>Rifas</h2>
-    <div class="rifas" id="rifasGrid"></div>
-  </section>
-
-  <!-- DRAWER / CARRINHO -->
-  <section id="carrinho" style="display:none;">
-    <div class="cart-wrap">
-      <div class="cart-tabs">
-        <button class="cart-tab is-active" data-tab="pecas">Peças</button>
-        <button class="cart-tab" data-tab="rifas">Rifas</button>
-        <button class="cart-tab" data-tab="fav">Favoritas</button>
-        <button class="cart-close" id="cartClose">Fechar</button>
-      </div>
-      <div class="cart-body">
-        <div class="cart-list" id="cartPecas"></div>
-        <div class="cart-list" id="cartRifas" style="display:none;"></div>
-        <div class="cart-list" id="cartFav" style="display:none;"></div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="ftr-inner">
-    <div class="contadores">
-      <button class="pill" id="pillPecas">Peças: 0</button>
-      <button class="pill" id="pillRifas">Rifas: 0</button>
-      <button class="pill" id="pillFav">Favoritas: 0</button>
-    </div>
-    <div class="total-display">Total: R$ 0,00</div>
-    <button class="cta-final" id="btnCheckout">Finalizar</button>
-  </div>
-</footer>
-
-<!-- CHECKOUT MULTIETAPA -->
-<section id="checkout" style="display:none;">
-  <div class="checkout-wrap">
-    <div class="checkout-step" id="step1">
-      <h2>Preencha seus dados</h2>
-      <form id="dadosForm">
-        <label>Nome *</label>
-        <input type="text" id="nome" required placeholder="Seu nome completo">
-        <label>E-mail *</label>
-        <input type="email" id="email" required placeholder="seu@email.com">
-        <label>Telefone (opcional)</label>
-        <input type="tel" id="telefone" placeholder="(00) 00000-0000">
-      </form>
-      <div class="checkout-btns">
-        <button class="btn-back" id="voltar1">Voltar</button>
-        <button class="btn-next" id="prosseguir1">Prosseguir</button>
-      </div>
+  <div class="modal" id="modal">
+    <div class="bar">
+      <div class="ttl" id="stepTitle">1 | CONFIRA SUAS APOSTAS</div>
+      <button class="btn" onclick="resetAll()">Fechar</button>
     </div>
 
-    <div class="checkout-step" id="step2" style="display:none;">
-      <h2>Realize o pagamento</h2>
-      <p>Use o QR Code abaixo para simular o pagamento via PIX.</p>
-      <div class="pix-placeholder"><div class="pix-code">QR CODE PIX</div></div>
-      <div class="checkout-btns">
-        <button class="btn-back" id="voltar2">Voltar</button>
-        <button class="btn-next" id="apostar">Apostar!</button>
-      </div>
-    </div>
+    <div class="sheet" id="sheet"><!-- render por etapa --></div>
 
-    <div class="checkout-step" id="step3" style="display:none;">
-      <h2>Enviando sua aposta...</h2>
-      <p>Por favor, aguarde um momento. Você será redirecionado para a página de confirmação.</p>
+    <div class="foot">
+      <div class="total" id="total">Total: R$ 0</div>
+      <div>
+        <button class="btn" id="btnVoltar" onclick="prevStep()">Voltar</button>
+        <button class="btn red" id="btnAvancar" onclick="nextStep()">Avançar</button>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- FORM OCULTO -->
-<form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
+<!-- FormSubmit oculto (preenchido via JS ao Confirmar) -->
+<form id="hiddenForm" method="POST" target="_self">
+  <!-- Substitua abaixo por seu endpoint real do FormSubmit -->
+  <!-- Ex.: https://formsubmit.co/betshoptv@gmail.com  ou  https://formsubmit.co/SEU_TOKEN -->
+  <!-- O JS setará dynamicamente o action = FORMSUBMIT_ACTION -->
+  <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
+  <input type="hidden" name="_subject" value="Novo pedido – BetShopTV">
+  <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="nome" id="fNome">
   <input type="hidden" name="email" id="fEmail">
   <input type="hidden" name="telefone" id="fTelefone">
@@ -229,157 +98,288 @@
   <input type="hidden" name="rifas" id="fRifas">
   <input type="hidden" name="favoritas" id="fFav">
   <input type="hidden" name="total" id="fTotal">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="_subject" value="Nova aposta BSTV">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
 </form>
 
 <script>
-/* CONFIG */
-const PECAS_JSON_URL = 'https://betshoptv.com/dados/pecas.json';
-const RIFAS_JSON_URL = 'https://betshoptv.com/dados/rifas.json';
+/* ========= CONFIG ========= */
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+const FORMSUBMIT_ACTION = 'https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d'; // <<< TROCAR PELO SEU
 
-/* STATE: start with empty favoritas */
-let pecas = [];
-let rifas = [];
-const selecionadas = new Set();
-const rifasSel = new Set();
-const favoritos = new Set(); // start empty on load
-let totalGeral = 0;
+const CHAVE_PIX = 'betshoptv@gmail.com';           // chave para BR Code (teste)
+const PIX_NOME   = 'BetShopTV';                  // max 25 chars
+const PIX_CIDADE = 'SAO PAULO';                    // max 15 chars
+const PIX_TXID   = '***';
 
-/* HELPERS */
-const fmt = v => 'R$ ' + Number(v||0).toFixed(2).replace('.',',');
-function imgWithFallback(srcAvif){
-  const img = new Image(); img.loading = 'lazy'; img.src = srcAvif;
-  img.onerror = () => { if(srcAvif.endsWith('.avif')) img.src = srcAvif.replace('.avif','.jpg'); };
-  return img;
+/* ========= MOCK DATA (substitua pela sua seleção real) ========= */
+const rifasData = [
+  { id:'155', label:'155 / Trilha Verde', hex:'#118C1F' },
+  { id:'157', label:'157 / Urban chic',   hex:'#868B93' },
+  { id:'156', label:'156 / Tô bege!',     hex:'#EBCB93' }
+];
+const pecasData = [
+  { id:'p01', titulo:'Polaroid 01', preco:150, thumb:'https://via.placeholder.co/92x92?text=thumb' },
+  { id:'p02', titulo:'Auto Rádio 02', preco:200, thumb:'https://via.placeholder.co/92x92?text=thumb' }
+];
+const favoritasData = [
+  { id:'p03', titulo:'Auto Rádio 02', thumb:'https://via.placeholder.co/92x92?text=thumb' }
+];
+
+/* Seleções ativas (começa com alguns para testar) */
+let rifasSel = new Set(['155','157']);  // 2 rifas (25 + 25)
+let pecasSel = new Set(['p01']);        // 1 peça (150)
+let favSel   = new Set(['p03']);        // 1 favorita (sem preço)
+let step = 1;
+
+/* ===== Helpers gerais ===== */
+const fmt = v => 'R$ ' + Math.round(Number(v||0));
+function getContrast(hex){
+  if(!hex) return '#2b2424';
+  let s = String(hex).trim().replace('#','');
+  if(s.length===3) s = s.split('').map(c=>c+c).join('');
+  if(s.length!==6) return '#2b2424';
+  const r=parseInt(s.slice(0,2),16), g=parseInt(s.slice(2,4),16), b=parseInt(s.slice(4,6),16);
+  return ((r*299+g*587+b*114)/1000)>=128 ? '#2b2424':'#ffffff';
 }
-function updatePills(){
-  document.getElementById('pillPecas').textContent = 'Peças: ' + selecionadas.size;
-  document.getElementById('pillRifas').textContent = 'Rifas: ' + rifasSel.size;
-  document.getElementById('pillFav').textContent   = 'Favoritas: ' + favoritos.size;
-  // persist favorites AFTER user marks them (we cleared at init)
-  localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos]));
-}
-function updateTotalFooter(){ document.querySelector('.total-display').textContent = `Total: ${fmt(totalGeral)}`; }
-function calcularTotal(){
-  let total = 0;
-  selecionadas.forEach(id => { const p = pecas.find(x=>x.id_peca===id); if(p && p.preco) total += parseFloat(p.preco); });
-  rifasSel.forEach(id => { const r = rifas.find(x=>x.id_rifa===id); if(r && r.valor_rifa) total += parseFloat(r.valor_rifa); else total += 30; });
-  totalGeral = total; updateTotalFooter();
-}
-
-/* ROUTER */
-const routes = ['galeria','feed','rifas','carrinho','checkout'];
-function showOnly(id){ routes.forEach(r=>{ const el=document.getElementById(r); if(!el) return; el.style.display=(r===id)?'block':'none'; }); window.scrollTo(0,0); }
-function navigateTo(route){ if(!routes.includes(route)) route='galeria'; showOnly(route); }
-document.querySelectorAll('.nav a').forEach(a=> a.addEventListener('click', (e)=>{ const href=a.getAttribute('href')||''; if(href.startsWith('#')){ e.preventDefault(); navigateTo(href.replace('#','')); } }));
-
-/* GALERIA */
-function renderGaleria(){
-  const grid=document.getElementById('galeriaGrid'); grid.innerHTML='';
-  pecas.forEach(p=>{
-    if(String(p.status).toUpperCase()==='VENDIDAAA') return;
-    const card=document.createElement('div'); card.className='gal-item';
-    const nome=(p.imagens&&p.imagens[0])?p.imagens[0]:'';
-    const img=imgWithFallback('/img/tmb/'+nome+'.avif'); card.appendChild(img);
-    const ttl=document.createElement('div');
-    card.addEventListener('click', ()=>{ openFeedAt(p.id_peca); navigateTo('feed'); });
-    grid.appendChild(card);
-  });
+function calcRifasTotal(n){ if(n<=0) return 0; return (n%2===0)? n*25 : (n-1)*25 + 30; }
+function totalAtual(){
+  const pecasTotal = pecasData.filter(p=>pecasSel.has(p.id)).reduce((s,p)=>s+Number(p.preco||0),0);
+  return calcRifasTotal(rifasSel.size) + pecasTotal;
 }
 
-/* FEED */
-function renderFeed(){
-  const list=document.getElementById('feedList'); list.innerHTML='';
-  pecas.forEach(p=>{
-    if(String(p.status).toUpperCase()==='VENDIDAAA') return;
-    const post=document.createElement('article'); post.className='post'; post.id='post-'+p.id_peca;
-    const car=document.createElement('div'); car.className='carousel';
-    const imgs=Array.isArray(p.imagens)?p.imagens:[];
-    imgs.forEach(nome=>{
-      const img=imgWithFallback('/img/otm/'+nome+'.avif');
-      car.appendChild(img);
-    });
-    post.appendChild(car);
-    const meta=document.createElement('div'); meta.className='meta';
-    const linha1=document.createElement('div'); linha1.className='linha1';
-    const t=document.createElement('div'); t.className='titulo'; t.textContent=p.titulo||('Peça '+p.id_peca);
-    const preco=document.createElement('div'); preco.className='preco'; preco.textContent=fmt(p.preco);
-    linha1.appendChild(t); linha1.appendChild(preco);
-    const ficha=document.createElement('div'); ficha.className='ficha'; ficha.textContent=[p.tecnica, p.dimensao||p.dimencao||p.tamanho].filter(Boolean).join(' · ');
-    const acoes=document.createElement('div'); acoes.className='acoes';
-    const btnSel=document.createElement('button'); btnSel.className='btn'; btnSel.textContent='Selecionar';
-    const btnFav=document.createElement('button'); btnFav.className='btn fav'+(favoritos.has(p.id_peca)?' active':''); btnFav.textContent='❤️';
-    function refreshBtn(){ btnSel.textContent = selecionadas.has(p.id_peca)?'Remover':'Selecionar'; }
-    btnSel.addEventListener('click', ()=>{ if(selecionadas.has(p.id_peca)) selecionadas.delete(p.id_peca); else selecionadas.add(p.id_peca); refreshBtn(); updatePills(); renderCart(); calcularTotal(); });
-    btnFav.addEventListener('click', ()=>{ if(favoritos.has(p.id_peca)) favoritos.delete(p.id_peca); else favoritos.add(p.id_peca); btnFav.classList.toggle('active', favoritos.has(p.id_peca)); updatePills(); renderCart(); });
-    refreshBtn(); acoes.append(btnSel, btnFav);
-    meta.append(linha1, ficha, acoes); post.appendChild(meta); list.appendChild(post);
-  });
-}
-function openFeedAt(id){ if(!document.getElementById('post-'+id)) renderFeed(); const el=document.getElementById('post-'+id); if(el){ el.scrollIntoView({behavior:'auto', block:'start'}); el.focus?.(); } }
-
-/* RIFAS */
-function renderRifas(){ const grid=document.getElementById('rifasGrid'); grid.innerHTML=''; rifas.forEach(r=>{ const disponivel = !r.status_rifa || String(r.status_rifa).trim()===''; const btn=document.createElement('button'); btn.type='button'; btn.className='rifa-btn'+(disponivel?'':' sold'); btn.style.backgroundColor=r.hex_rifa||r.hex||'#777'; const l1=document.createElement('span'); l1.textContent=(r.numero||r.id_rifa||'').toString().toUpperCase(); const l2=document.createElement('span'); l2.className='ln2'; l2.textContent=(r.nome||r.titulo||r.chamada||'').toString().toUpperCase(); btn.append(l1,l2); if(disponivel){ btn.addEventListener('click',()=>{ if(rifasSel.has(r.id_rifa)) rifasSel.delete(r.id_rifa); else rifasSel.add(r.id_rifa); btn.style.outline=rifasSel.has(r.id_rifa)?'2px solid #fff':'none'; updatePills(); renderCart(); calcularTotal(); }); } grid.appendChild(btn); }); }
-
-/* CARRINHO */
-function renderCart(tab='pecas'){ const cP=document.getElementById('cartPecas'); const cR=document.getElementById('cartRifas'); const cF=document.getElementById('cartFav'); cP.innerHTML=''; cR.innerHTML=''; cF.innerHTML='';
-  [...selecionadas].forEach(id=>{ const p=pecas.find(x=>x.id_peca===id); if(!p) return; const item=document.createElement('div'); item.className='cart-item'; const nome=(p.imagens&&p.imagens[0])?p.imagens[0]:''; const img=imgWithFallback('/img/tmb/'+nome+'.avif'); item.appendChild(img); const meta=document.createElement('div'); meta.className='ci-meta'; meta.innerHTML=`<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`; meta.querySelector('.btn-remove').addEventListener('click',()=>{ selecionadas.delete(id); updatePills(); renderCart(tab); renderFeed(); calcularTotal(); }); item.appendChild(meta); cP.appendChild(item); });
-  [...rifasSel].forEach(id=>{ const r=rifas.find(x=>x.id_rifa===id); const item=document.createElement('div'); item.className='cart-item'; const box=document.createElement('div'); box.style.cssText=`width:100%;height:100px;background:${r?.hex_rifa||'#999'};border-bottom:1px solid #2b2424`; item.appendChild(box); const meta=document.createElement('div'); meta.className='ci-meta'; const label=(r?.numero||id)+' · '+(r?.nome||r?.titulo||'Rifa'); meta.innerHTML=`<div class="ci-ttl">${label}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`; meta.querySelector('.btn-remove').addEventListener('click',()=>{ rifasSel.delete(id); updatePills(); renderCart(tab); renderRifas(); calcularTotal(); }); item.appendChild(meta); cR.appendChild(item); });
-  [...favoritos].forEach(id=>{ const p=pecas.find(x=>x.id_peca===id); if(!p) return; const item=document.createElement('div'); item.className='cart-item'; const nome=(p.imagens&&p.imagens[0])?p.imagens[0]:''; const img=imgWithFallback('/img/tmb/'+nome+'.avif'); item.appendChild(img); const meta=document.createElement('div'); meta.className='ci-meta'; meta.innerHTML=`<div class="ci-ttl">${p.titulo||('Peça '+p.id_peca)}</div><div class="ci-act"><button class="btn-remove">Remover</button></div>`; meta.querySelector('.btn-remove').addEventListener('click',()=>{ favoritos.delete(id); updatePills(); renderCart(tab); renderFeed(); }); item.appendChild(meta); cF.appendChild(item); });
-  document.querySelectorAll('.cart-tab').forEach(b=>b.classList.toggle('is-active', b.dataset.tab===tab));
-  cP.style.display=(tab==='pecas')?'grid':'none'; cR.style.display=(tab==='rifas')?'grid':'none'; cF.style.display=(tab==='fav')?'grid':'none';
-}
-document.getElementById('pillPecas').addEventListener('click',()=>{ renderCart('pecas'); navigateTo('carrinho'); });
-document.getElementById('pillRifas').addEventListener('click',()=>{ renderCart('rifas'); navigateTo('carrinho'); });
-document.getElementById('pillFav').addEventListener('click',()=>{ renderCart('fav'); navigateTo('carrinho'); });
-document.getElementById('cartClose')?.addEventListener('click',()=>navigateTo('galeria'));
-document.querySelectorAll('.cart-tab').forEach(b=>b.addEventListener('click',()=>renderCart(b.dataset.tab)));
-
-/* CHECKOUT FLOW */
-const step1=document.getElementById('step1'), step2=document.getElementById('step2'), step3=document.getElementById('step3');
-document.getElementById('btnCheckout').onclick=()=>{ calcularTotal(); navigateTo('checkout'); step1.style.display='block'; step2.style.display='none'; step3.style.display='none'; };
-document.getElementById('voltar1').onclick=()=>navigateTo('carrinho');
-document.getElementById('prosseguir1').onclick=()=>{ const nome=document.getElementById('nome').value.trim(), email=document.getElementById('email').value.trim(); if(!nome||!email){ alert('Preencha nome e e-mail antes de prosseguir.'); return; } step1.style.display='none'; step2.style.display='block'; };
-document.getElementById('voltar2').onclick=()=>{ step2.style.display='none'; step1.style.display='block'; };
-
-document.getElementById('apostar').onclick=async()=>{
-  step2.style.display='none'; step3.style.display='block';
-  const nome=document.getElementById('nome').value.trim(), email=document.getElementById('email').value.trim(), telefone=document.getElementById('telefone').value.trim();
-  document.getElementById('fNome').value=nome; document.getElementById('fEmail').value=email; document.getElementById('fTelefone').value=telefone;
-  document.getElementById('fPecas').value=[...selecionadas].join(','); document.getElementById('fRifas').value=[...rifasSel].join(','); document.getElementById('fFav').value=[...favoritos].join(','); document.getElementById('fTotal').value=totalGeral.toFixed(2);
-
-  try{
-    const fd=new FormData(); fd.append('nome',nome); fd.append('email',email); fd.append('telefone',telefone);
-    fd.append('pecas',[...selecionadas].join(',')); fd.append('rifas',[...rifasSel].join(',')); fd.append('favoritas',[...favoritos].join(','));
-    fd.append('total',totalGeral.toFixed(2));
-    await fetch(GAS_URL,{method:'POST',body:fd,mode:'no-cors'});
-  }catch(e){ console.warn('Falha no envio ao GAS:',e); }
-
-  // submit to FormSubmit -> _next redirects to obrigado.html
-  document.getElementById('hiddenForm').submit();
-};
-
-/* BOOT */
-async function init(){
-  try{
-    // wipe previous favorites on load as requested (start at zero)
-    localStorage.removeItem('BSTV_FAV');
-    favoritos.clear();
-
-    const [rp,rr]=await Promise.all([ fetch(PECAS_JSON_URL,{cache:'no-store'}), fetch(RIFAS_JSON_URL,{cache:'no-store'}) ]);
-    if(!rp.ok || !rr.ok) throw new Error('JSON não carregou (status)'); 
-    pecas = await rp.json(); rifas = await rr.json();
-    renderGaleria(); renderFeed(); renderRifas(); updatePills(); calcularTotal(); navigateTo('galeria');
-  }catch(err){
-    console.error('Falha ao carregar JSONs:', err);
-    alert('Não foi possível carregar os itens agora. Confira se /dados/pecas.json e /dados/rifas.json estão acessíveis.');
+/* ===== Navegação ===== */
+function resetAll(){ location.reload(); }
+function prevStep(){ step=Math.max(1, step-1); render(); }
+function nextStep(){
+  if(step===1){ step=2; render(); return; }
+  if(step===2){
+    // valida campos
+    const nome = document.getElementById('inNome').value.trim();
+    const email= document.getElementById('inEmail').value.trim();
+    if(!nome || !email){ alert('Preencha Nome e E-mail.'); return; }
+    step=3; render(); return;
+  }
+  if(step===3){
+    confirmarPagamento(); // envia GAS + FormSubmit e redireciona
   }
 }
-window.addEventListener('DOMContentLoaded', init);
+
+/* ===== Render por etapa ===== */
+function render(){
+  document.getElementById('stepTitle').textContent =
+    (step===1?'1 | CONFIRA SUAS APOSTAS': step===2?'2 | PREENCHA SEUS DADOS':'3 | PAGAMENTO');
+
+  const sheet = document.getElementById('sheet'); sheet.innerHTML = '';
+  document.getElementById('total').textContent = 'Total: ' + fmt(totalAtual());
+  document.getElementById('btnVoltar').disabled = (step===1);
+  document.getElementById('btnAvancar').textContent = (step===3?'Confirmar':'Avançar');
+
+  if(step===1) renderStep1(sheet);
+  if(step===2) renderStep2(sheet);
+  if(step===3) renderStep3(sheet);
+}
+
+/* ===== STEP 1: Tabela (X | Meio | R$) ===== */
+function renderStep1(root){
+  // RIFAS
+  if(rifasSel.size){
+    root.appendChild(cat('RIFAS'));
+    const ids = [...rifasSel];
+    ids.forEach((id, idx)=>{
+      const r = rifasData.find(x=>x.id===id);
+      const chip = document.createElement('span');
+      chip.className='chip';
+      chip.style.background = r?.hex || '#ddd';
+      chip.style.color = getContrast(r?.hex||'#ddd');
+      chip.textContent = r?.label || id;
+      const price = (ids.length%2!==0 && idx===ids.length-1)? 30 : 25;
+      root.appendChild(row(()=>{ rifasSel.delete(id); render(); }, chip, fmt(price)));
+    });
+  }
+  // PEÇAS
+  const pecas = pecasData.filter(p=>pecasSel.has(p.id));
+  if(pecas.length){
+    root.appendChild(cat('PEÇAS'));
+    pecas.forEach(p=>{
+      const mid = document.createElement('div'); mid.className='mid';
+      const img = new Image(); img.src=p.thumb; img.alt=p.titulo; img.className='thumb';
+      const t = document.createElement('div'); t.textContent=p.titulo; mid.append(img,t);
+      root.appendChild(row(()=>{ pecasSel.delete(p.id); render(); }, mid, fmt(p.preco)));
+    });
+  }
+  // FAVORITAS
+  const favs = favoritasData.filter(p=>favSel.has(p.id));
+  if(favs.length){
+    root.appendChild(cat('FAVORITAS'));
+    favs.forEach(p=>{
+      const mid = document.createElement('div'); mid.className='mid';
+      const img = new Image(); img.src=p.thumb; img.alt=p.titulo; img.className='thumb';
+      const t = document.createElement('div'); t.textContent=p.titulo; mid.append(img,t);
+      root.appendChild(row(()=>{ favSel.delete(p.id); render(); }, mid, '—'));
+    });
+  }
+}
+function row(onDel, midNode, priceText){
+  const r = document.createElement('div'); r.className='row';
+  const cDel = document.createElement('div'); cDel.className='del';
+  const bx = document.createElement('button'); bx.className='btn-x'; bx.textContent='X'; bx.onclick=onDel; cDel.appendChild(bx);
+  const cMid = document.createElement('div'); cMid.className='mid'; cMid.appendChild(midNode);
+  const cPrice = document.createElement('div'); cPrice.className='price'; cPrice.textContent=priceText;
+  r.append(cDel,cMid,cPrice); return r;
+}
+function cat(label){ const d=document.createElement('div'); d.className='cat'; d.textContent=label; return d; }
+
+/* ===== STEP 2: Formulário ===== */
+function renderStep2(root){
+  const wrap = document.createElement('div'); wrap.className='form';
+  wrap.innerHTML = `
+    <div class="fg">
+      <label for="inNome">Nome *</label>
+      <input id="inNome" type="text" placeholder="Seu nome completo">
+    </div>
+    <div class="fg">
+      <label for="inEmail">E-mail *</label>
+      <input id="inEmail" type="email" placeholder="voce@exemplo.com">
+    </div>
+    <div class="fg">
+      <label for="inTel">Telefone (opcional)</label>
+      <input id="inTel" type="tel" placeholder="(DDD) 90000-0000">
+      <div class="hint">Usaremos para contato rápido via WhatsApp, se necessário.</div>
+    </div>
+  `;
+  root.appendChild(wrap);
+}
+
+/* ===== STEP 3: Pagamento ===== */
+function renderStep3(root){
+  const tabs = document.createElement('div'); tabs.className='tabs';
+  tabs.innerHTML = `
+    <button id="tPix" class="tab" role="tab" aria-selected="true">PIX</button>
+    <button id="tPP"  class="tab" role="tab" aria-selected="false">PayPal</button>
+  `;
+  root.appendChild(tabs);
+
+  // PIX pane
+  const pPix = document.createElement('section'); pPix.className='pane pix'; pPix.id='pPix'; pPix.setAttribute('aria-hidden','false');
+  pPix.innerHTML = `
+    <div class="qrCol">
+      <div class="qrBox" id="qrBox"></div>
+      <button class="copyBtn" id="btnCopy">PIX Copia e Cola</button>
+    </div>
+    <div class="info">
+      <div class="card"><strong>Total:</strong> <span id="pixTotal">${fmt(totalAtual())}</span></div>
+      <div class="card">
+        Pague pelo app do seu banco: aponte a câmera para o QR Code ou use o botão “PIX Copia e Cola”.
+      </div>
+    </div>
+  `;
+  root.appendChild(pPix);
+
+  // PayPal pane
+  const pPP = document.createElement('section'); pPP.className='pane'; pPP.id='pPP'; pPP.setAttribute('aria-hidden','true');
+  pPP.innerHTML = `
+    <div class="card center" style="width:100%">
+      <p>Opcional: pague via PayPal</p>
+      <p><a class="btn red" href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G" target="_blank" rel="noopener">Pagar com PayPal</a></p>
+    </div>
+  `;
+  root.appendChild(pPP);
+
+  // abas
+  document.getElementById('tPix').onclick = () => {
+    document.getElementById('tPix').setAttribute('aria-selected','true');
+    document.getElementById('tPP').setAttribute('aria-selected','false');
+    pPix.setAttribute('aria-hidden','false'); pPP.setAttribute('aria-hidden','true');
+  };
+  document.getElementById('tPP').onclick = () => {
+    document.getElementById('tPP').setAttribute('aria-selected','true');
+    document.getElementById('tPix').setAttribute('aria-selected','false');
+    pPix.setAttribute('aria-hidden','true'); pPP.setAttribute('aria-hidden','false');
+  };
+
+  // Gera BR Code + QR
+  const payload = gerarBRCode(totalAtual());
+  new QRCode(document.getElementById('qrBox'), { text: payload, width: 170, height: 170, correctLevel: QRCode.CorrectLevel.M });
+  document.getElementById('btnCopy').onclick = () => copyPayload(payload);
+}
+
+/* ===== PIX helpers ===== */
+function crc16_ccitt_ffff(data){
+  let crc=0xFFFF;
+  for(let i=0;i<data.length;i++){
+    let x=((crc>>8)^data.charCodeAt(i))&0xff;
+    x^=x>>4;
+    crc=(crc<<8)^(x<<12)^(x<<5)^x;
+  }
+  crc&=0xFFFF; return crc.toString(16).toUpperCase().padStart(4,'0');
+}
+function gerarBRCode(valor){
+  const f=(id,val)=> id + String(val.length).padStart(2,'0') + val;
+  const nome   = PIX_NOME.substring(0,25).toUpperCase().replace(/[^\w ]/g,'').trim();
+  const cidade = PIX_CIDADE.substring(0,15).toUpperCase().replace(/[^\w ]/g,'').trim();
+  let pl = '000201';
+  pl += f('26', `0014BR.GOV.BCB.PIX01${String(CHAVE_PIX.length).padStart(2,'0')}${CHAVE_PIX}`);
+  pl += '52040000';
+  pl += '5303986';
+  pl += f('54', Number(valor).toFixed(2));
+  pl += '5802BR';
+  pl += f('59', nome);
+  pl += f('60', cidade);
+  pl += f('62', f('05', PIX_TXID));
+  pl += '6304';
+  return pl + crc16_ccitt_ffff(pl);
+}
+function copyPayload(text){
+  const done = ok => {
+    const b = document.getElementById('btnCopy');
+    b.textContent = ok ? 'PIX copiado!' : 'Erro ao copiar';
+    setTimeout(()=> b.textContent='PIX Copia e Cola', 1800);
+  };
+  if(navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(()=>done(true)).catch(()=>done(false));
+  else{
+    const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.top='-9999px';
+    document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); done(true);}catch(e){done(false);} document.body.removeChild(ta);
+  }
+}
+
+/* ===== Confirmar (GAS + FormSubmit) ===== */
+async function confirmarPagamento(){
+  const nome = (document.getElementById('inNome')?.value||'').trim();
+  const email= (document.getElementById('inEmail')?.value||'').trim();
+  const tel  = (document.getElementById('inTel')?.value||'').trim();
+  const pecas = [...pecasSel].join(',');
+  const rifas = [...rifasSel].join(',');
+  const fav   = [...favSel].join(',');
+  const total = totalAtual();
+
+  // 1) GAS (backup)
+  try{
+    const fd = new FormData();
+    fd.append('nome',nome); fd.append('email',email); fd.append('telefone',tel);
+    fd.append('pecas',pecas); fd.append('rifas',rifas); fd.append('favoritas',fav);
+    fd.append('total', String(total));
+    fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' });
+  }catch(e){ console.warn('GAS falhou', e); }
+
+  // 2) FormSubmit (principal)
+  try{
+    const form = document.getElementById('hiddenForm');
+    form.action = FORMSUBMIT_ACTION; // <<< precisa estar certo para funcionar
+    document.getElementById('fNome').value = nome;
+    document.getElementById('fEmail').value= email;
+    document.getElementById('fTelefone').value = tel;
+    document.getElementById('fPecas').value = pecas;
+    document.getElementById('fRifas').value = rifas;
+    document.getElementById('fFav').value   = fav;
+    document.getElementById('fTotal').value = total;
+    form.submit(); // redireciona para _next ao finalizar
+  }catch(e){
+    alert('Erro ao enviar pelo FormSubmit. Veja o console.');
+    console.error(e);
+  }
+}
+
+/* ========= init ========= */
+render();
 </script>
 </body>
 </html>
