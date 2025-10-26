@@ -295,7 +295,7 @@ footer.has-total #ctaMain {
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">pára de graça</div>
+      <div class="logo">quero amor e quero amar, quero a vida aproveitar</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -861,41 +861,7 @@ function attachBindings(){
 }
 
 
-    document.getElementById('voltarCheckout').onclick = () => handleHashChange();
-
-    document.getElementById('prosseguirCheckout').onclick = () => {
-      const nome  = document.getElementById('nome').value.trim();
-      const email = document.getElementById('email').value.trim();
-      if (!nome || !email) { alert('Preencha nome e e-mail'); return; }
-
-      // preenche form oculto
-      document.getElementById('fNome').value  = nome;
-      document.getElementById('fEmail').value = email;
-      document.getElementById('fTelefone').value = (document.getElementById('telefone').value||'').trim();
-      document.getElementById('fPecas').value = [...selecionadas].join(',');
-      document.getElementById('fRifas').value = [...rifasSel].join(',');
-      document.getElementById('fFav').value   = [...favoritos].join(',');
-      document.getElementById('fTotal').value = totalGeral.toFixed(2); // mantém 2 casas só para o form
-
-      // backup GAS (não bloqueia)
-      try{
-        const fd = new FormData();
-        fd.append('nome', nome);
-        fd.append('email', email);
-        fd.append('telefone', (document.getElementById('telefone').value||'').trim());
-        fd.append('pecas', [...selecionadas].join(','));
-        fd.append('rifas', [...rifasSel].join(','));
-        fd.append('favoritas', [...favoritos].join(','));
-        fd.append('total', totalGeral.toFixed(2));
-        fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' });
-      }catch(e){ console.warn('GAS backup falhou', e); }
-
-      // envia para FormSubmit → obrigado.html
-      document.getElementById('hiddenForm').submit();
-    };
-  };
-}
-
+/* ====== REMOVI COISA AQUI GPT DISSE PRA FAZER ====== */
 
 /* =============== Pills e Total ================= */
 /* ====== Footer: pills compactas + CTA dinâmico ====== */
