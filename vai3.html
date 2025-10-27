@@ -220,7 +220,62 @@ html.ck-open, body.ck-open{overflow:hidden}
 
 /* CTA do rodapé “invisível” quando total=0 */
 #ctaMain[disabled]{background:var(--ink)!important;color:var(--ink)!important;border-color:var(--ink)!important;opacity:1;cursor:default}
- </style>
+ 
+/* ===== PATCH-03 · Layout hotfix (colar no FINAL do CSS) ===== */
+
+/* Garante o contêiner da página */
+#app{max-width:var(--app-max-width);margin:20px auto;padding:0 16px}
+
+/* GALERIA (masonry em colunas) */
+.galeria{
+  display:block !important;            /* desarma qualquer display:flex/grid que tenha vazado */
+  column-gap:4px; -webkit-column-gap:4px;
+  column-count:3; -webkit-column-count:3;
+}
+@media (min-width:1300px){
+  .galeria{column-count:4; -webkit-column-count:4}
+}
+.gal-item{
+  display:inline-block; width:100%;
+  margin:0 0 1px;
+  break-inside:avoid; -webkit-column-break-inside:avoid;
+  border:var(--bd-thin) solid var(--ink);
+  background:#fff; overflow:hidden;
+}
+.gal-item img{
+  display:block; width:100%; height:auto;
+  object-fit:cover; background:#000;
+}
+
+/* FEED (lista vertical de posts) */
+.feed{display:flex !important; flex-direction:column; gap:8px}
+.post{border:var(--bd-thin) solid var(--ink); background:var(--beige); overflow:hidden}
+
+/* Botões do feed (reforço visual) */
+.btn,.ck-btn{border-radius:0; font-family:var(--ff-cta); font-weight:700}
+.add-btn{border:2px solid var(--red); background:transparent; color:var(--red)}
+.add-btn.added{border-color:var(--ink); background:var(--ink); color:var(--beige)}
+.fav-btn{border:2px solid var(--red); background:var(--beige); color:var(--red)}
+.fav-btn.active{background:var(--red); color:var(--beige)}
+
+/* CHECKOUT: empilhamento e largura */
+#checkoutOverlay{position:fixed; inset:0; z-index:9990}
+#checkoutModal{
+  position:fixed; left:50%; transform:translateX(-50%);
+  right:auto; bottom:0; z-index:9991;
+  max-width:min(1100px,94vw); max-height:69vh; overflow:auto
+}
+
+/* Rodapé: CTA “invisível” quando desabilitado, e vermelho quando tem total */
+footer.no-total #ctaMain{background:#2b2424; color:#2b2424; border-color:#2b2424}
+footer.has-total #ctaMain{background:var(--red); color:#fff; border:0}
+
+/* Etapas do checkout seguem atributo [hidden] */
+.ck-step{display:block}
+.ck-step[hidden]{display:none}
+
+
+</style>
 </head>
   
   
