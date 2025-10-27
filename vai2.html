@@ -1570,6 +1570,114 @@ function ckFillHiddenForm(nome,email,fone){
   };
 })();
 
+<!-- === BEGIN CHECKOUT CORE (drop-in, override-safe) === -->
+<script>
+(function(){
+  // Getters centralizados para o modal/abas/campos
+  window.CK = {
+    overlay: ()=> document.getElementById('checkoutOverlay'),
+    modal:   ()=> document.getElementById('checkoutModal'),
+    close:   ()=> document.getElementById('ck-close'),
+
+    s1: ()=> document.getElementById('ck-step1'),
+    s2: ()=> document.getElementById('ck-step2'),
+    s3: ()=> document.getElementById('ck-step3'),
+
+    listR: ()=> document.getElementById('ck-rifas'),
+    listP: ()=> document.getElementById('ck-pecas'),
+    listF: ()=> document.getElementById('ck-favs'),
+
+    prev1: ()=> document.getElementById('ck-prev-1'),
+    next1: ()=> document.getElementById('ck-next-1'),
+    prev2: ()=> document.getElementById('ck-prev-2'),
+    next2: ()=> document.getElementById('ck-next-2'),
+    prev3: ()=> document.getElementById('ck-prev-3'),
+    finish:()=> document.getElementById('ck-finish'),
+
+    t1:   ()=> document.getElementById('ck-total-s1'),
+    t2:   ()=> document.getElementById('ck-total-s2'),
+    t3:   ()=> document.getElementById('ck-total-s3'),
+    t3b:  ()=> document.getElementById('ck-total-s3b'),
+
+    tabPix:   ()=> document.getElementById('ck-tab-pix'),
+    tabPP:    ()=> document.getElementById('ck-tab-pp'),
+    panePix:  ()=> document.getElementById('ck-pane-pix'),
+    panePP:   ()=> document.getElementById('ck-pane-pp'),
+    pixQR:    ()=> document.getElementById('ck-pix-qr'),
+    pixCopy:  ()=> document.getElementById('ck-pix-copy'),
+    pixPayload: ()=> document.getElementById('ck-pix-payload'),
+
+    fNome: ()=> document.getElementById('ck-nome'),
+    fEmail:()=> document.getElementById('ck-email'),
+    fFone: ()=> document.getElementById('ck-fone'),
+  };
+
+  // Estado do modal
+  window.ckOpen = false;
+  window.ckStep = 1;
+
+  // Abre o checkout
+  window.ckOpenModal = function(){
+    const ov = CK.overlay(), md = CK.modal();
+    if (!ov || !md) return;
+
+    ov.removeAttribute('hidden');
+    md.removeAttribute('hidden');
+    document.documentElement.classList.add('ck-open');
+    document.body.classList.add('ck-open');
+
+    ckGoStep(1); // sempre começa no passo 1
+
+    // Render/sincronizações (chama só se existirem, para não quebrar)
+    if (typeof ckRenderStep1 === 'function') ckRenderStep1();
+    if (typeof ckSyncTotalsOnSteps === 'function') ckSyncTotalsOnSteps();
+    if (typeof ckEnsurePixReady === 'function')   ckEnsurePixReady(true);
+
+    ckOpen = true;
+  };
+
+  // Fecha o checkout
+  window.ckCloseModal = function(){
+    const ov = CK.overlay(), md = CK.modal();
+    if (!ov || !md) return;
+
+    ov.setAttribute('hidden','');
+    md.setAttribute('hidden','');
+    document.documentElement.classList.remove('ck-open');
+    document.body.classList.remove('ck-open');
+    ckOpen = false;
+  };
+
+  // Troca de etapa (1, 2, 3)
+  window.ckGoStep = function(step){
+    ckStep = step;
+    const s1 = CK.s1(), s2 = CK.s2(), s3 = CK.s3();
+    if (s1) s1.hidden = (step !== 1);
+    if (s2) s2.hidden = (step !== 2);
+    if (s3) s3.hidden = (step !== 3);
+
+    if (step === 3 && typeof ckEnsurePixReady === 'function') ckEnsurePixReady(true);
+    if (typeof ckSyncTotalsOnSteps === 'function') ckSyncTotalsOnSteps();
+  };
+
+  // Liga: CTA principal, overlay (fechar) e botão X (fechar)
+  (function bindOpenClose(){
+    const btn = document.getElementById('ctaMain');
+    const ov  = CK.overlay();
+    const x   = CK.close();
+
+    if (btn) btn.addEventListener('click', (e)=>{
+      if ((totalGeral||0) <= 0) return;
+      e.preventDefault();
+      ckOpenModal();
+    });
+
+    if (ov) ov.addEventListener('click', ckCloseModal);
+    if (x)  x.addEventListener('click', ckCloseModal);
+  })();
+})();
+</script>
+<!-- === END CHECKOUT CORE === -->
 
 
 
