@@ -274,6 +274,101 @@ footer.has-total #ctaMain{background:var(--red); color:#fff; border:0}
 .ck-step{display:block}
 .ck-step[hidden]{display:none}
 
+/* ========= PATCH-FEED-FIX (colar no FINAL do CSS) ========= */
+/* Mantém o feed igual ao design original, independente do restante do CSS */
+
+/* Container do post sempre em coluna, espaçado e com fundo correto */
+#app .post{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:0 !important;
+  background:var(--beige) !important;
+  border:var(--bd-thin) solid var(--ink) !important;
+  overflow:hidden !important;
+}
+
+/* Carrossel ocupa 100%, não “estica” vertical e centraliza a imagem */
+#app .post .carousel{
+  display:flex !important;
+  gap:4px !important;
+  overflow-x:auto !important;
+  scroll-snap-type:x mandatory !important;
+  padding:6px 12px !important;
+  background:var(--beige) !important;
+}
+#app .post .carousel-slide{
+  flex:0 0 100% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  scroll-snap-align:center !important;
+  background:var(--beige) !important;
+}
+#app .post .carousel-slide img{
+  width:100% !important;
+  max-height:42vh !important;   /* limite de altura como antes */
+  min-height:200px !important;
+  object-fit:contain !important;
+  background:var(--beige) !important;
+}
+
+/* Barra antiga permanece oculta */
+#app .post .carousel-bar-wrap{ display:none !important; }
+
+/* Bloco “meta” (título, preço, técnica, dim.) */
+#app .post .meta{
+  padding:10px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:8px !important;
+  background:var(--beige) !important;
+}
+#app .post .meta .linha1{
+  display:flex !important;
+  align-items:flex-start !important;
+  gap:8px !important;
+}
+#app .post .meta .titulo{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  font-family:var(--ff-cta) !important;
+  font-weight:700 !important;
+}
+#app .post .meta .preco{
+  flex:0 0 auto !important;
+  white-space:nowrap !important;
+  font-weight:700 !important;
+}
+
+/* Técnica acima das dimensões e ambas com as cores certas */
+#app .post .meta .tecnica{
+  font-size:13px !important;
+  color:var(--ink) !important;
+}
+#app .post .meta .dimens{
+  font-size:13px !important;
+  color:var(--ink) !important;
+}
+
+/* Rodapé dos botões: coração à esquerda, ADICIONAR/REMOVER à direita */
+#app .post .meta .meta-footer{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+}
+#app .post .meta .meta-footer .left-actions{ margin-right:auto !important; }
+#app .post .meta .meta-footer .right-actions{ display:flex !important; gap:8px !important; }
+
+/* Botões respeitando o padrão do site */
+#app .post .btn{ font-size:13px !important; font-family:var(--ff-cta) !important; font-weight:700 !important; padding:8px 12px !important; border-radius:0 !important; }
+#app .post .fav-btn{ border:2px solid var(--red) !important; background:var(--beige) !important; color:var(--red) !important; }
+#app .post .fav-btn.active{ background:var(--red) !important; color:var(--beige) !important; }
+#app .post .add-btn{ border:2px solid var(--red) !important; background:transparent !important; color:var(--red) !important; }
+#app .post .add-btn.added{ border-color:var(--ink) !important; background:var(--ink) !important; color:var(--beige) !important; }
+
+/* Evita qualquer scroll horizontal inesperado dentro do post */
+#app .post{ overflow-x:hidden !important; }
+/* ========= /PATCH-FEED-FIX ========= */
 
 </style>
 </head>
