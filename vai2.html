@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>quero amor e quero amar</title>
+<title>pós-queroamor</title>
 
 <!-- ====== STYLES (preserve visual look of v08) ====== -->
 <style>
@@ -266,7 +267,32 @@ footer.has-total #ctaMain {
 }
 
 
-  
+  /* ===================== PATCH VISUAL CHECKOUT (DROP-IN) ===================== */
+/* Alinha a lógica de visibilidade ao atributo [hidden] que o JS usa.          */
+/* Basta colar no FINAL do CSS existente. Não precisa apagar nada.             */
+
+/* Overlay e modal: escondidos por padrão; aparecem quando NÃO têm [hidden] */
+#checkoutOverlay { display: none; }
+#checkoutModal  { display: none; }
+#checkoutOverlay:not([hidden]) { display: block; }
+#checkoutModal:not([hidden])  { display: block; }
+
+/* Etapas (passos) do checkout: mostram/ocultam via [hidden] */
+.ck-step { display: block; }
+.ck-step[hidden] { display: none; }
+
+/* Garante que a página não role com o checkout aberto (se já existir, tudo bem) */
+html.ck-open, body.ck-open { overflow: hidden; }
+
+/* (opcional, mas útil) deixa o CTA invisível quando desabilitado, como você pediu */
+#ctaMain:disabled {
+  background: #2b2424 !important;
+  color: #2b2424 !important;
+  border-color: #2b2424 !important;
+  cursor: default;
+}
+/* ========================================================================== */
+
 </style>
 <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> 
 
@@ -295,7 +321,7 @@ footer.has-total #ctaMain {
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">quero amor e quero amar, quero a vida aproveitar</div>
+      <div class="logo">ME SINTO CONTENTE, ME SINTO MTO CONTENTE</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -1049,24 +1075,29 @@ const CK = {
 };
 
 // Mostra/esconde modal
-function ckOpenModal() {
-  const overlay = CK.overlay(), modal = CK.modal();
-  if (!overlay || !modal) return;
-  overlay.hidden = false;
-  modal.hidden = false;
-  ckOpen = true;
-  ckGoStep(1); // sempre inicia no passo 1
-  ckRenderStep1();
-  ckSyncTotalsOnSteps();
+function ckOpenModal(){
+  const ov = document.getElementById('checkoutOverlay');
+  const md = document.getElementById('checkoutModal');
+  if (!ov || !md) return;
+
+  // tira o hidden dos dois:
+  ov.removeAttribute('hidden');
+  md.removeAttribute('hidden');
+
+  // impede scroll de fundo (opcional, mas recomendado)
+  document.documentElement.classList.add('ck-open');
 }
 
-function ckCloseModal() {
-  const overlay = CK.overlay(), modal = CK.modal();
-  if (!overlay || !modal) return;
-  overlay.hidden = true;
-  modal.hidden = true;
-  ckOpen = false;
+function ckCloseModal(){
+  const ov = document.getElementById('checkoutOverlay');
+  const md = document.getElementById('checkoutModal');
+  if (!ov || !md) return;
+
+  ov.setAttribute('hidden','');
+  md.setAttribute('hidden','');
+  document.documentElement.classList.remove('ck-open');
 }
+
 
 // Troca de passo
 function ckGoStep(step) {
