@@ -614,16 +614,17 @@ function attachAppDelegation(){
 
 /* =============== Checkout (igual ao que já funcionava) =============== */
 /* ====== Bind do CTA principal (checkout inline) ====== */
+/* =============== Bind do CTA principal (checkout inline) =============== */
 function attachBindings(){
   const cta = document.getElementById('ctaMain');
   if (!cta) return;
 
   cta.onclick = (e) => {
-    if (cta.disabled) return;       // sem seleção, não faz nada
+    if (cta.disabled) return; // sem seleção, não faz nada
     e.preventDefault();
     calcularTotal();
 
-    // checkout minimalista inline (mesma lógica que você já usa)
+    // Checkout inline minimalista
     document.getElementById('app').innerHTML = `
       <section id="checkout">
         <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
@@ -633,45 +634,70 @@ function attachBindings(){
           <label>Telefone</label><input id="telefone" type="tel" style="width:100%">
           <div style="display:flex;gap:8px;margin-top:12px">
             <button id="voltarCheckout" style="flex:1">Voltar</button>
-            <button id="prosseguirCheckout" style="flex:1;background:var(--red);color:#fff">Prosseguir</button>
+            <button id="enviarApostaBtn" style="flex:1;background:var(--red);color:#fff">Enviar aposta</button>
           </div>
         </div>
       </section>`;
 
     document.getElementById('voltarCheckout').onclick = () => handleHashChange();
 
-    document.getElementById('prosseguirCheckout').onclick = () => {
-      const nome  = document.getElementById('nome').value.trim();
-      const email = document.getElementById('email').value.trim();
-      if (!nome || !email) { alert('Preencha nome e e-mail'); return; }
+    const enviarBtn = document.getElementById('enviarApostaBtn');
+    let enviando = false;
 
-      // preenche form oculto
-      document.getElementById('fNome').value  = nome;
-      document.getElementById('fEmail').value = email;
-      document.getElementById('fTelefone').value = (document.getElementById('telefone').value||'').trim();
-      document.getElementById('fPecas').value = [...selecionadas].join(',');
-      document.getElementById('fRifas').value = [...rifasSel].join(',');
-      document.getElementById('fFav').value   = [...favoritos].join(',');
-      document.getElementById('fTotal').value = totalGeral.toFixed(2); // mantém 2 casas só para o form
+    enviarBtn.onclick = async () => {
+      if (enviando) return;
+      const nome  = (document.getElementById('nome').value || '').trim();
+      const email = (document.getElementById('email').value || '').trim();
+      const fone  = (document.getElementById('telefone').value || '').trim();
+      if (!nome || !email) { alert('Preencha nome e e-mail.'); return; }
 
-      // backup GAS (não bloqueia)
+      // Preenche hidden form
+      const f = document.getElementById('hiddenForm');
+      document.getElementById('fNome').value    = nome;
+      document.getElementById('fEmail').value   = email;
+      document.getElementById('fTelefone').value= fone;
+      document.getElementById('fPecas').value   = [...selecionadas].join(',');
+      document.getElementById('fRifas').value   = [...rifasSel].join(',');
+      document.getElementById('fFav').value     = [...favoritos].join(',');
+      document.getElementById('fTotal').value   = Number(Math.floor(totalGeral||0)).toFixed(2);
+
+      // UI: desabilita e troca rótulo
+      enviando = true;
+      enviarBtn.disabled = true;
+      const oldLabel = enviarBtn.textContent;
+      enviarBtn.textContent = 'Enviando aposta...';
+
+      // Backup no GAS (não bloqueia)
       try{
         const fd = new FormData();
         fd.append('nome', nome);
         fd.append('email', email);
-        fd.append('telefone', (document.getElementById('telefone').value||'').trim());
+        fd.append('telefone', fone);
         fd.append('pecas', [...selecionadas].join(','));
         fd.append('rifas', [...rifasSel].join(','));
         fd.append('favoritas', [...favoritos].join(','));
-        fd.append('total', totalGeral.toFixed(2));
-        fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' });
-      }catch(e){ console.warn('GAS backup falhou', e); }
+        fd.append('total', Number(Math.floor(totalGeral||0)).toFixed(2));
+        fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' }).catch(()=>{});
+      }catch(_){/* ignora */ }
 
-      // envia para FormSubmit → obrigado.html
-      document.getElementById('hiddenForm').submit();
+      // Envia para FormSubmit → redireciona para _next (obrigado.html)
+      try{
+        f.submit();
+        // Fallback: se por algum motivo o navegador bloquear o submit
+        // (não costuma acontecer), forçamos o redirect após 800ms.
+        setTimeout(()=>{ location.href = 'https://betshoptv.com/obrigado.html'; }, 800);
+      }catch(err){
+        // Em caso de erro real, reverte o botão
+        console.error('Falha ao enviar o formulário:', err);
+        enviando = false;
+        enviarBtn.disabled = false;
+        enviarBtn.textContent = oldLabel;
+        alert('Não foi possível enviar agora. Tente novamente.');
+      }
     };
   };
 }
+
 
 
 /* =============== Pills e Total ================= */
