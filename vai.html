@@ -615,44 +615,67 @@ function attachAppDelegation(){
 /* =============== Checkout (igual ao que já funcionava) =============== */
 /* ====== Bind do CTA principal (checkout inline) ====== */
 /* =============== Bind do CTA principal (checkout inline) =============== */
+/* =============== Bind do CTA (Dados → PIX → Enviar) =============== */
 function attachBindings(){
   const cta = document.getElementById('ctaMain');
   if (!cta) return;
 
+  // util: BR Code PIX (CRC16 CCITT 0xFFFF)
+  const crc16 = (data)=>{
+    let crc=0xFFFF;
+    for(let i=0;i<data.length;i++){
+      let x=((crc>>8)^data.charCodeAt(i))&0xff; x^=x>>4;
+      crc=(crc<<8)^(x<<12)^(x<<5)^x;
+    }
+    return (crc&0xFFFF).toString(16).toUpperCase().padStart(4,'0');
+  };
+  const gerarBRCode = (valorBRL)=>{
+    const chavePix="betshoptv@gmail.com";
+    const nome="BET SHOP TV".substring(0,25).toUpperCase();
+    const cidade="SAO PAULO".substring(0,15).toUpperCase();
+    const txid="***";
+    const f=(id,val)=> id + String(val.length).padStart(2,'0') + val;
+
+    const v = Number(Math.floor(valorBRL||0)).toFixed(2); // 2 casas no campo 54
+    let pl="000201";
+    pl+=f('26',`0014BR.GOV.BCB.PIX01${String(chavePix.length).padStart(2,'0')}${chavePix}`);
+    pl+='52040000'; pl+='5303986';
+    pl+=f('54', v);
+    pl+='5802BR'; pl+=f('59',nome); pl+=f('60',cidade); pl+=f('62',f('05',txid)); pl+='6304';
+    return pl + crc16(pl);
+  };
+
   cta.onclick = (e) => {
-    if (cta.disabled) return; // sem seleção, não faz nada
+    if (cta.disabled) return; // sem seleção, ignora
     e.preventDefault();
     calcularTotal();
 
-    // Checkout inline minimalista
-    document.getElementById('app').innerHTML = `
+    // PASSO 1 – DADOS
+    const app = document.getElementById('app');
+    app.innerHTML = `
       <section id="checkout">
-        <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
+        <div style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
           <h2>Preencha seus dados</h2>
-          <label>Nome *</label><input id="nome" type="text" style="width:100%">
-          <label>E-mail *</label><input id="email" type="email" style="width:100%">
-          <label>Telefone</label><input id="telefone" type="tel" style="width:100%">
+          <label>Nome *</label><input id="ck_nome" type="text" style="width:100%">
+          <label>E-mail *</label><input id="ck_email" type="email" style="width:100%">
+          <label>Telefone</label><input id="ck_fone" type="tel" style="width:100%">
           <div style="display:flex;gap:8px;margin-top:12px">
-            <button id="voltarCheckout" style="flex:1">Voltar</button>
-            <button id="enviarApostaBtn" style="flex:1;background:var(--red);color:#fff">Enviar aposta</button>
+            <button id="ck_voltar" style="flex:1">Voltar</button>
+            <button id="ck_to_pix" style="flex:1;background:var(--red);color:#fff">Avançar para PIX</button>
           </div>
         </div>
-      </section>`;
+      </section>
+    `;
 
-    document.getElementById('voltarCheckout').onclick = () => handleHashChange();
+    document.getElementById('ck_voltar').onclick = () => handleHashChange();
 
-    const enviarBtn = document.getElementById('enviarApostaBtn');
-    let enviando = false;
-
-    enviarBtn.onclick = async () => {
-      if (enviando) return;
-      const nome  = (document.getElementById('nome').value || '').trim();
-      const email = (document.getElementById('email').value || '').trim();
-      const fone  = (document.getElementById('telefone').value || '').trim();
+    document.getElementById('ck_to_pix').onclick = ()=>{
+      const nome  = (document.getElementById('ck_nome').value || '').trim();
+      const email = (document.getElementById('ck_email').value || '').trim();
+      const fone  = (document.getElementById('ck_fone').value || '').trim();
       if (!nome || !email) { alert('Preencha nome e e-mail.'); return; }
 
-      // Preenche hidden form
-      const f = document.getElementById('hiddenForm');
+      // Preenche o form oculto já agora
       document.getElementById('fNome').value    = nome;
       document.getElementById('fEmail').value   = email;
       document.getElementById('fTelefone').value= fone;
@@ -661,42 +684,103 @@ function attachBindings(){
       document.getElementById('fFav').value     = [...favoritos].join(',');
       document.getElementById('fTotal').value   = Number(Math.floor(totalGeral||0)).toFixed(2);
 
-      // UI: desabilita e troca rótulo
-      enviando = true;
-      enviarBtn.disabled = true;
-      const oldLabel = enviarBtn.textContent;
-      enviarBtn.textContent = 'Enviando aposta...';
+      // PASSO 2 – PIX
+      const totalInt = Math.floor(totalGeral||0);
+      const payload = gerarBRCode(totalInt);
 
-      // Backup no GAS (não bloqueia)
-      try{
-        const fd = new FormData();
-        fd.append('nome', nome);
-        fd.append('email', email);
-        fd.append('telefone', fone);
-        fd.append('pecas', [...selecionadas].join(','));
-        fd.append('rifas', [...rifasSel].join(','));
-        fd.append('favoritas', [...favoritos].join(','));
-        fd.append('total', Number(Math.floor(totalGeral||0)).toFixed(2));
-        fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' }).catch(()=>{});
-      }catch(_){/* ignora */ }
+      app.innerHTML = `
+        <section id="checkout-pix">
+          <div style="max-width:720px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
+            <h2>Pagamento via PIX</h2>
+            <p style="margin:.5rem 0 1rem 0;"><strong>Total:</strong> R$ ${totalInt}</p>
+            <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+              <div id="ck_qr" style="width:180px;height:180px;border:1px solid #2b2424;display:flex;align-items:center;justify-content:center;background:#fff"></div>
+              <div style="flex:1;min-width:240px">
+                <button id="ck_copy" style="border:2px solid var(--ink);background:#fff;padding:8px 12px;cursor:pointer">PIX Copia e Cola</button>
+                <div id="ck_payload" style="display:none;">${payload}</div>
+                <p style="margin-top:10px;font-size:.95rem;color:#2b2424;">Você pode efetuar o pagamento agora ou depois. A aposta será enviada mesmo sem confirmar o pagamento.</p>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:14px">
+              <button id="ck_back_data" style="flex:1">Voltar</button>
+              <button id="ck_finish" style="flex:1;background:var(--red);color:#fff">Confirmar e Enviar</button>
+            </div>
+          </div>
+        </section>
+      `;
 
-      // Envia para FormSubmit → redireciona para _next (obrigado.html)
-      try{
-        f.submit();
-        // Fallback: se por algum motivo o navegador bloquear o submit
-        // (não costuma acontecer), forçamos o redirect após 800ms.
-        setTimeout(()=>{ location.href = 'https://betshoptv.com/obrigado.html'; }, 800);
-      }catch(err){
-        // Em caso de erro real, reverte o botão
-        console.error('Falha ao enviar o formulário:', err);
-        enviando = false;
-        enviarBtn.disabled = false;
-        enviarBtn.textContent = oldLabel;
-        alert('Não foi possível enviar agora. Tente novamente.');
-      }
+      // Render QR (se a lib existir)
+      (function renderQR(){
+        const holder = document.getElementById('ck_qr');
+        if (!holder) return;
+        holder.innerHTML = '';
+        if (window.QRCode){
+          new QRCode(holder, { text: payload, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
+        } else {
+          // fallback: mostra o payload legível
+          holder.style.fontSize = '10px';
+          holder.style.padding = '6px';
+          holder.textContent = payload;
+        }
+      })();
+
+      // Copiar
+      document.getElementById('ck_copy').onclick = ()=>{
+        const txt = document.getElementById('ck_payload').textContent;
+        const done = (ok)=>{
+          const btn = document.getElementById('ck_copy');
+          const old = btn.textContent;
+          btn.textContent = ok ? 'PIX copiado!' : 'Erro ao copiar';
+          setTimeout(()=> btn.textContent = old, 1600);
+        };
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(txt).then(()=>done(true)).catch(()=>done(false));
+        } else {
+          const ta=document.createElement('textarea'); ta.value=txt;
+          ta.style.position='fixed'; ta.style.top='-9999px'; document.body.appendChild(ta);
+          ta.select(); try{ document.execCommand('copy'); done(true);} catch(e){ done(false); }
+          document.body.removeChild(ta);
+        }
+      };
+
+      // Voltar aos dados
+      document.getElementById('ck_back_data').onclick = ()=> cta.onclick(e);
+
+      // Enviar (GAS best-effort + FormSubmit)
+      document.getElementById('ck_finish').onclick = async ()=>{
+        const btn = document.getElementById('ck_finish');
+        if (btn._busy) return;
+        btn._busy = true; btn.disabled = true;
+        const old = btn.textContent; btn.textContent = 'Enviando aposta...';
+
+        // Backup GAS (não bloqueia)
+        try{
+          const fd = new FormData();
+          fd.append('nome', document.getElementById('fNome').value);
+          fd.append('email', document.getElementById('fEmail').value);
+          fd.append('telefone', document.getElementById('fTelefone').value);
+          fd.append('pecas', document.getElementById('fPecas').value);
+          fd.append('rifas', document.getElementById('fRifas').value);
+          fd.append('favoritas', document.getElementById('fFav').value);
+          fd.append('total', document.getElementById('fTotal').value);
+          fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' }).catch(()=>{});
+        }catch(_){}
+
+        // Envia ao FormSubmit → _next já aponta para /obrigado.html
+        try{
+          document.getElementById('hiddenForm').submit();
+          // fallback de segurança
+          setTimeout(()=>{ location.href='https://betshoptv.com/obrigado.html'; }, 900);
+        }catch(err){
+          console.error('Falha ao enviar formulário:', err);
+          btn._busy = false; btn.disabled = false; btn.textContent = old;
+          alert('Não foi possível enviar agora. Tente novamente.');
+        }
+      };
     };
   };
 }
+
 
 
 
@@ -834,6 +918,7 @@ window.addEventListener('DOMContentLoaded', init);
   mo.observe(footer, { childList:true, subtree:true });
 })();
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" referrerpolicy="no-referrer"></script>
 
 </body>
 </html>
