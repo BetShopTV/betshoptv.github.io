@@ -387,1019 +387,459 @@ html.ck-open, body.ck-open{overflow:hidden}
 </form>
 
 <script>
-/* ======================= JS – PARTE 1/5 ===========================
-   Config/estado/helpers + roteador + total/CTA + bootstrap
-   (Interações de seleção, checkout e PIX virão nas Partes 2–5)
-=================================================================== */
-
-/* --------- CONFIG --------- */
+/* ======================== CONFIG ======================== */
 const PECAS_JSON_URL = 'https://betshoptv.com/dados/pecas.json';
 const RIFAS_JSON_URL = 'https://betshoptv.com/dados/rifas.json';
 const GAS_URL        = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
 
-/* --------- ESTADO GLOBAL --------- */
-let pecas = [];                 // catálogo de peças (JSON)
-let rifas = [];                 // catálogo de rifas (JSON)
-const selecionadas = new Set(); // ids de peças no carrinho
-const rifasSel     = new Set(); // ids de rifas no carrinho
-const favoritos    = new Set(); // ids de peças favoritas
-let totalGeral     = 0;         // total inteiro (sem casas)
-let appReady       = false;     // já carregou dados?
+/* ======================== STATE ========================= */
+let pecas = [];
+let rifas = [];
 
-/* --------- HELPERS VISUAIS/DADOS --------- */
-// Formata “R$ 1.500” sem casas decimais
-function fmt(v){
-  const n = Number(v||0);
-  return 'R$ ' + Math.round(n).toLocaleString('pt-BR');
-}
+const selecionadas = new Set();  // peças
+const rifasSel     = new Set();  // rifas (ids)
+const favoritos    = new Set();  // peças (ids)
 
-// Carrega imagem .avif com fallback .jpg
+let totalGeral = 0;
+
+/* ======================== HELPERS ======================= */
+const fmt = v => 'R$ ' + Math.round(Number(v||0)).toLocaleString('pt-BR');
+
 function imgWithFallback(src){
-  const img = new Image();
-  img.loading = 'lazy';
-  img.src = src;
-  img.onerror = () => {
-    if (src.endsWith('.avif')) img.src = src.replace('.avif', '.jpg');
-  };
+  const img = new Image(); img.loading='lazy'; img.src=src;
+  img.onerror = ()=>{ if(src.endsWith('.avif')) img.src = src.replace('.avif','.jpg'); };
   return img;
 }
 
-// Cor de texto legível sobre um fundo hex
 function getContrastColor(hex){
   try{
-    let s = String(hex||'').trim();
-    if (!s) return '#2b2424';
-    if (s.startsWith('#')) s = s.slice(1);
-    if (s.length===3) s = s.split('').map(ch=>ch+ch).join('');
-    if (s.length!==6) return '#2b2424';
+    if(!hex) return '#2b2424';
+    let s = String(hex).trim(); if(s.startsWith('#')) s = s.slice(1);
+    if(s.length===3) s = s.split('').map(c=>c+c).join('');
     const r=parseInt(s.slice(0,2),16), g=parseInt(s.slice(2,4),16), b=parseInt(s.slice(4,6),16);
-    const yiq = (r*299 + g*587 + b*114)/1000;
-    return yiq >= 128 ? '#2b2424' : '#ffffff';
+    const yiq=((r*299)+(g*587)+(b*114))/1000;
+    return yiq>=128?'#2b2424':'#ffffff';
   }catch(e){ return '#2b2424'; }
 }
 
-// Total de rifas: par = n*25; ímpar = (n-1)*25 + 30
-function calculateRifaTotal(count){
-  const n = Number(count||0);
-  if (n<=0) return 0;
-  return n%2===0 ? 25*n : 25*(n-1)+30;
-}
-
-/* --------- RENDER BÁSICO (placeholders – detalhes na Parte 2) --------- */
+/* ======================== RENDERERS ===================== */
 function renderGaleria(){
-  const app = document.getElementById('app');
-  app.innerHTML = '';
-  const sec = document.createElement('section');
-  sec.id = 'galeria';
-
-  const grid = document.createElement('div');
-  grid.className = 'galeria';
+  const app = document.getElementById('app'); app.innerHTML='';
+  const sec = document.createElement('section'); sec.id='galeria';
+  const grid = document.createElement('div'); grid.className='galeria';
 
   pecas.forEach(p=>{
-    if (String(p.status).toUpperCase()==='VENDIDAAA') return;
-    const card = document.createElement('div');
-    card.className = 'gal-item';
-    card.dataset.id = p.id_peca;
-
-    const first = (p.imagens&&p.imagens[0]) ? p.imagens[0] : '';
-    const img = imgWithFallback('/img/tmb/'+first+'.avif');
-    img.alt = p.titulo||('Peça '+p.id_peca);
-    card.appendChild(img);
-
+    if(String(p.status).toUpperCase()==='VENDIDAAA') return;
+    const card = document.createElement('div'); card.className='gal-item'; card.dataset.id=p.id_peca;
+    const first = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
+    card.appendChild(imgWithFallback('/img/tmb/'+first+'.avif'));
     grid.appendChild(card);
   });
 
-  sec.appendChild(grid);
-  app.appendChild(sec);
+  sec.appendChild(grid); app.appendChild(sec);
 }
 
-
-/* ---------- BEGIN REPLACE: renderFeed (com botões) ---------- */
 function renderFeed(){
-  const app = document.getElementById('app');
-  app.innerHTML = '';
+  const app = document.getElementById('app'); app.innerHTML='';
+  const sec = document.createElement('section'); sec.id='feed';
+  const list = document.createElement('div'); list.id='feedList'; list.className='feed';
 
-  const section = document.createElement('section');
-  section.id = 'feed';
+  pecas.forEach(p=>{
+    if(String(p.status).toUpperCase()==='VENDIDAAA') return;
 
-  const list = document.createElement('div');
-  list.className = 'feed';
+    const post = document.createElement('article'); post.className='post'; post.id='post-'+p.id_peca;
 
-  pecas.forEach(p => {
-    if (String(p.status).toUpperCase() === 'VENDIDAAA') return;
-
-    const post = document.createElement('article');
-    post.className = 'post';
-    post.id = 'post-' + p.id_peca;
-
-    // Carrossel (mínimo: 1ª imagem)
-    const car = document.createElement('div');
-    car.className = 'carousel';
-    const slide = document.createElement('div');
-    slide.className = 'carousel-slide';
-    const first = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
-    slide.appendChild(imgWithFallback('/img/otm/' + first + '.avif'));
+    // carrossel mínimo (1ª imagem)
+    const car = document.createElement('div'); car.className='carousel';
+    const slide = document.createElement('div'); slide.className='carousel-slide';
+    slide.appendChild(imgWithFallback('/img/otm/'+(p.imagens?.[0]||'')+'.avif'));
     car.appendChild(slide);
 
-    // Meta
-    const meta = document.createElement('div');
-    meta.className = 'meta';
+    const meta = document.createElement('div'); meta.className='meta';
+    const l1 = document.createElement('div'); l1.className='linha1';
+    const ttl = document.createElement('div'); ttl.className='titulo'; ttl.textContent=p.titulo||('Peça '+p.id_peca);
+    const prc = document.createElement('div'); prc.className='preco'; prc.textContent = fmt(p.preco);
+    l1.append(ttl,prc);
 
-    // Título + preço
-    const l1 = document.createElement('div');
-    l1.className = 'linha1';
-    const ttl = document.createElement('div'); ttl.className = 'titulo'; ttl.textContent = p.titulo || ('Peça ' + p.id_peca);
-    const prc = document.createElement('div'); prc.className = 'preco';  prc.textContent = fmt(p.preco);
-    l1.append(ttl, prc);
+    const tecnica=document.createElement('div'); tecnica.className='tecnica'; tecnica.textContent = p.tecnica||'';
+    const dimens =document.createElement('div'); dimens.className='dimens';  dimens.textContent = p.dimensao||p.tamanho||'';
 
-    // Técnica (acima) + dimensões
-    const tecnica = document.createElement('div'); tecnica.className = 'tecnica'; tecnica.textContent = p.tecnica || '';
-    const dim     = document.createElement('div'); dim.className     = 'dimens';  dim.textContent     = p.dimensao || p.tamanho || '';
+    const footerMeta=document.createElement('div'); footerMeta.className='meta-footer';
+    const left  = document.createElement('div'); left.className='left-actions';
+    const right = document.createElement('div'); right.className='right-actions';
 
-    // Ações
-    const footerMeta  = document.createElement('div'); footerMeta.className  = 'meta-footer';
-    const leftActions = document.createElement('div'); leftActions.className = 'left-actions';
-    const rightActions= document.createElement('div'); rightActions.className= 'right-actions';
-
-    // ♥ Favoritar
-    const fav = document.createElement('button');
-    fav.className = 'btn fav-btn';
-    fav.type = 'button';
-    fav.textContent = '♥';
+    const fav = document.createElement('button'); fav.className='btn fav-btn'; fav.type='button'; fav.textContent='♥';
     if (favoritos.has(p.id_peca)) fav.classList.add('active');
-
     fav.addEventListener('click', ()=>{
-      const id = p.id_peca;
-      if (favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
+      const id=p.id_peca; favoritos.has(id)?favoritos.delete(id):favoritos.add(id);
       fav.classList.toggle('active', favoritos.has(id));
-      try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
       updatePills();
     });
 
-    // ADICIONAR/REMOVER
-    const add = document.createElement('button');
-    add.className = 'btn add-btn';
-    add.type = 'button';
-    const isIn = selecionadas.has(p.id_peca);
-    if (isIn) add.classList.add('added');
-    add.textContent = isIn ? 'REMOVER' : 'ADICIONAR';
-
+    const add = document.createElement('button'); add.className='btn add-btn'; add.type='button';
+    const sel = selecionadas.has(p.id_peca); if(sel) add.classList.add('added');
+    add.textContent = sel ? 'REMOVER' : 'ADICIONAR';
     add.addEventListener('click', ()=>{
-      const id = p.id_peca;
-      const was = add.classList.toggle('added');
-      if (was) selecionadas.add(id); else selecionadas.delete(id);
-      add.textContent = was ? 'REMOVER' : 'ADICIONAR';
-      calcularTotal();  // já atualiza CTA/pills
+      const id=p.id_peca; const now = !selecionadas.has(id);
+      if (now) selecionadas.add(id); else selecionadas.delete(id);
+      add.classList.toggle('added', now); add.textContent = now?'REMOVER':'ADICIONAR';
+      calcularTotal(); updatePills();
     });
 
-    leftActions.appendChild(fav);
-    rightActions.appendChild(add);
-    footerMeta.append(leftActions, rightActions);
+    left.appendChild(fav); right.appendChild(add);
+    footerMeta.append(left,right);
 
-    meta.append(l1);
-    if (tecnica.textContent) meta.append(tecnica);
-    meta.append(dim, footerMeta);
+    meta.append(l1); if (tecnica.textContent) meta.append(tecnica);
+    meta.append(dimens, footerMeta);
 
-    post.append(car, meta);
-    list.appendChild(post);
+    post.append(car, meta); list.appendChild(post);
   });
 
-  section.appendChild(list);
-  app.appendChild(section);
+  sec.appendChild(list); app.appendChild(sec);
 }
-/* ---------- END REPLACE: renderFeed ---------- */
 
-/* ---------- BEGIN REPLACE: renderRifas (seleção) ---------- */
 function renderRifas(){
-  const app = document.getElementById('app');
-  app.innerHTML = '';
-
-  const sec = document.createElement('section');
-  sec.id = 'rifas';
-
-  const grid = document.createElement('div');
-  grid.className = 'rifas';
+  const app = document.getElementById('app'); app.innerHTML='';
+  const sec = document.createElement('section'); sec.id='rifas';
+  const grid = document.createElement('div'); grid.className='rifas';
 
   rifas.forEach(r=>{
-    const disponivel = !r.status_rifa || String(r.status_rifa).trim()==='';
+    const disp = !r.status_rifa || String(r.status_rifa).trim()==='';
     const btn = document.createElement('button');
-    btn.className = 'rifa-btn' + (disponivel ? '' : ' sold');
-    btn.dataset.id = r.id_rifa;
+    btn.className='rifa-btn'+(disp?'':' sold');
+    const bg = r.hex_rifa || r.hex || '#bebab0'; btn.style.backgroundColor=bg; btn.style.color=getContrastColor(bg);
+    btn.dataset.id=r.id_rifa;
 
-    const bg = r.hex_rifa || r.hex || '#bebab0';
-    btn.style.backgroundColor = bg;
-    btn.style.color = getContrastColor(bg);
+    let label = (r.botao_rifa && String(r.botao_rifa).trim()) ? String(r.botao_rifa).trim() : (r.numero || r.id_rifa || '').toString();
+    label = label.replace(/^\s*X\s*/i,'').trim();
 
-    // label (sem “X ” no começo)
-    const label = (r.botao_rifa?.trim() || r.numero || r.id_rifa || '')
-                  .toString().replace(/^\s*X\s*/i,'');
-    const ln1 = document.createElement('span'); ln1.className='ln1'; ln1.textContent = label;
-    btn.appendChild(ln1);
+    // quebra em duas linhas (heurística simples)
+    const frag = document.createDocumentFragment();
+    if (label.length<=28){ const s1=document.createElement('span'); s1.className='ln1'; s1.textContent=label; frag.appendChild(s1); }
+    else { const mid=Math.floor(label.length/2); let bp=label.lastIndexOf(' ',mid); if(bp<3) bp=label.indexOf(' ',mid); if(bp===-1) bp=28;
+           const s1=document.createElement('span'); s1.className='ln1'; s1.textContent=label.slice(0,bp).trim(); frag.appendChild(s1);
+           const rest=label.slice(bp).trim(); if(rest){ const s2=document.createElement('span'); s2.className='ln2'; s2.textContent=rest; frag.appendChild(s2); } }
+    btn.appendChild(frag);
 
-    if (disponivel){
-      // estado visual se já estava selecionada
-      if (rifasSel.has(String(r.id_rifa))){
-        btn.classList.add('selected');
-        btn.style.backgroundColor = '#fff';
-        btn.style.color = '#ff0000';
-        btn.style.borderColor = '#ff0000';
-      }
-
+    if (disp){
       btn.addEventListener('click', ()=>{
-        const id = String(r.id_rifa);
-        const willSelect = !btn.classList.contains('selected');
-        if (willSelect){
-          rifasSel.add(id);
-          btn.classList.add('selected');
-          btn.style.backgroundColor = '#fff';
-          btn.style.color = '#ff0000';
-          btn.style.borderColor = '#ff0000';
-        }else{
-          rifasSel.delete(id);
-          btn.classList.remove('selected');
-          btn.style.backgroundColor = bg;
-          btn.style.color = getContrastColor(bg);
-          btn.style.borderColor = '';
-        }
-        calcularTotal(); // já reflete no CTA/pills
+        const id = r.id_rifa;
+        if (rifasSel.has(id)){ rifasSel.delete(id); btn.classList.remove('selected'); btn.style.backgroundColor=bg; btn.style.color=getContrastColor(bg); }
+        else { rifasSel.add(id); btn.classList.add('selected'); btn.style.backgroundColor='#fff'; btn.style.color='#ff0000'; btn.style.borderColor='#ff0000'; }
+        calcularTotal(); updatePills();
       });
     }
-
     grid.appendChild(btn);
   });
 
-  sec.appendChild(grid);
-  app.appendChild(sec);
+  sec.appendChild(grid); app.appendChild(sec);
 }
-/* ---------- END REPLACE: renderRifas ---------- */
 
-/* --------- TOTAL + CTA/PILLS DO RODAPÉ --------- */
+/* ======================== FOOTER ======================== */
 function updatePills(){
-  const nbsp = '\u00A0';
   const pill = document.getElementById('pillCompact');
   const cta  = document.getElementById('ctaMain');
-
   const parts = [];
-  if (selecionadas.size>0) parts.push(`${selecionadas.size}${nbsp}${selecionadas.size===1?'Peça':'Peças'}`);
-  if (rifasSel.size>0)     parts.push(`${rifasSel.size}${nbsp}${rifasSel.size===1?'Rifa':'Rifas'}`);
-  if (favoritos.size>0)    parts.push(`${favoritos.size}${nbsp}${favoritos.size===1?'Favorita':'Favoritas'}`);
-
+  if (selecionadas.size) parts.push(selecionadas.size+' '+(selecionadas.size===1?'Peça':'Peças'));
+  if (rifasSel.size)     parts.push(rifasSel.size+' '+(rifasSel.size===1?'Rifa':'Rifas'));
+  if (favoritos.size)    parts.push(favoritos.size+' '+(favoritos.size===1?'Favorita':'Favoritas'));
   if (pill){ pill.textContent = parts.join(' · '); pill.style.display = parts.length?'inline-block':'none'; }
-
   if (cta){
-    if (totalGeral>0){
-      cta.textContent = 'APOSTAR ' + fmt(totalGeral);
-      cta.disabled = false;
-    } else {
-      cta.textContent = 'FAÇAM SUAS APOSTAS!';
-      cta.disabled = true;
-    }
+    if (totalGeral>0){ cta.disabled=false; cta.textContent='APOSTAR '+fmt(totalGeral); }
+    else { cta.disabled=true; cta.textContent='FAÇAM SUAS APOSTAS!'; }
   }
-
   const footer = document.querySelector('footer');
-  if (footer){
-    footer.classList.toggle('has-total', totalGeral>0);
-    footer.classList.toggle('no-total',  totalGeral===0);
-  }
+  if (footer){ footer.classList.toggle('has-total', totalGeral>0); footer.classList.toggle('no-total', totalGeral===0); }
 }
 
 function calcularTotal(){
-  let total = 0;
-
+  let t=0;
   // peças
-  selecionadas.forEach(id=>{
-    const p = pecas.find(x=>String(x.id_peca)===String(id));
-    if (p && p.preco) total += Number(p.preco);
-  });
+  selecionadas.forEach(id=>{ const p = pecas.find(x=>String(x.id_peca)===String(id)); if(p?.preco) t += Number(p.preco); });
+  // rifas: par = n*25; ímpar = (n-1)*25 + 30
+  const n = rifasSel.size||0; if (n>0) t += (n%2===0) ? (25*n) : (25*(n-1)+30);
+  totalGeral = t;
 
-  // rifas
-  total += calculateRifaTotal(rifasSel.size);
-
-  totalGeral = Math.floor(total||0);
-
-  // propaga ao form oculto (duas casas p/ backend)
-  const fTotal = document.getElementById('fTotal');
-  if (fTotal) fTotal.value = Number(totalGeral).toFixed(2);
-
+  // atualiza hidden total (2 casas) se existir
+  const fTotal = document.getElementById('fTotal'); if (fTotal) fTotal.value = Number(Math.floor(t)).toFixed(2);
   updatePills();
 }
 
-/* --------- ROTEADOR (hash) --------- */
-function parseHash(){
-  const raw = (location.hash||'').slice(1);
-  if (!raw) return { page:'galeria', params:new URLSearchParams() };
-  const [page, q] = raw.split('?');
-  return { page: page||'galeria', params: new URLSearchParams(q||'') };
-}
-
+/* ======================== HASH NAV ====================== */
 function showPage(page, opts={}){
-  const updateHash = opts.updateHash!==false;
-  const pieceId = opts.pieceId || null;
+  const updateHash = ('updateHash' in opts)? opts.updateHash : true;
+  const pieceId    = opts.pieceId||null;
 
-  if      (page==='feed')   renderFeed();
-  else if (page==='rifas')  renderRifas();
-  else                      renderGaleria();
+  if (page==='feed'){ renderFeed(); if(pieceId) setTimeout(()=>openFeedAt(pieceId),80); }
+  else if (page==='rifas'){ renderRifas(); }
+  else { renderGaleria(); }
 
+  calcularTotal(); updatePills();
   if (updateHash){
-    let h = page;
-    if (pieceId){
-      const par = new URLSearchParams(); par.set('p', pieceId);
-      h = `${page}?${par.toString()}`;
-    }
-    if (location.hash !== '#'+h) location.hash = h;
+    let newHash = page;
+    if (pieceId){ const qs = new URLSearchParams(); qs.set('p',pieceId); newHash = `${page}?${qs.toString()}`; }
+    if (location.hash !== '#'+newHash) location.hash = newHash;
   }
 }
-
-function handleHashChange(){
-  if (!appReady) return;
-  const { page, params } = parseHash();
-  if (page==='feed'){
-    const p = params.get('p');
-    showPage('feed', { updateHash:false, pieceId:p });
-  } else if (page==='rifas'){
-    showPage('rifas', { updateHash:false });
-  } else {
-    showPage('galeria', { updateHash:false });
-  }
-}
-
+function parseHash(){ const raw=(location.hash||'').slice(1); if(!raw) return {page:'galeria',params:new URLSearchParams()}; const [p,q]=raw.split('?'); return {page:p||'galeria', params:new URLSearchParams(q||'')}; }
+function handleHashChange(){ const {page,params}=parseHash(); if(page==='feed'){ const pid=params.get('p'); pid?showPage('feed',{updateHash:false,pieceId:pid}):showPage('feed',{updateHash:false}); } else if (page==='rifas'){ showPage('rifas',{updateHash:false}); } else { showPage('galeria',{updateHash:false}); } }
 window.addEventListener('hashchange', handleHashChange);
 
-// navegação do header
-document.addEventListener('DOMContentLoaded', ()=>{
-  document.querySelectorAll('.nav a[href^="#"]').forEach(a=>{
-    a.addEventListener('click', (e)=>{
-      e.preventDefault();
-      location.hash = a.getAttribute('href').slice(1);
-    });
+function attachAppDelegation(){
+  document.getElementById('app').addEventListener('click', (e)=>{
+    const gi = e.target.closest('.gal-item'); if(gi){ const id=gi.dataset.id; if(id) location.hash='feed?p='+encodeURIComponent(id); }
   });
-});
+}
 
-/* --------- BOOTSTRAP / INIT --------- */
+/* ======================== CHECKOUT CORE ================= */
+let ckOpen=false, ckStep=1;
+
+const CK = {
+  overlay: () => document.getElementById('checkoutOverlay'),
+  modal:   () => document.getElementById('checkoutModal'),
+  s1: () => document.getElementById('ck-step1'),
+  s2: () => document.getElementById('ck-step2'),
+  s3: () => document.getElementById('ck-step3'),
+  listR: () => document.getElementById('ck-rifas'),
+  listP: () => document.getElementById('ck-pecas'),
+  listF: () => document.getElementById('ck-favs'),
+  t1: () => document.getElementById('ck-total-s1'),
+  t2: () => document.getElementById('ck-total-s2'),
+  t3: () => document.getElementById('ck-total-s3'),
+  t3b:() => document.getElementById('ck-total-s3b'),
+  prev1:()=> document.getElementById('ck-prev-1'),
+  next1:()=> document.getElementById('ck-next-1'),
+  prev2:()=> document.getElementById('ck-prev-2'),
+  next2:()=> document.getElementById('ck-next-2'),
+  prev3:()=> document.getElementById('ck-prev-3'),
+  finish:()=> document.getElementById('ck-finish'),
+  close: ()=> document.getElementById('ck-close'),
+  pixQR: ()=> document.getElementById('ck-pix-qr'),
+  pixCopy:()=> document.getElementById('ck-pix-copy'),
+  pixPayload:()=> document.getElementById('ck-pix-payload'),
+  tabPix: ()=> document.getElementById('ck-tab-pix'),
+  tabPP:  ()=> document.getElementById('ck-tab-pp'),
+  panePix:()=> document.getElementById('ck-pane-pix'),
+  panePP: ()=> document.getElementById('ck-pane-pp'),
+  fNome: ()=> document.getElementById('ck-nome'),
+  fEmail:()=> document.getElementById('ck-email'),
+  fFone: ()=> document.getElementById('ck-fone'),
+};
+
+function ckOpenModal(){
+  ckOpen=true; ckStep=1;
+  const ov=CK.overlay(), md=CK.modal(); if(!ov||!md) return;
+  ov.removeAttribute('hidden'); md.removeAttribute('hidden');
+  document.documentElement.classList.add('ck-open');
+  CK.s1().hidden=false; CK.s2().hidden=true; CK.s3().hidden=true;
+  ckRenderStep1(); ckSyncTotalsOnSteps();
+}
+function ckCloseModal(){
+  ckOpen=false; const ov=CK.overlay(), md=CK.modal(); if(!ov||!md) return;
+  ov.setAttribute('hidden',''); md.setAttribute('hidden','');
+  document.documentElement.classList.remove('ck-open');
+}
+function ckGoStep(step){
+  ckStep=step; if(CK.s1()) CK.s1().hidden=step!==1; if(CK.s2()) CK.s2().hidden=step!==2; if(CK.s3()) CK.s3().hidden=step!==3;
+  if (step===3) ckEnsurePixReady(true);
+}
+function ckSyncTotalsOnSteps(){
+  const v=Math.floor(totalGeral||0);
+  CK.t1()&&(CK.t1().textContent='R$ '+v);
+  CK.t2()&&(CK.t2().textContent='R$ '+v);
+  CK.t3()&&(CK.t3().textContent='R$ '+v);
+  CK.t3b()&&(CK.t3b().textContent='R$ '+v);
+}
+
+/* ===== Passo 1: listas ===== */
+function ckMakeRow({ kind, id, itemNode, priceText }){
+  const row=document.createElement('div'); row.className='ck-row';
+  const colX=document.createElement('div'); colX.className='col-x';
+  const bx=document.createElement('button'); bx.className='ck-x'; bx.textContent='X'; bx.dataset.kind=kind; bx.dataset.id=id;
+  colX.appendChild(bx);
+  const colItem=document.createElement('div'); colItem.className='col-item'; colItem.appendChild(itemNode);
+  const colPrice=document.createElement('div'); colPrice.className='col-price'; colPrice.textContent=priceText||'';
+  row.append(colX,colItem,colPrice); return row;
+}
+function ckMakeRifaChip(label,bg,text){
+  const chip=document.createElement('div'); chip.className='rifa-chip'; chip.style.backgroundColor=bg||'var(--beige)'; chip.style.color=text||'var(--ink)';
+  const t=(label||'').trim();
+  if(!t){ const s1=document.createElement('span'); s1.className='ln1'; s1.textContent=''; chip.appendChild(s1); }
+  else if(t.length<=28){ const s1=document.createElement('span'); s1.className='ln1'; s1.textContent=t; chip.appendChild(s1); }
+  else { const mid=Math.floor(t.length/2); let bp=t.lastIndexOf(' ',mid); if(bp<3) bp=t.indexOf(' ',mid); if(bp===-1) bp=28;
+         const p1=t.slice(0,bp).trim(), p2=t.slice(bp).trim();
+         const s1=document.createElement('span'); s1.className='ln1'; s1.textContent=p1; chip.appendChild(s1);
+         if(p2){ const s2=document.createElement('span'); s2.className='ln2'; s2.textContent=p2; chip.appendChild(s2); } }
+  return chip;
+}
+function ckRenderStep1(){
+  const listR=CK.listR(), listP=CK.listP(), listF=CK.listF(); if(!listR||!listP||!listF) return;
+  listR.innerHTML=''; listP.innerHTML=''; listF.innerHTML='';
+
+  // Rifas (R$25 cada; se ímpar, a última é R$30)
+  const rSel=[...rifasSel];
+  const last30=(rSel.length%2===1)?String(rSel[rSel.length-1]):null;
+  rSel.forEach(rid=>{
+    const r = rifas.find(x=>String(x.id_rifa)===String(rid)); if(!r) return;
+    const label=(r.botao_rifa?.trim()||r.numero||r.id_rifa||'').toString().replace(/^\s*X\s*/i,'');
+    const bg=r.hex_rifa||r.hex||'#bebab0', txt=getContrastColor(bg);
+    const price=(last30 && String(rid)===last30)?30:25;
+    listR.appendChild( ckMakeRow({kind:'rifa', id:rid, itemNode:ckMakeRifaChip(label,bg,txt), priceText:'R$ '+price}) );
+  });
+
+  // Peças
+  [...selecionadas].forEach(pid=>{
+    const p=pecas.find(x=>String(x.id_peca)===String(pid)); if(!p) return;
+    const wrap=document.createElement('div');
+    const img=imgWithFallback('/img/tmb/'+(p.imagens?.[0]||'')+'.avif'); img.className='ck-thumb';
+    const ttl=document.createElement('span'); ttl.className='ck-title'; ttl.textContent=p.titulo||('Peça '+pid);
+    wrap.append(img,ttl);
+    listP.appendChild( ckMakeRow({kind:'peca', id:pid, itemNode:wrap, priceText:'R$ '+Math.floor(Number(p.preco||0))}) );
+  });
+
+  // Favoritas (sem preço)
+  [...favoritos].forEach(fid=>{
+    const p=pecas.find(x=>String(x.id_peca)===String(fid)); if(!p) return;
+    const wrap=document.createElement('div');
+    const img=imgWithFallback('/img/tmb/'+(p.imagens?.[0]||'')+'.avif'); img.className='ck-thumb';
+    const ttl=document.createElement('span'); ttl.className='ck-title'; ttl.textContent=p.titulo||('Peça '+fid);
+    wrap.append(img,ttl);
+    listF.appendChild( ckMakeRow({kind:'fav', id:fid, itemNode:wrap, priceText:''}) );
+  });
+
+  // Remoções
+  CK.modal().querySelectorAll('.ck-x').forEach(b=>{
+    b.onclick=()=>{
+      const k=b.dataset.kind, id=b.dataset.id;
+      if(k==='rifa') rifasSel.delete(id);
+      else if(k==='peca') selecionadas.delete(id);
+      else if(k==='fav') favoritos.delete(id);
+      calcularTotal(); ckRenderStep1();
+    };
+  });
+}
+
+/* ===== Passo 3: PIX ===== */
+function CRC16_CCITT_FFFF(data){
+  let crc=0xFFFF;
+  for(let i=0;i<data.length;i++){ let x=((crc>>8)^data.charCodeAt(i))&0xff; x^=x>>4; crc=(crc<<8)^(x<<12)^(x<<5)^x; }
+  crc&=0xFFFF; return crc.toString(16).toUpperCase().padStart(4,'0');
+}
+function gerarBRCode(valor){
+  const chavePix="betshoptv@gmail.com";
+  const nome="BET SHOP TV".substring(0,25).toUpperCase();
+  const cidade="SAO PAULO".substring(0,15).toUpperCase();
+  const txid="***"; const f=(id,val)=> id+String(val.length).padStart(2,'0')+val;
+  let pl="000201";
+  pl+=f('26',`0014BR.GOV.BCB.PIX01${String(chavePix.length).padStart(2,'0')}${chavePix}`);
+  pl+='52040000'; pl+='5303986';
+  pl+=f('54', Number(Math.floor(valor||0)).toFixed(2));
+  pl+='5802BR'; pl+=f('59',nome); pl+=f('60',cidade); pl+=f('62',f('05',txid)); pl+='6304';
+  return pl+CRC16_CCITT_FFFF(pl);
+}
+function ckEnsurePixReady(force=false){
+  const total = Math.floor(totalGeral||0);
+  CK.t3()&&(CK.t3().textContent='R$ '+total); CK.t3b()&&(CK.t3b().textContent='R$ '+total);
+
+  const payload = gerarBRCode(total);
+  const holder = CK.pixPayload(); if(holder) holder.textContent = payload;
+
+  const box = CK.pixQR(); if(!box) return;
+  if(force) box.innerHTML='';
+  if(box.childElementCount===0 && window.QRCode){
+    new QRCode(box,{text:payload,width:160,height:160,correctLevel:QRCode.CorrectLevel.M});
+  }
+
+  const btn=CK.pixCopy();
+  if(btn && !btn._ckBound){
+    btn._ckBound=true;
+    btn.onclick=()=>{
+      const text = holder?.textContent || payload;
+      const done=(ok)=>{ const old=btn.textContent; btn.textContent = ok?'PIX copiado!':'Erro ao copiar'; setTimeout(()=>btn.textContent=old,1500); };
+      if(navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(()=>done(true)).catch(()=>done(false));
+      else { const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.top='-9999px'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); done(true);}catch(e){done(false);} document.body.removeChild(ta); }
+    };
+  }
+
+  // abas
+  const tabPix=CK.tabPix(), tabPP=CK.tabPP(), panePix=CK.panePix(), panePP=CK.panePP();
+  if(tabPix && !tabPix._ckBound){ tabPix._ckBound=true; tabPix.onclick=()=>{ tabPix.setAttribute('aria-selected','true'); tabPP?.setAttribute('aria-selected','false'); panePix?.setAttribute('aria-hidden','false'); panePP?.setAttribute('aria-hidden','true'); }; }
+  if(tabPP && !tabPP._ckBound){ tabPP._ckBound=true; tabPP.onclick=()=>{ tabPP.setAttribute('aria-selected','true'); tabPix?.setAttribute('aria-selected','false'); panePP?.setAttribute('aria-hidden','false'); panePix?.setAttribute('aria-hidden','true'); }; }
+}
+
+/* ===== Passo 2 + Finalizar ===== */
+function ckFillHiddenForm(nome,email,fone){
+  document.getElementById('fNome')?.setAttribute('value', (nome||'').trim());
+  document.getElementById('fEmail')?.setAttribute('value', (email||'').trim());
+  document.getElementById('fTelefone')?.setAttribute('value', (fone||'').trim());
+  document.getElementById('fPecas')?.setAttribute('value', [...selecionadas].join(','));
+  document.getElementById('fRifas')?.setAttribute('value', [...rifasSel].join(','));
+  document.getElementById('fFav')  ?.setAttribute('value', [...favoritos].join(','));
+  document.getElementById('fTotal')?.setAttribute('value', Math.floor(totalGeral||0).toFixed(2));
+}
+function ckValidateStep2(){
+  const nome=(CK.fNome()?.value||'').trim();
+  const email=(CK.fEmail()?.value||'').trim();
+  if(!nome || !email){ alert('Preencha nome e e-mail.'); return null; }
+  return { nome, email, fone:(CK.fFone()?.value||'').trim() };
+}
+(function bindStepNav(){
+  CK.prev1()?.addEventListener('click', ()=>{ /* nada */ });
+  CK.next1()?.addEventListener('click', ()=> ckGoStep(2));
+  CK.prev2()?.addEventListener('click', ()=> ckGoStep(1));
+  CK.next2()?.addEventListener('click', ()=>{ const ok=ckValidateStep2(); if(!ok) return; ckGoStep(3); });
+})();
+(function bindFinish(){
+  const btn=CK.finish(); if(!btn) return;
+  btn.onclick=()=>{
+    const info=ckValidateStep2(); if(!info){ ckGoStep(2); return; }
+    ckFillHiddenForm(info.nome,info.email,info.fone);
+    try{ // backup no GAS (best-effort)
+      const fd=new FormData(); fd.append('nome',info.nome); fd.append('email',info.email); fd.append('telefone',info.fone);
+      fd.append('pecas',[...selecionadas].join(',')); fd.append('rifas',[...rifasSel].join(',')); fd.append('favoritas',[...favoritos].join(','));
+      fd.append('total', Math.floor(totalGeral||0).toFixed(2)); fetch(GAS_URL,{method:'POST',body:fd,mode:'no-cors'});
+    }catch(e){}
+    document.getElementById('hiddenForm')?.submit();
+  };
+})();
+
+/* ===== CTA / abrir-fechar modal ===== */
+(function bindFooterCTA(){
+  const btn=document.getElementById('ctaMain'); const ov=CK.overlay(), md=CK.modal(); if(!btn||!ov||!md) return;
+  btn.addEventListener('click', (e)=>{ if((totalGeral||0)<=0) return; ckOpenModal(); });
+  ov.addEventListener('click', ckCloseModal);
+  CK.close()?.addEventListener('click', ckCloseModal);
+})();
+document.addEventListener('keydown', (ev)=>{ if(ev.key==='Escape' && ckOpen){ ev.preventDefault(); ckCloseModal(); }});
+
+/* ======================== OPEN FEED AT ================= */
+function openFeedAt(id){
+  const tryScroll=()=>{ const el=document.getElementById('post-'+id); if(!el) return false; el.scrollIntoView({behavior:'smooth',block:'start'}); return true; };
+  if (document.getElementById('feedList')){ if(!tryScroll()) setTimeout(tryScroll,120); }
+  else { renderFeed(); setTimeout(tryScroll,100); }
+}
+
+/* ========================== INIT ======================= */
 async function init(){
   try{
-    // limpa favoritos antigos (como combinado)
-    try { localStorage.removeItem('BSTV_FAV'); } catch(e){}
-    favoritos.clear();
-
     const [rp, rr] = await Promise.all([
-      fetch(PECAS_JSON_URL, { cache:'no-store' }),
-      fetch(RIFAS_JSON_URL, { cache:'no-store' })
+      fetch(PECAS_JSON_URL, {cache:'no-store'}),
+      fetch(RIFAS_JSON_URL, {cache:'no-store'})
     ]);
-    if (!rp.ok || !rr.ok) throw new Error('Falha ao carregar dados');
+    if(!rp.ok || !rr.ok) throw new Error('Falha ao carregar JSONs');
+    pecas = await rp.json(); rifas = await rr.json();
 
-    pecas = await rp.json();
-    rifas = await rr.json();
-
-    appReady = true;
-    handleHashChange();   // render inicial conforme hash
-    calcularTotal();      // inicializa CTA
-  }catch(err){
-    console.error(err);
-    const app = document.getElementById('app');
-    if (app) app.innerHTML = '<div style="padding:20px;color:#900;">Erro ao carregar dados. Veja o console.</div>';
+    attachAppDelegation();
+    handleHashChange();                          // render pela hash
+    calcularTotal(); updatePills();
+  }catch(e){
+    console.error(e);
+    document.getElementById('app').innerHTML = '<div style="padding:20px;color:#900;">Erro ao carregar dados.</div>';
   }
 }
 window.addEventListener('DOMContentLoaded', init);
-
-  * ---------- Delegation geral (galeria → abrir feed na peça) ---------- */
-(function attachCommonDelegation(){
-  document.addEventListener('click', (e)=>{
-    const it = e.target.closest('.gal-item');
-    if (it && it.dataset.id){
-      location.hash = 'feed?p=' + encodeURIComponent(it.dataset.id);
-    }
-  });
-})();
-
-/* ---------- CTA do rodapé: abrir checkout (stub já funcional) ---------- */
-(function bindFooterCTA(){
-  const cta = document.getElementById('ctaMain');
-  if (!cta) return;
-
-  cta.addEventListener('click', (e)=>{
-    e.preventDefault();
-    if ((totalGeral||0) <= 0) return;
-    ckOpenModal(); // definido no stub abaixo (mostra overlay/modal e abre Passo 1)
-  });
-})();
-
-/* ---------- Checkout (stub mínimo para abrir/fechar) ----------
-   A lógica completa (render das listas, navegação e PIX) entra nas Partes 3–5.
------------------------------------------------------------------ */
-let ckOpen = false;
-let ckStep = 1;
-
-function CKq(sel){ return document.querySelector(sel); }
-
-const CK = {
-  overlay: ()=> CKq('#checkoutOverlay'),
-  modal:   ()=> CKq('#checkoutModal'),
-  s1:      ()=> CKq('#ck-step1'),
-  s2:      ()=> CKq('#ck-step2'),
-  s3:      ()=> CKq('#ck-step3'),
-  close:   ()=> CKq('#ck-close')
-};
-
-function ckGoStep(step){
-  ckStep = step;
-  const s1=CK.s1(), s2=CK.s2(), s3=CK.s3();
-  if (s1) s1.hidden = (step!==1);
-  if (s2) s2.hidden = (step!==2);
-  if (s3) s3.hidden = (step!==3);
-}
-
-function ckOpenModal(){
-  const ov=CK.overlay(), md=CK.modal();
-  if (!ov || !md) return;
-  ov.removeAttribute('hidden');
-  md.removeAttribute('hidden');
-  document.documentElement.classList.add('ck-open');
-  ckOpen = true;
-  ckGoStep(1); // começa no passo 1
-}
-
-function ckCloseModal(){
-  const ov=CK.overlay(), md=CK.modal();
-  if (!ov || !md) return;
-  ov.setAttribute('hidden','');
-  md.setAttribute('hidden','');
-  document.documentElement.classList.remove('ck-open');
-  ckOpen = false;
-}
-
-(function bindOverlayClose(){
-  const ov=CK.overlay(), x=CK.close();
-  if (ov) ov.addEventListener('click', ckCloseModal);
-  if (x)  x.addEventListener('click', ckCloseModal);
-})();
-
-
-/* ===================== JS — PARTE 3 ===================== */
-/* CHECKOUT: Passo 1 (listas de itens) + totais dos passos  */
-/* Cole este bloco DEPOIS da Parte 2 do JS                  */
-/* ======================================================== */
-
-/* Getters do checkout (caso ainda não tenham sido definidos) */
-if (!window.CK) {
-  window.CK = {
-    modal:      ()=>document.getElementById('checkoutModal'),
-    overlay:    ()=>document.getElementById('checkoutOverlay'),
-    close:      ()=>document.getElementById('ck-close'),
-    // listas do passo 1
-    listR:      ()=>document.getElementById('ck-rifas'),
-    listP:      ()=>document.getElementById('ck-pecas'),
-    listF:      ()=>document.getElementById('ck-favs'),
-    // totais dos passos
-    t1:         ()=>document.getElementById('ck-total-s1'),
-    t2:         ()=>document.getElementById('ck-total-s2'),
-    t3:         ()=>document.getElementById('ck-total-s3'),
-    t3b:        ()=>document.getElementById('ck-total-s3b'),
-    // navegação
-    prev1:      ()=>document.getElementById('ck-prev-1'),
-    next1:      ()=>document.getElementById('ck-next-1'),
-    prev2:      ()=>document.getElementById('ck-prev-2'),
-    next2:      ()=>document.getElementById('ck-next-2'),
-    prev3:      ()=>document.getElementById('ck-prev-3'),
-    finish:     ()=>document.getElementById('ck-finish'),
-    // pix
-    pixQR:      ()=>document.getElementById('ck-pix-qr'),
-    pixCopy:    ()=>document.getElementById('ck-pix-copy'),
-    pixPayload: ()=>document.getElementById('ck-pix-payload'),
-    tabPix:     ()=>document.getElementById('ck-tab-pix'),
-    tabPP:      ()=>document.getElementById('ck-tab-pp'),
-    panePix:    ()=>document.getElementById('ck-pane-pix'),
-    panePP:     ()=>document.getElementById('ck-pane-pp'),
-    // campos passo 2
-    fNome:      ()=>document.getElementById('ck-nome'),
-    fEmail:     ()=>document.getElementById('ck-email'),
-    fFone:      ()=>document.getElementById('ck-fone'),
-    // passos
-    s1:         ()=>document.getElementById('ck-step1'),
-    s2:         ()=>document.getElementById('ck-step2'),
-    s3:         ()=>document.getElementById('ck-step3'),
-  };
-}
-
-/* ==== Linha “tabela”: X | item | preço ==== */
-function ckMakeRow({ kind, id, itemNode, priceText }) {
-  const row = document.createElement('div');
-  row.className = 'ck-row';
-
-  const colX = document.createElement('div'); colX.className = 'col-x';
-  const bx = document.createElement('button'); bx.className = 'ck-x'; bx.textContent = 'X';
-  bx.dataset.kind = kind; bx.dataset.id = id;
-  colX.appendChild(bx);
-
-  const colItem = document.createElement('div'); colItem.className = 'col-item';
-  colItem.appendChild(itemNode);
-
-  const colPrice = document.createElement('div'); colPrice.className = 'col-price';
-  colPrice.textContent = priceText || '';
-
-  row.append(colX, colItem, colPrice);
-  return row;
-}
-
-/* ==== “Chip” de rifa com 1–2 linhas (sem forçar uppercase) ==== */
-function ckMakeRifaChip(label, bgHex, textColor) {
-  const chip = document.createElement('div');
-  chip.className = 'rifa-chip';
-  chip.style.backgroundColor = bgHex || 'var(--beige)';
-  chip.style.color = textColor || 'var(--ink)';
-
-  const t = (label||'').trim();
-  if (!t) {
-    const s1 = document.createElement('span'); s1.className='ln1'; s1.textContent='';
-    chip.appendChild(s1);
-  } else if (t.length <= 28) {
-    const s1 = document.createElement('span'); s1.className='ln1'; s1.textContent=t;
-    chip.appendChild(s1);
-  } else {
-    const mid = Math.floor(t.length/2);
-    let bp = t.lastIndexOf(' ', mid); if (bp < 3) bp = t.indexOf(' ', mid); if (bp === -1) bp = 28;
-    const part1 = t.slice(0, bp).trim();
-    const part2 = t.slice(bp).trim();
-    const s1 = document.createElement('span'); s1.className='ln1'; s1.textContent=part1; chip.appendChild(s1);
-    if (part2) { const s2 = document.createElement('span'); s2.className='ln2'; s2.textContent=part2; chip.appendChild(s2); }
-  }
-  return chip;
-}
-
-/* ==== Render do Passo 1: listas de Rifas / Peças / Favoritas ==== */
-function ckRenderStep1(){
-  const listR = CK.listR(), listP = CK.listP(), listF = CK.listF();
-  if (!listR || !listP || !listF) return;
-  listR.innerHTML = ''; listP.innerHTML = ''; listF.innerHTML = '';
-
-  // ----- RIFAS -----
-  const rSel = [...rifasSel];                       // ordem de inserção
-  const last30 = (rSel.length % 2 === 1) ? String(rSel[rSel.length - 1]) : null; // última custa 30 se ímpar
-
-  rSel.forEach(rid => {
-    const r = rifas.find(x => String(x.id_rifa) === String(rid));
-    if (!r) return;
-    const label = (r.botao_rifa?.trim() || r.numero || r.id_rifa || '')
-                  .toString().replace(/^\s*X\s*/i,'');
-    const bg = r.hex_rifa || r.hex || '#bebab0';
-    const txt = (typeof getContrastColor === 'function') ? getContrastColor(bg) : '#2b2424';
-    const chip = ckMakeRifaChip(label, bg, txt);
-    const price = (last30 && String(rid) === last30) ? 30 : 25;
-    listR.appendChild( ckMakeRow({ kind:'rifa', id:rid, itemNode:chip, priceText:'R$ ' + Math.floor(price) }) );
-  });
-
-  // ----- PEÇAS -----
-  [...selecionadas].forEach(pid => {
-    const p = pecas.find(x => String(x.id_peca) === String(pid));
-    if (!p) return;
-    const wrap = document.createElement('div');
-    const img  = imgWithFallback('/img/tmb/' + (p.imagens?.[0]||'') + '.avif'); img.className = 'ck-thumb';
-    const ttl  = document.createElement('span'); ttl.className = 'ck-title'; ttl.textContent = p.titulo || ('Peça ' + pid);
-    wrap.append(img, ttl);
-    listP.appendChild( ckMakeRow({ kind:'peca', id:pid, itemNode:wrap, priceText:'R$ ' + Math.floor(Number(p.preco||0)) }) );
-  });
-
-  // ----- FAVORITAS (sem preço) -----
-  [...favoritos].forEach(fid => {
-    const p = pecas.find(x => String(x.id_peca) === String(fid));
-    if (!p) return;
-    const wrap = document.createElement('div');
-    const img  = imgWithFallback('/img/tmb/' + (p.imagens?.[0]||'') + '.avif'); img.className = 'ck-thumb';
-    const ttl  = document.createElement('span'); ttl.className = 'ck-title'; ttl.textContent = p.titulo || ('Peça ' + fid);
-    wrap.append(img, ttl);
-    listF.appendChild( ckMakeRow({ kind:'fav', id:fid, itemNode:wrap, priceText:'' }) );
-  });
-
-  // Remover pelo X (delegação simples)
-  CK.modal().querySelectorAll('.ck-x').forEach(btn => {
-    btn.onclick = () => {
-      const kind = btn.dataset.kind, id = btn.dataset.id;
-      if (!kind || !id) return;
-      if (kind === 'rifa') rifasSel.delete(id);
-      else if (kind === 'peca') selecionadas.delete(id);
-      else if (kind === 'fav') favoritos.delete(id);
-      calcularTotal();     // recalcula e atualiza CTA/pills
-      ckRenderStep1();     // repinta as listas
-    };
-  });
-}
-
-/* ==== TOTAIS sincronizados nos 3 passos ==== */
-function ckSyncTotalsOnSteps(){
-  const v = Math.floor(totalGeral || 0);
-  if (CK.t1())  CK.t1().textContent  = 'R$ ' + v;
-  if (CK.t2())  CK.t2().textContent  = 'R$ ' + v;
-  if (CK.t3())  CK.t3().textContent  = 'R$ ' + v;
-  if (CK.t3b()) CK.t3b().textContent = 'R$ ' + v;
-}
-
-/* ==== Navegação dos passos (voltar/avançar) ==== */
-/* Requer que suas funções globais ckGoStep(step) e ckEnsurePixReady()
-   já existam (foram definidas nas partes anteriores). */
-(function bindStepNav(){
-  if (CK.prev1()) CK.prev1().onclick = ()=>{};          // nada no 1
-  if (CK.next1()) CK.next1().onclick = ()=>{ ckRenderStep1(); ckGoStep(2); };
-
-  if (CK.prev2()) CK.prev2().onclick = ()=>{ ckGoStep(1); };
-  if (CK.next2()) CK.next2().onclick = ()=>{ ckGoStep(3); ckSyncTotalsOnSteps(); };
-
-  if (CK.prev3()) CK.prev3().onclick = ()=>{ ckGoStep(2); };
-})();
-
-/* ==== Hook: sempre que calcularTotal rodar, manter passo 1/3 coerentes ==== */
-if (typeof calcularTotal === 'function') {
-  const _orig = calcularTotal;
-  calcularTotal = function(){
-    _orig();
-    ckSyncTotalsOnSteps();
-    // se o checkout estiver aberto, atualiza tela
-    if (window.ckOpen) {
-      if (window.ckStep === 1) ckRenderStep1();
-      if (window.ckStep === 3) { if (typeof ckEnsurePixReady === 'function') ckEnsurePixReady(true); }
-    }
-  };
-}
-
-/* ==== Inicializa render do passo 1 quando o modal abrir ==== */
-/* Se você já chama ckOpenModal() em outro ponto, garanta que ele
-   faça: ckRenderStep1(); ckSyncTotalsOnSteps(); */
-if (CK.modal()) {
-  // fallback: se a página já tiver itens selecionados e o modal estiver visível
-  if (!CK.modal().hasAttribute('hidden')) {
-    ckRenderStep1();
-    ckSyncTotalsOnSteps();
-  }
-}
-/* =================== FIM JS — PARTE 3 =================== */
-
-
-  
-/* ===================== JS — PARTE 4 ===================== */
-/* PIX (payload BR Code + QR + copiar + abas)               */
-/* + validação do Passo 2 e envio (FormSubmit + GAS)        */
-/* Cole este bloco DEPOIS da Parte 3 do JS                  */
-/* ======================================================== */
-
-/* ---------- Utilitários PIX (definidos se não existirem) ---------- */
-if (typeof window.ck_crc16_ccitt_ffff !== 'function') {
-  window.ck_crc16_ccitt_ffff = function(data){
-    let crc=0xFFFF;
-    for(let i=0;i<data.length;i++){
-      let x=((crc>>8)^data.charCodeAt(i))&0xff;
-      x^=x>>4;
-      crc=(crc<<8)^(x<<12)^(x<<5)^x;
-    }
-    crc&=0xFFFF;
-    return crc.toString(16).toUpperCase().padStart(4,'0');
-  };
-}
-
-if (typeof window.ck_gerarBRCode !== 'function') {
-  window.ck_gerarBRCode = function(valor){
-    const chavePix="betshoptv@gmail.com";               // sua chave
-    const nome="BET SHOP TV".substring(0,25).toUpperCase();
-    const cidade="SAO PAULO".substring(0,15).toUpperCase();
-    const txid="***";
-    const f=(id,val)=> id + String(val.length).padStart(2,'0') + val;
-
-    let pl="000201";
-    pl+=f('26',`0014BR.GOV.BCB.PIX01${String(chavePix.length).padStart(2,'0')}${chavePix}`);
-    pl+='52040000';
-    pl+='5303986';
-    pl+=f('54', Number(Math.floor(valor||0)).toFixed(2)); // campo 54 precisa de 2 casas
-    pl+='5802BR';
-    pl+=f('59',nome);
-    pl+=f('60',cidade);
-    pl+=f('62', f('05',txid));
-    pl+='6304';
-    return pl + ck_crc16_ccitt_ffff(pl);
-  };
-}
-
-/* ---------- Render/atualização do PIX no Passo 3 ---------- */
-if (typeof window.ckEnsurePixReady !== 'function') {
-  window.ckEnsurePixReady = function(force=false){
-    const totalInt = Math.floor((window.totalGeral||0));
-    // espelha total nos elementos do passo 3 (se existirem)
-    if (CK.t3())  CK.t3().textContent  = 'R$ ' + totalInt;
-    if (CK.t3b()) CK.t3b().textContent = 'R$ ' + totalInt;
-
-    // payload
-    const payload = ck_gerarBRCode(totalInt);
-    const holder  = CK.pixPayload();
-    if (holder) holder.textContent = payload;
-
-    // QRCode (usa a lib qrcodejs que você carrega no final da página)
-    const qrBox = CK.pixQR();
-    if (qrBox) {
-      if (force) qrBox.innerHTML = '';
-      if (qrBox.childElementCount === 0 && window.QRCode) {
-        new QRCode(qrBox, {
-          text: payload,
-          width: 160, height: 160,
-          correctLevel: QRCode.CorrectLevel.M
-        });
-      }
-    }
-
-    // Botão “PIX Copia e Cola”
-    const btnCopy = CK.pixCopy();
-    if (btnCopy && !btnCopy._ckBound) {
-      btnCopy._ckBound = true;
-      btnCopy.addEventListener('click', ()=>{
-        const text = holder ? holder.textContent : payload;
-        const done = (ok)=>{
-          const old = btnCopy.textContent;
-          btnCopy.textContent = ok ? 'PIX copiado!' : 'Erro ao copiar';
-          setTimeout(()=> btnCopy.textContent = old, 1600);
-        };
-        if (navigator.clipboard?.writeText) {
-          navigator.clipboard.writeText(text).then(()=>done(true)).catch(()=>done(false));
-        } else {
-          const ta=document.createElement('textarea');
-          ta.value=text; ta.style.position='fixed'; ta.style.top='-9999px';
-          document.body.appendChild(ta); ta.select();
-          try { document.execCommand('copy'); done(true); } catch(e){ done(false); }
-          document.body.removeChild(ta);
-        }
-      });
-    }
-
-    // Abas (PIX / PayPal)
-    const tabPix  = CK.tabPix(), tabPP = CK.tabPP();
-    const panePix = CK.panePix(), panePP = CK.panePP();
-    if (tabPix && !tabPix._ckBound) {
-      tabPix._ckBound = true;
-      tabPix.onclick = ()=>{
-        tabPix.setAttribute('aria-selected','true');
-        tabPP?.setAttribute('aria-selected','false');
-        panePix?.setAttribute('aria-hidden','false');
-        panePP?.setAttribute('aria-hidden','true');
-      };
-    }
-    if (tabPP && !tabPP._ckBound) {
-      tabPP._ckBound = true;
-      tabPP.onclick = ()=>{
-        tabPP.setAttribute('aria-selected','true');
-        tabPix?.setAttribute('aria-selected','false');
-        panePP?.setAttribute('aria-hidden','false');
-        panePix?.setAttribute('aria-hidden','true');
-      };
-    }
-  };
-}
-
-/* ---------- Validação do Passo 2 ---------- */
-if (typeof window.ckValidateStep2 !== 'function') {
-  window.ckValidateStep2 = function(){
-    const nome  = (CK.fNome()?.value || '').trim();
-    const email = (CK.fEmail()?.value || '').trim();
-    if (!nome || !email) {
-      alert('Preencha nome e e-mail.');
-      return null;
-    }
-    return { nome, email, fone: (CK.fFone()?.value || '').trim() };
-  };
-}
-
-/* ---------- Preencher hidden form antes de enviar ---------- */
-if (typeof window.ckFillHiddenForm !== 'function') {
-  window.ckFillHiddenForm = function(nome, email, fone){
-    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
-    set('fNome',     String(nome||'').trim());
-    set('fEmail',    String(email||'').trim());
-    set('fTelefone', String(fone||'').trim());
-    set('fPecas',    [...(window.selecionadas||new Set())].join(','));
-    set('fRifas',    [...(window.rifasSel||new Set())].join(','));
-    set('fFav',      [...(window.favoritos||new Set())].join(','));
-    set('fTotal',    Number(Math.floor(window.totalGeral||0)).toFixed(2)); // 2 casas para GAS/FormSubmit
-  };
-}
-
-/* ---------- Botão “Avançar” do passo 2 deve validar ---------- */
-(function ensureNext2Valid(){
-  const nxt = CK.next2();
-  if (!nxt || nxt._ckBound) return;
-  nxt._ckBound = true;
-
-  const original = nxt.onclick;
-  nxt.onclick = ()=>{
-    const ok = ckValidateStep2();
-    if (!ok) return;                       // fica no passo 2
-    if (typeof original === 'function') original();
-    else { ckGoStep(3); ckEnsurePixReady(true); }
-  };
-})();
-
-/* ---------- Botão “Confirmar” (passo 3) envia GAS + FormSubmit ---------- */
-(function bindFinish(){
-  const btn = CK.finish();
-  if (!btn || btn._ckBound) return;
-  btn._ckBound = true;
-
-  btn.onclick = async ()=>{
-    const v = ckValidateStep2();
-    if (!v) { ckGoStep(2); return; }
-
-    // preenche form oculto (FormSubmit)
-    ckFillHiddenForm(v.nome, v.email, v.fone);
-
-    // backup GAS (best-effort; não bloqueia fluxo)
-    try {
-      if (typeof GAS_URL === 'string' && GAS_URL) {
-        const fd = new FormData();
-        fd.append('nome', v.nome);
-        fd.append('email', v.email);
-        fd.append('telefone', v.fone);
-        fd.append('pecas', [...(window.selecionadas||new Set())].join(','));
-        fd.append('rifas', [...(window.rifasSel||new Set())].join(','));
-        fd.append('favoritas', [...(window.favoritos||new Set())].join(','));
-        fd.append('total', Number(Math.floor(window.totalGeral||0)).toFixed(2));
-        fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' }).catch(()=>{});
-      }
-    } catch(e) {
-      console.warn('Falha no backup GAS (seguindo com FormSubmit):', e);
-    }
-
-    // envia FormSubmit (redireciona para _next)
-    const form = document.getElementById('hiddenForm');
-    if (form) form.submit();
-  };
-})();
-
-/* ---------- Quando abrir o passo 3, garantir PIX pronto ---------- */
-(function onEnterStep3EnsurePix(){
-  // se você chama ckGoStep(3) em outro lugar, cuide de chamar ckEnsurePixReady();
-  if (CK.s3() && CK.s3().hidden === false) {
-    ckEnsurePixReady(true);
-  }
-})();
-
-/* =================== FIM JS — PARTE 4 =================== */
-
-/* ===================== JS — PARTE 5 ===================== */
-/* Cola DEPOIS da Parte 4. É o “glue final” do checkout.   */
-/* - Integra calcularTotal() com o modal aberto             */
-/* - Garante CTA abre/fecha corretamente                    */
-/* - Fechamento por overlay e tecla ESC                     */
-/* - Proteções contra dupla ligação de eventos              */
-/* ======================================================== */
-
-(function CK_GLUE_FINAL(){
-  if (window.__ckGlueApplied) return;
-  window.__ckGlueApplied = true;
-
-  /* --- 1) Garantir que o CTA do rodapé reflita o estado e abra o modal --- */
-  function ckUpdateFooterCTA(){
-    try {
-      const btn  = document.getElementById('ctaMain');
-      const pill = document.getElementById('pillCompact');
-      const footer = document.querySelector('footer');
-      const hasTotal = (window.totalGeral||0) > 0;
-
-      if (btn){
-        if (hasTotal){
-          btn.disabled = false;
-          // fmt() já remove decimais
-          btn.textContent = 'APOSTAR ' + (typeof fmt==='function' ? fmt(window.totalGeral) : ('R$ '+Math.floor(window.totalGeral)));
-        } else {
-          btn.disabled = true;
-          btn.textContent = 'FAÇAM SUAS APOSTAS!';
-        }
-      }
-      if (footer){
-        footer.classList.toggle('has-total',  hasTotal);
-        footer.classList.toggle('no-total',  !hasTotal);
-      }
-      if (pill){
-        const parts = [];
-        if (window.selecionadas?.size) parts.push(window.selecionadas.size + ' ' + (window.selecionadas.size===1?'Peça':'Peças'));
-        if (window.rifasSel?.size)     parts.push(window.rifasSel.size     + ' ' + (window.rifasSel.size===1?'Rifa':'Rifas'));
-        if (window.favoritos?.size)    parts.push(window.favoritos.size    + ' ' + (window.favoritos.size===1?'Favorita':'Favoritas'));
-        pill.textContent = parts.join(' · ');
-        pill.style.display = parts.length ? 'inline-block' : 'none';
-      }
-    } catch(e){}
-  }
-
-  // Liga o CTA uma única vez
-  (function bindFooterCTA(){
-    const btn = document.getElementById('ctaMain');
-    const overlay = (typeof CK!=='undefined' && CK.overlay) ? CK.overlay() : document.getElementById('checkoutOverlay');
-    const modal   = (typeof CK!=='undefined' && CK.modal)   ? CK.modal()   : document.getElementById('checkoutModal');
-    if (!btn || !overlay || !modal) return;
-
-    if (!btn.__ckBound){
-      btn.__ckBound = true;
-      btn.addEventListener('click', (e)=>{
-        if ((window.totalGeral||0) <= 0) return;
-        if (typeof ckOpenModal==='function') ckOpenModal();
-      });
-    }
-
-    // Fechar clicando no overlay
-    if (!overlay.__ckBound){
-      overlay.__ckBound = true;
-      overlay.addEventListener('click', ()=>{
-        if (typeof ckCloseModal==='function') ckCloseModal();
-      });
-    }
-
-    // Botão "Fechar" do modal
-    if (typeof CK==='object' && CK.close && CK.close() && !CK.close().__ckBound){
-      CK.close().__ckBound = true;
-      CK.close().addEventListener('click', ()=>{
-        if (typeof ckCloseModal==='function') ckCloseModal();
-      });
-    }
-  })();
-
-  /* --- 2) ESC para fechar quando aberto --- */
-  (function bindEscClose(){
-    if (window.__ckEscBound) return;
-    window.__ckEscBound = true;
-    document.addEventListener('keydown', (ev)=>{
-      if (ev.key === 'Escape' && window.ckOpen && typeof ckCloseModal==='function'){
-        ev.preventDefault();
-        ckCloseModal();
-      }
-    });
-  })();
-
-  /* --- 3) Hook em calcularTotal(): atualiza CTA e, se modal aberto, sincronia dos passos --- */
-  if (typeof window.calcularTotal === 'function' && !window.__ckTotalHooked){
-    window.__ckTotalHooked = true;
-    const __oldCalc = window.calcularTotal;
-    window.calcularTotal = function(){
-      __oldCalc();
-      // CTA/pills sempre coerentes
-      ckUpdateFooterCTA();
-
-      // Se modal estiver aberto, atualizar totais e, se necessário, redesenhar Passo 1/PIX
-      try{
-        if (window.ckOpen){
-          if (typeof ckSyncTotalsOnSteps==='function') ckSyncTotalsOnSteps();
-          if (typeof CK==='object' && CK.s1 && CK.s3){
-            if (CK.s1() && CK.s1().hidden === false && typeof ckRenderStep1==='function'){
-              ckRenderStep1();
-            }
-            if (CK.s3() && CK.s3().hidden === false && typeof ckEnsurePixReady==='function'){
-              ckEnsurePixReady(true);
-            }
-          }
-        }
-      }catch(e){}
-    };
-  } else {
-    // Se calcularTotal ainda não existir (caso raro), tenta atualizar CTA periodicamente até existir.
-    if (!window.__ckWatchTotal){
-      window.__ckWatchTotal = true;
-      const t = setInterval(()=>{
-        if (typeof window.calcularTotal === 'function'){
-          clearInterval(t);
-          // força UMA atualização de CTA
-          ckUpdateFooterCTA();
-        }
-      }, 300);
-    }
-  }
-
-  /* --- 4) Força 1ª atualização do CTA depois que a página monta --- */
-  (function afterFirstPaint(){
-    // tenta depois de um pequeno atraso (após init carregar JSONs)
-    setTimeout(ckUpdateFooterCTA, 600);
-  })();
-
-  /* --- 5) Se por algum motivo modal abrir sem travar o scroll, corrige --- */
-  (function ensureScrollLock(){
-    const ov = (typeof CK==='object' && CK.overlay) ? CK.overlay() : document.getElementById('checkoutOverlay');
-    const md = (typeof CK==='object' && CK.modal)   ? CK.modal()   : document.getElementById('checkoutModal');
-    const apply = ()=>{
-      const open = ov && !ov.hasAttribute('hidden') && md && !md.hasAttribute('hidden');
-      document.documentElement.classList.toggle('ck-open', open);
-      document.body.classList.toggle('ck-open', open);
-    };
-    if (ov && !ov.__ckObs){
-      ov.__ckObs = true;
-      const obs = new MutationObserver(apply);
-      obs.observe(ov, { attributes:true, attributeFilter:['hidden'] });
-    }
-    if (md && !md.__ckObs){
-      md.__ckObs = true;
-      const obs = new MutationObserver(apply);
-      obs.observe(md, { attributes:true, attributeFilter:['hidden'] });
-    }
-  })();
-
-  // Exponho opcionalmente para debug simples no console
-  window.ckDebug = Object.assign(window.ckDebug||{}, {
-    ping:'ok', open:()=>typeof ckOpenModal==='function'&&ckOpenModal(),
-    close:()=>typeof ckCloseModal==='function'&&ckCloseModal()
-  });
-})();
-
-  
 </script>
+
 
     
 
