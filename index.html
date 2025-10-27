@@ -1,1035 +1,491 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BetShopTV⦿com</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>...</title>
 
-    /* ============================
-       === ESTILOS ORIGINAIS =========
-       (Mantidos exatamente como no index0908)
-       ============================ */
-
-    body {
-      margin: 0;
-      font-family: 'Roboto Condensed', sans-serif;
-      background-color: #bebab0;
-      color: #2b2424;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    a {
-      color: #ff0000;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-    
-    header {
-      width: 100%;
-      height: auto;
-      min-height: 25vh;
-      padding: 20px 0;
-      background-color: #ff0000;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .header-video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      height: 100%;
-      width: auto;
-      min-width: 100%;
-      object-fit: cover;
-      transform: translate(-50%, -50%);
-      background-color: #ff0000;
-    }
-
-    main {
-      width: 90%;
-      max-width: 1888px;
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    main h1 {
-      font-size: 1.6em;
-      margin-bottom: 600px;
-    }
-
-    main h2 {
-      font-size: 1.8em;
-      margin-bottom: 8px;
-      margin-top: 42px;
-    }
-
-    main h3 {
-      font-size: 1.4em;
-      margin-top: 38px;
-      margin-bottom: 0px;
-    }
-
-    main h4 {
-      font-size: 1.3em;
-      color: #bebab0;
-    }
-
-    main v {
-      color: #ff0000;
-    }
-
-    main p {
-      font-size: 1em;
-      color: #2b2424;
-      margin-top: 4px;
-      margin-bottom: 4px;
-    }
-    
-    .button-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-      margin-right: 10px;
-      margin-left: 10px;
-    }
-
-    .button-container-subitem {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-      margin-right: 10px;
-      margin-left: 10px;
-    }
-
-    .button-main {
-      padding: 4px 13px;
-      height: 50px;
-      border: 2px solid #ff0000;
-      background-color: #bebab0;
-      color: #2b2424;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1em;
-      font-weight: bold;
-      text-align: center;
-      line-height: 1.2;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background-color 0.5s ease, color 0.5s ease, border-color 0.3s ease;
-    }
-
-    .button-main:hover {
-      color: #ffffff;
-    }
-
-    .button-main.active {
-      background-color: #bebab0;
-      color: #ffffff;
-      border-color: #ff0000;
-    }
-
-    .button-VENDIDO {
-      padding: 4px 13px;
-      height: 50px;
-      border: 2px solid #ff0000;
-      background-color: #ff0000;
-      color: #bebab0;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1em;
-      font-weight: bold;
-      text-align: center;
-      line-height: 1.2;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-    }
-
-    .botao-main, .botao-off, .botao-coluna {
-      padding: 4px 13px;
-      height: 50px;
-      border: 2px solid;
-      color: #ff0000;
-      background-color: #bebab0;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1em;
-      font-weight: bold;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .botao-main:hover {
-      color: #ff0000;
-      border-color: #ff0000;
-      text-decoration: underline;
-    }
-
-    .botao-subitem {
-      padding: 8px 8px;
-      height: 60px;
-      border: 2px solid;
-      color: #ff0000;
-      background-color: #bebab0;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1em;
-      font-weight: bold;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .botao-subitem:hover {
-      color: #bebab0;
-      background-color: #2b2424;
-      border-color: #2b2424;
-      text-decoration: underline;
-    }
-
-    .botao-subitem-off {
-      padding: 8px 8px;
-      height: 60px;
-      border: 2px solid;
-      color: #2b2424;
-      border-color: #2b2424;
-      background-color: #bebab0;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1em;
-      font-weight: bold;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .botao-coluna {
-      color: #bebab0;
-      border-color: #2b2424;
-      background-color: #2b2424;
-    }
-
-    .botao-off {
-      color: #2b2424;
-      border-color: #2b2424;
-    }
-
-    /* NOVO: container da área inferior com lista e botão copiar (mantido) */
-    .selection-container {
-      margin-top: 20px;
-      max-width: 75%;
-      width: 100%;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Roboto Condensed', sans-serif;
-    }
-
-    .selected-text {
-      flex-grow: 1;
-      min-height: 50px;
-      padding: 8px 12px;
-      border: 2px solid #ff0000;
-      border-radius: 2px;
-      background-color: #fff0f0;
-      color: #2b2424;
-      font-weight: bold;
-      white-space: pre-wrap;
-      user-select: text;
-    }
-
-    .copy-button {
-      padding: 10px 16px;
-      background-color: #ff0000;
-      color: #ffffff;
-      border: none;
-      border-radius: 2px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      white-space: nowrap;
-    }
-
-    .copy-button:hover {
-      background-color: #cc0000;
-    }
-
-    textarea#selected-text::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    textarea#selected-text::-webkit-scrollbar-thumb {
-      background-color: #ff0000;
-      border-radius: 2px;
-    }
-
-    textarea#selected-text::-webkit-scrollbar-track {
-      background: #bebab0;
-    }
-
-    /* Estilos para a seção de introdução PASSO A PASSO */
-    .intro-text-section { }
-
-    .intro-text-section h2 {
-        font-size: 1.8em;
-        color: #2b2424;
-        margin-top: 40px;
-        margin-bottom: 25px;
-        text-align: center;
-    }
-
-    .intro-text-section .step-title {
-        font-weight: bold;
-        font-size: 1.3em;
-        margin-top: 25px;
-        margin-bottom: 10px;
-    }
-    .intro-text-section .step-title:first-of-type {
-        margin-top: 0;
-    }
-
-    .intro-text-section p {
-        font-size: 1.15em;
-        margin-top: 8px;
-        margin-bottom: 8px;
-    }
-
-    .intro-text-section p[style*="margin-left:24px"] {
-        margin-top: 5px;
-        margin-bottom: 10px;
-    }
-
-    .intro-text-section a {
-        color: #ff0000 !important;
-        text-decoration: none;
-    }
-
-    .intro-text-section a:hover {
-        text-decoration: underline;
-    }
-    
-    .lightbox {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(43, 36, 36, 0.69);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .lightbox-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      min-height: 100%;
-      background: transparent;
-      z-index: 1;
-    }
-
-.conteudo {
-  position: relative;
-  width: 50%;
-  height: calc(94% - 48px);
-  border: 2px solid #2b2424;
-  background-image: url('/images/BG-PAP.gif'); 
-  background-color: #bebab0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 24px;
-  gap: 12px;
-  z-index: 2;
-}
-
-    .conteudo img {
-      flex-shrink: 0;
-      height: 100%;
-      object-fit: contain;
-    }
-    .conteudo::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .conteudo::-webkit-scrollbar-thumb {
-      background-color: #2b2424;
-      border-radius: 2px;
-    }
-
-    .conteudo::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    .fechar {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      color: #ff0000;
-      background: none;
-      border: none;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 3;
-    }
-    
-.marquee-container {
-  width: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-  background: transparent;
-  padding: 10px 0;
-  position: relative;
-}
-
-.marquee-track {
-  display: inline-block;
-  white-space: nowrap;
-  animation: scroll-text 269s linear infinite;
-  max-height: 68px;
-}
-
-.marquee-text {
-  display: inline-block;
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 3em;
-  color: #ffffff;
-  margin-right: 38px;
-}
-
-@keyframes scroll-text {
-  0% {
-    transform: translateX(0%);
+<!-- ====== STYLES (preserve visual look of v08) ====== -->
+<style>
+  /* ====== Tokens ====== */
+  :root{
+    --red:#ff0000; --ink:#2b2424; --beige:#bebab0; --white:#ffffff;
+    --bd-thin:1px; --bd-thick:2px;
+    --ff-cta:"Roboto Condensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --fs-h1:clamp(1.4rem,3vw,2rem); --fs-h2:clamp(1.1rem,2vw,1.4rem);
+    --fs-p:clamp(.9rem,1.2vw,1rem); --fs-sm:clamp(.78rem,1vw,.9rem);
+    --gap-xxs:4px; --gap-xs:6px; --gap-s:8px; --gap-m:12px; --gap-l:16px;
+    --app-max-width:1200px;
   }
-  100% {
-    transform: translateX(-50%);
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);-webkit-font-smoothing:antialiased}
+
+  /* ====== Header (mantém visual v08) ====== */
+  header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;border-bottom:var(--bd-thick) solid var(--ink)}
+  .hdr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px}
+  .logo{font:700 var(--fs-h2)/1 var(--ff-cta);text-transform:uppercase}
+  .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .nav a{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 10px;border:var(--bd-thin) solid #fff;color:#fff;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase}
+  .nav a:hover{background:#fff;color:var(--ink)}
+
+  /* ====== Área da página ====== */
+  main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 16px;min-height:60vh}
+  section{margin-bottom:24px}
+  h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
+
+  /* ====== Galeria (Masonry / Pinterest) ====== */
+  .galeria{
+    column-gap:4px; -webkit-column-gap:4px;
+    column-count:3; -webkit-column-count:3; /* 3 colunas por padrão */
+    margin:0; padding:0;
+  }
+  .gal-item{
+    display:inline-block; width:100%;
+    margin:0 0 1px;
+    break-inside:avoid; -webkit-column-break-inside:avoid;
+    border:var(--bd-thin) solid var(--ink);
+    background:#fff; overflow:hidden;
+  }
+  .gal-item img{display:block;width:100%;height:auto;object-fit:cover;vertical-align:middle;background:#000}
+  .gal-item .ttl{display:none!important}
+
+  @media (min-width:1300px){
+    .galeria{column-count:4; -webkit-column-count:4} /* 4 colunas telas largas */
   }
 
-    @media (max-width: 960px) {
-      .gallery-container {
-        gap: 8px;
-      }
-    }
-  </style>
-    <!-- =========================================
-       ADICIONEI UM BLOCO DE CSS EXTRA ABAIXO
-       (Somente para ajustar comportamento MOBILE
-       dos botões de RIFAS em #gridA)
-       ========================================= -->
-  <style>
-    /* -------------------------------------------------------
-       RESPONSIVIDADE ESPECÍFICA PARA RIFAS (apenas dentro de #gridA)
-       - Mantém 100% das propriedades desktop.
-       - No mobile (<=768px) reduz progressivamente fonte/altura.
-       - Os botões ficam centralizados, com largura AUTOFIT ao texto.
-       - Não força colunas fixas: quantos couberem na linha, aparecem.
-       - Sem rolagem horizontal: botões quebram de linha (wrap) quando necessário.
-       ------------------------------------------------------- */
+  /* ====== Feed / Post ====== */
+  .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
+  .post{border:var(--bd-thin) solid var(--ink);background:var(--beige);overflow:hidden;display:flex;flex-direction:column;}
 
-    /* Segurança: aplica apenas dentro do grid de rifas */
-   @media (max-width: 768px) {
-  .button-container {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    align-items: center !important;
-    margin-left: 8px !important;
-    margin-right: 8px !important;
+  /* Carrossel */
+  .carousel{
+    display:flex;gap:var(--gap-xxs);
+    overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:6px 12px;background:var(--beige);
+    /* barra de rolagem inferior sempre visível e vermelha */
+    scrollbar-color: var(--red) transparent;
+  }
+  .carousel::-webkit-scrollbar{height:8px; margin-top: 8px;border-radius:0;}
+  .carousel::-webkit-scrollbar-track{background:var(--beige);border-radius:0;}
+  .carousel::-webkit-scrollbar-thumb{background:var(--red)}
+  .carousel-slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;background:var(--beige);}
+  .carousel-slide img{
+    width:100%; max-height:42vh; min-height:200px;
+    object-fit:contain; background:var(--beige);
+  }
+  /* remove a barra de progresso antiga */
+  .carousel-bar-wrap{display:none!important}
+
+  /* Meta do post */
+  .meta{padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--beige);}
+  .meta .linha1{display:flex;align-items:flex-start;gap:8px;background:var(--beige);}
+  .titulo{flex:1 1 auto;font-family:var(--ff-cta);font-weight:700;min-width:0;background:var(--beige);}
+  .preco{flex:0 0 auto;font-weight:700;white-space:nowrap;align-self:flex-start;background:var(--beige);}
+  .descricao{font-size:15px; font-weight: 700;color:var(--ink);background:var(--beige);}
+  .tecnica{font-size:13px;color:var(--ink);background:var(--beige);}   /* será exibida acima das dimensões */
+  .dimens{font-size:13px;color:var(--ink);background:var(--beige);}
+
+  /* Botões do post */
+  .meta .meta-footer{display:flex;justify-content:flex-end;gap:8px}
+  .btn{font-size:13px;font-family:var(--ff-cta);font-weight:700;padding:8px 12px;cursor:pointer;border-radius:0}
+  .add-btn{font-size:13px;border:2px solid var(--red);background:transparent;color:var(--red)}
+  .add-btn.added{font-size:13px;border-color:var(--ink);background:var(--ink);color:var(--beige)}
+  .fav-btn{font-size:13px; border:2px solid var(--red);background:var(--beige);color:var(--red)}
+  .fav-btn.active{font-size:13px;border:2px solid var(--red);background:var(--red);color:var(--beige)}
+
+  /* ====== Rifas ====== */
+  @font-face{
+    font-family:'BC-RobotoCondensed-Med';
+    src:url('/fonts/Roboto_Condensed-Medium.woff2') format('woff2');
+    font-weight:500;font-style:normal;font-display:swap;
+  }
+  .rifas{
+    display:flex;flex-wrap:wrap;gap:8px;
+    align-items:flex-start;justify-content:center;align-content:center;
+    padding:6px 0;
+  }
+  .rifa-btn{
+    display:inline-flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;
+    min-height:56px;padding:10px 12px;border:1px solid var(--ink);
+    background:var(--beige);cursor:pointer;
+    font-family:'BC-RobotoCondensed-Med',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+    font-weight:500;font-size:14px;line-height:1.15;text-transform:none;color:inherit;white-space:normal;overflow:hidden;
+  }
+  .rifa-btn .ln1,.rifa-btn .ln2{
+    display:block;margin:0;padding:0;font:inherit;text-transform:none;text-align:left;color:inherit;
+  }
+  .rifa-btn.selected{background:#fff!important;border-color:var(--red)!important;color:var(--red)!important}
+  .rifa-btn.sold{opacity:.24;filter:grayscale(1);pointer-events:none; background: #bebab0; color:#fff; border: 0px;}
+
+  @media (max-width:768px){
+    .rifa-btn{min-height:42px;padding:5px 7px;font-size:11px}
+    .rifa-btn .ln1,.rifa-btn .ln2{font-size:11px;line-height:1.12}
+
   }
 
-  .button-container .botao-main,
-  .button-container .botao-off {
-    display: inline-flex !important;
-    flex: 0 0 auto !important;
-    width: auto !important;
-    max-width: calc(100% - 20px) !important;
-    white-space: nowrap !important;
-    font-size: clamp(0.72rem, 2.8vw, 1rem) !important;
-    padding: 6px 10px !important;
-    height: auto !important;
-    box-sizing: border-box !important;
-    text-align: center !important;
-  }
-        header {
-        height: 112px;
-        min-height: 112px;
-        max-height: 112px;
-        padding: 4px 4px;
-      }
+  /* ====== Footer (mantém visual v08) ====== */
 
-      .header-video {
-        height: 100%;
-        width: auto;
-        min-width: 300%;
-        object-fit: cover;
-        object-position: center;
-        transform: translate(-50%, -50%);
-      }
-       main {
-        font-size: clamp(0.78rem, 3.3vw, 1rem) !important;
-       }
-       
-       
-     .marquee-text {   
-  font-size: clamp(1.3rem, 4.2vw, 1rem) !important;
-  margin-top: 4px;
-     }
-     .marquee-track {
-         max-height: 38px;
-         margin-top: 10px;
-     }
-     
+    @font-face{
+    font-family:'BC-RobotoCondensed-Bold';
+    src:url('/fonts/Roboto_Condensed-Bold.woff2') format('woff2');
+    font-weight:900;font-style:normal;font-display:swap;
+  }
+
+  footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
+  .ftr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px}
+  .contadores{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:var(--beige);color:var(--ink);border:var(--bd-thin) solid var(--beige);padding:4px 4px;font:700 var(--fs-sm)/1 var(--ff-cta)}
+  .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font-size: 1em;font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;cursor:pointer}
+  .total-display{font-size: 1em;font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif; margin-left:12px}
+  /* Estado visual do rodapé quando NÃO há seleção (total = 0) */
+footer.no-total #pillCompact,
+footer.no-total #ctaMain {
+  background: var(--ink);
+  color: var(--ink);
+  border: 0;              /* sem borda colorida */
 }
-  </style>
+
+/* Estado visual do CTA quando HÁ seleção (total > 0) */
+footer.has-total #ctaMain {
+  background: var(--red);
+  color: #fff;
+  border: 0;              /* sem borda */
+  padding: 8px 12px;
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-right: 4px;
+  font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  font-size: 1em;
+}
+
+/* Garantias de interação */
+#ctaMain[disabled] {
+  cursor: default;
+  opacity: 1;             /* mantemos legível mesmo desabilitado */
+}
+
+</style>
+
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+
+<style>
+
+/* ===== CHECKOUT: Overlay e Container ===== */
+/* ===== CHECKOUT (NOVO) ===== */
+#checkoutOverlay{
+  position:fixed; inset:0;
+  background:rgba(43,36,36,.75);
+  backdrop-filter:saturate(1.1) blur(2px);
+  display:none; z-index:9990;
+}
+#checkoutOverlay:not([hidden]){display:block}
+
+#checkoutModal{
+  position:fixed; inset:auto 0 0 0; /* encaixa entre header e footer */
+  margin:0 auto; max-width:min(1100px, 94vw);
+  max-height:69vh; /* não invade o header/footer */
+  background:var(--beige);
+  border:2px solid var(--red);
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  display:none; z-index:9991;
+  overflow:auto;
+}
+#checkoutModal:not([hidden]){display:block}
+
+/* cabeça/rodapé internos */
+.ck-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid var(--ink)}
+.ck-close{border:1px solid var(--ink);background:#fff;color:var(--ink);padding:6px 10px;cursor:pointer}
+.ck-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-top:1px solid var(--ink)}
+
+.ck-step{display:none;padding:10px 12px}
+.ck-step[aria-hidden="false"]{display:block}
+
+.ck-grid{display:grid;grid-template-columns:52px 1fr minmax(88px,auto);gap:8px;align-items:center}
+.ck-grid-head{color:#fff;background:var(--ink);padding:8px;border:1px solid var(--ink)}
+.ck-group{margin:10px 0}
+.ck-group-title{font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase;margin:4px 0 6px}
+.ck-x{border:1px solid var(--ink);background:#fff;padding:4px 8px;cursor:pointer}
+.ck-thumb{width:56px;height:56px;object-fit:cover;border:1px solid var(--ink);margin-right:8px;vertical-align:middle}
+.ck-title{vertical-align:middle}
+
+.ck-actions .ck-btn{border:2px solid var(--ink);background:#fff;padding:8px 12px;cursor:pointer}
+.ck-actions .ck-btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+
+/* abas/PIX */
+.ck-tabs{display:flex;gap:8px;margin:6px 0}
+.ck-tab{flex:1;border:2px solid var(--ink);background:#ddd;padding:8px;cursor:pointer}
+.ck-tab[aria-selected="true"]{background:var(--ink);color:#fff}
+.ck-pane[aria-hidden="true"]{display:none}
+.ck-pane[aria-hidden="false"]{display:block}
+
+.ck-pix-row{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.ck-pix-qr{width:180px;height:180px;border:1px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center}
+.ck-pix-side{flex:1;display:flex;flex-direction:column;gap:10px}
+#ck-pix-copy{border:2px solid var(--ink);background:#fff;padding:8px 12px;cursor:pointer}
+
+/* CTA do rodapé: modo invisível quando total=0 */
+.cta-main[disabled]{
+  background:var(--ink) !important;
+  color:var(--ink) !important;
+  border-color:var(--ink) !important;
+  cursor:default;
+  opacity:1;
+}
+
+/* garante que não haverá scroll horizontal dentro do modal em telas estreitas */
+#checkoutModal{overflow-x:hidden}
+.ck-grid{grid-template-columns:52px 1fr minmax(88px,auto)}
+@media (max-width:560px){
+  .ck-grid{grid-template-columns:40px 1fr 88px}
+  .ck-thumb{width:48px;height:48px}
+}
+
+
+  /* ===================== PATCH VISUAL CHECKOUT (DROP-IN) ===================== */
+/* Alinha a lógica de visibilidade ao atributo [hidden] que o JS usa.          */
+/* Basta colar no FINAL do CSS existente. Não precisa apagar nada.             */
+
+/* Overlay e modal: escondidos por padrão; aparecem quando NÃO têm [hidden] */
+#checkoutOverlay { display: none; }
+#checkoutModal  { display: none; }
+#checkoutOverlay:not([hidden]) { display: block; }
+#checkoutModal:not([hidden])  { display: block; }
+
+/* Etapas (passos) do checkout: mostram/ocultam via [hidden] */
+.ck-step { display: block; }
+.ck-step[hidden] { display: none; }
+
+/* Garante que a página não role com o checkout aberto (se já existir, tudo bem) */
+html.ck-open, body.ck-open { overflow: hidden; }
+
+/* (opcional, mas útil) deixa o CTA invisível quando desabilitado, como você pediu */
+#ctaMain:disabled {
+  background: #2b2424 !important;
+  color: #2b2424 !important;
+  border-color: #2b2424 !important;
+  cursor: default;
+}
+/* ========================================================================== */
+
+</style>
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
+
+<!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS --> <!-- PATCH CSS -->
 
 </head>
 <body>
+  <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
-    <a href="https://betshoptv.com"><video class="header-video" autoplay loop muted playsinline>
-     <source src="images/base-02-cabe%C3%A7alho%202.mp4" type="video/mp4">
-      Seu navegador não suporta a tag de vídeo.
-    </video></a>
+    <div class="hdr-inner">
+      <div class="logo">ME SINTO CONTENTE, ME SINTO MTO CONTENTE</div>
+      <nav class="nav">
+        <a href="#galeria">Galeria</a>
+        <a href="#feed">Feed</a>
+        <a href="#rifas">Rifas</a>
+        <a href="https://betshoptv.com/como.html">Como Funciona?</a>
+      </nav>
+    </div>
   </header>
 
-  <!-- BOTÕES MENU (exatamente como no index0908) -->
-
-  <div class="button-container" style="padding: 0 50px;">
-    <a href="como.html" class="botao-main">COMO<br>FUNCIONA?</a>
-    <a href="rifas.html"
-     class="botao-main"
-     style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
-            background-position: 50% 52%;">APOSTE<br>RIFAS</a>
-   <a href="ofertas.html"
-      class="botao-main"
-      style="background-image: url('https://betshoptv.com/images/BG-BOTAO.gif');
-      background-position: 50% 52%;">APOSTE<br>OFERTAS</a>
-    <a href="galeria.html" class="botao-main">GALERIA<br>DE IMAGENS</a>
-    <a href="contato.html" class="botao-main">FALE<br>CONOSCO</a>
-  </div>
-
-  <main>
-<center>
-  
-          <div class="marquee-container" style="max-width: 800px; width: 100%;">
-       
-  <div class="marquee-track" style="background-color: #ff0000; background-image: url('https://betshoptv.com/images/BG-ENCERRADA.gif'); cursor: pointer;" onclick="window.location='https://betshoptv.com/rifas.html';">
-          <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-                        <span class="marquee-text"><strong>⦿&nbsp;APOSTA DISPONÍVEL&nbsp;&nbsp;</strong>☞&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424"><strong>&nbsp;<i>Chop Shop AV</i>&nbsp;</strong></font></span>
-             
-</div></div>  
-<div style="
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 18px;
-  max-width: 800px;
-  margin: 0 auto;
-  flex-wrap: wrap;
-  
-">
-  <div style="flex: 1; max-height: 600px; display: flex; justify-content: center; align-items: center;">
-    <img src="https://betshoptv.com/galeria/CSA/014-04a.jpg"
-         class="imagem-interativa"
-         data-serie="ETM"
-         data-index="0"
-         data-sequencia="
-         https://betshoptv.com/galeria/CSA/014-04a.jpg,
-         https://betshoptv.com/galeria/CSA/015-04a.jpg,
-         https://betshoptv.com/galeria/CSA/016-04a.jpg,
-         https://betshoptv.com/galeria/CSA/017-04a.jpg,
-         https://betshoptv.com/galeria/CSA/013-03a.jpg,
-         https://betshoptv.com/galeria/CSA/012-03a.jpg,
-         https://betshoptv.com/galeria/CSA/011-03a.jpg,
-         https://betshoptv.com/galeria/CSA/010-03a.jpg,
-         https://betshoptv.com/galeria/CSA/008-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/007-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/006-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/005-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/004-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/003-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/002-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/001-03-a.jpg"
-         style="cursor: pointer; width: 100%; height: auto; max-height: 600px; object-fit: contain;">
-  </div>
-
-  <div style="flex: 1; max-height: 600px; display: flex; justify-content: center; align-items: center;">
-    <img src="https://betshoptv.com/galeria/CSA/013-03a.jpg"
-         class="imagem-interativa"
-         data-serie="ETM"
-         data-index="0"
-         data-sequencia="
-         https://betshoptv.com/galeria/CSA/013-03a.jpg,
-         https://betshoptv.com/galeria/CSA/012-03a.jpg,
-         https://betshoptv.com/galeria/CSA/011-03a.jpg,
-         https://betshoptv.com/galeria/CSA/010-03a.jpg,
-         https://betshoptv.com/galeria/CSA/008-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/007-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/006-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/005-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/004-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/003-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/002-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/001-03-a.jpg,
-         https://betshoptv.com/galeria/CSA/014-04a.jpg,
-         https://betshoptv.com/galeria/CSA/015-04a.jpg,
-         https://betshoptv.com/galeria/CSA/016-04a.jpg,
-         https://betshoptv.com/galeria/CSA/017-04a.jpg"
-         style="cursor: pointer; width: 100%; height: auto; max-height: 600px; object-fit: contain;">
-  </div>
-</div>
-
-
-<br><br><br><br><br>
-    
-    <div class="marquee-container" style="margin-bottom: -38px; max-width: 800px; width: 100%;">
-  <div class="marquee-track" style="background-color: rgba(255, 255, 255, 0.38); background-image: url('https://betshoptv.com/images/BG-ENCERRADA.gif');">
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-          <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-          <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-              <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-          <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-              <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-              <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-          <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-          <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-              <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-          <span class="marquee-text" >&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-          <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text" style="margin-bottom: 24px;"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-
-    
-          <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-              <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-          <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-          <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-
-          <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-          <span class="marquee-text">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</span>
-              <span class="marquee-text"><font color="#2b2424">&nbsp;&nbsp;⦿ NÚMERO SORTEADO &nbsp;&nbsp;☞&nbsp;<strong> A049 / Dunas de areia</strong> &nbsp;[CR019]&nbsp;</font></span>
-    
-</div></div></center>
-<center>
-    <div style="
-  margin-bottom: 13px;
-  max-width: 420px;
-  width: 100%;
-  height: auto;
-  overflow: hidden;
-  box-sizing: border-box;
-  background-image: url('https://betshoptv.com/images/BG-COMO.gif');
-  border-radius: 1820px;">
-    <img src="https://betshoptv.com/images/APOSTAS_ENCERRADAS.gif" 
-         style="width: 82%; height: auto; display: block; margin-bottom: 24px; margin-top: -4px; position: relative; z-index: 1;"></div>
-        
-         <center>  <div class="marquee-container" style="margin-top: -88px; max-width: 800px; width: 100%;">
-  <div class="marquee-track" style="background-color: #2b2424;">
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BG-COMO.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-    
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-    
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BG-COMO.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-    
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV-COMO.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo.gif');"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-    
-          <span class="marquee-text" style="background-image: url('https://betshoptv.com/images/BGV_inicio-rapido-mais-longo_preto.gif');">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</span>
-              <span class="marquee-text" style="margin-bottom: 24px;"><font color="#bebab0">⦿&nbsp;APOSTA ENCERRADA &nbsp;&nbsp; </strong>☞<strong>   <i>EVA TV Man</i>&nbsp;&nbsp;</strong>⇴&nbsp; Coluna <strong>A</strong>&nbsp;</font></span>
-
-</div>
-
-<div style="
-  width: 100%;
-  height: auto;
-  overflow-x: auto; /* permite rolar lateralmente caso a imagem seja maior */
-  display: block;
-  text-align: center; /* centraliza a imagem quando menor que a tela */
-">
-  <img src="https://betshoptv.com/images/COMO-SORTEIO-A.jpg"
-       class="imagem-interativa"
-       data-serie="ETM"
-       data-index="0"
-       data-sequencia="https://betshoptv.com/images/COMO-SORTEIO-A.jpg,https://betshoptv.com/images/COMO-SORTEIO-B.jpg"
-       style="cursor: pointer; width: 100%; height: auto; max-width: none;">
-</div>
-<br>
-    <br>
-    </center>
-
-    </section>
+  <!-- ========== MOUNT POINT: only this container is mutated by JS ========== -->
+  <main id="app" role="main" aria-live="polite">
+    <!-- initial content: will be replaced by renderers -->
+    <section id="page-loading" style="padding:24px;text-align:center;">Carregando...</section>
   </main>
 
-  <!-- Funções lightbox e inicialização de hash (mantidas) -->
-  <script>
-    function abrirLightbox(idLightbox, idImagem = null) {
-      const lightbox = document.getElementById(idLightbox);
-      lightbox.style.display = 'flex';
-      if (idImagem) {
-        const imagem = document.getElementById(idImagem);
-        if (imagem) {
-          imagem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-        }
-      }
-    }
 
-    function fecharLightbox(idLightbox) {
-      const lightbox = document.getElementById(idLightbox);
-      lightbox.style.display = 'none';
-    }
+  <!-- ====== CHECKOUT (HTML puro; CSS/JS virão depois) ====== -->
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        fecharLightbox('PAP');
-      }
-    });
+<!-- backdrop do modal -->
+<div id="checkoutOverlay" hidden></div>
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const hash = window.location.hash.substring(1);
-      if (hash && document.getElementById(hash)) {
-        abrirLightbox('PAP', hash);
-      }
-    });
-  </script>
+<!-- modal do checkout -->
+<div id="checkoutModal" role="dialog" aria-labelledby="ck-ttl" aria-modal="true" hidden>
+  <header class="ck-head">
+    <h2 id="ck-ttl">Checkout</h2>
+    <button type="button" id="ck-close" class="ck-close" aria-label="Fechar">Fechar</button>
+  </header>
 
-  <!-- SCRIPT PRINCIPAL: seleção, hover e copiar (preservado do index0908) -->
-  <script>
-    // Elementos do DOM usados
-    const gridA = document.getElementById('gridA');
-    const selectionBox = document.getElementById('selected-text');
-    const copyButton = document.getElementById('copy-button');
+  <!-- ===== Etapa 1: CONFIRA SUAS APOSTAS ===== -->
+  <section id="ck-step1" class="ck-step" aria-labelledby="ck-s1-ttl">
+    <h3 id="ck-s1-ttl">1 | Confira suas apostas</h3>
 
-    let selectedItems = [];
+    <!-- Cabeçalho “tabela” (3 colunas: X | item | preço) -->
+    <div class="ck-grid ck-grid-head" aria-hidden="true">
+      <div class="col-x"></div>
+      <div class="col-item">Itens</div>
+      <div class="col-price">R$</div>
+    </div>
 
-    // Função para obter cor de contraste
-    function getContrastColor(backgroundColor) {
-      const colors = { white: "#ffffff", red: "#ff0000", gray: "#bebaba", dark: "#2b2424" };
-      function hexToRgb(hex) {
-        const bigint = parseInt(hex.replace('#',''), 16);
-        return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
-      }
-      function luminance([r, g, b]) {
-        const [rs, gs, bs] = [r, g, b].map(v => {
-          v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-        });
-        return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
-      }
-      try {
-        const bg = hexToRgb(backgroundColor);
-        const bgLuminance = luminance(bg);
-        return Object.values(colors).sort((a, b) => {
-          const lumA = luminance(hexToRgb(a)); const lumB = luminance(hexToRgb(b));
-          return Math.abs(bgLuminance - lumB) - Math.abs(bgLuminance - lumA);
-        })[0];
-      } catch (e) {
-        return "#ffffff";
-      }
-    }
+    <!-- RIFAS -->
+    <div class="ck-group">
+      <div class="ck-group-title">Rifas</div>
+      <div id="ck-rifas" class="ck-list" aria-label="Rifas selecionadas">
+        <!-- JS vai inserir linhas aqui -->
+      </div>
+    </div>
 
-    function calculateTotalCost(numberOfSelectedItems) {
-        if (numberOfSelectedItems <= 0) {
-            return 0;
-        } else if (numberOfSelectedItems % 2 === 0) { // Quantidade PAR
-            return numberOfSelectedItems * 25;
-        } else { // Quantidade ÍMPAR
-            return ((numberOfSelectedItems - 1) * 25) + 30;
-        }
-    }
+    <!-- PEÇAS -->
+    <div class="ck-group">
+      <div class="ck-group-title">Peças</div>
+      <div id="ck-pecas" class="ck-list" aria-label="Peças selecionadas">
+        <!-- JS vai inserir linhas aqui -->
+      </div>
+    </div>
 
-    // Atualiza a textarea com os itens selecionados
-    function updateSelection() {
-      if (selectedItems.length === 0) {
-        selectionBox.value = 'Nenhum número selecionado.';
-      } else {
-        selectionBox.value = selectedItems.join('\n');
-      }
+    <!-- FAVORITAS -->
+    <div class="ck-group">
+      <div class="ck-group-title">Favoritas</div>
+      <div id="ck-favs" class="ck-list" aria-label="Favoritas selecionadas">
+        <!-- JS vai inserir linhas aqui -->
+      </div>
+    </div>
 
-      const numberOfItems = selectedItems.length;
-      const selectedCountElement = document.getElementById('selected-count');
-      if (selectedCountElement) {
-        selectedCountElement.textContent = numberOfItems;
-      }
-      const totalCost = calculateTotalCost(numberOfItems);
-      const calculatedCostElement = document.getElementById('calculated-cost');
-      if (calculatedCostElement) {
-        calculatedCostElement.textContent = '$' + totalCost;
-      }
-    }
+    <footer class="ck-foot">
+      <div class="ck-total"><strong>Total:</strong> <span id="ck-total-s1">R$ 0</span></div>
+      <div class="ck-actions">
+        <button type="button" id="ck-prev-1" class="ck-btn" disabled>Voltar</button>
+        <button type="button" id="ck-next-1" class="ck-btn primary">Avançar</button>
+      </div>
+    </footer>
+  </section>
 
-    // Atualiza estado visual dos botões na COLUNA A conforme selectedItems
-    function updateActiveButtonsInVisibleGrid() {
-        const buttonsInCurrentGrid = gridA.querySelectorAll('.button-main:not(.button-VENDIDO)');
-        buttonsInCurrentGrid.forEach(button => {
-            const buttonText = button.textContent.trim();
-            if (selectedItems.includes(buttonText)) {
-                if (!button.classList.contains('active')) {
-                    button.classList.add('active');
-                    const hoverColor = button.dataset.hoverColor;
-                    if (hoverColor) {
-                      button.style.backgroundColor = hoverColor;
-                      button.style.color = getContrastColor(hoverColor);
-                      button.style.borderColor = hoverColor;
-                    }
-                }
-            } else {
-                button.classList.remove('active');
-                button.style.backgroundColor = '';
-                button.style.color = '';
-                button.style.borderColor = '';
-            }
-        });
-    }
+  <!-- ===== Etapa 2: PREENCHA SEUS DADOS ===== -->
+  <section id="ck-step2" class="ck-step" aria-labelledby="ck-s2-ttl" hidden>
+    <h3 id="ck-s2-ttl">2 | Preencha seus dados</h3>
+    <div class="ck-form">
+      <label for="ck-nome">Nome *</label>
+      <input id="ck-nome" type="text" inputmode="text" autocomplete="name" />
+      <label for="ck-email">E-mail *</label>
+      <input id="ck-email" type="email" inputmode="email" autocomplete="email" />
+      <label for="ck-fone">Telefone</label>
+      <input id="ck-fone" type="tel" inputmode="tel" autocomplete="tel" />
+    </div>
+    <footer class="ck-foot">
+      <div class="ck-total"><strong>Total:</strong> <span id="ck-total-s2">R$ 0</span></div>
+      <div class="ck-actions">
+        <button type="button" id="ck-prev-2" class="ck-btn">Voltar</button>
+        <button type="button" id="ck-next-2" class="ck-btn primary">Avançar</button>
+      </div>
+    </footer>
+  </section>
 
-    // Inicializa eventos dos botões
-    document.querySelectorAll('#gridA .button-container button').forEach(button => {
-      const hoverColor = button.dataset.hoverColor;
-      let fadeTimeout = null;
+  <!-- ===== Etapa 3: PAGAMENTO (layout básico; lógica entra no JS) ===== -->
+  <section id="ck-step3" class="ck-step" aria-labelledby="ck-s3-ttl" hidden>
+    <h3 id="ck-s3-ttl">3 | Pagamento</h3>
 
-      button.addEventListener('mouseover', () => {
-        if (button.classList.contains('button-VENDIDO')) return;
-        clearTimeout(fadeTimeout);
-        if (hoverColor) {
-          button.style.backgroundColor = hoverColor;
-          button.style.color = getContrastColor(hoverColor);
-          button.style.borderColor = hoverColor;
-        } else {
-          button.style.backgroundColor = '#ff0000';
-          button.style.color = '#ffffff';
-          button.style.borderColor = '#ff0000';
-        }
-      });
+    <div class="ck-pay">
+      <!-- Abas -->
+      <div class="ck-tabs" role="tablist">
+        <button id="ck-tab-pix" class="ck-tab" role="tab" aria-controls="ck-pane-pix" aria-selected="true">PIX</button>
+        <button id="ck-tab-pp"  class="ck-tab" role="tab" aria-controls="ck-pane-pp"  aria-selected="false">PayPal</button>
+      </div>
 
-      button.addEventListener('mouseout', () => {
-        if (button.classList.contains('button-VENDIDO')) return;
-        // efeito de fade randômico (mantive lógica original)
-        clearTimeout(fadeTimeout);
-        const minDelay = 188;
-        const maxDelay = 1802;
-        const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-        fadeTimeout = setTimeout(() => {
-          if (!button.classList.contains('active')) {
-            // Reverte estilos inline para permitir que o CSS original apareça
-            button.style.backgroundColor = '';
-            button.style.color = '';
-            button.style.borderColor = '';
-          }
-        }, randomDelay);
-      });
+      <!-- PIX -->
+      <div id="ck-pane-pix" class="ck-pane" role="tabpanel" aria-labelledby="ck-tab-pix" aria-hidden="false">
+        <div class="ck-pix-row">
+          <div class="ck-pix-qr" id="ck-pix-qr"></div>
+          <div class="ck-pix-side">
+            <div class="ck-pix-total"><strong>Total:</strong> <span id="ck-total-s3">R$ 0</span></div>
+            <button type="button" class="ck-btn" id="ck-pix-copy">PIX Copia e Cola</button>
+          </div>
+        </div>
+        <!-- O payload fica escondido; JS manipula -->
+        <div id="ck-pix-payload" hidden></div>
+      </div>
 
-      button.addEventListener('click', () => {
-        if (button.classList.contains('button-VENDIDO')) {
-          return; // Ignora botões vendidos
-        }
-        clearTimeout(fadeTimeout);
+      <!-- PayPal -->
+      <div id="ck-pane-pp" class="ck-pane" role="tabpanel" aria-labelledby="ck-tab-pp" aria-hidden="true">
+        <a class="ck-btn primary" target="_blank" rel="noopener" href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G">
+          Pagar com PayPal
+        </a>
+      </div>
+    </div>
+    <footer class="ck-foot">
+      <div class="ck-total"><strong>Total:</strong> <span id="ck-total-s3-footer">R$ 0</span></div>
+      <div class="ck-actions">
+        <button type="button" id="ck-prev-3" class="ck-btn">Voltar</button>
+        <button type="button" id="ck-finish" class="ck-btn primary">FINALIZAR PEDIDO</button>
+      </div>
+    </footer>
+  </section>
+</div>
+<!-- ====== /CHECKOUT ====== -->
 
-        const value = button.textContent.trim();
-        const index = selectedItems.indexOf(value);
 
-        if (index > -1) { // Deselecionar
-          selectedItems.splice(index, 1);
-          button.classList.remove('active');
-          // Limpa estilos inline para voltar ao CSS padrão
-          button.style.backgroundColor = '';
-          button.style.color = '';
-          button.style.borderColor = '';
-        } else { // Selecionar
-          selectedItems.push(value);
-          button.classList.add('active');
-          if (hoverColor) {
-            button.style.backgroundColor = hoverColor;
-            button.style.color = getContrastColor(hoverColor);
-            button.style.borderColor = hoverColor;
-          } else {
-            button.style.backgroundColor = '#ff0000';
-            button.style.color = '#ffffff';
-            button.style.borderColor = '#ff0000';
-          }
-        }
-        updateSelection();
-      });
-    });
 
-    // Lógica de copiar texto
-    copyButton.addEventListener('click', () => {
-      const textToCopy = selectionBox.value.trim();
-      if (textToCopy && textToCopy !== 'Nenhum número selecionado.') {
-        navigator.clipboard.writeText(textToCopy).then(() => {
-          copyButton.textContent = 'COPIOU!  ;)';
-          setTimeout(() => {
-            copyButton.textContent = 'CLIQUE PARA COPIAR SEUS NÚMEROS';
-          }, 1500);
-        }).catch(err => {
-          console.error('Falha ao copiar: ', err);
-          alert('Falha ao copiar. Tente manualmente.');
-        });
-      } else {
-        alert('Nada para copiar.');
-      }
-    });
+  <!-- ========== FOOTER (kept same as v08) ========== -->
+<footer>
+  <div class="ftr-inner">
+    <div class="contadores">
+      <span id="pillCompact" class="pill-compact" style="display:none;"></span>
+    </div>
 
-    // Inicialização
-    if (gridA) gridA.style.display = 'block';
-    updateSelection();
-    updateActiveButtonsInVisibleGrid();
-  </script>
-  <!-- INÍCIO MODIFICAÇÃO: Script de rotação de imagens -->
-<script>
-  document.querySelectorAll('.imagem-interativa').forEach(img => {
-    img.addEventListener('click', () => {
-      const sequencia = img.dataset.sequencia.split(',');
-      let indexAtual = parseInt(img.dataset.index, 10) || 0;
+    <!-- Botão único: muda rótulo e estado conforme total -->
+    <button class="cta-main" id="ctaMain" disabled>FAÇAM SUAS APOSTAS!</button>
+  </div>
+</footer>
 
-      indexAtual = (indexAtual + 1) % sequencia.length;
 
-      img.src = sequencia[indexAtual];
-      img.dataset.index = indexAtual;
-    });
-  });
-</script>
-<!-- FIM MODIFICAÇÃO: Script de rotação de imagens -->
+  <!-- Hidden Form (kept in footer area but declared here) -->
+  <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
+    <input type="hidden" name="nome" id="fNome">
+    <input type="hidden" name="email" id="fEmail">
+    <input type="hidden" name="telefone" id="fTelefone">
+    <input type="hidden" name="pecas" id="fPecas">
+    <input type="hidden" name="rifas" id="fRifas">
+    <input type="hidden" name="favoritas" id="fFav">
+    <input type="hidden" name="total" id="fTotal">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_subject" value="Nova aposta BSTV">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
+  </form>
 
-  <br><br><br><br><br><br>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" referrerpolicy="no-referrer"></script>
+  <script src="loja.js"></script>
 </body>
 </html>
