@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>affs pós patch sobre patch</title>
+<title>...</title>
 
 <!-- ====== STYLES (preserve visual look of v08) ====== -->
 <style>
@@ -320,7 +320,7 @@ html.ck-open, body.ck-open { overflow: hidden; }
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">pós patch sobre patch</div>
+      <div class="logo">ME SINTO CONTENTE, ME SINTO MTO CONTENTE</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -1025,262 +1025,81 @@ window.addEventListener('DOMContentLoaded', init);
 
 
 
+/* === CHECKOUT CORE – ÚNICO (estado + open/close + navegação + totais) === */
+let ckOpen = false;
+let ckStep = 1;
 
+const CK = {
+  // contêineres
+  overlay: () => document.getElementById('checkoutOverlay'),
+  modal:   () => document.getElementById('checkoutModal'),
+  // etapas
+  s1: () => document.getElementById('ck-step1'),
+  s2: () => document.getElementById('ck-step2'),
+  s3: () => document.getElementById('ck-step3'),
+  // listas do passo 1
+  listR: () => document.getElementById('ck-rifas'),
+  listP: () => document.getElementById('ck-pecas'),
+  listF: () => document.getElementById('ck-favs'),
+  // totais
+  t1: () => document.getElementById('ck-total-s1'),
+  t2: () => document.getElementById('ck-total-s2'),
+  t3: () => document.getElementById('ck-total-s3'),
+  t3b:() => document.getElementById('ck-total-s3b'),
+  // navegação
+  prev1: () => document.getElementById('ck-prev-1'),
+  next1: () => document.getElementById('ck-next-1'),
+  prev2: () => document.getElementById('ck-prev-2'),
+  next2: () => document.getElementById('ck-next-2'),
+  prev3: () => document.getElementById('ck-prev-3'),
+  finish:() => document.getElementById('ck-finish'),
+  close: () => document.getElementById('ck-close'),
+  // PIX
+  pixQR:     () => document.getElementById('ck-pix-qr'),
+  pixCopy:   () => document.getElementById('ck-pix-copy'),
+  pixPayload:() => document.getElementById('ck-pix-payload'),
+  tabPix:    () => document.getElementById('ck-tab-pix'),
+  tabPP:     () => document.getElementById('ck-tab-pp'),
+  panePix:   () => document.getElementById('ck-pane-pix'),
+  panePP:    () => document.getElementById('ck-pane-pp'),
+  // dados passo 2
+  fNome:  () => document.getElementById('ck-nome'),
+  fEmail: () => document.getElementById('ck-email'),
+  fFone:  () => document.getElementById('ck-fone'),
+};
 
-
-
-/* ========= CHECKOUT: Passo 1 (linhas de itens) – FIX ========= */
-
-// Cria uma linha em 3 colunas: X | item | R$
-function ckMakeRow({ kind, id, itemNode, priceText }) {
-  const row = document.createElement('div');
-  row.className = 'ck-row'; // <- IMPORTANTE: .ck-row (não .ck-grid)
-
-  const colX = document.createElement('div'); colX.className = 'col-x';
-  const bx = document.createElement('button'); bx.className = 'ck-x'; bx.textContent = 'X';
-  bx.dataset.kind = kind; bx.dataset.id = id;
-  colX.appendChild(bx);
-
-  const colItem = document.createElement('div'); colItem.className = 'col-item';
-  colItem.appendChild(itemNode);
-
-  const colPrice = document.createElement('div'); colPrice.className = 'col-price';
-  colPrice.textContent = priceText || '';
-
-  row.append(colX, colItem, colPrice);
-  return row;
+function ckOpenModal(){
+  const ov = CK.overlay(), md = CK.modal();
+  if (!ov || !md) return;
+  ov.removeAttribute('hidden');
+  md.removeAttribute('hidden');
+  document.documentElement.classList.add('ck-open');
+  ckOpen = true;
+  ckGoStep(1);           // entra pelo passo 1
+  ckRenderStep1?.();     // desenha as listas (função já existe mais abaixo)
+  ckSyncTotalsOnSteps(); // ajusta os “Total:” dos passos
 }
 
-// Chip de rifa (mesma lógica, só garantindo fundo/contraste)
-function ckMakeRifaChip(label, bgHex, textColor) {
-  const chip = document.createElement('div');
-  chip.className = 'rifa-chip';
-  chip.style.backgroundColor = bgHex || 'var(--beige)';
-  chip.style.color = textColor || 'var(--ink)';
-
-  const t = (label||'').trim();
-  if (!t) {
-    const s1=document.createElement('span'); s1.className='ln1'; s1.textContent='';
-    chip.appendChild(s1);
-  } else if (t.length <= 28) {
-    const s1=document.createElement('span'); s1.className='ln1'; s1.textContent=t;
-    chip.appendChild(s1);
-  } else {
-    const mid=Math.floor(t.length/2);
-    let bp=t.lastIndexOf(' ',mid); if(bp<3) bp=t.indexOf(' ',mid); if(bp===-1) bp=28;
-    const part1=t.slice(0,bp).trim(), part2=t.slice(bp).trim();
-    const s1=document.createElement('span'); s1.className='ln1'; s1.textContent=part1; chip.appendChild(s1);
-    if (part2) { const s2=document.createElement('span'); s2.className='ln2'; s2.textContent=part2; chip.appendChild(s2); }
-  }
-  return chip;
+function ckCloseModal(){
+  const ov = CK.overlay(), md = CK.modal();
+  if (!ov || !md) return;
+  ov.setAttribute('hidden','');
+  md.setAttribute('hidden','');
+  document.documentElement.classList.remove('ck-open');
+  ckOpen = false;
 }
 
-// Render das listas
-function ckRenderStep1() {
-  const listR = CK.listR(), listP = CK.listP(), listF = CK.listF();
-  if (!listR || !listP || !listF) return;
-  listR.innerHTML = ''; listP.innerHTML = ''; listF.innerHTML = '';
-
-  // ----- RIFAS -----
-  const rSel = [...rifasSel];
-  const last30 = (rSel.length % 2 === 1) ? String(rSel[rSel.length - 1]) : null;
-
-  rSel.forEach(rid => {
-    const r = rifas.find(x => String(x.id_rifa) === String(rid));
-    if (!r) return;
-    const label = (r.botao_rifa?.trim() || r.numero || r.id_rifa || '').toString().replace(/^\s*X\s*/i,'');
-    const bg = r.hex_rifa || r.hex || '#bebab0';
-    const txt = (typeof getContrastColor === 'function') ? getContrastColor(bg) : '#2b2424';
-    const chip = ckMakeRifaChip(label, bg, txt);
-    const price = (last30 && String(rid) === last30) ? 30 : 25;
-    listR.appendChild( ckMakeRow({ kind:'rifa', id:rid, itemNode:chip, priceText:`R$ ${Math.floor(price)}` }) );
-  });
-
-  // ----- PEÇAS -----
-  [...selecionadas].forEach(pid => {
-    const p = pecas.find(x => String(x.id_peca) === String(pid));
-    if (!p) return;
-    const wrap = document.createElement('div');
-    const img = imgWithFallback('/img/tmb/' + (p.imagens?.[0]||'') + '.avif'); img.className = 'ck-thumb';
-    const ttl = document.createElement('span'); ttl.className = 'ck-title'; ttl.textContent = p.titulo || ('Peça ' + pid);
-    wrap.append(img, ttl);
-    listP.appendChild( ckMakeRow({ kind:'peca', id:pid, itemNode:wrap, priceText:`R$ ${Math.floor(Number(p.preco||0))}` }) );
-  });
-
-  // ----- FAVORITAS (sem preço) -----
-  [...favoritos].forEach(fid => {
-    const p = pecas.find(x => String(x.id_peca) === String(fid));
-    if (!p) return;
-    const wrap = document.createElement('div');
-    const img  = imgWithFallback('/img/tmb/' + (p.imagens?.[0]||'') + '.avif'); img.className = 'ck-thumb';
-    const ttl  = document.createElement('span'); ttl.className = 'ck-title'; ttl.textContent = p.titulo || ('Peça ' + fid);
-    wrap.append(img, ttl);
-    listF.appendChild( ckMakeRow({ kind:'fav', id:fid, itemNode:wrap, priceText:'' }) );
-  });
-
-  // Botões X (remover item)
-  CK.modal().querySelectorAll('.ck-x').forEach(b => {
-    b.onclick = () => {
-      const k = b.dataset.kind, id = b.dataset.id;
-      if (k === 'rifa') rifasSel.delete(id);
-      else if (k === 'peca') selecionadas.delete(id);
-      else if (k === 'fav') favoritos.delete(id);
-      calcularTotal();            // recalcula total + atualiza CTA/pills
-      ckRenderStep1();            // repinta o Passo 1
-    };
-  });
+function ckGoStep(step){
+  ckStep = step;
+  const s1 = CK.s1(), s2 = CK.s2(), s3 = CK.s3();
+  if (s1) s1.hidden = (step !== 1);
+  if (s2) s2.hidden = (step !== 2);
+  if (s3) s3.hidden = (step !== 3);
+  // Ao entrar no passo 3, garante PIX pronto
+  if (step === 3 && typeof ckEnsurePixReady === 'function') ckEnsurePixReady(true);
 }
 
-
-
-  /* ========= CHECKOUT: Passo 1 (linhas de itens) ========= */
-
-// Utilitário para criar uma linha “tabela”: X | item | preço
-function ckMakeRow({ kind, id, itemNode, priceText }) {
-  const row = document.createElement('div');
-  row.className = 'ck-row';
-
-  // coluna X (remove)
-  const colX = document.createElement('div'); colX.className = 'col-x';
-  const bx = document.createElement('button'); bx.className = 'ck-x'; bx.textContent = 'X';
-  bx.setAttribute('data-kind', kind);
-  bx.setAttribute('data-id', id);
-  colX.appendChild(bx);
-
-  // coluna item
-  const colItem = document.createElement('div'); colItem.className = 'col-item';
-  colItem.appendChild(itemNode);
-
-  // coluna preço
-  const colPrice = document.createElement('div'); colPrice.className = 'col-price';
-  colPrice.textContent = priceText || '';
-
-  row.appendChild(colX);
-  row.appendChild(colItem);
-  row.appendChild(colPrice);
-  return row;
-}
-
-// Cria DOM do “chip” de rifa (visual neutro do botão)
-function ckMakeRifaChip(label, bgHex, textColor) {
-  const chip = document.createElement('div');
-  chip.className = 'rifa-chip';
-  chip.style.backgroundColor = bgHex || 'var(--beige)';
-  chip.style.color = textColor || 'var(--ink)';
-
-  // quebra em duas linhas, como no site (sem forçar uppercase)
-  const frag = document.createDocumentFragment();
-  const t = (label||'').trim();
-  if (!t) {
-    const s1 = document.createElement('span'); s1.className='ln1'; s1.textContent='';
-    frag.appendChild(s1);
-  } else {
-    // heurística simples: quebra na metade mais próxima de espaço
-    if (t.length <= 28) {
-      const s1 = document.createElement('span'); s1.className='ln1'; s1.textContent=t;
-      frag.appendChild(s1);
-    } else {
-      const mid = Math.floor(t.length/2);
-      let bp = t.lastIndexOf(' ', mid);
-      if (bp < 3) bp = t.indexOf(' ', mid);
-      if (bp === -1) bp = 28;
-      const part1 = t.slice(0, bp).trim();
-      const part2 = t.slice(bp).trim();
-      const s1 = document.createElement('span'); s1.className='ln1'; s1.textContent=part1;
-      frag.appendChild(s1);
-      if (part2) {
-        const s2 = document.createElement('span'); s2.className='ln2'; s2.textContent=part2;
-        frag.appendChild(s2);
-      }
-    }
-  }
-  chip.appendChild(frag);
-  return chip;
-}
-
-// Renderiza as 3 listas do passo 1
-function ckRenderStep1(){
-  const listR = CK.listR(), listP = CK.listP(), listF = CK.listF();
-  if (!listR || !listP || !listF) return;
-  listR.innerHTML = ''; listP.innerHTML = ''; listF.innerHTML = '';
-
-  // ----- RIFAS -----
-  // precisamos mostrar R$25 cada se par, e se ímpar a última é R$30
-  const rSel = [...rifasSel]; // ids
-  const totalR = rSel.length;
-  const perPrice = (totalR % 2 === 0) ? 25 : 25; // a última será 30 se ímpar
-  const lastExtra30 = (totalR % 2 === 1) ? rSel[rSel.length - 1] : null;
-
-  rSel.forEach((rid, idx)=>{
-    const r = rifas.find(x => String(x.id_rifa) === String(rid));
-    if (!r) return;
-    const rawLabel = (r.botao_rifa && String(r.botao_rifa).trim()) ? String(r.botao_rifa).trim()
-                    : (r.numero || r.id_rifa || '').toString();
-    const bg = r.hex_rifa || r.hex || '#bebab0';
-    const txt = (typeof getContrastColor === 'function') ? getContrastColor(bg) : '#2b2424';
-    const chip = ckMakeRifaChip(rawLabel.replace(/^\s*X\s*/i,''), bg, txt);
-
-    const price = (lastExtra30 && String(rid) === String(lastExtra30)) ? 30 : 25;
-    const row = ckMakeRow({
-      kind:'rifa',
-      id: rid,
-      itemNode: chip,
-      priceText: 'R$ ' + Math.floor(price), // sem centavos
-    });
-    listR.appendChild(row);
-  });
-
-  // ----- PEÇAS -----
-  [...selecionadas].forEach(pid=>{
-    const p = pecas.find(x => String(x.id_peca) === String(pid));
-    if (!p) return;
-    const wrap = document.createElement('div');
-    const img = imgWithFallback('/img/tmb/' + (p.imagens?.[0]||'') + '.avif');
-    img.className = 'ck-thumb';
-    const title = document.createElement('span'); title.className='ck-title'; title.textContent = p.titulo || ('Peça ' + pid);
-    wrap.appendChild(img); wrap.appendChild(title);
-
-    const priceText = (p.preco!=null) ? ('R$ ' + Math.floor(Number(p.preco||0))) : '';
-    const row = ckMakeRow({ kind:'peca', id: pid, itemNode: wrap, priceText });
-    listP.appendChild(row);
-  });
-
-  // ----- FAVORITAS -----
-  [...favoritos].forEach(fid=>{
-    const p = pecas.find(x => String(x.id_peca) === String(fid));
-    if (!p) return;
-    const wrap = document.createElement('div');
-    const img = imgWithFallback('/img/tmb/' + (p.imagens?.[0]||'') + '.avif');
-    img.className = 'ck-thumb';
-    const title = document.createElement('span'); title.className='ck-title'; title.textContent = p.titulo || ('Peça ' + fid);
-    wrap.appendChild(img); wrap.appendChild(title);
-
-    const row = ckMakeRow({ kind:'fav', id: fid, itemNode: wrap, priceText: '' });
-    listF.appendChild(row);
-  });
-
-  // Bind dos X (remoção) – delegação simples
-  CK.modal().querySelectorAll('.ck-x').forEach(btn=>{
-    btn.onclick = ()=>{
-      const kind = btn.getAttribute('data-kind');
-      const id   = btn.getAttribute('data-id');
-      if (!kind || !id) return;
-
-      if (kind === 'rifa') {
-        rifasSel.delete(id);
-      } else if (kind === 'peca') {
-        selecionadas.delete(id);
-      } else if (kind === 'fav') {
-        favoritos.delete(id);
-      }
-      updatePills(); calcularTotal(); // isto chamará ckUpdateFooterCTA(); e re-render conforme necessário
-      ckRenderStep1(); // re-render imediato do passo 1
-    };
-  });
-}
-
-// Sincroniza valores “Total:” dos 3 passos
-function ckSyncTotalsOnSteps() {
+function ckSyncTotalsOnSteps(){
   const v = Math.floor(totalGeral || 0);
   if (CK.t1()) CK.t1().textContent = 'R$ ' + v;
   if (CK.t2()) CK.t2().textContent = 'R$ ' + v;
@@ -1288,19 +1107,46 @@ function ckSyncTotalsOnSteps() {
   if (CK.t3b()) CK.t3b().textContent = 'R$ ' + v;
 }
 
-// Navegação prev/next dos passos
-(function bindStepNav(){
-  if (CK.prev1()) CK.prev1().onclick = ()=>{}; // nada no passo 1
-  if (CK.next1()) CK.next1().onclick = ()=>{ ckGoStep(2); };
-
-  if (CK.prev2()) CK.prev2().onclick = ()=>{ ckGoStep(1); };
-  if (CK.next2()) CK.next2().onclick = ()=>{
-    // validações mínimas aqui? (opcional — valida na hora do finish também)
-    ckGoStep(3);
-  };
-
-  if (CK.prev3()) CK.prev3().onclick = ()=>{ ckGoStep(2); };
+/* Fechar: backdrop e botão */
+(function bindClose(){
+  CK.overlay()?.addEventListener('click', ckCloseModal);
+  CK.close()?.addEventListener('click', ckCloseModal);
 })();
+
+/* Navegação: Avançar/Voltar */
+(function bindStepNav(){
+  CK.prev1()?.addEventListener('click', ()=>{});            // passo 1 não volta
+  CK.next1()?.addEventListener('click', ()=> ckGoStep(2));
+  CK.prev2()?.addEventListener('click', ()=> ckGoStep(1));
+  CK.next2()?.addEventListener('click', ()=> ckGoStep(3));
+  CK.prev3()?.addEventListener('click', ()=> ckGoStep(2));
+})();
+
+/* Integra ao CTA do rodapé (id="ctaMain") – abrir modal só se total > 0 */
+(function bindFooterCTA(){
+  const btn = document.getElementById('ctaMain');
+  if (!btn) return;
+  btn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    if ((totalGeral||0) > 0) ckOpenModal();
+  });
+})();
+
+/* Quando o total muda (sua função já existe), sincroniza modal em tempo real */
+if (typeof calcularTotal === 'function'){
+  const _old = calcularTotal;
+  calcularTotal = function(){
+    _old();
+    if (ckOpen){
+      ckSyncTotalsOnSteps();
+      if (ckStep === 1 && typeof ckRenderStep1 === 'function') ckRenderStep1();
+      if (ckStep === 3 && typeof ckEnsurePixReady === 'function') ckEnsurePixReady(true);
+    }
+  };
+}
+
+
+
 
 
   /* ========= CHECKOUT: PIX (geração de payload + QR opcional) ========= */
@@ -1724,6 +1570,114 @@ function ckFillHiddenForm(nome,email,fone){
   };
 })();
 
+<!-- === BEGIN CHECKOUT CORE (drop-in, override-safe) === -->
+<script>
+(function(){
+  // Getters centralizados para o modal/abas/campos
+  window.CK = {
+    overlay: ()=> document.getElementById('checkoutOverlay'),
+    modal:   ()=> document.getElementById('checkoutModal'),
+    close:   ()=> document.getElementById('ck-close'),
+
+    s1: ()=> document.getElementById('ck-step1'),
+    s2: ()=> document.getElementById('ck-step2'),
+    s3: ()=> document.getElementById('ck-step3'),
+
+    listR: ()=> document.getElementById('ck-rifas'),
+    listP: ()=> document.getElementById('ck-pecas'),
+    listF: ()=> document.getElementById('ck-favs'),
+
+    prev1: ()=> document.getElementById('ck-prev-1'),
+    next1: ()=> document.getElementById('ck-next-1'),
+    prev2: ()=> document.getElementById('ck-prev-2'),
+    next2: ()=> document.getElementById('ck-next-2'),
+    prev3: ()=> document.getElementById('ck-prev-3'),
+    finish:()=> document.getElementById('ck-finish'),
+
+    t1:   ()=> document.getElementById('ck-total-s1'),
+    t2:   ()=> document.getElementById('ck-total-s2'),
+    t3:   ()=> document.getElementById('ck-total-s3'),
+    t3b:  ()=> document.getElementById('ck-total-s3b'),
+
+    tabPix:   ()=> document.getElementById('ck-tab-pix'),
+    tabPP:    ()=> document.getElementById('ck-tab-pp'),
+    panePix:  ()=> document.getElementById('ck-pane-pix'),
+    panePP:   ()=> document.getElementById('ck-pane-pp'),
+    pixQR:    ()=> document.getElementById('ck-pix-qr'),
+    pixCopy:  ()=> document.getElementById('ck-pix-copy'),
+    pixPayload: ()=> document.getElementById('ck-pix-payload'),
+
+    fNome: ()=> document.getElementById('ck-nome'),
+    fEmail:()=> document.getElementById('ck-email'),
+    fFone: ()=> document.getElementById('ck-fone'),
+  };
+
+  // Estado do modal
+  window.ckOpen = false;
+  window.ckStep = 1;
+
+  // Abre o checkout
+  window.ckOpenModal = function(){
+    const ov = CK.overlay(), md = CK.modal();
+    if (!ov || !md) return;
+
+    ov.removeAttribute('hidden');
+    md.removeAttribute('hidden');
+    document.documentElement.classList.add('ck-open');
+    document.body.classList.add('ck-open');
+
+    ckGoStep(1); // sempre começa no passo 1
+
+    // Render/sincronizações (chama só se existirem, para não quebrar)
+    if (typeof ckRenderStep1 === 'function') ckRenderStep1();
+    if (typeof ckSyncTotalsOnSteps === 'function') ckSyncTotalsOnSteps();
+    if (typeof ckEnsurePixReady === 'function')   ckEnsurePixReady(true);
+
+    ckOpen = true;
+  };
+
+  // Fecha o checkout
+  window.ckCloseModal = function(){
+    const ov = CK.overlay(), md = CK.modal();
+    if (!ov || !md) return;
+
+    ov.setAttribute('hidden','');
+    md.setAttribute('hidden','');
+    document.documentElement.classList.remove('ck-open');
+    document.body.classList.remove('ck-open');
+    ckOpen = false;
+  };
+
+  // Troca de etapa (1, 2, 3)
+  window.ckGoStep = function(step){
+    ckStep = step;
+    const s1 = CK.s1(), s2 = CK.s2(), s3 = CK.s3();
+    if (s1) s1.hidden = (step !== 1);
+    if (s2) s2.hidden = (step !== 2);
+    if (s3) s3.hidden = (step !== 3);
+
+    if (step === 3 && typeof ckEnsurePixReady === 'function') ckEnsurePixReady(true);
+    if (typeof ckSyncTotalsOnSteps === 'function') ckSyncTotalsOnSteps();
+  };
+
+  // Liga: CTA principal, overlay (fechar) e botão X (fechar)
+  (function bindOpenClose(){
+    const btn = document.getElementById('ctaMain');
+    const ov  = CK.overlay();
+    const x   = CK.close();
+
+    if (btn) btn.addEventListener('click', (e)=>{
+      if ((totalGeral||0) <= 0) return;
+      e.preventDefault();
+      ckOpenModal();
+    });
+
+    if (ov) ov.addEventListener('click', ckCloseModal);
+    if (x)  x.addEventListener('click', ckCloseModal);
+  })();
+})();
+</script>
+<!-- === END CHECKOUT CORE === -->
 
 
 
