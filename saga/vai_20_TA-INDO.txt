@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>,00 patches</title>
+
+<!-- ====== STYLES (preserve visual look of v08) ====== -->
+<style>
+  /* ====== Tokens ====== */
+  :root{
+    --red:#ff0000; --ink:#2b2424; --beige:#bebab0; --white:#ffffff;
+    --bd-thin:1px; --bd-thick:2px;
+    --ff-cta:"Roboto Condensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --fs-h1:clamp(1.4rem,3vw,2rem); --fs-h2:clamp(1.1rem,2vw,1.4rem);
+    --fs-p:clamp(.9rem,1.2vw,1rem); --fs-sm:clamp(.78rem,1vw,.9rem);
+    --gap-xxs:4px; --gap-xs:6px; --gap-s:8px; --gap-m:12px; --gap-l:16px;
+    --app-max-width:1200px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);-webkit-font-smoothing:antialiased}
+
+  /* ====== Header (mantém visual v08) ====== */
+  header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;border-bottom:var(--bd-thick) solid var(--ink)}
+  .hdr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px}
+  .logo{font:700 var(--fs-h2)/1 var(--ff-cta);text-transform:uppercase}
+  .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .nav a{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 10px;border:var(--bd-thin) solid #fff;color:#fff;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase}
+  .nav a:hover{background:#fff;color:var(--ink)}
+
+  /* ====== Área da página ====== */
+  main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 16px;min-height:60vh}
+  section{margin-bottom:24px}
+  h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
+
+  /* ====== Galeria (Masonry / Pinterest) ====== */
+  .galeria{
+    column-gap:4px; -webkit-column-gap:4px;
+    column-count:3; -webkit-column-count:3; /* 3 colunas por padrão */
+    margin:0; padding:0;
+  }
+  .gal-item{
+    display:inline-block; width:100%;
+    margin:0 0 1px;
+    break-inside:avoid; -webkit-column-break-inside:avoid;
+    border:var(--bd-thin) solid var(--ink);
+    background:#fff; overflow:hidden;
+  }
+  .gal-item img{display:block;width:100%;height:auto;object-fit:cover;vertical-align:middle;background:#000}
+  .gal-item .ttl{display:none!important}
+
+  @media (min-width:1300px){
+    .galeria{column-count:4; -webkit-column-count:4} /* 4 colunas telas largas */
+  }
+
+  /* ====== Feed / Post ====== */
+  .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
+  .post{border:var(--bd-thin) solid var(--ink);background:var(--beige);overflow:hidden;display:flex;flex-direction:column;}
+
+  /* Carrossel */
+  .carousel{
+    display:flex;gap:var(--gap-xxs);
+    overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:6px 12px;background:var(--beige);
+    /* barra de rolagem inferior sempre visível e vermelha */
+    scrollbar-color: var(--red) transparent;
+  }
+  .carousel::-webkit-scrollbar{height:8px; margin-top: 8px;border-radius:0;}
+  .carousel::-webkit-scrollbar-track{background:var(--beige);border-radius:0;}
+  .carousel::-webkit-scrollbar-thumb{background:var(--red)}
+  .carousel-slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;background:var(--beige);}
+  .carousel-slide img{
+    width:100%; max-height:42vh; min-height:200px;
+    object-fit:contain; background:var(--beige);
+  }
+  /* remove a barra de progresso antiga */
+  .carousel-bar-wrap{display:none!important}
+
+  /* Meta do post */
+  .meta{padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--beige);}
+  .meta .linha1{display:flex;align-items:flex-start;gap:8px;background:var(--beige);}
+  .titulo{flex:1 1 auto;font-family:var(--ff-cta);font-weight:700;min-width:0;background:var(--beige);}
+  .preco{flex:0 0 auto;font-weight:700;white-space:nowrap;align-self:flex-start;background:var(--beige);}
+  .descricao{font-size:15px; font-weight: 700;color:var(--ink);background:var(--beige);}
+  .tecnica{font-size:13px;color:var(--ink);background:var(--beige);}   /* será exibida acima das dimensões */
+  .dimens{font-size:13px;color:var(--ink);background:var(--beige);}
+
+  /* Botões do post */
+  .meta .meta-footer{display:flex;justify-content:flex-end;gap:8px}
+  .btn{font-size:13px;font-family:var(--ff-cta);font-weight:700;padding:8px 12px;cursor:pointer;border-radius:0}
+  .add-btn{font-size:13px;border:2px solid var(--red);background:transparent;color:var(--red)}
+  .add-btn.added{font-size:13px;border-color:var(--ink);background:var(--ink);color:var(--beige)}
+  .fav-btn{font-size:13px; border:2px solid var(--red);background:var(--beige);color:var(--red)} 
+  .fav-btn.active{font-size:13px;border:2px solid var(--red);background:var(--red);color:var(--beige)}
+ 
+  /* ====== Rifas ====== */
+  @font-face{
+    font-family:'BC-RobotoCondensed-Med';
+    src:url('/fonts/Roboto_Condensed-Medium.woff2') format('woff2');
+    font-weight:500;font-style:normal;font-display:swap;
+  }
+  .rifas{
+    display:flex;flex-wrap:wrap;gap:8px;
+    align-items:flex-start;justify-content:center;align-content:center;
+    padding:6px 0;
+  }
+  .rifa-btn{
+    display:inline-flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;
+    min-height:56px;padding:10px 12px;border:1px solid var(--ink);
+    background:var(--beige);cursor:pointer;
+    font-family:'BC-RobotoCondensed-Med',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+    font-weight:500;font-size:14px;line-height:1.15;text-transform:none;color:inherit;white-space:normal;overflow:hidden;
+  }
+  .rifa-btn .ln1,.rifa-btn .ln2{
+    display:block;margin:0;padding:0;font:inherit;text-transform:none;text-align:left;color:inherit;
+  }
+  .rifa-btn.selected{background:#fff!important;border-color:var(--red)!important;color:var(--red)!important}
+  .rifa-btn.sold{opacity:.24;filter:grayscale(1);pointer-events:none; background: #bebab0; color:#fff; border: 0px;}
+
+  @media (max-width:768px){
+    .rifa-btn{min-height:42px;padding:5px 7px;font-size:11px}
+    .rifa-btn .ln1,.rifa-btn .ln2{font-size:11px;line-height:1.12}
+
+  }
+
+  /* ====== Footer (mantém visual v08) ====== */
+  
+    @font-face{
+    font-family:'BC-RobotoCondensed-Bold';
+    src:url('/fonts/Roboto_Condensed-Bold.woff2') format('woff2');
+    font-weight:900;font-style:normal;font-display:swap;
+  }
+  
+  footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
+  .ftr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px}
+  .contadores{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:var(--beige);color:var(--ink);border:var(--bd-thin) solid var(--beige);padding:4px 4px;font:700 var(--fs-sm)/1 var(--ff-cta)}
+  .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font-size: 1em;font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;cursor:pointer}
+  .total-display{font-size: 1em;font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif; margin-left:12px}
+  /* Estado visual do rodapé quando NÃO há seleção (total = 0) */
+footer.no-total #pillCompact,
+footer.no-total #ctaMain {
+  background: var(--ink);
+  color: var(--ink);
+  border: 0;              /* sem borda colorida */
+}
+
+/* Estado visual do CTA quando HÁ seleção (total > 0) */
+footer.has-total #ctaMain {
+  background: var(--red);
+  color: #fff;
+  border: 0;              /* sem borda */
+  padding: 8px 12px;
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-right: 4px;
+  font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  font-size: 1em;
+}
+
+/* Garantias de interação */
+#ctaMain[disabled] {
+  cursor: default;
+  opacity: 1;             /* mantemos legível mesmo desabilitado */
+}
+
+</style>
+
+</head>
+<body>
+  <!-- ========== HEADER (kept same as v08) ========== -->
+  <header>
+    <div class="hdr-inner">
+      <div class="logo">!!!!!!!!!!!!!!!!</div>
+      <nav class="nav">
+        <a href="#galeria">Galeria</a>
+        <a href="#feed">Feed</a>
+        <a href="#rifas">Rifas</a>
+        <a href="https://betshoptv.com/como.html">Como Funciona?</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========== MOUNT POINT: only this container is mutated by JS ========== -->
+  <main id="app" role="main" aria-live="polite">
+    <!-- initial content: will be replaced by renderers -->
+    <section id="page-loading" style="padding:24px;text-align:center;">Carregando...</section>
+  </main>
+
+  <!-- ========== FOOTER (kept same as v08) ========== -->
+<footer>
+  <div class="ftr-inner">
+    <div class="contadores">
+      <span id="pillCompact" class="pill-compact" style="display:none;"></span>
+    </div>
+
+    <!-- Botão único: muda rótulo e estado conforme total -->
+    <button class="cta-main" id="ctaMain" disabled>FAÇAM SUAS APOSTAS!</button>
+  </div>
+</footer>
+
+
+  <!-- Hidden Form (kept in footer area but declared here) -->
+  <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
+    <input type="hidden" name="nome" id="fNome">
+    <input type="hidden" name="email" id="fEmail">
+    <input type="hidden" name="telefone" id="fTelefone">
+    <input type="hidden" name="pecas" id="fPecas">
+    <input type="hidden" name="rifas" id="fRifas">
+    <input type="hidden" name="favoritas" id="fFav">
+    <input type="hidden" name="total" id="fTotal">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_subject" value="Nova aposta BSTV">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
+  </form>
+
+  <!-- ====== SCRIPT: modular renderers, event delegation, footer bindings ====== -->
+<script>
+/* ======================= CONFIG ======================= */
+const PECAS_JSON_URL = 'https://betshoptv.com/dados/pecas.json';
+const RIFAS_JSON_URL = 'https://betshoptv.com/dados/rifas.json';
+const GAS_URL        = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+
+/* ======================== STATE ======================== */
+let pecas = [];
+let rifas = [];
+const selecionadas = new Set(); // peças escolhidas
+const rifasSel     = new Set(); // rifas escolhidas (ids)
+const favoritos    = new Set(); // peças favoritas
+let totalGeral     = 0;
+
+/* ======================= HELPERS ======================= */
+// FORMATA EM PT-BR SEM CASAS DECIMAIS (ex.: R$ 1.500)
+const fmt = (v) => {
+  const n = Number(v || 0);
+  // arredonda para o inteiro mais próximo; se preferir “truncar”, troque por Math.floor(n)
+  const inteiro = Math.round(n);
+  return 'R$ ' + inteiro.toLocaleString('pt-BR');
+};
+
+function imgWithFallback(src){
+  const img = new Image();
+  img.loading = 'lazy';
+  img.src = src;
+  img.onerror = () => { if (src.endsWith('.avif')) img.src = src.replace('.avif', '.jpg'); };
+  return img;
+}
+
+// Contraste por YIQ (usa #2b2424 como cor escura e #fff como clara)
+const getContrastColor = (hexColor) => {
+  try {
+    if (!hexColor) return '#2b2424';
+    let s = String(hexColor).trim();
+    if (s.startsWith('#')) s = s.slice(1);
+    if (s.length === 3) s = s.split('').map(ch => ch + ch).join('');
+    if (s.length !== 6) return '#2b2424';
+    const r = parseInt(s.substring(0, 2), 16);
+    const g = parseInt(s.substring(2, 4), 16);
+    const b = parseInt(s.substring(4, 6), 16);
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return (yiq >= 128) ? '#2b2424' : '#ffffff';
+  } catch (e) { return '#2b2424'; }
+};
+
+// Regra de preço das rifas (par = n*25; ímpar = (n-1)*25 + 30)
+function calculateRifaTotal(count){
+  count = Number(count || 0);
+  if (count <= 0) return 0;
+  if (count % 2 === 0) return 25 * count;
+  return 25 * (count - 1) + 30;
+}
+
+/* =============== GALERIA (MASONRY) ================= */
+function renderGaleria(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const section = document.createElement('section');
+  section.id = 'galeria';
+
+  const masonry = document.createElement('div');
+  masonry.className = 'galeria';
+  masonry.id = 'masonryGallery';
+
+  pecas.forEach(p => {
+    if (String(p.status).toUpperCase() === 'VENDIDAAA') return;
+
+    const item = document.createElement('div');
+    item.className = 'gal-item';
+    item.dataset.id = p.id_peca;
+
+    const firstImg = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
+    const img = imgWithFallback('/img/tmb/' + firstImg + '.avif');
+    img.alt = p.titulo || ('Peça ' + p.id_peca);
+    item.appendChild(img);
+
+    masonry.appendChild(item);
+  });
+
+  section.appendChild(masonry);
+  app.appendChild(section);
+}
+
+/* =============== FEED (POST/CARROSSEL) =============== */
+function renderFeed(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const section = document.createElement('section');
+  section.id = 'feed';
+
+  const list = document.createElement('div');
+  list.id = 'feedList';
+  list.className = 'feed';
+
+  pecas.forEach(p => {
+    if (String(p.status).toUpperCase() === 'VENDIDAAA') return;
+
+    const post = document.createElement('article');
+    post.className = 'post';
+    post.id = 'post-' + p.id_peca;
+
+    // Carrossel
+    const carousel = document.createElement('div');
+    carousel.className = 'carousel';
+
+    const imgs = Array.isArray(p.imagens) ? p.imagens : [];
+    imgs.forEach(name=>{
+      const slide = document.createElement('div');
+      slide.className = 'carousel-slide';
+      const img = imgWithFallback('/img/otm/' + name + '.avif');
+      slide.appendChild(img);
+      carousel.appendChild(slide);
+    });
+
+    // (a barra de progresso antiga foi desativada no CSS, mantemos a marcação)
+    const barWrap = document.createElement('div');
+    barWrap.className = 'carousel-bar-wrap';
+    const bar = document.createElement('div');
+    bar.className = 'carousel-bar';
+    const pos = document.createElement('div');
+    pos.className = 'pos';
+    bar.appendChild(pos);
+    barWrap.appendChild(bar);
+
+    // Meta
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+
+    // Linha 1: título (flex:1) + preço (alinhado à direita)
+    const l1 = document.createElement('div');
+    l1.className = 'linha1';
+    const title = document.createElement('div');
+    title.className = 'titulo';
+    title.textContent = p.titulo || ('Peça ' + p.id_peca);
+    const price = document.createElement('div');
+    price.className = 'preco';
+    price.textContent = fmt(p.preco);
+    l1.appendChild(title);
+    l1.appendChild(price);
+
+    // Técnica (acima de dimensões)
+    const tecnica = document.createElement('div');
+    tecnica.className = 'tecnica';
+    tecnica.textContent = p.tecnica || '';
+    const dims = document.createElement('div');
+    dims.className = 'dimens';
+    dims.textContent = p.dimensao || p.tamanho || '';
+
+    // Ações: coração à esquerda, adicionar/remover à direita
+    const footerMeta = document.createElement('div');
+    footerMeta.className = 'meta-footer';
+
+    const leftActions = document.createElement('div');
+    leftActions.className = 'left-actions';
+
+    const rightActions = document.createElement('div');
+    rightActions.className = 'right-actions';
+
+    const fav = document.createElement('button');
+    fav.className = 'btn fav-btn';
+    fav.type = 'button';
+    fav.setAttribute('aria-label', 'Favoritar ' + (p.titulo||''));
+    fav.textContent = '♥';
+    if (favoritos.has(p.id_peca)) fav.classList.add('active');
+    leftActions.appendChild(fav);
+
+    const add = document.createElement('button');
+    add.className = 'btn add-btn';
+    add.type = 'button';
+    const estaSel = selecionadas.has(p.id_peca);
+    if (estaSel) add.classList.add('added');
+    add.textContent = estaSel ? 'REMOVER' : 'ADICIONAR';
+    rightActions.appendChild(add);
+
+    footerMeta.appendChild(leftActions);
+    footerMeta.appendChild(rightActions);
+
+    // Monta meta
+    meta.appendChild(l1);
+    if (tecnica && tecnica.textContent) meta.appendChild(tecnica);
+    meta.appendChild(dims);
+    meta.appendChild(footerMeta);
+
+    // Monta post
+    post.appendChild(carousel);
+    post.appendChild(barWrap);
+    post.appendChild(meta);
+    list.appendChild(post);
+
+    // Atualiza “pos” (barra inferior) quando rolar o carrossel
+    (function(car, posEl){
+      const slides = car.querySelectorAll('.carousel-slide');
+      const total = slides.length || 1;
+      function updatePos(){
+        const idx = Math.round(car.scrollLeft / car.clientWidth);
+        const pct = ((idx+1)/Math.max(1,total)) * 100;
+        posEl.style.width = pct + '%';
+      }
+      car.addEventListener('scroll', ()=>{ clearTimeout(car._t); car._t = setTimeout(updatePos, 60); });
+      updatePos();
+    })(carousel, bar.querySelector('.pos'));
+
+    // Comportamentos
+    fav.addEventListener('click', () => {
+      const id = p.id_peca;
+      if (favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
+      fav.classList.toggle('active', favoritos.has(id));
+      try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
+      updatePills();
+    });
+
+add.addEventListener('click', () => {
+  const id = p.id_peca;
+  const isAdded = add.classList.toggle('added');
+  if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
+  add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
+  calcularTotal();     // <— calcula primeiro
+  updatePills();       // <— depois reflete no CTA/pills
+});
+
+  });
+
+  section.appendChild(list);
+  app.appendChild(section);
+}
+
+/* =============== RIFAS ================= */
+function formatRifaLabelDOM(rawText){
+  const t0 = (rawText || '').toString().trim();
+  const frag = document.createDocumentFragment();
+  if (!t0) { const s = document.createElement('span'); s.className = 'ln1'; s.textContent = ''; frag.appendChild(s); return frag; }
+
+  // tokeniza (mantém '/')
+  let tokens = t0.split(/\s+/).filter(Boolean);
+  if (tokens.length >= 3 && tokens[1] === '/') {
+    tokens = [ tokens.slice(0,3).join(' ') ].concat(tokens.slice(3));
+  }
+  if (tokens.length === 1) { const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = tokens[0]; frag.appendChild(s1); return frag; }
+
+  const n = tokens.length;
+  const lens = tokens.map(w=>w.length);
+  const total = lens.reduce((a,b)=>a+b,0) + (n-1);
+  const pref = new Array(n+1).fill(0);
+  for(let i=0;i<n;i++) pref[i+1] = pref[i] + lens[i];
+  const leftLen = (i)=> (i<=0?0:(pref[i] + (i-1)));
+
+  let bestI = 1, bestDiff = Infinity;
+  const minLeft=4, minRight=3;
+  for(let i=1;i<n;i++){
+    const L = leftLen(i), R = total-L, diff = Math.abs(L-R);
+    const penalty = (L>=minLeft && R>=minRight) ? 0 : 20;
+    if (diff+penalty < bestDiff) { bestDiff = diff+penalty; bestI = i; }
+  }
+  let part1 = tokens.slice(0,bestI).join(' ');
+  let part2 = tokens.slice(bestI).join(' ');
+  if (part2.length < minRight && bestI>1){
+    bestI = Math.max(1,bestI-1);
+    part1 = tokens.slice(0,bestI).join(' ');
+    part2 = tokens.slice(bestI).join(' ');
+  }
+  const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = part1; frag.appendChild(s1);
+  if (part2){ const s2 = document.createElement('span'); s2.className = 'ln2'; s2.textContent = part2; frag.appendChild(s2); }
+  return frag;
+}
+
+function renderRifas(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const section = document.createElement('section'); section.id = 'rifas';
+  const grid = document.createElement('div'); grid.className = 'rifas';
+
+  rifas.forEach(r=>{
+    const disponivel = !r.status_rifa || String(r.status_rifa).trim() === '';
+    const btn = document.createElement('button');
+    btn.className = 'rifa-btn' + (disponivel ? '' : ' sold');
+
+    const bg = r.hex_rifa || r.hex || '#777';
+    btn.style.backgroundColor = bg;
+    btn.style.color = getContrastColor(bg);
+    btn.dataset.id = r.id_rifa;
+
+    // label: prioriza botao_rifa; remove X no início se tiver
+    let rawLabel = (r.botao_rifa && String(r.botao_rifa).trim()) ? String(r.botao_rifa).trim()
+                  : (r.numero || r.id_rifa || '').toString();
+    rawLabel = rawLabel.replace(/^\s*X\s*/i,'').trim();
+
+    btn.appendChild( formatRifaLabelDOM(rawLabel) );
+    btn.style.textAlign = 'left';
+    btn.setAttribute('aria-label', rawLabel);
+
+    if (disponivel){
+      btn.addEventListener('click', ()=>{
+        const wasSelected = btn.classList.contains('selected');
+        if (wasSelected){
+          btn.classList.remove('selected');
+          btn.style.backgroundColor = bg;
+          btn.style.color = getContrastColor(bg);
+          btn.style.borderColor = '';
+          rifasSel.delete(r.id_rifa);
+        }else{
+          btn.classList.add('selected');
+          btn.style.backgroundColor = '#ffffff';
+          btn.style.color = '#ff0000';
+          btn.style.borderColor = '#ff0000';
+          rifasSel.add(r.id_rifa);
+        }
+        calcularTotal();
+        updatePills();
+      });
+    }
+
+    grid.appendChild(btn);
+  });
+
+  section.appendChild(grid);
+  app.appendChild(section);
+}
+
+/* =============== NAVEGAÇÃO / HASH ================= */
+function showPage(page, opts = {}) {
+  const updateHash = (typeof opts.updateHash === 'boolean') ? opts.updateHash : true;
+  const pieceId    = opts.pieceId || null;
+
+  if (page === 'galeria') renderGaleria();
+  else if (page === 'feed'){
+    renderFeed();
+    if (pieceId) setTimeout(()=> openFeedAt(pieceId), 80);
+  }
+  else if (page === 'rifas') renderRifas();
+  else renderGaleria();
+
+  updatePills(); calcularTotal();
+
+  if (updateHash){
+    let newHash = page;
+    if (pieceId){
+      const params = new URLSearchParams(); params.set('p', pieceId);
+      newHash = `${page}?${params.toString()}`;
+    }
+    if (location.hash !== '#' + newHash) location.hash = newHash;
+  }
+}
+
+function parseHash(){
+  const raw = (location.hash || '').slice(1);
+  if (!raw) return { page: 'galeria', params: new URLSearchParams() };
+  const [pagePart, query] = raw.split('?');
+  return { page: pagePart || 'galeria', params: new URLSearchParams(query || '') };
+}
+
+function handleHashChange(){
+  const { page, params } = parseHash();
+  if (page === 'feed'){
+    const p = params.get('p');
+    if (p) showPage('feed', { updateHash:false, pieceId:p });
+    else   showPage('feed', { updateHash:false });
+  } else if (page === 'rifas'){
+    showPage('rifas', { updateHash:false });
+  } else {
+    showPage('galeria', { updateHash:false });
+  }
+}
+window.addEventListener('hashchange', handleHashChange);
+
+// links do header passam a escrever o hash
+document.querySelectorAll('.nav a').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    const href = a.getAttribute('href') || '';
+    if (href.startsWith('#')){
+      e.preventDefault();
+      const target = href.slice(1);
+      location.hash = target; // hashchange cuidará do render
+    }
+  });
+});
+
+/* =============== Delegação no #app =============== */
+function attachAppDelegation(){
+  const app = document.getElementById('app');
+  app.addEventListener('click', (e)=>{
+    // item da galeria abre o feed na peça
+    const galleryItem = e.target.closest('.gal-item');
+    if (galleryItem){
+      const id = galleryItem.dataset.id;
+      if (id) location.hash = 'feed?p=' + encodeURIComponent(id);
+      return;
+    }
+  });
+}
+
+/* =============== Checkout (igual ao que já funcionava) =============== */
+/* ====== Bind do CTA principal (checkout inline) ====== */
+function attachBindings(){
+  const cta = document.getElementById('ctaMain');
+  if (!cta) return;
+
+  cta.onclick = (e) => {
+    if (cta.disabled) return;       // sem seleção, não faz nada
+    e.preventDefault();
+    calcularTotal();
+
+    // checkout minimalista inline (mesma lógica que você já usa)
+    document.getElementById('app').innerHTML = `
+      <section id="checkout">
+        <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
+          <h2>Preencha seus dados</h2>
+          <label>Nome *</label><input id="nome" type="text" style="width:100%">
+          <label>E-mail *</label><input id="email" type="email" style="width:100%">
+          <label>Telefone</label><input id="telefone" type="tel" style="width:100%">
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button id="voltarCheckout" style="flex:1">Voltar</button>
+            <button id="prosseguirCheckout" style="flex:1;background:var(--red);color:#fff">Prosseguir</button>
+          </div>
+        </div>
+      </section>`;
+
+    document.getElementById('voltarCheckout').onclick = () => handleHashChange();
+
+    document.getElementById('prosseguirCheckout').onclick = () => {
+      const nome  = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      if (!nome || !email) { alert('Preencha nome e e-mail'); return; }
+
+      // preenche form oculto
+      document.getElementById('fNome').value  = nome;
+      document.getElementById('fEmail').value = email;
+      document.getElementById('fTelefone').value = (document.getElementById('telefone').value||'').trim();
+      document.getElementById('fPecas').value = [...selecionadas].join(',');
+      document.getElementById('fRifas').value = [...rifasSel].join(',');
+      document.getElementById('fFav').value   = [...favoritos].join(',');
+      document.getElementById('fTotal').value = totalGeral.toFixed(2); // mantém 2 casas só para o form
+
+      // backup GAS (não bloqueia)
+      try{
+        const fd = new FormData();
+        fd.append('nome', nome);
+        fd.append('email', email);
+        fd.append('telefone', (document.getElementById('telefone').value||'').trim());
+        fd.append('pecas', [...selecionadas].join(','));
+        fd.append('rifas', [...rifasSel].join(','));
+        fd.append('favoritas', [...favoritos].join(','));
+        fd.append('total', totalGeral.toFixed(2));
+        fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' });
+      }catch(e){ console.warn('GAS backup falhou', e); }
+
+      // envia para FormSubmit → obrigado.html
+      document.getElementById('hiddenForm').submit();
+    };
+  };
+}
+
+
+/* =============== Pills e Total ================= */
+/* ====== Footer: pills compactas + CTA dinâmico ====== */
+function updatePills(){
+  const nbsp = '\u00A0';                           // espaço não-quebrável
+  const pill = document.getElementById('pillCompact');
+  const cta  = document.getElementById('ctaMain');
+
+  // monta lista só com contadores > 0 (mobile-friendly)
+  const parts = [];
+  if (selecionadas.size > 0) {
+    parts.push(`${selecionadas.size}${nbsp}${selecionadas.size === 1 ? 'Peça' : 'Peças'}`);
+  }
+  if (rifasSel.size > 0) {
+    parts.push(`${rifasSel.size}${nbsp}${rifasSel.size === 1 ? 'Rifa' : 'Rifas'}`);
+  }
+  if (favoritos.size > 0) {
+    parts.push(`${favoritos.size}${nbsp}${favoritos.size === 1 ? 'Favorita' : 'Favoritas'}`);
+  }
+
+  // mostra/oculta a pill compacta
+  if (pill) {
+    pill.textContent = parts.join(' · ');
+    pill.style.display = parts.length ? 'inline-block' : 'none';
+  }
+
+  // CTA único: label e estado
+  if (cta) {
+    if (totalGeral > 0) {
+      // fmt() já remove casas decimais
+      cta.textContent = `APOSTAR ${fmt(totalGeral)}`;
+      cta.disabled = false;
+    } else {
+      cta.textContent = 'FAÇAM SUAS APOSTAS!';
+      cta.disabled = true;
+    }
+  }
+    // marca estado no footer para o CSS reagir
+  const footer = document.querySelector('footer');
+  if (footer) {
+    footer.classList.toggle('has-total',  totalGeral > 0);
+    footer.classList.toggle('no-total',   totalGeral === 0);
+  }
+
+}
+
+
+function calcularTotal(){
+  let total = 0;
+
+  // Peças
+  selecionadas.forEach(id => {
+    const p = pecas.find(x => x.id_peca === id);
+    if (p && p.preco) total += parseFloat(p.preco);
+  });
+
+  // Rifas: regra de paridade
+  const nR = rifasSel.size || 0;
+  const totalRifas = (nR <= 0) ? 0 : (nR % 2 === 0 ? 25*nR : 25*(nR-1)+30);
+  total += totalRifas;
+
+  totalGeral = total;
+
+  // Atualiza hidden form (mantém duas casas para o form)
+  const fTotal = document.getElementById('fTotal');
+  if (fTotal) fTotal.value = totalGeral.toFixed(2);
+
+  // Sincroniza CTA/pills após recalcular
+  updatePills();
+}
+
+
+/* =============== Abrir peça dentro do feed ================= */
+function openFeedAt(id){
+  const tryScroll = ()=>{
+    const el = document.getElementById('post-' + id);
+    if (!el) return false;
+    el.scrollIntoView({ behavior:'smooth', block:'start' });
+    try{
+      const t = el.querySelector('.titulo');
+      if (t && t.focus){ t.setAttribute('tabindex','-1'); t.focus(); }
+    }catch(e){}
+    return true;
+  };
+
+  if (document.getElementById('feedList')){
+    if (!tryScroll()) setTimeout(tryScroll, 120);
+  } else {
+    renderFeed();
+    setTimeout(tryScroll, 100);
+  }
+}
+
+/* ======================== INIT ======================== */
+async function init(){
+  try{
+    // começar com favoritos zerados (como pedido)
+    localStorage.removeItem('BSTV_FAV'); favoritos.clear();
+
+    const [rp, rr] = await Promise.all([
+      fetch(PECAS_JSON_URL, { cache:'no-store' }),
+      fetch(RIFAS_JSON_URL, { cache:'no-store' })
+    ]);
+    if (!rp.ok || !rr.ok) throw new Error('Falha ao carregar JSONs');
+
+    pecas = await rp.json();
+    rifas = await rr.json();
+
+    // render inicial conforme hash
+    attachAppDelegation();
+    attachBindings();
+    handleHashChange();
+
+    updatePills();
+    calcularTotal();
+  }catch(e){
+    console.error('Init error', e);
+    document.getElementById('app').innerHTML =
+      '<div style="padding:20px;color:#900;">Erro ao carregar dados. Veja o console.</div>';
+  }
+}
+window.addEventListener('DOMContentLoaded', init);
+
+/* Só monitora alterações perigosas no footer (aviso em console) */
+(function(){
+  const footer = document.querySelector('footer');
+  if (!footer) return;
+  const mo = new MutationObserver(()=>{
+    if(!document.getElementById('btnCheckout')){
+      console.warn('Footer alterado: btnCheckout ausente. Verifique alterações acidentais no header/footer.');
+    }
+  });
+  mo.observe(footer, { childList:true, subtree:true });
+})();
+</script>
+
+</body>
+</html>
