@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>pós-queroamor</title>
+<title>affs pós patch sobre patch</title>
 
 <!-- ====== STYLES (preserve visual look of v08) ====== -->
 <style>
@@ -321,7 +320,7 @@ html.ck-open, body.ck-open { overflow: hidden; }
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">ME SINTO CONTENTE, ME SINTO MTO CONTENTE</div>
+      <div class="logo">pós patch sobre patch</div>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
@@ -1030,141 +1029,108 @@ window.addEventListener('DOMContentLoaded', init);
 
 
 
-/* ========= CHECKOUT: estado e utilitários (NÃO substitui nada existente) ========= */
-let ckOpen = false;
-let ckStep = 1; // 1=itens, 2=dados, 3=pagamento
+/* ========= CHECKOUT: Passo 1 (linhas de itens) – FIX ========= */
 
-// cache de elementos do modal
-const CK = {
-  overlay: () => document.getElementById('checkoutOverlay'),
-  modal:   () => document.getElementById('checkoutModal'),
-  // steps
-  s1:      () => document.getElementById('ck-step1'),
-  s2:      () => document.getElementById('ck-step2'),
-  s3:      () => document.getElementById('ck-step3'),
-  // listas do passo 1
-  listR:   () => document.getElementById('ck-rifas'),
-  listP:   () => document.getElementById('ck-pecas'),
-  listF:   () => document.getElementById('ck-favs'),
-  // totais nos rodapés dos passos
-  t1:      () => document.getElementById('ck-total-s1'),
-  t2:      () => document.getElementById('ck-total-s2'),
-  t3:      () => document.getElementById('ck-total-s3'),
-  t3b:     () => document.getElementById('ck-total-s3b'),
-  // ações
-  prev1:   () => document.getElementById('ck-prev-1'),
-  next1:   () => document.getElementById('ck-next-1'),
-  prev2:   () => document.getElementById('ck-prev-2'),
-  next2:   () => document.getElementById('ck-next-2'),
-  prev3:   () => document.getElementById('ck-prev-3'),
-  finish:  () => document.getElementById('ck-finish'),
-  close:   () => document.getElementById('ck-close'),
-  // pix
-  pixQR:   () => document.getElementById('ck-pix-qr'),
-  pixCopy: () => document.getElementById('ck-pix-copy'),
-  pixPayload: () => document.getElementById('ck-pix-payload'),
-  // abas pagamento
-  tabPix:  () => document.getElementById('ck-tab-pix'),
-  tabPP:   () => document.getElementById('ck-tab-pp'),
-  panePix: () => document.getElementById('ck-pane-pix'),
-  panePP:  () => document.getElementById('ck-pane-pp'),
-  // formulário passo 2
-  fNome:   () => document.getElementById('ck-nome'),
-  fEmail:  () => document.getElementById('ck-email'),
-  fFone:   () => document.getElementById('ck-fone'),
-};
+// Cria uma linha em 3 colunas: X | item | R$
+function ckMakeRow({ kind, id, itemNode, priceText }) {
+  const row = document.createElement('div');
+  row.className = 'ck-row'; // <- IMPORTANTE: .ck-row (não .ck-grid)
 
-// Mostra/esconde modal
-function ckOpenModal(){
-  const ov = document.getElementById('checkoutOverlay');
-  const md = document.getElementById('checkoutModal');
-  if (!ov || !md) return;
+  const colX = document.createElement('div'); colX.className = 'col-x';
+  const bx = document.createElement('button'); bx.className = 'ck-x'; bx.textContent = 'X';
+  bx.dataset.kind = kind; bx.dataset.id = id;
+  colX.appendChild(bx);
 
-  // tira o hidden dos dois:
-  ov.removeAttribute('hidden');
-  md.removeAttribute('hidden');
+  const colItem = document.createElement('div'); colItem.className = 'col-item';
+  colItem.appendChild(itemNode);
 
-  // impede scroll de fundo (opcional, mas recomendado)
-  document.documentElement.classList.add('ck-open');
+  const colPrice = document.createElement('div'); colPrice.className = 'col-price';
+  colPrice.textContent = priceText || '';
+
+  row.append(colX, colItem, colPrice);
+  return row;
 }
 
-function ckCloseModal(){
-  const ov = document.getElementById('checkoutOverlay');
-  const md = document.getElementById('checkoutModal');
-  if (!ov || !md) return;
+// Chip de rifa (mesma lógica, só garantindo fundo/contraste)
+function ckMakeRifaChip(label, bgHex, textColor) {
+  const chip = document.createElement('div');
+  chip.className = 'rifa-chip';
+  chip.style.backgroundColor = bgHex || 'var(--beige)';
+  chip.style.color = textColor || 'var(--ink)';
 
-  ov.setAttribute('hidden','');
-  md.setAttribute('hidden','');
-  document.documentElement.classList.remove('ck-open');
-}
-
-
-// Troca de passo
-function ckGoStep(step) {
-  ckStep = step;
-  const s1 = CK.s1(), s2 = CK.s2(), s3 = CK.s3();
-  if (s1) s1.hidden = (step !== 1);
-  if (s2) s2.hidden = (step !== 2);
-  if (s3) s3.hidden = (step !== 3);
-
-  // ao entrar no passo 3, preparar/tocar PIX
-  if (step === 3) {
-    ckEnsurePixReady();
-  }
-}
-
-// Atualiza o CTA do rodapé (um único botão) – id="ctaMain"
-// Reutiliza seu totalGeral e fmt já existentes.
-function ckUpdateFooterCTA() {
-  const btn = document.getElementById('ctaMain');
-  const pill = document.getElementById('pillCompact');
-  if (!btn) return;
-  if ((totalGeral || 0) > 0) {
-    btn.disabled = false;
-    btn.textContent = 'APOSTAR ' + fmt(totalGeral);
-    // deixa os contadores compactos visíveis apenas para o que tiver > 0
-    const parts = [];
-    if (selecionadas.size > 0) parts.push(selecionadas.size + ' Peças');
-    if (rifasSel.size > 0)      parts.push(rifasSel.size + ' Rifas');
-    if (favoritos.size > 0)     parts.push(favoritos.size + ' Favoritas');
-    if (pill) { pill.style.display = parts.length ? '' : 'none'; pill.textContent = parts.join(' · '); }
+  const t = (label||'').trim();
+  if (!t) {
+    const s1=document.createElement('span'); s1.className='ln1'; s1.textContent='';
+    chip.appendChild(s1);
+  } else if (t.length <= 28) {
+    const s1=document.createElement('span'); s1.className='ln1'; s1.textContent=t;
+    chip.appendChild(s1);
   } else {
-    btn.disabled = true;
-    btn.textContent = 'FAÇAM SUAS APOSTAS!';
-    if (pill) { pill.style.display = 'none'; pill.textContent = ''; }
+    const mid=Math.floor(t.length/2);
+    let bp=t.lastIndexOf(' ',mid); if(bp<3) bp=t.indexOf(' ',mid); if(bp===-1) bp=28;
+    const part1=t.slice(0,bp).trim(), part2=t.slice(bp).trim();
+    const s1=document.createElement('span'); s1.className='ln1'; s1.textContent=part1; chip.appendChild(s1);
+    if (part2) { const s2=document.createElement('span'); s2.className='ln2'; s2.textContent=part2; chip.appendChild(s2); }
   }
+  return chip;
 }
 
-// Integra o CTA ao abrir o checkout (somente se total > 0)
-(function bindFooterCTA(){
-  const btn = document.getElementById('ctaMain');
-  const overlay = CK.overlay(), modal = CK.modal();
-  if (!btn || !overlay || !modal) return;
+// Render das listas
+function ckRenderStep1() {
+  const listR = CK.listR(), listP = CK.listP(), listF = CK.listF();
+  if (!listR || !listP || !listF) return;
+  listR.innerHTML = ''; listP.innerHTML = ''; listF.innerHTML = '';
 
-  btn.addEventListener('click', (e)=>{
-    if ((totalGeral||0) <= 0) return;
-    ckOpenModal();
+  // ----- RIFAS -----
+  const rSel = [...rifasSel];
+  const last30 = (rSel.length % 2 === 1) ? String(rSel[rSel.length - 1]) : null;
+
+  rSel.forEach(rid => {
+    const r = rifas.find(x => String(x.id_rifa) === String(rid));
+    if (!r) return;
+    const label = (r.botao_rifa?.trim() || r.numero || r.id_rifa || '').toString().replace(/^\s*X\s*/i,'');
+    const bg = r.hex_rifa || r.hex || '#bebab0';
+    const txt = (typeof getContrastColor === 'function') ? getContrastColor(bg) : '#2b2424';
+    const chip = ckMakeRifaChip(label, bg, txt);
+    const price = (last30 && String(rid) === last30) ? 30 : 25;
+    listR.appendChild( ckMakeRow({ kind:'rifa', id:rid, itemNode:chip, priceText:`R$ ${Math.floor(price)}` }) );
   });
 
-  // fechar
-  overlay.addEventListener('click', ckCloseModal);
-  const close = CK.close(); if (close) close.addEventListener('click', ckCloseModal);
-})();
+  // ----- PEÇAS -----
+  [...selecionadas].forEach(pid => {
+    const p = pecas.find(x => String(x.id_peca) === String(pid));
+    if (!p) return;
+    const wrap = document.createElement('div');
+    const img = imgWithFallback('/img/tmb/' + (p.imagens?.[0]||'') + '.avif'); img.className = 'ck-thumb';
+    const ttl = document.createElement('span'); ttl.className = 'ck-title'; ttl.textContent = p.titulo || ('Peça ' + pid);
+    wrap.append(img, ttl);
+    listP.appendChild( ckMakeRow({ kind:'peca', id:pid, itemNode:wrap, priceText:`R$ ${Math.floor(Number(p.preco||0))}` }) );
+  });
 
-// Chame isso ao final do seu calcularTotal() já existente (se ainda não estiver chamando)
-if (typeof calcularTotal === 'function') {
-  const _calc = calcularTotal;
-  calcularTotal = function(){
-    _calc();
-    ckUpdateFooterCTA();
-    if (ckOpen) {
-      ckSyncTotalsOnSteps();
-      // se estiver no passo 1 e houve alteração, re-renderiza linhas
-      if (ckStep === 1) ckRenderStep1();
-      if (ckStep === 3) ckEnsurePixReady(true); // atualiza QR/valor se mudou
-    }
-  };
+  // ----- FAVORITAS (sem preço) -----
+  [...favoritos].forEach(fid => {
+    const p = pecas.find(x => String(x.id_peca) === String(fid));
+    if (!p) return;
+    const wrap = document.createElement('div');
+    const img  = imgWithFallback('/img/tmb/' + (p.imagens?.[0]||'') + '.avif'); img.className = 'ck-thumb';
+    const ttl  = document.createElement('span'); ttl.className = 'ck-title'; ttl.textContent = p.titulo || ('Peça ' + fid);
+    wrap.append(img, ttl);
+    listF.appendChild( ckMakeRow({ kind:'fav', id:fid, itemNode:wrap, priceText:'' }) );
+  });
+
+  // Botões X (remover item)
+  CK.modal().querySelectorAll('.ck-x').forEach(b => {
+    b.onclick = () => {
+      const k = b.dataset.kind, id = b.dataset.id;
+      if (k === 'rifa') rifasSel.delete(id);
+      else if (k === 'peca') selecionadas.delete(id);
+      else if (k === 'fav') favoritos.delete(id);
+      calcularTotal();            // recalcula total + atualiza CTA/pills
+      ckRenderStep1();            // repinta o Passo 1
+    };
+  });
 }
+
 
 
   /* ========= CHECKOUT: Passo 1 (linhas de itens) ========= */
@@ -1707,6 +1673,56 @@ function ckFillHiddenForm(nome,email,fone){
 })();
 
 
+/* ========= CHECKOUT: Confirmar (GAS + FormSubmit) ========= */
+
+(function bindFinish(){
+  const btn = CK.finish();
+  if (!btn || btn._bound) return;
+  btn._bound = true;
+
+  btn.onclick = async () => {
+    // 1) Pega dados do Passo 2
+    const nome  = (CK.fNome()?.value || '').trim();
+    const email = (CK.fEmail()?.value || '').trim();
+    const fone  = (CK.fFone()?.value || '').trim();
+
+    if (!nome || !email) {
+      alert('Preencha nome e e-mail.');
+      ckGoStep(2);
+      return;
+    }
+
+    // 2) Preenche o form oculto (FormSubmit)
+    const f = document.getElementById('hiddenForm');
+    if (!f) { alert('Formulário oculto não encontrado.'); return; }
+
+    document.getElementById('fNome').value   = nome;
+    document.getElementById('fEmail').value  = email;
+    document.getElementById('fTelefone').value = fone;
+    document.getElementById('fPecas').value  = [...selecionadas].join(',');
+    document.getElementById('fRifas').value  = [...rifasSel].join(',');
+    document.getElementById('fFav').value    = [...favoritos].join(',');
+    document.getElementById('fTotal').value  = Number(Math.floor(totalGeral||0)).toFixed(2);
+
+    // 3) (Opcional) Backup no GAS – só se você já tiver a constante GAS_URL declarada
+    try {
+      if (typeof GAS_URL === 'string' && GAS_URL) {
+        const fd = new FormData();
+        fd.append('nome', nome);
+        fd.append('email', email);
+        fd.append('telefone', fone);
+        fd.append('pecas', [...selecionadas].join(','));
+        fd.append('rifas', [...rifasSel].join(','));
+        fd.append('favoritas', [...favoritos].join(','));
+        fd.append('total', Number(Math.floor(totalGeral||0)).toFixed(2));
+        await fetch(GAS_URL, { method: 'POST', body: fd });
+      }
+    } catch (e) { console.warn('Falha ao enviar ao GAS (segue para FormSubmit):', e); }
+
+    // 4) Envia ao FormSubmit (redireciona para _next)
+    f.submit();
+  };
+})();
 
 
 
