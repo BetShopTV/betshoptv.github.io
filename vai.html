@@ -207,6 +207,7 @@ footer.has-total #ctaMain {
   padding: 16px;
   margin: 0 0 16px 0;
   position: relative;
+  align-items: center;
 }
 .rifa-hero .badge{
   display:inline-block;
@@ -637,7 +638,7 @@ function renderRifas(){
   const hero = document.createElement('div');
   hero.className = 'rifa-hero';
   hero.innerHTML = `
-    <center><span class="badge">APOSTA DISPONÍVEL</span>
+    <span class="badge">APOSTA DISPONÍVEL</span>
     <h2><em>Chop Shop AV</em></h2>
 
     <p class="desc">
@@ -660,7 +661,7 @@ function renderRifas(){
       Marque-as como <span class="strong">Favoritas</span> no FEED <em>antes</em> de pagar.
       Se seu número for sorteado, priorizamos suas favoritas na distribuição.
     </p>
-    <p class="cta-hint">Clique nos números que deseja apostar e avance para o pagamento.</p></center>
+    <p class="cta-hint">Clique nos números que deseja apostar e avance para o pagamento.</p>
   `;
   section.appendChild(hero);
 
