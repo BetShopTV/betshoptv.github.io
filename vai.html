@@ -24,7 +24,17 @@
   /* ====== Header (mantém visual v08) ====== */
   header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;border-bottom:var(--bd-thick) solid var(--ink)}
   .hdr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px}
-  .logo{font:700 var(--fs-h2)/1 var(--ff-cta);text-transform:uppercase}
+/* PATCH: logo como imagem, mantendo o mesmo “peso visual” do título anterior */
+.logo{
+  display:flex; align-items:center; gap:8px;
+  text-decoration:none;
+}
+.logo img{
+  display:block;
+  height: clamp(28px, 5.2vw, 44px); /* cresce um pouco em telas largas */
+  width: auto;
+}
+
   .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
   .nav a{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 10px;border:var(--bd-thin) solid #fff;color:#fff;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase}
   .nav a:hover{background:#fff;color:var(--ink)}
@@ -172,12 +182,13 @@ footer.has-total #ctaMain {
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <div class="logo">AGORA VAI FIAAAA</div>
+      <a class="logo" href="https://betshoptv.com" aria-label="BetShopTV – página inicial">
+  <img src="http://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" loading="eager" />
+</a>
       <nav class="nav">
         <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
         <a href="#rifas">Rifas</a>
-        <a href="https://betshoptv.com/como.html">Como Funciona?</a>
       </nav>
     </div>
   </header>
