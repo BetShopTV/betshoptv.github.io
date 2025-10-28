@@ -291,6 +291,25 @@ footer.has-total #ctaMain {
   }
 }
 
+  /* Remove a moldura automática quando o navegador foca o elemento com hash (#id) */
+:target {
+  outline: none;
+}
+:target * {
+  outline: none !important;
+}
+
+/* Ajusta o posicionamento da âncora no feed, respeitando o cabeçalho fixo */
+.feed-item {
+  scroll-margin-top: 100px; /* altura aproximada do header vermelho */
+}
+
+@media (max-width: 600px) {
+  .feed-item {
+    scroll-margin-top: 72px;
+  }
+}
+
   
 </style>
 
