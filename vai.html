@@ -637,9 +637,8 @@ function renderRifas(){
   const hero = document.createElement('div');
   hero.className = 'rifa-hero';
   hero.innerHTML = `
-    <span class="badge">APOSTA DISPONÍVEL</span>
-    <h2>Chop Shop AV</h2>
-    <span class="sub">COLUNA <span style="color:var(--red)">X</span></span>
+    <center><span class="badge">APOSTA DISPONÍVEL</span>
+    <h2><em>Chop Shop AV</em></h2>
 
     <p class="desc">
       Impressão offset em papel couché transferida para EVA estamptado, tinta acrílica,
@@ -648,16 +647,20 @@ function renderRifas(){
     <p class="spec">Políptico, dimensões variáveis.</p>
 
     <div class="precos">
-      <span class="pill">R$ 30 = 1 número</span>
+      <span class="pill">R$ 30 = 1 número</span>&nbsp;
       <span class="pill">R$ 50 = 2 números</span>
     </div>
 
     <p class="hint">
+      Já viu a <span class="strong">Galeria de Ofertas</span>? Gostou de peças específicas? 
+      Selecione suas favoritas no FEED <em>antes</em> de concluir a compra! 
+      Assim, caso seu número seja sorteado, suas chances de ganhar peças escolhidas aumenta!
+      
       Já viu a <span class="strong">Galeria de Ofertas</span>? Curtiu peças específicas?
       Marque-as como <span class="strong">Favoritas</span> no FEED <em>antes</em> de pagar.
       Se seu número for sorteado, priorizamos suas favoritas na distribuição.
     </p>
-    <p class="cta-hint">Clique nos números que deseja apostar e avance para o pagamento.</p>
+    <p class="cta-hint">Clique nos números que deseja apostar e avance para o pagamento.</p></center>
   `;
   section.appendChild(hero);
 
