@@ -987,16 +987,18 @@ document.getElementById('ck_finish').onclick = async () => {
       body: fd
     });
 
+    // Redireciona após sucesso
     location.href = 'https://betshoptv.com/obrigado.html';
 
   } catch (err) {
-    console.error('Erro ao enviar dados para o GAS:', err);
+    console.error('Erro ao enviar para o GAS:', err);
     btn._busy = false;
     btn.disabled = false;
     btn.textContent = old;
     alert('Não foi possível enviar agora. Tente novamente.');
   }
 };
+
 
 
         // Backup GAS (não bloqueia)
