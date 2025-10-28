@@ -21,7 +21,7 @@
     "id_rifa": "004",
     "hex": "#FF69B4",
     "botao_rifa": "004 / Ai, amiga",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "005",
@@ -63,7 +63,7 @@
     "id_rifa": "011",
     "hex": "#4682B4",
     "botao_rifa": "011 / Atmosfera",
-    "status_rifa": "x"
+    "status_rifa": ""
   },
   {
     "id_rifa": "012",
@@ -87,7 +87,7 @@
     "id_rifa": "015",
     "hex": "#FFFFF0",
     "botao_rifa": "015 / Batida de coco",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "016",
@@ -213,13 +213,13 @@
     "id_rifa": "036",
     "hex": "#CD853F",
     "botao_rifa": "036 / Corpo bronzeado",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "037",
     "hex": "#FFD700",
     "botao_rifa": "037 / Corpo tropical",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "038",
@@ -321,7 +321,7 @@
     "id_rifa": "054",
     "hex": "#FF6347",
     "botao_rifa": "054 / Explícita",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "055",
@@ -423,7 +423,7 @@
     "id_rifa": "071",
     "hex": "#DC143C",
     "botao_rifa": "071 / Hoje sou minha",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "072",
@@ -459,7 +459,7 @@
     "id_rifa": "077",
     "hex": "#FFFFF0",
     "botao_rifa": "077 / Leite de coco",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "078",
@@ -477,7 +477,7 @@
     "id_rifa": "080",
     "hex": "#FAF0E6",
     "botao_rifa": "080 / Lugar de Afeto",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "081",
@@ -513,7 +513,7 @@
     "id_rifa": "086",
     "hex": "#8B4513",
     "botao_rifa": "086 / Marrom da Riqueza",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "087",
@@ -639,7 +639,7 @@
     "id_rifa": "107",
     "hex": "#DC143C",
     "botao_rifa": "107 / Não mexe comigo",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "108",
@@ -741,7 +741,7 @@
     "id_rifa": "124",
     "hex": "#FAEBD7",
     "botao_rifa": "124 / Renascer",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "125",
@@ -867,7 +867,7 @@
     "id_rifa": "145",
     "hex": "#32CD32",
     "botao_rifa": "145 / Suculenta",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "146",
@@ -903,7 +903,7 @@
     "id_rifa": "151",
     "hex": "#D2B48C",
     "botao_rifa": "151 / Toque Casual",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "152",
@@ -933,7 +933,7 @@
     "id_rifa": "156",
     "hex": "#F5DEB3",
     "botao_rifa": "156 / Tô bege!",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "157",
