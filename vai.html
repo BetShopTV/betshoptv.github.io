@@ -31,7 +31,7 @@
 }
 .logo img{
   display:block;
-  height: clamp(88px, 6.9vw, 224px); /* cresce um pouco em telas largas */
+  height: clamp(69px, 5.6vw, 188px); /* cresce um pouco em telas largas */
   width: auto;
   margin-left: 8px;
 }
@@ -65,7 +65,7 @@
 /* Estado "vendido" */
 .gal-item.sold {
   position: relative;
-  filter: saturate(0.88) brightness(1.8);
+  filter: saturate(0.88) brightness(0.94);
   opacity: 1;
 }
 
@@ -73,7 +73,7 @@
   content: '⬤';
   position: absolute;
   top: 18px;
-  right: 6px;
+  right: 18px;
   color: var(--red);
   font-size: 24px;
   line-height: 1;
@@ -200,6 +200,64 @@ footer.has-total #ctaMain {
   opacity: 1;             /* mantemos legível mesmo desabilitado */
 }
 
+/* ===== RIFAS: hero/topo informativo ===== */
+.rifa-hero{
+  border: var(--bd-thin) solid var(--ink);
+  background: #d2cec5;               /* tom acima do beige mantendo paleta */
+  padding: 16px;
+  margin: 0 0 16px 0;
+  position: relative;
+}
+.rifa-hero .badge{
+  display:inline-block;
+  background: var(--red);
+  color:#fff;
+  font:700 var(--fs-sm)/1 var(--ff-cta);
+  padding:6px 10px;
+  border: var(--bd-thin) solid var(--ink);
+  position:absolute;
+  top:-12px; left:16px;
+}
+.rifa-hero h2{
+  margin: 14px 0 2px 0;
+  font:700 var(--fs-h2)/1.1 var(--ff-cta);
+}
+.rifa-hero .sub{
+  display:block;
+  font:700 var(--fs-h2)/1 var(--ff-cta);
+  letter-spacing:.02em;
+  margin-bottom:10px;
+}
+.rifa-hero .desc{
+  margin:10px 0 8px 0;
+  font-size: var(--fs-p);
+}
+.rifa-hero .spec{
+  margin:0 0 10px 0;
+  font-size: var(--fs-p);
+}
+.rifa-hero .precos{
+  margin: 10px 0 12px 0;
+  display:flex; gap:10px; flex-wrap:wrap;
+}
+.rifa-hero .pill{
+  background:var(--beige);
+  color:var(--ink);
+  border: var(--bd-thin) solid var(--ink);
+  padding:6px 10px;
+  font:700 var(--fs-sm)/1 var(--ff-cta);
+}
+.rifa-hero .hint{
+  margin: 8px 0 0 0;
+  font-size: var(--fs-sm);
+}
+.rifa-hero .strong{ font-weight:700; }
+.rifa-hero .cta-hint{
+  margin-top: 8px;
+  font:700 var(--fs-sm)/1 var(--ff-cta);
+}
+
+  
 </style>
 
 </head>
@@ -533,12 +591,79 @@ function formatRifaLabelDOM(rawText){
   return frag;
 }
 
+/* =============== RIFAS ================= */
+function formatRifaLabelDOM(rawText){
+  const t0 = (rawText || '').toString().trim();
+  const frag = document.createDocumentFragment();
+  if (!t0) { const s = document.createElement('span'); s.className = 'ln1'; s.textContent = ''; frag.appendChild(s); return frag; }
+
+  let tokens = t0.split(/\s+/).filter(Boolean);
+  if (tokens.length >= 3 && tokens[1] === '/') tokens = [ tokens.slice(0,3).join(' ') ].concat(tokens.slice(3));
+  if (tokens.length === 1) { const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = tokens[0]; frag.appendChild(s1); return frag; }
+
+  const n = tokens.length, lens = tokens.map(w=>w.length);
+  const total = lens.reduce((a,b)=>a+b,0) + (n-1);
+  const pref = new Array(n+1).fill(0);
+  for(let i=0;i<n;i++) pref[i+1] = pref[i] + lens[i];
+  const leftLen = (i)=> (i<=0?0:(pref[i] + (i-1)));
+
+  let bestI = 1, bestDiff = Infinity;
+  const minLeft=4, minRight=3;
+  for(let i=1;i<n;i++){
+    const L = leftLen(i), R = total-L, diff = Math.abs(L-R);
+    const penalty = (L>=minLeft && R>=minRight) ? 0 : 20;
+    if (diff+penalty < bestDiff) { bestDiff = diff+penalty; bestI = i; }
+  }
+  let part1 = tokens.slice(0,bestI).join(' ');
+  let part2 = tokens.slice(bestI).join(' ');
+  if (part2.length < minRight && bestI>1){
+    bestI = Math.max(1,bestI-1);
+    part1 = tokens.slice(0,bestI).join(' ');
+    part2 = tokens.slice(bestI).join(' ');
+  }
+  const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = part1; frag.appendChild(s1);
+  if (part2){ const s2 = document.createElement('span'); s2.className = 'ln2'; s2.textContent = part2; frag.appendChild(s2); }
+  return frag;
+}
+
 function renderRifas(){
   const app = document.getElementById('app');
   app.innerHTML = '';
 
-  const section = document.createElement('section'); section.id = 'rifas';
-  const grid = document.createElement('div'); grid.className = 'rifas';
+  const section = document.createElement('section'); 
+  section.id = 'rifas';
+
+  /* ---- HERO / CABEÇALHO DA PÁGINA ---- */
+  const hero = document.createElement('div');
+  hero.className = 'rifa-hero';
+  hero.innerHTML = `
+    <span class="badge">APOSTA DISPONÍVEL</span>
+    <h2>Chop Shop AV</h2>
+    <span class="sub">COLUNA <span style="color:var(--red)">X</span></span>
+
+    <p class="desc">
+      Impressão offset em papel couché transferida para EVA estamptado, tinta acrílica,
+      ímãs, grampos, ferragens e refugos de EVA.
+    </p>
+    <p class="spec">Políptico, dimensões variáveis.</p>
+
+    <div class="precos">
+      <span class="pill">R$ 30 = 1 número</span>
+      <span class="pill">R$ 50 = 2 números</span>
+    </div>
+
+    <p class="hint">
+      Já viu a <span class="strong">Galeria de Ofertas</span>? Curtiu peças específicas?
+      Marque-as como <span class="strong">Favoritas</span> no FEED <em>antes</em> de pagar.
+      Se seu número for sorteado, priorizamos suas favoritas na distribuição.
+    </p>
+    <p class="cta-hint">Clique nos números que deseja apostar e avance para o pagamento.</p>
+  `;
+  section.appendChild(hero);
+
+  /* ---- GRADE DE RIFAS ---- */
+  const grid = document.createElement('div'); 
+  grid.className = 'rifas';
 
   rifas.forEach(r=>{
     const disponivel = !r.status_rifa || String(r.status_rifa).trim() === '';
@@ -550,7 +675,6 @@ function renderRifas(){
     btn.style.color = getContrastColor(bg);
     btn.dataset.id = r.id_rifa;
 
-    // label: prioriza botao_rifa; remove X no início se tiver
     let rawLabel = (r.botao_rifa && String(r.botao_rifa).trim()) ? String(r.botao_rifa).trim()
                   : (r.numero || r.id_rifa || '').toString();
     rawLabel = rawLabel.replace(/^\s*X\s*/i,'').trim();
@@ -586,6 +710,7 @@ function renderRifas(){
   section.appendChild(grid);
   app.appendChild(section);
 }
+
 
 /* =============== NAVEGAÇÃO / HASH ================= */
 function showPage(page, opts = {}) {
