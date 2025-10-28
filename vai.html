@@ -175,6 +175,10 @@ footer.has-total #ctaMain {
   opacity: 1;             /* mantemos legível mesmo desabilitado */
 }
 
+/* PATCH: preço de peça vendida no feed */
+.preco.sold { color: var(--red); font-weight: 900; }
+
+  
 </style>
 
 </head>
@@ -284,35 +288,164 @@ function calculateRifaTotal(count){
 }
 
 /* =============== GALERIA (MASONRY) ================= */
-function renderGaleria(){
+/* =============== FEED (POST/CARROSSEL) =============== */
+function renderFeed(){
   const app = document.getElementById('app');
   app.innerHTML = '';
 
   const section = document.createElement('section');
-  section.id = 'galeria';
+  section.id = 'feed';
 
-  const masonry = document.createElement('div');
-  masonry.className = 'galeria';
-  masonry.id = 'masonryGallery';
+  const list = document.createElement('div');
+  list.id = 'feedList';
+  list.className = 'feed';
 
   pecas.forEach(p => {
-    if (String(p.status).toUpperCase() === 'VENDIDAAA') return;
+    // NÃO filtramos vendidas; mas tratamos o estado
+    const isSold = String(p.status || '').trim().toUpperCase() === 'VENDIDAAA'
+                || String(p.status || '').trim().toUpperCase() === 'VENDIDA'
+                || String(p.status || '').trim().toUpperCase() === 'VENDIDO';
 
-    const item = document.createElement('div');
-    item.className = 'gal-item';
-    item.dataset.id = p.id_peca;
+    const post = document.createElement('article');
+    post.className = 'post';
+    post.id = 'post-' + p.id_peca;
 
-    const firstImg = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
-    const img = imgWithFallback('/img/tmb/' + firstImg + '.avif');
-    img.alt = p.titulo || ('Peça ' + p.id_peca);
-    item.appendChild(img);
+    // Carrossel
+    const carousel = document.createElement('div');
+    carousel.className = 'carousel';
 
-    masonry.appendChild(item);
+    const imgs = Array.isArray(p.imagens) ? p.imagens : [];
+    imgs.forEach(name=>{
+      const slide = document.createElement('div');
+      slide.className = 'carousel-slide';
+      const img = imgWithFallback('/img/otm/' + name + '.avif');
+      slide.appendChild(img);
+      carousel.appendChild(slide);
+    });
+
+    // (barra desativada via CSS; mantida por compat)
+    const barWrap = document.createElement('div');
+    barWrap.className = 'carousel-bar-wrap';
+    const bar = document.createElement('div');
+    bar.className = 'carousel-bar';
+    const pos = document.createElement('div');
+    pos.className = 'pos';
+    bar.appendChild(pos);
+    barWrap.appendChild(bar);
+
+    // Meta
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+
+    // Linha 1: título + preço/indicador
+    const l1 = document.createElement('div');
+    l1.className = 'linha1';
+
+    const title = document.createElement('div');
+    title.className = 'titulo';
+    title.textContent = p.titulo || ('Peça ' + p.id_peca);
+
+    const price = document.createElement('div');
+    price.className = 'preco';
+    if (isSold) {
+      // símbolo vermelho no lugar do preço
+      price.textContent = '⬤';
+      price.classList.add('sold');
+    } else {
+      price.textContent = fmt(p.preco);
+    }
+
+    l1.appendChild(title);
+    l1.appendChild(price);
+
+    // Técnica e dimensões
+    const tecnica = document.createElement('div');
+    tecnica.className = 'tecnica';
+    tecnica.textContent = p.tecnica || '';
+    const dims = document.createElement('div');
+    dims.className = 'dimens';
+    dims.textContent = p.dimensao || p.tamanho || '';
+
+    // Rodapé de ações
+    const footerMeta = document.createElement('div');
+    footerMeta.className = 'meta-footer';
+
+    // Se NÃO estiver vendida, mostra os botões; se vendida, não mostra nada
+    if (!isSold) {
+      const leftActions = document.createElement('div');
+      leftActions.className = 'left-actions';
+
+      const rightActions = document.createElement('div');
+      rightActions.className = 'right-actions';
+
+      const fav = document.createElement('button');
+      fav.className = 'btn fav-btn';
+      fav.type = 'button';
+      fav.setAttribute('aria-label', 'Favoritar ' + (p.titulo||''));
+      fav.textContent = '♥';
+      if (favoritos.has(p.id_peca)) fav.classList.add('active');
+      leftActions.appendChild(fav);
+
+      const add = document.createElement('button');
+      add.className = 'btn add-btn';
+      add.type = 'button';
+      const estaSel = selecionadas.has(p.id_peca);
+      if (estaSel) add.classList.add('added');
+      add.textContent = estaSel ? 'REMOVER' : 'ADICIONAR';
+      rightActions.appendChild(add);
+
+      footerMeta.appendChild(leftActions);
+      footerMeta.appendChild(rightActions);
+
+      // Comportamentos (somente se não for vendida)
+      fav.addEventListener('click', () => {
+        const id = p.id_peca;
+        if (favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
+        fav.classList.toggle('active', favoritos.has(id));
+        try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
+        updatePills();
+      });
+
+      add.addEventListener('click', () => {
+        const id = p.id_peca;
+        const isAdded = add.classList.toggle('added');
+        if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
+        add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
+        calcularTotal();
+        updatePills();
+      });
+    }
+
+    // Monta meta
+    meta.appendChild(l1);
+    if (tecnica && tecnica.textContent) meta.appendChild(tecnica);
+    meta.appendChild(dims);
+    meta.appendChild(footerMeta);
+
+    // Monta post
+    post.appendChild(carousel);
+    post.appendChild(barWrap);
+    post.appendChild(meta);
+    list.appendChild(post);
+
+    // Atualiza “pos” (barra inferior) quando rolar o carrossel
+    (function(car, posEl){
+      const slides = car.querySelectorAll('.carousel-slide');
+      const total = slides.length || 1;
+      function updatePos(){
+        const idx = Math.round(car.scrollLeft / car.clientWidth);
+        const pct = ((idx+1)/Math.max(1,total)) * 100;
+        posEl.style.width = pct + '%';
+      }
+      car.addEventListener('scroll', ()=>{ clearTimeout(car._t); car._t = setTimeout(updatePos, 60); });
+      updatePos();
+    })(carousel, bar.querySelector('.pos'));
   });
 
-  section.appendChild(masonry);
+  section.appendChild(list);
   app.appendChild(section);
 }
+
 
 /* =============== FEED (POST/CARROSSEL) =============== */
 function renderFeed(){
