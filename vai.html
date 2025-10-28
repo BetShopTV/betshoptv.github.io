@@ -245,17 +245,50 @@ footer.has-total #ctaMain {
   background:var(--beige);
   color:var(--ink);
   border: var(--bd-thin) solid var(--ink);
-  padding:6px 10px;
-  font:700 var(--fs-sm)/1 var(--ff-cta);
+  padding:10px 15px;
+    font:500 var(--fs-h2)/1.1 var(--ff-cta);
 }
 .rifa-hero .hint{
-  margin: 8px 0 0 0;
-  font-size: var(--fs-sm);
+  margin:10px 0 8px 0;
+  font-size: var(--fs-p);
 }
 .rifa-hero .strong{ font-weight:700; }
 .rifa-hero .cta-hint{
   margin-top: 8px;
   font:700 var(--fs-sm)/1 var(--ff-cta);
+}
+/* Centraliza verticalmente o texto do topo das rifas */
+.rifa-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  max-width: 720px;
+  margin: 20px auto 32px auto; /* centraliza no eixo horizontal e dá espaçamento */
+  padding: 24px 16px;
+}
+
+.rifa-hero .badge {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin-bottom: 12px;
+}
+
+.rifa-hero h2,
+.rifa-hero .desc,
+.rifa-hero .spec,
+.rifa-hero .cta-hint {
+  text-align: center;
+  max-width: 90%;
+}
+@media (max-width: 600px) {
+  .rifa-hero {
+    padding: 20px 12px;
+    margin-top: 8px;
+  }
 }
 
   
@@ -661,7 +694,7 @@ function renderRifas(){
       Marque-as como <span class="strong">Favoritas</span> no FEED <em>antes</em> de pagar.
       Se seu número for sorteado, priorizamos suas favoritas na distribuição.
     </p>
-    <p class="cta-hint">Clique nos números que deseja apostar e avance para o pagamento.</p>
+    <p class="hint">Clique nos números que deseja apostar e avance para o pagamento.</p>
   `;
   section.appendChild(hero);
 
