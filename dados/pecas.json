@@ -168,7 +168,7 @@
   {
     "id_peca": "0401",
     "titulo": "04/01 TV 01",
-    "preco": 1800,
+    "preco": 1000,
     "status": "X",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e prego.",
     "dimensao": "60 x 20,5 x 4 cm",
@@ -272,12 +272,38 @@
   {
     "id_peca": "0409",
     "titulo": "04/09 Telefone 01",
-    "preco": 888,
+    "preco": 250,
     "status": "X",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e ferragens.",
     "dimensao": "52 x 27 x 6 cm",
     "imagens": [
       "04-09a"
+    ]
+  },
+  {
+    "id_peca": "0501",
+    "titulo": "05/01 Violino 01",
+    "preco": 300,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para EVA.",
+    "dimensao": "6 x 80 x 13 cm",
+    "imagens": [
+      "05-01a",
+      "05-01b",
+      "05-01c"
+    ]
+  },
+  {
+    "id_peca": "0601",
+    "titulo": "06/01 Filmadora 05",
+    "preco": 300,
+    "status": "X",
+    "tecnica": "Duas impressões offset em papel couché transferidas para EVA estampado.",
+    "dimensao": "27 x 20,5 x 10 cm",
+    "imagens": [
+      "06-01a",
+      "06-01b",
+      "06-01c"
     ]
   }
 ]
