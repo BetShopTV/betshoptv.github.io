@@ -963,7 +963,7 @@ function attachBindings(){
       // Voltar aos dados
       document.getElementById('ck_back_data').onclick = ()=> cta.onclick(e);
 
-      // Enviar (GAS best-effort + FormSubmit)
+// Enviar (GAS direto, sem FormSubmit)
 document.getElementById('ck_finish').onclick = async () => {
   const btn = document.getElementById('ck_finish');
   if (btn._busy) return;
@@ -982,12 +982,13 @@ document.getElementById('ck_finish').onclick = async () => {
     fd.append('favoritas', document.getElementById('fFav').value);
     fd.append('total', document.getElementById('fTotal').value);
 
+    // ✅ Envia direto ao GAS
     await fetch(GAS_URL, {
       method: 'POST',
       body: fd
     });
 
-    // Redireciona após sucesso
+    // ✅ Redireciona após sucesso
     location.href = 'https://betshoptv.com/obrigado.html';
 
   } catch (err) {
@@ -998,54 +999,6 @@ document.getElementById('ck_finish').onclick = async () => {
     alert('Não foi possível enviar agora. Tente novamente.');
   }
 };
-
-
-
-        // Backup GAS (não bloqueia)
-        try{
-          const fd = new FormData();
-          fd.append('nome', document.getElementById('fNome').value);
-          fd.append('email', document.getElementById('fEmail').value);
-          fd.append('telefone', document.getElementById('fTelefone').value);
-          fd.append('pecas', document.getElementById('fPecas').value);
-          fd.append('rifas', document.getElementById('fRifas').value);
-          fd.append('favoritas', document.getElementById('fFav').value);
-          fd.append('total', document.getElementById('fTotal').value);
-          fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' }).catch(()=>{});
-        }catch(_){}
-
-        // Envia ao só ao GAS → _next já aponta para /obrigado.html
-try {
-  const fd = new FormData();
-  fd.append('nome', document.getElementById('fNome').value);
-  fd.append('email', document.getElementById('fEmail').value);
-  fd.append('telefone', document.getElementById('fTelefone').value);
-  fd.append('pecas', document.getElementById('fPecas').value);
-  fd.append('rifas', document.getElementById('fRifas').value);
-  fd.append('favoritas', document.getElementById('fFav').value);
-  fd.append('total', document.getElementById('fTotal').value);
-
-  await fetch(GAS_URL, {
-    method: 'POST',
-    body: fd
-  });
-
-  // ✅ Redirecionamento manual após sucesso
-  location.href = 'https://betshoptv.com/obrigado.html';
-
-} catch (err) {
-  console.error('Erro ao enviar dados! Por favor, tente novamente:', err);
-  btn._busy = false;
-  btn.disabled = false;
-  btn.textContent = old;
-  alert('Não foi possível enviar agora. Tente novamente.');
-}
-
-      };
-    };
-  };
-}
-
 
 
 
