@@ -129,7 +129,7 @@
     "id_rifa": "022",
     "hex": "#DAA520",
     "botao_rifa": "022 / Brocado Rico",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "023",
@@ -339,7 +339,7 @@
     "id_rifa": "057",
     "hex": "#556B2F",
     "botao_rifa": "057 / Figo Verde",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "058",
@@ -387,7 +387,7 @@
     "id_rifa": "065",
     "hex": "#F4A460",
     "botao_rifa": "065 / Geléia de Cupuaçu",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "066",
@@ -507,7 +507,7 @@
     "id_rifa": "085",
     "hex": "#A0522D",
     "botao_rifa": "085 / Mantilha",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "086",
