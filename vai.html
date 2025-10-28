@@ -60,6 +60,15 @@
   .gal-item img{display:block;width:100%;height:auto;object-fit:cover;vertical-align:middle;background:#000}
   .gal-item .ttl{display:none!important}
 
+  /* VENDIDA — realce discreto */
+.gal-item.sold { filter: grayscale(1); opacity:.38; position:relative; }
+.gal-item.sold::after {
+ 
+  content: '⬤'; position:absolute; top:6px; right:6px;
+  color: var(--red); font-size: 18px; line-height:1;
+}
+.preco.sold { color: var(--red); }
+
   @media (min-width:1300px){
     .galeria{column-count:4; -webkit-column-count:4} /* 4 colunas telas largas */
   }
@@ -186,7 +195,7 @@ footer.has-total #ctaMain {
   <img src="http://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" loading="eager" />
 </a>
       <nav class="nav">
-        <a href="#galeria">Galeria de Ofertas</a>
+        <a href="#galeria">Galeria</a>
         <a href="#feed">Feed</a>
         <a href="#rifas">Rifas</a>
       </nav>
@@ -197,20 +206,6 @@ footer.has-total #ctaMain {
   <main id="app" role="main" aria-live="polite">
     <!-- initial content: will be replaced by renderers -->
     <section id="page-loading" style="padding:24px;text-align:center;">Carregando...</section>
-    <h1><center>
-      
-    <strong>APOSTA DISPONÍVEL</strong><br>
-    <i>Chop Shop AV</i><br>
-    Impressão offset em papel couché transferida para EVA<br>
-    Políptico, dimensões variáveis.<br>
-<br>
-    R$ 30 = 1 número<br>
-    R$ 50 = 2 números
-<br><br>
-    Já viu a Galeria de Ofertas? Gostou de peças específicas? Selecione suas favoritas no FEED antes de concluir a compra! Assim, caso seu número seja sorteado, suas chances de ganhar peças escolhidas aumenta!
-    <br><br>
-    Clique sobre os números que deseja apostar e avance para o pagamento. 
-    </center></h1>
   </main>
 
   <!-- ========== FOOTER (kept same as v08) ========== -->
@@ -310,10 +305,12 @@ function renderGaleria(){
   masonry.id = 'masonryGallery';
 
   pecas.forEach(p => {
-    if (String(p.status).toUpperCase() === 'VENDIDAAA') return;
+    // ↓ antes pulava as vendidas; agora só marcamos
+    const sold = /vendid/i.test(String(p.status || ''));
 
     const item = document.createElement('div');
     item.className = 'gal-item';
+    if (sold) item.classList.add('sold');
     item.dataset.id = p.id_peca;
 
     const firstImg = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
@@ -328,6 +325,7 @@ function renderGaleria(){
   app.appendChild(section);
 }
 
+
 /* =============== FEED (POST/CARROSSEL) =============== */
 function renderFeed(){
   const app = document.getElementById('app');
@@ -341,7 +339,8 @@ function renderFeed(){
   list.className = 'feed';
 
   pecas.forEach(p => {
-    if (String(p.status).toUpperCase() === 'VENDIDAAA') return;
+    // ↓ antes pulava as vendidas; agora só tratamos diferente
+    const sold = /vendid/i.test(String(p.status || ''));
 
     const post = document.createElement('article');
     post.className = 'post';
@@ -360,7 +359,6 @@ function renderFeed(){
       carousel.appendChild(slide);
     });
 
-    // (a barra de progresso antiga foi desativada no CSS, mantemos a marcação)
     const barWrap = document.createElement('div');
     barWrap.className = 'carousel-bar-wrap';
     const bar = document.createElement('div');
@@ -374,68 +372,94 @@ function renderFeed(){
     const meta = document.createElement('div');
     meta.className = 'meta';
 
-    // Linha 1: título (flex:1) + preço (alinhado à direita)
     const l1 = document.createElement('div');
     l1.className = 'linha1';
+
     const title = document.createElement('div');
     title.className = 'titulo';
     title.textContent = p.titulo || ('Peça ' + p.id_peca);
+
     const price = document.createElement('div');
     price.className = 'preco';
-    price.textContent = fmt(p.preco);
+    if (sold){
+      price.textContent = '⬤';
+      price.classList.add('sold'); // deixa vermelho via CSS
+    } else {
+      price.textContent = fmt(p.preco);
+    }
     l1.appendChild(title);
     l1.appendChild(price);
 
-    // Técnica (acima de dimensões)
     const tecnica = document.createElement('div');
     tecnica.className = 'tecnica';
     tecnica.textContent = p.tecnica || '';
+
     const dims = document.createElement('div');
     dims.className = 'dimens';
     dims.textContent = p.dimensao || p.tamanho || '';
 
-    // Ações: coração à esquerda, adicionar/remover à direita
+    // Footer de ações
     const footerMeta = document.createElement('div');
     footerMeta.className = 'meta-footer';
 
-    const leftActions = document.createElement('div');
-    leftActions.className = 'left-actions';
+    if (!sold){
+      // Só mostra botões quando NÃO está vendida
+      const leftActions = document.createElement('div');
+      leftActions.className = 'left-actions';
 
-    const rightActions = document.createElement('div');
-    rightActions.className = 'right-actions';
+      const rightActions = document.createElement('div');
+      rightActions.className = 'right-actions';
 
-    const fav = document.createElement('button');
-    fav.className = 'btn fav-btn';
-    fav.type = 'button';
-    fav.setAttribute('aria-label', 'Favoritar ' + (p.titulo||''));
-    fav.textContent = '♥';
-    if (favoritos.has(p.id_peca)) fav.classList.add('active');
-    leftActions.appendChild(fav);
+      const fav = document.createElement('button');
+      fav.className = 'btn fav-btn';
+      fav.type = 'button';
+      fav.setAttribute('aria-label', 'Favoritar ' + (p.titulo||''));
+      fav.textContent = '♥';
+      if (favoritos.has(p.id_peca)) fav.classList.add('active');
+      leftActions.appendChild(fav);
 
-    const add = document.createElement('button');
-    add.className = 'btn add-btn';
-    add.type = 'button';
-    const estaSel = selecionadas.has(p.id_peca);
-    if (estaSel) add.classList.add('added');
-    add.textContent = estaSel ? 'REMOVER' : 'ADICIONAR';
-    rightActions.appendChild(add);
+      const add = document.createElement('button');
+      add.className = 'btn add-btn';
+      add.type = 'button';
+      const estaSel = selecionadas.has(p.id_peca);
+      if (estaSel) add.classList.add('added');
+      add.textContent = estaSel ? 'REMOVER' : 'ADICIONAR';
+      rightActions.appendChild(add);
 
-    footerMeta.appendChild(leftActions);
-    footerMeta.appendChild(rightActions);
+      footerMeta.appendChild(leftActions);
+      footerMeta.appendChild(rightActions);
 
-    // Monta meta
+      // Comportamentos (só quando não vendida)
+      fav.addEventListener('click', () => {
+        const id = p.id_peca;
+        if (favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
+        fav.classList.toggle('active', favoritos.has(id));
+        try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
+        updatePills();
+      });
+
+      add.addEventListener('click', () => {
+        const id = p.id_peca;
+        const isAdded = add.classList.toggle('added');
+        if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
+        add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
+        calcularTotal();
+        updatePills();
+      });
+    }
+
+    // Montagem
     meta.appendChild(l1);
     if (tecnica && tecnica.textContent) meta.appendChild(tecnica);
     meta.appendChild(dims);
     meta.appendChild(footerMeta);
 
-    // Monta post
     post.appendChild(carousel);
     post.appendChild(barWrap);
     post.appendChild(meta);
     list.appendChild(post);
 
-    // Atualiza “pos” (barra inferior) quando rolar o carrossel
+    // Atualiza barra de posição no scroll
     (function(car, posEl){
       const slides = car.querySelectorAll('.carousel-slide');
       const total = slides.length || 1;
@@ -447,30 +471,12 @@ function renderFeed(){
       car.addEventListener('scroll', ()=>{ clearTimeout(car._t); car._t = setTimeout(updatePos, 60); });
       updatePos();
     })(carousel, bar.querySelector('.pos'));
-
-    // Comportamentos
-    fav.addEventListener('click', () => {
-      const id = p.id_peca;
-      if (favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
-      fav.classList.toggle('active', favoritos.has(id));
-      try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
-      updatePills();
-    });
-
-add.addEventListener('click', () => {
-  const id = p.id_peca;
-  const isAdded = add.classList.toggle('added');
-  if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
-  add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
-  calcularTotal();     // <— calcula primeiro
-  updatePills();       // <— depois reflete no CTA/pills
-});
-
   });
 
   section.appendChild(list);
   app.appendChild(section);
 }
+
 
 /* =============== RIFAS ================= */
 function formatRifaLabelDOM(rawText){
