@@ -356,21 +356,6 @@ footer.has-total #ctaMain {
 </footer>
 
 
-  <!-- Hidden Form (kept in footer area but declared here) -->
-  <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
-    <input type="hidden" name="nome" id="fNome">
-    <input type="hidden" name="email" id="fEmail">
-    <input type="hidden" name="telefone" id="fTelefone">
-    <input type="hidden" name="pecas" id="fPecas">
-    <input type="hidden" name="rifas" id="fRifas">
-    <input type="hidden" name="favoritas" id="fFav">
-    <input type="hidden" name="total" id="fTotal">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_subject" value="Nova aposta BSTV">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
-  </form>
-
   <!-- ====== SCRIPT: modular renderers, event delegation, footer bindings ====== -->
 <script>
 /* ======================= CONFIG ======================= */
@@ -998,16 +983,33 @@ function attachBindings(){
           fetch(GAS_URL, { method:'POST', body:fd, mode:'no-cors' }).catch(()=>{});
         }catch(_){}
 
-        // Envia ao FormSubmit → _next já aponta para /obrigado.html
-        try{
-          document.getElementById('hiddenForm').submit();
-          // fallback de segurança
-          setTimeout(()=>{ location.href='https://betshoptv.com/obrigado.html'; }, 900);
-        }catch(err){
-          console.error('Falha ao enviar formulário:', err);
-          btn._busy = false; btn.disabled = false; btn.textContent = old;
-          alert('Não foi possível enviar agora. Tente novamente.');
-        }
+        // Envia ao só ao GAS → _next já aponta para /obrigado.html
+try {
+  const fd = new FormData();
+  fd.append('nome', document.getElementById('fNome').value);
+  fd.append('email', document.getElementById('fEmail').value);
+  fd.append('telefone', document.getElementById('fTelefone').value);
+  fd.append('pecas', document.getElementById('fPecas').value);
+  fd.append('rifas', document.getElementById('fRifas').value);
+  fd.append('favoritas', document.getElementById('fFav').value);
+  fd.append('total', document.getElementById('fTotal').value);
+
+  await fetch(GAS_URL, {
+    method: 'POST',
+    body: fd
+  });
+
+  // ✅ Redirecionamento manual após sucesso
+  location.href = 'https://betshoptv.com/obrigado.html';
+
+} catch (err) {
+  console.error('Erro ao enviar dados! Por favor, tente novamente:', err);
+  btn._busy = false;
+  btn.disabled = false;
+  btn.textContent = old;
+  alert('Não foi possível enviar agora. Tente novamente.');
+}
+
       };
     };
   };
