@@ -61,7 +61,10 @@
   .gal-item .ttl{display:none!important}
 
   /* VENDIDA — realce discreto */
-.gal-item.sold { filter: grayscale(1); opacity:.38; position:relative; }
+.gal-item.sold {
+  filter: hue-rotate(-15deg) saturate(0.4) brightness(0.8);
+  opacity: 0.8;
+}
 .gal-item.sold::after {
  
   content: '⬤'; position:absolute; top:18px; right:6px;
