@@ -1079,15 +1079,24 @@ function calcularTotal(){
 
 
 /* =============== Abrir peça dentro do feed ================= */
+/* =============== Abrir peça dentro do feed (ajuste sem scroll suave + sem foco) ================= */
 function openFeedAt(id){
   const tryScroll = ()=>{
     const el = document.getElementById('post-' + id);
     if (!el) return false;
-    el.scrollIntoView({ behavior:'smooth', block:'start' });
-    try{
-      const t = el.querySelector('.titulo');
-      if (t && t.focus){ t.setAttribute('tabindex','-1'); t.focus(); }
-    }catch(e){}
+
+    // remove foco automático (evita moldura azul)
+    if (document.activeElement && document.activeElement.blur) {
+      document.activeElement.blur();
+    }
+
+    // rola imediatamente, sem animação
+    el.scrollIntoView({ behavior: 'auto', block: 'start' });
+
+    // compensa a altura do cabeçalho fixo (ajuste fino)
+    const headerHeight = document.querySelector('header')?.offsetHeight || 100;
+    window.scrollBy(0, -headerHeight);
+
     return true;
   };
 
@@ -1098,6 +1107,7 @@ function openFeedAt(id){
     setTimeout(tryScroll, 100);
   }
 }
+
 
 /* ======================== INIT ======================== */
 async function init(){
