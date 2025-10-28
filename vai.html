@@ -964,11 +964,40 @@ function attachBindings(){
       document.getElementById('ck_back_data').onclick = ()=> cta.onclick(e);
 
       // Enviar (GAS best-effort + FormSubmit)
-      document.getElementById('ck_finish').onclick = async ()=>{
-        const btn = document.getElementById('ck_finish');
-        if (btn._busy) return;
-        btn._busy = true; btn.disabled = true;
-        const old = btn.textContent; btn.textContent = 'Enviando aposta...';
+document.getElementById('ck_finish').onclick = async () => {
+  const btn = document.getElementById('ck_finish');
+  if (btn._busy) return;
+  btn._busy = true;
+  btn.disabled = true;
+  const old = btn.textContent;
+  btn.textContent = 'Enviando aposta...';
+
+  try {
+    const fd = new FormData();
+    fd.append('nome', document.getElementById('fNome').value);
+    fd.append('email', document.getElementById('fEmail').value);
+    fd.append('telefone', document.getElementById('fTelefone').value);
+    fd.append('pecas', document.getElementById('fPecas').value);
+    fd.append('rifas', document.getElementById('fRifas').value);
+    fd.append('favoritas', document.getElementById('fFav').value);
+    fd.append('total', document.getElementById('fTotal').value);
+
+    await fetch(GAS_URL, {
+      method: 'POST',
+      body: fd
+    });
+
+    location.href = 'https://betshoptv.com/obrigado.html';
+
+  } catch (err) {
+    console.error('Erro ao enviar dados para o GAS:', err);
+    btn._busy = false;
+    btn.disabled = false;
+    btn.textContent = old;
+    alert('Não foi possível enviar agora. Tente novamente.');
+  }
+};
+
 
         // Backup GAS (não bloqueia)
         try{
