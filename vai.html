@@ -61,14 +61,38 @@
   .gal-item .ttl{display:none!important}
 
   /* VENDIDA — realce discreto */
+/* Estado "vendido" */
 .gal-item.sold {
-  filter: hue-rotate(-15deg) saturate(0.4) brightness(0.8);
-  opacity: 0.8;
+  /* Mantém opacidade total */
+  opacity: 1;
+
+  /* Filtro: avermelhado + levemente dessaturado */
+  filter: hue-rotate(-10deg) saturate(0.6) brightness(0.92);
+  transition: filter 0.4s ease;
 }
+
+/* Círculo indicador — isolado do filtro */
 .gal-item.sold::after {
- 
-  content: '⬤'; position:absolute; top:18px; right:6px;
-  color: var(--red); font-size: 24px; line-height:1;
+  content: '⬤';
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  font-size: 20px;
+  line-height: 1;
+  color: #ff0000;
+
+  /* Isola do filtro do container */
+  filter: none;
+  mix-blend-mode: normal;
+  isolation: isolate;
+  z-index: 2;
+}
+
+/* Restaura cor no hover (para desktop) */
+@media (hover: hover) and (pointer: fine) {
+  .gal-item.sold:hover {
+    filter: none;
+  }
 }
 .preco.sold { color: var(--red); }
 
