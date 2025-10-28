@@ -686,9 +686,9 @@ function renderRifas(){
     </div>
 
     <p class="hint">
-      Já viu a <span class="strong">Galeria de Ofertas</span>? Gostou de peças específicas? 
+      Já viu a <span class="strong"><a href="#galeria">Galeria de Ofertas</a></span>? Gostou de peças específicas? 
       Selecione suas favoritas no FEED <em>antes</em> de concluir a compra! 
-      Assim, caso seu número seja sorteado, suas chances de ganhar peças escolhidas aumenta!
+      Assim, caso seu número seja sorteado, suas chances de ganhar as peças escolhidas aumenta!
     </p><br>
     <p class="hint">Clique nos números que deseja apostar e avance para o pagamento.</p>
   `;
@@ -866,7 +866,7 @@ function attachBindings(){
           <label>Telefone</label><input id="ck_fone" type="tel" style="width:100%">
           <div style="display:flex;gap:8px;margin-top:12px">
             <button id="ck_voltar" style="flex:1">Voltar</button>
-            <button id="ck_to_pix" style="flex:1;background:var(--red);color:#fff">Avançar para PIX</button>
+            <button id="ck_to_pix" style="flex:1;background:var(--red);color:#fff">Avançar</button>
           </div>
         </div>
       </section>
@@ -903,12 +903,11 @@ function attachBindings(){
               <div style="flex:1;min-width:240px">
                 <button id="ck_copy" style="border:2px solid var(--ink);background:#fff;padding:8px 12px;cursor:pointer">PIX Copia e Cola</button>
                 <div id="ck_payload" style="display:none;">${payload}</div>
-                <p style="margin-top:10px;font-size:.95rem;color:#2b2424;">Você pode efetuar o pagamento agora ou depois. A aposta será enviada mesmo sem confirmar o pagamento.</p>
               </div>
             </div>
             <div style="display:flex;gap:8px;margin-top:14px">
               <button id="ck_back_data" style="flex:1">Voltar</button>
-              <button id="ck_finish" style="flex:1;background:var(--red);color:#fff">Confirmar e Enviar</button>
+              <button id="ck_finish" style="flex:1;background:var(--red);color:#fff;">ENVIAR APOSTA</button>
             </div>
           </div>
         </section>
