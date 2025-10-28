@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Obrigado!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="15;url=https://betshoptv.com">
   <style>
     body {
       background: #ff0000;
@@ -13,27 +12,46 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
       height: 100vh;
       margin: 0;
       text-align: center;
     }
-    .msg {
-      max-width: 600px;
-      padding: 20px;
-    }
-    .msg h1 {
+    h1 {
       font-size: 2em;
       margin-bottom: 10px;
     }
-    .msg p {
+    p {
       font-size: 1.2em;
+    }
+    #contador {
+      font-size: 2em;
+      font-weight: bold;
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: 2px solid #fff;
+      border-radius: 6px;
     }
   </style>
 </head>
 <body>
-  <div class="msg">
-    <h1>Obrigado pela sua participação!</h1>
-    <p>Você será redirecionado em instantes...</p>
-  </div>
+
+  <h1>Agradecemos sua participação<br>e desejamos SORTE NO SORTEIO!</h1><br>
+  <p>Em <span id="contador">15</span> segundos você voltará ao site.</p>
+
+  <script>
+    let tempo = 15;
+    const contadorEl = document.getElementById('contador');
+
+    const intervalo = setInterval(() => {
+      tempo--;
+      contadorEl.textContent = tempo;
+      if (tempo <= 0) {
+        clearInterval(intervalo);
+        window.location.href = 'https://betshoptv.com';
+      }
+    }, 1000);
+  </script>
+
 </body>
 </html>
