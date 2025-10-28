@@ -412,10 +412,9 @@ function renderGaleria(){
   masonry.className = 'galeria';
   masonry.id = 'masonryGallery';
 
-  pecas.forEach(p => {
-    // ↓ antes pulava as vendidas; agora só marcamos
+  // 👉 Reverte a ordem das peças para exibir invertido (9/8/7... etc)
+  [...pecas].reverse().forEach(p => {
     const sold = /vendid/i.test(String(p.status || ''));
-
     const item = document.createElement('div');
     item.className = 'gal-item';
     if (sold) item.classList.add('sold');
@@ -434,6 +433,7 @@ function renderGaleria(){
 }
 
 
+
 /* =============== FEED (POST/CARROSSEL) =============== */
 function renderFeed(){
   const app = document.getElementById('app');
@@ -446,7 +446,7 @@ function renderFeed(){
   list.id = 'feedList';
   list.className = 'feed';
 
-  pecas.forEach(p => {
+  [...pecas].reverse().forEach(p => {
     // ↓ antes pulava as vendidas; agora só tratamos diferente
     const sold = /vendid/i.test(String(p.status || ''));
 
