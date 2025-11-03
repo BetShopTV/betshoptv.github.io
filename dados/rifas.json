@@ -81,7 +81,7 @@
     "id_rifa": "014",
     "hex": "#D2B48C",
     "botao_rifa": "014 / Batida de Amendoim",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "015",
@@ -93,7 +93,7 @@
     "id_rifa": "016",
     "hex": "#FF6347",
     "botao_rifa": "016 / Beijo roubado",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "017",
