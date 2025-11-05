@@ -281,6 +281,59 @@
     ]
   },
   {
+    "id_peca": "0410",
+    "titulo": "04/10 Caça-níquel 01",
+    "preco": 400,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e prego.",
+    "dimensao": "27 x 16 x 8 cm",
+    "imagens": [
+      "04-10a",
+      "04-10b",
+      "04-10c",
+      "04-10d"
+    ]
+  },
+  {
+    "id_peca": "0411",
+    "titulo": "04/11 Filmadora 04",
+    "preco": 400,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e tachinha.",
+    "dimensao": "18 x 41 x 4 cm",
+    "imagens": [
+      "04-11a",
+      "04-11b",
+      "04-11c"
+    ]
+  },
+  {
+    "id_peca": "0412",
+    "titulo": "04/12 Telefone 02",
+    "preco": 400,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, arruela e tachinhas.",
+    "dimensao": "52 x 22 x 3 cm",
+    "imagens": [
+      "04-12a",
+      "04-12b",
+      "04-12c"
+    ]
+  },
+  {
+    "id_peca": "0413",
+    "titulo": "04/13 Microfone 01",
+    "preco": 500,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, suportes angulares e parafusos.",
+    "dimensao": "27 x 15 x 7 cm",
+    "imagens": [
+      "04-13a",
+      "04-13b",
+      "04-13c"
+    ]
+  },
+  {
     "id_peca": "0501",
     "titulo": "05/01 Violino 01",
     "preco": 300,
@@ -294,9 +347,68 @@
     ]
   },
   {
+    "id_peca": "0505",
+    "titulo": "05/05 TV Portátil 02",
+    "preco": 600,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para EVA.",
+    "dimensao": "13 x 30 x 18 cm",
+    "imagens": [
+      "05-05a",
+      "05-05b",
+      "05-05c",
+      "05-05d",
+      "05-05e"
+    ]
+  },
+  {
+    "id_peca": "0506",
+    "titulo": "05/06 Antena Parabólica 01",
+    "preco": 500,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para EVA estampado.",
+    "dimensao": "14 x 20,5 x 18 cm",
+    "imagens": [
+      "05-06a",
+      "05-06b",
+      "05-06c",
+      "05-06d",
+      "05-06e",
+      "05-06f"
+    ]
+  },
+  {
+    "id_peca": "0507",
+    "titulo": "05/07 Stereo System 02",
+    "preco": 600,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para EVA Glitter.",
+    "dimensao": "27 x 18 x 10 cm",
+    "imagens": [
+      "05-07a",
+      "05-07b",
+      "05-07c",
+      "05-07d",
+      "05-07e",
+      "05-07f"
+    ]
+  },
+  {
+    "id_peca": "0508",
+    "titulo": "05/08 Videocassete 02",
+    "preco": 300,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para EVA e prego.",
+    "dimensao": "28 x 30 x 5 cm",
+    "imagens": [
+      "05-08a",
+      "05-08b"
+    ]
+  },
+  {
     "id_peca": "0601",
     "titulo": "06/01 Filmadora 05",
-    "preco": 300,
+    "preco": 350,
     "status": "X",
     "tecnica": "Duas impressões offset em papel couché transferidas para EVA estampado.",
     "dimensao": "27 x 20,5 x 10 cm",
@@ -304,6 +416,118 @@
       "06-01a",
       "06-01b",
       "06-01c"
+    ]
+  },
+  {
+    "id_peca": "0602",
+    "titulo": "06/02 Som Automotivo 01",
+    "preco": 400,
+    "status": "X",
+    "tecnica": "Duas impressões offset em papel couché transferidas para refugo de EVA.",
+    "dimensao": "28 x 22 x 8 cm",
+    "imagens": [
+      "06-02a",
+      "06-02b",
+      "06-02c"
+    ]
+  },
+  {
+    "id_peca": "0603",
+    "titulo": "06/03 TV 02",
+    "preco": 500,
+    "status": "X",
+    "tecnica": "Duas impressões offset em papel couché transferidas para EVA estampado.",
+    "dimensao": "54 x 18 x 7 cm",
+    "imagens": [
+      "06-03a",
+      "06-03b",
+      "06-03c",
+      "06-03d"
+    ]
+  },
+  {
+    "id_peca": "0604",
+    "titulo": "06/04 Stereo System 03",
+    "preco": 2000,
+    "status": "X",
+    "tecnica": "Duas impressões offset em papel couché transferidas para refugo de EVA.",
+    "dimensao": "14 x 18 x 14 cm",
+    "imagens": [
+      "06-04a",
+      "06-04b",
+      "06-04c",
+      "06-04d",
+      "06-04e",
+      "06-04f"
+    ]
+  },
+  {
+    "id_peca": "0605",
+    "titulo": "06/05 Telefone 03",
+    "preco": 350,
+    "status": "X",
+    "tecnica": "Duas impressões offset em papel couché transferidas para refugo de EVA.",
+    "dimensao": "4 x 20,5 x 24 cm",
+    "imagens": [
+      "06-05a",
+      "06-05b",
+      "06-05c",
+      "06-05d"
+    ]
+  },
+  {
+    "id_peca": "0606",
+    "titulo": "06/06 Videocassete 03",
+    "preco": 300,
+    "status": "X",
+    "tecnica": "Duas impressões offset em papel couché transferidas para refugo de EVA.",
+    "dimensao": "27 x 20,5 x 10 cm",
+    "imagens": [
+      "06-06a",
+      "06-06b",
+      "06-06c",
+      "06-06d"
+    ]
+  },
+  {
+    "id_peca": "0607",
+    "titulo": "06/07 Microfone 02",
+    "preco": 350,
+    "status": "X",
+    "tecnica": "Duas impressões offset em papel couché transferidas para refugo de EVA.",
+    "dimensao": "33 x 44 x 12 cm",
+    "imagens": [
+      "06-07a",
+      "06-07b",
+      "06-07c",
+      "06-07d"
+    ]
+  },
+  {
+    "id_peca": "0608",
+    "titulo": "06/08 TV 03",
+    "preco": 350,
+    "status": "X",
+    "tecnica": "Duas impressões offset em papel couché transferidas para refugo de EVA.",
+    "dimensao": "33 x 44 x 12 cm",
+    "imagens": [
+      "06-08a",
+      "06-08b",
+      "06-08c",
+      "06-08d"
+    ]
+  },
+  {
+    "id_peca": "0609",
+    "titulo": "06/09 Microfone 03",
+    "preco": 800,
+    "status": "X",
+    "tecnica": "Duas impressões offset em papel couché transferidas para EVA estampado.",
+    "dimensao": "27 x 41 x 4 cm",
+    "imagens": [
+      "06-09a",
+      "06-09b",
+      "06-09c"
     ]
   }
 ]
