@@ -852,18 +852,23 @@ function parseHash(){
   return { page: pagePart || 'galeria', params: new URLSearchParams(query || '') };
 }
 
-function handleHashChange(){
+function handleHashChange() {
   const { page, params } = parseHash();
-  if (page === 'feed'){
+  if (page === 'feed') {
     const p = params.get('p');
-    if (p) showPage('feed', { updateHash:false, pieceId:p });
-    else   showPage('feed', { updateHash:false });
-  } else if (page === 'rifas'){
-    showPage('rifas', { updateHash:false });
+    if (p) showPage('feed', { updateHash: false, pieceId: p });
+    else   showPage('feed', { updateHash: false });
+  } else if (page === 'rifas') {
+    showPage('rifas', { updateHash: false });
+  } else if (page === 'sobre') {
+    showPage('sobre', { updateHash: false });
+  } else if (page === 'como') {
+    showPage('como', { updateHash: false });
   } else {
-    showPage('galeria', { updateHash:false });
+    showPage('galeria', { updateHash: false });
   }
 }
+
 window.addEventListener('hashchange', handleHashChange);
 
 // links do header passam a escrever o hash
