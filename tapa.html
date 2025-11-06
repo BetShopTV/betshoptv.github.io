@@ -502,24 +502,13 @@ function getGruposDisponiveis(){
   
 // 🔧 Helpers de filtragem e ordenação
 function orderByRows(lista, colunas = 4, asc = false) {
-  const sorted = [...lista].sort((a, b) => {
+  return [...lista].sort((a, b) => {
     const ida = parseInt(a.id_peca, 10);
     const idb = parseInt(b.id_peca, 10);
     return asc ? ida - idb : idb - ida;
   });
-
-  const linhas = Math.ceil(sorted.length / colunas);
-  const final = [];
-
-  for (let l = 0; l < linhas; l++) {
-    for (let c = 0; c < colunas; c++) {
-      const idx = l * colunas + c;
-      if (sorted[idx]) final.push(sorted[idx]);
-    }
-  }
-
-  return final;
 }
+
 
 
 
