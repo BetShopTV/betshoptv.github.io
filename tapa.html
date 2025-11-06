@@ -50,17 +50,18 @@
 .galeria {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 4px;
+  align-items: flex-start; /* ⬅ importante! */
   justify-content: flex-start;
-  margin: 0;
-  padding: 0;
 }
 
 .gal-item {
-  width: calc(25% - 6px); /* 4 colunas desktop */
-  overflow: hidden;
+  width: calc(25% - 4px); /* 4 colunas no desktop */
+  background: #fff;
   border: var(--bd-thin) solid var(--ink);
-  display: block;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .gal-item img {
@@ -493,77 +494,170 @@ function getGruposDisponiveis(){
 
   
 // 🔧 Helpers de filtragem e ordenação
-function orderByIdLinha(lista, colunas = 4, asc = false) {
-  const sorted = [...lista].sort((a, b) => {
-    const ida = parseInt(a.id_peca, 10);
-    const idb = parseInt(b.id_peca, 10);
-    return asc ? ida - idb : idb - ida;
-  });
+function orderByRows(lista, colunas = 4) {
+  const linhas = Math.ceil(lista.length / colunas);
+  const novaLista = [];
 
-  return sorted;
+  for (let l = 0; l < linhas; l++) {
+    for (let c = 0; c < colunas; c++) {
+      const idx = l * colunas + c;
+      if (lista[idx]) novaLista.push(lista[idx]);
+    }
+  }
+
+  return novaLista;
 }
 
 
 
 
 
+
   // 🎨 Função principal de render da galeria
   // 🎨 Função principal de render da galeria
   // 🎨 Função principal de render da galeria
   // 🎨 Função principal de render da galeria
-function renderGaleria(lista = pecas) {
-  // Aplicar filtros
-  if (filtros.precoMax > 0) {
-    lista = lista.filter(p => parseFloat(p.preco || 0) <= filtros.precoMax);
+function renderGaleria() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const section = document.createElement('section');
+
+  // ====== BARRA DE FILTROS ======
+  const filtrosWrap = document.createElement('div');
+  filtrosWrap.style = 'margin-bottom:16px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;';
+
+  // Grupos
+  const grupos = getGruposDisponiveis();
+  const grupoWrap = document.createElement('div');
+  grupoWrap.style = 'display:flex;gap:6px;align-items:center;';
+  grupoWrap.innerHTML = `<span style="font-size:14px;">Grupos:</span>`;
+  grupos.forEach(g => {
+    const lb = document.createElement('label');
+    lb.style = 'font-size:14px;';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = g;
+    cb.checked = filtros.grupos.has(g);
+    cb.onchange = () => {
+      if (cb.checked) filtros.grupos.add(g);
+      else filtros.grupos.delete(g);
+      renderGaleria();
+    };
+    lb.appendChild(cb);
+    lb.appendChild(document.createTextNode(' ' + g));
+    grupoWrap.appendChild(lb);
+  });
+  filtrosWrap.appendChild(grupoWrap);
+
+  // Ordem crescente
+  const ordemLabel = document.createElement('label');
+  ordemLabel.style = 'font-size:14px;';
+  const ordemCheck = document.createElement('input');
+  ordemCheck.type = 'checkbox';
+  ordemCheck.checked = filtros.ordemAsc;
+  ordemCheck.style = 'margin-left:12px;margin-right:6px;';
+  ordemCheck.onchange = () => {
+    filtros.ordemAsc = ordemCheck.checked;
+    renderGaleria();
+  };
+  ordemLabel.appendChild(ordemCheck);
+  ordemLabel.appendChild(document.createTextNode('Ordem crescente'));
+  filtrosWrap.appendChild(ordemLabel);
+
+  // Somente disponíveis
+  const chkDisp = document.createElement('label');
+  chkDisp.style = 'font-size:14px;';
+  const chkInput = document.createElement('input');
+  chkInput.type = 'checkbox';
+  chkInput.checked = filtros.disponiveis;
+  chkInput.style = 'margin-right:6px;';
+  chkInput.onchange = () => {
+    filtros.disponiveis = chkInput.checked;
+    renderGaleria();
+  };
+  chkDisp.appendChild(chkInput);
+  chkDisp.appendChild(document.createTextNode('Somente disponíveis'));
+  filtrosWrap.appendChild(chkDisp);
+
+  // Preço
+  const selectPreco = document.createElement('select');
+  selectPreco.innerHTML = `
+    <option value="all">Todos os preços</option>
+    <option value="200">Até R$ 200</option>
+    <option value="400">R$ 200 – 400</option>
+    <option value="400+">Acima de R$ 400</option>
+  `;
+  selectPreco.value = filtros.precoMax;
+  selectPreco.onchange = () => {
+    filtros.precoMax = selectPreco.value;
+    renderGaleria();
+  };
+  filtrosWrap.appendChild(selectPreco);
+
+  section.appendChild(filtrosWrap);
+
+  // ====== GALERIA ======
+  const galeria = document.createElement('div');
+  galeria.className = 'galeria';
+
+  let lista = [...pecas];
+
+  // FILTROS
+  if (filtros.disponiveis) {
+    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
   }
 
-  if (filtros.somenteDisp) {
-    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
+  if (filtros.precoMax === '200') {
+    lista = lista.filter(p => parseFloat(p.preco || 0) <= 200);
+  } else if (filtros.precoMax === '400') {
+    lista = lista.filter(p => {
+      const preco = parseFloat(p.preco || 0);
+      return preco >= 200 && preco <= 400;
+    });
+  } else if (filtros.precoMax === '400+') {
+    lista = lista.filter(p => parseFloat(p.preco || 0) > 400);
   }
 
   if (filtros.grupos.size > 0) {
     lista = lista.filter(p => {
-      const grupo = String(p.id_peca).slice(0, 2);
+      const id = String(p.id_peca || '');
+      const grupo = id.slice(0, 2);
       return filtros.grupos.has(grupo);
     });
   }
 
-  // Ordenação numérica por id_peca
+  // ORDENAR por ID (numérico)
   lista.sort((a, b) => {
     const ida = parseInt(a.id_peca, 10);
     const idb = parseInt(b.id_peca, 10);
     return filtros.ordemAsc ? ida - idb : idb - ida;
   });
 
-  // Cria container principal
-  const section = document.createElement('section');
-  section.className = 'galeria';
+  // DISTRIBUIÇÃO POR LINHAS (método orderByRows)
+  lista = orderByRows(lista, 4); // ← 4 colunas
 
+  // RENDER
   lista.forEach(p => {
-    const sold = /vendid/i.test(String(p.status || ''));
     const item = document.createElement('div');
     item.className = 'gal-item';
-    if (sold) item.classList.add('sold');
     item.dataset.id = p.id_peca;
+    if (/vendid/i.test(String(p.status || ''))) item.classList.add('sold');
 
-    // Imagem
     const firstImg = (p.imagens && p.imagens[0]) || '';
     const img = imgWithFallback('/img/tmb/' + firstImg + '.avif');
-    img.alt = p.titulo || `Peça ${p.id_peca}`;
+    img.alt = p.titulo || ('Peça ' + p.id_peca);
     item.appendChild(img);
 
-    // 🔍 Label do ID
     const label = document.createElement('div');
-    label.style = 'padding:6px 4px;font:16px monospace;font-weight:bold;color:white;background:red;text-align:center;';
+    label.className = 'id-label'; // CSS controla visual
     label.textContent = p.id_peca;
     item.appendChild(label);
 
-    section.appendChild(item);
+    galeria.appendChild(item);
   });
 
-  // Exibe na página
-  const app = document.getElementById('app');
-  app.innerHTML = '';
+  section.appendChild(galeria);
   app.appendChild(section);
 }
 
