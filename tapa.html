@@ -501,7 +501,7 @@ function getGruposDisponiveis(){
 
   
 // 🔧 Helpers de filtragem e ordenação
-function orderByIdPorLinhasParaMasonry(lista, colunas = 4, asc = false) {
+function orderByRows(lista, colunas = 4, asc = false) {
   const sorted = [...lista].sort((a, b) => {
     const ida = parseInt(a.id_peca, 10);
     const idb = parseInt(b.id_peca, 10);
@@ -509,17 +509,18 @@ function orderByIdPorLinhasParaMasonry(lista, colunas = 4, asc = false) {
   });
 
   const linhas = Math.ceil(sorted.length / colunas);
-  const colArrays = Array.from({ length: colunas }, () => []);
+  const final = [];
 
   for (let l = 0; l < linhas; l++) {
     for (let c = 0; c < colunas; c++) {
       const idx = l * colunas + c;
-      if (sorted[idx]) colArrays[c].push(sorted[idx]);
+      if (sorted[idx]) final.push(sorted[idx]);
     }
   }
 
-  return colArrays.flat(); // Ordem por colunas, preservando render Masonry
+  return final;
 }
+
 
 
 
@@ -640,7 +641,8 @@ function renderGaleria(){
   }
 
   // ====== ORDENAR POR LINHAS para MASONRY
-  lista = orderByIdPorLinhasParaMasonry(lista, 4, filtros.ordemAsc);
+lista = orderByRows(lista, 4, filtros.ordemAsc);
+
 
   // ====== RENDERIZAÇÃO
   lista.forEach(p => {
