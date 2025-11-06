@@ -1,1 +1,532 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BetShopTV⦿com</title>
+
+<!-- ====== STYLES (preserve visual look of v08) ====== -->
+<style>
+  /* ====== Tokens ====== */
+  :root{
+    --red:#ff0000; --ink:#2b2424; --beige:#bebab0; --white:#ffffff;
+    --bd-thin:1px; --bd-thick:2px;
+    --ff-cta:"Roboto Condensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --fs-h1:clamp(1.4rem,3vw,2rem); --fs-h2:clamp(1.1rem,2vw,1.4rem);
+    --fs-p:clamp(.9rem,1.2vw,1rem); --fs-sm:clamp(.78rem,1vw,.9rem);
+    --gap-xxs:4px; --gap-xs:6px; --gap-s:8px; --gap-m:12px; --gap-l:16px;
+    --app-max-width:1200px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);-webkit-font-smoothing:antialiased}
+
+  /* ====== Header (mantém visual v08) ====== */
+  header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;}
+  .hdr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px}
+/* PATCH: logo como imagem, mantendo o mesmo “peso visual” do título anterior */
+.logo{
+  display:flex; align-items:center; gap:8px;
+  text-decoration:none;
+}
+.logo img{
+  display:block;
+  height: clamp(69px, 5.6vw, 188px); /* cresce um pouco em telas largas */
+  width: auto;
+  margin-left: 8px;
+}
+
+  .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .nav a{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 10px;border:var(--bd-thin) solid #fff;color:#fff;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase}
+  .nav a:hover{background:#fff;color:var(--ink)}
+
+  /* ====== Área da página ====== */
+  main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 16px;min-height:60vh}
+  section{margin-bottom:24px}
+  h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
+
+  /* ====== Galeria (Masonry / Pinterest) ====== */
+  .galeria{
+    column-gap:4px; -webkit-column-gap:4px;
+    column-count:3; -webkit-column-count:3; /* 3 colunas por padrão */
+    margin:0; padding:0;
+  }
+  .gal-item{
+    display:inline-block; width:100%;
+    margin:0 0 1px;
+    break-inside:avoid; -webkit-column-break-inside:avoid;
+    border:var(--bd-thin) solid var(--ink);
+    background:#fff; overflow:hidden;
+  }
+  .gal-item img{display:block;width:100%;height:auto;object-fit:cover;vertical-align:middle;background:#000}
+  .gal-item .ttl{display:none!important}
+
+  /* VENDIDA — realce discreto */
+/* Estado "vendido" */
+.gal-item.sold {
+  position: relative;
+  filter: saturate(0.88) brightness(0.94);
+  opacity: 1;
+}
+
+.gal-item.sold::after {
+  content: '⬤';
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  color: var(--red);
+  font-size: 24px;
+  line-height: 1;
+  
+  /* 🔥 Isola o pseudo do filtro */
+  filter: none;
+  mix-blend-mode: normal;
+  isolation: isolate;
+}
+.preco.sold { color: var(--red); }
+
+  @media (min-width:1300px){
+    .galeria{column-count:4; -webkit-column-count:4} /* 4 colunas telas largas */
+  }
+
+  /* ====== Feed / Post ====== */
+  .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
+  .post{border:var(--bd-thin) solid var(--ink);background:var(--beige);overflow:hidden;display:flex;flex-direction:column;}
+
+  /* Carrossel */
+  .carousel{
+    display:flex;gap:var(--gap-xxs);
+    overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:6px 12px;background:var(--beige);
+    /* barra de rolagem inferior sempre visível e vermelha */
+    scrollbar-color: var(--red) transparent;
+  }
+  .carousel::-webkit-scrollbar{height:8px; margin-top: 8px;border-radius:0;}
+  .carousel::-webkit-scrollbar-track{background:var(--beige);border-radius:0;}
+  .carousel::-webkit-scrollbar-thumb{background:var(--red)}
+  .carousel-slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;background:var(--beige);}
+  .carousel-slide img{
+    width:100%; max-height:42vh; min-height:200px;
+    object-fit:contain; background:var(--beige);
+  }
+  /* remove a barra de progresso antiga */
+  .carousel-bar-wrap{display:none!important}
+
+  /* Meta do post */
+  .meta{padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--beige);}
+  .meta .linha1{display:flex;align-items:flex-start;gap:8px;background:var(--beige);}
+  .titulo{flex:1 1 auto;font-family:var(--ff-cta);font-weight:700;min-width:0;background:var(--beige);}
+  .preco{flex:0 0 auto;font-weight:700;white-space:nowrap;align-self:flex-start;background:var(--beige);}
+  .descricao{font-size:15px; font-weight: 700;color:var(--ink);background:var(--beige);}
+  .tecnica{font-size:13px;color:var(--ink);background:var(--beige);}   /* será exibida acima das dimensões */
+  .dimens{font-size:13px;color:var(--ink);background:var(--beige);}
+
+  /* Botões do post */
+  .meta .meta-footer{display:flex;justify-content:flex-end;gap:8px}
+  .btn{font-size:13px;font-family:var(--ff-cta);font-weight:700;padding:8px 12px;cursor:pointer;border-radius:0}
+  .add-btn{font-size:13px;border:2px solid var(--red);background:transparent;color:var(--red)}
+  .add-btn.added{font-size:13px;border-color:var(--ink);background:var(--ink);color:var(--beige)}
+  .fav-btn{font-size:13px; border:2px solid var(--red);background:var(--beige);color:var(--red)} 
+  .fav-btn.active{font-size:13px;border:2px solid var(--red);background:var(--red);color:var(--beige)}
+ 
+  /* ====== Rifas ====== */
+  @font-face{
+    font-family:'BC-RobotoCondensed-Med';
+    src:url('/fonts/Roboto_Condensed-Medium.woff2') format('woff2');
+    font-weight:500;font-style:normal;font-display:swap;
+  }
+  .rifas{
+    display:flex;flex-wrap:wrap;gap:8px;
+    align-items:flex-start;justify-content:center;align-content:center;
+    padding:6px 0;
+  }
+  .rifa-btn{
+    display:inline-flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;
+    min-height:56px;padding:10px 12px;border:1px solid var(--ink);
+    background:var(--beige);cursor:pointer;
+    font-family:'BC-RobotoCondensed-Med',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+    font-weight:500;font-size:14px;line-height:1.15;text-transform:none;color:inherit;white-space:normal;overflow:hidden;
+  }
+  .rifa-btn .ln1,.rifa-btn .ln2{
+    display:block;margin:0;padding:0;font:inherit;text-transform:none;text-align:left;color:inherit;
+  }
+  .rifa-btn.selected{background:#fff!important;border-color:var(--red)!important;color:var(--red)!important}
+  .rifa-btn.sold{opacity:.08;filter:grayscale(1);pointer-events:none; background: #bebab0; color:#fff; border: 0px;}
+
+  @media (max-width:768px){
+    .rifa-btn{min-height:42px;padding:5px 7px;font-size:11px}
+    .rifa-btn .ln1,.rifa-btn .ln2{font-size:11px;line-height:1.12}
+
+  }
+
+  /* ====== Footer (mantém visual v08) ====== */
+  
+    @font-face{
+    font-family:'BC-RobotoCondensed-Bold';
+    src:url('/fonts/Roboto_Condensed-Bold.woff2') format('woff2');
+    font-weight:900;font-style:normal;font-display:swap;
+  }
+  
+  footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
+  .ftr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px}
+  .contadores{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:var(--beige);color:var(--ink);border:var(--bd-thin) solid var(--beige);padding:4px 4px;font:700 var(--fs-sm)/1 var(--ff-cta)}
+  .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font-size: 1em;font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;cursor:pointer}
+  .total-display{font-size: 1em;font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif; margin-left:12px}
+  /* Estado visual do rodapé quando NÃO há seleção (total = 0) */
+footer.no-total #pillCompact,
+footer.no-total #ctaMain {
+  background: var(--ink);
+  color: var(--ink);
+  border: 0;              /* sem borda colorida */
+}
+
+/* Estado visual do CTA quando HÁ seleção (total > 0) */
+footer.has-total #ctaMain {
+  background: var(--red);
+  color: #fff;
+  border: 0;              /* sem borda */
+  padding: 8px 12px;
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-right: 4px;
+  font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  font-size: 1em;
+}
+
+/* Garantias de interação */
+#ctaMain[disabled] {
+  cursor: default;
+  opacity: 1;             /* mantemos legível mesmo desabilitado */
+}
+
+/* ===== RIFAS: hero/topo informativo ===== */
+.rifa-hero{
+  border: var(--bd-thin) solid var(--ink);
+  background: #d2cec5;               /* tom acima do beige mantendo paleta */
+  padding: 16px;
+  margin: 0 0 16px 0;
+  position: relative;
+  align-items: center;
+}
+.rifa-hero .badge{
+  display:inline-block;
+  background: var(--red);
+  color:#fff;
+  font:700 var(--fs-sm)/1 var(--ff-cta);
+  padding:6px 10px;
+  border: var(--bd-thin) solid var(--ink);
+  position:absolute;
+  top:-12px; left:16px;
+}
+.rifa-hero h2{
+  margin: 14px 0 2px 0;
+  font:700 var(--fs-h2)/1.1 var(--ff-cta);
+}
+.rifa-hero .sub{
+  display:block;
+  font:700 var(--fs-h2)/1 var(--ff-cta);
+  letter-spacing:.02em;
+  margin-bottom:10px;
+}
+.rifa-hero .desc{
+  margin:10px 0 8px 0;
+  font-size: var(--fs-p);
+}
+.rifa-hero .spec{
+  margin:0 0 10px 0;
+  font-size: var(--fs-p);
+}
+.rifa-hero .precos{
+  margin: 4px 0 4px 0;
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.rifa-hero .pill{
+  background:var(--beige);
+  color:var(--ink);
+  border: var(--bd-thin) solid var(--ink);
+  padding:10px 15px;
+    font:500 calc(var(--fs-h2) * 0.9) / 1.1 var(--ff-cta);
+}
+.rifa-hero .hint{
+  margin:10px 0 8px 0;
+  font-size: var(--fs-p);
+}
+.rifa-hero .strong{ font-weight:700; }
+.rifa-hero .cta-hint{
+  margin-top: 8px;
+  font:700 var(--fs-sm)/1 var(--ff-cta);
+}
+/* Centraliza verticalmente o texto do topo das rifas */
+.rifa-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  max-width: 720px;
+  margin: 20px auto 32px auto; /* centraliza no eixo horizontal e dá espaçamento */
+  padding: 24px 16px;
+}
+
+.rifa-hero .badge {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin-bottom: 12px;
+}
+
+.rifa-hero h2,
+.rifa-hero .desc,
+.rifa-hero .spec,
+.rifa-hero .cta-hint {
+  text-align: center;
+  max-width: 90%;
+}
+@media (max-width: 600px) {
+  .rifa-hero {
+    padding: 20px 12px;
+    margin-top: 8px;
+  }
+}
+
+  /* Remove a moldura automática quando o navegador foca o elemento com hash (#id) */
+:target {
+  outline: none;
+}
+:target * {
+  outline: none !important;
+}
+
+/* Ajusta o posicionamento da âncora no feed, respeitando o cabeçalho fixo */
+.feed-item {
+  scroll-margin-top: 100px; /* altura aproximada do header vermelho */
+}
+
+@media (max-width: 600px) {
+  .feed-item {
+    scroll-margin-top: 72px;
+  }
+}
+
+      a {
+      color: #ff0000;
+      text-decoration: underline;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+  
+</style>
+
+</head>
+<body>
+  <!-- ========== HEADER (kept same as v08) ========== -->
+  <header>
+    <div class="hdr-inner">
+      <a class="logo" href="https://betshoptv.com" aria-label="BetShopTV – página inicial">
+  <img src="https://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" loading="eager" />
+</a>
+      <nav class="nav">
+        <a href="#galeria">Galeria de Ofertas</a>
+        <a href="#feed">Feed</a>
+        <a href="#rifas">Rifas</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========== MOUNT POINT: only this container is mutated by JS ========== -->
+<main x-data="appData()" x-init="init" aria-live="polite">
+
+  <!-- GALERIA DE OFERTAS -->
+  <section x-show="pagina === 'galeria'" id="galeria">
+    <h2>Galeria de Ofertas</h2>
+    <div class="galeria">
+      <template x-for="peca in pecas.slice().reverse()" :key="peca.id_peca">
+        <div class="gal-item" :class="{ 'sold': /vendid/i.test(peca.status) }">
+          <img
+            :src="'/img/tmb/' + (peca.imagens?.[0] || '') + '.avif'"
+            :alt="peca.titulo || ('Peça ' + peca.id_peca)"
+            loading="lazy"
+          >
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- FEED DE PEÇAS -->
+  <section x-show="pagina === 'feed'" id="feed">
+    <h2>Feed</h2>
+    <div class="feed">
+      <template x-for="peca in pecas.slice().reverse()" :key="peca.id_peca">
+        <article class="post" :id="'post-' + peca.id_peca">
+          <!-- Carrossel -->
+          <div class="carousel">
+            <template x-for="img in peca.imagens || []">
+              <div class="carousel-slide">
+                <img :src="'/img/otm/' + img + '.avif'" :alt="peca.titulo || 'Peça'">
+              </div>
+            </template>
+          </div>
+
+          <!-- Info -->
+          <div class="meta">
+            <div class="linha1">
+              <div class="titulo" x-text="peca.titulo || ('Peça ' + peca.id_peca)"></div>
+              <div class="preco" :class="{ 'sold': /vendid/i.test(peca.status) }" x-text="/vendid/i.test(peca.status) ? '⬤' : formatarPreco(peca.preco)"></div>
+            </div>
+
+            <div class="tecnica" x-text="peca.tecnica"></div>
+            <div class="dimens" x-text="peca.dimensao || peca.tamanho"></div>
+
+            <div class="meta-footer" x-show="!(/vendid/i.test(peca.status))">
+              <button class="btn fav-btn" :class="{ 'active': favoritas.includes(peca.id_peca) }"
+                      @click="toggleFavorita(peca.id_peca)">♥</button>
+
+              <button class="btn add-btn" :class="{ 'added': selecionadas.includes(peca.id_peca) }"
+                      @click="toggleSelecionada(peca.id_peca)"
+                      x-text="selecionadas.includes(peca.id_peca) ? 'REMOVER' : 'ADICIONAR'">
+              </button>
+            </div>
+          </div>
+        </article>
+      </template>
+    </div>
+  </section>
+
+  <!-- RIFAS -->
+  <section x-show="pagina === 'rifas'" id="rifas">
+    <h2>Rifas</h2>
+    <div class="rifas">
+      <template x-for="rifa in rifas" :key="rifa.id_rifa">
+        <button
+          class="rifa-btn"
+          :class="{
+            'sold': rifa.status_rifa && rifa.status_rifa.trim() !== '',
+            'selected': rifasSelecionadas.includes(rifa.id_rifa)
+          }"
+          @click="toggleRifa(rifa.id_rifa)"
+          :disabled="rifa.status_rifa && rifa.status_rifa.trim() !== ''"
+        >
+          <span x-text="rifa.botao_rifa || rifa.numero || rifa.id_rifa"></span>
+        </button>
+      </template>
+    </div>
+  </section>
+<!-- CHECKOUT – etapa 1: dados -->
+<section x-show="pagina === 'checkoutDados'" id="checkout-dados" style="max-width: 520px; margin: 0 auto;">
+  <h2>Preencha seus dados</h2>
+
+  <label>Nome *</label>
+  <input type="text" x-model="formulario.nome" required>
+
+  <label>E-mail *</label>
+  <input type="email" x-model="formulario.email" required>
+
+  <label>Telefone</label>
+  <input type="tel" x-model="formulario.telefone">
+
+  <div style="display:flex; gap:8px; margin-top:16px">
+    <button @click="mudarPagina('galeria')">Voltar</button>
+    <button :disabled="!formulario.nome || !formulario.email" @click="mudarPagina('checkoutResumo')">Avançar</button>
+  </div>
+</section>
+
+<!-- CHECKOUT – etapa 2: resumo da compra -->
+<section x-show="pagina === 'checkoutResumo'" id="checkout-resumo" style="max-width: 720px; margin: 0 auto;">
+  <h2>Resumo do Pedido</h2>
+
+  <p><strong>Nome:</strong> <span x-text="formulario.nome"></span></p>
+  <p><strong>Email:</strong> <span x-text="formulario.email"></span></p>
+  <p><strong>Telefone:</strong> <span x-text="formulario.telefone || '–'"></span></p>
+
+  <div>
+    <h3>Peças Selecionadas</h3>
+    <ul>
+      <template x-for="id in selecionadas" :key="id">
+        <li>
+          <span x-text="pecas.find(p => p.id_peca === id)?.titulo || id"></span>
+          — <span x-text="formatarPreco(pecas.find(p => p.id_peca === id)?.preco)"></span>
+        </li>
+      </template>
+      <template x-if="selecionadas.length === 0"><li>Nenhuma peça selecionada.</li></template>
+    </ul>
+
+    <h3>Rifas Selecionadas</h3>
+    <ul>
+      <template x-for="id in rifasSelecionadas" :key="id">
+        <li x-text="rifas.find(r => r.id_rifa === id)?.botao_rifa || id"></li>
+      </template>
+      <template x-if="rifasSelecionadas.length === 0"><li>Nenhuma rifa selecionada.</li></template>
+    </ul>
+
+    <h3>Favoritas</h3>
+    <ul>
+      <template x-for="id in favoritas" :key="id">
+        <li x-text="id"></li>
+      </template>
+      <template x-if="favoritas.length === 0"><li>Nenhuma peça favoritada.</li></template>
+    </ul>
+  </div>
+
+  <p><strong>Total:</strong> <span x-text="formatarPreco(totalGeral)"></span></p>
+
+  <div style="display:flex; gap:8px; margin-top:16px">
+    <button @click="mudarPagina('checkoutDados')">Voltar</button>
+    <button @click="mudarPagina('checkoutPIX')">Avançar para PIX</button>
+  </div>
+</section>
+
+<!-- CHECKOUT – etapa 3: pagamento PIX -->
+<section x-show="pagina === 'checkoutPIX'" id="checkout-pix" style="max-width: 720px; margin: 0 auto;">
+  <h2>Pagamento via PIX</h2>
+  <p><strong>Total:</strong> <span x-text="formatarPreco(totalGeral)"></span></p>
+
+  <!-- QR Code Placeholder -->
+  <div id="qrCodePix" style="width:180px; height:180px; border:1px solid #2b2424; margin-bottom:10px;"></div>
+
+  <button @click="copiarPIX()" style="margin-bottom:10px;">PIX Copia e Cola</button>
+  <p id="pixPayload" style="font-size:12px; word-break:break-all;"></p>
+
+  <div style="display:flex; gap:8px; margin-top:16px">
+    <button @click="mudarPagina('checkoutResumo')">Voltar</button>
+    <button @click="enviarParaGAS()" style="background: var(--red); color: white;">Confirmar Aposta</button>
+  </div>
+</section>
+
+
+</main>
+
+
+<footer :class="{ 'has-total': totalGeral > 0, 'no-total': totalGeral === 0 }">
+  <div class="ftr-inner">
+    <div class="contadores">
+      <span class="pill" x-show="selecionadas.length > 0" x-text="selecionadas.length + ' Peça(s)'"></span>
+      <span class="pill" x-show="rifasSelecionadas.length > 0" x-text="rifasSelecionadas.length + ' Rifa(s)'"></span>
+      <span class="pill" x-show="favoritas.length > 0" x-text="favoritas.length + ' Favorita(s)'"></span>
+    </div>
+
+    <button id="ctaMain"
+            class="cta-final"
+            :disabled="totalGeral === 0"
+            x-text="totalGeral > 0 ? 'APOSTAR ' + formatarPreco(totalGeral) : 'FAÇAM SUAS APOSTAS!'"
+            @click="mudarPagina('checkoutDados')">
+    </button>
+  </div>
+</footer>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" referrerpolicy="no-referrer"></script>
+<script src="https://betshoptv.com/js/alpineApp.js" defer></script> <!-- <- você deve adicionar esse -->
+
+
+  
+
+
+</body>
+</html>
