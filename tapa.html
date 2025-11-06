@@ -317,6 +317,83 @@ footer.has-total #ctaMain {
       text-decoration: none;
     }
   
+  
+/* ====== FOFILTROS (barra compacta) ====== */
+.filters-bar{
+  display:flex;
+  flex-direction:column;        /* 2 linhas no mobile-first */
+  gap:8px;
+  padding:6px 0;
+}
+
+/* linha 1 e linha 2 */
+.filters-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 12px;
+  align-items:stretch;
+  justify-content:flex-start;
+}
+
+/* blocos de cada controle */
+.filters-group{
+  display:flex;
+  align-items:stretch;
+  gap:6px;
+}
+
+/* rótulos (ex.: Grupos, Peças, Preço, Ordenar) */
+.filters-label{
+  font:700 var(--fs-sm)/1 var(--ff-cta);
+  color:var(--ink);
+  align-self:center;
+  white-space:nowrap;
+}
+
+/* botões tipo "chip" (sem borda arredondada) */
+.chip{
+  appearance:none;
+  border:1px solid var(--ink);
+  background:var(--beige);   /* vazio */
+  color:var(--ink);          /* vazio */
+  font:700 calc(var(--fs-sm) * .95)/1 var(--ff-cta); /* menor que header */
+  padding:.38rem .60rem;
+  border-radius:0;           /* <-- sem arredondamento */
+  cursor:pointer;
+  display:inline-flex;       /* centralização de texto */
+  align-items:center;        /* vertical center */
+  justify-content:center;    /* horizontal center */
+  text-align:center;
+  min-height:36px;           /* garante centro vertical */
+  white-space:nowrap;
+}
+
+/* estado selecionado */
+.chip[aria-pressed="true"],
+.chip.is-active{
+  background:var(--ink);     /* #2b2424 */
+  border-color:var(--ink);
+  color:var(--beige);        /* #bebab0 */
+}
+
+/* selects (PREÇO e ORDENAR) – alinhados à esquerda */
+.select{
+  border:1px solid var(--ink);
+  background:var(--beige);
+  color:var(--ink);
+  font:700 calc(var(--fs-sm) * .95)/1 var(--ff-cta);
+  padding:.30rem .55rem;
+  border-radius:0;           /* <-- sem arredondamento */
+  min-height:36px;
+}
+
+/* RESPONSIVO: em telas maiores mantém 2 linhas, mas sem overflow horizontal */
+@media (min-width: 920px){
+  .filters-row{ gap:10px 16px; }
+}
+
+
+  
 </style>
 
 </head>
@@ -405,12 +482,16 @@ const favoritos    = new Set(); // peças favoritas
 let totalGeral     = 0;
   
   // FOFILTROS!!
-  const filtros = {
-  disponiveis: false,
-  precoMax: 'all', // valores: 'all', '200', '400', '400+'
-  grupos: new Set(),     // exemplo: Set { '01', '02', '03' }
-  ordemAsc: false
+  // FOFILTROS!!
+  // FOFILTROS!!
+
+const filtros = {
+  disponiveis: false,      // "Peças" começa DESLIGADO
+  priceRange: null,        // 'promo' | 'lt-500' | '500-1000' | 'gt-1000' | null
+  grupos: new Set(),       // ex.: Set { '01', '02', ... }
+  sort: 'group-desc'       // 'group-asc' | 'group-desc' | 'price-asc' | 'price-desc'
 };
+
 
 
 /* ======================= HELPERS ======================= */
@@ -474,158 +555,205 @@ function renderGaleria() {
   const section = document.createElement('section');
   section.id = 'galeria';
 
-  const colunas = window.innerWidth < 768 ? 3 : 3;
+  const colunas = 3; // mantém seu layout atual
 
-  // ====== BARRA DE FILTROS ======
-  const filtrosWrap = document.createElement('div');
-  filtrosWrap.style = 'margin-bottom:16px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;';
+  // ====== BARRA DE FILTROS (2 LINHAS) ======
+  const bar = document.createElement('div');
+  bar.className = 'filters-bar';
 
-  // Grupos
-  const grupos = [...new Set(pecas.map(p => p.id_peca.slice(0, 2)))].sort();
-  const grupoWrap = document.createElement('div');
-  grupoWrap.style = 'display:flex;gap:6px;align-items:center;';
-  grupoWrap.innerHTML = `<span style="font-size:14px;">Grupos:</span>`;
-  grupos.forEach(g => {
-    const lb = document.createElement('label');
-    lb.style = 'font-size:14px;';
-    const cb = document.createElement('input');
-    cb.type = 'checkbox';
-    cb.value = g;
-    cb.checked = filtros.grupos.has(g);
-    cb.onchange = () => {
-      if (cb.checked) filtros.grupos.add(g);
-      else filtros.grupos.delete(g);
+  // linha 1
+  const row1 = document.createElement('div');
+  row1.className = 'filters-row';
+
+  // --- Grupos (chips multi) ---
+  const gruposDisp = [...new Set(pecas.map(p => String(p.id_peca||'').slice(0,2)).filter(Boolean))].sort();
+  const grp = document.createElement('div');
+  grp.className = 'filters-group';
+
+  const grpLabel = document.createElement('span');
+  grpLabel.className = 'filters-label';
+  grpLabel.textContent = 'Grupos';
+  grp.appendChild(grpLabel);
+
+  gruposDisp.forEach(g=>{
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip';
+    b.textContent = g;
+    const active = filtros.grupos.has(g);
+    b.setAttribute('aria-pressed', active ? 'true':'false');
+    b.classList.toggle('is-active', active);
+    b.addEventListener('click', ()=>{
+      const on = b.getAttribute('aria-pressed') === 'true';
+      if (on) filtros.grupos.delete(g);
+      else filtros.grupos.add(g);
       renderGaleria();
-    };
-    lb.appendChild(cb);
-    lb.appendChild(document.createTextNode(' ' + g));
-    grupoWrap.appendChild(lb);
+    });
+    grp.appendChild(b);
   });
-  filtrosWrap.appendChild(grupoWrap);
+  row1.appendChild(grp);
 
-  // Ordem crescente
-  const ordemLabel = document.createElement('label');
-  ordemLabel.style = 'font-size:14px;';
-  const ordemCheck = document.createElement('input');
-  ordemCheck.type = 'checkbox';
-  ordemCheck.checked = filtros.ordemAsc;
-  ordemCheck.style = 'margin-left:12px;margin-right:6px;';
-  ordemCheck.onchange = () => {
-    filtros.ordemAsc = ordemCheck.checked;
+  // --- Peças (toggle disponíveis) ---
+  const avail = document.createElement('div');
+  avail.className = 'filters-group';
+
+  const availLabel = document.createElement('span');
+  availLabel.className = 'filters-label';
+  availLabel.textContent = 'Peças';
+  avail.appendChild(availLabel);
+
+  const bAvail = document.createElement('button');
+  bAvail.type = 'button';
+  bAvail.className = 'chip';
+  bAvail.textContent = 'Somente disponíveis';   // texto do botão
+  bAvail.setAttribute('aria-pressed', filtros.disponiveis ? 'true':'false');
+  bAvail.classList.toggle('is-active', !!filtros.disponiveis);
+  bAvail.addEventListener('click', ()=>{
+    filtros.disponiveis = !filtros.disponiveis;
     renderGaleria();
-  };
-  ordemLabel.appendChild(ordemCheck);
-  ordemLabel.appendChild(document.createTextNode('Ordem crescente'));
-  filtrosWrap.appendChild(ordemLabel);
+  });
+  avail.appendChild(bAvail);
 
-  // Somente disponíveis
-  const chkDisp = document.createElement('label');
-  chkDisp.style = 'font-size:14px;';
-  const chkInput = document.createElement('input');
-  chkInput.type = 'checkbox';
-  chkInput.checked = filtros.disponiveis;
-  chkInput.style = 'margin-right:6px;';
-  chkInput.onchange = () => {
-    filtros.disponiveis = chkInput.checked;
-    renderGaleria();
-  };
-  chkDisp.appendChild(chkInput);
-  chkDisp.appendChild(document.createTextNode('Somente disponíveis'));
-  filtrosWrap.appendChild(chkDisp);
+  row1.appendChild(avail);
+  bar.appendChild(row1);
 
-  // Filtro: Preço
-  const selectPreco = document.createElement('select');
-  selectPreco.innerHTML = `
-    <option value="all">Todos os preços</option>
-    <option value="200">Até R$ 200</option>
-    <option value="400">R$ 200 – 400</option>
-    <option value="400+">Acima de R$ 400</option>
+  // linha 2
+  const row2 = document.createElement('div');
+  row2.className = 'filters-row';
+
+  // --- Preço (DROPDOWN) ---
+  const price = document.createElement('div');
+  price.className = 'filters-group';
+
+  const priceLabel = document.createElement('span');
+  priceLabel.className = 'filters-label';
+  priceLabel.textContent = 'Preço';
+  price.appendChild(priceLabel);
+
+  const selPrice = document.createElement('select');
+  selPrice.className = 'select';
+  selPrice.setAttribute('aria-label','Filtrar por preço');
+  selPrice.innerHTML = `
+    <option value="">Todos</option>
+    <option value="promo">PROMO</option>
+    <option value="lt-500">Até R$ 500</option>
+    <option value="500-1000">R$ 500 – R$ 1.000</option>
+    <option value="gt-1000">Acima de R$ 1.000</option>
   `;
-  selectPreco.value = filtros.precoMax;
-  selectPreco.onchange = () => {
-    filtros.precoMax = selectPreco.value;
+  selPrice.value = filtros.priceRange || '';
+  selPrice.addEventListener('change', ()=>{
+    filtros.priceRange = selPrice.value || null;
     renderGaleria();
-  };
-  filtrosWrap.appendChild(selectPreco);
+  });
+  price.appendChild(selPrice);
+  row2.appendChild(price);
 
-  section.appendChild(filtrosWrap);
+  // --- Ordenar (DROPDOWN) ---
+  const sort = document.createElement('div');
+  sort.className = 'filters-group';
 
-  // ====== FILTRAGEM E ORDENAÇÃO ======
+  const sortLabel = document.createElement('span');
+  sortLabel.className = 'filters-label';
+  sortLabel.textContent = 'Ordenar';
+  sort.appendChild(sortLabel);
+
+  const selSort = document.createElement('select');
+  selSort.className = 'select';
+  selSort.setAttribute('aria-label','Ordenar resultados');
+  selSort.innerHTML = `
+    <option value="group-asc">Grupo: crescente</option>
+    <option value="group-desc">Grupo: decrescente</option>
+    <option value="price-asc">Preço: menor → maior</option>
+    <option value="price-desc">Preço: maior → menor</option>
+  `;
+  selSort.value = filtros.sort;
+  selSort.addEventListener('change', ()=>{
+    filtros.sort = selSort.value;
+    renderGaleria();
+  });
+  sort.appendChild(selSort);
+  row2.appendChild(sort);
+
+  bar.appendChild(row2);
+  section.appendChild(bar);
+
+  // ====== FILTRAGEM ======
   let lista = [...pecas];
 
+  // Peças (somente disponíveis quando ativado)
   if (filtros.disponiveis) {
     lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
   }
 
-  if (filtros.precoMax === '200') {
-    lista = lista.filter(p => parseFloat(p.preco || 0) <= 200);
-  } else if (filtros.precoMax === '400') {
-    lista = lista.filter(p => {
-      const preco = parseFloat(p.preco || 0);
-      return preco >= 200 && preco <= 400;
+  // Preço (faixas)
+  if (filtros.priceRange) {
+    lista = lista.filter(p=>{
+      const pr = parseFloat(p.preco || 0);
+      switch (filtros.priceRange) {
+        case 'promo':      return pr === 150;
+        case 'lt-500':     return pr > 0 && pr <= 500;
+        case '500-1000':   return pr >= 500 && pr <= 1000;
+        case 'gt-1000':    return pr > 1000;
+        default:           return true;
+      }
     });
-  } else if (filtros.precoMax === '400+') {
-    lista = lista.filter(p => parseFloat(p.preco || 0) > 400);
   }
 
+  // Grupos (multi)
   if (filtros.grupos.size > 0) {
-    lista = lista.filter(p => filtros.grupos.has(p.id_peca.slice(0, 2)));
+    lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
   }
 
-  lista.sort((a, b) => {
-    const ida = parseInt(a.id_peca);
-    const idb = parseInt(b.id_peca);
-    return filtros.ordemAsc ? ida - idb : idb - ida;
-  });
+  // ====== ORDENAÇÃO ======
+  const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
+  const numKey   = p => parseInt(p.id_peca) || 0;
 
-  // ====== DISTRIBUIÇÃO EM LINHAS (horizontal, coluna a coluna) ======
+  if (filtros.sort === 'price-asc') {
+    lista.sort((a,b)=> (parseFloat(a.preco||0) - parseFloat(b.preco||0)));
+  } else if (filtros.sort === 'price-desc') {
+    lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
+  } else if (filtros.sort === 'group-asc') {
+    lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
+  } else { // 'group-desc' (default)
+    lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
+  }
+
+  // ====== GRID (mantém seu layout) ======
   const linhas = Math.ceil(lista.length / colunas);
   const ordenada = [];
-
-  for (let l = 0; l < linhas; l++) {
-    for (let c = 0; c < colunas; c++) {
+  for (let l=0; l<linhas; l++){
+    for (let c=0; c<colunas; c++){
       const idx = l * colunas + c;
       if (lista[idx]) ordenada.push(lista[idx]);
     }
   }
 
-  // ====== CONTAINER COM 3 ou 4 COLUNAS ======
   const container = document.createElement('div');
   container.style = 'display:flex;gap:4px;align-items:flex-start;';
-
-  const colunasHTML = Array.from({ length: colunas }, () => {
+  const colsEls = Array.from({ length: colunas }, () => {
     const col = document.createElement('div');
     col.style = 'flex:1;display:flex;flex-direction:column;gap:4px;';
     container.appendChild(col);
-    return col;
+    return col; 
   });
 
-const alturas = Array(colunas).fill(0);
+  const alturas = Array(colunas).fill(0);
+  ordenada.forEach(p=>{
+    const item = document.createElement('div');
+    item.className = 'gal-item';
+    if (/vendid/i.test(p.status || '')) item.classList.add('sold');
+    item.dataset.id = p.id_peca;
 
-ordenada.forEach((p, idx) => {
-  const item = document.createElement('div');
-  item.className = 'gal-item';
-  if (/vendid/i.test(p.status || '')) item.classList.add('sold');
-  item.dataset.id = p.id_peca;
+    const img = imgWithFallback('https://betshoptv.com/img/tmb/' + p.imagens[0] + '.avif');
+    img.alt = p.titulo || `Peça ${p.id_peca}`;
+    img.style = 'border: 1px solid #2b2424;';
+    item.appendChild(img);
 
-  const img = imgWithFallback('https://betshoptv.com/img/tmb/' + p.imagens[0] + '.avif');
-  img.alt = p.titulo || `Peça ${p.id_peca}`;
-  img.style = 'border: 1px solid #2b2424;'
-  item.appendChild(img);
-
-
-
-  // Inserção na coluna de menor altura
-  let minIdx = 0;
-  for (let i = 1; i < colunas; i++) {
-    if (alturas[i] < alturas[minIdx]) minIdx = i;
-  }
-  colunasHTML[minIdx].appendChild(item);
-
-  // Estima altura adicionada com base no layout
-  alturas[minIdx] += 1; // Aqui pode ser aprimorado com medidas reais se quiser
-});
-
+    let minIdx = 0;
+    for (let i=1;i<colunas;i++){ if (alturas[i] < alturas[minIdx]) minIdx = i; }
+    colsEls[minIdx].appendChild(item);
+    alturas[minIdx] += 1;
+  });
 
   section.appendChild(container);
   app.appendChild(section);
