@@ -48,20 +48,30 @@
 
 /* ====== Galeria (Layout Flex Horizontal) ====== */
 .galeria {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: flex-start;
-  margin: 0;
-  padding: 0;
+  column-count: 4;
+  column-gap: 8px;
+  -webkit-column-count: 4;
+  -webkit-column-gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .galeria {
+    column-count: 3;
+    -webkit-column-count: 3;
+  }
 }
 
 .gal-item {
-  width: calc(25% - 6px); /* 4 colunas desktop */
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 8px;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
   background: #fff;
-  overflow: hidden;
   border: var(--bd-thin) solid var(--ink);
+  overflow: hidden;
 }
+
 
 .gal-item img {
   display: block;
@@ -71,6 +81,7 @@
   vertical-align: middle;
   background: #000;
 }
+
 .gal-item .ttl {
   display: none !important;
 }
@@ -168,8 +179,7 @@
   @media (max-width:768px){
     .rifa-btn{min-height:42px;padding:5px 7px;font-size:11px}
     .rifa-btn .ln1,.rifa-btn .ln2{font-size:11px;line-height:1.12}
-  .gal-item {
-    width: calc(33.333% - 6px); /* 3 colunas no mobile */
+
   }
 
   /* ====== Footer (mantém visual v08) ====== */
@@ -491,52 +501,150 @@ function getGruposDisponiveis(){
 
   
 // 🔧 Helpers de filtragem e ordenação
-function orderByIdLinha(lista, colunas = 4, asc = false) {
+function orderByRows(lista, colunas = 4, asc = false) {
   const sorted = [...lista].sort((a, b) => {
     const ida = parseInt(a.id_peca, 10);
     const idb = parseInt(b.id_peca, 10);
     return asc ? ida - idb : idb - ida;
   });
 
-  return sorted;
+  const linhas = Math.ceil(sorted.length / colunas);
+  const final = [];
+
+  for (let l = 0; l < linhas; l++) {
+    for (let c = 0; c < colunas; c++) {
+      const idx = l * colunas + c;
+      if (sorted[idx]) final.push(sorted[idx]);
+    }
+  }
+
+  return final;
 }
 
 
 
 
+  // 🎨 Função principal de render da galeria
+  // 🎨 Função principal de render da galeria
+  // 🎨 Função principal de render da galeria
+  // 🎨 Função principal de render da galeria
+function renderGaleria(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
 
-  // 🎨 Função principal de render da galeria
-  // 🎨 Função principal de render da galeria
-  // 🎨 Função principal de render da galeria
-  // 🎨 Função principal de render da galeria
-function renderGaleria(lista) {
-  // Aplicar filtros
-  if (filtros.precoMax > 0) {
-    lista = lista.filter(p => parseFloat(p.preco || 0) <= filtros.precoMax);
-  }
+  const section = document.createElement('section');
+  section.id = 'galeria';
 
-  if (filtros.somenteDisp) {
+  // ====== BARRA DE FILTROS ======
+  const filtrosWrap = document.createElement('div');
+  filtrosWrap.style = 'margin-bottom:16px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;';
+
+  // Grupos
+  const grupos = getGruposDisponiveis(); // ← já existente
+  const grupoWrap = document.createElement('div');
+  grupoWrap.style = 'display:flex;gap:6px;align-items:center;';
+  grupoWrap.innerHTML = `<span style="font-size:14px;">Grupos:</span>`;
+  grupos.forEach(g => {
+    const lb = document.createElement('label');
+    lb.style = 'font-size:14px;';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = g;
+    cb.checked = filtros.grupos.has(g);
+    cb.onchange = () => {
+      if (cb.checked) filtros.grupos.add(g);
+      else filtros.grupos.delete(g);
+      renderGaleria();
+    };
+    lb.appendChild(cb);
+    lb.appendChild(document.createTextNode(' ' + g));
+    grupoWrap.appendChild(lb);
+  });
+  filtrosWrap.appendChild(grupoWrap);
+
+  // Ordem crescente
+  const ordemLabel = document.createElement('label');
+  ordemLabel.style = 'font-size:14px;';
+  const ordemCheck = document.createElement('input');
+  ordemCheck.type = 'checkbox';
+  ordemCheck.checked = filtros.ordemAsc;
+  ordemCheck.style = 'margin-left:12px;margin-right:6px;';
+  ordemCheck.onchange = () => {
+    filtros.ordemAsc = ordemCheck.checked;
+    renderGaleria();
+  };
+  ordemLabel.appendChild(ordemCheck);
+  ordemLabel.appendChild(document.createTextNode('Ordem crescente'));
+  filtrosWrap.appendChild(ordemLabel);
+
+  // Disponíveis
+  const chkDisp = document.createElement('label');
+  chkDisp.style = 'font-size:14px;';
+  const chkInput = document.createElement('input');
+  chkInput.type = 'checkbox';
+  chkInput.checked = filtros.disponiveis;
+  chkInput.style = 'margin-right:6px;';
+  chkInput.onchange = () => {
+    filtros.disponiveis = chkInput.checked;
+    renderGaleria();
+  };
+  chkDisp.appendChild(chkInput);
+  chkDisp.appendChild(document.createTextNode('Somente disponíveis'));
+  filtrosWrap.appendChild(chkDisp);
+
+  // Preço
+  const selectPreco = document.createElement('select');
+  selectPreco.innerHTML = `
+    <option value="all">Todos os preços</option>
+    <option value="200">Até R$ 200</option>
+    <option value="400">R$ 200 – 400</option>
+    <option value="400+">Acima de R$ 400</option>
+  `;
+  selectPreco.value = filtros.precoMax;
+  selectPreco.onchange = () => {
+    filtros.precoMax = selectPreco.value;
+    renderGaleria();
+  };
+  filtrosWrap.appendChild(selectPreco);
+
+  section.appendChild(filtrosWrap);
+
+  // ====== CONTAINER DE GALERIA ======
+  const masonry = document.createElement('div');
+  masonry.className = 'galeria';
+  masonry.id = 'masonryGallery';
+
+  let lista = [...pecas];
+
+  // FILTRAGEM
+  if (filtros.disponiveis) {
     lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
   }
 
-  if (filtros.grupos.size > 0) {
+  if (filtros.precoMax === '200') {
+    lista = lista.filter(p => parseFloat(p.preco || 0) <= 200);
+  } else if (filtros.precoMax === '400') {
     lista = lista.filter(p => {
-      const grupo = String(p.id_peca).slice(0, 2);
+      const preco = parseFloat(p.preco || 0);
+      return preco >= 200 && preco <= 400;
+    });
+  } else if (filtros.precoMax === '400+') {
+    lista = lista.filter(p => parseFloat(p.preco || 0) > 400);
+  }
+
+  if (filtros.grupos.size > 0){
+    lista = lista.filter(p => {
+      const id = String(p.id_peca || '');
+      const grupo = id.slice(0,2);
       return filtros.grupos.has(grupo);
     });
   }
 
-  // Ordenar por ID para montar por linhas (esquerda ➝ direita, cima ➝ baixo)
-  lista = [...lista].sort((a, b) => {
-    const ida = parseInt(a.id_peca, 10);
-    const idb = parseInt(b.id_peca, 10);
-    return filtros.ordemAsc ? ida - idb : idb - ida;
-  });
+  // ====== ORDENAR POR LINHAS para MASONRY
+lista = orderByRows(lista, 4, filtros.ordemAsc);
 
-  // Criar container da galeria
-  const section = document.createElement('section');
-  section.className = 'galeria';
 
+  // ====== RENDERIZAÇÃO
   lista.forEach(p => {
     const sold = /vendid/i.test(String(p.status || ''));
     const item = document.createElement('div');
@@ -544,26 +652,21 @@ function renderGaleria(lista) {
     if (sold) item.classList.add('sold');
     item.dataset.id = p.id_peca;
 
-    // Imagem
-    const firstImg = (p.imagens && p.imagens[0]) || '';
+    const firstImg = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
     const img = imgWithFallback('/img/tmb/' + firstImg + '.avif');
-    img.alt = p.titulo || `Peça ${p.id_peca}`;
+    img.alt = p.titulo || ('Peça ' + p.id_peca);
     item.appendChild(img);
+const label = document.createElement('div');
+label.style = 'padding:8px 6px;font:18px monospace;color:#bebab0;background-color:#ff0000;text-align:center;';
+label.textContent = p.id_peca;
+item.appendChild(label);
 
-    // ID visual (debug — pode remover depois)
-    const label = document.createElement('div');
-    label.style = 'padding:6px 4px;font:16px monospace;font-weight:bold;color:white;background:red;text-align:center;';
-    label.textContent = p.id_peca;
-    item.appendChild(label);
-
-    section.appendChild(item);
+    masonry.appendChild(item);
   });
 
-  // Render final
-  app.innerHTML = '';
+  section.appendChild(masonry);
   app.appendChild(section);
 }
-
 
 
 
