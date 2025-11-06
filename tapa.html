@@ -323,12 +323,22 @@ footer.has-total #ctaMain {
 </style>
 
 </head>
-<body>
+<body x-data="appData()" x-init="init">
+
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
       <a class="logo" href="https://betshoptv.com" aria-label="BetShopTV – página inicial">
   <img src="https://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" loading="eager" />
+        <h2>Galeria de Ofertas</h2>
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.effect(() => {
+      console.log('Pecas visíveis:', Alpine.store('pecas'), Alpine.store('pagina'));
+    });
+  });
+</script>
+
 </a>
       <nav class="nav">
         <a href="#galeria">Galeria de Ofertas</a>
