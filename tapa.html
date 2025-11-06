@@ -635,7 +635,7 @@ lista = orderByIdPorLinhas(lista, 4, filtros.ordemAsc);
 
   
   // Render
-  lista.reverse().forEach(p => {
+  lista.forEach(p => {
     const sold = /vendid/i.test(String(p.status || ''));
     const item = document.createElement('div');
     item.className = 'gal-item';
