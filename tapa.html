@@ -52,18 +52,16 @@
   flex-wrap: wrap;
   gap: 8px;
   justify-content: flex-start;
+  margin: 0;
+  padding: 0;
 }
 
 .gal-item {
-  width: calc(25% - 6px); /* 4 colunas */
-  margin: 0;
-  display: block;
+  width: calc(25% - 6px); /* 4 colunas desktop */
   background: #fff;
-  border: var(--bd-thin) solid var(--ink);
   overflow: hidden;
+  border: var(--bd-thin) solid var(--ink);
 }
-
-
 
 .gal-item img {
   display: block;
@@ -73,6 +71,8 @@
   vertical-align: middle;
   background: #000;
 }
+
+
 
 .gal-item .ttl {
   display: none !important;
@@ -514,36 +514,61 @@ function orderByIdLinha(lista, colunas = 4, asc = false) {
   // 🎨 Função principal de render da galeria
   // 🎨 Função principal de render da galeria
   // 🎨 Função principal de render da galeria
-.galeria {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: flex-start;
-  margin: 0;
-  padding: 0;
-}
-
-.gal-item {
-  width: calc(25% - 6px); /* 4 colunas desktop */
-  background: #fff;
-  overflow: hidden;
-  border: var(--bd-thin) solid var(--ink);
-}
-
-.gal-item img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  vertical-align: middle;
-  background: #000;
-}
-
-@media (max-width: 768px) {
-  .gal-item {
-    width: calc(33.333% - 6px); /* 3 colunas no mobile */
+function renderGaleria(lista) {
+  // Aplicar filtros
+  if (filtros.precoMax > 0) {
+    lista = lista.filter(p => parseFloat(p.preco || 0) <= filtros.precoMax);
   }
+
+  if (filtros.somenteDisp) {
+    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
+  }
+
+  if (filtros.grupos.size > 0) {
+    lista = lista.filter(p => {
+      const grupo = String(p.id_peca).slice(0, 2);
+      return filtros.grupos.has(grupo);
+    });
+  }
+
+  // Ordenar por ID para montar por linhas (esquerda ➝ direita, cima ➝ baixo)
+  lista = [...lista].sort((a, b) => {
+    const ida = parseInt(a.id_peca, 10);
+    const idb = parseInt(b.id_peca, 10);
+    return filtros.ordemAsc ? ida - idb : idb - ida;
+  });
+
+  // Criar container da galeria
+  const section = document.createElement('section');
+  section.className = 'galeria';
+
+  lista.forEach(p => {
+    const sold = /vendid/i.test(String(p.status || ''));
+    const item = document.createElement('div');
+    item.className = 'gal-item';
+    if (sold) item.classList.add('sold');
+    item.dataset.id = p.id_peca;
+
+    // Imagem
+    const firstImg = (p.imagens && p.imagens[0]) || '';
+    const img = imgWithFallback('/img/tmb/' + firstImg + '.avif');
+    img.alt = p.titulo || `Peça ${p.id_peca}`;
+    item.appendChild(img);
+
+    // ID visual (debug — pode remover depois)
+    const label = document.createElement('div');
+    label.style = 'padding:6px 4px;font:16px monospace;font-weight:bold;color:white;background:red;text-align:center;';
+    label.textContent = p.id_peca;
+    item.appendChild(label);
+
+    section.appendChild(item);
+  });
+
+  // Render final
+  app.innerHTML = '';
+  app.appendChild(section);
 }
+
 
 
 
