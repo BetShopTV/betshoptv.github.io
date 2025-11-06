@@ -48,29 +48,21 @@
 
 /* ====== Galeria (Layout Flex Horizontal) ====== */
 .galeria {
-  column-count: 4;
-  column-gap: 8px;
-  -webkit-column-count: 4;
-  -webkit-column-gap: 8px;
-}
-
-@media (max-width: 768px) {
-  .galeria {
-    column-count: 3;
-    -webkit-column-count: 3;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
 }
 
 .gal-item {
-  display: inline-block;
-  width: 100%;
-  margin-bottom: 8px;
-  break-inside: avoid;
-  -webkit-column-break-inside: avoid;
+  width: calc(25% - 6px); /* 4 colunas */
+  margin: 0;
+  display: block;
   background: #fff;
   border: var(--bd-thin) solid var(--ink);
   overflow: hidden;
 }
+
 
 
 .gal-item img {
@@ -179,7 +171,9 @@
   @media (max-width:768px){
     .rifa-btn{min-height:42px;padding:5px 7px;font-size:11px}
     .rifa-btn .ln1,.rifa-btn .ln2{font-size:11px;line-height:1.12}
-
+  .gal-item {
+    width: calc(33.333% - 6px); /* 3 colunas no mobile */
+  }
   }
 
   /* ====== Footer (mantém visual v08) ====== */
@@ -501,13 +495,16 @@ function getGruposDisponiveis(){
 
   
 // 🔧 Helpers de filtragem e ordenação
-function orderByRows(lista, colunas = 4, asc = false) {
-  return [...lista].sort((a, b) => {
+function orderByIdLinha(lista, colunas = 4, asc = false) {
+  const sorted = [...lista].sort((a, b) => {
     const ida = parseInt(a.id_peca, 10);
     const idb = parseInt(b.id_peca, 10);
     return asc ? ida - idb : idb - ida;
   });
+
+  return sorted;
 }
+
 
 
 
@@ -630,7 +627,8 @@ function renderGaleria(){
   }
 
   // ====== ORDENAR POR LINHAS para MASONRY
-lista = orderByRows(lista, 4, filtros.ordemAsc);
+lista = orderByIdLinha(lista, 4, filtros.ordemAsc);
+
 
 
   // ====== RENDERIZAÇÃO
