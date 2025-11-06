@@ -53,7 +53,22 @@ background:#ff0000;color:white;border: 1px solid white;
   main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 6px;min-height:60vh}
   section{margin-bottom:24px}
   h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
-
+  .botao-txt a{display:inline-flex;align-items:center;justify-content:center;color:#ffffff;text-decoration:none;
+padding: clamp(8px, 3.8vw, 38px) clamp(12px, 3vw, 27px);
+height: clamp(48px, 7vh, 72px);
+font-weight: 700;
+font-size: clamp(27px, 6.9vw, 42px);
+letter-spacing: clamp(1.3px, 0.42vw, 2.4px); 
+text-transform:uppercase; 
+background-color: #ff0000;
+  background-image: url('https://betshoptv.com/images/fofertas.gif');
+  background-repeat: repeat;
+  }
+  .botao-txt a:hover{
+  background: #2b2424;     /* bege ativo */
+  color: white;          /* texto escuro */
+  border-color: #2b2424;   /* borda bege pra integrar */
+  }
   /* ====== Galeria (Masonry / Pinterest) ====== */
   .galeria{
     column-gap:2px; -webkit-column-gap:2px;
@@ -568,27 +583,26 @@ footer.has-total #ctaMain {
 
 <!-- ========== TEMPLATE: SOBRE O PROJETO ========== -->
 <template id="page-sobre">
-  <section style="max-width:720px;margin:0 auto;padding:20px;background:#fff;border:1px solid var(--ink)">
-    <h2>Sobre o Projeto</h2>
-    <p>Olá! Somos a <strong>BetShopTV.com</strong>: uma plataforma de apostas e circulação de valores.</p>
+  <section style="max-width:750px;margin:0 auto;padding:20px;background:transparent;border:1px solid var(--ink)">
+    <h2 style="font-size: clamp(18px, 3.7vw, 24px);">Olá! Somos a <strong>BetShopTV.com</strong>: uma plataforma de apostas e circulação de valores.</h2>
 
-    <div style="margin:24px 0; text-align:center;">
-      <p><strong>QUERO APOSTAR EM</strong></p>
+    <div style="margin:24px 0; text-align:center;" class="botao-txt">
+      <p style="font-size:clamp(24px, 6.9vw, 38px); margin-bottom:-2px;"><strong>QUERO APOSTAR EM</strong></p>
       <div style="display:flex;gap:12px;justify-content:center;margin-top:10px;">
-        <a href="#rifas" class="nav-cta">RIFAS</a>
-        <span style="color:#888">|</span>
-        <a href="#galeria" class="nav-cta">OFERTAS</a>
+        <a href="#rifas">RIFAS</a>
+        <span>&nbsp;</span> 
+        <a href="#galeria">OFERTAS</a>
       </div>
     </div>
 
-    <p>Funciona assim: quem participa da RIFA pode ganhar até três das 100 peças do políptico <em>Chop Shop AV</em>. No dia 15 de novembro, durante o encerramento da exposição na Saturna, serão sorteadas pelo menos 17 pessoas para dividir as peças disponíveis — ou seja, as que seguirem à venda na Galeria de Ofertas.</p>
-    <p>Aqui complicamos em nome de um princípio simples: equilibrar as chances de vitória entre diferentes graus de contribuição afirma a política de funcionamento do projeto, que busca calibrar ganhos e apoios mútuos entre quem aposta e quem produz ao potencialmente ampliar a distribuição das peças.</p>
+    <p style="letter-spacing:0.2px;">Funciona assim: quem participa da <a href="#rifas">RIFA</a> pode ganhar até três das 100 peças do políptico <em>Chop Shop AV</em>. No dia <strong>15 de novembro</strong>, durante o encerramento da exposição na <a href="https://www.instagram.com/saturna_estudio/" target="_blank">Saturna</a>, serão sorteadas ao menos 17 pessoas para dividir as peças disponíveis — ou seja, as que seguirem à venda na <a href="#galeria">Galeria de Ofertas</a>.</p>
+    <p style="letter-spacing:0.2px;">Aqui complicamos em nome de um princípio simples: equilibrar as chances de vitória entre diferentes graus de contribuição afirma a política de funcionamento do projeto, que busca calibrar ganhos e apoios mútuos entre quem aposta e quem produz ao potencialmente ampliar a distribuição das peças.</p>
   </section>
 </template>
 
 <!-- ========== TEMPLATE: COMO FUNCIONA ========== -->
 <template id="page-como">
-  <section style="max-width:720px;margin:0 auto;padding:20px;background:#fff;border:1px solid var(--ink)">
+  <section style="max-width:750px;margin:0 auto;padding:20px;background:transparent;border:1px solid var(--ink)">
     <h2>Como Funciona</h2>
     <p>O sistema da BetShopTV...</p>
   </section>
