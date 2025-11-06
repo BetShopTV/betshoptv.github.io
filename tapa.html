@@ -340,162 +340,57 @@ footer.has-total #ctaMain {
 
   <!-- ========== MOUNT POINT: only this container is mutated by JS ========== -->
 <main x-data="appData()" x-init="init" aria-live="polite">
-
-  <!-- GALERIA DE OFERTAS -->
-  <section x-show="pagina === 'galeria'" id="galeria">
+<!-- GALERIA DE PEÇAS -->
+<template x-if="pagina === '#galeria'">
+  <section>
     <h2>Galeria de Ofertas</h2>
     <div class="galeria">
-      <template x-for="peca in pecas.slice().reverse()" :key="peca.id_peca">
-        <div class="gal-item" :class="{ 'sold': /vendid/i.test(peca.status) }">
-          <img
-            :src="'/img/tmb/' + (peca.imagens?.[0] || '') + '.avif'"
-            :alt="peca.titulo || ('Peça ' + peca.id_peca)"
-            loading="lazy"
-          >
-        </div>
-      </template>
-    </div>
-  </section>
-
-  <!-- FEED DE PEÇAS -->
-  <section x-show="pagina === 'feed'" id="feed">
-    <h2>Feed</h2>
-    <div class="feed">
-      <template x-for="peca in pecas.slice().reverse()" :key="peca.id_peca">
-        <article class="post" :id="'post-' + peca.id_peca">
-          <!-- Carrossel -->
-          <div class="carousel">
-            <template x-for="img in peca.imagens || []">
-              <div class="carousel-slide">
-                <img :src="'/img/otm/' + img + '.avif'" :alt="peca.titulo || 'Peça'">
-              </div>
-            </template>
-          </div>
-
-          <!-- Info -->
-          <div class="meta">
-            <div class="linha1">
-              <div class="titulo" x-text="peca.titulo || ('Peça ' + peca.id_peca)"></div>
-              <div class="preco" :class="{ 'sold': /vendid/i.test(peca.status) }" x-text="/vendid/i.test(peca.status) ? '⬤' : formatarPreco(peca.preco)"></div>
+      <template x-for="peca in pecas" :key="peca.id_peca">
+        <article class="peca" :style="`background-color: ${peca.hex}`">
+          <h3 x-text="peca.titulo"></h3>
+          <p><strong>Preço:</strong> R$ <span x-text="peca.preco"></span></p>
+          <p x-text="peca.tecnica"></p>
+          <p x-text="peca.dimensao"></p>
+          <template x-if="peca.imagens && peca.imagens.length">
+            <div class="imagens">
+              <template x-for="img in peca.imagens">
+                <img :src="`img/${img}.jpg`" :alt="peca.titulo" />
+              </template>
             </div>
-
-            <div class="tecnica" x-text="peca.tecnica"></div>
-            <div class="dimens" x-text="peca.dimensao || peca.tamanho"></div>
-
-            <div class="meta-footer" x-show="!(/vendid/i.test(peca.status))">
-              <button class="btn fav-btn" :class="{ 'active': favoritas.includes(peca.id_peca) }"
-                      @click="toggleFavorita(peca.id_peca)">♥</button>
-
-              <button class="btn add-btn" :class="{ 'added': selecionadas.includes(peca.id_peca) }"
-                      @click="toggleSelecionada(peca.id_peca)"
-                      x-text="selecionadas.includes(peca.id_peca) ? 'REMOVER' : 'ADICIONAR'">
-              </button>
-            </div>
-          </div>
+          </template>
+          <button @click="toggleSelecionada(peca.id_peca)">Selecionar</button>
+          <button @click="toggleFavorita(peca.id_peca)">Favoritar</button>
         </article>
       </template>
     </div>
   </section>
+</template>
 
-  <!-- RIFAS -->
-  <section x-show="pagina === 'rifas'" id="rifas">
+<!-- FEED -->
+<template x-if="pagina === '#feed'">
+  <section>
+    <h2>Feed</h2>
+    <p>🚧 Em breve</p>
+  </section>
+</template>
+
+<!-- RIFAS -->
+<template x-if="pagina === '#rifas'">
+  <section>
     <h2>Rifas</h2>
     <div class="rifas">
       <template x-for="rifa in rifas" :key="rifa.id_rifa">
         <button
-          class="rifa-btn"
-          :class="{
-            'sold': rifa.status_rifa && rifa.status_rifa.trim() !== '',
-            'selected': rifasSelecionadas.includes(rifa.id_rifa)
-          }"
-          @click="toggleRifa(rifa.id_rifa)"
-          :disabled="rifa.status_rifa && rifa.status_rifa.trim() !== ''"
-        >
-          <span x-text="rifa.botao_rifa || rifa.numero || rifa.id_rifa"></span>
-        </button>
+          class="rifa-botao"
+          :disabled="rifa.status_rifa === 'x'"
+          :style="`background-color: ${rifa.hex}`"
+          @click="toggleRifaSelecionada(rifa.id_rifa)"
+          x-text="rifa.botao_rifa"
+        ></button>
       </template>
     </div>
   </section>
-<!-- CHECKOUT – etapa 1: dados -->
-<section x-show="pagina === 'checkoutDados'" id="checkout-dados" style="max-width: 520px; margin: 0 auto;">
-  <h2>Preencha seus dados</h2>
-
-  <label>Nome *</label>
-  <input type="text" x-model="formulario.nome" required>
-
-  <label>E-mail *</label>
-  <input type="email" x-model="formulario.email" required>
-
-  <label>Telefone</label>
-  <input type="tel" x-model="formulario.telefone">
-
-  <div style="display:flex; gap:8px; margin-top:16px">
-    <button @click="mudarPagina('galeria')">Voltar</button>
-    <button :disabled="!formulario.nome || !formulario.email" @click="mudarPagina('checkoutResumo')">Avançar</button>
-  </div>
-</section>
-
-<!-- CHECKOUT – etapa 2: resumo da compra -->
-<section x-show="pagina === 'checkoutResumo'" id="checkout-resumo" style="max-width: 720px; margin: 0 auto;">
-  <h2>Resumo do Pedido</h2>
-
-  <p><strong>Nome:</strong> <span x-text="formulario.nome"></span></p>
-  <p><strong>Email:</strong> <span x-text="formulario.email"></span></p>
-  <p><strong>Telefone:</strong> <span x-text="formulario.telefone || '–'"></span></p>
-
-  <div>
-    <h3>Peças Selecionadas</h3>
-    <ul>
-      <template x-for="id in selecionadas" :key="id">
-        <li>
-          <span x-text="pecas.find(p => p.id_peca === id)?.titulo || id"></span>
-          — <span x-text="formatarPreco(pecas.find(p => p.id_peca === id)?.preco)"></span>
-        </li>
-      </template>
-      <template x-if="selecionadas.length === 0"><li>Nenhuma peça selecionada.</li></template>
-    </ul>
-
-    <h3>Rifas Selecionadas</h3>
-    <ul>
-      <template x-for="id in rifasSelecionadas" :key="id">
-        <li x-text="rifas.find(r => r.id_rifa === id)?.botao_rifa || id"></li>
-      </template>
-      <template x-if="rifasSelecionadas.length === 0"><li>Nenhuma rifa selecionada.</li></template>
-    </ul>
-
-    <h3>Favoritas</h3>
-    <ul>
-      <template x-for="id in favoritas" :key="id">
-        <li x-text="id"></li>
-      </template>
-      <template x-if="favoritas.length === 0"><li>Nenhuma peça favoritada.</li></template>
-    </ul>
-  </div>
-
-  <p><strong>Total:</strong> <span x-text="formatarPreco(totalGeral)"></span></p>
-
-  <div style="display:flex; gap:8px; margin-top:16px">
-    <button @click="mudarPagina('checkoutDados')">Voltar</button>
-    <button @click="mudarPagina('checkoutPIX')">Avançar para PIX</button>
-  </div>
-</section>
-
-<!-- CHECKOUT – etapa 3: pagamento PIX -->
-<section x-show="pagina === 'checkoutPIX'" id="checkout-pix" style="max-width: 720px; margin: 0 auto;">
-  <h2>Pagamento via PIX</h2>
-  <p><strong>Total:</strong> <span x-text="formatarPreco(totalGeral)"></span></p>
-
-  <!-- QR Code Placeholder -->
-  <div id="qrCodePix" style="width:180px; height:180px; border:1px solid #2b2424; margin-bottom:10px;"></div>
-
-  <button @click="copiarPIX()" style="margin-bottom:10px;">PIX Copia e Cola</button>
-  <p id="pixPayload" style="font-size:12px; word-break:break-all;"></p>
-
-  <div style="display:flex; gap:8px; margin-top:16px">
-    <button @click="mudarPagina('checkoutResumo')">Voltar</button>
-    <button @click="enviarParaGAS()" style="background: var(--red); color: white;">Confirmar Aposta</button>
-  </div>
-</section>
+</template>
 
 
 </main>
