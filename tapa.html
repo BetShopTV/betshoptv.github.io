@@ -558,7 +558,7 @@ footer.has-total #ctaMain {
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <a class="logo" href="https://betshoptv.com" aria-label="BetShopTV – página inicial">
+      <a class="logo" href="#home" aria-label="BetShopTV – página inicial">
   <img src="https://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" loading="eager" />
 </a>
       <nav class="nav">
@@ -1322,16 +1322,6 @@ function renderRifas(){
   app.appendChild(section);
 }
 
-// === Marca o botão ativo no cabeçalho conforme a seção atual ===
-function updateNavActive(){
-  // pega o hash atual (#feed, #galeria etc.)
-  const hash = location.hash.replace('#','') || 'galeria'; // padrão = galeria
-  // percorre todos os links do cabeçalho
-  document.querySelectorAll('.nav a').forEach(a=>{
-    const target = a.getAttribute('href').replace('#','');
-    a.classList.toggle('active', target === hash);
-  });
-}
 
 
 /* =============== NAVEGAÇÃO / HASH ================= */
@@ -1364,13 +1354,22 @@ function showPage(page, opts = {}) {
 }
 
 // === Atualiza o destaque ativo no menu do cabeçalho ===
-function updateNavActive(){
+function updateNavActive(forcedPage = null) {
   const { page } = parseHash();
+  const current = forcedPage !== null ? forcedPage : page;
+
   document.querySelectorAll('.nav a').forEach(a => {
     const target = a.getAttribute('href').replace('#','');
-    a.classList.toggle('active', target === page);
+
+    // Se estiver na home (sem hash ou #home), nenhum botão fica ativo
+    if (!location.hash || current === 'home') {
+      a.classList.remove('active');
+    } else {
+      a.classList.toggle('active', target === current);
+    }
   });
 }
+
 
 
 function parseHash(){
@@ -1382,23 +1381,36 @@ function parseHash(){
 
 function handleHashChange() {
   const { page, params } = parseHash();
+
+  // Sem hash ou #home → mostra conteúdo da home
+  if (!location.hash || page === 'home') { 
+    renderHome();
+    updateNavActive(''); // nenhum botão ativo
+    return;
+  }
+
   if (page === 'feed') {
     const p = params.get('p');
     if (p) showPage('feed', { updateHash: false, pieceId: p });
     else   showPage('feed', { updateHash: false });
+
   } else if (page === 'rifas') {
     showPage('rifas', { updateHash: false });
+
   } else if (page === 'sobre') {
-    showPage('sobre', { updateHash: false });
+    renderSobreProjeto();
+
   } else if (page === 'como') {
-    showPage('como', { updateHash: false });
+    renderComoFunciona();
+
   } else {
     showPage('galeria', { updateHash: false });
   }
 
- updateNavActive();
-
+  updateNavActive(page);
 }
+
+
 
 window.addEventListener('hashchange', handleHashChange);
 
@@ -1730,6 +1742,12 @@ async function init(){
     document.getElementById('app').innerHTML =
       '<div style="padding:20px;color:#900;">Erro ao carregar dados. Veja o console.</div>';
   }
+}
+function renderHome() {
+  const app = document.getElementById('app');
+  const tpl = document.getElementById('page-sobre');
+  app.innerHTML = '';
+  if (tpl) app.appendChild(tpl.content.cloneNode(true));
 }
 
   function renderSobreProjeto(){
