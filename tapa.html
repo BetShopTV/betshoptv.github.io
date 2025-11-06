@@ -48,20 +48,30 @@
 
 /* ====== Galeria (Layout Flex Horizontal) ====== */
 .galeria {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 6px;
-  align-items: start;
-  justify-content: start;
-  margin: 0;
-  padding: 0;
+  column-count: 4;
+  column-gap: 8px;
+  -webkit-column-count: 4;
+  -webkit-column-gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .galeria {
+    column-count: 3;
+    -webkit-column-count: 3;
+  }
 }
 
 .gal-item {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 8px;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
   background: #fff;
-  overflow: hidden;
   border: var(--bd-thin) solid var(--ink);
+  overflow: hidden;
 }
+
 
 .gal-item img {
   display: block;
@@ -432,7 +442,7 @@ let totalGeral     = 0;
   disponiveis: false,
   precoMax: 'all', // valores: 'all', '200', '400', '400+'
   grupos: new Set(),     // exemplo: Set { '01', '02', '03' }
-  ordemAsc: true
+  ordemAsc: false
 };
 
 
@@ -491,12 +501,24 @@ function getGruposDisponiveis(){
 
   
 // 🔧 Helpers de filtragem e ordenação
-function ordenarPorId(lista, asc = false) {
-  return [...lista].sort((a, b) => {
+function orderByIdPorLinhasParaMasonry(lista, colunas = 4, asc = false) {
+  const sorted = [...lista].sort((a, b) => {
     const ida = parseInt(a.id_peca, 10);
     const idb = parseInt(b.id_peca, 10);
     return asc ? ida - idb : idb - ida;
   });
+
+  const linhas = Math.ceil(sorted.length / colunas);
+  const colArrays = Array.from({ length: colunas }, () => []);
+
+  for (let l = 0; l < linhas; l++) {
+    for (let c = 0; c < colunas; c++) {
+      const idx = l * colunas + c;
+      if (sorted[idx]) colArrays[c].push(sorted[idx]);
+    }
+  }
+
+  return colArrays.flat(); // Ordem por colunas, preservando render Masonry
 }
 
 
@@ -516,8 +538,8 @@ function renderGaleria(){
   const filtrosWrap = document.createElement('div');
   filtrosWrap.style = 'margin-bottom:16px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;';
 
-  // Filtro: Grupos
-  const grupos = getGruposDisponiveis(); // <-- essa função deve existir acima
+  // Grupos
+  const grupos = getGruposDisponiveis(); // ← já existente
   const grupoWrap = document.createElement('div');
   grupoWrap.style = 'display:flex;gap:6px;align-items:center;';
   grupoWrap.innerHTML = `<span style="font-size:14px;">Grupos:</span>`;
@@ -539,7 +561,7 @@ function renderGaleria(){
   });
   filtrosWrap.appendChild(grupoWrap);
 
-  // Filtro: Ordem crescente
+  // Ordem crescente
   const ordemLabel = document.createElement('label');
   ordemLabel.style = 'font-size:14px;';
   const ordemCheck = document.createElement('input');
@@ -554,7 +576,7 @@ function renderGaleria(){
   ordemLabel.appendChild(document.createTextNode('Ordem crescente'));
   filtrosWrap.appendChild(ordemLabel);
 
-  // Filtro: Disponíveis
+  // Disponíveis
   const chkDisp = document.createElement('label');
   chkDisp.style = 'font-size:14px;';
   const chkInput = document.createElement('input');
@@ -569,7 +591,7 @@ function renderGaleria(){
   chkDisp.appendChild(document.createTextNode('Somente disponíveis'));
   filtrosWrap.appendChild(chkDisp);
 
-  // Filtro: Preço
+  // Preço
   const selectPreco = document.createElement('select');
   selectPreco.innerHTML = `
     <option value="all">Todos os preços</option>
@@ -593,7 +615,7 @@ function renderGaleria(){
 
   let lista = [...pecas];
 
-  // FILTROS
+  // FILTRAGEM
   if (filtros.disponiveis) {
     lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
   }
@@ -617,10 +639,10 @@ function renderGaleria(){
     });
   }
 
-  // ORDENAR FINAL
-  lista = ordenarPorId(lista, filtros.ordemAsc);
+  // ====== ORDENAR POR LINHAS para MASONRY
+  lista = orderByIdPorLinhasParaMasonry(lista, 4, filtros.ordemAsc);
 
-  // RENDER PEÇAS
+  // ====== RENDERIZAÇÃO
   lista.forEach(p => {
     const sold = /vendid/i.test(String(p.status || ''));
     const item = document.createElement('div');
@@ -639,6 +661,7 @@ function renderGaleria(){
   section.appendChild(masonry);
   app.appendChild(section);
 }
+
 
 
 
