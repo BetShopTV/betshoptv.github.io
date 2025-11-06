@@ -46,23 +46,38 @@
   section{margin-bottom:24px}
   h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
 
-  /* ====== Galeria (Masonry / Pinterest) ====== */
-  .galeria{
-    column-gap:4px; -webkit-column-gap:4px;
-    column-count:3; -webkit-column-count:3; /* 3 colunas por padrão */
-    margin:0; padding:0;
-  }
-  .gal-item{
-    display:inline-block; width:100%;
-    margin:0 0 1px;
-    break-inside:avoid; -webkit-column-break-inside:avoid;
-    border:var(--bd-thin) solid var(--ink);
-    background:#fff; overflow:hidden;
-  }
-  .gal-item img{display:block;width:100%;height:auto;object-fit:cover;vertical-align:middle;background:#000}
-  .gal-item .ttl{display:none!important}
+/* ====== Galeria (Layout Flex Horizontal) ====== */
+.galeria {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
 
-  /* VENDIDA — realce discreto */
+.gal-item {
+  width: calc(25% - 6px); /* 4 por linha - ajuste aqui se quiser mais/menos */
+  box-sizing: border-box;
+  border: var(--bd-thin) solid var(--ink);
+  background: #fff;
+  overflow: hidden;
+}
+
+.gal-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  vertical-align: middle;
+  background: #000;
+}
+
+.gal-item .ttl {
+  display: none !important;
+}
+
 /* Estado "vendido" */
 .gal-item.sold {
   position: relative;
@@ -78,12 +93,11 @@
   color: var(--red);
   font-size: 24px;
   line-height: 1;
-  
-  /* 🔥 Isola o pseudo do filtro */
   filter: none;
   mix-blend-mode: normal;
   isolation: isolate;
 }
+
 .preco.sold { color: var(--red); }
 
   @media (min-width:1300px){
@@ -479,28 +493,14 @@ function getGruposDisponiveis(){
 
   
 // 🔧 Helpers de filtragem e ordenação
-function orderByIdPorLinhas(lista, colunas = 4, asc = false) {
-  const clone = [...lista];
-
-  // Ordenar com base no valor numérico real do id_peca
-  clone.sort((a, b) => {
+function ordenarPorId(lista, asc = false) {
+  return [...lista].sort((a, b) => {
     const ida = parseInt(a.id_peca, 10);
     const idb = parseInt(b.id_peca, 10);
     return asc ? ida - idb : idb - ida;
   });
-
-  const novaLista = [];
-  const linhas = Math.ceil(clone.length / colunas);
-
-  for (let l = 0; l < linhas; l++) {
-    for (let c = 0; c < colunas; c++) {
-      const idx = l * colunas + c;
-      if (clone[idx]) novaLista.push(clone[idx]);
-    }
-  }
-
-  return novaLista;
 }
+
 
 
   // 🎨 Função principal de render da galeria
@@ -629,7 +629,8 @@ if (filtros.grupos.size > 0){
   });
 }
 
-lista = orderByIdPorLinhas(lista, 4, filtros.ordemAsc);
+lista = ordenarPorId(lista, filtros.ordemAsc);
+
 
 
 
