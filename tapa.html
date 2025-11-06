@@ -418,7 +418,9 @@ let totalGeral     = 0;
   // FOFILTROS!!
   const filtros = {
   disponiveis: false,
-  precoMax: 'all' // valores: 'all', '200', '400', '400+'
+  precoMax: 'all', // valores: 'all', '200', '400', '400+'
+  grupos: new Set(),     // exemplo: Set { '01', '02', '03' }
+  ordemAsc: false
 };
 
 
@@ -463,6 +465,19 @@ function calculateRifaTotal(count){
   return 25 * (count - 1) + 30;
 }
 
+
+// EXTRAÇÃO DE GRUPOS
+function getGruposDisponiveis(){
+  const set = new Set();
+  pecas.forEach(p => {
+    const id = String(p.id_peca || '');
+    if (id.length >= 2) set.add(id.slice(0, 2));
+  });
+  return [...set].sort();
+}
+
+
+  
 /* =============== GALERIA (MASONRY) ================= */
 function renderGaleria(){
   const app = document.getElementById('app');
@@ -472,8 +487,77 @@ function renderGaleria(){
   section.id = 'galeria';
 
   // ====== BARRA DE FILTROS ======
-  const filtrosWrap = document.createElement('div');
-  filtrosWrap.style = 'margin-bottom:16px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;';
+const filtrosWrap = document.createElement('div');
+filtrosWrap.style = 'margin-bottom:16px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;';
+
+// Filtro: Disponíveis
+const chkDisp = document.createElement('label');
+chkDisp.style = 'font-size:14px;';
+const chkInput = document.createElement('input');
+chkInput.type = 'checkbox';
+chkInput.checked = filtros.disponiveis;
+chkInput.style = 'margin-right:6px;';
+chkInput.onchange = () => {
+  filtros.disponiveis = chkInput.checked;
+  renderGaleria();
+};
+chkDisp.appendChild(chkInput);
+chkDisp.appendChild(document.createTextNode('Somente disponíveis'));
+filtrosWrap.appendChild(chkDisp);
+
+// Filtro: Preço
+const selectPreco = document.createElement('select');
+selectPreco.innerHTML = `
+  <option value="all">Todos os preços</option>
+  <option value="200">Até R$ 200</option>
+  <option value="400">R$ 200 – 400</option>
+  <option value="400+">Acima de R$ 400</option>
+`;
+selectPreco.value = filtros.precoMax;
+selectPreco.onchange = () => {
+  filtros.precoMax = selectPreco.value;
+  renderGaleria();
+};
+filtrosWrap.appendChild(selectPreco);
+
+// Filtro: Grupo
+const grupos = getGruposDisponiveis();
+const grupoWrap = document.createElement('div');
+grupoWrap.style = 'display:flex;gap:6px;align-items:center;';
+grupoWrap.innerHTML = `<span style="font-size:14px;">Grupos:</span>`;
+grupos.forEach(g => {
+  const lb = document.createElement('label');
+  lb.style = 'font-size:14px;';
+  const cb = document.createElement('input');
+  cb.type = 'checkbox';
+  cb.value = g;
+  cb.checked = filtros.grupos.has(g);
+  cb.onchange = () => {
+    if (cb.checked) filtros.grupos.add(g);
+    else filtros.grupos.delete(g);
+    renderGaleria();
+  };
+  lb.appendChild(cb);
+  lb.appendChild(document.createTextNode(' ' + g));
+  grupoWrap.appendChild(lb);
+});
+filtrosWrap.appendChild(grupoWrap);
+
+// Filtro: Ordem crescente
+const ordemLabel = document.createElement('label');
+ordemLabel.style = 'font-size:14px;';
+const ordemCheck = document.createElement('input');
+ordemCheck.type = 'checkbox';
+ordemCheck.checked = filtros.ordemAsc;
+ordemCheck.style = 'margin-left:12px;margin-right:6px;';
+ordemCheck.onchange = () => {
+  filtros.ordemAsc = ordemCheck.checked;
+  renderGaleria();
+};
+ordemLabel.appendChild(ordemCheck);
+ordemLabel.appendChild(document.createTextNode('Ordem crescente'));
+filtrosWrap.appendChild(ordemLabel);
+
 
   // Filtro: Disponíveis
   const chkDisp = document.createElement('label');
@@ -514,6 +598,15 @@ function renderGaleria(){
 
   let lista = [...pecas];
 
+// Filtro: Grupos
+if (filtros.grupos.size > 0){
+  lista = lista.filter(p => {
+    const id = String(p.id_peca || '');
+    const grupo = id.slice(0,2);
+    return filtros.grupos.has(grupo);
+  });
+}
+  
   // Aplicar filtros
   if (filtros.disponiveis) {
     lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
@@ -530,6 +623,11 @@ function renderGaleria(){
     lista = lista.filter(p => parseFloat(p.preco || 0) > 400);
   }
 
+if (!filtros.ordemAsc) {
+  lista.reverse(); // por padrão é decrescente, então reverte só se não for crescente
+}
+
+  
   // Render
   lista.reverse().forEach(p => {
     const sold = /vendid/i.test(String(p.status || ''));
