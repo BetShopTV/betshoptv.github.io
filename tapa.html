@@ -48,22 +48,22 @@
 
 /* ====== Galeria (Layout Flex Horizontal) ====== */
 .galeria {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 6px;
+  grid-auto-flow: dense;
+  align-items: start;
+  justify-content: start;
   margin: 0;
   padding: 0;
-  justify-content: flex-start;
-  align-items: flex-start;
 }
 
 .gal-item {
-  width: calc(25% - 6px); /* 4 por linha - ajuste aqui se quiser mais/menos */
-  box-sizing: border-box;
   border: var(--bd-thin) solid var(--ink);
   background: #fff;
   overflow: hidden;
 }
+
 
 .gal-item img {
   display: block;
@@ -515,47 +515,46 @@ function renderGaleria(){
   section.id = 'galeria';
 
   // ====== BARRA DE FILTROS ======
-const filtrosWrap = document.createElement('div');
-filtrosWrap.style = 'margin-bottom:16px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;';
+  const filtrosWrap = document.createElement('div');
+  filtrosWrap.style = 'margin-bottom:16px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;';
 
-// Filtro: Grupo
-const grupos = getGruposDisponiveis();
-const grupoWrap = document.createElement('div');
-grupoWrap.style = 'display:flex;gap:6px;align-items:center;';
-grupoWrap.innerHTML = `<span style="font-size:14px;">Grupos:</span>`;
-grupos.forEach(g => {
-  const lb = document.createElement('label');
-  lb.style = 'font-size:14px;';
-  const cb = document.createElement('input');
-  cb.type = 'checkbox';
-  cb.value = g;
-  cb.checked = filtros.grupos.has(g);
-  cb.onchange = () => {
-    if (cb.checked) filtros.grupos.add(g);
-    else filtros.grupos.delete(g);
+  // Filtro: Grupos
+  const grupos = getGruposDisponiveis(); // <-- essa função deve existir acima
+  const grupoWrap = document.createElement('div');
+  grupoWrap.style = 'display:flex;gap:6px;align-items:center;';
+  grupoWrap.innerHTML = `<span style="font-size:14px;">Grupos:</span>`;
+  grupos.forEach(g => {
+    const lb = document.createElement('label');
+    lb.style = 'font-size:14px;';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = g;
+    cb.checked = filtros.grupos.has(g);
+    cb.onchange = () => {
+      if (cb.checked) filtros.grupos.add(g);
+      else filtros.grupos.delete(g);
+      renderGaleria();
+    };
+    lb.appendChild(cb);
+    lb.appendChild(document.createTextNode(' ' + g));
+    grupoWrap.appendChild(lb);
+  });
+  filtrosWrap.appendChild(grupoWrap);
+
+  // Filtro: Ordem crescente
+  const ordemLabel = document.createElement('label');
+  ordemLabel.style = 'font-size:14px;';
+  const ordemCheck = document.createElement('input');
+  ordemCheck.type = 'checkbox';
+  ordemCheck.checked = filtros.ordemAsc;
+  ordemCheck.style = 'margin-left:12px;margin-right:6px;';
+  ordemCheck.onchange = () => {
+    filtros.ordemAsc = ordemCheck.checked;
     renderGaleria();
   };
-  lb.appendChild(cb);
-  lb.appendChild(document.createTextNode(' ' + g));
-  grupoWrap.appendChild(lb);
-});
-filtrosWrap.appendChild(grupoWrap);
-
-// Filtro: Ordem crescente
-const ordemLabel = document.createElement('label');
-ordemLabel.style = 'font-size:14px;';
-const ordemCheck = document.createElement('input');
-ordemCheck.type = 'checkbox';
-ordemCheck.checked = filtros.ordemAsc;
-ordemCheck.style = 'margin-left:12px;margin-right:6px;';
-ordemCheck.onchange = () => {
-  filtros.ordemAsc = ordemCheck.checked;
-  renderGaleria();
-};
-ordemLabel.appendChild(ordemCheck);
-ordemLabel.appendChild(document.createTextNode('Ordem crescente'));
-filtrosWrap.appendChild(ordemLabel);
-
+  ordemLabel.appendChild(ordemCheck);
+  ordemLabel.appendChild(document.createTextNode('Ordem crescente'));
+  filtrosWrap.appendChild(ordemLabel);
 
   // Filtro: Disponíveis
   const chkDisp = document.createElement('label');
@@ -589,53 +588,41 @@ filtrosWrap.appendChild(ordemLabel);
 
   section.appendChild(filtrosWrap);
 
-  // ====== GALERIA FILTRADA ======
+  // ====== CONTAINER DE GALERIA ======
   const masonry = document.createElement('div');
   masonry.className = 'galeria';
   masonry.id = 'masonryGallery';
 
   let lista = [...pecas];
 
-// Filtro: Grupos
-if (filtros.grupos.size > 0){
-  lista = lista.filter(p => {
-    const id = String(p.id_peca || '');
-    const grupo = id.slice(0,2);
-    return filtros.grupos.has(grupo);
-  });
-}
-  
-// Aplicar filtros
-if (filtros.disponiveis) {
-  lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
-}
+  // FILTROS
+  if (filtros.disponiveis) {
+    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
+  }
 
-if (filtros.precoMax === '200') {
-  lista = lista.filter(p => parseFloat(p.preco || 0) <= 200);
-} else if (filtros.precoMax === '400') {
-  lista = lista.filter(p => {
-    const preco = parseFloat(p.preco || 0);
-    return preco >= 200 && preco <= 400;
-  });
-} else if (filtros.precoMax === '400+') {
-  lista = lista.filter(p => parseFloat(p.preco || 0) > 400);
-}
+  if (filtros.precoMax === '200') {
+    lista = lista.filter(p => parseFloat(p.preco || 0) <= 200);
+  } else if (filtros.precoMax === '400') {
+    lista = lista.filter(p => {
+      const preco = parseFloat(p.preco || 0);
+      return preco >= 200 && preco <= 400;
+    });
+  } else if (filtros.precoMax === '400+') {
+    lista = lista.filter(p => parseFloat(p.preco || 0) > 400);
+  }
 
-if (filtros.grupos.size > 0){
-  lista = lista.filter(p => {
-    const id = String(p.id_peca || '');
-    const grupo = id.slice(0,2);
-    return filtros.grupos.has(grupo);
-  });
-}
+  if (filtros.grupos.size > 0){
+    lista = lista.filter(p => {
+      const id = String(p.id_peca || '');
+      const grupo = id.slice(0,2);
+      return filtros.grupos.has(grupo);
+    });
+  }
 
-lista = ordenarPorId(lista, filtros.ordemAsc);
+  // ORDENAR FINAL
+  lista = ordenarPorId(lista, filtros.ordemAsc);
 
-
-
-
-  
-  // Render
+  // RENDER PEÇAS
   lista.forEach(p => {
     const sold = /vendid/i.test(String(p.status || ''));
     const item = document.createElement('div');
@@ -654,6 +641,7 @@ lista = ordenarPorId(lista, filtros.ordemAsc);
   section.appendChild(masonry);
   app.appendChild(section);
 }
+
 
 
 
