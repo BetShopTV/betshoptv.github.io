@@ -479,16 +479,29 @@ function getGruposDisponiveis(){
 
   
 // 🔧 Helpers de filtragem e ordenação
-function orderByRows(lista, colunas = 4) {
-  const linhas = Math.ceil(lista.length / colunas);
+function orderByIdPorLinhas(lista, colunas = 4, asc = false) {
+  const clone = [...lista];
+
+  // Ordenar com base no valor numérico real do id_peca
+  clone.sort((a, b) => {
+    const ida = parseInt(a.id_peca, 10);
+    const idb = parseInt(b.id_peca, 10);
+    return asc ? ida - idb : idb - ida;
+  });
+
   const novaLista = [];
+  const linhas = Math.ceil(clone.length / colunas);
 
   for (let l = 0; l < linhas; l++) {
     for (let c = 0; c < colunas; c++) {
-      const idx = c * linhas + l;
-      if (lista[idx]) novaLista.push(lista[idx]);
+      const idx = l * colunas + c;
+      if (clone[idx]) novaLista.push(clone[idx]);
     }
   }
+
+  return novaLista;
+}
+
 
   return novaLista;
 }
@@ -619,11 +632,8 @@ if (filtros.grupos.size > 0){
   });
 }
 
-if (!filtros.ordemAsc) {
-  lista.reverse();
-}
+lista = orderByIdPorLinhas(lista, 4, filtros.ordemAsc);
 
-lista = orderByRows(lista, 4); // ⬅️ AQUI ENTRA o novo ordenamento por linhas
 
 
   
