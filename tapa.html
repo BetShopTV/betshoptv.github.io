@@ -654,6 +654,10 @@ function renderGaleria(){
     const img = imgWithFallback('/img/tmb/' + firstImg + '.avif');
     img.alt = p.titulo || ('Peça ' + p.id_peca);
     item.appendChild(img);
+const label = document.createElement('div');
+label.style = 'padding:8px 6px;font:18px monospace;color:#bebab0;background-color:#ff0000;text-align:center;';
+label.textContent = p.id_peca;
+item.appendChild(label);
 
     masonry.appendChild(item);
   });
