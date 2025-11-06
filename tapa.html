@@ -32,7 +32,7 @@
 }
 .logo img{
   display:block;
-  height: clamp(69px, 5.6vw, 188px); /* cresce um pouco em telas largas */
+  height: clamp(88px, 6.9vw, 224px); /* cresce um pouco em telas largas */
   width: auto;
   margin-left: 8px;
 }
@@ -42,24 +42,23 @@
   .nav a:hover{background:#fff;color:var(--ink)}
 
   /* ====== Área da página ====== */
-  main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 16px;min-height:60vh}
+  main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 6px;min-height:60vh}
   section{margin-bottom:24px}
   h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
 
   /* ====== Galeria (Masonry / Pinterest) ====== */
   .galeria{
-    column-gap:4px; -webkit-column-gap:4px;
+    column-gap:2px; -webkit-column-gap:2px;
     column-count:3; -webkit-column-count:3; /* 3 colunas por padrão */
     margin:0; padding:0;
   }
   .gal-item{
     display:inline-block; width:100%;
-    margin:0 0 1px;
+    margin:0 0 0px;
     break-inside:avoid; -webkit-column-break-inside:avoid;
-    border:var(--bd-thin) solid var(--ink);
-    background:#fff; overflow:hidden;
+    background:transparent; overflow:hidden;
   }
-  .gal-item img{display:block;width:100%;height:auto;object-fit:cover;vertical-align:middle;background:#000}
+  .gal-item img{display:block;width:100%;height:auto;object-fit:cover;vertical-align:middle;background:transparent}
   .gal-item .ttl{display:none!important}
 
   /* VENDIDA — realce discreto */
@@ -73,10 +72,10 @@
 .gal-item.sold::after {
   content: '⬤';
   position: absolute;
-  top: 18px;
-  right: 18px;
+  top: 1.5vw;
+  right: 1.5vw;
   color: var(--red);
-  font-size: 24px;
+  font-size: clamp(18px, 2.4vw, 27px);
   line-height: 1;
   
   /* 🔥 Isola o pseudo do filtro */
@@ -86,9 +85,7 @@
 }
 .preco.sold { color: var(--red); }
 
-  @media (min-width:1300px){
-    .galeria{column-count:4; -webkit-column-count:4} /* 4 colunas telas largas */
-  }
+
 
   /* ====== Feed / Post ====== */
   .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
@@ -485,7 +482,7 @@ function renderGaleria() {
   const section = document.createElement('section');
   section.id = 'galeria';
 
-  const colunas = window.innerWidth < 768 ? 3 : 4;
+  const colunas = window.innerWidth < 768 ? 3 : 3;
 
   // ====== BARRA DE FILTROS ======
   const filtrosWrap = document.createElement('div');
@@ -602,11 +599,11 @@ function renderGaleria() {
 
   // ====== CONTAINER COM 3 ou 4 COLUNAS ======
   const container = document.createElement('div');
-  container.style = 'display:flex;gap:12px;align-items:flex-start;';
+  container.style = 'display:flex;gap:4px;align-items:flex-start;';
 
   const colunasHTML = Array.from({ length: colunas }, () => {
     const col = document.createElement('div');
-    col.style = 'flex:1;display:flex;flex-direction:column;gap:8px;';
+    col.style = 'flex:1;display:flex;flex-direction:column;gap:4px;';
     container.appendChild(col);
     return col;
   });
@@ -621,13 +618,10 @@ ordenada.forEach((p, idx) => {
 
   const img = imgWithFallback('https://betshoptv.com/img/tmb/' + p.imagens[0] + '.avif');
   img.alt = p.titulo || `Peça ${p.id_peca}`;
+  img.style = 'border: 1px solid #2b2424;'
   item.appendChild(img);
 
-  const label = document.createElement('div');
-  label.className = 'id-label';
-  label.textContent = p.id_peca;
-  label.style = 'text-align:center;font-size:14px;color:#888;';
-  item.appendChild(label);
+
 
   // Inserção na coluna de menor altura
   let minIdx = 0;
