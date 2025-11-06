@@ -511,7 +511,7 @@ function orderByIdLinha(lista, colunas = 4, asc = false) {
   // 🎨 Função principal de render da galeria
   // 🎨 Função principal de render da galeria
   // 🎨 Função principal de render da galeria
-function renderGaleria(lista) {
+function renderGaleria(lista = pecas) {
   // Aplicar filtros
   if (filtros.precoMax > 0) {
     lista = lista.filter(p => parseFloat(p.preco || 0) <= filtros.precoMax);
@@ -528,14 +528,14 @@ function renderGaleria(lista) {
     });
   }
 
-  // Ordenar por ID para montar por linhas (esquerda ➝ direita, cima ➝ baixo)
-  lista = [...lista].sort((a, b) => {
+  // Ordenação numérica por id_peca
+  lista.sort((a, b) => {
     const ida = parseInt(a.id_peca, 10);
     const idb = parseInt(b.id_peca, 10);
     return filtros.ordemAsc ? ida - idb : idb - ida;
   });
 
-  // Criar container da galeria
+  // Cria container principal
   const section = document.createElement('section');
   section.className = 'galeria';
 
@@ -552,7 +552,7 @@ function renderGaleria(lista) {
     img.alt = p.titulo || `Peça ${p.id_peca}`;
     item.appendChild(img);
 
-    // ID visual (debug — pode remover depois)
+    // 🔍 Label do ID
     const label = document.createElement('div');
     label.style = 'padding:6px 4px;font:16px monospace;font-weight:bold;color:white;background:red;text-align:center;';
     label.textContent = p.id_peca;
@@ -561,10 +561,12 @@ function renderGaleria(lista) {
     section.appendChild(item);
   });
 
-  // Render final
+  // Exibe na página
+  const app = document.getElementById('app');
   app.innerHTML = '';
   app.appendChild(section);
 }
+
 
 
 
