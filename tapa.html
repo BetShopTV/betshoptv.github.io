@@ -420,7 +420,7 @@ let totalGeral     = 0;
   disponiveis: false,
   precoMax: 'all', // valores: 'all', '200', '400', '400+'
   grupos: new Set(),     // exemplo: Set { '01', '02', '03' }
-  ordemAsc: false
+  ordemAsc: true
 };
 
 
@@ -478,7 +478,25 @@ function getGruposDisponiveis(){
 
 
   
-/* =============== GALERIA (MASONRY) ================= */
+// 🔧 Helpers de filtragem e ordenação
+function orderByRows(lista, colunas = 4) {
+  const linhas = Math.ceil(lista.length / colunas);
+  const novaLista = [];
+
+  for (let l = 0; l < linhas; l++) {
+    for (let c = 0; c < colunas; c++) {
+      const idx = c * linhas + l;
+      if (lista[idx]) novaLista.push(lista[idx]);
+    }
+  }
+
+  return novaLista;
+}
+
+  // 🎨 Função principal de render da galeria
+  // 🎨 Função principal de render da galeria
+  // 🎨 Função principal de render da galeria
+  // 🎨 Função principal de render da galeria
 function renderGaleria(){
   const app = document.getElementById('app');
   app.innerHTML = '';
@@ -577,25 +595,36 @@ if (filtros.grupos.size > 0){
   });
 }
   
-  // Aplicar filtros
-  if (filtros.disponiveis) {
-    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
-  }
+// Aplicar filtros
+if (filtros.disponiveis) {
+  lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
+}
 
-  if (filtros.precoMax === '200') {
-    lista = lista.filter(p => parseFloat(p.preco || 0) <= 200);
-  } else if (filtros.precoMax === '400') {
-    lista = lista.filter(p => {
-      const preco = parseFloat(p.preco || 0);
-      return preco >= 200 && preco <= 400;
-    });
-  } else if (filtros.precoMax === '400+') {
-    lista = lista.filter(p => parseFloat(p.preco || 0) > 400);
-  }
+if (filtros.precoMax === '200') {
+  lista = lista.filter(p => parseFloat(p.preco || 0) <= 200);
+} else if (filtros.precoMax === '400') {
+  lista = lista.filter(p => {
+    const preco = parseFloat(p.preco || 0);
+    return preco >= 200 && preco <= 400;
+  });
+} else if (filtros.precoMax === '400+') {
+  lista = lista.filter(p => parseFloat(p.preco || 0) > 400);
+}
+
+if (filtros.grupos.size > 0){
+  lista = lista.filter(p => {
+    const id = String(p.id_peca || '');
+    const grupo = id.slice(0,2);
+    return filtros.grupos.has(grupo);
+  });
+}
 
 if (!filtros.ordemAsc) {
-  lista.reverse(); // por padrão é decrescente, então reverte só se não for crescente
+  lista.reverse();
 }
+
+lista = orderByRows(lista, 4); // ⬅️ AQUI ENTRA o novo ordenamento por linhas
+
 
   
   // Render
