@@ -340,31 +340,38 @@ footer.has-total #ctaMain {
 
   <!-- ========== MOUNT POINT: only this container is mutated by JS ========== -->
 <main x-data="appData()" x-init="init" aria-live="polite">
+    <pre x-text="JSON.stringify(pecas, null, 2)"></pre>
+<pre x-text="JSON.stringify(rifas, null, 2)"></pre>
+
 <!-- GALERIA DE PEÇAS -->
 <template x-if="pagina === 'galeria'">
-  <section>
-    <h2>Galeria de Ofertas</h2>
-    <div class="galeria">
+  <section id="galeria" class="galery off">
+    <div class="galery-grid">
       <template x-for="peca in pecas" :key="peca.id_peca">
-        <article class="peca" :style="`background-color: ${peca.hex}`">
-          <h3 x-text="peca.titulo"></h3>
-          <p><strong>Preço:</strong> R$ <span x-text="peca.preco"></span></p>
-          <p x-text="peca.tecnica"></p>
-          <p x-text="peca.dimensao"></p>
-          <template x-if="peca.imagens && peca.imagens.length">
-            <div class="imagens">
-              <template x-for="img in peca.imagens">
-                <img :src="`img/${img}.jpg`" :alt="peca.titulo" />
-              </template>
-            </div>
-          </template>
-          <button @click="toggleSelecionada(peca.id_peca)">Selecionar</button>
-          <button @click="toggleFavorita(peca.id_peca)">Favoritar</button>
-        </article>
+        <div
+          class="gal-item"
+          :class="{
+            sold: peca.status?.toLowerCase().includes('x') || peca.status?.toLowerCase().includes('vendid'),
+            active: selecionadas.includes(peca.id_peca)
+          }"
+          @click="togglePeca(peca.id_peca)"
+        >
+          <div class="gal-thumb">
+            <img :src='`https://betshoptv.com/img/pecas/${peca.imagens[0]}.jpg`' :alt="peca.titulo">
+          </div>
+          <div class="gal-info">
+            <p class="gal-nome" x-text="peca.titulo"></p>
+            <p class="gal-preco">
+              <span class="bold">R$</span>
+              <span x-text="peca.preco"></span>
+            </p>
+          </div>
+        </div>
       </template>
     </div>
   </section>
 </template>
+
 
 <!-- FEED -->
 <template x-if="pagina === 'feed'">
