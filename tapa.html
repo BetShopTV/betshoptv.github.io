@@ -339,12 +339,15 @@ footer.has-total #ctaMain {
   </header>
 
   <!-- ========== MOUNT POINT: only this container is mutated by JS ========== -->
-  <main id="app" role="main" aria-live="polite">
-    <!-- initial content: will be replaced by renderers -->
-    <section id="page-loading" style="padding:24px;text-align:center;">Carregando...</section>
+  <!-- ========== MOUNT POINT: only this container is mutated by JS ========== -->
+<main id="app" role="main" aria-live="polite">
+  <!-- initial content: will be replaced by renderers -->
+  <section id="page-loading" style="padding:24px;text-align:center;">Carregando.</section>
+</main>
 
-    
-    <!-- ========== TEMPLATE: SOBRE O PROJETO ========== -->
+<!-- ========== TEMPLATES (FORA do #app!) ========== -->
+
+<!-- ========== TEMPLATE: SOBRE O PROJETO ========== -->
 <template id="page-sobre">
   <section style="max-width:720px;margin:0 auto;padding:20px;background:#fff;border:1px solid var(--ink)">
     <h2>Sobre o Projeto</h2>
@@ -368,21 +371,10 @@ footer.has-total #ctaMain {
 <template id="page-como">
   <section style="max-width:720px;margin:0 auto;padding:20px;background:#fff;border:1px solid var(--ink)">
     <h2>Como Funciona</h2>
-    <p>O sistema da BetShopTV.com conecta dois tipos de apostas: nas <strong>rifas</strong> e nas <strong>ofertas diretas</strong> de peças.</p>
-    
-    <ul style="padding-left: 18px; line-height:1.5;">
-      <li>Você pode escolher números da <a href="#rifas">Rifa</a> por R$30 ou aproveitar combos de R$50 (2 números) para aumentar suas chances.</li>
-      <li>No dia 15/11 às 21h, encerram-se as apostas. Às 21h30 serão anunciados os sorteados para receber até 3 peças.</li>
-      <li>Paralelamente, qualquer pessoa pode garantir peças favoritas comprando direto pela <a href="#galeria">Galeria de Ofertas</a>.</li>
-    </ul>
-
-    <p>⚖️ Apostar em rifas aumenta suas chances a cada número escolhido. Comprar diretamente garante a posse de uma peça. Ambos os caminhos fazem parte da mesma lógica de redistribuição artística.</p>
-
-    <p style="margin-top:20px;">Fique atento às atualizações, ofertas-relâmpago e novas oportunidades de ampliar sua coleção!</p>
+    <p>O sistema da BetShopTV...</p>
   </section>
 </template>
 
-  </main>
 
   <!-- ========== FOOTER (kept same as v08) ========== -->
 <footer>
