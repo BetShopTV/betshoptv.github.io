@@ -39,8 +39,13 @@
 }
 
   .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-  .nav a{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 10px;border:var(--bd-thin) solid #fff;color:#fff;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase}
-  .nav a:hover{background:#fff;color:var(--ink)}
+  .nav a{display:inline-flex;align-items:center;justify-content:center;height:33px;padding:0 1.8vw;border:var(--bd-thin) solid #fff;color:#ff0000;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase; background:white;}
+  .nav a:hover{background:#ff0000;color:white;border: 1px solid white;}
+  .nav a.active {
+  background: #bebab0;     /* bege ativo */
+  color: #2b2424;          /* texto escuro */
+  border-color: #bebab0;   /* borda bege pra integrar */
+}
 
   /* ====== Área da página ====== */
   main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 6px;min-height:60vh}
@@ -472,6 +477,62 @@ footer.has-total #ctaMain {
 @media (min-width: 1280px){
   .filters-row{ gap: 8px 12px; }
 }
+/* === FOFILTROS: 1 linha no desktop, quebra fluida no mobile === */
+.filters-bar{
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;   /* desktop: 1 linha */
+  flex-wrap: wrap;       /* quebra quando precisar */
+  justify-content: center;
+  gap: 10px 14px;
+  padding: 10px 0;
+}
+.filters-row--all{
+  display: contents;     /* os grupos "fluem" direto na barra */
+}
+.filters-group{
+  display: inline-flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Altura enxuta (mantemos como você pediu) */
+.chip{
+  font: 700 calc(var(--fs-sm) * .90)/1 var(--ff-cta);
+  padding: .26rem .50rem;
+  min-height: 30px;
+} 
+.select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font: 700 calc(var(--fs-sm) * .90)/1 var(--ff-cta);
+  padding: .22rem .50rem;
+  min-height: 30px;
+  line-height: 1.1;
+  border-radius: 0;
+}
+
+/* Remove halo/borda branca ao focar no select (todos os browsers) */
+.select:focus,
+.select:focus-visible,
+.select:-moz-focusring{
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: var(--ink) !important;
+}
+/* Safari: foco via mouse não pinta nada */
+.select:focus:not(:focus-visible){
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Mobile-first: abaixo de 760px, a barra pode virar 2–3 linhas naturalmente */
+@media (max-width: 760px){
+  .filters-bar{ justify-content: center; gap: 8px 10px; }
+}
 
 </style>
 
@@ -484,12 +545,12 @@ footer.has-total #ctaMain {
   <img src="https://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" loading="eager" />
 </a>
       <nav class="nav">
-      <a href="#rifas">Aposte na Rifa</a>
+      <a href="#rifas">Rifas</a>
         <a href="#galeria">Galeria de Ofertas</a>
         
-        <a href="#sobre">Sobre</a>
 <a href="#como">Como Funciona?</a>
-
+         <a href="#sobre">Sobre a BetShopTV</a>
+ 
       </nav>
     </div>
   </header>
@@ -566,10 +627,11 @@ let totalGeral     = 0;
 
 const filtros = {
   disponiveis: false,      // "Peças" começa DESLIGADO
-  priceRange: null,        // 'promo' | 'lt-500' | '500-1000' | 'gt-1000' | null
+  promo: false,            // NOVO: PROMOÇÃO (apenas R$ 150)
   grupos: new Set(),       // ex.: Set { '01', '02', ... }
   sort: 'group-desc'       // 'group-asc' | 'group-desc' | 'price-asc' | 'price-desc'
 };
+
 
 
 
@@ -625,55 +687,63 @@ function getGruposDisponiveis(){
   return [...set].sort();
 }
 
+// === BARRA DE FILTROS (reutilizável em Galeria e Feed) ===
+// === BARRA DE FILTROS (1 linha no desktop; reuso em Galeria/Feed) ===
+function buildFilters(currentPage){ // 'galeria' | 'feed'
+  const rerender = () => (currentPage === 'galeria' ? renderGaleria() : renderFeed());
 
-// === FUNÇÃO PRINCIPAL DE RENDERIZAÇÃO DA GALERIA ===
-function renderGaleria() {
-  const app = document.getElementById('app');
-  app.innerHTML = '';
-
-  const section = document.createElement('section');
-  section.id = 'galeria';
-
-  const colunas = 3; // mantém seu layout atual
-
-  // ====== BARRA DE FILTROS (2 LINHAS) ======
   const bar = document.createElement('div');
   bar.className = 'filters-bar';
 
-  // linha 1
-  const row1 = document.createElement('div');
-  row1.className = 'filters-row';
-  
-  
-  // --- Peças (toggle disponíveis) ---
-  const avail = document.createElement('div');
-  avail.className = 'filters-group';
+  // ÚNICA "row" que se adapta (desktop: 1 linha; mobile: quebra)
+  const row = document.createElement('div');
+  row.className = 'filters-row filters-row--all';
 
-  const bAvail = document.createElement('button');
-  bAvail.type = 'button';
-  bAvail.className = 'chip';
-  bAvail.textContent = 'PEÇAS DISPONÍVEIS';   // texto do botão
-  bAvail.setAttribute('aria-pressed', filtros.disponiveis ? 'true':'false');
-  bAvail.classList.toggle('is-active', !!filtros.disponiveis);
-  bAvail.addEventListener('click', ()=>{
-    filtros.disponiveis = !filtros.disponiveis;
-    renderGaleria();
+  // -------- Peças: [DISPONÍVEIS] [PROMOÇÃO] --------
+  const gPieces = document.createElement('div');
+  gPieces.className = 'filters-group';
+
+  const lblPieces = document.createElement('span');
+  lblPieces.className = 'filters-label';
+  lblPieces.textContent = 'Peças';
+  gPieces.appendChild(lblPieces);
+
+  const bDisp = document.createElement('button');
+  bDisp.type = 'button';
+  bDisp.className = 'chip';
+  bDisp.textContent = 'Disponíveis';
+  bDisp.setAttribute('aria-pressed', filtros.disponiveis ? 'true':'false');
+  bDisp.classList.toggle('is-active', !!filtros.disponiveis);
+  bDisp.addEventListener('click', ()=>{
+    filtros.disponiveis = !filtros.disponiveis;  // 🔸 NÃO mexe em nenhum outro filtro
+    rerender();
   });
-  avail.appendChild(bAvail);
+  gPieces.appendChild(bDisp);
 
-  row1.appendChild(avail);
-  bar.appendChild(row1);
-  
-  // --- Grupos (chips multi) ---
-  const gruposDisp = [...new Set(pecas.map(p => String(p.id_peca||'').slice(0,2)).filter(Boolean))].sort();
-  const grp = document.createElement('div');
-  grp.className = 'filters-group';
+  const bPromo = document.createElement('button');
+  bPromo.type = 'button';
+  bPromo.className = 'chip';
+  bPromo.textContent = 'Promoção';
+  bPromo.setAttribute('aria-pressed', filtros.promo ? 'true':'false');
+  bPromo.classList.toggle('is-active', !!filtros.promo);
+  bPromo.addEventListener('click', ()=>{
+    filtros.promo = !filtros.promo;              // 🔸 idem
+    rerender();
+  });
+  gPieces.appendChild(bPromo);
 
-  const grpLabel = document.createElement('span');
-  grpLabel.className = 'filters-label';
-  grpLabel.textContent = 'Grupos';
-  grp.appendChild(grpLabel);
+  row.appendChild(gPieces);
 
+  // -------- Grupos --------
+  const gGroups = document.createElement('div');
+  gGroups.className = 'filters-group';
+
+  const lblGroups = document.createElement('span');
+  lblGroups.className = 'filters-label';
+  lblGroups.textContent = 'Grupos';
+  gGroups.appendChild(lblGroups);
+
+  const gruposDisp = getGruposDisponiveis();
   gruposDisp.forEach(g=>{
     const b = document.createElement('button');
     b.type = 'button';
@@ -684,54 +754,21 @@ function renderGaleria() {
     b.classList.toggle('is-active', active);
     b.addEventListener('click', ()=>{
       const on = b.getAttribute('aria-pressed') === 'true';
-      if (on) filtros.grupos.delete(g);
-      else filtros.grupos.add(g);
-      renderGaleria();
+      if (on) filtros.grupos.delete(g); else filtros.grupos.add(g);
+      rerender();
     });
-    grp.appendChild(b);
+    gGroups.appendChild(b);
   });
-  row1.appendChild(grp);
+  row.appendChild(gGroups);
 
+  // -------- Ordenar (dropdown) --------
+  const gSort = document.createElement('div');
+  gSort.className = 'filters-group';
 
-  // linha 2
-  const row2 = document.createElement('div');
-  row2.className = 'filters-row';
-
-  // --- Preço (DROPDOWN) ---
-  const price = document.createElement('div');
-  price.className = 'filters-group';
-
-  const priceLabel = document.createElement('span');
-  priceLabel.className = 'filters-label';
-  priceLabel.textContent = 'Preço';
-  price.appendChild(priceLabel);
-
-  const selPrice = document.createElement('select');
-  selPrice.className = 'select';
-  selPrice.setAttribute('aria-label','Filtrar por preço');
-  selPrice.innerHTML = `
-    <option value="">Todos</option>
-    <option value="promo">PROMO</option>
-    <option value="lt-500">Até R$ 500</option>
-    <option value="500-1000">R$ 500 – R$ 1.000</option>
-    <option value="gt-1000">Acima de R$ 1.000</option>
-  `;
-  selPrice.value = filtros.priceRange || '';
-  selPrice.addEventListener('change', ()=>{
-    filtros.priceRange = selPrice.value || null;
-    renderGaleria();
-  });
-  price.appendChild(selPrice);
-  row2.appendChild(price);
-
-  // --- Ordenar (DROPDOWN) ---
-  const sort = document.createElement('div');
-  sort.className = 'filters-group';
-
-  const sortLabel = document.createElement('span');
-  sortLabel.className = 'filters-label';
-  sortLabel.textContent = 'Ordenar';
-  sort.appendChild(sortLabel);
+  const lblSort = document.createElement('span');
+  lblSort.className = 'filters-label';
+  lblSort.textContent = 'Ordenar';
+  gSort.appendChild(lblSort);
 
   const selSort = document.createElement('select');
   selSort.className = 'select';
@@ -744,36 +781,100 @@ function renderGaleria() {
   `;
   selSort.value = filtros.sort;
   selSort.addEventListener('change', ()=>{
-    filtros.sort = selSort.value;
-    renderGaleria();
+    filtros.sort = selSort.value;                 // 🔸 idem
+    rerender();
   });
-  sort.appendChild(selSort);
-  row2.appendChild(sort);
+  gSort.appendChild(selSort);
+  row.appendChild(gSort);
 
-  bar.appendChild(row2);
-  section.appendChild(bar);
+  // -------- FEED (toggle de página, sem resetar filtros) --------
+  const gFeed = document.createElement('div');
+  gFeed.className = 'filters-group';
+
+  const bFeed = document.createElement('button');
+  bFeed.type = 'button';
+  bFeed.className = 'chip';
+  bFeed.textContent = 'FEED';
+  const feedActive = (currentPage === 'feed');
+  bFeed.setAttribute('aria-pressed', feedActive ? 'true':'false');
+  bFeed.classList.toggle('is-active', feedActive);
+  bFeed.addEventListener('click', ()=>{
+    // 🔸 Apenas troca de página; NÃO toca em nenhum filtro.
+    if (currentPage === 'feed') showPage('galeria');
+    else showPage('feed');
+  });
+  gFeed.appendChild(bFeed);
+  row.appendChild(gFeed);
+
+  bar.appendChild(row);
+  return bar;
+}
+
+// === lista filtrada + ordenada, compartilhada por Galeria e Feed ===
+function getFilteredSortedList(source){
+  let lista = Array.isArray(source) ? [...source] : [];
+
+  // 1) Somente disponíveis
+  if (filtros.disponiveis) {
+    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
+  }
+
+  // 2) Promoção (apenas R$ 150)
+  if (filtros.promo) {
+    lista = lista.filter(p => Number(p.preco) === 150);
+  }
+
+  // 3) Grupos (multi)
+  if (filtros.grupos && filtros.grupos.size > 0) {
+    lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
+  }
+
+  // 4) Ordenação
+  const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
+  const numKey   = p => parseInt(p.id_peca) || 0;
+
+  if (filtros.sort === 'price-asc') {
+    lista.sort((a,b)=> (parseFloat(a.preco||0) - parseFloat(b.preco||0)));
+  } else if (filtros.sort === 'price-desc') {
+    lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
+  } else if (filtros.sort === 'group-asc') {
+    lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
+  } else { // 'group-desc' (default)
+    lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
+  }
+
+  return lista;
+}
+ 
+// === FUNÇÃO PRINCIPAL DE RENDERIZAÇÃO DA GALERIA ===
+function renderGaleria() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const section = document.createElement('section');
+  section.id = 'galeria';
+
+  const colunas = 3; // mantém seu layout atual
+
+  // Barra de filtros (nova)
+section.appendChild( buildFilters('galeria') );
+
 
   // ====== FILTRAGEM ======
-  let lista = [...pecas];
+// === dados da galeria obedecendo os filtros globais
+let lista = getFilteredSortedList(pecas);
+
 
   // Peças (somente disponíveis quando ativado)
   if (filtros.disponiveis) {
     lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
   }
 
-  // Preço (faixas)
-  if (filtros.priceRange) {
-    lista = lista.filter(p=>{
-      const pr = parseFloat(p.preco || 0);
-      switch (filtros.priceRange) {
-        case 'promo':      return pr === 150;
-        case 'lt-500':     return pr > 0 && pr <= 500;
-        case '500-1000':   return pr >= 500 && pr <= 1000;
-        case 'gt-1000':    return pr > 1000;
-        default:           return true;
-      }
-    });
-  }
+// PROMOÇÃO (apenas R$ 150)
+if (filtros.promo) {
+  lista = lista.filter(p => Number(p.preco) === 150);
+}
+
 
   // Grupos (multi)
   if (filtros.grupos.size > 0) {
@@ -835,6 +936,41 @@ function renderGaleria() {
   app.appendChild(section);
 }
 
+// === lista filtrada e ordenada (usada por Galeria e Feed) ===
+function getFilteredSortedList(source){
+  let lista = Array.isArray(source) ? [...source] : [];
+
+  // 1. somente disponíveis
+  if (filtros.disponiveis) {
+    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
+  }
+
+  // 2. promoção (R$ 150)
+  if (filtros.promo) {
+    lista = lista.filter(p => Number(p.preco) === 150);
+  }
+
+  // 3. grupos
+  if (filtros.grupos && filtros.grupos.size > 0) {
+    lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
+  }
+
+  // 4. ordenação
+  const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
+  const numKey   = p => parseInt(p.id_peca) || 0;
+
+  if (filtros.sort === 'price-asc') {
+    lista.sort((a,b)=> (parseFloat(a.preco||0) - parseFloat(b.preco||0)));
+  } else if (filtros.sort === 'price-desc') {
+    lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
+  } else if (filtros.sort === 'group-asc') {
+    lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
+  } else { // 'group-desc'
+    lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
+  }
+
+  return lista;
+}
 
 
 
@@ -847,145 +983,147 @@ function renderFeed(){
 
   const section = document.createElement('section');
   section.id = 'feed';
+  
+  // Barra de filtros compartilhada (indica que estamos no feed)
+section.appendChild( buildFilters('feed') );
 
+ 
   const list = document.createElement('div');
   list.id = 'feedList';
   list.className = 'feed';
 
-  [...pecas].reverse().forEach(p => {
-    // ↓ antes pulava as vendidas; agora só tratamos diferente
-    const sold = /vendid/i.test(String(p.status || ''));
+  // === aplica os mesmos filtros e ordem da galeria ===
+const base = getFilteredSortedList(pecas);
 
-    const post = document.createElement('article');
-    post.className = 'post';
-    post.id = 'post-' + p.id_peca;
+// se quiser inverter a ordem (mais recentes primeiro), descomente a linha abaixo:
+// const base = getFilteredSortedList(pecas).slice().reverse();
 
-    // Carrossel
-    const carousel = document.createElement('div');
-    carousel.className = 'carousel';
+base.forEach(p => {
+  const sold = /vendid/i.test(String(p.status || ''));
+  const post = document.createElement('article');
+  post.className = 'post';
+  post.id = 'post-' + p.id_peca;
 
-    const imgs = Array.isArray(p.imagens) ? p.imagens : [];
-    imgs.forEach(name=>{
-      const slide = document.createElement('div');
-      slide.className = 'carousel-slide';
-      const img = imgWithFallback('https://betshoptv.com/img/otm/' + name + '.avif');
-      slide.appendChild(img);
-      carousel.appendChild(slide);
+  const carousel = document.createElement('div');
+  carousel.className = 'carousel';
+
+  const imgs = Array.isArray(p.imagens) ? p.imagens : [];
+  imgs.forEach(name=>{
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+    const img = imgWithFallback('https://betshoptv.com/img/otm/' + name + '.avif');
+    slide.appendChild(img);
+    carousel.appendChild(slide);
+  });
+
+  const barWrap = document.createElement('div');
+  barWrap.className = 'carousel-bar-wrap';
+  const bar = document.createElement('div');
+  bar.className = 'carousel-bar';
+  const pos = document.createElement('div');
+  pos.className = 'pos';
+  bar.appendChild(pos);
+  barWrap.appendChild(bar);
+
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+
+  const l1 = document.createElement('div');
+  l1.className = 'linha1';
+
+  const title = document.createElement('div');
+  title.className = 'titulo';
+  title.textContent = p.titulo || ('Peça ' + p.id_peca);
+
+  const price = document.createElement('div');
+  price.className = 'preco';
+  if (sold){
+    price.textContent = '⬤';
+    price.classList.add('sold');
+  } else {
+    price.textContent = fmt(p.preco);
+  }
+  l1.appendChild(title);
+  l1.appendChild(price);
+
+  const tecnica = document.createElement('div');
+  tecnica.className = 'tecnica';
+  tecnica.textContent = p.tecnica || '';
+
+  const dims = document.createElement('div');
+  dims.className = 'dimens';
+  dims.textContent = p.dimensao || p.tamanho || '';
+
+  const footerMeta = document.createElement('div');
+  footerMeta.className = 'meta-footer';
+
+  if (!sold){
+    const leftActions = document.createElement('div');
+    leftActions.className = 'left-actions';
+    const rightActions = document.createElement('div');
+    rightActions.className = 'right-actions';
+
+    const fav = document.createElement('button');
+    fav.className = 'btn fav-btn';
+    fav.type = 'button';
+    fav.setAttribute('aria-label', 'Favoritar ' + (p.titulo||''));
+    fav.textContent = '♥';
+    if (favoritos.has(p.id_peca)) fav.classList.add('active');
+    leftActions.appendChild(fav);
+
+    const add = document.createElement('button');
+    add.className = 'btn add-btn';
+    add.type = 'button';
+    const estaSel = selecionadas.has(p.id_peca);
+    if (estaSel) add.classList.add('added');
+    add.textContent = estaSel ? 'REMOVER' : 'ADICIONAR';
+    rightActions.appendChild(add);
+
+    footerMeta.appendChild(leftActions);
+    footerMeta.appendChild(rightActions);
+
+    fav.addEventListener('click', () => {
+      const id = p.id_peca;
+      if (favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
+      fav.classList.toggle('active', favoritos.has(id));
+      try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
+      updatePills();
     });
 
-    const barWrap = document.createElement('div');
-    barWrap.className = 'carousel-bar-wrap';
-    const bar = document.createElement('div');
-    bar.className = 'carousel-bar';
-    const pos = document.createElement('div');
-    pos.className = 'pos';
-    bar.appendChild(pos);
-    barWrap.appendChild(bar);
+    add.addEventListener('click', () => {
+      const id = p.id_peca;
+      const isAdded = add.classList.toggle('added');
+      if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
+      add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
+      calcularTotal();
+      updatePills();
+    });
+  }
 
-    // Meta
-    const meta = document.createElement('div');
-    meta.className = 'meta';
+  meta.appendChild(l1);
+  if (tecnica && tecnica.textContent) meta.appendChild(tecnica);
+  meta.appendChild(dims);
+  meta.appendChild(footerMeta);
 
-    const l1 = document.createElement('div');
-    l1.className = 'linha1';
+  post.appendChild(carousel);
+  post.appendChild(barWrap);
+  post.appendChild(meta);
+  list.appendChild(post);
 
-    const title = document.createElement('div');
-    title.className = 'titulo';
-    title.textContent = p.titulo || ('Peça ' + p.id_peca);
-
-    const price = document.createElement('div');
-    price.className = 'preco';
-    if (sold){
-      price.textContent = '⬤';
-      price.classList.add('sold'); // deixa vermelho via CSS
-    } else {
-      price.textContent = fmt(p.preco);
+  // barra de posição
+  (function(car, posEl){
+    const slides = car.querySelectorAll('.carousel-slide');
+    const total = slides.length || 1;
+    function updatePos(){
+      const idx = Math.round(car.scrollLeft / car.clientWidth);
+      const pct = ((idx+1)/Math.max(1,total)) * 100;
+      posEl.style.width = pct + '%';
     }
-    l1.appendChild(title);
-    l1.appendChild(price);
+    car.addEventListener('scroll', ()=>{ clearTimeout(car._t); car._t = setTimeout(updatePos, 60); });
+    updatePos();
+  })(carousel, bar.querySelector('.pos'));
+});
 
-    const tecnica = document.createElement('div');
-    tecnica.className = 'tecnica';
-    tecnica.textContent = p.tecnica || '';
-
-    const dims = document.createElement('div');
-    dims.className = 'dimens';
-    dims.textContent = p.dimensao || p.tamanho || '';
-
-    // Footer de ações
-    const footerMeta = document.createElement('div');
-    footerMeta.className = 'meta-footer';
-
-    if (!sold){
-      // Só mostra botões quando NÃO está vendida
-      const leftActions = document.createElement('div');
-      leftActions.className = 'left-actions';
-
-      const rightActions = document.createElement('div');
-      rightActions.className = 'right-actions';
-
-      const fav = document.createElement('button');
-      fav.className = 'btn fav-btn';
-      fav.type = 'button';
-      fav.setAttribute('aria-label', 'Favoritar ' + (p.titulo||''));
-      fav.textContent = '♥';
-      if (favoritos.has(p.id_peca)) fav.classList.add('active');
-      leftActions.appendChild(fav);
-
-      const add = document.createElement('button');
-      add.className = 'btn add-btn';
-      add.type = 'button';
-      const estaSel = selecionadas.has(p.id_peca);
-      if (estaSel) add.classList.add('added');
-      add.textContent = estaSel ? 'REMOVER' : 'ADICIONAR';
-      rightActions.appendChild(add);
-
-      footerMeta.appendChild(leftActions);
-      footerMeta.appendChild(rightActions);
-
-      // Comportamentos (só quando não vendida)
-      fav.addEventListener('click', () => {
-        const id = p.id_peca;
-        if (favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
-        fav.classList.toggle('active', favoritos.has(id));
-        try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
-        updatePills();
-      });
-
-      add.addEventListener('click', () => {
-        const id = p.id_peca;
-        const isAdded = add.classList.toggle('added');
-        if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
-        add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
-        calcularTotal();
-        updatePills();
-      });
-    }
-
-    // Montagem
-    meta.appendChild(l1);
-    if (tecnica && tecnica.textContent) meta.appendChild(tecnica);
-    meta.appendChild(dims);
-    meta.appendChild(footerMeta);
-
-    post.appendChild(carousel);
-    post.appendChild(barWrap);
-    post.appendChild(meta);
-    list.appendChild(post);
-
-    // Atualiza barra de posição no scroll
-    (function(car, posEl){
-      const slides = car.querySelectorAll('.carousel-slide');
-      const total = slides.length || 1;
-      function updatePos(){
-        const idx = Math.round(car.scrollLeft / car.clientWidth);
-        const pct = ((idx+1)/Math.max(1,total)) * 100;
-        posEl.style.width = pct + '%';
-      }
-      car.addEventListener('scroll', ()=>{ clearTimeout(car._t); car._t = setTimeout(updatePos, 60); });
-      updatePos();
-    })(carousel, bar.querySelector('.pos'));
-  });
 
   section.appendChild(list);
   app.appendChild(section);
@@ -1151,6 +1289,17 @@ function renderRifas(){
   app.appendChild(section);
 }
 
+// === Marca o botão ativo no cabeçalho conforme a seção atual ===
+function updateNavActive(){
+  // pega o hash atual (#feed, #galeria etc.)
+  const hash = location.hash.replace('#','') || 'galeria'; // padrão = galeria
+  // percorre todos os links do cabeçalho
+  document.querySelectorAll('.nav a').forEach(a=>{
+    const target = a.getAttribute('href').replace('#','');
+    a.classList.toggle('active', target === hash);
+  });
+}
+
 
 /* =============== NAVEGAÇÃO / HASH ================= */
 function showPage(page, opts = {}) {
@@ -1177,6 +1326,17 @@ function showPage(page, opts = {}) {
     }
     if (location.hash !== '#' + newHash) location.hash = newHash;
   }
+    updateNavActive(); // ← marca o botão ativo do menu
+
+}
+
+// === Atualiza o destaque ativo no menu do cabeçalho ===
+function updateNavActive(){
+  const { page } = parseHash();
+  document.querySelectorAll('.nav a').forEach(a => {
+    const target = a.getAttribute('href').replace('#','');
+    a.classList.toggle('active', target === page);
+  });
 }
 
 
@@ -1202,6 +1362,9 @@ function handleHashChange() {
   } else {
     showPage('galeria', { updateHash: false });
   }
+
+ updateNavActive();
+
 }
 
 window.addEventListener('hashchange', handleHashChange);
