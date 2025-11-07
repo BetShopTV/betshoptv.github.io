@@ -602,6 +602,60 @@ footer.has-total #ctaMain {
 
 <!-- ========== TEMPLATE: SOBRE O PROJETO ========== -->
 <template id="page-sobre">
+    <center>
+  <h2 class="titulo-sobre">
+    <span class="linha1">Olá! Somos a <strong>BetShopTV.com</strong>:</span>
+    <span class="linha2">um canal de apostas e</span>
+    <span class="linha3">circulação de valores.</span>
+  </h2>
+</center>
+
+<style>
+  .titulo-sobre {
+    font-size: clamp(23px, 3.7vw, 33px);
+    margin-bottom: clamp(8px, 3.8vw, 38px);
+    margin-top: 2.4vw;
+    color: #ff0000;
+    font-weight: 400;
+    line-height: 1.45;
+    text-align: center;
+  }
+
+  /* Cada trecho é um bloco controlado */
+  .titulo-sobre span {
+    display: inline-block;
+    white-space: nowrap; /* impede quebras internas */
+  }
+
+  /* 🔹 Estado 1: tudo em uma linha (desktop) */
+  .titulo-sobre .linha1::after,
+  .titulo-sobre .linha2::after {
+    content: " ";
+  }
+
+  /* 🔸 Estado 2: quebra após a primeira linha */
+  @media (max-width: 920px) {
+    .titulo-sobre .linha1::after {
+      content: "\A"; /* quebra de linha */
+      white-space: pre;
+    }
+    .titulo-sobre .linha2::after {
+      content: " ";
+    }
+  }
+
+  /* 🔻 Estado 3: quebra após linha 1 e 2 */
+  @media (max-width: 540px) {
+    .titulo-sobre .linha1::after {
+      content: "\A";
+      white-space: pre;
+    }
+    .titulo-sobre .linha2::after {
+      content: "\A";
+      white-space: pre;
+    }
+  }
+</style>
   <section style="
     max-width: 1200px;
     margin: 0 auto;
@@ -611,49 +665,60 @@ footer.has-total #ctaMain {
     font-size: clamp(15px, 2vw, 17px);
     line-height: clamp(1.4, 4.5vw, 1.55);
     letter-spacing: clamp(0.2px, 0.5vw, 0.35px);
+    
   ">
-    <center>
-  <h2 style="
-    font-size: clamp(16px, 3.7vw, 22px);
-    margin-bottom: 0.6em;
-    color: white;
-    font-weight: 400;
-    line-height: 1.45;
-  ">
-    Olá! Somos a <strong>BetShopTV.com</strong>: um canal de apostas e circulação de valores.
-  </h2>
+      
+      
 
-  <h2 style="
-    font-size: clamp(16px, 3.7vw, 22px);
-    margin-bottom: 1.1em;
-    color: white;
-    font-weight: 400;
-    line-height: 1.45;
-  ">
-    Estamos em exposição até 15 de novembro, quando acontecem os sorteios finais!
-  </h2>
 
-  <p style="margin-top: 4px; margin-bottom: 14px; line-height: 1.5;">
-    Visitas sob agendamento ou sábados das 16 às 22h
-  </p>
 
-  <h2 style="
+
+<!-- BLOCO TEXTO + VÍDEO UNIFICADO -->
+<div class="bloco-expo">
+  <div class="texto-expo">
+    <h2>Estamos em exposição até 15 de novembro, quando acontecem os sorteios finais!</h2>
+      <h2 style="
     margin: 0;
     font-size: clamp(16px, 3.5vw, 21px);
     line-height: 1.4;
   ">
-    <a href="https://www.instagram.com/saturna_estudio/" target="_blank">SATURNA ESTÚDIO</a>
+    <br><a href="https://www.instagram.com/saturna_estudio/" target="_blank">SATURNA ESTÚDIO</a>
   </h2>
 
   <p style="
     margin-top: 4px;
+    margin-bottom: 4px;
+    line-height: 1.45;
+  ">
+    Rua Lopes de Oliveira, 166 - Barra Funda, SP
+  </p>
+        <p style="
+    margin-top: 4px;
     margin-bottom: 24px;
     line-height: 1.45;
   ">
-    Rua Lopes de Oliveira, 166<br>
-    Barra Funda, SP
+          Visitas sob agendamento <br>ou sábados das 16 às 22h
   </p>
-</center>
+  </div>
+
+  <div class="video-expo">
+    <video
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="auto"
+      width="100%"
+      style="cursor: pointer;"
+      onclick="this.paused ? this.play() : this.pause();"
+    >
+      <source src="https://betshoptv.com/elementos/expo2.mp4" type="video/mp4">
+      <source src="https://betshoptv.com/elementos/expo2.webm" type="video/webm">
+      Seu navegador não suporta vídeo HTML5.
+    </video>
+  </div>
+</div>
+
 
 
 
@@ -670,21 +735,7 @@ footer.has-total #ctaMain {
     "
   >
 
-    <!-- 🎥 VÍDEO -->
-    <video
-      autoplay
-      loop
-      muted
-      playsinline
-      preload="auto"
-      width="100%"
-      style="cursor: pointer; display: block; width: 100%; height: auto; border: none;"
-      onclick="this.paused ? this.play() : this.pause();"
-    >
-      <source src="https://betshoptv.com/elementos/expo2.mp4" type="video/mp4">
-      <source src="https://betshoptv.com/elementos/expo2.webm" type="video/webm">
-      Seu navegador não suporta vídeo HTML5.
-    </video>
+
 
     <!-- 🎯 BLOCO “APOSTE AQUI” -->
     <div
@@ -779,6 +830,50 @@ footer.has-total #ctaMain {
         color: white !important;
         text-decoration: none;
       }
+  /* 🔧 Layout desktop e mobile do bloco da exposição */
+  .bloco-expo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 28px;
+    max-width: 1000px;
+    margin: 0 auto 24px auto;
+    color: white;
+    margin-top: clamp(8px, 3.8vw, 38px);
+  }
+
+  .bloco-expo .texto-expo {
+    flex: 1 1 88%;
+    max-width: 420px;
+    text-align: left;
+    font-size: clamp(15px, 2vw, 17px);
+    line-height: 1.5;
+  }
+
+  .bloco-expo .video-expo {
+    flex: 1 1 400px;
+    max-width: 480px;
+  }
+
+  /* Responsivo: mobile (volta ao layout empilhado) */
+  @media (max-width: 720px) {
+    .bloco-expo {
+      flex-direction: column;
+      align-items: center; 
+      text-align: center;
+    }
+    .bloco-expo .texto-expo {
+      max-width: 100%;
+      text-align: center;
+    }
+  }
+
+  /* Botões RIFAS e OFERTAS sempre na mesma linha */
+  .botao-txt div a {
+    white-space: nowrap;
+  }
+
     </style>
 
   </section><br><br><br>
