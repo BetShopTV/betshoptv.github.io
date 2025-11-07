@@ -1946,6 +1946,12 @@ function showPage(page, opts = {}) {
   else renderGaleria();
 
   updatePills(); calcularTotal();
+  
+  // 🧹 Scrolla pro topo em todas as páginas, exceto feed
+if (page !== 'feed') {
+  setTimeout(() => window.scrollTo(0, 0), 10);
+}
+
 
   if (updateHash){
     let newHash = page;
