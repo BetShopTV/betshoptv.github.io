@@ -201,7 +201,7 @@ background-color: #ff0000;
     font-weight:900;font-style:normal;font-display:swap;
   }
   
-  footer{position:sticky;bottom:0;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
+  footer{position:sticky;bottom:-2px;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
   .ftr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px}
   .contadores{display:flex;gap:8px;flex-wrap:wrap}
   .pill{background:var(--beige);color:var(--ink);border:var(--bd-thin) solid var(--beige);padding:4px 4px;font:700 var(--fs-sm)/1 var(--ff-cta)}
@@ -334,13 +334,13 @@ footer.has-total #ctaMain {
 }
 
 /* Ajusta o posicionamento da âncora no feed, respeitando o cabeçalho fixo */
-.post {
-  scroll-margin-top: 210px; /* altura aproximada do header vermelho */
+.feed-item {
+  scroll-margin-top: 110px; /* altura aproximada do header vermelho */
 }
 
 @media (max-width: 600px) {
-  .post {
-    scroll-margin-top: 206px;
+  .feed-item {
+    scroll-margin-top: 82px;
   }
 }
 
