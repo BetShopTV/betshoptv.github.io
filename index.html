@@ -231,7 +231,7 @@ footer.has-total #ctaMain {
 /* Garantias de interação */
 #ctaMain[disabled] {
   cursor: default;
-  opacity: 1;             /* mantemos legível mesmo desabilitado */
+  opacity: 0;             /* mantemos legível mesmo desabilitado */
 }
 
 /* ===== RIFAS: hero/topo informativo ===== */
@@ -336,11 +336,13 @@ footer.has-total #ctaMain {
 /* Ajusta o posicionamento da âncora no feed, respeitando o cabeçalho fixo */
 .feed-item {
   scroll-margin-top: 110px; /* altura aproximada do header vermelho */
+  margin-top: 4px;
 }
 
 @media (max-width: 600px) {
   .feed-item {
     scroll-margin-top: 82px;
+    margin-top: 4px;
   }
 }
 
