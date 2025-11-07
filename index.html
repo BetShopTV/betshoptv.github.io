@@ -601,9 +601,11 @@ footer.has-total #ctaMain {
 <!-- ========== TEMPLATES (FORA do #app!) ========== -->
 
 <!-- ========== TEMPLATE: SOBRE O PROJETO ========== -->
+
 <template id="page-sobre">
-    <center>
-  <h2 class="titulo-sobre">
+<!-- 🌟 PARTE 1: Cabeçalho -->
+<center>
+  <h2 class="titulo-sobre" STYLE="color: red">
     <span class="linha1">Olá! Somos a <strong>BetShopTV.com</strong>:</span>
     <span class="linha2">um canal de apostas e</span>
     <span class="linha3">circulação de valores.</span>
@@ -612,19 +614,19 @@ footer.has-total #ctaMain {
 
 <style>
   .titulo-sobre {
-    font-size: clamp(23px, 3.7vw, 33px);
+    font-size: clamp(25px, 3.7vw, 37px);
     margin-bottom: clamp(8px, 3.8vw, 38px);
     margin-top: 2.4vw;
-    color: #ff0000;
+    color: white;
     font-weight: 400;
     line-height: 1.45;
     text-align: center;
+    padding: 4px 12px;
   }
 
-  /* Cada trecho é um bloco controlado */
   .titulo-sobre span {
     display: inline-block;
-    white-space: nowrap; /* impede quebras internas */
+    white-space: nowrap;
   }
 
   /* 🔹 Estado 1: tudo em uma linha (desktop) */
@@ -636,7 +638,7 @@ footer.has-total #ctaMain {
   /* 🔸 Estado 2: quebra após a primeira linha */
   @media (max-width: 920px) {
     .titulo-sobre .linha1::after {
-      content: "\A"; /* quebra de linha */
+      content: "\A";
       white-space: pre;
     }
     .titulo-sobre .linha2::after {
@@ -656,131 +658,156 @@ footer.has-total #ctaMain {
     }
   }
 </style>
-  <section style="
+
+<!-- 🏛️ PARTE 2: TEXTO + VÍDEO -->
+<section
+  style="
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 20 auto;
     padding: 20px 28px;
     background: var(--ink);
     color: var(--beige);
     font-size: clamp(15px, 2vw, 17px);
     line-height: clamp(1.4, 4.5vw, 1.55);
     letter-spacing: clamp(0.2px, 0.5vw, 0.35px);
-    
-  ">
-      
-      
+  "
+>
+  <div class="bloco-expo">
+    <div class="texto-expo">
+      <h2>Estamos em exposição até 15 de novembro, quando acontecem os sorteios finais!</h2>
+      <h2
+        style="
+          margin: 0;
+          font-size: clamp(16px, 3.5vw, 21px);
+          line-height: 1.4;
+        "
+      >
+        <br><a href="https://www.instagram.com/saturna_estudio/" target="_blank">SATURNA ESTÚDIO</a>
+      </h2>
 
+      <p style="margin-top: 4px; margin-bottom: 4px; line-height: 1.45;">
+        Rua Lopes de Oliveira, 166 - Barra Funda, SP
+      </p>
+      <p style="margin-top: 4px; margin-bottom: 24px; line-height: 1.45;">
+        Visitas sob agendamento <br />ou sábados das 16 às 22h
+      </p>
+    </div>
 
-
-
-<!-- BLOCO TEXTO + VÍDEO UNIFICADO -->
-<div class="bloco-expo">
-  <div class="texto-expo">
-    <h2>Estamos em exposição até 15 de novembro, quando acontecem os sorteios finais!</h2>
-      <h2 style="
-    margin: 0;
-    font-size: clamp(16px, 3.5vw, 21px);
-    line-height: 1.4;
-  ">
-    <br><a href="https://www.instagram.com/saturna_estudio/" target="_blank">SATURNA ESTÚDIO</a>
-  </h2>
-
-  <p style="
-    margin-top: 4px;
-    margin-bottom: 4px;
-    line-height: 1.45;
-  ">
-    Rua Lopes de Oliveira, 166 - Barra Funda, SP
-  </p>
-        <p style="
-    margin-top: 4px;
-    margin-bottom: 24px;
-    line-height: 1.45;
-  ">
-          Visitas sob agendamento <br>ou sábados das 16 às 22h
-  </p>
-  </div>
-
-  <div class="video-expo">
-    <video
-      autoplay
-      loop
-      muted
-      playsinline
-      preload="auto"
-      width="100%"
-      style="cursor: pointer;"
-      onclick="this.paused ? this.play() : this.pause();"
-    >
-      <source src="https://betshoptv.com/elementos/expo2.mp4" type="video/mp4">
-      <source src="https://betshoptv.com/elementos/expo2.webm" type="video/webm">
-      Seu navegador não suporta vídeo HTML5.
-    </video>
-  </div>
+<div class="video-expo">
+  <video
+    autoplay
+    loop
+    muted
+    playsinline
+    preload="auto"
+    width="100%"
+    style="cursor: pointer; display: block;"
+    onclick="this.paused ? this.play() : this.pause();"
+  >
+    <source src="https://betshoptv.com/elementos/expo2.mp4" type="video/mp4" />
+    <source src="https://betshoptv.com/elementos/expo2.webm" type="video/webm" />
+    Seu navegador não suporta vídeo HTML5.
+  </video>
 </div>
 
+<style>
+  /* 🖥️ Desktop normal, nada muda */
+  .video-expo {
+    margin-bottom: 0;
+  }
 
+  .video-expo video {
+    display: block;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+  }
 
+  /* 📱 Mobile: sobe o vídeo conforme a largura da tela */
+  @media (max-width: 900px) {
+    .video-expo {
+      margin-bottom: clamp(-24px, -8vw, -50px); /* 🔥 sobe suavemente em telas menores */
+    }
+  }
 
-<!-- 🎬 CONTAINER UNIFICADO: VÍDEO + BLOCO "APOSTE AQUI" -->
-<center>
-  <div
-    style="
-      display: inline-block;
-      width: 100%;
-      max-width: clamp(280px, 90vw, 600px);
-      box-sizing: border-box;
-      text-align: center;
-      padding: 0 clamp(16px, 5vw, 40px);
-    "
-  >
+  @media (max-width: 540px) {
+    .video-expo {
+      margin-bottom: clamp(-100px, -37vw, -888px); /* 🔥 sobe mais em celulares pequenos */
+    }
+  }
+  
+    @media (max-width: 480px) {
+    .video-expo {
+      margin-bottom: clamp(-142px, -38vw, -888px); /* 🔥 sobe mais em celulares pequenos */
+    }
+  }
+  
+      @media (max-width: 350px) {
+    .video-expo {
+      margin-bottom: clamp(-188px, -42vw, -888px); /* 🔥 sobe mais em celulares pequenos */
+    }
+  }
+</style>
 
-
-
-    <!-- 🎯 BLOCO “APOSTE AQUI” -->
-    <div
-      style="
-        margin-top: 20px;
-        background-color: #bebab0;
-        background-image: url('https://betshoptv.com/images/BGINDEX2.gif');
-        background-size: repeat;
-        background-position: center;
-        padding: 8px clamp(16px, 5vw, 40px);
-        box-sizing: border-box;
-      "
-      class="botao-txt"
-    >
-      <p
-        style="
-          font-size: clamp(24px, 6.9vw, 38px);
-          margin-bottom: -2px;
-          color: var(--ink);
-          margin-top: 18px;
-        "
-      >
-        <strong>APOSTE AQUI</strong>
-      </p>
-
-      <div
-        style="
-          display: flex;
-          gap: 12px;
-          justify-content: center;
-          margin-top: 10px;
-          flex-wrap: wrap;
-        "
-      >
-        <a href="#rifas">RIFAS</a>
-        <a href="#galeria">OFERTAS</a>
-      </div>
-      <br>
-    </div>
   </div>
-</center>
+
+  <style>
+    /* 🔧 Layout desktop e mobile do bloco da exposição */
+    .bloco-expo {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 28px;
+      max-width: 1000px;
+      margin: 0 auto 24px auto;
+      color: white;
+      margin-top: clamp(8px, 3.8vw, 38px);
+    }
+
+    .bloco-expo .texto-expo {
+      flex: 1 1 88%;
+      max-width: 420px;
+      text-align: left;
+      font-size: clamp(15px, 2vw, 17px);
+      line-height: 1.5;
+    }
+
+    .bloco-expo .video-expo {
+      flex: 1 1 400px;
+      max-width: 480px;
+      display: block;
+    }
+
+    /* Responsivo: mobile (volta ao layout empilhado) */
+    @media (max-width: 720px) {
+      .bloco-expo {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .bloco-expo .texto-expo {
+        max-width: 100%;
+        text-align: center;
+      }
+    }
+
+    section a {
+      color: white !important;
+      text-decoration: underline;
+    }
+
+    section a:hover {
+      color: white !important;
+      text-decoration: none;
+    }
+  </style>
+</section>
 
 
 
-<!-- Bloco de texto responsivo alinhado com o vídeo -->
+
+<!-- 📖 PARTE 4: TEXTO INFORMATIVO ABAIXO DO PAINEL -->
 <center>
   <div
     style="
@@ -791,94 +818,199 @@ footer.has-total #ctaMain {
       box-sizing: border-box;
       padding-left: clamp(13px, 4vw, 38px);
       padding-right: clamp(13px, 4vw, 38px);
+      background: white;
+      color: #2b2424;
+      border: 1px solid #2b2424;
     "
   >
-    <p>Funciona assim: quem participa da <a href="#rifas">RIFA</a> pode ganhar até <strong>três das 100 peças</strong> do políptico <em>Chop Shop AV</em>.</p>
+      
+      
+<style>
+  /* 🧩 Fonte personalizada: Roboto Black via WOFF2 */
+  @font-face {
+    font-family: "RobotoBlackCustom";
+    src: url("https://betshoptv.com/fonts/Roboto-Black.woff2") format("woff2");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+  }
 
-    <p>No dia <strong>15 de novembro</strong>, durante o encerramento da exposição na <a href="https://www.instagram.com/saturna_estudio/" target="_blank">Saturna</a>, serão sorteadas <strong>ao menos 17 pessoas</strong> para dividir as peças disponíveis — ou seja, as que seguirem à venda na nossa <a href="#galeria">Galeria de Ofertas</a>.</p>
+  /* 🎯 Aplica especificamente no texto “APOSTE AQUI” */
+  .botao-txt strong {
+    font-size: 1.42em;
+    font-family: "RobotoBlackCustom", "Roboto", sans-serif !important;
+    font-weight: 900 !important;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  /* 🎨 Borda do texto */
+-webkit-text-stroke: 4px #2b2424;
+-webkit-text-fill-color: #bebab0;
+  color: #2b2424; /* fallback */
 
-    <p>Aqui complicamos em nome de um princípio simples: <strong>equilibrar as chances de vitória entre diferentes graus de contribuição</strong>. Essa é uma das principais políticas de funcionamento do projeto: <strong>calibrar ganhos e apoios mútuos entre quem aposta e quem produz</strong>.</p>
+  /* melhora o rendering da borda */
+  paint-order: stroke fill;
+}
+}
+  }
+</style>
 
-    <p>A aposta mínima de <strong>R$ 30</strong> oferece <strong>10% de chance</strong> de ganhar — e essa porcentagem <strong>quase dobra</strong> ao escolher dois números pelo valor promocional de <strong>R$ 50</strong> por par!</p>
+<center>
+  <div
+    style="
+      background-color: #bebab0;
+      background-image: 
+        url('https://betshoptv.com/images/BGO-fast.gif'),
+        url('https://betshoptv.com/images/BGINDEX2.gif'),
+        url('https://betshoptv.com/images/BGO-big.gif');
+      background-repeat: repeat, repeat, repeat;
+      background-position: center, center, center;
+      background-size: auto, auto, auto;
+      padding: 8px clamp(16px, 5vw, 40px);
+      box-sizing: border-box;
+      margin-top: clamp(8px, 2vw, 20px);
+      border: 1px solid #2b2424;
+    "
+    class="botao-txt"
+  >
+    <p
+      style="
+        font-size: clamp(24px, 6.9vw, 38px);
+        margin-bottom: -2px;
+        color: var(--ink);
+        margin-top: 18px;
+      "
+    >
+      <strong style="-webkit-text-stroke: 5px #2b2424;">APOSTE AQUI</strong>
+    </p>
 
-    <p>Para trocar a sorte pela certeza, você pode garantir suas peças favoritas diretamente na nossa <a href="#galeria">GALERIA de OFERTAS</a>: com valores a partir de <strong>R$ 150</strong> por peça, elas estarão disponíveis até as <strong>21h15 do dia 15</strong>, entre o encerramento das apostas (<strong>21h</strong>) e a divulgação dos resultados finais (<strong>21h30</strong>).</p>
-
-    <p>Até lá, seguimos <strong>embaralhando as probabilidades</strong> com <em>promoções exclusivas</em> e <em>ofertas relâmpago</em> para que ainda mais pessoas possam ganhar.</p>
-
-    <br>
-
-    <div style="text-align:center; font-weight:bold; margin-top:24px; color:white;">
-      <span style="font-size:1.3em;">BetShopTV.com<br>Peças únicas, chances múltiplas.</span><br><br><br>
+    <div
+      style="
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 10px;
+        flex-wrap: nowrap;
+      "
+    >
+      <a href="#rifas">RIFAS</a>
+      <a href="#galeria">OFERTAS</a>
     </div>
+    <br />
   </div>
 </center>
 
 
-
-    <!-- 🔒 Forçar cor branca e sem underline só aqui -->
-    <style>
-      :host, template#page-sobre, template#page-sobre * {
-        all: initial;
-      }
-
-      section a {
-        color: white !important;
-        text-decoration: underline;
-      }
-
-      section a:hover {
-        color: white !important;
-        text-decoration: none;
-      }
-  /* 🔧 Layout desktop e mobile do bloco da exposição */
-  .bloco-expo {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 28px;
-    max-width: 1000px;
-    margin: 0 auto 24px auto;
-    color: white;
-    margin-top: clamp(8px, 3.8vw, 38px);
-  }
-
-  .bloco-expo .texto-expo {
-    flex: 1 1 88%;
-    max-width: 420px;
-    text-align: left;
-    font-size: clamp(15px, 2vw, 17px);
-    line-height: 1.5;
-  }
-
-  .bloco-expo .video-expo {
-    flex: 1 1 400px;
-    max-width: 480px;
-  }
-
-  /* Responsivo: mobile (volta ao layout empilhado) */
-  @media (max-width: 720px) {
-    .bloco-expo {
-      flex-direction: column;
-      align-items: center; 
-      text-align: center;
-    }
-    .bloco-expo .texto-expo {
-      max-width: 100%;
-      text-align: center;
-    }
-  }
-
+<style>
   /* Botões RIFAS e OFERTAS sempre na mesma linha */
   .botao-txt div a {
     white-space: nowrap;
   }
 
-    </style>
+ /* 📱 Gambiarra controlada: sobe o bloco no mobile */
+  @media (max-width: 720px) {
+    .botao-txt {
+      margin-top: 10px !important;
+    }
 
-  </section><br><br><br>
+    .gambi {
+      position: relative;
+      top: -22px; /* 🔧 Ajuste fino — pode subir mais ou menos (ex: -18px, -25px) */
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+  }
+</style>
+      
+      
+      
+      
+      
+      <span style="font-weight: 500;" class="link-fundo-branco">
+    <p>
+      Funciona assim: quem participa da <a href="#rifas">RIFA</a> pode ganhar até
+      <strong>três das 100 peças</strong> do políptico
+      <em>Chop Shop AV</em>.
+    </p>
+
+    <p>
+      No dia <strong>15 de novembro</strong>, durante o encerramento da
+      exposição na
+      <a href="https://www.instagram.com/saturna_estudio/" target="_blank">Saturna</a>,
+      serão sorteadas <strong>ao menos 17 pessoas</strong> para dividir as peças
+      disponíveis — ou seja, as que seguirem à venda na nossa
+      <a href="#galeria">Galeria de Ofertas</a>.
+    </p>
+
+    <p>
+      Aqui complicamos em nome de um princípio simples:
+      <strong>equilibrar as chances de vitória entre diferentes graus de
+        contribuição</strong>.
+      Essa é uma das principais políticas de funcionamento do projeto:
+      <strong>calibrar ganhos e apoios mútuos entre quem aposta e quem
+        produz</strong>.
+    </p>
+
+    <p>
+      A aposta mínima de <strong>R$ 30</strong> oferece
+      <strong>10 % de chance</strong> de ganhar — e essa porcentagem
+      <strong>quase dobra</strong> ao escolher dois números pelo valor
+      promocional de <strong>R$ 50</strong> por par!
+    </p>
+
+    <p>
+      Para trocar a sorte pela certeza, você pode garantir suas peças favoritas
+      diretamente na nossa <a href="#galeria">Galeria de Ofertas</a>: com
+      valores a partir de <strong>R$ 150</strong> por peça, elas estarão
+      disponíveis até as <strong>21h15 do dia 15</strong>, entre o encerramento
+      das apostas (<strong>21h</strong>) e a divulgação dos resultados finais
+      (<strong>21h30</strong>).
+    </p>
+
+    <p>
+      Até lá, seguimos <strong>embaralhando as probabilidades</strong> com
+      <em>promoções exclusivas</em> e
+      <em>ofertas relâmpago</em> para que ainda mais pessoas possam ganhar.
+    </p>
+</span>
+    <br />
+
+    <div
+      style="
+        text-align: center;
+        font-weight: bold;
+        margin-top: 24px;
+        color: white;
+      "
+    >
+      <span style="font-size: 1.5em; color: red;">
+        BetShopTV.com<br />
+        Peças únicas, chances múltiplas.
+      </span>
+      <br /><br /><br />
+    </div>
+  </div>
+</center>
+
+<style>
+  /* 🔒 Garante cor branca e comportamento uniforme dos links */
+    .link-fundo-branco a {  color: black !important;
+    text-decoration: underline;
+    }
+    
+        .link-fundo-branco a:hover {  color: white !important;
+        background: red;
+    text-decoration: none;
+    }
+    
+</style>
+
+
+
+
+
 </template>
 
+    
 
 
 
