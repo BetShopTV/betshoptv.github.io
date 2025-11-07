@@ -2418,6 +2418,50 @@ window.addEventListener('DOMContentLoaded', init);
 </script>
 
 
+<script>
+/* 🔧 Corrige o comportamento de rolagem nas âncoras da página
+   — sempre alinha ao topo (exceto o Feed) */
+(function(){
+  document.addEventListener("click", function(e){
+    const link = e.target.closest("a[href^='#']");
+    if(!link) return;
+
+    const targetId = link.getAttribute("href").substring(1);
+    const targetEl = document.getElementById(targetId);
+
+    // só atua em seções internas existentes
+    if(!targetEl) return;
+
+    // impede o comportamento padrão do navegador
+    e.preventDefault();
+
+    // exceção: feed deve manter o comportamento original
+    if(targetId === "feed") {
+      window.location.hash = "#feed";
+      return;
+    }
+
+    // rola até o topo da seção com comportamento suave
+    targetEl.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+    // força o hash na URL para manter o estado da página
+    history.replaceState(null, "", "#" + targetId);
+  });
+
+  /* 🧩 adicional: se o usuário entra com uma âncora na URL,
+     garante que ela alinhe ao topo também */
+  window.addEventListener("load", () => {
+    const id = location.hash.replace("#", "");
+    const el = id && document.getElementById(id);
+    if(el && id !== "feed"){
+      setTimeout(() => el.scrollIntoView({ behavior: "auto", block: "start" }), 50);
+    }
+  });
+})();
+</script>
 
 </body>
 </html>
