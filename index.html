@@ -1,8 +1,27 @@
+
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="icon" href="https://betshoptv.com/FAVICON.png" type="image/x-icon">
+    <link rel="icon" href="https://betshoptv.com/FAVICON.ico" type="image/x-icon">
+  <!-- Open Graph (Facebook, Instagram, WhatsApp) -->
+<meta property="og:title" content="BetShopTV⦿com">
+<meta property="og:description" content="BetShopTV.com é uma plataforma de apostas e circulação de valores.">
+<meta property="og:image" content="https://betshoptv.com/elementos/img-web-site-new.jpg">
+<meta property="og:url" content="https://betshoptv.com">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BetShopTV⦿com">
+<meta name="twitter:description" content="BetShopTV.com é uma plataforma de apostas e circulação de valores.">
+<meta name="twitter:image" content="https://betshoptv.com/elementos/img-web-site-new.jpg">
+
+
 <title>BetShopTV⦿com</title>
 
 <!-- ====== STYLES (preserve visual look of v08) ====== -->
@@ -31,34 +50,55 @@
 }
 .logo img{
   display:block;
-  height: clamp(69px, 5.6vw, 188px); /* cresce um pouco em telas largas */
+  height: clamp(88px, 6.9vw, 224px); /* cresce um pouco em telas largas */
   width: auto;
   margin-left: 8px;
 }
 
   .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-  .nav a{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 10px;border:var(--bd-thin) solid #fff;color:#fff;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase}
-  .nav a:hover{background:#fff;color:var(--ink)}
+  .nav a{display:inline-flex;align-items:center;justify-content:center;height:33px;padding:0 1.8vw;border:var(--bd-thin) solid #fff;color:#ff0000;text-decoration:none;font:700 var(--fs-sm)/1 var(--ff-cta);text-transform:uppercase; background:white;}
+  .nav a:hover{
+  background: #bebab0;     /* bege ativo */
+  color: #2b2424;          /* texto escuro */
+  border-color: #bebab0;   /* borda bege pra integrar */
+  }
+  .nav a.active {
+background:#ff0000;color:white;border: 1px solid white;
+}
 
   /* ====== Área da página ====== */
-  main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 16px;min-height:60vh}
+  main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 6px;min-height:60vh}
   section{margin-bottom:24px}
   h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
-
+  .botao-txt a{display:inline-flex;align-items:center;justify-content:center;color:#ffffff;text-decoration:none;
+padding: clamp(8px, 3.8vw, 38px) clamp(12px, 3vw, 27px);
+height: clamp(48px, 7vh, 72px);
+font-weight: 700;
+font-size: clamp(27px, 6.9vw, 42px);
+letter-spacing: clamp(1.3px, 0.42vw, 2.4px); 
+text-transform:uppercase; 
+background-color: #ff0000;
+  background-image: url('https://betshoptv.com/images/fofertas.gif');
+  background-repeat: repeat;
+  }
+  .botao-txt a:hover{
+  background: #2b2424;     /* bege ativo */
+  color: white;          /* texto escuro */
+  border-color: #2b2424;   /* borda bege pra integrar */
+  }
   /* ====== Galeria (Masonry / Pinterest) ====== */
   .galeria{
-    column-gap:4px; -webkit-column-gap:4px;
+    column-gap:2px; -webkit-column-gap:2px;
     column-count:3; -webkit-column-count:3; /* 3 colunas por padrão */
     margin:0; padding:0;
   }
   .gal-item{
     display:inline-block; width:100%;
-    margin:0 0 1px;
+    margin:0 0 0px;
     break-inside:avoid; -webkit-column-break-inside:avoid;
-    border:var(--bd-thin) solid var(--ink);
-    background:#fff; overflow:hidden;
+    background:transparent; overflow:hidden;
   }
-  .gal-item img{display:block;width:100%;height:auto;object-fit:cover;vertical-align:middle;background:#000}
+  .gal-item img{display:block;width:100%;height:auto;object-fit:cover;vertical-align:middle;background:transparent}
   .gal-item .ttl{display:none!important}
 
   /* VENDIDA — realce discreto */
@@ -72,10 +112,10 @@
 .gal-item.sold::after {
   content: '⬤';
   position: absolute;
-  top: 18px;
-  right: 18px;
+  top: 1.5vw;
+  right: 1.5vw;
   color: var(--red);
-  font-size: 24px;
+  font-size: clamp(18px, 2.4vw, 27px);
   line-height: 1;
   
   /* 🔥 Isola o pseudo do filtro */
@@ -85,9 +125,7 @@
 }
 .preco.sold { color: var(--red); }
 
-  @media (min-width:1300px){
-    .galeria{column-count:4; -webkit-column-count:4} /* 4 colunas telas largas */
-  }
+
 
   /* ====== Feed / Post ====== */
   .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
@@ -156,7 +194,7 @@
   @media (max-width:768px){
     .rifa-btn{min-height:42px;padding:5px 7px;font-size:11px}
     .rifa-btn .ln1,.rifa-btn .ln2{font-size:11px;line-height:1.12}
-
+    .galeria{column-count:3; -webkit-column-count:3} /* 4 colunas telas largas */
   }
 
   /* ====== Footer (mantém visual v08) ====== */
@@ -319,6 +357,217 @@ footer.has-total #ctaMain {
       text-decoration: none;
     }
   
+  
+/* ====== FOFILTROS (barra compacta) ====== */
+.filters-bar{
+  display:flex;
+  flex-direction:column;        /* 2 linhas no mobile-first */
+  gap:8px;
+  padding:6px 0;
+}
+
+/* linha 1 e linha 2 */
+.filters-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 12px;
+  align-items:stretch;
+  justify-content:flex-start;
+}
+
+/* blocos de cada controle */
+.filters-group{
+  display:flex;
+  align-items:stretch;
+  gap:6px;
+}
+
+/* rótulos (ex.: Grupos, Peças, Preço, Ordenar) */
+.filters-label{
+  font:700 var(--fs-sm)/1 var(--ff-cta);
+  color:var(--ink);
+  align-self:center;
+  white-space:nowrap;
+}
+
+/* botões tipo "chip" (sem borda arredondada) */
+.chip{
+  appearance:none;
+  border:1px solid var(--ink);
+  background:var(--beige);   /* vazio */
+  color:var(--ink);          /* vazio */
+  font:700 calc(var(--fs-sm) * .95)/1 var(--ff-cta); /* menor que header */
+  padding:.38rem .60rem;
+  border-radius:0;           /* <-- sem arredondamento */
+  cursor:pointer;
+  display:inline-flex;       /* centralização de texto */
+  align-items:center;        /* vertical center */
+  justify-content:center;    /* horizontal center */
+  text-align:center;
+  min-height:36px;           /* garante centro vertical */
+  white-space:nowrap;
+}
+
+/* estado selecionado */
+.chip[aria-pressed="true"],
+.chip.is-active{
+  background:var(--ink);     /* #2b2424 */
+  border-color:var(--ink);
+  color:var(--beige);        /* #bebab0 */
+}
+
+/* selects (PREÇO e ORDENAR) – alinhados à esquerda */
+.select{
+  border:1px solid var(--ink);
+  background:var(--beige);
+  color:var(--ink);
+  font:700 calc(var(--fs-sm) * .95)/1 var(--ff-cta);
+  padding:.18rem .55rem;
+  border-radius:0;           /* <-- sem arredondamento */
+  min-height:36px;
+}
+
+/* RESPONSIVO: em telas maiores mantém 2 linhas, mas sem overflow horizontal */
+@media (min-width: 920px){
+  .filters-row{ gap:10px 16px; }
+}
+
+
+  /* ===== PATCH FOFILTROS ===== */
+
+/* 1) Centralização e layout responsivo
+   - Mobile-first: empilha (coluna)
+   - >=1024px: tenta virar 1 linha (row + wrap)
+*/
+.filters-bar{
+  /* já existia, reforçamos: */
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;   /* mobile */
+  gap: 18px;
+  padding: 2.4vh 0;
+  align-items: center;      /* centraliza todo o bloco */
+}
+
+.filters-row{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  align-items: stretch;
+  justify-content: center;  /* centraliza os itens de cada linha */
+}
+
+/* Em telas largas, as duas "linhas" viram irmãs lado a lado e tentam ficar em 1 linha */
+@media (min-width: 1024px){
+  .filters-bar{
+    flex-direction: row;    /* row1 e row2 lado a lado */
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filters-row{
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* 2) Altura mais baixa dos botões com borda (chips) e dos selects */
+.chip{
+  /* tamanho mais enxuto */
+  font: 700 calc(var(--fs-sm) * .90)/1 var(--ff-cta);
+  padding: .26rem .50rem;     /* menos vertical */
+  min-height: 30px;           /* de 36px -> 30px */
+}
+.select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font: 700 calc(var(--fs-sm) * .90)/1 var(--ff-cta);
+  padding: .22rem .50rem;     /* menos vertical */ 
+  min-height: 30px;           /* de 36px -> 30px */
+  line-height: 1.1;
+}
+
+/* 3) Remover “borda branca”/realce do select ao focar/clicar (todos os navegadores) */
+.select:focus,
+.select:focus-visible,
+.select:-moz-focusring {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: var(--ink) !important;
+}
+
+/* (Safari/WebKit) bloqueia halo azul no focus via mouse */
+.select:focus:not(:focus-visible){
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 4) Borda do select/inputs nunca arredondada (reforço) */
+.select{ border-radius: 0 !important; }
+
+/* 5) Ajuste fino de gap em telas bem largas (opcional) */
+@media (min-width: 1280px){
+  .filters-row{ gap: 8px 12px; }
+}
+/* === FOFILTROS: 1 linha no desktop, quebra fluida no mobile === */
+.filters-bar{
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;   /* desktop: 1 linha */
+  flex-wrap: wrap;       /* quebra quando precisar */
+  justify-content: center;
+  gap: 10px 14px;
+  padding: 10px 0;
+}
+.filters-row--all{
+  display: contents;     /* os grupos "fluem" direto na barra */
+}
+.filters-group{
+  display: inline-flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Altura enxuta (mantemos como você pediu) */
+.chip{
+  font: 700 calc(var(--fs-sm) * .90)/1 var(--ff-cta);
+  padding: .26rem .50rem;
+  min-height: 30px;
+} 
+.select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font: 700 calc(var(--fs-sm) * .90)/1 var(--ff-cta);
+  padding: .22rem .50rem;
+  min-height: 30px;
+  line-height: 1.1;
+  border-radius: 0;
+}
+
+/* Remove halo/borda branca ao focar no select (todos os browsers) */
+.select:focus,
+.select:focus-visible,
+.select:-moz-focusring{
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: var(--ink) !important;
+}
+/* Safari: foco via mouse não pinta nada */
+.select:focus:not(:focus-visible){
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Mobile-first: abaixo de 760px, a barra pode virar 2–3 linhas naturalmente */
+@media (max-width: 760px){
+  .filters-bar{ justify-content: center; gap: 8px 10px; }
+}
+
 </style>
 
 </head>
@@ -326,22 +575,73 @@ footer.has-total #ctaMain {
   <!-- ========== HEADER (kept same as v08) ========== -->
   <header>
     <div class="hdr-inner">
-      <a class="logo" href="https://betshoptv.com" aria-label="BetShopTV – página inicial">
-  <img src="http://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" loading="eager" />
+      <a class="logo" href="#home" aria-label="BetShopTV – página inicial">
+  <img src="https://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" loading="eager" />
 </a>
       <nav class="nav">
+      <a href="#rifas">Rifas</a>
         <a href="#galeria">Galeria de Ofertas</a>
-        <a href="#feed">Feed</a>
-        <a href="#rifas">Rifas</a>
+        
+<a href="#como">Como Funciona?</a>
+         <a href="#sobre">Sobre a BetShopTV</a>
+ 
       </nav>
     </div>
   </header>
 
   <!-- ========== MOUNT POINT: only this container is mutated by JS ========== -->
-  <main id="app" role="main" aria-live="polite">
-    <!-- initial content: will be replaced by renderers -->
-    <section id="page-loading" style="padding:24px;text-align:center;">Carregando...</section>
-  </main>
+  <!-- ========== MOUNT POINT: only this container is mutated by JS ========== -->
+<main id="app" role="main" aria-live="polite">
+  <!-- initial content: will be replaced by renderers -->
+  <section id="page-loading" style="padding:24px;text-align:center;">Carregando.</section>
+</main>
+
+<!-- ========== TEMPLATES (FORA do #app!) ========== -->
+
+<!-- ========== TEMPLATE: SOBRE O PROJETO ========== -->
+<template id="page-sobre">
+  <section style="max-width:750px;margin:0 auto;padding:20px;background:transparent;border:1px solid var(--ink)">
+    <h2 style="font-size: clamp(18px, 3.7vw, 24px);">Olá! Somos a <strong>BetShopTV.com</strong>: uma plataforma de apostas e circulação de valores.</h2>
+
+    <center><div style="text-align:center;   border: 2px solid #2b2424; padding: 8px 33px;
+    display:inline-block;  text-align:center; margin:24px auto; max-width:100%;
+     " class="botao-txt">
+      <p style="font-size:clamp(24px, 6.9vw, 38px); margin-bottom:-2px;"><strong>APOSTE AQUI</strong></p>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:10px;">
+        <a href="#rifas">RIFAS</a>
+    
+        <a href="#galeria">OFERTAS</a>
+      </div><br><br>
+    </div>
+    <p style="letter-spacing:0.2px;">Funciona assim: quem participa da <a href="#rifas">RIFA</a> pode ganhar até <strong>três das 100 peças</strong> do políptico <em>Chop Shop AV</em>.</p>
+    <p style="letter-spacing:0.2px;">No dia <strong>15 de novembro</strong>, durante o encerramento da exposição na <a href="https://www.instagram.com/saturna_estudio/" target="_blank">Saturna</a>, serão sorteadas <strong>ao menos 17 pessoas</strong> para dividir as peças disponíveis — ou seja, as que seguirem à venda na nossa <a href="#galeria">Galeria de Ofertas</a>.</p>
+
+    <p style="letter-spacing:0.2px;">Aqui complicamos em nome de um princípio simples: <strong>equilibrar as chances de vitória entre diferentes graus de contribuição</strong>. Essa é uma das principais políticas de funcionamento do projeto: <strong>calibrar ganhos e apoios mútuos entre quem aposta e quem produz</strong>.</p>
+
+    <p style="letter-spacing:0.2px;">A aposta mínima de <strong>R$ 30</strong> oferece <strong>10% de chance</strong> de ganhar — e essa porcentagem <strong>quase dobra</strong> ao escolher dois números pelo valor promocional de <strong>R$ 50</strong> por par!</p>
+
+    <p style="letter-spacing:0.2px;">Para trocar a sorte pela certeza, você pode garantir suas peças favoritas diretamente na nossa <a href="#galeria">GALERIA de OFERTAS</a>: com valores a partir de <strong>R$ 150</strong> por peça, elas estarão disponíveis até as <strong>21h15 do dia 15</strong>, entre o encerramento das apostas (<strong>21h</strong>) e a divulgação dos resultados finais (<strong>21h30</strong>).</p>
+
+    <p style="letter-spacing:0.2px;">Até lá, seguimos <strong>embaralhando as probabilidades</strong> com <em>promoções exclusivas</em> e <em>ofertas relâmpago</em> para que ainda mais pessoas possam ganhar.</p>
+<br>
+    <div style="text-align:center;font-weight:bold;margin-top:24px;">
+      <span style="font-size:1.3em;">BetShopTV.com
+      <br>
+      Peças únicas, chances múltiplas.</span><br><br>
+
+    </div></center>
+  </section>
+</template>
+<br><br>
+
+<!-- ========== TEMPLATE: COMO FUNCIONA ========== -->
+<template id="page-como">
+  <section style="max-width:750px;margin:0 auto;padding:20px;background:transparent;border:1px solid var(--ink)">
+    <h2>Como Funciona</h2>
+    <p>O sistema da BetShopTV...</p>
+  </section>
+</template>
+
 
   <!-- ========== FOOTER (kept same as v08) ========== -->
 <footer>
@@ -355,21 +655,6 @@ footer.has-total #ctaMain {
   </div>
 </footer>
 
-
-  <!-- Hidden Form (kept in footer area but declared here) -->
-  <form id="hiddenForm" action="https://formsubmit.co/b7c03bfd6671addd4ddd857cb7e53d3d" method="POST" style="display:none;">
-    <input type="hidden" name="nome" id="fNome">
-    <input type="hidden" name="email" id="fEmail">
-    <input type="hidden" name="telefone" id="fTelefone">
-    <input type="hidden" name="pecas" id="fPecas">
-    <input type="hidden" name="rifas" id="fRifas">
-    <input type="hidden" name="favoritas" id="fFav">
-    <input type="hidden" name="total" id="fTotal">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_subject" value="Nova aposta BSTV">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_next" value="https://betshoptv.com/obrigado.html">
-  </form>
 
   <!-- ====== SCRIPT: modular renderers, event delegation, footer bindings ====== -->
 <script>
@@ -385,6 +670,20 @@ const selecionadas = new Set(); // peças escolhidas
 const rifasSel     = new Set(); // rifas escolhidas (ids)
 const favoritos    = new Set(); // peças favoritas
 let totalGeral     = 0;
+  
+  // FOFILTROS!!
+  // FOFILTROS!!
+  // FOFILTROS!!
+
+const filtros = {
+  disponiveis: false,      // "Peças" começa DESLIGADO
+  promo: false,            // NOVO: PROMOÇÃO (apenas R$ 150)
+  grupos: new Set(),       // ex.: Set { '01', '02', ... }
+  sort: 'group-desc'       // 'group-asc' | 'group-desc' | 'price-asc' | 'price-desc'
+};
+
+
+
 
 /* ======================= HELPERS ======================= */
 // FORMATA EM PT-BR SEM CASAS DECIMAIS (ex.: R$ 1.500)
@@ -427,37 +726,303 @@ function calculateRifaTotal(count){
   return 25 * (count - 1) + 30;
 }
 
-/* =============== GALERIA (MASONRY) ================= */
-function renderGaleria(){
+
+// === EXTRAÇÃO DE GRUPOS (ex: '06' de '0609') ===
+function getGruposDisponiveis(){
+  const set = new Set();
+  pecas.forEach(p => {
+    const id = String(p.id_peca || '');
+    if (id.length >= 2) set.add(id.slice(0, 2));
+  });
+  return [...set].sort();
+}
+
+// === BARRA DE FILTROS (reutilizável em Galeria e Feed) ===
+// === BARRA DE FILTROS (1 linha no desktop; reuso em Galeria/Feed) ===
+function buildFilters(currentPage){ // 'galeria' | 'feed'
+  const rerender = () => (currentPage === 'galeria' ? renderGaleria() : renderFeed());
+
+  const bar = document.createElement('div');
+  bar.className = 'filters-bar';
+
+  // ÚNICA "row" que se adapta (desktop: 1 linha; mobile: quebra)
+  const row = document.createElement('div');
+  row.className = 'filters-row filters-row--all';
+
+  // -------- Peças: [DISPONÍVEIS] [PROMOÇÃO] --------
+  const gPieces = document.createElement('div');
+  gPieces.className = 'filters-group';
+
+  const lblPieces = document.createElement('span');
+  lblPieces.className = 'filters-label';
+  lblPieces.textContent = 'PEÇAS';
+  gPieces.appendChild(lblPieces);
+
+  const bDisp = document.createElement('button');
+  bDisp.type = 'button';
+  bDisp.className = 'chip';
+  bDisp.textContent = 'Disponíveis';
+  bDisp.setAttribute('aria-pressed', filtros.disponiveis ? 'true':'false');
+  bDisp.classList.toggle('is-active', !!filtros.disponiveis);
+  bDisp.addEventListener('click', ()=>{
+    filtros.disponiveis = !filtros.disponiveis;  // 🔸 NÃO mexe em nenhum outro filtro
+    rerender();
+  });
+  gPieces.appendChild(bDisp);
+
+  const bPromo = document.createElement('button');
+  bPromo.type = 'button';
+  bPromo.className = 'chip';
+  bPromo.textContent = 'Promoção';
+  bPromo.setAttribute('aria-pressed', filtros.promo ? 'true':'false');
+  bPromo.classList.toggle('is-active', !!filtros.promo);
+  bPromo.addEventListener('click', ()=>{
+    filtros.promo = !filtros.promo;              // 🔸 idem
+    rerender();
+  });
+  gPieces.appendChild(bPromo);
+
+  row.appendChild(gPieces);
+
+  // -------- Grupos --------
+  const gGroups = document.createElement('div');
+  gGroups.className = 'filters-group';
+
+  const lblGroups = document.createElement('span');
+  lblGroups.className = 'filters-label';
+  lblGroups.textContent = 'GRUPOS';
+  gGroups.appendChild(lblGroups);
+
+  const gruposDisp = getGruposDisponiveis();
+  gruposDisp.forEach(g=>{
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip';
+    b.textContent = g;
+    const active = filtros.grupos.has(g);
+    b.setAttribute('aria-pressed', active ? 'true':'false');
+    b.classList.toggle('is-active', active);
+    b.addEventListener('click', ()=>{
+      const on = b.getAttribute('aria-pressed') === 'true';
+      if (on) filtros.grupos.delete(g); else filtros.grupos.add(g);
+      rerender();
+    });
+    gGroups.appendChild(b);
+  });
+  row.appendChild(gGroups);
+
+  // -------- Ordenar (dropdown) --------
+  const gSort = document.createElement('div');
+  gSort.className = 'filters-group';
+
+  const lblSort = document.createElement('span');
+  lblSort.className = 'filters-label';
+  lblSort.textContent = 'ORDENAR';
+  gSort.appendChild(lblSort);
+
+  const selSort = document.createElement('select');
+  selSort.className = 'select';
+  selSort.setAttribute('aria-label','Ordenar resultados');
+  selSort.innerHTML = `
+    <option value="group-asc">Grupo: crescente</option>
+    <option value="group-desc">Grupo: decrescente</option>
+    <option value="price-asc">Preço: menor → maior</option>
+    <option value="price-desc">Preço: maior → menor</option>
+  `;
+  selSort.value = filtros.sort;
+  selSort.addEventListener('change', ()=>{
+    filtros.sort = selSort.value;                 // 🔸 idem
+    rerender();
+  });
+  gSort.appendChild(selSort);
+  row.appendChild(gSort);
+
+  // -------- FEED (toggle de página, sem resetar filtros) --------
+  const gFeed = document.createElement('div');
+  gFeed.className = 'filters-group';
+
+  const bFeed = document.createElement('button');
+  bFeed.type = 'button';
+  bFeed.className = 'chip';
+  bFeed.textContent = 'FEED';
+  const feedActive = (currentPage === 'feed');
+  bFeed.setAttribute('aria-pressed', feedActive ? 'true':'false');
+  bFeed.classList.toggle('is-active', feedActive);
+  bFeed.addEventListener('click', ()=>{
+    // 🔸 Apenas troca de página; NÃO toca em nenhum filtro.
+    if (currentPage === 'feed') showPage('galeria');
+    else showPage('feed');
+  });
+  gFeed.appendChild(bFeed);
+  row.appendChild(gFeed);
+
+  bar.appendChild(row);
+  return bar;
+}
+
+// === lista filtrada + ordenada, compartilhada por Galeria e Feed ===
+function getFilteredSortedList(source){
+  let lista = Array.isArray(source) ? [...source] : [];
+
+  // 1) Somente disponíveis
+  if (filtros.disponiveis) {
+    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
+  }
+
+  // 2) Promoção (apenas R$ 150)
+  if (filtros.promo) {
+    lista = lista.filter(p => Number(p.preco) === 150);
+  }
+
+  // 3) Grupos (multi)
+  if (filtros.grupos && filtros.grupos.size > 0) {
+    lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
+  }
+
+  // 4) Ordenação
+  const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
+  const numKey   = p => parseInt(p.id_peca) || 0;
+
+  if (filtros.sort === 'price-asc') {
+    lista.sort((a,b)=> (parseFloat(a.preco||0) - parseFloat(b.preco||0)));
+  } else if (filtros.sort === 'price-desc') {
+    lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
+  } else if (filtros.sort === 'group-asc') {
+    lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
+  } else { // 'group-desc' (default)
+    lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
+  }
+
+  return lista;
+}
+ 
+// === FUNÇÃO PRINCIPAL DE RENDERIZAÇÃO DA GALERIA ===
+function renderGaleria() {
   const app = document.getElementById('app');
   app.innerHTML = '';
 
   const section = document.createElement('section');
   section.id = 'galeria';
 
-  const masonry = document.createElement('div');
-  masonry.className = 'galeria';
-  masonry.id = 'masonryGallery';
+  const colunas = 3; // mantém seu layout atual
 
-  // 👉 Reverte a ordem das peças para exibir invertido (9/8/7... etc)
-  [...pecas].reverse().forEach(p => {
-    const sold = /vendid/i.test(String(p.status || ''));
-    const item = document.createElement('div');
-    item.className = 'gal-item';
-    if (sold) item.classList.add('sold');
-    item.dataset.id = p.id_peca;
+  // Barra de filtros (nova)
+section.appendChild( buildFilters('galeria') );
 
-    const firstImg = (p.imagens && p.imagens[0]) ? p.imagens[0] : '';
-    const img = imgWithFallback('/img/tmb/' + firstImg + '.avif');
-    img.alt = p.titulo || ('Peça ' + p.id_peca);
-    item.appendChild(img);
 
-    masonry.appendChild(item);
+  // ====== FILTRAGEM ======
+// === dados da galeria obedecendo os filtros globais
+let lista = getFilteredSortedList(pecas);
+
+
+  // Peças (somente disponíveis quando ativado)
+  if (filtros.disponiveis) {
+    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
+  }
+
+// PROMOÇÃO (apenas R$ 150)
+if (filtros.promo) {
+  lista = lista.filter(p => Number(p.preco) === 150);
+}
+
+
+  // Grupos (multi)
+  if (filtros.grupos.size > 0) {
+    lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
+  }
+
+  // ====== ORDENAÇÃO ======
+  const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
+  const numKey   = p => parseInt(p.id_peca) || 0;
+
+  if (filtros.sort === 'price-asc') {
+    lista.sort((a,b)=> (parseFloat(a.preco||0) - parseFloat(b.preco||0)));
+  } else if (filtros.sort === 'price-desc') {
+    lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
+  } else if (filtros.sort === 'group-asc') {
+    lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
+  } else { // 'group-desc' (default)
+    lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
+  }
+
+  // ====== GRID (mantém seu layout) ======
+  const linhas = Math.ceil(lista.length / colunas);
+  const ordenada = [];
+  for (let l=0; l<linhas; l++){
+    for (let c=0; c<colunas; c++){
+      const idx = l * colunas + c;
+      if (lista[idx]) ordenada.push(lista[idx]);
+    }
+  }
+
+  const container = document.createElement('div');
+  container.style = 'display:flex;gap:4px;align-items:flex-start;';
+  const colsEls = Array.from({ length: colunas }, () => {
+    const col = document.createElement('div');
+    col.style = 'flex:1;display:flex;flex-direction:column;gap:4px;margin-top:1.8vh;';
+    container.appendChild(col);
+    return col; 
   });
 
-  section.appendChild(masonry);
+  const alturas = Array(colunas).fill(0);
+  ordenada.forEach(p=>{
+    const item = document.createElement('div');
+    item.className = 'gal-item';
+    if (/vendid/i.test(p.status || '')) item.classList.add('sold');
+    item.dataset.id = p.id_peca;
+
+    const img = imgWithFallback('https://betshoptv.com/img/tmb/' + p.imagens[0] + '.avif');
+    img.alt = p.titulo || `Peça ${p.id_peca}`;
+    img.style = 'border: 1px solid #2b2424;';
+    item.appendChild(img);
+
+    let minIdx = 0;
+    for (let i=1;i<colunas;i++){ if (alturas[i] < alturas[minIdx]) minIdx = i; }
+    colsEls[minIdx].appendChild(item);
+    alturas[minIdx] += 1;
+  });
+
+  section.appendChild(container);
   app.appendChild(section);
 }
+
+// === lista filtrada e ordenada (usada por Galeria e Feed) ===
+function getFilteredSortedList(source){
+  let lista = Array.isArray(source) ? [...source] : [];
+
+  // 1. somente disponíveis
+  if (filtros.disponiveis) {
+    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
+  }
+
+  // 2. promoção (R$ 150)
+  if (filtros.promo) {
+    lista = lista.filter(p => Number(p.preco) === 150);
+  }
+
+  // 3. grupos
+  if (filtros.grupos && filtros.grupos.size > 0) {
+    lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
+  }
+
+  // 4. ordenação
+  const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
+  const numKey   = p => parseInt(p.id_peca) || 0;
+
+  if (filtros.sort === 'price-asc') {
+    lista.sort((a,b)=> (parseFloat(a.preco||0) - parseFloat(b.preco||0)));
+  } else if (filtros.sort === 'price-desc') {
+    lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
+  } else if (filtros.sort === 'group-asc') {
+    lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
+  } else { // 'group-desc'
+    lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
+  }
+
+  return lista;
+}
+
+
 
 
 
@@ -468,145 +1033,147 @@ function renderFeed(){
 
   const section = document.createElement('section');
   section.id = 'feed';
+  
+  // Barra de filtros compartilhada (indica que estamos no feed)
+section.appendChild( buildFilters('feed') );
 
+ 
   const list = document.createElement('div');
   list.id = 'feedList';
   list.className = 'feed';
 
-  [...pecas].reverse().forEach(p => {
-    // ↓ antes pulava as vendidas; agora só tratamos diferente
-    const sold = /vendid/i.test(String(p.status || ''));
+  // === aplica os mesmos filtros e ordem da galeria ===
+const base = getFilteredSortedList(pecas);
 
-    const post = document.createElement('article');
-    post.className = 'post';
-    post.id = 'post-' + p.id_peca;
+// se quiser inverter a ordem (mais recentes primeiro), descomente a linha abaixo:
+// const base = getFilteredSortedList(pecas).slice().reverse();
 
-    // Carrossel
-    const carousel = document.createElement('div');
-    carousel.className = 'carousel';
+base.forEach(p => {
+  const sold = /vendid/i.test(String(p.status || ''));
+  const post = document.createElement('article');
+  post.className = 'post';
+  post.id = 'post-' + p.id_peca;
 
-    const imgs = Array.isArray(p.imagens) ? p.imagens : [];
-    imgs.forEach(name=>{
-      const slide = document.createElement('div');
-      slide.className = 'carousel-slide';
-      const img = imgWithFallback('/img/otm/' + name + '.avif');
-      slide.appendChild(img);
-      carousel.appendChild(slide);
+  const carousel = document.createElement('div');
+  carousel.className = 'carousel';
+
+  const imgs = Array.isArray(p.imagens) ? p.imagens : [];
+  imgs.forEach(name=>{
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+    const img = imgWithFallback('https://betshoptv.com/img/otm/' + name + '.avif');
+    slide.appendChild(img);
+    carousel.appendChild(slide);
+  });
+
+  const barWrap = document.createElement('div');
+  barWrap.className = 'carousel-bar-wrap';
+  const bar = document.createElement('div');
+  bar.className = 'carousel-bar';
+  const pos = document.createElement('div');
+  pos.className = 'pos';
+  bar.appendChild(pos);
+  barWrap.appendChild(bar);
+
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+
+  const l1 = document.createElement('div');
+  l1.className = 'linha1';
+
+  const title = document.createElement('div');
+  title.className = 'titulo';
+  title.textContent = p.titulo || ('Peça ' + p.id_peca);
+
+  const price = document.createElement('div');
+  price.className = 'preco';
+  if (sold){
+    price.textContent = '⬤';
+    price.classList.add('sold');
+  } else {
+    price.textContent = fmt(p.preco);
+  }
+  l1.appendChild(title);
+  l1.appendChild(price);
+
+  const tecnica = document.createElement('div');
+  tecnica.className = 'tecnica';
+  tecnica.textContent = p.tecnica || '';
+
+  const dims = document.createElement('div');
+  dims.className = 'dimens';
+  dims.textContent = p.dimensao || p.tamanho || '';
+
+  const footerMeta = document.createElement('div');
+  footerMeta.className = 'meta-footer';
+
+  if (!sold){
+    const leftActions = document.createElement('div');
+    leftActions.className = 'left-actions';
+    const rightActions = document.createElement('div');
+    rightActions.className = 'right-actions';
+
+    const fav = document.createElement('button');
+    fav.className = 'btn fav-btn';
+    fav.type = 'button';
+    fav.setAttribute('aria-label', 'Favoritar ' + (p.titulo||''));
+    fav.textContent = '♥';
+    if (favoritos.has(p.id_peca)) fav.classList.add('active');
+    leftActions.appendChild(fav);
+
+    const add = document.createElement('button');
+    add.className = 'btn add-btn';
+    add.type = 'button';
+    const estaSel = selecionadas.has(p.id_peca);
+    if (estaSel) add.classList.add('added');
+    add.textContent = estaSel ? 'REMOVER' : 'ADICIONAR';
+    rightActions.appendChild(add);
+
+    footerMeta.appendChild(leftActions);
+    footerMeta.appendChild(rightActions);
+
+    fav.addEventListener('click', () => {
+      const id = p.id_peca;
+      if (favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
+      fav.classList.toggle('active', favoritos.has(id));
+      try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
+      updatePills();
     });
 
-    const barWrap = document.createElement('div');
-    barWrap.className = 'carousel-bar-wrap';
-    const bar = document.createElement('div');
-    bar.className = 'carousel-bar';
-    const pos = document.createElement('div');
-    pos.className = 'pos';
-    bar.appendChild(pos);
-    barWrap.appendChild(bar);
+    add.addEventListener('click', () => {
+      const id = p.id_peca;
+      const isAdded = add.classList.toggle('added');
+      if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
+      add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
+      calcularTotal();
+      updatePills();
+    });
+  }
 
-    // Meta
-    const meta = document.createElement('div');
-    meta.className = 'meta';
+  meta.appendChild(l1);
+  if (tecnica && tecnica.textContent) meta.appendChild(tecnica);
+  meta.appendChild(dims);
+  meta.appendChild(footerMeta);
 
-    const l1 = document.createElement('div');
-    l1.className = 'linha1';
+  post.appendChild(carousel);
+  post.appendChild(barWrap);
+  post.appendChild(meta);
+  list.appendChild(post);
 
-    const title = document.createElement('div');
-    title.className = 'titulo';
-    title.textContent = p.titulo || ('Peça ' + p.id_peca);
-
-    const price = document.createElement('div');
-    price.className = 'preco';
-    if (sold){
-      price.textContent = '⬤';
-      price.classList.add('sold'); // deixa vermelho via CSS
-    } else {
-      price.textContent = fmt(p.preco);
+  // barra de posição
+  (function(car, posEl){
+    const slides = car.querySelectorAll('.carousel-slide');
+    const total = slides.length || 1;
+    function updatePos(){
+      const idx = Math.round(car.scrollLeft / car.clientWidth);
+      const pct = ((idx+1)/Math.max(1,total)) * 100;
+      posEl.style.width = pct + '%';
     }
-    l1.appendChild(title);
-    l1.appendChild(price);
+    car.addEventListener('scroll', ()=>{ clearTimeout(car._t); car._t = setTimeout(updatePos, 60); });
+    updatePos();
+  })(carousel, bar.querySelector('.pos'));
+});
 
-    const tecnica = document.createElement('div');
-    tecnica.className = 'tecnica';
-    tecnica.textContent = p.tecnica || '';
-
-    const dims = document.createElement('div');
-    dims.className = 'dimens';
-    dims.textContent = p.dimensao || p.tamanho || '';
-
-    // Footer de ações
-    const footerMeta = document.createElement('div');
-    footerMeta.className = 'meta-footer';
-
-    if (!sold){
-      // Só mostra botões quando NÃO está vendida
-      const leftActions = document.createElement('div');
-      leftActions.className = 'left-actions';
-
-      const rightActions = document.createElement('div');
-      rightActions.className = 'right-actions';
-
-      const fav = document.createElement('button');
-      fav.className = 'btn fav-btn';
-      fav.type = 'button';
-      fav.setAttribute('aria-label', 'Favoritar ' + (p.titulo||''));
-      fav.textContent = '♥';
-      if (favoritos.has(p.id_peca)) fav.classList.add('active');
-      leftActions.appendChild(fav);
-
-      const add = document.createElement('button');
-      add.className = 'btn add-btn';
-      add.type = 'button';
-      const estaSel = selecionadas.has(p.id_peca);
-      if (estaSel) add.classList.add('added');
-      add.textContent = estaSel ? 'REMOVER' : 'ADICIONAR';
-      rightActions.appendChild(add);
-
-      footerMeta.appendChild(leftActions);
-      footerMeta.appendChild(rightActions);
-
-      // Comportamentos (só quando não vendida)
-      fav.addEventListener('click', () => {
-        const id = p.id_peca;
-        if (favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
-        fav.classList.toggle('active', favoritos.has(id));
-        try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
-        updatePills();
-      });
-
-      add.addEventListener('click', () => {
-        const id = p.id_peca;
-        const isAdded = add.classList.toggle('added');
-        if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
-        add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
-        calcularTotal();
-        updatePills();
-      });
-    }
-
-    // Montagem
-    meta.appendChild(l1);
-    if (tecnica && tecnica.textContent) meta.appendChild(tecnica);
-    meta.appendChild(dims);
-    meta.appendChild(footerMeta);
-
-    post.appendChild(carousel);
-    post.appendChild(barWrap);
-    post.appendChild(meta);
-    list.appendChild(post);
-
-    // Atualiza barra de posição no scroll
-    (function(car, posEl){
-      const slides = car.querySelectorAll('.carousel-slide');
-      const total = slides.length || 1;
-      function updatePos(){
-        const idx = Math.round(car.scrollLeft / car.clientWidth);
-        const pct = ((idx+1)/Math.max(1,total)) * 100;
-        posEl.style.width = pct + '%';
-      }
-      car.addEventListener('scroll', ()=>{ clearTimeout(car._t); car._t = setTimeout(updatePos, 60); });
-      updatePos();
-    })(carousel, bar.querySelector('.pos'));
-  });
 
   section.appendChild(list);
   app.appendChild(section);
@@ -773,17 +1340,20 @@ function renderRifas(){
 }
 
 
+
 /* =============== NAVEGAÇÃO / HASH ================= */
 function showPage(page, opts = {}) {
   const updateHash = (typeof opts.updateHash === 'boolean') ? opts.updateHash : true;
   const pieceId    = opts.pieceId || null;
 
   if (page === 'galeria') renderGaleria();
-  else if (page === 'feed'){
+  else if (page === 'feed') {
     renderFeed();
     if (pieceId) setTimeout(()=> openFeedAt(pieceId), 80);
   }
   else if (page === 'rifas') renderRifas();
+  else if (page === 'sobre') renderSobreProjeto();
+  else if (page === 'como') renderComoFunciona();
   else renderGaleria();
 
   updatePills(); calcularTotal();
@@ -796,7 +1366,28 @@ function showPage(page, opts = {}) {
     }
     if (location.hash !== '#' + newHash) location.hash = newHash;
   }
+    updateNavActive(); // ← marca o botão ativo do menu
+
 }
+
+// === Atualiza o destaque ativo no menu do cabeçalho ===
+function updateNavActive(forcedPage = null) {
+  const { page } = parseHash();
+  const current = forcedPage !== null ? forcedPage : page;
+
+  document.querySelectorAll('.nav a').forEach(a => {
+    const target = a.getAttribute('href').replace('#','');
+
+    // Se estiver na home (sem hash ou #home), nenhum botão fica ativo
+    if (!location.hash || current === 'home') {
+      a.classList.remove('active');
+    } else {
+      a.classList.toggle('active', target === current);
+    }
+  });
+}
+
+
 
 function parseHash(){
   const raw = (location.hash || '').slice(1);
@@ -805,31 +1396,53 @@ function parseHash(){
   return { page: pagePart || 'galeria', params: new URLSearchParams(query || '') };
 }
 
-function handleHashChange(){
+function handleHashChange() {
   const { page, params } = parseHash();
-  if (page === 'feed'){
-    const p = params.get('p');
-    if (p) showPage('feed', { updateHash:false, pieceId:p });
-    else   showPage('feed', { updateHash:false });
-  } else if (page === 'rifas'){
-    showPage('rifas', { updateHash:false });
-  } else {
-    showPage('galeria', { updateHash:false });
+
+  // Sem hash ou #home → mostra conteúdo da home
+  if (!location.hash || page === 'home') { 
+    renderHome();
+    updateNavActive(''); // nenhum botão ativo
+    return;
   }
+
+  if (page === 'feed') {
+    const p = params.get('p');
+    if (p) showPage('feed', { updateHash: false, pieceId: p });
+    else   showPage('feed', { updateHash: false });
+
+  } else if (page === 'rifas') {
+    showPage('rifas', { updateHash: false });
+
+  } else if (page === 'sobre') {
+    renderSobreProjeto();
+
+  } else if (page === 'como') {
+    renderComoFunciona();
+
+  } else {
+    showPage('galeria', { updateHash: false });
+  }
+
+  updateNavActive(page);
 }
+
+
+
 window.addEventListener('hashchange', handleHashChange);
 
 // links do header passam a escrever o hash
-document.querySelectorAll('.nav a').forEach(a=>{
-  a.addEventListener('click', (e)=>{
+document.querySelectorAll('.nav a').forEach(a => {
+  a.addEventListener('click', (e) => {
     const href = a.getAttribute('href') || '';
-    if (href.startsWith('#')){
+    if (href.startsWith('#')) {
       e.preventDefault();
       const target = href.slice(1);
-      location.hash = target; // hashchange cuidará do render
+      showPage(target); // Chama diretamente
     }
   });
 });
+
 
 /* =============== Delegação no #app =============== */
 function attachAppDelegation(){
@@ -887,14 +1500,14 @@ function attachBindings(){
     const app = document.getElementById('app');
     app.innerHTML = `
       <section id="checkout">
-        <div style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
-          <h2>Preencha seus dados</h2>
-          <label>Nome *</label><input id="ck_nome" type="text" style="width:100%">
-          <label>E-mail *</label><input id="ck_email" type="email" style="width:100%">
-          <label>Telefone</label><input id="ck_fone" type="tel" style="width:100%">
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <button id="ck_voltar" style="flex:1">Voltar</button>
-            <button id="ck_to_pix" style="flex:1;background:var(--red);color:#fff">Avançar</button>
+        <div style="max-width:520px;  margin:0 auto; height: 6.9vw; max-height: 33px;margin-bottom: 3vw;">
+          <h2 style="font-size: 16px;font-weight:300; color:#2b2424; text-transform: uppercase; margin-bottom:24px;">Preencha seus dados abaixo:</h2>
+          <label>Nome *</label><input id="ck_nome" type="text" style="width:100%;height: 6.9vw; max-height: 33px;margin-bottom: 3vw;">
+          <label>E-mail *</label><input id="ck_email" type="email" style="width:100%;height: 6.9vw; max-height: 33px;margin-bottom: 3vw;">
+          <label>Telefone</label><input id="ck_fone" type="tel" style="width:100%;height: 6.9vw; max-height: 33px; margin-bottom: 3vw;">
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <button id="ck_voltar" style="flex:1; height: 7.5vw; max-height: 38px;">Voltar</button>
+            <button id="ck_to_pix" style="flex:1;height: 7.5vw; max-height: 38px;background:var(--red);color:#fff">Avançar</button>
           </div>
         </div>
       </section>
@@ -1147,6 +1760,27 @@ async function init(){
       '<div style="padding:20px;color:#900;">Erro ao carregar dados. Veja o console.</div>';
   }
 }
+function renderHome() {
+  const app = document.getElementById('app');
+  const tpl = document.getElementById('page-sobre');
+  app.innerHTML = '';
+  if (tpl) app.appendChild(tpl.content.cloneNode(true));
+}
+
+  function renderSobreProjeto(){
+  const app = document.getElementById('app');
+  const tpl = document.getElementById('page-sobre'); 
+  app.innerHTML = '';
+  if (tpl) app.appendChild(tpl.content.cloneNode(true));
+}
+
+function renderComoFunciona(){
+  const app = document.getElementById('app');
+  const tpl = document.getElementById('page-como');
+  app.innerHTML = '';
+  if (tpl) app.appendChild(tpl.content.cloneNode(true));
+}
+
 window.addEventListener('DOMContentLoaded', init);
 
 /* Só monitora alterações perigosas no footer (aviso em console) */
@@ -1161,6 +1795,15 @@ window.addEventListener('DOMContentLoaded', init);
   mo.observe(footer, { childList:true, subtree:true });
 })();
 </script>
+<!-- Campos ocultos (essenciais para o GAS funcionar) -->
+<input type="hidden" id="fNome">
+<input type="hidden" id="fEmail">
+<input type="hidden" id="fTelefone">
+<input type="hidden" id="fPecas">
+<input type="hidden" id="fRifas">
+<input type="hidden" id="fFav">
+<input type="hidden" id="fTotal">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" referrerpolicy="no-referrer"></script>
 
 </body>
