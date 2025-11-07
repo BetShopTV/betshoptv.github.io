@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1752,7 +1753,7 @@ function renderHome() {
 
   function renderSobreProjeto(){
   const app = document.getElementById('app');
-  const tpl = document.getElementById('page-sobre');
+  const tpl = document.getElementById('page-sobre'); 
   app.innerHTML = '';
   if (tpl) app.appendChild(tpl.content.cloneNode(true));
 }
@@ -1778,6 +1779,15 @@ window.addEventListener('DOMContentLoaded', init);
   mo.observe(footer, { childList:true, subtree:true });
 })();
 </script>
+<!-- Campos ocultos (essenciais para o GAS funcionar) -->
+<input type="hidden" id="fNome">
+<input type="hidden" id="fEmail">
+<input type="hidden" id="fTelefone">
+<input type="hidden" id="fPecas">
+<input type="hidden" id="fRifas">
+<input type="hidden" id="fFav">
+<input type="hidden" id="fTotal">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" referrerpolicy="no-referrer"></script>
 
 </body>
