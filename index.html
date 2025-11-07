@@ -1004,13 +1004,190 @@ footer.has-total #ctaMain {
     
 </style>
 
-
+ 
 
 
 
 </template>
 
     
+<template id="page-como">
+  <!-- 🧱 CABEÇALHO PRINCIPAL -->
+  <section
+    style="
+    font-size: clamp(18px, 3vw, 27px);
+    margin-bottom: clamp(8px, 3.8vw, 38px);
+    margin-top: 2.4vw;
+    color: RED;
+    font-weight: 400;
+    line-height: 1.45;
+    text-align: center;
+    padding: 4px clamp(27px, 3.3vw, 40px);
+  }
+    "
+  >
+
+    <p>
+      As apostas do projeto <strong>BetShopTV.com</strong> são divididas
+      entre <strong>RIFAS</strong> e <strong>OFERTAS</strong>.
+      <br>
+      Quem participa da rifa concorre às peças disponíveis
+      na Galeria de Ofertas, onde é possível comprar peças diretamente
+      e retirá-las do conjunto destinado ao sorteio das rifas.
+    </p>
+  </section>
+
+
+  <!-- 🎟️ SEÇÃO EXPANSÍVEL RIFAS -->
+  <section
+    style="
+      background-color: #ffffff;
+      color: #2b2424;
+      padding: clamp(20px, 4vw, 40px);
+      max-width: 800px;
+      margin: 0 auto;
+    "
+  >
+    <h2
+      style="
+        color: #ff0000;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 16px;
+      "
+    >
+      RIFAS
+    </h2>
+    <p style="margin-bottom: 12px;">
+      Cada número custa <strong>R$ 30</strong>, ou <strong>R$ 50</strong> o par.
+      É possível apostar em quantos números quiser para aumentar as chances no sorteio, mas atenção: <strong>cada pessoa só poderá ser sorteada uma vez</strong>, ainda que realize uma aposta múltipla.
+    </p>
+    <ul style="list-style: disc; margin-left: 20px; margin-bottom: 16px;">
+      <li>Serão premiadas ao menos 17 pessoas.</li>
+      <li>A distribuição depende das peças disponíveis no dia do sorteio.</li>
+    </ul>
+    <div
+      style="
+        background-color: #bebab0;
+        padding: 10px 16px;
+        font-size: 0.95em;
+        border-left: 3px solid #2b2424;
+      "
+    >
+      <p>
+        Antes de confirmar sua aposta, marque suas peças favoritas!<br>
+        Essa seleção ajuda na distribuição final, facilitando a reserva
+        das peças às pessoas sorteadas.<br>
+        <a href="#favoritos" style="color: #bebab0; text-decoration: underline;">Saiba mais ▸</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- 🛒 SEÇÃO EXPANSÍVEL OFERTAS -->
+  <section
+    style="
+      background-color: #ffffff;
+      color: #2b2424;
+      padding: clamp(20px, 4vw, 40px);
+      max-width: 800px;
+      margin: 0 auto;
+    "
+  >
+    <h2
+      style="
+        color: #ff0000;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 16px;
+      "
+    >
+      OFERTAS
+    </h2>
+    <ul style="list-style: disc; margin-left: 20px; margin-bottom: 16px;">
+      <li>As peças disponíveis a partir de <strong>R$ 150</strong>!</li>
+      <li>TODAS as peças estarão em promoção a R$ 150 antes do sorteio final, pelo período mínimo de 8 horas.</li>
+      <li>As vendas diretas ocorrem<strong> até as 21h15 do dia 15, 
+      entre o encerramento das apostas (21h) e a divulgação dos resultados finais (21h30).</strong></li>
+    </ul>
+    <a href="#ofertas" style="color: white; text-decoration: underline;">Saiba mais ▸</a>
+  </section>
+
+  <!-- 🎰 SEÇÃO EXPANSÍVEL SORTEIO FINAL -->
+  <section
+    style="
+      background-color: #bebab0;
+      color: #2b2424;
+      padding: clamp(20px, 4vw, 40px);
+      max-width: 800px;
+      margin: 0 auto;
+    "
+  >
+    <h2
+      style="
+        color: #ff0000;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 16px;
+      "
+    >
+      SORTEIO FINAL
+    </h2>
+    <ul style="list-style: disc; margin-left: 20px;">
+      <li>Data: <strong>15 de novembro de 2025</strong></li>
+      <li>Local: <strong>Saturna Estúdio</strong> — Rua Lopes de Oliveira, 166, Barra Funda, SP</li>
+      <li>O sorteio ocorre durante o encerramento da exposição.</li>
+      <li>Resultados publicados no site e Instagram <a href="https://instagram.com/betshoptv" target="_blank">@betshoptv</a>.</li>
+    </ul>
+    <a href="#regras" style="color: #bebab0; text-decoration: underline;">Saiba mais ▸</a>
+  </section>
+
+  <!-- 📦 SEÇÃO EXPANSÍVEL RETIRADA E ENVIO -->
+  <section
+    style="
+      background-color: #ffffff;
+      color: #2b2424;
+      padding: clamp(20px, 4vw, 40px);
+      max-width: 800px;
+      margin: 0 auto;
+    "
+  >
+    <h2
+      style="
+        color: #ff0000;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 16px;
+      "
+    >
+      RETIRADA E ENVIO
+    </h2>
+    <p>
+      As pessoas sorteadas poderão retirar ou receber suas peças de três modos:
+    </p>
+    <ol style="margin-left: 20px;">
+      <li>Presencialmente no evento de sorteio em São Paulo.</li>
+      <li>Retirada em pontos da região central ou estações de Metrô/CPTM.</li>
+      <li>Envio pelos Correios (frete não incluso).</li>
+    </ol>
+    <p style="margin-top: 12px;">
+      Todos os envios acompanham certificado e instruções de montagem.
+    </p>
+  </section>
+
+  <!-- 📬 RODAPÉ -->
+  <footer
+    style="
+      background-color: #bebab0;
+      color: #2b2424;
+      text-align: center;
+      padding: 20px;
+      font-size: 15px;
+    "
+  >
+    ☞ CONTATO:
+    <a href="mailto:betshoptv@gmail.com" style="color: #2b2424;">betshoptv@gmail.com</a>
+  </footer>
+</template>
 
 
 
