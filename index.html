@@ -656,7 +656,7 @@ footer.has-total #ctaMain {
   .modal-content {
   padding: 38px 18px;
   max-width: 80vw;
-  max-height: 63vh;
+  max-height: 69vh;
 }
 
   .filters-bar{ justify-content: center; gap: 8px 10px; }
@@ -2602,6 +2602,75 @@ window.addEventListener('DOMContentLoaded', init);
 })();
 
 
+(function(){
+  // Usa a mesma URL do checkout
+  const GAS_URL = typeof window.GAS_URL === 'string'
+    ? window.GAS_URL
+    : 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const form = document.getElementById('form-agendar');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+
+      const nome  = (document.getElementById('ag_nome').value || '').trim();
+      const email = (document.getElementById('ag_email').value || '').trim();
+      const tel   = (document.getElementById('ag_telefone').value || '').trim();
+      const msg   = (document.getElementById('ag_msg').value || '').trim();
+      const btn   = document.getElementById('ag_enviar');
+      const feed  = document.getElementById('ag_feedback');
+
+      if (!nome || !email || !msg) {
+        alert('Preencha nome, e-mail e a mensagem de agendamento.');
+        return;
+      }
+
+      // Monta como o checkout, mas separado:
+      // - tipo=AGENDAR
+      // - pecas recebe a mensagem
+      // - rifas/favoritas/total vazios
+      const fd = new FormData();
+      fd.append('tipo', 'AGENDAR');
+      fd.append('nome', nome);
+      fd.append('email', email);
+      fd.append('telefone', tel);
+      fd.append('pecas', msg);       // <- mensagem vai na coluna PECAS
+      fd.append('rifas', '');
+      fd.append('favoritas', '');
+      fd.append('total', '');
+
+      // UX básico
+      const old = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      try{
+        const res = await fetch(GAS_URL, { method:'POST', body: fd });
+        // Melhor esforço: se 200, consideramos OK
+        if (res.ok) {
+          feed.style.display = 'block';
+          feed.style.color = 'red';
+          feed.textContent = 'Agendamento enviado! Em breve entraremos em contato.';
+          form.reset();
+          // Você pode fechar o modal aqui, se preferir:
+          // setTimeout(()=> fecharModalAgende(), 1200);
+        } else {
+          throw new Error('Falha ao enviar. Tente novamente.');
+        }
+      } catch(err){
+        feed.style.display = 'block';
+        feed.style.color = '#900';
+        feed.textContent = 'Erro ao enviar. Tente novamente.';
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = old;
+      }
+    });
+  });
+})();
 
 
 </script>
@@ -2685,13 +2754,136 @@ window.addEventListener('DOMContentLoaded', init);
 </script>
 
 <!-- 🔳 MODAIS GERAIS -->
-<div id="modal-agende-visita" class="modal-overlay" style="display: none;">
+<div id="modal-agende-visita" class="modal-overlay" style="display:none;">
   <div class="modal-content">
     <button class="modal-close" onclick="fecharModal()">✕</button>
-    <h2>AGENDE AQUI</h2>
-    <p>Entre em contato por mensagem direta para visitar a exposição.</p>
+<div class="agendar-visita">
+  <h2 class="agendar-titulo">AGENDE SUA VISITA</h2>
+
+  <form id="form-agendar">
+    <label for="ag_nome">NOME *</label>
+    <input id="ag_nome" name="nome" type="text" required>
+
+    <label for="ag_email">E-MAIL *</label>
+    <input id="ag_email" name="email" type="email" required>
+
+    <label for="ag_telefone">TELEFONE</label>
+    <input id="ag_telefone" name="telefone" type="tel">
+
+    <label for="ag_msg">QUANDO VAMOS? *</label>
+    <textarea id="ag_msg" name="mensagem" rows="4" required></textarea>
+
+    <button id="ag_enviar" type="submit" class="agendar-btn">ENVIAR</button>
+    <div id="ag_feedback" class="agendar-feedback"></div>
+  </form>
+</div>
+
+<style>
+.agendar-visita {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.agendar-titulo {
+  font: 700 var(--fs-h2)/1.1 var(--ff-cta);
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 8px;
+}
+
+.agendar-sub {
+  font-size: var(--fs-p);
+  margin-bottom: 22px;
+  max-width: 480px;
+  color: var(--ink);
+}
+
+#form-agendar {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+
+#form-agendar label {
+  font: 700 var(--fs-sm)/1 var(--ff-cta);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: -4px;
+  margin-top: 6px;
+}
+
+#form-agendar input {
+  height: 30px;
+}
+
+#form-agendar input,
+#form-agendar textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: var(--ff-body);
+  font-size: var(--fs-p);
+  border: var(--bd-thin) solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  border-radius: 0;
+}
+
+#form-agendar textarea {
+  resize: vertical;
+  min-height: 38px;
+}
+
+.agendar-btn {
+  margin-top: 10px;
+  align-self: center;
+  background: var(--red);
+  color: #fff;
+  font: 700 var(--fs-h2)/1 var(--ff-cta);
+  border: none;
+  padding: 12px 36px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.agendar-btn:hover {
+  background: var(--ink);
+  color: var(--beige);
+}
+
+.agendar-feedback {
+  margin-top: 14px;
+  font: 700 var(--fs-sm)/1 var(--ff-cta);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    padding: 28px 18px;
+  }
+  #form-agendar {
+    gap: 12px;
+  }
+  .agendar-btn {
+    width: 42%;
+    padding: 14px 0;
+  }
+}
+</style>
+
+
+
+    <div id="ag_feedback" style="display:none;margin-top:12px;font-weight:700;"></div>
   </div>
 </div>
+
+
 
 <div id="modal-fave-checkout" class="modal-overlay" style="display: none;">
   <div class="modal-content">
