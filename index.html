@@ -567,23 +567,6 @@ footer.has-total #ctaMain {
   box-shadow: none !important;
 }
 
-/* Mobile-first: abaixo de 760px, a barra pode virar 2–3 linhas naturalmente */
-@media (max-width: 760px){
-  .filters-bar{ justify-content: center; gap: 8px 10px; }
-}
-
-/* Offset da âncora para não esconder sob o cabeçalho fixo (exceto feed) */
-app[id]:not(#feed),
-section[id]:not(#feed),
-template[id]:not(#feed),
-div[id]:not(#feed) {
-  scroll-margin-top: 0px;
-}
-  .modal-content {
-  padding: 42px 18px;
-  max-width: 73vw;
-  max-height: 55vh;
-}
 
 /* === FEED – Desktop: carrossel em faixa horizontal === */
 @media (min-width: 1024px){
@@ -666,6 +649,27 @@ div[id]:not(#feed) {
   cursor: pointer;
 }
 
+/* Mobile-first: abaixo de 760px, a barra pode virar 2–3 linhas naturalmente */
+@media (max-width: 760px){
+
+  .modal-content {
+  padding: 42px 18px;
+  max-width: 73vw;
+  max-height: 55vh;
+}
+
+  .filters-bar{ justify-content: center; gap: 8px 10px; }
+}
+
+/* Offset da âncora para não esconder sob o cabeçalho fixo (exceto feed) */
+app[id]:not(#feed),
+section[id]:not(#feed),
+template[id]:not(#feed),
+div[id]:not(#feed) {
+  scroll-margin-top: 0px;
+}
+  
+  
 </style>
 
 </head>
