@@ -606,39 +606,66 @@ div[id]:not(#feed) {
   }
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  rgba(43, 36, 36, 0.7);  /* sem sombra, bem leve */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
 .modal-content {
   background: var(--beige);
   color: var(--ink);
-  padding: 20px 28px;
-  border: 1px solid var(--ink);
-  max-width: 88vw;
-  width: 690px;
+  padding: 38px 28px;
+  border: 2px solid var(--ink);
+  max-width: 90vw;
+  width: 320px;
   font-size: 1rem;
   text-align: center;
+  position: relative;
+
+  max-height: 69vh;
+  overflow-y: auto;
+}
+
+/* Scrollbar vertical no modal */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 0;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: var(--beige);
+  border-radius: 0;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: var(--red);
+}
+
+.modal-content {
+  max-height: 69vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(43, 36, 36, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* ⚠️ aqui aumentei para garantir que fique no topo */
 }
 
 .modal-close {
   position: absolute;
-  top: 8px;
-  right: 12px;
+  top: 6px;
+  right: 4px;
   background: none;
   border: none;
-  font-size: 1.4rem;
-  color: var(--ink);
+  font-size: 1rem;
+ font-family: "Roboto SemiCondensed", var(--ff-body), sans-serif;
+  font-weight: 900;
+  color: var(--red);
   cursor: pointer;
 }
-
 
 </style>
 
@@ -766,19 +793,95 @@ div[id]:not(#feed) {
         ou
         <a href="#" onclick="abrirModalAgende()">
             agende sua visita</a>!
-      </p>
+      </p><br>
+      <a onclick="abrirModal(this)" data-modal-id="agende-visita">Visitas sob agendamento</a>
+<a onclick="abrirModal(this)" data-modal-id="fave-checkout">Favoritos & Checkout</a>
+<a onclick="abrirModal(this)" data-modal-id="saiba-mais">Saiba Mais</a>
+
     </div>
 
 
 
-<!-- 🔳 MODAL LEVE: AGENDE AQUI -->
-<div id="modal-agende" class="modal-overlay" style="display: none;">
+
+
+<div id="modal-saiba-mais" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-    <button class="modal-close" onclick="fecharModalAgende()">✕</button>
-    <h2 style="margin-top:0">AGENDE AQUI</h2>
-    <p>Entre em contato por e-mail ou mensagem direta para agendar sua visita. 📅</p>
+
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+
+    <h2 style="margin: 0 0 12px 0; font-family: var(--ff-cta); font-size: var(--fs-h2); line-height: 1.2;">
+      SAIBA TUDO E MAIS UM POUCO
+    </h2>
+
+    <!-- 🔴 Seção 1 -->
+    <div style="background: var(--red); color: var(--beige); padding: 12px 16px; margin-bottom: 16px;">
+      <p style="margin: 0; font-size: var(--fs-p); font-weight: 700;">
+        BetShopTV.com é mais do que uma galeria. É uma engrenagem de circulação de valores entre arte, sorte e comunidade.
+      </p>
+    </div>
+
+    <!-- 🟤 Seção 2: Como participar -->
+    <h3 style="margin-bottom: 8px; font-size: var(--fs-h2); font-family: var(--ff-cta);">COMO PARTICIPAR</h3>
+
+    <ul style="list-style: disc; padding-left: 24px; margin-bottom: 16px; text-align: left; font-size: var(--fs-p);">
+      <li><strong>Apostando nas rifas</strong> — concorra a várias peças únicas por valores baixos</li>
+      <li><strong>Comprando direto na galeria</strong> — garanta sua peça antes do sorteio final</li>
+    </ul>
+
+    <!-- 🔘 Seção 3: Entenda o funcionamento -->
+    <div style="border: 1px solid var(--ink); padding: 10px 14px; margin-bottom: 16px; background: var(--beige); font-size: var(--fs-p);">
+      <p><strong>Quanto mais você interage, mais suas chances aumentam.</strong> Marcar favoritas, apostar cedo e escolher bem seu número pode mudar tudo.</p>
+      <p>Você participa do sorteio com base em: número sorteado, momento da aposta e quantidade de favoritas marcadas.</p>
+    </div>
+
+    <!-- 🧮 Seção 4: Exemplo de cálculo -->
+    <div style="background: white; border: 1px solid var(--ink); padding: 12px; margin-bottom: 18px; text-align: left;">
+      <h4 style="margin-top: 0; font-size: var(--fs-sm); font-weight: bold; color: var(--red); text-transform: uppercase;">Exemplo prático:</h4>
+      <ul style="padding-left: 18px; font-size: var(--fs-p);">
+        <li>Você aposta R$ 50 → recebe 2 números</li>
+        <li>Marca 3 favoritas no feed</li>
+        <li>No sorteio, uma das suas apostas é sorteada</li>
+        <li>Você leva uma das peças que escolheu 🎯</li>
+      </ul>
+    </div>
+
+    <!-- 💡 Dica -->
+    <p style="font-style: italic; font-size: var(--fs-sm); margin-bottom: 24px;">
+      Dica: quanto antes apostar, mais alta sua posição. E isso importa na ordem de escolha!
+    </p>
+
+    <!-- 📦 Seção 5: Transparência -->
+    <h3 style="font-family: var(--ff-cta); font-size: var(--fs-h2); margin-bottom: 6px;">O QUE APOSTAMOS COM VOCÊ</h3>
+    <p style="font-size: var(--fs-p); margin-bottom: 12px;">
+      O BetShopTV funciona sem intermediação. Todo o processo é transparente e direto:
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+      <button class="chip is-active">Pagamento via PIX</button>
+      <button class="chip">Sem apps externos</button>
+      <button class="chip">Envios com certificado</button>
+      <button class="chip">Distribuição ao vivo</button>
+    </div>
+
+    <!-- 🧠 Política -->
+    <div style="background: var(--red); color: white; padding: 16px; font-size: var(--fs-sm); line-height: 1.4;">
+      <strong>Nosso princípio:</strong><br>
+      <em>equilibrar ganhos e apoios entre quem aposta e quem produz</em>. Essa calibragem garante múltiplas formas de acesso e retorno.
+    </div>
+
+    <!-- ✅ Final -->
+    <div style="margin-top: 24px; text-align: center;">
+      <p style="font-weight: bold; font-size: var(--fs-h2); color: var(--red);">
+        BetShopTV.com
+      </p>
+      <p style="font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: 1px;">
+        Peças únicas, chances múltiplas
+      </p>
+    </div>
   </div>
 </div>
+
+
 
 
 
@@ -2429,28 +2532,41 @@ function renderComoFunciona(){
   if (tpl) app.appendChild(tpl.content.cloneNode(true));
 }
 
-function abrirModalAgende() {
-  const modal = document.getElementById('modal-agende');
+let modalAtivo = null;
+
+function abrirModal(el) {
+  const id = el.dataset.modalId;
+  const modal = document.getElementById(`modal-${id}`);
   if (!modal) return;
 
+  fecharModal();
   modal.style.display = 'flex';
+  modalAtivo = modal;
 
-  // ESC para fechar
-  document.addEventListener('keydown', escFecharModal);
+  modal.scrollTop = 0; // 👈 Corrige abertura “colada” ao clique
 
-  // Clique fora para fechar
-  modal.addEventListener('click', cliqueForaModal);
+  document.addEventListener('keydown', fecharPorEsc);
+  modal.addEventListener('click', cliqueFora);
 }
 
-function fecharModalAgende() {
-  const modal = document.getElementById('modal-agende');
-  if (!modal) return;
 
-  modal.style.display = 'none';
+function fecharModal() {
+  if (!modalAtivo) return;
 
-  document.removeEventListener('keydown', escFecharModal);
-  modal.removeEventListener('click', cliqueForaModal);
+  modalAtivo.style.display = 'none';
+  document.removeEventListener('keydown', fecharPorEsc);
+  modalAtivo.removeEventListener('click', cliqueFora);
+  modalAtivo = null;
 }
+
+function fecharPorEsc(e) {
+  if (e.key === 'Escape') fecharModal();
+}
+
+function cliqueFora(e) {
+  if (e.target === modalAtivo) fecharModal();
+}
+
 
 function escFecharModal(e) {
   if (e.key === 'Escape') fecharModalAgende();
@@ -2563,6 +2679,25 @@ window.addEventListener('DOMContentLoaded', init);
   });
 })();
 </script>
+
+
+<!-- 🔳 MODAIS GERAIS -->
+<div id="modal-agende-visita" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+    <h2>AGENDE AQUI</h2>
+    <p>Entre em contato por mensagem direta para visitar a exposição.</p>
+  </div>
+</div>
+
+<div id="modal-fave-checkout" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+    <h2>FAVORITOS E CHECKOUT</h2>
+    <p>Reveja suas peças favoritas antes de finalizar a aposta.</p>
+  </div>
+</div>
+
 
 </body>
 </html>
