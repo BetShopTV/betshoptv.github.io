@@ -610,7 +610,7 @@ div[id]:not(#feed) {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
-  background: rgba(255, 255, 255, 0.96); /* sem sombra, bem leve */
+  rgba(43, 36, 36, 0.38);  /* sem sombra, bem leve */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -621,9 +621,9 @@ div[id]:not(#feed) {
   background: var(--beige);
   color: var(--ink);
   padding: 20px 28px;
-  border: 2px solid var(--ink);
-  max-width: 90vw;
-  width: 320px;
+  border: 1px solid var(--ink);
+  max-width: 88vw;
+  width: 888px;
   font-size: 1rem;
   text-align: center;
 }
@@ -2431,8 +2431,35 @@ function renderComoFunciona(){
 
 function abrirModalAgende() {
   const modal = document.getElementById('modal-agende');
-  if (modal) modal.style.display = 'flex';
+  if (!modal) return;
+
+  modal.style.display = 'flex';
+
+  // ESC para fechar
+  document.addEventListener('keydown', escFecharModal);
+
+  // Clique fora para fechar
+  modal.addEventListener('click', cliqueForaModal);
 }
+
+function fecharModalAgende() {
+  const modal = document.getElementById('modal-agende');
+  if (!modal) return;
+
+  modal.style.display = 'none';
+
+  document.removeEventListener('keydown', escFecharModal);
+  modal.removeEventListener('click', cliqueForaModal);
+}
+
+function escFecharModal(e) {
+  if (e.key === 'Escape') fecharModalAgende();
+}
+
+function cliqueForaModal(e) {
+  if (e.target.id === 'modal-agende') fecharModalAgende();
+}
+
 
 function fecharModalAgende() {
   const modal = document.getElementById('modal-agende');
