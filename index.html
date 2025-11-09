@@ -606,6 +606,38 @@ div[id]:not(#feed) {
   }
 }
 
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(255, 255, 255, 0.96); /* sem sombra, bem leve */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: var(--beige);
+  color: var(--ink);
+  padding: 20px 28px;
+  border: 2px solid var(--ink);
+  max-width: 90vw;
+  width: 320px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--ink);
+  cursor: pointer;
+}
 
 
 </style>
@@ -714,7 +746,7 @@ div[id]:not(#feed) {
 >
   <div class="bloco-expo">
     <div class="texto-expo">
-      <h2 style="margin-top: 4px;">Estamos em exposição até 15 de novembro, quando acontecem os sorteios finais!</h2>
+      <h2 style="margin-top: 2px;">Estamos em exposição até o dia 15 de novembro, quando acontecem os sorteios finais!</h2>
       <h2
         style="
           margin: 0;
@@ -726,12 +758,31 @@ div[id]:not(#feed) {
       </h2>
 
       <p style="margin-top: 4px; margin-bottom: 4px; line-height: 1.45;">
-        Rua Lopes de Oliveira, 166 - Barra Funda, SP
+        Rua Lopes de Oliveira, 166 <br />Barra Funda, São Paulo
       </p>
-      <p style="margin-top: 4px; margin-bottom: 24px; line-height: 1.45;">
-        Visitas sob agendamento <br />ou sábados das 16h às 22h.
+      
+      <p style="margin-top: 10px; margin-bottom: 24px; line-height: 1.45;">
+        <strong>Sexta e Sábado, das 16h às 22h</strong><br />
+        ou
+        <a href="#" onclick="abrirModalAgende()">
+            agende sua visita</a>!
       </p>
     </div>
+
+
+
+<!-- 🔳 MODAL LEVE: AGENDE AQUI -->
+<div id="modal-agende" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <button class="modal-close" onclick="fecharModalAgende()">✕</button>
+    <h2 style="margin-top:0">AGENDE AQUI</h2>
+    <p>Entre em contato por e-mail ou mensagem direta para agendar sua visita. 📅</p>
+  </div>
+</div>
+
+
+
+
 
 <div class="video-expo">
   <video
@@ -2369,7 +2420,7 @@ function renderHome() {
   const tpl = document.getElementById('page-sobre'); 
   app.innerHTML = '';
   if (tpl) app.appendChild(tpl.content.cloneNode(true));
-}
+} 
 
 function renderComoFunciona(){
   const app = document.getElementById('app');
@@ -2377,6 +2428,17 @@ function renderComoFunciona(){
   app.innerHTML = '';
   if (tpl) app.appendChild(tpl.content.cloneNode(true));
 }
+
+function abrirModalAgende() {
+  const modal = document.getElementById('modal-agende');
+  if (modal) modal.style.display = 'flex';
+}
+
+function fecharModalAgende() {
+  const modal = document.getElementById('modal-agende');
+  if (modal) modal.style.display = 'none';
+}
+
 
 window.addEventListener('DOMContentLoaded', init);
 
@@ -2391,6 +2453,10 @@ window.addEventListener('DOMContentLoaded', init);
   });
   mo.observe(footer, { childList:true, subtree:true });
 })();
+
+
+
+
 </script>
 <!-- Campos ocultos (essenciais para o GAS funcionar) -->
 <input type="hidden" id="fNome">
