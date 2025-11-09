@@ -579,6 +579,11 @@ template[id]:not(#feed),
 div[id]:not(#feed) {
   scroll-margin-top: 0px;
 }
+  .modal-content {
+  padding: 42px 18px;
+  max-width: 73vw;
+  max-height: 55vh;
+}
 
 /* === FEED – Desktop: carrossel em faixa horizontal === */
 @media (min-width: 1024px){
@@ -616,9 +621,9 @@ div[id]:not(#feed) {
   font-size: 1rem;
   text-align: center;
   position: relative;
-
   max-height: 69vh;
   overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 /* Scrollbar vertical no modal */
@@ -634,12 +639,6 @@ div[id]:not(#feed) {
 
 .modal-content::-webkit-scrollbar-thumb {
   background: var(--red);
-}
-
-.modal-content {
-  max-height: 69vh;
-  overflow-y: auto;
-  scroll-behavior: smooth;
 }
 
 .modal-overlay {
