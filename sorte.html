@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Obrigado!</title>
+  <title>SORTE NOS SORTEIOS!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
@@ -50,11 +50,10 @@
       display: inline-block;
       font-size: clamp(1.4rem, 4vw, 2rem);
       font-weight: bold;
-      margin-top: 20px;
-      background: rgba(255,255,255,0.2);
-      padding: 8px 16px;
-      border-radius: 6px;
-      min-width: 2ch;
+      background: red;
+      padding: 8px 8px;
+      border-radius: 0px;
+      min-width: 1.6ch;
     }
 
     @media (max-width: 600px) {
@@ -72,10 +71,10 @@
 
   <h1>Agradecemos sua participação<br>e desejamos <strong>SORTE NO SORTEIO!</strong></h1>
 
-  <p>Em <span id="contador">15</span> segundos você voltará ao site.</p>
+  <p>Em <span id="contador">7</span> segundos você voltará ao site.</p>
 
   <script>
-    let tempo = 15;
+    let tempo = 7;
     const contadorEl = document.getElementById('contador');
 
     const intervalo = setInterval(() => {
