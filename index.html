@@ -1268,7 +1268,7 @@ div[id]:not(#feed) {
   <!-- 🧱 CABEÇALHO PRINCIPAL -->
   <section
     style="
-    font-size: clamp(18px, 3vw, 27px);
+    font-size: clamp(16px, 2.7vw, 27px);
     margin-bottom: clamp(8px, 3.8vw, 38px);
     margin-top: 0.4vw;
     color: RED;
@@ -1285,8 +1285,12 @@ div[id]:not(#feed) {
       entre <strong>RIFAS</strong> e <strong>OFERTAS</strong>.
       <br>
       Quem participa da rifa concorre às peças disponíveis
-      na Galeria de Ofertas, onde é possível comprar peças diretamente
-      e retirá-las do conjunto destinado ao sorteio das rifas.
+      do catálogo de <em>Chop Shop AV</em>, que estão também
+      à venda em nossa galeria até o sorteio final neste sábado.
+      <br><br>
+      Para saber mais, <a onclick="abrirModal(this)" data-modal-id="agende-visita" style="cursor: pointer">fale conosco</a> ou acompanhe aqui nossos lançamentos e promoções!
+      
+      
     </p>
   </section>
 
@@ -1294,7 +1298,7 @@ div[id]:not(#feed) {
   <!-- 🎟️ SEÇÃO EXPANSÍVEL RIFAS -->
   <section
     style="
-      background-color: #ffffff;
+      background-color: #ffffff; 
       color: #2b2424;
       padding: clamp(20px, 4vw, 40px);
       max-width: 800px;
@@ -2859,7 +2863,7 @@ window.addEventListener('DOMContentLoaded', init);
   <div class="modal-content">
     <button class="modal-close" onclick="fecharModal()">✕</button>
 <div class="agendar-visita">
-  <h2 class="agendar-titulo">AGENDE SUA VISITA</h2>
+  <h2 class="agendar-titulo">FALE CONOSCO</h2>
 
   <form id="form-agendar">
     <label for="ag_nome">NOME *</label>
@@ -2871,10 +2875,10 @@ window.addEventListener('DOMContentLoaded', init);
     <label for="ag_telefone">TELEFONE</label>
     <input id="ag_telefone" name="telefone" type="tel">
 
-    <label for="ag_msg">QUANDO VAMOS? *</label>
+    <label for="ag_msg">MENSAGEM *</label>
     <textarea id="ag_msg" name="mensagem" rows="4" required></textarea>
 
-    <button id="ag_enviar" type="submit" class="agendar-btn">ENVIAR</button>
+    <button id="ag_enviar" type="submit" class="agendar-btn" style="margin-bottom: -8px;">ENVIAR</button>
     <div id="ag_feedback" class="agendar-feedback"></div>
   </form>
 </div>
