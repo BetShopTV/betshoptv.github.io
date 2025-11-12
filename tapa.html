@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,13 +16,13 @@
     --bd-thin:1px; --bd-thick:2px;
     --ff-cta:"Roboto Condensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
     --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
-    --fs-h1:clamp(1.4rem,3vw,2rem); --fs-h2:clamp(1.1rem,2vw,1.4rem);
+    --fs-h1:clamp(1.4rem,3vw,2rem); --fs-h2:clamp(1.1rem,2vw,1.3rem);
     --fs-p:clamp(.9rem,1.2vw,1rem); --fs-sm:clamp(.78rem,1vw,.9rem); --fs-menu:clamp(.8rem,1.03vw,1.08rem);
     --gap-xxs:4px; --gap-xs:6px; --gap-s:8px; --gap-m:12px; --gap-l:16px;
     --app-max-width:1200px;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);-webkit-font-smoothing:antialiased} 
 
   /* ====== Header (mantém visual v08) ====== */
   header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;}
@@ -63,7 +64,7 @@ background:#ff0000;color:white;border: 1px solid white;
 }
 
   /* ====== Área da página ====== */
-  main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 6px;min-height:60vh}
+main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 6px;min-height:60vh}
   section{margin-bottom:24px}
   h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
   .botao-txt a{display:inline-flex;align-items:center;justify-content:center;color:#ffffff;text-decoration:none;
@@ -237,7 +238,7 @@ footer.has-total #ctaMain {
 /* ===== RIFAS: hero/topo informativo ===== */
 .rifa-hero{
   border: var(--bd-thin) solid var(--ink);
-  background: #d2cec5;               /* tom acima do beige mantendo paleta */
+  background: white;               /* tom acima do beige mantendo paleta */
   padding: 16px;
   margin: 0 0 16px 0;
   position: relative;
@@ -245,13 +246,15 @@ footer.has-total #ctaMain {
 }
 .rifa-hero .badge{
   display:inline-block;
-  background: var(--red);
-  color:#fff;
-  font:700 var(--fs-sm)/1 var(--ff-cta);
+  background: var(--beige);
+  color:var (--ink);
+  font-weight: 500; 
+  font-size: clamp(0.9rem,2vw,1.3rem);
   padding:6px 10px;
   border: var(--bd-thin) solid var(--ink);
   position:absolute;
   top:-12px; left:16px;
+  margin: -4px;
 }
 .rifa-hero h2{
   margin: 14px 0 2px 0;
@@ -276,11 +279,12 @@ footer.has-total #ctaMain {
   display:flex; gap:8px; flex-wrap:wrap;
 }
 .rifa-hero .pill{
-  background:var(--beige);
-  color:var(--ink);
-  border: var(--bd-thin) solid var(--ink);
-  padding:10px 15px;
-    font:500 calc(var(--fs-h2) * 0.9) / 1.1 var(--ff-cta);
+  background:var(--red);
+  color:var(--white);
+  padding:12px clamp(18px, 4vw, 38px);
+    font:500 calc(var(--fs-h2) * 1.1) / 1.1 var(--ff-cta);
+ line-height: 1.3;
+    
 }
 .rifa-hero .hint{
   margin:10px 0 8px 0;
@@ -308,7 +312,7 @@ footer.has-total #ctaMain {
   position: relative;
   top: 0;
   left: 0;
-  margin-bottom: 12px;
+  margin-bottom: 2px;
 }
 
 .rifa-hero h2,
@@ -594,8 +598,21 @@ footer.has-total #ctaMain {
   }
 }
 
+/* ====== MODAL BASE ====== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(43, 36, 36, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Estrutura: .modal-content + .modal-footer (opcional) */
 .modal-content {
-  margin-bottom: 8vw; 
   background: var(--beige);
   color: var(--ink);
   padding: 38px 28px;
@@ -608,35 +625,26 @@ footer.has-total #ctaMain {
   max-height: 69vh;
   overflow-y: auto;
   scroll-behavior: smooth;
+  margin-bottom: 0;
 }
 
-/* Scrollbar vertical no modal */
+/* Se tiver rodapé fixo, o conteúdo sobe um pouco pra não esconder */
+.modal-overlay.has-footer .modal-content {
+  margin-bottom: 64px; /* espaço pro rodapé */
+}
+
+/* Scrollbar vertical */
 .modal-content::-webkit-scrollbar {
   width: 8px;
-  border-radius: 0;
 }
-
 .modal-content::-webkit-scrollbar-track {
   background: var(--beige);
-  border-radius: 0;
 }
-
 .modal-content::-webkit-scrollbar-thumb {
   background: var(--red);
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(43, 36, 36, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999; /* ⚠️ aqui aumentei para garantir que fique no topo */
-}
-
+/* Botão fechar */
 .modal-close {
   position: absolute;
   top: 6px;
@@ -644,23 +652,60 @@ footer.has-total #ctaMain {
   background: none;
   border: none;
   font-size: 1rem;
- font-family: "Roboto SemiCondensed", var(--ff-body), sans-serif;
+  font-family: "Roboto SemiCondensed", var(--ff-body), sans-serif;
   font-weight: 900;
   color: var(--white);
   cursor: pointer;
 }
 
-/* Mobile-first: abaixo de 760px, a barra pode virar 2–3 linhas naturalmente */
+/* ====== Rodapé opcional ====== */
+.modal-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  background: var(--beige);
+  border-top: 2px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  z-index: 10000;
+}
+
+.modal-footer button {
+  flex: 1;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  padding: 10px;
+  transition: background 0.2s;
+}
+
+.modal-footer .btn-skip:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+.modal-footer .btn-next {
+  color: #fff;
+  background: var(--red);
+}
+
+.modal-footer .btn-next:hover {
+  background: #b00;
+}
+
+/* ====== Mobile ====== */
 @media (max-width: 760px){
-
   .modal-content {
-  padding: 38px 18px;
-  max-width: 80vw;
-  max-height: 63vh;
-}
-
-  .filters-bar{ justify-content: center; gap: 8px 10px; }
-}
+    padding: 38px 18px;
+    max-width: 80vw;
+    max-height: 69vh;
+  }
+  .filters-bar {
+    justify-content: center;
+    gap: 8px 10px;
+  }
 
 /* Offset da âncora para não esconder sob o cabeçalho fixo (exceto feed) */
 app[id]:not(#feed),
@@ -670,7 +715,13 @@ div[id]:not(#feed) {
   scroll-margin-top: 0px;
 }
   
-  
+  .rifa-hero .badge {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin: -6px;
+}
+
 </style>
 
 </head>
@@ -791,19 +842,16 @@ div[id]:not(#feed) {
       <p style="margin-top: 4px; margin-bottom: 4px; line-height: 1.45;">
         Rua Lopes de Oliveira, 166 <br />Barra Funda, São Paulo
       </p>
+    
+
       
       <p style="margin-top: 10px; margin-bottom: 24px; line-height: 1.45;">
-        <strong>Sexta e Sábado, das 16h às 22h</strong><br />
+        <strong>Sexta, das 16h às 20h<br />
+        Sábado, das 16h às 22h</strong><br />
         ou
         <a onclick="abrirModal(this)" data-modal-id="agende-visita">
             agende sua visita</a>!
       </p><br>
-
-      
-
-      
-<a onclick="abrirModal(this)" data-modal-id="fave-checkout">💡</a>
-<a onclick="abrirModal(this)" data-modal-id="saiba-mais"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="height: 38px; width: 38px;"><defs><radialGradient id="zeromancer-heart-plus-gradient-2"><stop offset="0%" stop-color="#000" stop-opacity="1"></stop><stop offset="100%" stop-color="#e20303" stop-opacity="1"></stop></radialGradient></defs><path d="M0 0h512v512H0z" fill="#000" fill-opacity="0"></path><g class="" transform="translate(0,0)" style=""><path d="M372.48 31.215c-77.65 0-116.48 65.73-116.48 65.73s-38.83-65.72-116.48-65.72c-37.14 0-107.77 33.72-107.77 125.13 0 161.24 224.25 324.43 224.25 324.43s224.25-163.19 224.25-324.43c0-91.42-70.63-125.13-107.77-125.14zm-145.492 115.02h60.698v79.415h79.238v60.7h-79.238v79.884h-60.698V286.35h-80.064v-60.7h80.064z" fill="#bebab0" transform="translate(0, 0) scale(1, 1) rotate(-360, 256, 256) skewX(0) skewY(0)" fill-opacity="1" stroke-width="8" stroke="#2b2424" stroke-opacity="1"></path></g></svg></a>
 
 
 
@@ -973,7 +1021,7 @@ div[id]:not(#feed) {
 
     .bloco-expo .texto-expo {
       flex: 1 1 88%;
-      max-width: 420px;
+      max-width: 460px;
       text-align: left;
       font-size: clamp(15px, 2vw, 17px);
       line-height: 1.5;
@@ -1221,7 +1269,7 @@ div[id]:not(#feed) {
   <!-- 🧱 CABEÇALHO PRINCIPAL -->
   <section
     style="
-    font-size: clamp(18px, 3vw, 27px);
+    font-size: clamp(16px, 2.7vw, 27px);
     margin-bottom: clamp(8px, 3.8vw, 38px);
     margin-top: 0.4vw;
     color: RED;
@@ -1238,8 +1286,12 @@ div[id]:not(#feed) {
       entre <strong>RIFAS</strong> e <strong>OFERTAS</strong>.
       <br>
       Quem participa da rifa concorre às peças disponíveis
-      na Galeria de Ofertas, onde é possível comprar peças diretamente
-      e retirá-las do conjunto destinado ao sorteio das rifas.
+      do catálogo de <em>Chop Shop AV</em>, que estão também
+      à venda em nossa galeria até o sorteio final neste sábado.
+      <br><br>
+      Para saber mais, <a onclick="abrirModal(this)" data-modal-id="agende-visita" style="cursor: pointer">fale conosco</a> ou acompanhe aqui nossos lançamentos e promoções!
+      
+      
     </p>
   </section>
 
@@ -1247,7 +1299,7 @@ div[id]:not(#feed) {
   <!-- 🎟️ SEÇÃO EXPANSÍVEL RIFAS -->
   <section
     style="
-      background-color: #ffffff;
+      background-color: #ffffff; 
       color: #2b2424;
       padding: clamp(20px, 4vw, 40px);
       max-width: 800px;
@@ -1391,7 +1443,7 @@ div[id]:not(#feed) {
     "
   >
     ☞ CONTATO:
-    <a href="mailto:betshoptv@gmail.com" style="color: #2b2424;">betshoptv@gmail.com</a>
+    <a href="/cdn-cgi/l/email-protection#72101706011a1d02060432151f131b1e5c111d1f" style="color: #2b2424;"><span class="__cf_email__" data-cfemail="c0a2a5b4b3a8afb0b4b680a7ada1a9aceea3afad">[email&#160;protected]</span></a>
   </footer>
 </template>
 
@@ -1412,7 +1464,7 @@ div[id]:not(#feed) {
 
 
   <!-- ====== SCRIPT: modular renderers, event delegation, footer bindings ====== -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ======================= CONFIG ======================= */
 const PECAS_JSON_URL = 'https://betshoptv.com/dados/pecas.json';
 const RIFAS_JSON_URL = 'https://betshoptv.com/dados/rifas.json';
@@ -1599,7 +1651,7 @@ function buildFilters(currentPage){ // 'galeria' | 'feed'
   const bFeed = document.createElement('button');
   bFeed.type = 'button';
   bFeed.className = 'chip';
-  bFeed.textContent = 'FEED';
+  bFeed.textContent = 'CATÁLOGO';
   const feedActive = (currentPage === 'feed');
   bFeed.setAttribute('aria-pressed', feedActive ? 'true':'false');
   bFeed.classList.toggle('is-active', feedActive);
@@ -1650,6 +1702,82 @@ function getFilteredSortedList(source){
 
   return lista;
 }
+ 
+ /* ===== Swipe "uma imagem por vez" no mobile (carrossel do feed) ===== */
+function setupMobileSwipeCarousel(carousel) {
+  // Só queremos esse comportamento em telas menores (celular / tablet)
+  const isMobile = () => window.innerWidth < 1024;
+
+  let startX = 0;
+  let startIndex = 0;
+  let startScrollLeft = 0;
+  let isDragging = false;
+
+  const getIndex = () => {
+    if (!carousel.clientWidth) return 0;
+    return Math.round(carousel.scrollLeft / carousel.clientWidth);
+  };
+
+  function onTouchStart(e) {
+    if (!isMobile()) return;
+    if (!e.touches || !e.touches.length) return;
+
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    startScrollLeft = carousel.scrollLeft;
+    startIndex = getIndex();
+
+    // Desativa snap durante o gesto para evitar briga com o navegador
+    carousel.style.scrollSnapType = 'none';
+  }
+
+  function onTouchMove(e) {
+    if (!isMobile() || !isDragging) return;
+    if (!e.touches || !e.touches.length) return;
+
+    const dx = e.touches[0].clientX - startX;
+    // Arraste manual controlado (horizontal)
+    carousel.scrollLeft = startScrollLeft - dx;
+  }
+
+  function onTouchEnd(e) {
+    if (!isMobile() || !isDragging) return;
+    isDragging = false;
+
+    const touch = (e.changedTouches && e.changedTouches[0]) || null;
+    const endX = touch ? touch.clientX : startX;
+    const dx = endX - startX;
+
+    const largura = carousel.clientWidth || 1;
+    const threshold = largura * 0.15; // ~15% da largura para considerar swipe
+
+    let targetIndex = startIndex;
+    if (dx < -threshold) {
+      // arrastou para a esquerda → próxima imagem
+      targetIndex = startIndex + 1;
+    } else if (dx > threshold) {
+      // arrastou para a direita → imagem anterior
+      targetIndex = startIndex - 1;
+    }
+
+    const maxIndex = Math.max(0, carousel.children.length - 1);
+    targetIndex = Math.max(0, Math.min(maxIndex, targetIndex));
+
+    // Reativa o snap e anima para o slide calculado
+    carousel.style.scrollSnapType = 'x mandatory';
+    carousel.scrollTo({
+      left: targetIndex * largura,
+      behavior: 'smooth'
+    });
+  }
+
+  carousel.addEventListener('touchstart', onTouchStart, { passive: true });
+  carousel.addEventListener('touchmove', onTouchMove, { passive: true });
+  carousel.addEventListener('touchend', onTouchEnd);
+  carousel.addEventListener('touchcancel', onTouchEnd);
+}
+
+ 
  
 // === FUNÇÃO PRINCIPAL DE RENDERIZAÇÃO DA GALERIA ===
 function renderGaleria() {
@@ -1820,6 +1948,9 @@ base.forEach(p => {
     slide.appendChild(img);
     carousel.appendChild(slide);
   });
+  
+    // 🔴 AQUI: ativa o swipe 1-a-1 no mobile
+  setupMobileSwipeCarousel(carousel);
 
   const barWrap = document.createElement('div');
   barWrap.className = 'carousel-bar-wrap';
@@ -2020,25 +2151,22 @@ function renderRifas(){
   const hero = document.createElement('div');
   hero.className = 'rifa-hero';
   hero.innerHTML = `
-    <span class="badge">APOSTA DISPONÍVEL</span>
-    <h2><em>Chop Shop AV</em></h2>
-
-    <p class="desc">
-      Impressão offset em papel couché transferida para EVA
-    </p>
-    <p class="spec">Políptico, dimensões variáveis.</p>
+     <span class="pill">APOSTA DISPONÍVEL
+     <br />
+                <em>Chop Shop AV</em>
+     </span>
 <br>
     <div class="precos">
-      <span class="pill">R$ 30 = 1 número</span>&nbsp;
-      <span class="pill">R$ 50 = 2 números</span>
+      <span class="badge">R$ 30 = 1 número</span>&nbsp;
+      <span class="badge">R$ 50 = 2 números</span>
     </div>
 <br>
     <p class="hint">
-      Já viu a <span class="strong"><a href="#galeria">Galeria de Ofertas</a></span>? Gostou de peças específicas?</p>
+      Tá torcendo pra ganhar? 
+      <br />
+      <a href="#" class="btn-favoritos" data-modal-id="favoritos" onclick="abrirModal(this); return false;">Selecione suas favoritas</a> <em>antes</em> de concluir a compra!</p> 
     <p class="hint">  
-      Selecione suas favoritas no <span class="strong"><a href="#feed">Feed</a></span> <em>antes</em> de concluir a compra!</p> 
-    <p class="hint">  
-      Assim, caso seu número seja sorteado, suas chances de ganhar as peças escolhidas aumenta!
+      Assim, suas chances de ganhar as peças escolhidas aumenta!
     </p><br>
     <p class="hint" style="color: #ff0000;">Clique nos números abaixo para selecioná-los e no botão APOSTAR para prosseguir.</p>
   `;
@@ -2291,63 +2419,114 @@ function attachBindings(){
       document.getElementById('fFav').value     = [...favoritos].join(',');
       document.getElementById('fTotal').value   = Number(Math.floor(totalGeral||0)).toFixed(2);
 
-      // PASSO 2 – PIX
-      const totalInt = Math.floor(totalGeral||0);
-      const payload = gerarBRCode(totalInt);
+ // PASSO 2 – PIX
+const totalInt = Math.floor(totalGeral || 0);
+const payload = gerarBRCode(totalInt);
 
-      app.innerHTML = `
-        <section id="checkout-pix">
-          <div style="max-width:720px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
-            <h2>Pagamento via PIX</h2>
-            <p style="margin:.5rem 0 1rem 0;"><strong>Total:</strong> R$ ${totalInt}</p>
-            <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
-              <div id="ck_qr" style="width:180px;height:180px;border:1px solid #2b2424;display:flex;align-items:center;justify-content:center;background:#fff"></div>
-              <div style="flex:1;min-width:240px">
-                <button id="ck_copy" style="border:2px solid var(--ink);background:#fff;padding:8px 12px;cursor:pointer">PIX Copia e Cola</button>
-                <div id="ck_payload" style="display:none;">${payload}</div>
-              </div>
-            </div>
-            <div style="display:flex;gap:8px;margin-top:14px">
-              <button id="ck_back_data" style="flex:1">Voltar</button>
-              <button id="ck_finish" style="flex:1;background:var(--red);color:#fff;">ENVIAR APOSTA</button>
-            </div>
-          </div>
-        </section>
-      `;
+app.innerHTML = `
+  <section id="checkout-pix">
+    <div style="max-width:720px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
+      <h2>
+        Pagamento via PIX /
+        <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G"
+           target="_blank"
+           onclick="event.preventDefault();
+                    if(confirm('Total a pagar: R$ ${totalInt}'))
+                      window.open(this.href);"
+           style="color:var(--red); text-decoration:none;">
+           via PayPal
+        </a>
+      </h2>
+      <br />
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;justify-content:space-between;">
 
-      // Render QR (se a lib existir)
-      (function renderQR(){
-        const holder = document.getElementById('ck_qr');
-        if (!holder) return;
-        holder.innerHTML = '';
-        if (window.QRCode){
-          new QRCode(holder, { text: payload, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
-        } else {
-          // fallback: mostra o payload legível
-          holder.style.fontSize = '10px';
-          holder.style.padding = '6px';
-          holder.textContent = payload;
-        }
-      })();
+        ${favoritos.size === 0 ? `
+        <div style="flex:1;min-width:220px;background:red;color:#2b2424;padding:2px;">
+          <a href="#"
+             data-modal-id="favoritos"
+             onclick="abrirModal(this); return false;"
+             style="display:inline-block;
+                    padding:2px 2px;font-family:var(--ff-cta);
+                    font-size:14px;text-decoration:none;text-transform:uppercase;">
+                    
+            <button style="border: 1px solid white; background: white; padding: 18px;cursor:pointer; text-align: left; color: red; font-weight: 500;">
+              <p style="margin:0 0 10px 0; margin-top: 8px; font-size:14px;line-height:1.2;text-align: left;">
+                Antes de apostar, você pode indicar quantas peças favoritas quiser!
+              </p>
+              <p style="margin-top: 8px; font-size:14px;line-height:1.2;text-align: left;">
+                Assim cada pessoa sorteada pode ganhar aquilo que mais gostou!
+              </p>
+              <p style="margin-top: 8px; font-size:14px;line-height:1.2;text-align: left;">
+                <strong>Clique aqui</strong> para abrir a mini-galeria.
+              </p>
+            </button>
+          </a> 
+        </div>` : ''}
 
-      // Copiar
-      document.getElementById('ck_copy').onclick = ()=>{
-        const txt = document.getElementById('ck_payload').textContent;
-        const done = (ok)=>{
-          const btn = document.getElementById('ck_copy');
-          const old = btn.textContent;
-          btn.textContent = ok ? 'PIX copiado!' : 'Erro ao copiar';
-          setTimeout(()=> btn.textContent = old, 1600);
-        };
-        if (navigator.clipboard?.writeText) {
-          navigator.clipboard.writeText(txt).then(()=>done(true)).catch(()=>done(false));
-        } else {
-          const ta=document.createElement('textarea'); ta.value=txt;
-          ta.style.position='fixed'; ta.style.top='-9999px'; document.body.appendChild(ta);
-          ta.select(); try{ document.execCommand('copy'); done(true);} catch(e){ done(false); }
-          document.body.removeChild(ta);
-        }
-      };
+        <div style="flex:1;width:clamp(160px, 2vw, 380px);text-align:center;">
+          <div id="ck_qr" style="width:clamp(120px, 2vw, 380px);height:100%;margin:0 auto 10px;margin-top:8px;border:1px solid #2b2424;display:flex;align-items:center;justify-content:center;background:#fff;"></div>
+          
+          <button id="ck_copy" style="width:150px;background:#fff;color:var(--ink);border:1px solid #2b2424;padding:8px;cursor:pointer;font-weight:700;">
+            PIX Copia e Cola
+          </button>
+          
+          <!-- Aqui está o campo oculto que o botão precisa -->
+          <div id="ck_payload" style="display:none;">${payload}</div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:38px;">
+        <button id="ck_back_data" style="flex:1; height:7.5vw; max-height:38px;">Voltar</button>
+        <button id="ck_finish" style="flex:1;height:7.5vw; max-height:38px;background:var(--red);color:#fff;">ENVIAR APOSTA</button>
+      </div>
+    </div>
+  </section>
+`;
+
+// Render QR (se a lib existir)
+(function renderQR() {
+  const holder = document.getElementById('ck_qr');
+  if (!holder) return;
+  holder.innerHTML = '';
+  if (window.QRCode) {
+    new QRCode(holder, { text: payload, width: 150, height: 150, correctLevel: QRCode.CorrectLevel.M });
+  } else {
+    // fallback: mostra o payload legível
+    holder.style.fontSize = '10px';
+    holder.style.padding = '6px';
+    holder.textContent = payload;
+  }
+})();
+
+// Copiar PIX
+document.getElementById('ck_copy').onclick = () => {
+  const txt = document.getElementById('ck_payload').textContent;
+  const done = (ok) => {
+    const btn = document.getElementById('ck_copy');
+    const old = btn.textContent;
+    btn.textContent = ok ? 'PIX copiado!' : 'Erro ao copiar';
+    setTimeout(() => (btn.textContent = old), 1600);
+  };
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(txt).then(() => done(true)).catch(() => done(false));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      done(true);
+    } catch (e) {
+      done(false);
+    }
+    document.body.removeChild(ta);
+  }
+};
+
 
       // Voltar aos dados
       document.getElementById('ck_back_data').onclick = ()=> cta.onclick(e);
@@ -2374,7 +2553,7 @@ document.getElementById('ck_finish').onclick = async ()=>{
     await fetch(GAS_URL, { method:'POST', body:fd });
 
     // redireciona após envio
-    location.href = 'https://betshoptv.com/obrigado.html';
+    location.href = 'https://betshoptv.com/sorte.html';
 
   } catch(err){
     console.error('Erro ao enviar dados para GAS:', err);
@@ -2608,6 +2787,75 @@ window.addEventListener('DOMContentLoaded', init);
 })();
 
 
+(function(){
+  // Usa a mesma URL do checkout
+  const GAS_URL = typeof window.GAS_URL === 'string'
+    ? window.GAS_URL
+    : 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const form = document.getElementById('form-agendar');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+
+      const nome  = (document.getElementById('ag_nome').value || '').trim();
+      const email = (document.getElementById('ag_email').value || '').trim();
+      const tel   = (document.getElementById('ag_telefone').value || '').trim();
+      const msg   = (document.getElementById('ag_msg').value || '').trim();
+      const btn   = document.getElementById('ag_enviar');
+      const feed  = document.getElementById('ag_feedback');
+
+      if (!nome || !email || !msg) {
+        alert('Preencha nome, e-mail e a mensagem de agendamento.');
+        return;
+      }
+
+      // Monta como o checkout, mas separado:
+      // - tipo=AGENDAR
+      // - pecas recebe a mensagem
+      // - rifas/favoritas/total vazios
+      const fd = new FormData();
+      fd.append('tipo', 'AGENDAR');
+      fd.append('nome', nome);
+      fd.append('email', email);
+      fd.append('telefone', tel);
+      fd.append('pecas', msg);       // <- mensagem vai na coluna PECAS
+      fd.append('rifas', '');
+      fd.append('favoritas', '');
+      fd.append('total', '');
+
+      // UX básico
+      const old = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      try{
+        const res = await fetch(GAS_URL, { method:'POST', body: fd });
+        // Melhor esforço: se 200, consideramos OK
+        if (res.ok) {
+          feed.style.display = 'block';
+          feed.style.color = 'red';
+          feed.textContent = 'Agendamento enviado! Em breve entraremos em contato.';
+          form.reset();
+          // Você pode fechar o modal aqui, se preferir:
+          // setTimeout(()=> fecharModalAgende(), 1200);
+        } else {
+          throw new Error('Falha ao enviar. Tente novamente.');
+        }
+      } catch(err){
+        feed.style.display = 'block';
+        feed.style.color = '#900';
+        feed.textContent = 'Erro ao enviar. Tente novamente.';
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = old;
+      }
+    });
+  });
+})();
 
 
 </script>
@@ -2691,22 +2939,307 @@ window.addEventListener('DOMContentLoaded', init);
 </script>
 
 <!-- 🔳 MODAIS GERAIS -->
-<div id="modal-agende-visita" class="modal-overlay" style="display: none;">
+<div id="modal-agende-visita" class="modal-overlay" style="display:none;">
   <div class="modal-content">
     <button class="modal-close" onclick="fecharModal()">✕</button>
-    <h2>AGENDE AQUI</h2>
-    <p>Entre em contato por mensagem direta para visitar a exposição.</p>
+<div class="agendar-visita">
+  <h2 class="agendar-titulo">FALE CONOSCO</h2>
+
+  <form id="form-agendar">
+    <label for="ag_nome">NOME *</label>
+    <input id="ag_nome" name="nome" type="text" required>
+
+    <label for="ag_email">E-MAIL *</label>
+    <input id="ag_email" name="email" type="email" required>
+
+    <label for="ag_telefone">TELEFONE</label>
+    <input id="ag_telefone" name="telefone" type="tel">
+
+    <label for="ag_msg">MENSAGEM *</label>
+    <textarea id="ag_msg" name="mensagem" rows="4" required></textarea>
+
+    <button id="ag_enviar" type="submit" class="agendar-btn" style="margin-bottom: -8px;">ENVIAR</button>
+    <div id="ag_feedback" class="agendar-feedback"></div>
+  </form>
+</div>
+
+<style>
+.agendar-visita {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.agendar-titulo {
+  font: 700 var(--fs-h2)/1.1 var(--ff-cta);
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 8px;
+}
+
+.agendar-sub {
+  font-size: var(--fs-p);
+  margin-bottom: 22px;
+  max-width: 480px;
+  color: var(--ink);
+}
+
+#form-agendar {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+
+#form-agendar label {
+  font: 700 var(--fs-sm)/1 var(--ff-cta);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: -4px;
+  margin-top: 6px;
+}
+
+#form-agendar input {
+  height: 30px;
+}
+
+#form-agendar input,
+#form-agendar textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: var(--ff-body);
+  font-size: var(--fs-p);
+  border: var(--bd-thin) solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  border-radius: 0;
+}
+
+#form-agendar textarea {
+  resize: vertical;
+  min-height: 38px;
+}
+
+.agendar-btn {
+  margin-top: 10px;
+  align-self: center;
+  background: var(--red);
+  color: #fff;
+  font: 700 var(--fs-h2)/1 var(--ff-cta);
+  border: none;
+  padding: 12px 36px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.agendar-btn:hover {
+  background: var(--ink);
+  color: var(--beige);
+}
+
+.agendar-feedback {
+  margin-top: 14px;
+  font: 700 var(--fs-sm)/1 var(--ff-cta);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    padding: 28px 18px;
+  }
+  #form-agendar {
+    gap: 12px;
+  }
+  .agendar-btn {
+    width: 42%;
+    padding: 14px 0;
+  }
+}
+</style>
+
+
+
+    <div id="ag_feedback" style="display:none;margin-top:12px;font-weight:700;"></div>
   </div>
 </div>
 
-<div id="modal-fave-checkout" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
+
+<!-- ===== MODAL FAVORITOS ===== -->
+<!-- ===== MODAL FAVORITOS (mini-galeria dinâmica) ===== -->
+<div id="modal-favoritos" class="modal-overlay has-footer" style="display:none;">
+  <div class="modal-content favoritos-modal">
     <button class="modal-close" onclick="fecharModal()">✕</button>
-    <h2>FAVORITOS E CHECKOUT</h2>
-    <p>Reveja suas peças favoritas antes de finalizar a aposta.</p>
+    <h2 style="margin-top:0;">FAVORITAS</h2>
+    <p style="margin:0 0 16px 0;">
+      Clique nas miniaturas para marcar ou remover favoritas.
+    </p>
+
+    <!-- 🔹 Filtros: apenas grupos -->
+    <div class="filters-bar fav-filtros">
+      <div class="filters-group">
+        <span class="filters-label">GRUPOS</span>
+        <div id="fav-grupos" style="display:inline-flex;gap:6px;flex-wrap:wrap;"></div>
+      </div>
+        <button class="chip" onclick="fecharModal()" style="border:1px solid red; background: red; color: white;">CONCLUIR SELEÇÃO</button>
+    </div>
+
+    <!-- 🔹 Mini-galeria -->
+    <div id="fav-galeria" class="fav-galeria"></div>
+    
+
+
   </div>
 </div>
 
+<style>
+/* == modal botoes = */
 
+/* ====== Modal base ====== */
+.favoritos-modal {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red) var(--beige);
+}
+.fav-filtros {
+  position: sticky;
+  top: 0;
+  background: var(--beige);
+  padding: 6px 0 10px;
+  border-bottom: var(--bd-thin) solid var(--ink);
+  z-index: 2;
+}
+
+/* ====== Mini-galeria ====== */
+.fav-galeria {
+  column-count: 4;
+  column-gap: 6px; /* espaçamento horizontal */
+  width: 100%;
+  margin-top: 14px;
+}
+
+.fav-galeria .fav-item {
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 6px 0; /* igual ao column-gap */
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  cursor: pointer;
+}
+
+.fav-galeria img {
+  width: 100%;
+  display: block;
+  border: 1px solid var(--ink);
+  background: #fff;
+  transition: filter 0.2s, border-color 0.2s;
+}
+.fav-galeria img:hover { filter: brightness(0.9); }
+.fav-galeria img.fav-active {
+  border: 1px solid #bebab0;
+  filter: saturate(1.88) brightness(1.03) contrast(1.18) grayscale(0.38);
+}
+
+
+
+/* sempre 4 colunas, mesmo no mobile */
+@media (max-width: 700px) {
+  .fav-galeria {
+    column-count: 4;
+    column-gap: 4px;
+  }
+  .fav-galeria .fav-item {
+    margin-bottom: 1px;
+  }
+}
+
+</style>
+
+<script>
+/* ======= FAVORITOS MODAL: mini galeria tipo masonry ======= */
+function renderModalFavoritos(){
+  const gal = document.getElementById('fav-galeria');
+  const gruposWrap = document.getElementById('fav-grupos');
+  if(!gal || !pecas?.length) return;
+
+  // 🔹 construir botões de grupo dinamicamente
+  gruposWrap.innerHTML = '';
+  const gruposDisp = getGruposDisponiveis();
+  gruposDisp.forEach(g=>{
+    const b=document.createElement('button');
+    b.className='chip';
+    b.textContent=g;
+    b.dataset.grp=g;
+    b.addEventListener('click',()=>{
+      const ativo=b.classList.toggle('is-active');
+      if(!ativo) b.removeAttribute('aria-pressed');
+      else b.setAttribute('aria-pressed','true');
+      renderMiniGaleria(); // re-renderiza com grupos selecionados
+    });
+    gruposWrap.appendChild(b);
+  });
+
+  // primeiro render sem seleção (mostra todas)
+  renderMiniGaleria();
+}
+
+function renderMiniGaleria(){
+  const gal = document.getElementById('fav-galeria');
+  const gruposAtivos = Array.from(document.querySelectorAll('#fav-grupos .chip.is-active'))
+                            .map(b=>b.dataset.grp);
+  gal.innerHTML = '';
+
+  let lista = pecas.filter(p => !/vendid/i.test(p.status || ''));
+  if(gruposAtivos.length){
+    lista = lista.filter(p => gruposAtivos.includes(String(p.id_peca).slice(0,2)));
+  }
+
+  lista.forEach(p=>{
+    const wrap=document.createElement('div');
+    wrap.className='fav-item';
+    const img = imgWithFallback(`https://betshoptv.com/img/tmb/${p.imagens[0]}.avif`);
+    img.alt = p.titulo || p.id_peca;
+    img.dataset.id = p.id_peca;
+    if (favoritos.has(p.id_peca)) img.classList.add('fav-active');
+    img.onclick = ()=>toggleFavModal(p.id_peca, img);
+    wrap.appendChild(img);
+    gal.appendChild(wrap);
+  });
+}
+
+function toggleFavModal(id, el){
+  if (favoritos.has(id)) favoritos.delete(id);
+  else favoritos.add(id);
+  el.classList.toggle('fav-active');
+  try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
+  updatePills();
+}
+
+// 🪄 Integrar ao fluxo do site
+const _abrirModalOriginal = abrirModal;
+abrirModal = function(el){
+  const id = el.dataset.modalId;
+  const modal = document.getElementById(`modal-${id}`);
+  if(!modal) return;
+  fecharModal();
+  modal.style.display='flex';
+  modalAtivo=modal;
+  modal.scrollTop=0;
+  document.addEventListener('keydown', fecharPorEsc);
+  modal.addEventListener('click', cliqueFora);
+  if(id==='favoritos') renderModalFavoritos();
+};
+</script>
+
+
+
+
+
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
