@@ -1,5 +1,31 @@
 [
   {
+    "id_peca": "0201",
+    "titulo": "02/01 Câmera fotográfica 04",
+    "preco": 150,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para EVA.",
+    "dimensao": "29 x 20,5 x 0,6 cm",
+    "imagens": [
+      "02-01a",
+      "02-01b",
+      "02-01c"
+    ]
+  },
+  {
+    "id_peca": "0202",
+    "titulo": "02/02 Auto Rádio 04",
+    "preco": 150,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para EVA.",
+    "dimensao": "29 x 20,5 x 0,6 cm",
+    "imagens": [
+      "02-02a",
+      "02-02b",
+      "02-02c"
+    ]
+  },
+  {
     "id_peca": "0301",
     "titulo": "03/01 Rádio 01",
     "preco": 150,
@@ -653,6 +679,20 @@
       "08-07a",
       "08-07b",
       "08-07c"
+    ]
+  },
+  {
+    "id_peca": "0808",
+    "titulo": "08/08 Filmadora 07",
+    "preco": 800,
+    "status": "X",
+    "tecnica": "Impressão jato de tinta em sulfite e impressões offset em papel couché transferidas para tatame de EVA.",
+    "dimensao": "27 x 20,5 x 1 cm",
+    "imagens": [
+      "08-08a",
+      "08-08b",
+      "08-08c",
+      "08-08d"
     ]
   }
 ]
