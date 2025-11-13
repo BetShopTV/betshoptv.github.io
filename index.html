@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1442,7 +1443,7 @@ div[id]:not(#feed) {
     "
   >
     ☞ CONTATO:
-    <a href="mailto:betshoptv@gmail.com" style="color: #2b2424;">betshoptv@gmail.com</a>
+    <a href="/cdn-cgi/l/email-protection#72101706011a1d02060432151f131b1e5c111d1f" style="color: #2b2424;"><span class="__cf_email__" data-cfemail="c0a2a5b4b3a8afb0b4b680a7ada1a9aceea3afad">[email&#160;protected]</span></a>
   </footer>
 </template>
 
@@ -1463,7 +1464,7 @@ div[id]:not(#feed) {
 
 
   <!-- ====== SCRIPT: modular renderers, event delegation, footer bindings ====== -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ======================= CONFIG ======================= */
 const PECAS_JSON_URL = 'https://betshoptv.com/dados/pecas.json';
 const RIFAS_JSON_URL = 'https://betshoptv.com/dados/rifas.json';
@@ -3058,10 +3059,10 @@ window.addEventListener('DOMContentLoaded', init);
   background: #fff;
   transition: filter 0.2s, border-color 0.2s;
 }
-.fav-galeria img:hover { filter: brightness(0.9); }
+.fav-galeria img:hover { filter: brightness(1.07); border: 1px solid red;}
 .fav-galeria img.fav-active {
-  border: 1px solid #bebab0;
-  filter: saturate(1.88) brightness(1.03) contrast(1.18) grayscale(0.38);
+    outline: 5px solid rgba(255, 0, 0, 0.7); /* borda interna simulada */
+  outline-offset: -5px;       /* empurra outline para dentro */
 }
 
 
@@ -3075,6 +3076,10 @@ window.addEventListener('DOMContentLoaded', init);
   .fav-galeria .fav-item {
     margin-bottom: 1px;
   }
+  .fav-galeria img.fav-active {
+    outline: 3px solid rgba(255, 0, 0, 0.7); /* borda interna simulada */
+  outline-offset: -3px;       /* empurra outline para dentro */
+}
 }
 
 </style>
@@ -3160,5 +3165,6 @@ abrirModal = function(el){
 
 
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
