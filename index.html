@@ -452,6 +452,7 @@ footer.has-total #ctaMain {
   gap: 18px;
   padding: 2.4vh 0;
   align-items: center;      /* centraliza todo o bloco */
+    
 }
 
 .filters-row{
@@ -705,6 +706,7 @@ footer.has-total #ctaMain {
   .filters-bar {
     justify-content: center;
     gap: 8px 10px;
+    margin-top: 10px;
   }
 
 /* Offset da âncora para não esconder sob o cabeçalho fixo (exceto feed) */
@@ -3001,7 +3003,7 @@ window.addEventListener('DOMContentLoaded', init);
     </p>
 
     <!-- 🔹 Filtros: apenas grupos -->
-    <div class="filters-bar fav-filtros">
+    <div class="filters-bar fav-filtros" style="margin-top: 10px;">
       <div class="filters-group">
         <span class="filters-label">GRUPOS</span>
         <div id="fav-grupos" style="display:inline-flex;gap:6px;flex-wrap:wrap;"></div>
@@ -3033,6 +3035,7 @@ window.addEventListener('DOMContentLoaded', init);
   padding: 6px 0 10px;
   border-bottom: var(--bd-thin) solid var(--ink);
   z-index: 2;
+  border-top: 8px solid #bebab0;
 }
 
 /* ====== Mini-galeria ====== */
@@ -3134,7 +3137,7 @@ function renderMiniGaleria(){
     wrap.appendChild(img);
     gal.appendChild(wrap);
   });
-}
+} 
 
 function toggleFavModal(id, el){
   if (favoritos.has(id)) favoritos.delete(id);
@@ -3166,5 +3169,473 @@ abrirModal = function(el){
 
 
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+
+
+
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (NOVO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (NOVO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (ATUALIZADO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (NOVO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (NOVO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (ATUALIZADO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (ATUALIZADO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (ATUALIZADO) ========== -->
+<style>
+  #modal-resumo .titulo{
+    font:700 var(--fs-h2)/1.2 var(--ff-cta);
+    margin: 4px 0 6px 0;
+    text-transform: uppercase;
+  }
+  #modal-resumo .grupo{ margin: 10px 0 12px 0; }
+  #modal-resumo .chip{ cursor:pointer; }
+  #modal-resumo .chip.is-active{ background:var(--ink); color:var(--beige); }
+  #modal-resumo .hint{ font:700 var(--fs-sm)/1 var(--ff-cta); color:var(--ink); }
+
+  /* modal em coluna, só corpo rola (vertical) */
+  #modal-resumo .modal-content{
+    max-width: min(100vw - 32px, 900px);
+    max-height: 69vh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  #modal-resumo .modal-body{
+    flex:1 1 auto;
+    overflow-y:auto;
+    overflow-x:hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--red) var(--beige);
+  }
+
+  /* barra de ações fixa no rodapé do modal */
+  #modal-resumo .modal-actions{
+    flex:0 0 auto;
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;
+    margin-top:0px;
+    padding-top:8px;
+    border-top:1px solid var(--ink);
+  }
+
+  /* listas de peças/favoritas em linhas com 2 colunas */
+  #modal-resumo .resumo-list{
+    display:flex;
+    flex-direction:column; 
+    gap:8px;
+    width:100%;
+  } 
+  #modal-resumo .resumo-item{
+    display:flex;
+    gap:8px;
+    align-items:flex-start;
+    cursor:default;
+    border: 1px solid #2b2424;
+    margin-right: 6px;
+  }  
+  #modal-resumo .resumo-item-img{
+    flex:0 0 35%;
+    max-width:35%;
+  }
+  #modal-resumo .resumo-item-img img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-right: 1px solid #2b2424;
+  }
+  #modal-resumo .resumo-item-info{
+    flex:1;
+    font-weight:400;
+    font-size: clamp(0.88rem,1.6vw,1.38rem);
+    text-align:left;
+    margin-right: 4px;
+  }
+  #modal-resumo .resumo-item-titulo{
+    margin: clamp(20px, 2vw, 35px) 6px 6px 10px;
+  }
+  #modal-resumo .resumo-item-preco{
+    margin: 0 4px 0px 10px;
+    font-weight:500;
+    font-family:var(--ff-cta);
+  }
+
+  /* botão de edição ativo (modo exclusão rápida) */
+  #resumo-editar.selecionando{
+    background: var(--ink);
+    color: var(--beige);
+  }
+</style>
+
+<div id="modal-resumo" class="modal-overlay" style="display:none;">
+  <div class="modal-content">
+    <button class="modal-close" onclick="(window._fecharResumo||(()=>{}))()">✕</button>
+
+    <div class="modal-body">
+      <h2 style="margin:0 0 12px 0;">APOSTAS SELECIONADAS</h2>
+
+      <!-- TEXTO GUIA (sem total aqui) -->
+      <div class="grupo">
+      </div>
+<div style="background: #2b2424; width: 100%, height: 1px; color: #2b2424; margin-bottom: 18px; font-size: 1px">_</div>
+      <!-- RIFAS -->
+      <div id="resumo-rifas" class="grupo">
+        <div class="titulo">RIFAS</div>
+        <div id="resumo-rifas-list" class="rifas"></div>
+        <div id="resumo-rifas-fav-cta" style="display:none; margin-top:8px;">
+          <a href="#"
+             style="text-decoration: none;" onclick="event.preventDefault(); (window._fecharResumo||(()=>{}))(); if (typeof abrirModal==='function'){ try{ abrirModal({dataset:{modalId:'favoritos'}});}catch(e){ showPage('galeria'); } } else { showPage('galeria'); }">
+                        <button style="border: 1px dashed red; background: white; padding: 18px;cursor:pointer; text-align: left; color: red; font-weight: 500;">
+              <p style="margin:0 0 10px 0; margin-top: 8px; font-size:14px;line-height:1;text-align: left;">
+                Antes de apostar, indique quantas peças favoritas quiser!
+              </p>
+              <p style="margin-top: 8px; font-size:14px;line-height:1;text-align: left;">
+                Assim cada pessoa sorteada pode ganhar aquilo que mais gostou.
+              </p>
+              <p style="margin-top: 8px; font-size:14px;line-height:1;text-align: left;">
+                <strong>Clique aqui</strong> para abrir a mini-galeria.
+              </p>
+            </button> 
+          </a>
+        </div>
+      </div>
+
+      <!-- TABS (PEÇAS / FAVORITAS) -->
+      <div id="resumo-switch" class="grupo" style="display:none;">
+        <button id="resumo-tab-pecas" class="chip is-active" type="button" aria-pressed="true">Peças</button>
+        <button id="resumo-tab-favs"  class="chip"           type="button" aria-pressed="false">Favoritas</button>
+      </div>
+
+      <!-- LISTAS EM LINHAS (2 colunas) -->
+      <div id="resumo-pecas" class="grupo" style="display:none;">
+        <div class="titulo">PEÇAS</div>
+        <div id="resumo-pecas-list" class="resumo-list"></div>
+      </div>
+
+      <div id="resumo-favs" class="grupo" style="display:none;">
+        <div class="titulo">FAVORITAS</div>
+        <div id="resumo-favs-list" class="resumo-list"></div>
+      </div>
+    </div>
+
+    <!-- AÇÕES (fixo no rodapé do modal) -->
+    <div class="grupo modal-actions">
+      <button id="resumo-total-btn" class="chip is-active" type="button"
+              style="background:var(--red);color:#fff;cursor:default; width: 100%; font:500 var(--fs-sm)/1.2 var(--ff-cta);border: 1px solid red;" disabled>
+      </button>
+      <button id="resumo-editar"     class="chip" type="button">EDITAR SELEÇÃO</button>
+      <button id="resumo-prosseguir" class="chip is-active" type="button"
+              style="background:var(--red);color:#fff; border: 1px solid red;">PROSSEGUIR</button>
+    </div>
+  </div>
+</div>
+
+<script>
+window._resumoEditMode = false;
+
+/* --- abertura/fechamento do modal --- */
+(function(){
+  function _open(){
+    var m = document.getElementById('modal-resumo');
+    if (!m) return;
+    m.style.display = 'flex';
+    document.addEventListener('keydown', _esc);
+    m.addEventListener('click', _backdrop);
+  }
+  function _close(){
+    var m = document.getElementById('modal-resumo');
+    if (!m) return;
+    m.style.display = 'none';
+    document.removeEventListener('keydown', _esc);
+    m.removeEventListener('click', _backdrop);
+    window._resumoEditMode = false;
+    atualizaEstadoBotaoEdicao();
+  }
+  function _esc(e){ if (e.key === 'Escape') _close(); }
+  function _backdrop(e){ if (e.target && e.target.id === 'modal-resumo') _close(); }
+
+  window._abrirResumo  = _open;
+  window._fecharResumo = _close;
+})();
+
+/* --- aparência do botão EDITAR SELEÇÃO --- */
+function atualizaEstadoBotaoEdicao(){
+  var btn = document.getElementById('resumo-editar');
+  if (!btn) return;
+  if (window._resumoEditMode){
+    btn.classList.add('selecionando');
+    btn.textContent = 'CONCLUIR EDIÇÃO';
+  } else {
+    btn.classList.remove('selecionando');
+    btn.textContent = 'EDITAR SELEÇÃO';
+  }
+}
+
+/* --- monta a UI do resumo com os dados vivos em memória --- */
+function renderResumoSelecoes(){
+  try{
+    if (typeof calcularTotal === 'function') calcularTotal();
+    if (typeof updatePills === 'function')   updatePills();
+
+    window._resumoEditMode = false;
+    atualizaEstadoBotaoEdicao();
+
+    var rifasList = document.getElementById('resumo-rifas-list');
+    var pecasList = document.getElementById('resumo-pecas-list');
+    var favsList  = document.getElementById('resumo-favs-list');
+    var sw        = document.getElementById('resumo-switch');
+
+    if (rifasList) rifasList.innerHTML = '';
+    if (pecasList) pecasList.innerHTML = '';
+    if (favsList)  favsList.innerHTML  = '';
+
+    // --- RIFAS ---
+    var hasRifas = false;
+    if (typeof rifasSel !== 'undefined' && Array.isArray(rifas) && rifasList){
+      (Array.from(rifasSel)).forEach(function(id){
+        var r = rifas.find(function(x){ return x && (String(x.id_rifa)===String(id)); });
+        if (!r) return;
+        hasRifas = true;
+
+        var btn = document.createElement('div');
+        btn.className = 'rifa-btn selected';
+        var cor = r.hex_rifa || r.hex || '#ccc';
+        btn.style.backgroundColor = cor;
+        if (typeof getContrastColor === 'function'){
+          btn.style.color = getContrastColor(cor);
+        }
+
+        var rawLabel = (r.botao_rifa && String(r.botao_rifa).trim())
+          ? String(r.botao_rifa).trim()
+          : (r.numero || r.id_rifa || '').toString();
+        rawLabel = rawLabel.replace(/^\s*X\s*/i,'').trim();
+
+        if (typeof formatRifaLabelDOM === 'function'){
+          btn.appendChild( formatRifaLabelDOM(rawLabel) );
+        } else {
+          btn.textContent = rawLabel;
+        }
+
+        btn.onclick = function(){
+          if (!window._resumoEditMode) return;
+          try{
+            rifasSel.delete(r.id_rifa);
+            if (typeof calcularTotal==='function') calcularTotal();
+            if (typeof updatePills==='function')   updatePills();
+            if (typeof handleHashChange==='function') handleHashChange();
+            renderResumoSelecoes();
+          }catch(e){ console.error(e); }
+        };
+
+        rifasList.appendChild(btn);
+      });
+    }
+
+    var favCta = document.getElementById('resumo-rifas-fav-cta');
+    if (favCta){
+      var onlyR = hasRifas &&
+                  (typeof selecionadas !== 'undefined' ? selecionadas.size === 0 : true) &&
+                  (typeof favoritos    !== 'undefined' ? favoritos.size    === 0 : true);
+      favCta.style.display = onlyR ? '' : 'none';
+    }
+
+    // --- PEÇAS ---
+    var hasPecas = false;
+    if (typeof selecionadas !== 'undefined' && Array.isArray(pecas) && pecasList){
+      (Array.from(selecionadas))
+        .map(function(id){
+          return pecas.find(function(p){ return p && (String(p.id_peca)===String(id)); });
+        })
+        .filter(Boolean)
+        .forEach(function(p){
+          hasPecas = true;
+
+          var row = document.createElement('div');
+          row.className = 'resumo-item';
+
+          var colImg = document.createElement('div');
+          colImg.className = 'resumo-item-img';
+
+          var imgId = (p.imagens && p.imagens.length) ? p.imagens[0] : null;
+          if (imgId){
+            var img = imgWithFallback(`https://betshoptv.com/img/tmb/${imgId}.avif`);
+            img.alt = p.titulo || p.id_peca;
+            colImg.appendChild(img);
+          }
+
+          var colInfo = document.createElement('div');
+          colInfo.className = 'resumo-item-info';
+
+          var tituloEl = document.createElement('div');
+          tituloEl.className = 'resumo-item-titulo';
+          tituloEl.textContent = p.titulo || ('Peça ' + p.id_peca);
+
+          var precoEl = document.createElement('div');
+          precoEl.className = 'resumo-item-preco';
+          var preco = (typeof fmt === 'function') ? fmt(p.preco) : ('R$ ' + Math.round(p.preco||0));
+          precoEl.textContent = preco;
+
+          colInfo.appendChild(tituloEl);
+          colInfo.appendChild(precoEl);
+
+          row.appendChild(colImg);
+          row.appendChild(colInfo);
+
+          row.onclick = function(){
+            if (!window._resumoEditMode) return;
+            try{
+              selecionadas.delete(p.id_peca);
+              if (typeof calcularTotal==='function') calcularTotal();
+              if (typeof updatePills==='function')   updatePills();
+              if (typeof handleHashChange==='function') handleHashChange();
+              renderResumoSelecoes();
+            }catch(e){ console.error(e); }
+          };
+
+          pecasList.appendChild(row);
+        });
+    }
+
+    // --- FAVORITAS ---
+    var hasFavs = false;
+    if (typeof favoritos !== 'undefined' && Array.isArray(pecas) && favsList){
+      (Array.from(favoritos))
+        .map(function(id){
+          return pecas.find(function(p){ return p && (String(p.id_peca)===String(id)); });
+        })
+        .filter(Boolean)
+        .forEach(function(p){
+          hasFavs = true;
+
+          var row = document.createElement('div');
+          row.className = 'resumo-item';
+
+          var colImg = document.createElement('div');
+          colImg.className = 'resumo-item-img';
+
+          var imgId = (p.imagens && p.imagens.length) ? p.imagens[0] : null;
+          if (imgId){
+            var img = imgWithFallback(`https://betshoptv.com/img/tmb/${imgId}.avif`);
+            img.alt = p.titulo || p.id_peca;
+            colImg.appendChild(img);
+          }
+
+          var colInfo = document.createElement('div');
+          colInfo.className = 'resumo-item-info';
+
+          var tituloEl = document.createElement('div');
+          tituloEl.className = 'resumo-item-titulo';
+          tituloEl.textContent = p.titulo || ('Peça ' + p.id_peca);
+
+          colInfo.appendChild(tituloEl);
+
+          row.appendChild(colImg);
+          row.appendChild(colInfo);
+
+          row.onclick = function(){
+            if (!window._resumoEditMode) return;
+            try{
+              favoritos.delete(p.id_peca);
+              if (typeof calcularTotal==='function') calcularTotal();
+              if (typeof updatePills==='function')   updatePills();
+              if (typeof handleHashChange==='function') handleHashChange();
+              renderResumoSelecoes();
+            }catch(e){ console.error(e); }
+          };
+
+          favsList.appendChild(row);
+        });
+    }
+
+    // --- TOTAL NO BOTÃO DO RODAPÉ ---
+    var tot = (typeof totalGeral !== 'undefined') ? totalGeral : 0;
+    var totalBtn = document.getElementById('resumo-total-btn');
+    if (totalBtn){
+      var labelTot = (typeof fmt === 'function') ? fmt(tot) : ('R$ ' + Math.round(tot||0));
+      totalBtn.textContent = 'TOTAL: ' + labelTot;
+    }
+
+    // --- TABS (Peças/Favoritas) ---
+    var boxP = document.getElementById('resumo-pecas');
+    var boxF = document.getElementById('resumo-favs');
+    var tabP = document.getElementById('resumo-tab-pecas');
+    var tabF = document.getElementById('resumo-tab-favs');
+
+    if (boxP) boxP.style.display = hasPecas ? '' : 'none';
+    if (boxF) boxF.style.display = (hasPecas && hasFavs) ? 'none' : (hasFavs ? '' : 'none');
+    if (sw)   sw.style.display   = (hasPecas && hasFavs) ? '' : 'none';
+
+    if (hasPecas && hasFavs && tabP && tabF){
+      var selectTab = function(qual){
+        var pOn = (qual === 'p');
+        if (boxP) boxP.style.display = pOn ? '' : 'none';
+        if (boxF) boxF.style.display = pOn ? 'none' : '';
+        tabP.classList.toggle('is-active', pOn);
+        tabP.setAttribute('aria-pressed', pOn ? 'true' : 'false');
+        tabF.classList.toggle('is-active', !pOn);
+        tabF.setAttribute('aria-pressed', !pOn ? 'true' : 'false');
+      };
+      selectTab('p');
+      tabP.onclick = function(){ selectTab('p'); };
+      tabF.onclick = function(){ selectTab('f'); };
+    }
+
+  }catch(err){ console.error('renderResumoSelecoes()', err); }
+}
+
+/* --- intercepta #ctaMain sem reescrever attachBindings() --- */
+(function hookCTA(){
+  function doHook(){
+    var cta = document.getElementById('ctaMain');
+    if (!cta) return setTimeout(doHook, 80);
+
+    if (typeof cta.onclick !== 'function'){
+      return setTimeout(doHook, 80);
+    }
+
+    var originalCTA = cta.onclick;
+    if (cta._resumoHooked) return;
+    cta._resumoHooked = true;
+
+    cta.onclick = function(e){
+      if (cta.disabled) return;
+      e.preventDefault();
+
+      renderResumoSelecoes();
+      (window._abrirResumo||(()=>{}))();
+
+      var btnEdit = document.getElementById('resumo-editar');
+      var btnNext = document.getElementById('resumo-prosseguir');
+
+      if (btnEdit){
+        btnEdit.onclick = function(){
+          window._resumoEditMode = !window._resumoEditMode;
+          atualizaEstadoBotaoEdicao();
+        };
+      }
+
+      if (btnNext){
+        btnNext.onclick = function(){
+          (window._fecharResumo||(()=>{}))();
+          try{
+            originalCTA.call(cta, new MouseEvent('click'));
+          }catch(err){
+            originalCTA();
+          }
+        };
+      }
+    };
+  }
+  doHook();
+})();
+</script>
+
+
+
+
+
+
+
+
 </body>
 </html>
