@@ -99,7 +99,7 @@
     "id_rifa": "017",
     "hex": "#32CD32",
     "botao_rifa": "017 / Bem-Estar",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "018",
@@ -111,7 +111,7 @@
     "id_rifa": "019",
     "hex": "#FF7F50",
     "botao_rifa": "019 / Bolsa de Praia",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "020",
@@ -255,7 +255,7 @@
     "id_rifa": "043",
     "hex": "#FFE4E1",
     "botao_rifa": "043 / Delicadeza",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "044",
@@ -1017,6 +1017,6 @@
     "id_rifa": "170",
     "hex": "#FF69B4",
     "botao_rifa": "170 / Vou de rosa",
-    "status_rifa": ""
+    "status_rifa": "x"
   }
 ]
