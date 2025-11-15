@@ -63,7 +63,7 @@
     "id_rifa": "011",
     "hex": "#4682B4",
     "botao_rifa": "011 / Atmosfera",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "012",
@@ -153,7 +153,7 @@
     "id_rifa": "026",
     "hex": "#D2B48C",
     "botao_rifa": "026 / Capuccino Doce",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "027",
@@ -195,7 +195,7 @@
     "id_rifa": "033",
     "hex": "#A9A9A9",
     "botao_rifa": "033 / Colinas de Inverno",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "034",
@@ -315,7 +315,7 @@
     "id_rifa": "053",
     "hex": "#FFFFFF",
     "botao_rifa": "053 / Estrela de luz",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "054",
@@ -333,7 +333,7 @@
     "id_rifa": "056",
     "hex": "#4682B4",
     "botao_rifa": "056 / Fazendo vários nadas",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "057",
@@ -411,7 +411,7 @@
     "id_rifa": "069",
     "hex": "#2F4F4F",
     "botao_rifa": "069 / Grande Metrópole",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "070",
@@ -447,7 +447,7 @@
     "id_rifa": "075",
     "hex": "#006400",
     "botao_rifa": "075 / Jardim Misterioso",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "076",
@@ -465,7 +465,7 @@
     "id_rifa": "078",
     "hex": "#FF8C00",
     "botao_rifa": "078 / Ligada no 220v",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "079",
@@ -483,7 +483,7 @@
     "id_rifa": "081",
     "hex": "#32CD32",
     "botao_rifa": "081 / Luz da Floresta",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "082",
@@ -801,7 +801,7 @@
     "id_rifa": "134",
     "hex": "#8A2BE2",
     "botao_rifa": "134 / Roxo místico",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "135",
