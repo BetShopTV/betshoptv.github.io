@@ -141,7 +141,7 @@
     "id_rifa": "024",
     "hex": "#008000",
     "botao_rifa": "024 / Caminho do Jardim",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "025",
@@ -681,7 +681,7 @@
     "id_rifa": "114",
     "hex": "#FF69B4",
     "botao_rifa": "114 / Precioso Momento",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "115",
@@ -915,7 +915,7 @@
     "id_rifa": "153",
     "hex": "#8B4513",
     "botao_rifa": "153 / Toque de Noz-Moscada",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "154",
