@@ -435,7 +435,7 @@
     "id_rifa": "073",
     "hex": "#6A5ACD",
     "botao_rifa": "073 / Intuição Divina",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "074",
@@ -663,7 +663,7 @@
     "id_rifa": "111",
     "hex": "#A0522D",
     "botao_rifa": "111 / Pinhão",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "112",
