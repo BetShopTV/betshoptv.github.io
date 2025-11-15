@@ -9,7 +9,7 @@
     "id_rifa": "002",
     "hex": "#B22222",
     "botao_rifa": "002 / 5ª avenida",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "003",
@@ -123,7 +123,7 @@
     "id_rifa": "021",
     "hex": "#FFD700",
     "botao_rifa": "021 / Brinde da virada",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "022",
@@ -267,7 +267,7 @@
     "id_rifa": "045",
     "hex": "#FA8072",
     "botao_rifa": "045 / Dieta hoje não",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "046",
@@ -285,7 +285,7 @@
     "id_rifa": "048",
     "hex": "#483D8B",
     "botao_rifa": "048 / Drama Noturno",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "049",
@@ -327,7 +327,7 @@
     "id_rifa": "055",
     "hex": "#228B22",
     "botao_rifa": "055 / Fazendo a fitness",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "056",
@@ -495,7 +495,7 @@
     "id_rifa": "083",
     "hex": "#000000",
     "botao_rifa": "083 / Mais que preto, black",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "084",
@@ -555,7 +555,7 @@
     "id_rifa": "093",
     "hex": "#FF69B4",
     "botao_rifa": "093 / Momento selfie",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "094",
@@ -585,7 +585,7 @@
     "id_rifa": "098",
     "hex": "#800000",
     "botao_rifa": "098 / Na dúvida, vinho!",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "099",
@@ -885,7 +885,7 @@
     "id_rifa": "148",
     "hex": "#FF0000",
     "botao_rifa": "148 / Tapete vermelho",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "149",
@@ -993,7 +993,7 @@
     "id_rifa": "166",
     "hex": "#DC143C",
     "botao_rifa": "166 / Vestida pra matar",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "167",
