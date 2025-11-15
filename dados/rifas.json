@@ -105,7 +105,7 @@
     "id_rifa": "018",
     "hex": "#000000",
     "botao_rifa": "018 / Black",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "019",
@@ -243,7 +243,7 @@
     "id_rifa": "041",
     "hex": "#DC143C",
     "botao_rifa": "041 / Deixa beijar",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "042",
@@ -651,7 +651,7 @@
     "id_rifa": "109",
     "hex": "#FF69B4",
     "botao_rifa": "109 / Papel de Bala",
-    "status_rifa": ""
+    "status_rifa": "x"
   },
   {
     "id_rifa": "110",
