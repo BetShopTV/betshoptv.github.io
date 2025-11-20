@@ -1,0 +1,3645 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="icon" href="https://betshoptv.com/FAVICON.png" type="image/x-icon">
+
+<title>BetShopTV⦿com</title>
+
+<!-- ====== STYLES (preserve visual look of v08) ====== -->
+<style>
+  /* ====== Tokens ====== */
+  :root{
+    --red:#ff0000; --ink:#2b2424; --beige:#bebab0; --white:#ffffff;
+    --bd-thin:1px; --bd-thick:2px;
+    --ff-cta:"Roboto Condensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --fs-h1:clamp(1.4rem,3vw,2rem); --fs-h2:clamp(1.1rem,2vw,1.3rem);
+    --fs-p:clamp(.9rem,1.2vw,1rem); --fs-sm:clamp(.78rem,1vw,.9rem); --fs-menu:clamp(.8rem,1.03vw,1.08rem);
+    --gap-xxs:4px; --gap-xs:6px; --gap-s:8px; --gap-m:12px; --gap-l:16px;
+    --app-max-width:1200px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);-webkit-font-smoothing:antialiased} 
+
+  /* ====== Header (mantém visual v08) ====== */
+  header{position:sticky;top:0;z-index:10;background:var(--red);color:#fff;}
+  .hdr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px}
+/* PATCH: logo como imagem, mantendo o mesmo “peso visual” do título anterior */
+.logo{
+  display:flex; align-items:center; gap:8px;
+  text-decoration:none;
+}
+.logo img{
+  display:block;
+  height: clamp(88px, 6.9vw, 224px); /* cresce um pouco em telas largas */
+  width: auto;
+  margin-left: 8px;
+}
+
+  .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: clamp(30px, 5vw, 46px);
+  padding: 0 clamp(6px, 2vw, 18px);
+  font-weight: 650;
+  font-size: clamp(12px, 2vw, 18px);
+  color: #ff0000;
+  background: white;
+  text-decoration: none;
+  letter-spacing: 0.24px;
+}
+
+  .nav a:hover{
+  background: #bebab0;     /* bege ativo */
+  color: #2b2424;          /* texto escuro */
+  border-color: #bebab0;   /* borda bege pra integrar */
+  }
+  .nav a.active {
+background:#ff0000;color:white;border: 1px solid white;
+}
+
+  /* ====== Área da página ====== */
+main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 6px;min-height:60vh}
+  section{margin-bottom:24px}
+  h2{font:700 var(--fs-h2)/1.2 var(--ff-cta);margin:0 0 8px}
+  .botao-txt a{display:inline-flex;align-items:center;justify-content:center;color:#ffffff;text-decoration:none;
+padding: clamp(8px, 3.8vw, 38px) clamp(12px, 3vw, 27px);
+height: clamp(48px, 7vh, 72px);
+font-weight: 700;
+font-size: clamp(27px, 6.9vw, 42px);
+letter-spacing: clamp(1.3px, 0.42vw, 2.4px); 
+text-transform:uppercase; 
+background-color: #ff0000;
+  background-image: url('https://betshoptv.com/images/faposteee.gif');
+  background-repeat: repeat;
+  }
+  .botao-txt a:hover{
+  background: #2b2424;     /* bege ativo */
+  color: white;          /* texto escuro */
+  border-color: #2b2424;   /* borda bege pra integrar */
+  }
+  /* ====== Galeria (Masonry / Pinterest) ====== */
+  .galeria{
+    column-gap:2px; -webkit-column-gap:2px;
+    column-count:3; -webkit-column-count:3; /* 3 colunas por padrão */
+    margin:0; padding:0;
+  }
+  .gal-item{
+    display:inline-block; width:100%;
+    margin:0 0 0px;
+    break-inside:avoid; -webkit-column-break-inside:avoid;
+    background:transparent; overflow:hidden;
+  }
+  .gal-item img{display:block;width:100%;height:auto;object-fit:cover;vertical-align:middle;background:transparent}
+  .gal-item .ttl{display:none!important}
+
+  /* VENDIDA — realce discreto */
+/* Estado "vendido" */
+.gal-item.sold {
+  position: relative;
+  filter: saturate(0.88) brightness(0.94);
+  opacity: 1;
+}
+
+.gal-item.sold::after {
+  content: '⬤';
+  position: absolute;
+  top: 1.5vw;
+  right: 1.5vw;
+  color: var(--red);
+  font-size: clamp(18px, 2.4vw, 27px);
+  line-height: 1;
+  
+  /* 🔥 Isola o pseudo do filtro */
+  filter: none;
+  mix-blend-mode: normal;
+  isolation: isolate;
+}
+.preco.sold { color: var(--red); }
+
+
+
+  /* ====== Feed / Post ====== */
+  .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
+  .post{border:var(--bd-thin) solid var(--ink);background:var(--beige);overflow:hidden;display:flex;flex-direction:column;}
+
+  /* Carrossel */
+  .carousel{
+    display:flex;gap:var(--gap-xxs);
+    overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:6px 12px;background:var(--beige);
+    /* barra de rolagem inferior sempre visível e vermelha */
+    scrollbar-color: var(--red) transparent;
+  }
+  .carousel::-webkit-scrollbar{height:8px; margin-top: 8px;border-radius:0;}
+  .carousel::-webkit-scrollbar-track{background:var(--beige);border-radius:0;}
+  .carousel::-webkit-scrollbar-thumb{background:var(--red)}
+  .carousel-slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;background:var(--beige);}
+  .carousel-slide img{
+    width:100%; max-height:42vh; min-height:200px;
+    object-fit:contain; background:var(--beige);
+  }
+  /* remove a barra de progresso antiga */
+  .carousel-bar-wrap{display:none!important}
+
+  /* Meta do post */
+  .meta{padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--beige);}
+  .meta .linha1{display:flex;align-items:flex-start;gap:8px;background:var(--beige);}
+  .titulo{flex:1 1 auto;font-family:var(--ff-cta);font-weight:700;min-width:0;background:var(--beige);}
+  .preco{flex:0 0 auto;font-weight:700;white-space:nowrap;align-self:flex-start;background:var(--beige);}
+  .descricao{font-size:15px; font-weight: 700;color:var(--ink);background:var(--beige);}
+  .tecnica{font-size:13px;color:var(--ink);background:var(--beige);}   /* será exibida acima das dimensões */
+  .dimens{font-size:13px;color:var(--ink);background:var(--beige);}
+
+  /* Botões do post */
+  .meta .meta-footer{display:flex;justify-content:flex-end;gap:8px}
+  .btn{font-size:13px;font-family:var(--ff-cta);font-weight:700;padding:8px 12px;cursor:pointer;border-radius:0}
+  .add-btn{font-size:13px;border:2px solid var(--red);background:transparent;color:var(--red)}
+  .add-btn.added{font-size:13px;border-color:var(--ink);background:var(--ink);color:var(--beige)}
+  .fav-btn{font-size:13px; border:2px solid var(--red);background:var(--beige);color:var(--red)} 
+  .fav-btn.active{font-size:13px;border:2px solid var(--red);background:var(--red);color:var(--beige)}
+ 
+  /* ====== Rifas ====== */
+  @font-face{
+    font-family:'BC-RobotoCondensed-Med';
+    src:url('/fonts/Roboto_Condensed-Medium.woff2') format('woff2');
+    font-weight:500;font-style:normal;font-display:swap;
+  }
+  .rifas{
+    display:flex;flex-wrap:wrap;gap:8px;
+    align-items:flex-start;justify-content:center;align-content:center;
+    padding:6px 0;
+  }
+  .rifa-btn{
+    display:inline-flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;
+    min-height:56px;padding:10px 12px;border:1px solid var(--ink);
+    background:var(--beige);cursor:pointer;
+    font-family:'BC-RobotoCondensed-Med',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+    font-weight:500;font-size:14px;line-height:1.15;text-transform:none;color:inherit;white-space:normal;overflow:hidden;
+  }
+  .rifa-btn .ln1,.rifa-btn .ln2{
+    display:block;margin:0;padding:0;font:inherit;text-transform:none;text-align:left;color:inherit;
+  }
+  .rifa-btn.selected{background:#fff!important;border-color:var(--red)!important;color:var(--red)!important}
+  .rifa-btn.sold{opacity:.08;filter:grayscale(1);pointer-events:none; background: #bebab0; color:#fff; border: 0px;}
+
+  @media (max-width:768px){
+    .rifa-btn{min-height:42px;padding:5px 7px;font-size:11px}
+    .rifa-btn .ln1,.rifa-btn .ln2{font-size:11px;line-height:1.12}
+    .galeria{column-count:3; -webkit-column-count:3} /* 4 colunas telas largas */
+  }
+
+  /* ====== Footer (mantém visual v08) ====== */
+  
+    @font-face{
+    font-family:'BC-RobotoCondensed-Bold';
+    src:url('/fonts/Roboto_Condensed-Bold.woff2') format('woff2');
+    font-weight:900;font-style:normal;font-display:swap;
+  }
+  
+  footer{position:sticky;bottom:-2px;background:var(--ink);color:#fff;border-top:var(--bd-thick) solid var(--ink)}
+  .ftr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px}
+  .contadores{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:var(--beige);color:var(--ink);border:var(--bd-thin) solid var(--beige);padding:4px 4px;font:700 var(--fs-sm)/1 var(--ff-cta)}
+  .cta-final{background:var(--red);color:#fff;border:var(--bd-thin) solid #fff;padding:8px 12px;font-size: 1em;font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;cursor:pointer}
+  .total-display{font-size: 1em;font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif; margin-left:12px}
+  /* Estado visual do rodapé quando NÃO há seleção (total = 0) */
+footer.no-total #pillCompact,
+footer.no-total #ctaMain {
+  background: var(--ink);
+  color: var(--ink);
+  border: 0;              /* sem borda colorida */
+}
+
+/* Estado visual do CTA quando HÁ seleção (total > 0) */
+footer.has-total #ctaMain {
+  background: var(--red);
+  color: #fff;
+  border: 0;              /* sem borda */
+  padding: 8px 12px;
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-right: 4px;
+  font-family:'BC-RobotoCondensed-Bold',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  font-size: 1em;
+}
+
+/* Garantias de interação */
+#ctaMain[disabled] {
+  cursor: default;
+  opacity: 0;             /* mantemos legível mesmo desabilitado */
+}
+
+/* ===== RIFAS: hero/topo informativo ===== */
+.rifa-hero{
+  border: var(--bd-thin) solid var(--ink);
+  background: white;               /* tom acima do beige mantendo paleta */
+  padding: 16px;
+  margin: 0 0 16px 0;
+  position: relative;
+  align-items: center;
+}
+.rifa-hero .badge{
+  display:inline-block;
+  background: var(--beige);
+  color:var (--ink);
+  font-weight: 500; 
+  font-size: clamp(0.9rem,2vw,1.3rem);
+  padding:6px 10px;
+  border: var(--bd-thin) solid var(--ink);
+  position:absolute;
+  top:-12px; left:16px;
+  margin: -4px;
+}
+.rifa-hero h2{
+  margin: 14px 0 2px 0;
+  font:700 var(--fs-h2)/1.1 var(--ff-cta);
+}
+.rifa-hero .sub{
+  display:block;
+  font:700 var(--fs-h2)/1 var(--ff-cta);
+  letter-spacing:.02em;
+  margin-bottom:10px;
+}
+.rifa-hero .desc{
+  margin:10px 0 8px 0;
+  font-size: var(--fs-p);
+}
+.rifa-hero .spec{
+  margin:0 0 10px 0;
+  font-size: var(--fs-p);
+}
+.rifa-hero .precos{
+  margin: 4px 0 4px 0;
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.rifa-hero .pill{
+  background:var(--red);
+  color:var(--white);
+  padding:12px clamp(18px, 4vw, 38px);
+    font:500 calc(var(--fs-h2) * 1.1) / 1.1 var(--ff-cta);
+ line-height: 1.3;
+    
+}
+.rifa-hero .hint{
+  margin:10px 0 8px 0;
+  font-size: var(--fs-p);
+}
+.rifa-hero .strong{ font-weight:700; }
+.rifa-hero .cta-hint{
+  margin-top: 8px;
+  font:700 var(--fs-sm)/1 var(--ff-cta);
+}
+/* Centraliza verticalmente o texto do topo das rifas */
+.rifa-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  max-width: 720px;
+  margin: 20px auto 32px auto; /* centraliza no eixo horizontal e dá espaçamento */
+  padding: 24px 16px;
+}
+
+.rifa-hero .badge {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin-bottom: 2px;
+}
+
+.rifa-hero h2,
+.rifa-hero .desc,
+.rifa-hero .spec,
+.rifa-hero .cta-hint {
+  text-align: center;
+  max-width: 90%;
+}
+@media (max-width: 600px) {
+  .rifa-hero {
+    padding: 20px 12px;
+    margin-top: 8px;
+  }
+}
+
+  /* Remove a moldura automática quando o navegador foca o elemento com hash (#id) */
+:target {
+  outline: none;
+}
+:target * {
+  outline: none !important;
+}
+
+/* Ajusta o posicionamento da âncora no feed, respeitando o cabeçalho fixo */
+.feed-item {
+  scroll-margin-top: 110px; /* altura aproximada do header vermelho */
+  margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .feed-item {
+    scroll-margin-top: 82px;
+    margin-top: 4px;
+  }
+}
+
+      a {
+      color: #ff0000;
+      text-decoration: underline;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+  
+  
+/* ====== FOFILTROS (barra compacta) ====== */
+.filters-bar{
+  display:flex;
+  flex-direction:column;        /* 2 linhas no mobile-first */
+  gap:8px;
+  padding:6px 0;
+}
+
+/* linha 1 e linha 2 */
+.filters-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 12px;
+  align-items:stretch;
+  justify-content:flex-start;
+}
+
+/* blocos de cada controle */
+.filters-group{
+  display:flex;
+  align-items:stretch;
+  gap:6px;
+}
+
+/* rótulos (ex.: Grupos, Peças, Preço, Ordenar) */
+.filters-label{
+  font:700 var(--fs-sm)/1 var(--ff-cta);
+  color:var(--ink);
+  align-self:center;
+  white-space:nowrap;
+}
+
+/* botões tipo "chip" (sem borda arredondada) */
+.chip{
+  appearance:none;
+  border:1px solid var(--ink);
+  background:var(--beige);   /* vazio */
+  color:var(--ink);          /* vazio */
+  font:700 calc(var(--fs-sm) * .95)/1 var(--ff-cta); /* menor que header */
+  padding:.38rem .60rem;
+  border-radius:0;           /* <-- sem arredondamento */
+  cursor:pointer;
+  display:inline-flex;       /* centralização de texto */
+  align-items:center;        /* vertical center */
+  justify-content:center;    /* horizontal center */
+  text-align:center;
+  min-height:36px;           /* garante centro vertical */
+  white-space:nowrap;
+}
+
+/* estado selecionado */
+.chip[aria-pressed="true"],
+.chip.is-active{
+  background:var(--ink);     /* #2b2424 */
+  border-color:var(--ink);
+  color:var(--beige);        /* #bebab0 */
+}
+
+/* selects (PREÇO e ORDENAR) – alinhados à esquerda */
+.select{
+  border:1px solid var(--ink);
+  background:var(--beige);
+  color:var(--ink);
+  font:700 calc(var(--fs-sm) * .95)/1 var(--ff-cta);
+  padding:.18rem .55rem;
+  border-radius:0;           /* <-- sem arredondamento */
+  min-height:36px;
+}
+
+/* RESPONSIVO: em telas maiores mantém 2 linhas, mas sem overflow horizontal */
+@media (min-width: 920px){
+  .filters-row{ gap:10px 16px; }
+  .nav a {
+  font-weight: 700;}
+}
+
+
+  /* ===== PATCH FOFILTROS ===== */
+
+/* 1) Centralização e layout responsivo
+   - Mobile-first: empilha (coluna)
+   - >=1024px: tenta virar 1 linha (row + wrap)
+*/
+.filters-bar{
+  /* já existia, reforçamos: */
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;   /* mobile */
+  gap: 18px;
+  padding: 2.4vh 0;
+  align-items: center;      /* centraliza todo o bloco */
+    
+}
+
+.filters-row{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  align-items: stretch;
+  justify-content: center;  /* centraliza os itens de cada linha */
+}
+
+/* Em telas largas, as duas "linhas" viram irmãs lado a lado e tentam ficar em 1 linha */
+@media (min-width: 1024px){
+  .filters-bar{
+    flex-direction: row;    /* row1 e row2 lado a lado */
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filters-row{
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* 2) Altura mais baixa dos botões com borda (chips) e dos selects */
+.chip{
+  /* tamanho mais enxuto */
+  font: 700 calc(var(--fs-sm) * .90)/1 var(--ff-cta);
+  padding: .26rem .50rem;     /* menos vertical */
+  min-height: 30px;           /* de 36px -> 30px */
+}
+.select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font: 700 calc(var(--fs-sm) * .90)/1 var(--ff-cta);
+  padding: .22rem .50rem;     /* menos vertical */ 
+  min-height: 30px;           /* de 36px -> 30px */
+  line-height: 1.1;
+}
+
+/* 3) Remover “borda branca”/realce do select ao focar/clicar (todos os navegadores) */
+.select:focus,
+.select:focus-visible,
+.select:-moz-focusring {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: var(--ink) !important;
+}
+
+/* (Safari/WebKit) bloqueia halo azul no focus via mouse */
+.select:focus:not(:focus-visible){
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 4) Borda do select/inputs nunca arredondada (reforço) */
+.select{ border-radius: 0 !important; }
+
+/* 5) Ajuste fino de gap em telas bem largas (opcional) */
+@media (min-width: 1280px){
+      .nav a {
+  font-weight: 800;
+  letter-spacing: 0.66px;
+    }
+    .filters-row{ gap: 8px 12px; }
+}
+/* === FOFILTROS: 1 linha no desktop, quebra fluida no mobile === */
+.filters-bar{
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;   /* desktop: 1 linha */
+  flex-wrap: wrap;       /* quebra quando precisar */
+  justify-content: center;
+  gap: 10px 14px;
+  padding: 10px 0;
+}
+.filters-row--all{
+  display: contents;     /* os grupos "fluem" direto na barra */
+}
+.filters-group{
+  display: inline-flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Altura enxuta (mantemos como você pediu) */
+.chip{
+  font: 700 calc(var(--fs-sm) * .90)/1 var(--ff-cta);
+  padding: .26rem .50rem;
+  min-height: 30px;
+} 
+.select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font: 700 calc(var(--fs-sm) * .90)/1 var(--ff-cta);
+  padding: .22rem .50rem;
+  min-height: 30px;
+  line-height: 1.1;
+  border-radius: 0;
+}
+
+/* Remove halo/borda branca ao focar no select (todos os browsers) */
+.select:focus,
+.select:focus-visible,
+.select:-moz-focusring{
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: var(--ink) !important;
+}
+/* Safari: foco via mouse não pinta nada */
+.select:focus:not(:focus-visible){
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+/* === FEED – Desktop: carrossel em faixa horizontal === */
+@media (min-width: 1024px){
+  /* faixa com rolagem horizontal e espaçamento fixo */
+  .post .carousel{
+    gap: 24px !important;                /* espaço entre imagens */
+    scroll-snap-type: none;     /* mantém "grudinho" suave */
+    padding: 12px 16px 16px;             /* um respiro embaixo da barra */
+    overflow-x: auto;                    /* garante a barra horizontal */
+  }
+
+  /* cada slide só o tamanho do conteúdo (lado a lado) */
+  .post .carousel-slide{
+    flex: 0 0 auto !important;           /* NÃO ocupa 100% da largura */
+    scroll-snap-align: none;             /* encaixa no início a cada arrasto */
+  }
+
+  /* imagem totalmente visível; 10% mais alta que hoje */
+  .post .carousel-slide img{
+    width: auto !important;              /* não esticar a 100% da faixa */
+    height: auto;
+    max-height: calc(42vh * 1.1);        /* +10% de altura no desktop */
+    object-fit: contain;                  /* tudo visível dentro da faixa */
+    display: block;
+  }
+}
+
+/* ====== MODAL BASE ====== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(43, 36, 36, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Estrutura: .modal-content + .modal-footer (opcional) */
+.modal-content {
+  background: var(--beige);
+  color: var(--ink);
+  padding: 38px 28px;
+  border: 2px solid var(--ink);
+  max-width: 88vw;
+  width: 690px;
+  font-size: 1rem;
+  text-align: center;
+  position: relative;
+  max-height: 69vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  margin-bottom: 0;
+}
+
+/* Se tiver rodapé fixo, o conteúdo sobe um pouco pra não esconder */
+.modal-overlay.has-footer .modal-content {
+  margin-bottom: 64px; /* espaço pro rodapé */
+}
+
+/* Scrollbar vertical */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+.modal-content::-webkit-scrollbar-track {
+  background: var(--beige);
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background: var(--red);
+}
+
+/* Botão fechar */
+.modal-close {
+  position: absolute;
+  top: 6px;
+  right: 4px;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-family: "Roboto SemiCondensed", var(--ff-body), sans-serif;
+  font-weight: 900;
+  color: var(--white);
+  cursor: pointer;
+}
+
+/* ====== Rodapé opcional ====== */
+.modal-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  background: var(--beige);
+  border-top: 2px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  z-index: 10000;
+}
+
+.modal-footer button {
+  flex: 1;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  padding: 10px;
+  transition: background 0.2s;
+}
+
+.modal-footer .btn-skip:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+.modal-footer .btn-next {
+  color: #fff;
+  background: var(--red);
+}
+
+.modal-footer .btn-next:hover {
+  background: #b00;
+}
+
+/* ====== Mobile ====== */
+@media (max-width: 760px){
+  .modal-content {
+    padding: 38px 18px;
+    max-width: 80vw;
+    max-height: 69vh;
+  }
+  .filters-bar {
+    justify-content: center;
+    gap: 8px 10px;
+    margin-top: 10px;
+  }
+
+/* Offset da âncora para não esconder sob o cabeçalho fixo (exceto feed) */
+app[id]:not(#feed),
+section[id]:not(#feed),
+template[id]:not(#feed),
+div[id]:not(#feed) {
+  scroll-margin-top: 0px;
+}
+  
+  .rifa-hero .badge {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin: -6px;
+}
+
+</style>
+
+</head>
+<body>
+  <!-- ========== HEADER (kept same as v08) ========== -->
+  <header>
+    <div class="hdr-inner">
+      <a class="logo" href="#home" aria-label="BetShopTV – página inicial">
+  <img src="https://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" loading="eager" />
+</a>
+      <nav class="nav">
+      <a href="#rifas">RIFAS</a>
+        <a href="#galeria">GALERIA de OFERTAS</a>
+        
+<a href="#como">COMO FUNCIONA?</a>
+         <a href="#sobre">SOBRE NÓS</a>
+ 
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========== MOUNT POINT: only this container is mutated by JS ========== -->
+  <!-- ========== MOUNT POINT: only this container is mutated by JS ========== -->
+<main id="app" role="main" aria-live="polite">
+  <!-- initial content: will be replaced by renderers -->
+  <section id="page-loading" style="padding:24px;text-align:center;">Carregando.</section>
+</main>
+
+<!-- ========== TEMPLATES (FORA do #app!) ========== -->
+
+<!-- ========== TEMPLATE: SOBRE O PROJETO ========== -->
+
+<template id="page-sobre">
+<!-- 🌟 PARTE 1: Cabeçalho -->
+<center>
+  <h2 class="titulo-sobre" STYLE="color: red">
+    <span class="linha1">Olá! Somos a <strong>BetShopTV.com</strong>:</span>
+    <span class="linha2">um canal de apostas e</span>
+    <span class="linha3">circulação de valores.</span>
+  </h2>
+</center>
+
+<style>
+  .titulo-sobre {
+    font-size: clamp(25px, 3.7vw, 37px);
+    margin-bottom: clamp(8px, 3.8vw, 38px);
+    margin-top: 2.4vw;
+    color: white;
+    font-weight: 400;
+    line-height: 1.45;
+    text-align: center;
+    padding: 4px 12px;
+  }
+
+  .titulo-sobre span {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  /* 🔹 Estado 1: tudo em uma linha (desktop) */
+  .titulo-sobre .linha1::after,
+  .titulo-sobre .linha2::after {
+    content: " ";
+  }
+
+  /* 🔸 Estado 2: quebra após a primeira linha */
+  @media (max-width: 920px) {
+    .titulo-sobre .linha1::after {
+      content: "\A";
+      white-space: pre;
+    }
+    .titulo-sobre .linha2::after {
+      content: " ";
+    }
+  }
+
+  /* 🔻 Estado 3: quebra após linha 1 e 2 */
+  @media (max-width: 540px) {
+    .titulo-sobre .linha1::after {
+      content: "\A";
+      white-space: pre;
+    }
+    .titulo-sobre .linha2::after {
+      content: "\A";
+      white-space: pre;
+    }
+  }
+</style>
+
+<!-- 🏛️ PARTE 2: TEXTO + VÍDEO -->
+<section
+  style="
+    max-width: 1200px;
+    margin: 20 auto;
+    padding: 20px 28px;
+    background: var(--red);
+    color: var(--beige);
+    font-size: clamp(15px, 2vw, 17px);
+    line-height: clamp(1.4, 4.5vw, 1.55);
+    letter-spacing: clamp(0.2px, 0.5vw, 0.35px);
+    margin-right:clamp(0px, 1.4vw, 28px);
+    margin-left:clamp(0px, 1.4vw,    28px);
+  "
+>
+  <div class="bloco-expo">
+    <div class="texto-expo">
+      <h2 style="margin-top: 2px;">Estamos em exposição até o dia 15 de novembro, quando acontecem os sorteios finais!</h2>
+      <h2
+        style="
+          margin: 0;
+          font-size: clamp(16px, 3.5vw, 21px);
+          line-height: 1.4;
+        "
+      >
+        <br><a href="https://www.instagram.com/saturna_estudio/" target="_blank">SATURNA ESTÚDIO</a>
+      </h2>
+
+      <p style="margin-top: 4px; margin-bottom: 4px; line-height: 1.45;">
+        Rua Lopes de Oliveira, 166 <br />Barra Funda, São Paulo
+      </p>
+    
+
+      
+      <p style="margin-top: 10px; margin-bottom: 24px; line-height: 1.45;">
+        <strong>Sexta, das 16h às 20h<br />
+        Sábado, das 16h às 22h</strong><br />
+        ou
+        <a onclick="abrirModal(this)" data-modal-id="agende-visita">
+            agende sua visita</a>!
+      </p><br>
+
+
+
+      
+    </div>
+
+
+
+
+
+<div id="modal-saiba-mais" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+
+    <h2 style="margin: 0 0 12px 0; font-family: var(--ff-cta); font-size: var(--fs-h2); line-height: 1.2;">
+      SAIBA TUDO E MAIS UM POUCO
+    </h2>
+
+    <!-- 🔴 Seção 1 -->
+    <div style="background: var(--red); color: var(--beige); padding: 12px 16px; margin-bottom: 16px;">
+      <p style="margin: 0; font-size: var(--fs-p); font-weight: 700;">
+        BetShopTV.com é mais do que uma galeria. É uma engrenagem de circulação de valores entre arte, sorte e comunidade.
+      </p>
+    </div>
+
+    <!-- 🟤 Seção 2: Como participar -->
+    <h3 style="margin-bottom: 8px; font-size: var(--fs-h2); font-family: var(--ff-cta);">COMO PARTICIPAR</h3>
+
+    <ul style="list-style: disc; padding-left: 24px; margin-bottom: 16px; text-align: left; font-size: var(--fs-p);">
+      <li><strong>Apostando nas rifas</strong> — concorra a várias peças únicas por valores baixos</li>
+      <li><strong>Comprando direto na galeria</strong> — garanta sua peça antes do sorteio final</li>
+    </ul>
+
+    <!-- 🔘 Seção 3: Entenda o funcionamento -->
+    <div style="border: 1px solid var(--ink); padding: 10px 14px; margin-bottom: 16px; background: var(--beige); font-size: var(--fs-p);">
+      <p><strong>Quanto mais você interage, mais suas chances aumentam.</strong> Marcar favoritas, apostar cedo e escolher bem seu número pode mudar tudo.</p>
+      <p>Você participa do sorteio com base em: número sorteado, momento da aposta e quantidade de favoritas marcadas.</p>
+    </div>
+
+    <!-- 🧮 Seção 4: Exemplo de cálculo -->
+    <div style="background: white; border: 1px solid var(--ink); padding: 12px; margin-bottom: 18px; text-align: left;">
+      <h4 style="margin-top: 0; font-size: var(--fs-sm); font-weight: bold; color: var(--red); text-transform: uppercase;">Exemplo prático:</h4>
+      <ul style="padding-left: 18px; font-size: var(--fs-p);">
+        <li>Você aposta R$ 50 → recebe 2 números</li>
+        <li>Marca 3 favoritas no feed</li>
+        <li>No sorteio, uma das suas apostas é sorteada</li>
+        <li>Você leva uma das peças que escolheu 🎯</li>
+      </ul>
+    </div>
+
+    <!-- 💡 Dica -->
+    <p style="font-style: italic; font-size: var(--fs-sm); margin-bottom: 24px;">
+      Dica: quanto antes apostar, mais alta sua posição. E isso importa na ordem de escolha!
+    </p>
+
+    <!-- 📦 Seção 5: Transparência -->
+    <h3 style="font-family: var(--ff-cta); font-size: var(--fs-h2); margin-bottom: 6px;">O QUE APOSTAMOS COM VOCÊ</h3>
+    <p style="font-size: var(--fs-p); margin-bottom: 12px;">
+      O BetShopTV funciona sem intermediação. Todo o processo é transparente e direto:
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+      <button class="chip is-active">Pagamento via PIX</button>
+      <button class="chip">Sem apps externos</button>
+      <button class="chip">Envios com certificado</button>
+      <button class="chip">Distribuição ao vivo</button>
+    </div>
+
+    <!-- 🧠 Política -->
+    <div style="background: var(--red); color: white; padding: 16px; font-size: var(--fs-sm); line-height: 1.4;">
+      <strong>Nosso princípio:</strong><br>
+      <em>equilibrar ganhos e apoios entre quem aposta e quem produz</em>. Essa calibragem garante múltiplas formas de acesso e retorno.
+    </div>
+
+    <!-- ✅ Final -->
+    <div style="margin-top: 24px; text-align: center;">
+      <p style="font-weight: bold; font-size: var(--fs-h2); color: var(--red);">
+        BetShopTV.com
+      </p>
+      <p style="font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: 1px;">
+        Peças únicas, chances múltiplas
+      </p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div class="video-expo">
+  <video
+    autoplay
+    loop
+    muted
+    playsinline
+    preload="auto"
+    width="100%"
+    style="cursor: pointer; display: block; border: clamp(2px, 1vw,     10px)   solid #bebab0;"
+    onclick="this.paused ? this.play() : this.pause();"
+   
+  >
+    <source src="https://betshoptv.com/elementos/expo2.mp4" type="video/mp4" />
+    <source src="https://betshoptv.com/elementos/expo2.webm" type="video/webm" />
+    Seu navegador não suporta vídeo HTML5.
+  </video>
+</div>
+
+<style>
+  /* 🖥️ Desktop normal, nada muda */
+  .video-expo {
+    margin-bottom: 0;
+  }
+
+  .video-expo video {
+    display: block;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+  }
+
+  /* 📱 Mobile: sobe o vídeo conforme a largura da tela */
+  @media (max-width: 900px) {
+    .video-expo {
+      margin-bottom: clamp(-24px, -8vw, -50px); /* 🔥 sobe suavemente em telas menores */
+    }
+  }
+
+  @media (max-width: 540px) {
+    .video-expo {
+      margin-bottom: clamp(-100px, -37vw, -888px); /* 🔥 sobe mais em celulares pequenos */
+      margin-top: -27px;
+    }
+  }
+  
+    @media (max-width: 480px) {
+    .video-expo {
+      margin-bottom: clamp(-142px, -38vw, -888px); /* 🔥 sobe mais em celulares pequenos */
+    }
+  }
+  
+      @media (max-width: 379px) {
+    .video-expo {
+      margin-bottom: clamp(-188px, -42vw, -888px); /* 🔥 sobe mais em celulares pequenos */
+    }
+  }
+</style>
+
+  </div>
+
+  <style>
+    /* 🔧 Layout desktop e mobile do bloco da exposição */
+    .bloco-expo {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 28px;
+      max-width: 1000px;
+      margin: 0 auto 24px auto;
+      color: white;
+      margin-top: clamp(8px, 3.8vw, 38px);
+    }
+
+    .bloco-expo .texto-expo {
+      flex: 1 1 88%;
+      max-width: 460px;
+      text-align: left;
+      font-size: clamp(15px, 2vw, 17px);
+      line-height: 1.5;
+    }
+
+    .bloco-expo .video-expo {
+      flex: 1 1 400px;
+      max-width: 480px;
+      display: block;
+    }
+
+    /* Responsivo: mobile (volta ao layout empilhado) */
+    @media (max-width: 720px) {
+      .bloco-expo {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .bloco-expo .texto-expo {
+        max-width: 100%;
+        text-align: center;
+      }
+    }
+
+    section a {
+      color: white !important;
+      text-decoration: underline;
+    }
+
+    section a:hover {
+      color: white !important;
+      text-decoration: none;
+    }
+  </style>
+</section>
+
+
+
+
+<!-- 📖 PARTE 4: TEXTO INFORMATIVO ABAIXO DO PAINEL -->
+<center>
+  <div
+    style="
+      text-align: left;
+      display: inline-block;
+      width: 100%;
+      max-width: 937px;
+      box-sizing: border-box;
+      padding-left: clamp(13px, 4vw, 38px);
+      padding-right: clamp(13px, 4vw, 38px);
+      background: white;
+      color: #2b2424;
+      border: 1px solid #2b2424;
+    "
+  >
+      
+      
+<style>
+  /* 🧩 Fonte personalizada: Roboto Black via WOFF2 */
+  @font-face {
+    font-family: "RobotoBlackCustom";
+    src: url("https://betshoptv.com/fonts/Roboto-Black.woff2") format("woff2");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  /* 🎯 Aplica especificamente no texto “APOSTE AQUI” */
+  .botao-txt strong {
+    font-size: 1.42em;
+    font-family: "RobotoBlackCustom", "Roboto", sans-serif !important;
+    font-weight: 900 !important;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  /* 🎨 Borda do texto */
+-webkit-text-stroke: 4px #2b2424;
+-webkit-text-fill-color: #bebab0;
+  color: #2b2424; /* fallback */
+
+  /* melhora o rendering da borda */
+  paint-order: stroke fill;
+}
+}
+  }
+</style>
+
+<center>
+  <div
+    style="
+      background-color: #bebab0;
+      background-image: 
+        url('https://betshoptv.com/images/BGINDEX2.gif'),
+        url('https://betshoptv.com/images/BGO-big.gif');
+      background-repeat: repeat, repeat, repeat;
+      background-position: center, center, center;
+      background-size: auto, auto, auto;
+      padding: 8px clamp(16px, 5vw, 40px);
+      box-sizing: border-box;
+      margin-top: clamp(8px, 2vw, 20px);
+      border: 1px solid #2b2424;
+    "
+    class="botao-txt"
+  >
+    <p
+      style="
+        font-size: clamp(24px, 6.9vw, 38px);
+        margin-bottom: -2px;
+        color: var(--ink);
+        margin-top: 18px;
+      "
+    >
+      <strong style="-webkit-text-stroke: 5px #2b2424;">APOSTE AQUI</strong>
+    </p>
+
+    <div
+      style="
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 10px;
+        flex-wrap: nowrap;
+      "
+    >
+      <a href="#rifas">RIFAS</a>
+      <a href="#galeria">OFERTAS</a>
+    </div>
+    <br />
+  </div>
+</center>
+
+
+<style>
+  /* Botões RIFAS e OFERTAS sempre na mesma linha */
+  .botao-txt div a {
+    white-space: nowrap;
+  }
+
+ /* 📱 Gambiarra controlada: sobe o bloco no mobile */
+  @media (max-width: 720px) {
+    .botao-txt {
+      margin-top: 10px !important;
+    }
+
+    .gambi {
+      position: relative;
+      top: -22px; /* 🔧 Ajuste fino — pode subir mais ou menos (ex: -18px, -25px) */
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+  }
+</style>
+      
+      
+      
+      
+      
+      <span style="font-weight: 500;" class="link-fundo-branco">
+    <br>
+    <p>
+      Funciona assim: quem participa da <a href="#rifas">RIFA</a> pode ganhar até
+      <strong>três das 100 peças</strong> do políptico
+      <em>Chop Shop AV</em>.
+    </p>
+
+    <p>
+      No dia <strong>15 de novembro</strong>, durante o encerramento da
+      exposição na
+      <a href="https://www.instagram.com/saturna_estudio/" target="_blank">Saturna</a>,
+      serão sorteadas <strong>ao menos 17 pessoas</strong> para dividir as peças
+      disponíveis — ou seja, as que seguirem à venda na nossa
+      <a href="#galeria">Galeria de Ofertas</a>.
+    </p>
+
+    <p>
+      Aqui complicamos em nome de um princípio simples:
+      <strong>equilibrar as chances de vitória entre diferentes graus de
+        contribuição</strong>.
+      Essa é uma das principais políticas de funcionamento do projeto:
+      <strong>calibrar ganhos e apoios mútuos entre quem aposta e quem
+        produz</strong>.
+    </p>
+
+    <p>
+      A aposta mínima de <strong>R$ 30</strong> oferece
+      <strong>10 % de chance</strong> de ganhar — e essa porcentagem
+      <strong>quase dobra</strong> ao escolher dois números pelo valor
+      promocional de <strong>R$ 50</strong> por par!
+    </p>
+
+    <p>
+      Para trocar a sorte pela certeza, você pode garantir suas peças favoritas
+      diretamente na nossa <a href="#galeria">Galeria de Ofertas</a>: com
+      valores a partir de <strong>R$ 150</strong> por peça, elas estarão
+      disponíveis até as <strong>21h15 do dia 15</strong>, entre o encerramento
+      das apostas (<strong>21h</strong>) e a divulgação dos resultados finais
+      (<strong>21h30</strong>).
+    </p>
+
+    <p>
+      Até lá, seguimos <strong>embaralhando as probabilidades</strong> com
+      <em>promoções exclusivas</em> e
+      <em>ofertas relâmpago</em> para que ainda mais pessoas possam ganhar.
+    </p>
+</span>
+    <br />
+
+    <div
+      style="
+        text-align: center;
+        font-weight: bold;
+        margin-top: 24px;
+        color: white;
+      "
+    >
+      <span style="font-size: 1.5em; color: red;">
+        BetShopTV.com<br />
+        Peças únicas, chances múltiplas.<br>
+      </span>
+      <br /><br /><br />
+    </div>
+  </div>
+</center>
+
+<style>
+  /* 🔒 Garante cor branca e comportamento uniforme dos links */
+    .link-fundo-branco a {  color: red !important;
+    text-decoration: underline;
+    }
+    
+        .link-fundo-branco a:hover {  color: white !important;
+        background: red;
+    text-decoration: none;
+    }
+    
+</style>
+<br><br><br><br>
+ 
+
+
+
+</template>
+
+    
+<template id="page-como">
+  <!-- 🧱 CABEÇALHO PRINCIPAL -->
+  <section
+    style="
+    font-size: clamp(16px, 2.7vw, 27px);
+    margin-bottom: clamp(8px, 3.8vw, 38px);
+    margin-top: 0.4vw;
+    color: RED;
+    font-weight: 400;
+    line-height: 1.45;
+    text-align: center;
+    padding: 4px clamp(27px, 3.3vw, 40px);
+  }
+    "
+  >
+
+    <p>
+      As apostas do projeto <strong>BetShopTV.com</strong> são divididas
+      entre <strong>RIFAS</strong> e <strong>OFERTAS</strong>.
+      <br>
+      Quem participa da rifa concorre às peças disponíveis
+      do catálogo de <em>Chop Shop AV</em>, que estão também
+      à venda em nossa galeria até o sorteio final neste sábado.
+      <br><br>
+      Para saber mais, <a onclick="abrirModal(this)" data-modal-id="agende-visita" style="cursor: pointer">fale conosco</a> ou acompanhe aqui nossos lançamentos e promoções!
+      
+      
+    </p>
+  </section>
+
+
+  <!-- 🎟️ SEÇÃO EXPANSÍVEL RIFAS -->
+  <section
+    style="
+      background-color: #ffffff; 
+      color: #2b2424;
+      padding: clamp(20px, 4vw, 40px);
+      max-width: 800px;
+      margin: 0 auto;
+    "
+  >
+    <h2
+      style="
+        color: #ff0000;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 16px;
+      "
+    >
+      RIFAS
+    </h2>
+    <p style="margin-bottom: 12px;">
+      Cada número custa <strong>R$ 30</strong>, ou <strong>R$ 50</strong> o par.
+      É possível apostar em quantos números quiser para aumentar as chances no sorteio, mas atenção: <strong>cada pessoa só poderá ser sorteada uma vez</strong>, ainda que realize uma aposta múltipla.
+    </p>
+    <ul style="list-style: disc; margin-left: 20px; margin-bottom: 16px;">
+      <li>Serão premiadas ao menos 17 pessoas.</li>
+      <li>A distribuição depende das peças disponíveis no dia do sorteio.</li>
+    </ul>
+    <div
+      style="
+        background-color: #bebab0;
+        padding: 10px 16px;
+        font-size: 0.95em;
+        border-left: 3px solid #2b2424;
+      "
+    >
+      <p>
+        Antes de confirmar sua aposta, marque suas peças favoritas!<br>
+        Essa seleção ajuda na distribuição final, facilitando a reserva
+        das peças às pessoas sorteadas.<br>
+        <a href="#favoritos" style="color: #bebab0; text-decoration: underline;">Saiba mais ▸</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- 🛒 SEÇÃO EXPANSÍVEL OFERTAS -->
+  <section
+    style="
+      background-color: #ffffff;
+      color: #2b2424;
+      padding: clamp(20px, 4vw, 40px);
+      max-width: 800px;
+      margin: 0 auto;
+    "
+  >
+    <h2
+      style="
+        color: #ff0000;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 16px;
+      "
+    >
+      OFERTAS
+    </h2>
+    <ul style="list-style: disc; margin-left: 20px; margin-bottom: 16px;">
+      <li>As peças disponíveis a partir de <strong>R$ 150</strong>!</li>
+      <li>TODAS as peças estarão em promoção a R$ 150 antes do sorteio final, pelo período mínimo de 8 horas.</li>
+      <li>As vendas diretas ocorrem<strong> até as 21h15 do dia 15, 
+      entre o encerramento das apostas (21h) e a divulgação dos resultados finais (21h30).</strong></li>
+    </ul>
+    <a href="#ofertas" style="color: white; text-decoration: underline;">Saiba mais ▸</a>
+  </section>
+
+  <!-- 🎰 SEÇÃO EXPANSÍVEL SORTEIO FINAL -->
+  <section
+    style="
+      background-color: #bebab0;
+      color: #2b2424;
+      padding: clamp(20px, 4vw, 40px);
+      max-width: 800px;
+      margin: 0 auto;
+    "
+  >
+    <h2
+      style="
+        color: #ff0000;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 16px;
+      "
+    >
+      SORTEIO FINAL
+    </h2>
+    <ul style="list-style: disc; margin-left: 20px;">
+      <li>Data: <strong>15 de novembro de 2025</strong></li>
+      <li>Local: <strong>Saturna Estúdio</strong> — Rua Lopes de Oliveira, 166, Barra Funda, SP</li>
+      <li>O sorteio ocorre durante o encerramento da exposição.</li>
+      <li>Resultados publicados no site e Instagram <a href="https://instagram.com/betshoptv" target="_blank">@betshoptv</a>.</li>
+    </ul>
+    <a href="#regras" style="color: #bebab0; text-decoration: underline;">Saiba mais ▸</a>
+  </section>
+
+  <!-- 📦 SEÇÃO EXPANSÍVEL RETIRADA E ENVIO -->
+  <section
+    style="
+      background-color: #ffffff;
+      color: #2b2424;
+      padding: clamp(20px, 4vw, 40px);
+      max-width: 800px;
+      margin: 0 auto;
+    "
+  >
+    <h2
+      style="
+        color: #ff0000;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 16px;
+      "
+    >
+      RETIRADA E ENVIO
+    </h2>
+    <p>
+      As pessoas sorteadas poderão retirar ou receber suas peças de três modos:
+    </p>
+    <ol style="margin-left: 20px;">
+      <li>Presencialmente no evento de sorteio em São Paulo.</li>
+      <li>Retirada em pontos da região central ou estações de Metrô/CPTM.</li>
+      <li>Envio pelos Correios (frete não incluso).</li>
+    </ol>
+    <p style="margin-top: 12px;">
+      Todos os envios acompanham certificado e instruções de montagem.
+    </p>
+  </section>
+
+  <!-- 📬 RODAPÉ -->
+  <footer
+    style="
+      background-color: #bebab0;
+      color: #2b2424;
+      text-align: center;
+      padding: 20px;
+      font-size: 15px;
+    "
+  >
+    ☞ CONTATO:
+    <a href="/cdn-cgi/l/email-protection#72101706011a1d02060432151f131b1e5c111d1f" style="color: #2b2424;"><span class="__cf_email__" data-cfemail="c0a2a5b4b3a8afb0b4b680a7ada1a9aceea3afad">[email&#160;protected]</span></a>
+  </footer>
+</template>
+
+
+
+
+  <!-- ========== FOOTER (kept same as v08) ========== -->
+<footer>
+  <div class="ftr-inner">
+    <div class="contadores">
+      <span id="pillCompact" class="pill-compact" style="display:none;"></span>
+    </div>
+
+    <!-- Botão único: muda rótulo e estado conforme total -->
+    <button class="cta-main" id="ctaMain" disabled>FAÇAM SUAS APOSTAS!</button>
+  </div>
+</footer>
+
+
+  <!-- ====== SCRIPT: modular renderers, event delegation, footer bindings ====== -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ======================= CONFIG ======================= */
+const PECAS_JSON_URL = 'https://betshoptv.com/dados/pecas.json';
+const RIFAS_JSON_URL = 'https://betshoptv.com/dados/rifas.json';
+const GAS_URL        = 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+
+/* ======================== STATE ======================== */
+let pecas = [];
+let rifas = [];
+const selecionadas = new Set(); // peças escolhidas
+const rifasSel     = new Set(); // rifas escolhidas (ids)
+const favoritos    = new Set(); // peças favoritas
+let totalGeral     = 0;
+  
+  // FOFILTROS!!
+  // FOFILTROS!!
+  // FOFILTROS!!
+
+const filtros = {
+  disponiveis: false,      // "Peças" começa DESLIGADO
+  promo: false,            // NOVO: PROMOÇÃO (apenas R$ 150)
+  grupos: new Set(),       // ex.: Set { '01', '02', ... }
+  sort: 'group-desc'       // 'group-asc' | 'group-desc' | 'price-asc' | 'price-desc'
+};
+
+
+
+
+/* ======================= HELPERS ======================= */
+// FORMATA EM PT-BR SEM CASAS DECIMAIS (ex.: R$ 1.500)
+const fmt = (v) => {
+  const n = Number(v || 0);
+  // arredonda para o inteiro mais próximo; se preferir “truncar”, troque por Math.floor(n)
+  const inteiro = Math.round(n);
+  return 'R$ ' + inteiro.toLocaleString('pt-BR');
+};
+
+function imgWithFallback(src){
+  const img = new Image();
+  img.loading = 'lazy';
+  img.src = src;
+  img.onerror = () => { if (src.endsWith('.avif')) img.src = src.replace('.avif', '.jpg'); };
+  return img;
+}
+
+// Contraste por YIQ (usa #2b2424 como cor escura e #fff como clara)
+const getContrastColor = (hexColor) => {
+  try {
+    if (!hexColor) return '#2b2424';
+    let s = String(hexColor).trim();
+    if (s.startsWith('#')) s = s.slice(1);
+    if (s.length === 3) s = s.split('').map(ch => ch + ch).join('');
+    if (s.length !== 6) return '#2b2424';
+    const r = parseInt(s.substring(0, 2), 16);
+    const g = parseInt(s.substring(2, 4), 16);
+    const b = parseInt(s.substring(4, 6), 16);
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return (yiq >= 128) ? '#2b2424' : '#ffffff';
+  } catch (e) { return '#2b2424'; }
+};
+
+// Regra de preço das rifas (par = n*25; ímpar = (n-1)*25 + 30)
+function calculateRifaTotal(count){
+  count = Number(count || 0);
+  if (count <= 0) return 0;
+  if (count % 2 === 0) return 25 * count;
+  return 25 * (count - 1) + 30;
+}
+
+
+// === EXTRAÇÃO DE GRUPOS (ex: '06' de '0609') ===
+function getGruposDisponiveis(){
+  const set = new Set();
+  pecas.forEach(p => {
+    const id = String(p.id_peca || '');
+    if (id.length >= 2) set.add(id.slice(0, 2));
+  });
+  return [...set].sort();
+}
+
+// === BARRA DE FILTROS (reutilizável em Galeria e Feed) ===
+// === BARRA DE FILTROS (1 linha no desktop; reuso em Galeria/Feed) ===
+function buildFilters(currentPage){ // 'galeria' | 'feed'
+  const rerender = () => (currentPage === 'galeria' ? renderGaleria() : renderFeed());
+
+  const bar = document.createElement('div');
+  bar.className = 'filters-bar';
+
+  // ÚNICA "row" que se adapta (desktop: 1 linha; mobile: quebra)
+  const row = document.createElement('div');
+  row.className = 'filters-row filters-row--all';
+  
+
+  // -------- Peças: [DISPONÍVEIS] [PROMOÇÃO] --------
+  const gPieces = document.createElement('div');
+  gPieces.className = 'filters-group';
+
+  const lblPieces = document.createElement('span');
+  lblPieces.className = 'filters-label';
+  lblPieces.textContent = 'PEÇAS';
+  gPieces.appendChild(lblPieces);
+
+  const bDisp = document.createElement('button');
+  bDisp.type = 'button';
+  bDisp.className = 'chip';
+  bDisp.textContent = 'Disponíveis';
+  bDisp.setAttribute('aria-pressed', filtros.disponiveis ? 'true':'false');
+  bDisp.classList.toggle('is-active', !!filtros.disponiveis);
+  bDisp.addEventListener('click', ()=>{
+    filtros.disponiveis = !filtros.disponiveis;  // 🔸 NÃO mexe em nenhum outro filtro
+    rerender();
+  });
+  gPieces.appendChild(bDisp);
+
+  const bPromo = document.createElement('button');
+  bPromo.type = 'button';
+  bPromo.className = 'chip';
+  bPromo.textContent = 'Promoção';
+  bPromo.setAttribute('aria-pressed', filtros.promo ? 'true':'false');
+  bPromo.classList.toggle('is-active', !!filtros.promo);
+  bPromo.addEventListener('click', ()=>{
+    filtros.promo = !filtros.promo;              // 🔸 idem
+    rerender();
+  });
+  gPieces.appendChild(bPromo);
+
+  row.appendChild(gPieces);
+  
+  
+
+  // -------- Grupos --------
+  const gGroups = document.createElement('div');
+  gGroups.className = 'filters-group';
+
+  const lblGroups = document.createElement('span');
+  lblGroups.className = 'filters-label';
+  lblGroups.textContent = 'GRUPOS';
+  gGroups.appendChild(lblGroups);
+
+  const gruposDisp = getGruposDisponiveis();
+  gruposDisp.forEach(g=>{
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip';
+    b.textContent = g;
+    const active = filtros.grupos.has(g);
+    b.setAttribute('aria-pressed', active ? 'true':'false');
+    b.classList.toggle('is-active', active);
+    b.addEventListener('click', ()=>{
+      const on = b.getAttribute('aria-pressed') === 'true';
+      if (on) filtros.grupos.delete(g); else filtros.grupos.add(g);
+      rerender();
+    });
+    gGroups.appendChild(b);
+  });
+  row.appendChild(gGroups);
+
+  // -------- Ordenar (dropdown) --------
+  const gSort = document.createElement('div');
+  gSort.className = 'filters-group';
+
+  const lblSort = document.createElement('span');
+  lblSort.className = 'filters-label';
+  lblSort.textContent = 'ORDENAR';
+  gSort.appendChild(lblSort);
+
+  const selSort = document.createElement('select');
+  selSort.className = 'select';
+  selSort.setAttribute('aria-label','Ordenar resultados');
+  selSort.innerHTML = `
+    <option value="group-asc">Grupo: crescente</option>
+    <option value="group-desc">Grupo: decrescente</option>
+    <option value="price-asc">Preço: menor → maior</option>
+    <option value="price-desc">Preço: maior → menor</option>
+  `;
+  selSort.value = filtros.sort;
+  selSort.addEventListener('change', ()=>{
+    filtros.sort = selSort.value;                 // 🔸 idem
+    rerender();
+  });
+  gSort.appendChild(selSort);
+  row.appendChild(gSort);
+
+  // -------- FEED (toggle de página, sem resetar filtros) --------
+  const gFeed = document.createElement('div');
+  gFeed.className = 'filters-group';
+
+  const bFeed = document.createElement('button');
+  bFeed.type = 'button';
+  bFeed.className = 'chip';
+  bFeed.textContent = 'CATÁLOGO';
+  const feedActive = (currentPage === 'feed');
+  bFeed.setAttribute('aria-pressed', feedActive ? 'true':'false');
+  bFeed.classList.toggle('is-active', feedActive);
+  bFeed.addEventListener('click', ()=>{
+    // 🔸 Apenas troca de página; NÃO toca em nenhum filtro.
+    if (currentPage === 'feed') showPage('galeria');
+    else showPage('feed');
+  });
+  gFeed.appendChild(bFeed);
+  row.appendChild(gFeed);
+
+  bar.appendChild(row);
+  return bar;
+}
+
+// === lista filtrada + ordenada, compartilhada por Galeria e Feed ===
+function getFilteredSortedList(source){
+  let lista = Array.isArray(source) ? [...source] : [];
+
+  // 1) Somente disponíveis
+  if (filtros.disponiveis) { // Mantemos o nome da variável, mas invertemos o que ela faz
+ lista = lista.filter(p => !/X/i.test(String(p.status || '')));
+ }
+
+  // 2) Promoção (apenas R$ 150)
+  if (filtros.promo) {
+    lista = lista.filter(p => Number(p.preco) === 150);
+  }
+
+  // 3) Grupos (multi)
+  if (filtros.grupos && filtros.grupos.size > 0) {
+    lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
+  }
+
+  // 4) Ordenação
+  const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
+  const numKey   = p => parseInt(p.id_peca) || 0;
+
+  if (filtros.sort === 'price-asc') {
+    lista.sort((a,b)=> (parseFloat(a.preco||0) - parseFloat(b.preco||0)));
+  } else if (filtros.sort === 'price-desc') {
+    lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
+  } else if (filtros.sort === 'group-asc') {
+    lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
+  } else { // 'group-desc' (default)
+    lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
+  }
+
+  return lista;
+}
+ 
+// === FUNÇÃO PRINCIPAL DE RENDERIZAÇÃO DA GALERIA ===
+function renderGaleria() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const section = document.createElement('section');
+  section.id = 'galeria';
+
+  const colunas = 3; // mantém seu layout atual
+
+  // Barra de filtros (nova)
+section.appendChild( buildFilters('galeria') );
+
+
+  // ====== FILTRAGEM ======
+// === dados da galeria obedecendo os filtros globais
+let lista = getFilteredSortedList(pecas);
+
+
+  // Peças (somente disponíveis quando ativado)
+
+  if (filtros.disponiveis) { // Mantemos o nome da variável, mas invertemos o que ela faz
+ lista = lista.filter(p => !/X/i.test(String(p.status || '')));
+ }
+
+// PROMOÇÃO (apenas R$ 150)
+if (filtros.promo) {
+  lista = lista.filter(p => Number(p.preco) === 150);
+}
+
+
+  // Grupos (multi)
+  if (filtros.grupos.size > 0) {
+    lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
+  }
+
+  // ====== ORDENAÇÃO ======
+  const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
+  const numKey   = p => parseInt(p.id_peca) || 0;
+
+  if (filtros.sort === 'price-asc') {
+    lista.sort((a,b)=> (parseFloat(a.preco||0) - parseFloat(b.preco||0)));
+  } else if (filtros.sort === 'price-desc') {
+    lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
+  } else if (filtros.sort === 'group-asc') {
+    lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
+  } else { // 'group-desc' (default)
+    lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
+  }
+
+  // ====== GRID (mantém seu layout) ======
+  const linhas = Math.ceil(lista.length / colunas);
+  const ordenada = [];
+  for (let l=0; l<linhas; l++){
+    for (let c=0; c<colunas; c++){
+      const idx = l * colunas + c;
+      if (lista[idx]) ordenada.push(lista[idx]);
+    }
+  }
+
+  const container = document.createElement('div');
+  container.style = 'display:flex;gap:4px;align-items:flex-start;';
+  const colsEls = Array.from({ length: colunas }, () => {
+    const col = document.createElement('div');
+    col.style = 'flex:1;display:flex;flex-direction:column;gap:4px;margin-top:1.8vh;';
+    container.appendChild(col);
+    return col; 
+  });
+
+  const alturas = Array(colunas).fill(0);
+  ordenada.forEach(p=>{
+    const item = document.createElement('div');
+    item.className = 'gal-item';
+    if (/vendid/i.test(p.status || '')) item.classList.add('sold');
+    item.dataset.id = p.id_peca;
+
+    const img = imgWithFallback('https://betshoptv.com/img/tmb/' + p.imagens[0] + '.avif');
+    img.alt = p.titulo || `Peça ${p.id_peca}`;
+    img.style = 'border: 1px solid #2b2424;';
+    item.appendChild(img);
+
+    let minIdx = 0;
+    for (let i=1;i<colunas;i++){ if (alturas[i] < alturas[minIdx]) minIdx = i; }
+    colsEls[minIdx].appendChild(item);
+    alturas[minIdx] += 1;
+  });
+
+  section.appendChild(container);
+  app.appendChild(section);
+}
+
+// === lista filtrada e ordenada (usada por Galeria e Feed) ===
+function getFilteredSortedList(source){
+  let lista = Array.isArray(source) ? [...source] : [];
+
+  // 1. somente disponíveis
+ if (filtros.disponiveis) { // Mantemos o nome da variável, mas invertemos o que ela faz
+ lista = lista.filter(p => !/X/i.test(String(p.status || '')));
+ }
+
+  // 2. promoção (R$ 150)
+  if (filtros.promo) {
+    lista = lista.filter(p => Number(p.preco) === 150);
+  }
+
+  // 3. grupos
+  if (filtros.grupos && filtros.grupos.size > 0) {
+    lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
+  }
+
+  // 4. ordenação
+  const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
+  const numKey   = p => parseInt(p.id_peca) || 0;
+
+  if (filtros.sort === 'price-asc') {
+    lista.sort((a,b)=> (parseFloat(a.preco||0) - parseFloat(b.preco||0)));
+  } else if (filtros.sort === 'price-desc') {
+    lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
+  } else if (filtros.sort === 'group-asc') {
+    lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
+  } else { // 'group-desc'
+    lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
+  }
+
+  return lista;
+}
+
+
+
+
+
+/* =============== FEED (POST/CARROSSEL) =============== */
+function renderFeed(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const section = document.createElement('section');
+  section.id = 'feed';
+  
+  // Barra de filtros compartilhada (indica que estamos no feed)
+section.appendChild( buildFilters('feed') );
+
+ 
+  const list = document.createElement('div');
+  list.id = 'feedList';
+  list.className = 'feed';
+
+  // === aplica os mesmos filtros e ordem da galeria ===
+const base = getFilteredSortedList(pecas);
+
+// se quiser inverter a ordem (mais recentes primeiro), descomente a linha abaixo:
+// const base = getFilteredSortedList(pecas).slice().reverse();
+
+base.forEach(p => {
+  const sold = /vendid/i.test(String(p.status || ''));
+  const post = document.createElement('article');
+  post.className = 'post';
+  post.id = 'post-' + p.id_peca;
+
+  const carousel = document.createElement('div');
+  carousel.className = 'carousel';
+
+  const imgs = Array.isArray(p.imagens) ? p.imagens : [];
+  imgs.forEach(name=>{
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+    const img = imgWithFallback('https://betshoptv.com/img/otm/' + name + '.avif');
+    slide.appendChild(img);
+    carousel.appendChild(slide);
+  });
+
+  const barWrap = document.createElement('div');
+  barWrap.className = 'carousel-bar-wrap';
+  const bar = document.createElement('div');
+  bar.className = 'carousel-bar';
+  const pos = document.createElement('div');
+  pos.className = 'pos';
+  bar.appendChild(pos);
+  barWrap.appendChild(bar);
+
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+
+  const l1 = document.createElement('div');
+  l1.className = 'linha1';
+
+  const title = document.createElement('div');
+  title.className = 'titulo';
+  title.textContent = p.titulo || ('Peça ' + p.id_peca);
+
+  const price = document.createElement('div');
+  price.className = 'preco';
+  if (sold){
+    price.textContent = '⬤';
+    price.classList.add('sold');
+  } else {
+    price.textContent = fmt(p.preco);
+  }
+  l1.appendChild(title);
+  l1.appendChild(price);
+
+  const tecnica = document.createElement('div');
+  tecnica.className = 'tecnica';
+  tecnica.textContent = p.tecnica || '';
+
+  const dims = document.createElement('div');
+  dims.className = 'dimens';
+  dims.textContent = p.dimensao || p.tamanho || '';
+
+  const footerMeta = document.createElement('div');
+  footerMeta.className = 'meta-footer';
+
+  if (!sold){
+    const leftActions = document.createElement('div');
+    leftActions.className = 'left-actions';
+    const rightActions = document.createElement('div');
+    rightActions.className = 'right-actions';
+
+    const fav = document.createElement('button');
+    fav.className = 'btn fav-btn';
+    fav.type = 'button';
+    fav.setAttribute('aria-label', 'Favoritar ' + (p.titulo||''));
+    fav.textContent = '♥';
+    if (favoritos.has(p.id_peca)) fav.classList.add('active');
+    leftActions.appendChild(fav);
+
+    const add = document.createElement('button');
+    add.className = 'btn add-btn';
+    add.type = 'button';
+    const estaSel = selecionadas.has(p.id_peca);
+    if (estaSel) add.classList.add('added');
+    add.textContent = estaSel ? 'REMOVER' : 'ADICIONAR';
+    rightActions.appendChild(add);
+
+    footerMeta.appendChild(leftActions);
+    footerMeta.appendChild(rightActions);
+
+    fav.addEventListener('click', () => {
+      const id = p.id_peca;
+      if (favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
+      fav.classList.toggle('active', favoritos.has(id));
+      try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
+      updatePills();
+    });
+
+    add.addEventListener('click', () => {
+      const id = p.id_peca;
+      const isAdded = add.classList.toggle('added');
+      if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
+      add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
+      calcularTotal();
+      updatePills();
+    });
+  }
+
+  meta.appendChild(l1);
+  if (tecnica && tecnica.textContent) meta.appendChild(tecnica);
+  meta.appendChild(dims);
+  meta.appendChild(footerMeta);
+
+  post.appendChild(carousel);
+  post.appendChild(barWrap);
+  post.appendChild(meta);
+  list.appendChild(post);
+
+  // barra de posição
+  (function(car, posEl){
+    const slides = car.querySelectorAll('.carousel-slide');
+    const total = slides.length || 1;
+    function updatePos(){
+      const idx = Math.round(car.scrollLeft / car.clientWidth);
+      const pct = ((idx+1)/Math.max(1,total)) * 100;
+      posEl.style.width = pct + '%';
+    }
+    car.addEventListener('scroll', ()=>{ clearTimeout(car._t); car._t = setTimeout(updatePos, 60); });
+    updatePos();
+  })(carousel, bar.querySelector('.pos'));
+});
+
+
+  section.appendChild(list);
+  app.appendChild(section);
+}
+
+
+/* =============== RIFAS ================= */
+function formatRifaLabelDOM(rawText){
+  const t0 = (rawText || '').toString().trim();
+  const frag = document.createDocumentFragment();
+  if (!t0) { const s = document.createElement('span'); s.className = 'ln1'; s.textContent = ''; frag.appendChild(s); return frag; }
+
+  // tokeniza (mantém '/')
+  let tokens = t0.split(/\s+/).filter(Boolean);
+  if (tokens.length >= 3 && tokens[1] === '/') {
+    tokens = [ tokens.slice(0,3).join(' ') ].concat(tokens.slice(3));
+  }
+  if (tokens.length === 1) { const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = tokens[0]; frag.appendChild(s1); return frag; }
+
+  const n = tokens.length;
+  const lens = tokens.map(w=>w.length);
+  const total = lens.reduce((a,b)=>a+b,0) + (n-1);
+  const pref = new Array(n+1).fill(0);
+  for(let i=0;i<n;i++) pref[i+1] = pref[i] + lens[i];
+  const leftLen = (i)=> (i<=0?0:(pref[i] + (i-1)));
+
+  let bestI = 1, bestDiff = Infinity;
+  const minLeft=4, minRight=3;
+  for(let i=1;i<n;i++){
+    const L = leftLen(i), R = total-L, diff = Math.abs(L-R);
+    const penalty = (L>=minLeft && R>=minRight) ? 0 : 20;
+    if (diff+penalty < bestDiff) { bestDiff = diff+penalty; bestI = i; }
+  }
+  let part1 = tokens.slice(0,bestI).join(' ');
+  let part2 = tokens.slice(bestI).join(' ');
+  if (part2.length < minRight && bestI>1){
+    bestI = Math.max(1,bestI-1);
+    part1 = tokens.slice(0,bestI).join(' ');
+    part2 = tokens.slice(bestI).join(' ');
+  }
+  const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = part1; frag.appendChild(s1);
+  if (part2){ const s2 = document.createElement('span'); s2.className = 'ln2'; s2.textContent = part2; frag.appendChild(s2); }
+  return frag;
+}
+
+/* =============== RIFAS ================= */
+function formatRifaLabelDOM(rawText){
+  const t0 = (rawText || '').toString().trim();
+  const frag = document.createDocumentFragment();
+  if (!t0) { const s = document.createElement('span'); s.className = 'ln1'; s.textContent = ''; frag.appendChild(s); return frag; }
+
+  let tokens = t0.split(/\s+/).filter(Boolean);
+  if (tokens.length >= 3 && tokens[1] === '/') tokens = [ tokens.slice(0,3).join(' ') ].concat(tokens.slice(3));
+  if (tokens.length === 1) { const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = tokens[0]; frag.appendChild(s1); return frag; }
+
+  const n = tokens.length, lens = tokens.map(w=>w.length);
+  const total = lens.reduce((a,b)=>a+b,0) + (n-1);
+  const pref = new Array(n+1).fill(0);
+  for(let i=0;i<n;i++) pref[i+1] = pref[i] + lens[i];
+  const leftLen = (i)=> (i<=0?0:(pref[i] + (i-1)));
+
+  let bestI = 1, bestDiff = Infinity;
+  const minLeft=4, minRight=3;
+  for(let i=1;i<n;i++){
+    const L = leftLen(i), R = total-L, diff = Math.abs(L-R);
+    const penalty = (L>=minLeft && R>=minRight) ? 0 : 20;
+    if (diff+penalty < bestDiff) { bestDiff = diff+penalty; bestI = i; }
+  }
+  let part1 = tokens.slice(0,bestI).join(' ');
+  let part2 = tokens.slice(bestI).join(' ');
+  if (part2.length < minRight && bestI>1){
+    bestI = Math.max(1,bestI-1);
+    part1 = tokens.slice(0,bestI).join(' ');
+    part2 = tokens.slice(bestI).join(' ');
+  }
+  const s1 = document.createElement('span'); s1.className = 'ln1'; s1.textContent = part1; frag.appendChild(s1);
+  if (part2){ const s2 = document.createElement('span'); s2.className = 'ln2'; s2.textContent = part2; frag.appendChild(s2); }
+  return frag;
+}
+
+function renderRifas(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const section = document.createElement('section'); 
+  section.id = 'rifas';
+
+  /* ---- HERO / CABEÇALHO DA PÁGINA ---- */
+  const hero = document.createElement('div');
+  hero.className = 'rifa-hero';
+  hero.innerHTML = `
+     <span class="pill">APOSTA DISPONÍVEL
+     <br />
+                <em>Chop Shop AV</em>
+     </span>
+<br>
+    <div class="precos">
+      <span class="badge">R$ 30 = 1 número</span>&nbsp;
+      <span class="badge">R$ 50 = 2 números</span>
+    </div>
+<br>
+    <p class="hint">
+      <strong>TÁ TORCENDO PRA GANHAR?</strong> 
+      <br />
+      <a href="#" class="btn-favoritos" data-modal-id="favoritos" onclick="abrirModal(this); return false;"><strong>Selecione suas peças favoritas</a> antes</strong> de concluir a compra para aumentar suas chances de ganhá-las.</p> 
+      <br>
+    <p class="hint" style="color: #ff0000;">Escolha seus números abaixo e clique no botão <strong>APOSTAR</strong> para prosseguir.</p>
+  `;
+  section.appendChild(hero);
+
+  /* ---- GRADE DE RIFAS ---- */
+  const grid = document.createElement('div'); 
+  grid.className = 'rifas';
+
+  rifas.forEach(r=>{
+    const disponivel = !r.status_rifa || String(r.status_rifa).trim() === '';
+    const btn = document.createElement('button');
+    btn.className = 'rifa-btn' + (disponivel ? '' : ' sold');
+
+    const bg = r.hex_rifa || r.hex || '#777';
+    btn.style.backgroundColor = bg;
+    btn.style.color = getContrastColor(bg);
+    btn.dataset.id = r.id_rifa;
+
+    let rawLabel = (r.botao_rifa && String(r.botao_rifa).trim()) ? String(r.botao_rifa).trim()
+                  : (r.numero || r.id_rifa || '').toString();
+    rawLabel = rawLabel.replace(/^\s*X\s*/i,'').trim();
+
+    btn.appendChild( formatRifaLabelDOM(rawLabel) );
+    btn.style.textAlign = 'left';
+    btn.setAttribute('aria-label', rawLabel);
+
+    if (disponivel){
+      btn.addEventListener('click', ()=>{
+        const wasSelected = btn.classList.contains('selected');
+        if (wasSelected){
+          btn.classList.remove('selected');
+          btn.style.backgroundColor = bg;
+          btn.style.color = getContrastColor(bg);
+          btn.style.borderColor = '';
+          rifasSel.delete(r.id_rifa);
+        }else{
+          btn.classList.add('selected');
+          btn.style.backgroundColor = '#ffffff';
+          btn.style.color = '#ff0000';
+          btn.style.borderColor = '#ff0000';
+          rifasSel.add(r.id_rifa);
+        }
+        calcularTotal();
+        updatePills();
+      });
+    }
+
+    grid.appendChild(btn);
+  });
+
+  section.appendChild(grid);
+  app.appendChild(section);
+}
+
+
+
+/* =============== NAVEGAÇÃO / HASH ================= */
+function showPage(page, opts = {}) {
+  const updateHash = (typeof opts.updateHash === 'boolean') ? opts.updateHash : true;
+  const pieceId    = opts.pieceId || null;
+
+  if (page === 'galeria') renderGaleria();
+  else if (page === 'feed') {
+    renderFeed();
+    if (pieceId) setTimeout(()=> openFeedAt(pieceId), 80);
+  }
+  else if (page === 'rifas') renderRifas();
+  else if (page === 'sobre') renderSobreProjeto();
+  else if (page === 'como') renderComoFunciona();
+  else renderGaleria();
+
+  updatePills(); calcularTotal();
+  
+  // 🧹 Scrolla pro topo em todas as páginas, exceto feed
+if (page !== 'feed') {
+  setTimeout(() => window.scrollTo(0, 0), 10);
+}
+
+
+  if (updateHash){
+    let newHash = page;
+    if (pieceId){
+      const params = new URLSearchParams(); params.set('p', pieceId);
+      newHash = `${page}?${params.toString()}`;
+    }
+    if (location.hash !== '#' + newHash) location.hash = newHash;
+  }
+    updateNavActive(); // ← marca o botão ativo do menu
+
+}
+
+// === Atualiza o destaque ativo no menu do cabeçalho ===
+function updateNavActive(forcedPage = null) {
+  const { page } = parseHash();
+  const current = forcedPage !== null ? forcedPage : page;
+
+  document.querySelectorAll('.nav a').forEach(a => {
+    const target = a.getAttribute('href').replace('#','');
+
+    // Se estiver na home (sem hash ou #home), nenhum botão fica ativo
+    if (!location.hash || current === 'home') {
+      a.classList.remove('active');
+    } else {
+      a.classList.toggle('active', target === current);
+    }
+  });
+}
+
+
+
+function parseHash(){
+  const raw = (location.hash || '').slice(1);
+  if (!raw) return { page: 'galeria', params: new URLSearchParams() };
+  const [pagePart, query] = raw.split('?');
+  return { page: pagePart || 'galeria', params: new URLSearchParams(query || '') };
+}
+
+function handleHashChange() {
+  const { page, params } = parseHash();
+
+  // Sem hash ou #home → mostra conteúdo da home
+  if (!location.hash || page === 'home') { 
+    renderHome();
+    updateNavActive(''); // nenhum botão ativo
+    return;
+  }
+
+  if (page === 'feed') {
+    const p = params.get('p');
+    if (p) showPage('feed', { updateHash: false, pieceId: p });
+    else   showPage('feed', { updateHash: false });
+
+  } else if (page === 'rifas') {
+    showPage('rifas', { updateHash: false });
+
+  } else if (page === 'sobre') {
+    renderSobreProjeto();
+
+  } else if (page === 'como') {
+    renderComoFunciona();
+
+  } else {
+    showPage('galeria', { updateHash: false });
+  }
+
+  updateNavActive(page);
+}
+
+
+
+window.addEventListener('hashchange', handleHashChange);
+
+// links do header passam a escrever o hash
+document.querySelectorAll('.nav a').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const href = a.getAttribute('href') || '';
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const target = href.slice(1);
+      showPage(target); // Chama diretamente
+    }
+  });
+});
+
+
+/* =============== Delegação no #app =============== */
+function attachAppDelegation(){
+  const app = document.getElementById('app');
+  app.addEventListener('click', (e)=>{
+    // item da galeria abre o feed na peça
+    const galleryItem = e.target.closest('.gal-item');
+    if (galleryItem){
+      const id = galleryItem.dataset.id;
+      if (id) location.hash = 'feed?p=' + encodeURIComponent(id);
+      return;
+    }
+  });
+}
+
+/* =============== Checkout (igual ao que já funcionava) =============== */
+/* ====== Bind do CTA principal (checkout inline) ====== */
+/* =============== Bind do CTA principal (checkout inline) =============== */
+/* =============== Bind do CTA (Dados → PIX → Enviar) =============== */
+function attachBindings(){
+  const cta = document.getElementById('ctaMain');
+  if (!cta) return;
+
+  // util: BR Code PIX (CRC16 CCITT 0xFFFF)
+  const crc16 = (data)=>{
+    let crc=0xFFFF;
+    for(let i=0;i<data.length;i++){
+      let x=((crc>>8)^data.charCodeAt(i))&0xff; x^=x>>4;
+      crc=(crc<<8)^(x<<12)^(x<<5)^x;
+    }
+    return (crc&0xFFFF).toString(16).toUpperCase().padStart(4,'0');
+  };
+  const gerarBRCode = (valorBRL)=>{
+    const chavePix="betshoptv@gmail.com";
+    const nome="BET SHOP TV".substring(0,25).toUpperCase();
+    const cidade="SAO PAULO".substring(0,15).toUpperCase();
+    const txid="***";
+    const f=(id,val)=> id + String(val.length).padStart(2,'0') + val;
+
+    const v = Number(Math.floor(valorBRL||0)).toFixed(2); // 2 casas no campo 54
+    let pl="000201";
+    pl+=f('26',`0014BR.GOV.BCB.PIX01${String(chavePix.length).padStart(2,'0')}${chavePix}`);
+    pl+='52040000'; pl+='5303986';
+    pl+=f('54', v);
+    pl+='5802BR'; pl+=f('59',nome); pl+=f('60',cidade); pl+=f('62',f('05',txid)); pl+='6304';
+    return pl + crc16(pl);
+  };
+
+  cta.onclick = (e) => {
+    if (cta.disabled) return; // sem seleção, ignora
+    e.preventDefault();
+    calcularTotal();
+
+    // PASSO 1 – DADOS
+    const app = document.getElementById('app');
+    app.innerHTML = `
+      <section id="checkout">
+        <div style="max-width:520px;  margin:0 auto; height: 6.9vw; max-height: 33px;margin-bottom: 3vw;">
+          <h2 style="font-size: 16px;font-weight:300; color:#2b2424; text-transform: uppercase; margin-bottom:24px;">Preencha seus dados abaixo:</h2>
+          <label>Nome *</label><input id="ck_nome" type="text" style="width:100%;height: 6.9vw; max-height: 33px;margin-bottom: 3vw;">
+          <label>E-mail *</label><input id="ck_email" type="email" style="width:100%;height: 6.9vw; max-height: 33px;margin-bottom: 3vw;">
+          <label>Telefone</label><input id="ck_fone" type="tel" style="width:100%;height: 6.9vw; max-height: 33px; margin-bottom: 3vw;">
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <button id="ck_voltar" style="flex:1; height: 7.5vw; max-height: 38px;">Voltar</button>
+            <button id="ck_to_pix" style="flex:1;height: 7.5vw; max-height: 38px;background:var(--red);color:#fff">Avançar</button>
+          </div>
+        </div>
+      </section>
+    `;
+
+    document.getElementById('ck_voltar').onclick = () => handleHashChange();
+
+    document.getElementById('ck_to_pix').onclick = ()=>{
+      const nome  = (document.getElementById('ck_nome').value || '').trim();
+      const email = (document.getElementById('ck_email').value || '').trim();
+      const fone  = (document.getElementById('ck_fone').value || '').trim();
+      if (!nome || !email) { alert('Preencha nome e e-mail.'); return; }
+
+      // Preenche o form oculto já agora
+      document.getElementById('fNome').value    = nome;
+      document.getElementById('fEmail').value   = email;
+      document.getElementById('fTelefone').value= fone;
+      document.getElementById('fPecas').value   = [...selecionadas].join(',');
+      document.getElementById('fRifas').value   = [...rifasSel].join(',');
+      document.getElementById('fFav').value     = [...favoritos].join(',');
+      document.getElementById('fTotal').value   = Number(Math.floor(totalGeral||0)).toFixed(2);
+
+ // PASSO 2 – PIX
+const totalInt = Math.floor(totalGeral || 0);
+const payload = gerarBRCode(totalInt);
+
+app.innerHTML = `
+  <section id="checkout-pix">
+    <div style="max-width:720px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
+      <h2>
+        Pagamento via PIX /
+        <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G"
+           target="_blank"
+           onclick="event.preventDefault();
+                    if(confirm('Total a pagar: R$ ${totalInt}'))
+                      window.open(this.href);"
+           style="color:var(--red); text-decoration:none;">
+           via PayPal
+        </a>
+      </h2>
+      <br />
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;justify-content:space-between;">
+
+        ${favoritos.size === 0 ? `
+        <div style="flex:1;min-width:220px;background:red;color:#2b2424;padding:2px;">
+          <a href="#"
+             data-modal-id="favoritos"
+             onclick="abrirModal(this); return false;"
+             style="display:inline-block;
+                    padding:2px 2px;font-family:var(--ff-cta);
+                    font-size:14px;text-decoration:none;text-transform:uppercase;">
+                    
+            <button style="border: 1px solid white; background: white; padding: 18px;cursor:pointer; text-align: left; color: red; font-weight: 500;">
+              <p style="margin:0 0 10px 0; margin-top: 8px; font-size:14px;line-height:1.2;text-align: left;">
+                Antes de apostar, você pode indicar quantas peças favoritas quiser!
+              </p>
+              <p style="margin-top: 8px; font-size:14px;line-height:1.2;text-align: left;">
+                Assim cada pessoa sorteada pode ganhar aquilo que mais gostou!
+              </p>
+              <p style="margin-top: 8px; font-size:14px;line-height:1.2;text-align: left;">
+                <strong>Clique aqui</strong> para abrir a mini-galeria.
+              </p>
+            </button>
+          </a> 
+        </div>` : ''}
+
+        <div style="flex:1;width:clamp(160px, 2vw, 380px);text-align:center;">
+          <div id="ck_qr" style="width:clamp(120px, 2vw, 380px);height:100%;margin:0 auto 10px;margin-top:8px;border:1px solid #2b2424;display:flex;align-items:center;justify-content:center;background:#fff;"></div>
+          
+          <button id="ck_copy" style="width:150px;background:#fff;color:var(--ink);border:1px solid #2b2424;padding:8px;cursor:pointer;font-weight:700;">
+            PIX Copia e Cola
+          </button>
+          
+          <!-- Aqui está o campo oculto que o botão precisa -->
+          <div id="ck_payload" style="display:none;">${payload}</div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:38px;">
+        <button id="ck_back_data" style="flex:1; height:7.5vw; max-height:38px;">Voltar</button>
+        <button id="ck_finish" style="flex:1;height:7.5vw; max-height:38px;background:var(--red);color:#fff;">ENVIAR APOSTA</button>
+      </div>
+    </div>
+  </section>
+`;
+
+// Render QR (se a lib existir)
+(function renderQR() {
+  const holder = document.getElementById('ck_qr');
+  if (!holder) return;
+  holder.innerHTML = '';
+  if (window.QRCode) {
+    new QRCode(holder, { text: payload, width: 150, height: 150, correctLevel: QRCode.CorrectLevel.M });
+  } else {
+    // fallback: mostra o payload legível
+    holder.style.fontSize = '10px';
+    holder.style.padding = '6px';
+    holder.textContent = payload;
+  }
+})();
+
+// Copiar PIX
+document.getElementById('ck_copy').onclick = () => {
+  const txt = document.getElementById('ck_payload').textContent;
+  const done = (ok) => {
+    const btn = document.getElementById('ck_copy');
+    const old = btn.textContent;
+    btn.textContent = ok ? 'PIX copiado!' : 'Erro ao copiar';
+    setTimeout(() => (btn.textContent = old), 1600);
+  };
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(txt).then(() => done(true)).catch(() => done(false));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      done(true);
+    } catch (e) {
+      done(false);
+    }
+    document.body.removeChild(ta);
+  }
+};
+
+
+      // Voltar aos dados
+      document.getElementById('ck_back_data').onclick = ()=> cta.onclick(e);
+
+      // Enviar (GAS best-effort + FormSubmit)
+document.getElementById('ck_finish').onclick = async ()=>{
+  const btn = document.getElementById('ck_finish');
+  if (btn._busy) return;
+  btn._busy = true;
+  btn.disabled = true;
+  const old = btn.textContent;
+  btn.textContent = 'Enviando aposta...';
+
+  try {
+    const fd = new FormData();
+    fd.append('nome', document.getElementById('fNome').value);
+    fd.append('email', document.getElementById('fEmail').value);
+    fd.append('telefone', document.getElementById('fTelefone').value);
+    fd.append('pecas', document.getElementById('fPecas').value);
+    fd.append('rifas', document.getElementById('fRifas').value);
+    fd.append('favoritas', document.getElementById('fFav').value);
+    fd.append('total', document.getElementById('fTotal').value);
+
+    await fetch(GAS_URL, { method:'POST', body:fd });
+
+    // redireciona após envio
+    location.href = 'https://betshoptv.com/sorte.html';
+
+  } catch(err){
+    console.error('Erro ao enviar dados para GAS:', err);
+    btn._busy = false;
+    btn.disabled = false;
+    btn.textContent = old;
+    alert('Erro ao enviar aposta. Tente novamente.');
+  }
+};
+    };
+  };
+}
+
+
+
+
+/* =============== Pills e Total ================= */
+/* ====== Footer: pills compactas + CTA dinâmico ====== */
+function updatePills(){
+  const nbsp = '\u00A0';                           // espaço não-quebrável
+  const pill = document.getElementById('pillCompact');
+  const cta  = document.getElementById('ctaMain');
+
+  // monta lista só com contadores > 0 (mobile-friendly)
+  const parts = [];
+  if (selecionadas.size > 0) {
+    parts.push(`${selecionadas.size}${nbsp}${selecionadas.size === 1 ? 'Peça' : 'Peças'}`);
+  }
+  if (rifasSel.size > 0) {
+    parts.push(`${rifasSel.size}${nbsp}${rifasSel.size === 1 ? 'Rifa' : 'Rifas'}`);
+  }
+  if (favoritos.size > 0) {
+    parts.push(`${favoritos.size}${nbsp}${favoritos.size === 1 ? 'Favorita' : 'Favoritas'}`);
+  }
+
+  // mostra/oculta a pill compacta
+  if (pill) {
+    pill.textContent = parts.join(' · ');
+    pill.style.display = parts.length ? 'inline-block' : 'none';
+  }
+
+  // CTA único: label e estado
+  if (cta) {
+    if (totalGeral > 0) {
+      // fmt() já remove casas decimais
+      cta.textContent = `APOSTAR ${fmt(totalGeral)}`;
+      cta.disabled = false;
+    } else {
+      cta.textContent = 'FAÇAM SUAS APOSTAS!';
+      cta.disabled = true;
+    }
+  }
+    // marca estado no footer para o CSS reagir
+  const footer = document.querySelector('footer');
+  if (footer) {
+    footer.classList.toggle('has-total',  totalGeral > 0);
+    footer.classList.toggle('no-total',   totalGeral === 0);
+  }
+
+}
+
+
+function calcularTotal(){
+  let total = 0;
+
+  // Peças
+  selecionadas.forEach(id => {
+    const p = pecas.find(x => x.id_peca === id);
+    if (p && p.preco) total += parseFloat(p.preco);
+  });
+
+  // Rifas: regra de paridade
+  const nR = rifasSel.size || 0;
+  const totalRifas = (nR <= 0) ? 0 : (nR % 2 === 0 ? 25*nR : 25*(nR-1)+30);
+  total += totalRifas;
+
+  totalGeral = total;
+
+  // Atualiza hidden form (mantém duas casas para o form)
+  const fTotal = document.getElementById('fTotal');
+  if (fTotal) fTotal.value = totalGeral.toFixed(2);
+
+  // Sincroniza CTA/pills após recalcular
+  updatePills();
+}
+
+
+/* =============== Abrir peça dentro do feed ================= */
+/* =============== Abrir peça dentro do feed (ajuste sem scroll suave + sem foco) ================= */
+function openFeedAt(id){
+  const tryScroll = ()=>{
+    const el = document.getElementById('post-' + id);
+    if (!el) return false;
+
+    // remove foco automático (evita moldura azul)
+    if (document.activeElement && document.activeElement.blur) {
+      document.activeElement.blur();
+    }
+
+    // rola imediatamente, sem animação
+    el.scrollIntoView({ behavior: 'auto', block: 'start' });
+
+    // compensa a altura do cabeçalho fixo (ajuste fino)
+    const headerHeight = document.querySelector('header')?.offsetHeight || 100;
+    window.scrollBy(0, -headerHeight);
+
+    return true;
+  };
+
+  if (document.getElementById('feedList')){
+    if (!tryScroll()) setTimeout(tryScroll, 120);
+  } else {
+    renderFeed();
+    setTimeout(tryScroll, 100);
+  }
+}
+
+
+/* ======================== INIT ======================== */
+async function init(){
+  try{
+    // começar com favoritos zerados (como pedido)
+    localStorage.removeItem('BSTV_FAV'); favoritos.clear();
+
+    const [rp, rr] = await Promise.all([
+      fetch(PECAS_JSON_URL, { cache:'no-store' }),
+      fetch(RIFAS_JSON_URL, { cache:'no-store' })
+    ]);
+    if (!rp.ok || !rr.ok) throw new Error('Falha ao carregar JSONs');
+
+    pecas = await rp.json();
+    rifas = await rr.json();
+
+    // render inicial conforme hash
+    attachAppDelegation();
+    attachBindings();
+    handleHashChange();
+
+    updatePills();
+    calcularTotal();
+  }catch(e){
+    console.error('Init error', e);
+    document.getElementById('app').innerHTML =
+      '<div style="padding:20px;color:#900;">Erro ao carregar dados. Veja o console.</div>';
+  }
+}
+function renderHome() {
+  const app = document.getElementById('app');
+  const tpl = document.getElementById('page-sobre');
+  app.innerHTML = '';
+  if (tpl) app.appendChild(tpl.content.cloneNode(true));
+}
+
+  function renderSobreProjeto(){
+  const app = document.getElementById('app');
+  const tpl = document.getElementById('page-sobre'); 
+  app.innerHTML = '';
+  if (tpl) app.appendChild(tpl.content.cloneNode(true));
+} 
+
+function renderComoFunciona(){
+  const app = document.getElementById('app');
+  const tpl = document.getElementById('page-como');
+  app.innerHTML = '';
+  if (tpl) app.appendChild(tpl.content.cloneNode(true));
+}
+
+let modalAtivo = null;
+
+function abrirModal(el) {
+  const id = el.dataset.modalId;
+  const modal = document.getElementById(`modal-${id}`);
+  if (!modal) return;
+
+  fecharModal();
+  modal.style.display = 'flex';
+  modalAtivo = modal;
+
+  modal.scrollTop = 0; // 👈 Corrige abertura “colada” ao clique
+
+  document.addEventListener('keydown', fecharPorEsc);
+  modal.addEventListener('click', cliqueFora);
+}
+
+
+function fecharModal() {
+  if (!modalAtivo) return;
+
+  modalAtivo.style.display = 'none';
+  document.removeEventListener('keydown', fecharPorEsc);
+  modalAtivo.removeEventListener('click', cliqueFora);
+  modalAtivo = null;
+}
+
+function fecharPorEsc(e) {
+  if (e.key === 'Escape') fecharModal();
+}
+
+function cliqueFora(e) {
+  if (e.target === modalAtivo) fecharModal();
+}
+
+
+function escFecharModal(e) {
+  if (e.key === 'Escape') fecharModalAgende();
+}
+
+function cliqueForaModal(e) {
+  if (e.target.id === 'modal-agende') fecharModalAgende();
+}
+
+
+function fecharModalAgende() {
+  const modal = document.getElementById('modal-agende');
+  if (modal) modal.style.display = 'none';
+}
+
+
+window.addEventListener('DOMContentLoaded', init);
+
+/* Só monitora alterações perigosas no footer (aviso em console) */
+(function(){
+  const footer = document.querySelector('footer');
+  if (!footer) return;
+  const mo = new MutationObserver(()=>{
+    if(!document.getElementById('btnCheckout')){
+      console.warn('Footer alterado: btnCheckout ausente. Verifique alterações acidentais no header/footer.');
+    }
+  });
+  mo.observe(footer, { childList:true, subtree:true });
+})();
+
+
+(function(){
+  // Usa a mesma URL do checkout
+  const GAS_URL = typeof window.GAS_URL === 'string'
+    ? window.GAS_URL
+    : 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const form = document.getElementById('form-agendar');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+
+      const nome  = (document.getElementById('ag_nome').value || '').trim();
+      const email = (document.getElementById('ag_email').value || '').trim();
+      const tel   = (document.getElementById('ag_telefone').value || '').trim();
+      const msg   = (document.getElementById('ag_msg').value || '').trim();
+      const btn   = document.getElementById('ag_enviar');
+      const feed  = document.getElementById('ag_feedback');
+
+      if (!nome || !email || !msg) {
+        alert('Preencha nome, e-mail e a mensagem de agendamento.');
+        return;
+      }
+
+      // Monta como o checkout, mas separado:
+      // - tipo=AGENDAR
+      // - pecas recebe a mensagem
+      // - rifas/favoritas/total vazios
+      const fd = new FormData();
+      fd.append('tipo', 'AGENDAR');
+      fd.append('nome', nome);
+      fd.append('email', email);
+      fd.append('telefone', tel);
+      fd.append('pecas', msg);       // <- mensagem vai na coluna PECAS
+      fd.append('rifas', '');
+      fd.append('favoritas', '');
+      fd.append('total', '');
+
+      // UX básico
+      const old = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      try{
+        const res = await fetch(GAS_URL, { method:'POST', body: fd });
+        // Melhor esforço: se 200, consideramos OK
+        if (res.ok) {
+          feed.style.display = 'block';
+          feed.style.color = 'red';
+          feed.textContent = 'Agendamento enviado! Em breve entraremos em contato.';
+          form.reset();
+          // Você pode fechar o modal aqui, se preferir:
+          // setTimeout(()=> fecharModalAgende(), 1200);
+        } else {
+          throw new Error('Falha ao enviar. Tente novamente.');
+        }
+      } catch(err){
+        feed.style.display = 'block';
+        feed.style.color = '#900';
+        feed.textContent = 'Erro ao enviar. Tente novamente.';
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = old;
+      }
+    });
+  });
+})();
+
+
+</script>
+<!-- Campos ocultos (essenciais para o GAS funcionar) -->
+<input type="hidden" id="fNome">
+<input type="hidden" id="fEmail">
+<input type="hidden" id="fTelefone">
+<input type="hidden" id="fPecas">
+<input type="hidden" id="fRifas">
+<input type="hidden" id="fFav">
+<input type="hidden" id="fTotal">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" referrerpolicy="no-referrer"></script>
+
+
+<script>
+  // 🧠 Força o modo horizontal no desktop, mas mantém slider no mobile
+  document.addEventListener("DOMContentLoaded", function () {
+    const feed = document.querySelector(".feed-wrapper");
+    if (!feed) return;
+
+    const handleFeedMode = () => {
+      if (window.innerWidth > 1024) {
+        feed.classList.add("feed-desktop");
+        feed.classList.remove("feed-mobile");
+      } else {
+        feed.classList.add("feed-mobile");
+        feed.classList.remove("feed-desktop");
+      }
+    };
+
+    handleFeedMode();
+    window.addEventListener("resize", handleFeedMode);
+  });
+</script>
+
+
+<script>
+/* 🔧 Corrige o comportamento de rolagem nas âncoras da página
+   — sempre alinha ao topo (exceto o Feed) */
+(function(){
+  document.addEventListener("click", function(e){
+    const link = e.target.closest("a[href^='#']");
+    if(!link) return;
+
+    const targetId = link.getAttribute("href").substring(1);
+    const targetEl = document.getElementById(targetId);
+
+    // só atua em seções internas existentes
+    if(!targetEl) return;
+
+    // impede o comportamento padrão do navegador
+    e.preventDefault();
+
+    // exceção: feed deve manter o comportamento original
+    if(targetId === "feed") {
+      window.location.hash = "#feed";
+      return;
+    }
+
+    // rola até o topo da seção com comportamento suave
+    targetEl.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+    // força o hash na URL para manter o estado da página
+    history.replaceState(null, "", "#" + targetId);
+  });
+
+  /* 🧩 adicional: se o usuário entra com uma âncora na URL,
+     garante que ela alinhe ao topo também */
+  window.addEventListener("load", () => {
+    const id = location.hash.replace("#", "");
+    const el = id && document.getElementById(id);
+    if(el && id !== "feed"){
+      setTimeout(() => el.scrollIntoView({ behavior: "auto", block: "start" }), 50);
+    }
+  });
+})();
+</script>
+
+<!-- 🔳 MODAIS GERAIS -->
+<div id="modal-agende-visita" class="modal-overlay" style="display:none;">
+  <div class="modal-content">
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+<div class="agendar-visita">
+  <h2 class="agendar-titulo">FALE CONOSCO</h2>
+
+  <form id="form-agendar">
+    <label for="ag_nome">NOME *</label>
+    <input id="ag_nome" name="nome" type="text" required>
+
+    <label for="ag_email">E-MAIL *</label>
+    <input id="ag_email" name="email" type="email" required>
+
+    <label for="ag_telefone">TELEFONE</label>
+    <input id="ag_telefone" name="telefone" type="tel">
+
+    <label for="ag_msg">MENSAGEM *</label>
+    <textarea id="ag_msg" name="mensagem" rows="4" required></textarea>
+
+    <button id="ag_enviar" type="submit" class="agendar-btn" style="margin-bottom: -8px;">ENVIAR</button>
+    <div id="ag_feedback" class="agendar-feedback"></div>
+  </form>
+</div>
+
+<style>
+.agendar-visita {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.agendar-titulo {
+  font: 700 var(--fs-h2)/1.1 var(--ff-cta);
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 8px;
+}
+
+.agendar-sub {
+  font-size: var(--fs-p);
+  margin-bottom: 22px;
+  max-width: 480px;
+  color: var(--ink);
+}
+
+#form-agendar {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+
+#form-agendar label {
+  font: 700 var(--fs-sm)/1 var(--ff-cta);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: -4px;
+  margin-top: 6px;
+}
+
+#form-agendar input {
+  height: 30px;
+}
+
+#form-agendar input,
+#form-agendar textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: var(--ff-body);
+  font-size: var(--fs-p);
+  border: var(--bd-thin) solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  border-radius: 0;
+}
+
+#form-agendar textarea {
+  resize: vertical;
+  min-height: 38px;
+}
+
+.agendar-btn {
+  margin-top: 10px;
+  align-self: center;
+  background: var(--red);
+  color: #fff;
+  font: 700 var(--fs-h2)/1 var(--ff-cta);
+  border: none;
+  padding: 12px 36px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.agendar-btn:hover {
+  background: var(--ink);
+  color: var(--beige);
+}
+
+.agendar-feedback {
+  margin-top: 14px;
+  font: 700 var(--fs-sm)/1 var(--ff-cta);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    padding: 28px 18px;
+  }
+  #form-agendar {
+    gap: 12px;
+  }
+  .agendar-btn {
+    width: 42%;
+    padding: 14px 0;
+  }
+}
+</style>
+
+
+
+    <div id="ag_feedback" style="display:none;margin-top:12px;font-weight:700;"></div>
+  </div>
+</div>
+
+
+<!-- ===== MODAL FAVORITOS ===== -->
+<!-- ===== MODAL FAVORITOS (mini-galeria dinâmica) ===== -->
+<div id="modal-favoritos" class="modal-overlay has-footer" style="display:none;">
+  <div class="modal-content favoritos-modal">
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+    <h2 style="margin-top:0;">FAVORITAS</h2>
+    <p style="margin:0 0 16px 0;">
+      Clique nas miniaturas para marcar ou remover favoritas.
+    </p>
+
+    <!-- 🔹 Filtros: apenas grupos -->
+    <div class="filters-bar fav-filtros" style="margin-top: 10px;">
+      <div class="filters-group">
+        <span class="filters-label">GRUPOS</span>
+        <div id="fav-grupos" style="display:inline-flex;gap:6px;flex-wrap:wrap;"></div>
+      </div>
+        <button class="chip" onclick="fecharModal()" style="border:1px solid red; background: red; color: white;">CONCLUIR SELEÇÃO</button>
+    </div>
+
+    <!-- 🔹 Mini-galeria -->
+    <div id="fav-galeria" class="fav-galeria"></div>
+    
+
+
+  </div>
+</div>
+
+<style>
+/* == modal botoes = */
+
+/* ====== Modal base ====== */
+.favoritos-modal {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red) var(--beige);
+}
+.fav-filtros {
+  position: sticky;
+  top: 0;
+  background: var(--beige);
+  padding: 6px 0 10px;
+  border-bottom: var(--bd-thin) solid var(--ink);
+  z-index: 2;
+  border-top: 8px solid #bebab0;
+}
+
+/* ====== Mini-galeria ====== */
+.fav-galeria {
+  column-count: 4;
+  column-gap: 6px; /* espaçamento horizontal */
+  width: 100%;
+  margin-top: 14px;
+}
+
+.fav-galeria .fav-item {
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 6px 0; /* igual ao column-gap */
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  cursor: pointer;
+}
+
+.fav-galeria img {
+  width: 100%;
+  display: block;
+  border: 1px solid var(--ink);
+  background: #fff;
+  transition: filter 0.2s, border-color 0.2s;
+}
+.fav-galeria img:hover { filter: brightness(1.07); border: 1px solid red;}
+.fav-galeria img.fav-active {
+    outline: 5px solid rgba(255, 0, 0, 0.7); /* borda interna simulada */
+  outline-offset: -5px;       /* empurra outline para dentro */
+}
+
+
+
+/* sempre 4 colunas, mesmo no mobile */
+@media (max-width: 700px) {
+  .fav-galeria {
+    column-count: 4;
+    column-gap: 4px;
+  }
+  .fav-galeria .fav-item {
+    margin-bottom: 1px;
+  }
+  .fav-galeria img.fav-active {
+    outline: 3px solid rgba(255, 0, 0, 0.7); /* borda interna simulada */
+  outline-offset: -3px;       /* empurra outline para dentro */
+}
+}
+
+</style>
+
+<script>
+/* ======= FAVORITOS MODAL: mini galeria tipo masonry ======= */
+function renderModalFavoritos(){
+  const gal = document.getElementById('fav-galeria');
+  const gruposWrap = document.getElementById('fav-grupos');
+  if(!gal || !pecas?.length) return;
+
+  // 🔹 construir botões de grupo dinamicamente
+  gruposWrap.innerHTML = '';
+  const gruposDisp = getGruposDisponiveis();
+  gruposDisp.forEach(g=>{
+    const b=document.createElement('button');
+    b.className='chip';
+    b.textContent=g;
+    b.dataset.grp=g;
+    b.addEventListener('click',()=>{
+      const ativo=b.classList.toggle('is-active');
+      if(!ativo) b.removeAttribute('aria-pressed');
+      else b.setAttribute('aria-pressed','true');
+      renderMiniGaleria(); // re-renderiza com grupos selecionados
+    });
+    gruposWrap.appendChild(b);
+  });
+
+  // primeiro render sem seleção (mostra todas)
+  renderMiniGaleria();
+}
+
+function renderMiniGaleria(){
+  const gal = document.getElementById('fav-galeria');
+  const gruposAtivos = Array.from(document.querySelectorAll('#fav-grupos .chip.is-active'))
+                            .map(b=>b.dataset.grp);
+  gal.innerHTML = '';
+
+  let lista = pecas.filter(p => !/vendid/i.test(p.status || ''));
+  if(gruposAtivos.length){
+    lista = lista.filter(p => gruposAtivos.includes(String(p.id_peca).slice(0,2)));
+  }
+
+  lista.forEach(p=>{
+    const wrap=document.createElement('div');
+    wrap.className='fav-item';
+    const img = imgWithFallback(`https://betshoptv.com/img/tmb/${p.imagens[0]}.avif`);
+    img.alt = p.titulo || p.id_peca;
+    img.dataset.id = p.id_peca;
+    if (favoritos.has(p.id_peca)) img.classList.add('fav-active');
+    img.onclick = ()=>toggleFavModal(p.id_peca, img);
+    wrap.appendChild(img);
+    gal.appendChild(wrap);
+  });
+} 
+
+function toggleFavModal(id, el){
+  if (favoritos.has(id)) favoritos.delete(id);
+  else favoritos.add(id);
+  el.classList.toggle('fav-active');
+  try { localStorage.setItem('BSTV_FAV', JSON.stringify([...favoritos])); } catch(e){}
+  updatePills();
+}
+
+// 🪄 Integrar ao fluxo do site
+const _abrirModalOriginal = abrirModal;
+abrirModal = function(el){
+  const id = el.dataset.modalId;
+  const modal = document.getElementById(`modal-${id}`);
+  if(!modal) return;
+  fecharModal();
+  modal.style.display='flex';
+  modalAtivo=modal;
+  modal.scrollTop=0;
+  document.addEventListener('keydown', fecharPorEsc);
+  modal.addEventListener('click', cliqueFora);
+  if(id==='favoritos') renderModalFavoritos();
+};
+</script>
+
+
+
+
+
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+
+
+
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (NOVO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (NOVO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (ATUALIZADO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (NOVO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (NOVO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (ATUALIZADO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (ATUALIZADO) ========== -->
+<!-- ========== MODAL: RESUMO DAS SELEÇÕES (ATUALIZADO) ========== -->
+<style>
+  #modal-resumo .titulo{
+    font:700 var(--fs-h2)/1.2 var(--ff-cta);
+    margin: 4px 0 6px 0;
+    text-transform: uppercase;
+  }
+  #modal-resumo .grupo{ margin: 10px 0 12px 0; }
+  #modal-resumo .chip{ cursor:pointer; }
+  #modal-resumo .chip.is-active{ background:var(--ink); color:var(--beige); }
+  #modal-resumo .hint{ font:700 var(--fs-sm)/1 var(--ff-cta); color:var(--ink); }
+
+  /* modal em coluna, só corpo rola (vertical) */
+  #modal-resumo .modal-content{
+    max-width: min(100vw - 32px, 900px);
+    max-height: 69vh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  #modal-resumo .modal-body{
+    flex:1 1 auto;
+    overflow-y:auto;
+    overflow-x:hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--red) var(--beige);
+  }
+
+  /* barra de ações fixa no rodapé do modal */
+  #modal-resumo .modal-actions{
+    flex:0 0 auto;
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;
+    margin-top:0px;
+    padding-top:8px;
+    border-top:1px solid var(--ink);
+  }
+
+  /* listas de peças/favoritas em linhas com 2 colunas */
+  #modal-resumo .resumo-list{
+    display:flex;
+    flex-direction:column; 
+    gap:8px;
+    width:100%;
+  } 
+  #modal-resumo .resumo-item{
+    display:flex;
+    gap:8px;
+    align-items:flex-start;
+    cursor:default;
+    border: 1px solid #2b2424;
+    margin-right: 6px;
+  }  
+  #modal-resumo .resumo-item-img{
+    flex:0 0 35%;
+    max-width:35%;
+  }
+  #modal-resumo .resumo-item-img img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-right: 1px solid #2b2424;
+  }
+  #modal-resumo .resumo-item-info{
+    flex:1;
+    font-weight:400;
+    font-size: clamp(0.88rem,1.6vw,1.38rem);
+    text-align:left;
+    margin-right: 4px;
+  }
+  #modal-resumo .resumo-item-titulo{
+    margin: clamp(20px, 2vw, 35px) 6px 6px 10px;
+  }
+  #modal-resumo .resumo-item-preco{
+    margin: 0 4px 0px 10px;
+    font-weight:500;
+    font-family:var(--ff-cta);
+  }
+
+  /* botão de edição ativo (modo exclusão rápida) */
+  #resumo-editar.selecionando{
+    background: var(--ink);
+    color: var(--beige);
+  }
+</style>
+
+<div id="modal-resumo" class="modal-overlay" style="display:none;">
+  <div class="modal-content">
+    <button class="modal-close" onclick="(window._fecharResumo||(()=>{}))()">✕</button>
+
+    <div class="modal-body">
+      <h2 style="margin:0 0 12px 0;">APOSTAS SELECIONADAS</h2>
+
+      <!-- TEXTO GUIA (sem total aqui) -->
+      <div class="grupo">
+      </div>
+<div style="background: #2b2424; width: 100%, height: 1px; color: #2b2424; margin-bottom: 18px; font-size: 1px">_</div>
+      <!-- RIFAS -->
+      <div id="resumo-rifas" class="grupo">
+        <div class="titulo">RIFAS</div>
+        <div id="resumo-rifas-list" class="rifas"></div>
+        <div id="resumo-rifas-fav-cta" style="display:none; margin-top:8px;">
+          <a href="#"
+             style="text-decoration: none;" onclick="event.preventDefault(); (window._fecharResumo||(()=>{}))(); if (typeof abrirModal==='function'){ try{ abrirModal({dataset:{modalId:'favoritos'}});}catch(e){ showPage('galeria'); } } else { showPage('galeria'); }">
+                        <button style="border: 1px dashed red; background: white; padding: 18px;cursor:pointer; text-align: left; color: red; font-weight: 500;">
+              <p style="margin:0 0 10px 0; margin-top: 8px; font-size:14px;line-height:1;text-align: left;">
+                Antes de apostar, indique quantas peças favoritas quiser!
+              </p>
+              <p style="margin-top: 8px; font-size:14px;line-height:1;text-align: left;">
+                Assim cada pessoa sorteada pode ganhar aquilo que mais gostou.
+              </p>
+              <p style="margin-top: 8px; font-size:14px;line-height:1;text-align: left;">
+                <strong>Clique aqui</strong> para abrir a mini-galeria.
+              </p>
+            </button> 
+          </a>
+        </div>
+      </div>
+
+      <!-- TABS (PEÇAS / FAVORITAS) -->
+      <div id="resumo-switch" class="grupo" style="display:none;">
+        <button id="resumo-tab-pecas" class="chip is-active" type="button" aria-pressed="true">Peças</button>
+        <button id="resumo-tab-favs"  class="chip"           type="button" aria-pressed="false">Favoritas</button>
+      </div>
+
+      <!-- LISTAS EM LINHAS (2 colunas) -->
+      <div id="resumo-pecas" class="grupo" style="display:none;">
+        <div class="titulo">PEÇAS</div>
+        <div id="resumo-pecas-list" class="resumo-list"></div>
+      </div>
+
+      <div id="resumo-favs" class="grupo" style="display:none;">
+        <div class="titulo">FAVORITAS</div>
+        <div id="resumo-favs-list" class="resumo-list"></div>
+      </div>
+    </div>
+
+    <!-- AÇÕES (fixo no rodapé do modal) -->
+    <div class="grupo modal-actions">
+      <button id="resumo-total-btn" class="chip is-active" type="button"
+              style="background:var(--red);color:#fff;cursor:default; width: 100%; font:500 var(--fs-sm)/1.2 var(--ff-cta);border: 1px solid red;" disabled>
+      </button>
+      <button id="resumo-editar"     class="chip" type="button">EDITAR SELEÇÃO</button>
+      <button id="resumo-prosseguir" class="chip is-active" type="button"
+              style="background:var(--red);color:#fff; border: 1px solid red;">PROSSEGUIR</button>
+    </div>
+  </div>
+</div>
+
+<script>
+window._resumoEditMode = false;
+
+/* --- abertura/fechamento do modal --- */
+(function(){
+  function _open(){
+    var m = document.getElementById('modal-resumo');
+    if (!m) return;
+    m.style.display = 'flex';
+    document.addEventListener('keydown', _esc);
+    m.addEventListener('click', _backdrop);
+  }
+  function _close(){
+    var m = document.getElementById('modal-resumo');
+    if (!m) return;
+    m.style.display = 'none';
+    document.removeEventListener('keydown', _esc);
+    m.removeEventListener('click', _backdrop);
+    window._resumoEditMode = false;
+    atualizaEstadoBotaoEdicao();
+  }
+  function _esc(e){ if (e.key === 'Escape') _close(); }
+  function _backdrop(e){ if (e.target && e.target.id === 'modal-resumo') _close(); }
+
+  window._abrirResumo  = _open;
+  window._fecharResumo = _close;
+})();
+
+/* --- aparência do botão EDITAR SELEÇÃO --- */
+function atualizaEstadoBotaoEdicao(){
+  var btn = document.getElementById('resumo-editar');
+  if (!btn) return;
+  if (window._resumoEditMode){
+    btn.classList.add('selecionando');
+    btn.textContent = 'CONCLUIR EDIÇÃO';
+  } else {
+    btn.classList.remove('selecionando');
+    btn.textContent = 'EDITAR SELEÇÃO';
+  }
+}
+
+/* --- monta a UI do resumo com os dados vivos em memória --- */
+function renderResumoSelecoes(){
+  try{
+    if (typeof calcularTotal === 'function') calcularTotal();
+    if (typeof updatePills === 'function')   updatePills();
+
+    window._resumoEditMode = false;
+    atualizaEstadoBotaoEdicao();
+
+    var rifasList = document.getElementById('resumo-rifas-list');
+    var pecasList = document.getElementById('resumo-pecas-list');
+    var favsList  = document.getElementById('resumo-favs-list');
+    var sw        = document.getElementById('resumo-switch');
+
+    if (rifasList) rifasList.innerHTML = '';
+    if (pecasList) pecasList.innerHTML = '';
+    if (favsList)  favsList.innerHTML  = '';
+
+    // --- RIFAS ---
+    var hasRifas = false;
+    if (typeof rifasSel !== 'undefined' && Array.isArray(rifas) && rifasList){
+      (Array.from(rifasSel)).forEach(function(id){
+        var r = rifas.find(function(x){ return x && (String(x.id_rifa)===String(id)); });
+        if (!r) return;
+        hasRifas = true;
+
+        var btn = document.createElement('div');
+        btn.className = 'rifa-btn selected';
+        var cor = r.hex_rifa || r.hex || '#ccc';
+        btn.style.backgroundColor = cor;
+        if (typeof getContrastColor === 'function'){
+          btn.style.color = getContrastColor(cor);
+        }
+
+        var rawLabel = (r.botao_rifa && String(r.botao_rifa).trim())
+          ? String(r.botao_rifa).trim()
+          : (r.numero || r.id_rifa || '').toString();
+        rawLabel = rawLabel.replace(/^\s*X\s*/i,'').trim();
+
+        if (typeof formatRifaLabelDOM === 'function'){
+          btn.appendChild( formatRifaLabelDOM(rawLabel) );
+        } else {
+          btn.textContent = rawLabel;
+        }
+
+        btn.onclick = function(){
+          if (!window._resumoEditMode) return;
+          try{
+            rifasSel.delete(r.id_rifa);
+            if (typeof calcularTotal==='function') calcularTotal();
+            if (typeof updatePills==='function')   updatePills();
+            if (typeof handleHashChange==='function') handleHashChange();
+            renderResumoSelecoes();
+          }catch(e){ console.error(e); }
+        };
+
+        rifasList.appendChild(btn);
+      });
+    }
+
+    var favCta = document.getElementById('resumo-rifas-fav-cta');
+    if (favCta){
+      var onlyR = hasRifas &&
+                  (typeof selecionadas !== 'undefined' ? selecionadas.size === 0 : true) &&
+                  (typeof favoritos    !== 'undefined' ? favoritos.size    === 0 : true);
+      favCta.style.display = onlyR ? '' : 'none';
+    }
+
+    // --- PEÇAS ---
+    var hasPecas = false;
+    if (typeof selecionadas !== 'undefined' && Array.isArray(pecas) && pecasList){
+      (Array.from(selecionadas))
+        .map(function(id){
+          return pecas.find(function(p){ return p && (String(p.id_peca)===String(id)); });
+        })
+        .filter(Boolean)
+        .forEach(function(p){
+          hasPecas = true;
+
+          var row = document.createElement('div');
+          row.className = 'resumo-item';
+
+          var colImg = document.createElement('div');
+          colImg.className = 'resumo-item-img';
+
+          var imgId = (p.imagens && p.imagens.length) ? p.imagens[0] : null;
+          if (imgId){
+            var img = imgWithFallback(`https://betshoptv.com/img/tmb/${imgId}.avif`);
+            img.alt = p.titulo || p.id_peca;
+            colImg.appendChild(img);
+          }
+
+          var colInfo = document.createElement('div');
+          colInfo.className = 'resumo-item-info';
+
+          var tituloEl = document.createElement('div');
+          tituloEl.className = 'resumo-item-titulo';
+          tituloEl.textContent = p.titulo || ('Peça ' + p.id_peca);
+
+          var precoEl = document.createElement('div');
+          precoEl.className = 'resumo-item-preco';
+          var preco = (typeof fmt === 'function') ? fmt(p.preco) : ('R$ ' + Math.round(p.preco||0));
+          precoEl.textContent = preco;
+
+          colInfo.appendChild(tituloEl);
+          colInfo.appendChild(precoEl);
+
+          row.appendChild(colImg);
+          row.appendChild(colInfo);
+
+          row.onclick = function(){
+            if (!window._resumoEditMode) return;
+            try{
+              selecionadas.delete(p.id_peca);
+              if (typeof calcularTotal==='function') calcularTotal();
+              if (typeof updatePills==='function')   updatePills();
+              if (typeof handleHashChange==='function') handleHashChange();
+              renderResumoSelecoes();
+            }catch(e){ console.error(e); }
+          };
+
+          pecasList.appendChild(row);
+        });
+    }
+
+    // --- FAVORITAS ---
+    var hasFavs = false;
+    if (typeof favoritos !== 'undefined' && Array.isArray(pecas) && favsList){
+      (Array.from(favoritos))
+        .map(function(id){
+          return pecas.find(function(p){ return p && (String(p.id_peca)===String(id)); });
+        })
+        .filter(Boolean)
+        .forEach(function(p){
+          hasFavs = true;
+
+          var row = document.createElement('div');
+          row.className = 'resumo-item';
+
+          var colImg = document.createElement('div');
+          colImg.className = 'resumo-item-img';
+
+          var imgId = (p.imagens && p.imagens.length) ? p.imagens[0] : null;
+          if (imgId){
+            var img = imgWithFallback(`https://betshoptv.com/img/tmb/${imgId}.avif`);
+            img.alt = p.titulo || p.id_peca;
+            colImg.appendChild(img);
+          }
+
+          var colInfo = document.createElement('div');
+          colInfo.className = 'resumo-item-info';
+
+          var tituloEl = document.createElement('div');
+          tituloEl.className = 'resumo-item-titulo';
+          tituloEl.textContent = p.titulo || ('Peça ' + p.id_peca);
+
+          colInfo.appendChild(tituloEl);
+
+          row.appendChild(colImg);
+          row.appendChild(colInfo);
+
+          row.onclick = function(){
+            if (!window._resumoEditMode) return;
+            try{
+              favoritos.delete(p.id_peca);
+              if (typeof calcularTotal==='function') calcularTotal();
+              if (typeof updatePills==='function')   updatePills();
+              if (typeof handleHashChange==='function') handleHashChange();
+              renderResumoSelecoes();
+            }catch(e){ console.error(e); }
+          };
+
+          favsList.appendChild(row);
+        });
+    }
+
+    // --- TOTAL NO BOTÃO DO RODAPÉ ---
+    var tot = (typeof totalGeral !== 'undefined') ? totalGeral : 0;
+    var totalBtn = document.getElementById('resumo-total-btn');
+    if (totalBtn){
+      var labelTot = (typeof fmt === 'function') ? fmt(tot) : ('R$ ' + Math.round(tot||0));
+      totalBtn.textContent = 'TOTAL: ' + labelTot;
+    }
+
+    // --- TABS (Peças/Favoritas) ---
+    var boxP = document.getElementById('resumo-pecas');
+    var boxF = document.getElementById('resumo-favs');
+    var tabP = document.getElementById('resumo-tab-pecas');
+    var tabF = document.getElementById('resumo-tab-favs');
+
+    if (boxP) boxP.style.display = hasPecas ? '' : 'none';
+    if (boxF) boxF.style.display = (hasPecas && hasFavs) ? 'none' : (hasFavs ? '' : 'none');
+    if (sw)   sw.style.display   = (hasPecas && hasFavs) ? '' : 'none';
+
+    if (hasPecas && hasFavs && tabP && tabF){
+      var selectTab = function(qual){
+        var pOn = (qual === 'p');
+        if (boxP) boxP.style.display = pOn ? '' : 'none';
+        if (boxF) boxF.style.display = pOn ? 'none' : '';
+        tabP.classList.toggle('is-active', pOn);
+        tabP.setAttribute('aria-pressed', pOn ? 'true' : 'false');
+        tabF.classList.toggle('is-active', !pOn);
+        tabF.setAttribute('aria-pressed', !pOn ? 'true' : 'false');
+      };
+      selectTab('p');
+      tabP.onclick = function(){ selectTab('p'); };
+      tabF.onclick = function(){ selectTab('f'); };
+    }
+
+  }catch(err){ console.error('renderResumoSelecoes()', err); }
+}
+
+/* --- intercepta #ctaMain sem reescrever attachBindings() --- */
+(function hookCTA(){
+  function doHook(){
+    var cta = document.getElementById('ctaMain');
+    if (!cta) return setTimeout(doHook, 80);
+
+    if (typeof cta.onclick !== 'function'){
+      return setTimeout(doHook, 80);
+    }
+
+    var originalCTA = cta.onclick;
+    if (cta._resumoHooked) return;
+    cta._resumoHooked = true;
+
+    cta.onclick = function(e){
+      if (cta.disabled) return;
+      e.preventDefault();
+
+      renderResumoSelecoes();
+      (window._abrirResumo||(()=>{}))();
+
+      var btnEdit = document.getElementById('resumo-editar');
+      var btnNext = document.getElementById('resumo-prosseguir');
+
+      if (btnEdit){
+        btnEdit.onclick = function(){
+          window._resumoEditMode = !window._resumoEditMode;
+          atualizaEstadoBotaoEdicao();
+        };
+      }
+
+      if (btnNext){
+        btnNext.onclick = function(){
+          (window._fecharResumo||(()=>{}))();
+          try{
+            originalCTA.call(cta, new MouseEvent('click'));
+          }catch(err){
+            originalCTA();
+          }
+        };
+      }
+    };
+  }
+  doHook();
+})();
+</script>
+
+
+
+
+
+
+
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
