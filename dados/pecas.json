@@ -131,7 +131,7 @@
     "id_peca": "0309",
     "titulo": "03/09 Conjunto de som e imagem 01",
     "preco": 150,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para EVA estampado e presilhas metálicas.",
     "dimensao": "25 x 20,5 x 6,5 cm",
     "imagens": [
@@ -195,7 +195,7 @@
     "id_peca": "0401",
     "titulo": "04/01 TV 01",
     "preco": 1000,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e prego.",
     "dimensao": "60 x 20,5 x 4 cm",
     "imagens": [
@@ -244,7 +244,7 @@
     "id_peca": "0405",
     "titulo": "04/05 Microcomputador 03",
     "preco": 350,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, tinta acrílica, aneis de borracha nitrílica e ganchos.",
     "dimensao": "19 x 37 x 12 cm",
     "imagens": [
@@ -350,7 +350,7 @@
     "id_peca": "0413",
     "titulo": "04/13 Microfone 01",
     "preco": 500,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, suportes angulares e parafusos.",
     "dimensao": "27 x 15 x 7 cm",
     "imagens": [
@@ -475,7 +475,7 @@
     "id_peca": "0604",
     "titulo": "06/04 Stereo System 03",
     "preco": 2000,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA, parafusos, arruelas e porcas.",
     "dimensao": "14 x 18 x 14 cm",
     "imagens": [
@@ -591,7 +591,7 @@
     "id_peca": "0801",
     "titulo": "08/01 Conjunto de som e imagem 02",
     "preco": 1800,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para adesivo sobre EVA estampado.",
     "dimensao": "27 x 20,5 x 0,2 cm",
     "imagens": [
@@ -685,7 +685,7 @@
     "id_peca": "0808",
     "titulo": "08/08 Filmadora 07",
     "preco": 800,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão jato de tinta em sulfite e impressões offset em papel couché transferidas para tatame de EVA.",
     "dimensao": "27 x 20,5 x 1 cm",
     "imagens": [
