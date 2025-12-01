@@ -4,7 +4,7 @@
     "titulo": "02/01 Câmera fotográfica 04",
     "preco": 150,
     "status": "X",
-    "tecnica": "Impressão offset em papel couché transferida para EVA.",
+    "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
     "dimensao": "29 x 20,5 x 0,6 cm",
     "imagens": [
       "02-01a",
@@ -17,12 +17,99 @@
     "titulo": "02/02 Auto Rádio 04",
     "preco": 150,
     "status": "X",
-    "tecnica": "Impressão offset em papel couché transferida para EVA.",
+    "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
     "dimensao": "29 x 20,5 x 0,6 cm",
     "imagens": [
       "02-02a",
       "02-02b",
       "02-02c"
+    ]
+  },
+  {
+    "id_peca": "0203",
+    "titulo": "02/03 Videocassete",
+    "preco": 150,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
+    "dimensao": "29 x 41 x 0,6 cm",
+    "imagens": [
+      "02-03a",
+      "02-03b",
+      "02-03c"
+    ]
+  },
+  {
+    "id_peca": "0204",
+    "titulo": "02/04 Microfone 04",
+    "preco": 150,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
+    "dimensao": "29 x 20,5 x 0,6 cm",
+    "imagens": [
+      "02-04a",
+      "02-04b",
+      "02-04c"
+    ]
+  },
+  {
+    "id_peca": "0205",
+    "titulo": "02/05 Câmera fotográfica 05",
+    "preco": 150,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
+    "dimensao": "29 x 20,5 x 0,6 cm",
+    "imagens": [
+      "02-05a",
+      "02-05b"
+    ]
+  },
+  {
+    "id_peca": "0206",
+    "titulo": "02/06 Câmera fotográfica 06",
+    "preco": 150,
+    "status": "",
+    "tecnica": "Caneta esferográfica e impressão offset em papel couché transferida para EVA e pregos.",
+    "dimensao": "29 x 20,5 x 0,6 cm",
+    "imagens": [
+      "02-06a",
+      "02-06b"
+    ]
+  },
+  {
+    "id_peca": "0207",
+    "titulo": "02/07 Telefone 06",
+    "preco": 150,
+    "status": "",
+    "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
+    "dimensao": "29 x 20,5 x 0,6 cm",
+    "imagens": [
+      "02-07a",
+      "02-07b",
+      "02-07c"
+    ]
+  },
+  {
+    "id_peca": "0208",
+    "titulo": "02/08 Microfone 05",
+    "preco": 150,
+    "status": "",
+    "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
+    "dimensao": "29 x 20,5 x 0,6 cm",
+    "imagens": [
+      "02-08a",
+      "02-08b"
+    ]
+  },
+  {
+    "id_peca": "0209",
+    "titulo": "02/09 Super Telão 03",
+    "preco": 150,
+    "status": "",
+    "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
+    "dimensao": "29 x 20,5 x 0,6 cm",
+    "imagens": [
+      "02-09a",
+      "02-09b"
     ]
   },
   {
@@ -436,7 +523,7 @@
     "titulo": "06/01 Filmadora 05",
     "preco": 400,
     "status": "VENDIDAAA",
-    "tecnica": "Impressões offset em papel couché transferidas para EVA estampado.",
+    "tecnica": "Impressões offset em papel couché transferidas para EVA estampado e pregos.",
     "dimensao": "27 x 20,5 x 10 cm",
     "imagens": [
       "06-01a",
@@ -449,7 +536,7 @@
     "titulo": "06/02 Som Automotivo 01",
     "preco": 400,
     "status": "X",
-    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA.",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA, parafuso, arruela e porca.",
     "dimensao": "28 x 22 x 8 cm",
     "imagens": [
       "06-02a",
@@ -462,7 +549,7 @@
     "titulo": "06/03 TV 02",
     "preco": 500,
     "status": "X",
-    "tecnica": "Impressões offset em papel couché transferidas para EVA estampado.",
+    "tecnica": "Impressões offset em papel couché transferidas para EVA mesclado e prego.",
     "dimensao": "54 x 18 x 7 cm",
     "imagens": [
       "06-03a",
@@ -506,7 +593,7 @@
     "titulo": "06/06 Videocassete 03",
     "preco": 300,
     "status": "X",
-    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA.",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA e pregos.",
     "dimensao": "27 x 20,5 x 10 cm",
     "imagens": [
       "06-06a",
@@ -520,7 +607,7 @@
     "titulo": "06/07 Microfone 02",
     "preco": 350,
     "status": "X",
-    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA.",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA e pregos.",
     "dimensao": "33 x 44 x 12 cm",
     "imagens": [
       "06-07a",
@@ -534,7 +621,7 @@
     "titulo": "06/08 TV 03",
     "preco": 350,
     "status": "X",
-    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA.",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA e pregos.",
     "dimensao": "33 x 44 x 12 cm",
     "imagens": [
       "06-08a",
@@ -548,7 +635,7 @@
     "titulo": "06/09 Microfone 03",
     "preco": 800,
     "status": "X",
-    "tecnica": "Impressões offset em papel couché transferidas para EVA estampado.",
+    "tecnica": "Impressões offset em papel couché transferidas para EVA estampado e pregos.",
     "dimensao": "27 x 41 x 4 cm",
     "imagens": [
       "06-09a",
@@ -561,7 +648,7 @@
     "titulo": "06/10 Telefone 04",
     "preco": 800,
     "status": "X",
-    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA.",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA e pregos.",
     "dimensao": "61 x 41 x 4,5 cm",
     "imagens": [
       "06-10a",
@@ -572,11 +659,106 @@
     ]
   },
   {
+    "id_peca": "0611",
+    "titulo": "06/11 Antena Parabólica 02",
+    "preco": 1000,
+    "status": "X",
+    "tecnica": "Impressões offset em papel couché transferidas para EVA estampado e pregos.",
+    "dimensao": "27 x 28,5 x 2,5 cm",
+    "imagens": [
+      "06-11a",
+      "06-11b",
+      "06-11c"
+    ]
+  },
+  {
+    "id_peca": "0612",
+    "titulo": "06/12 Telefone 07",
+    "preco": 500,
+    "status": "X",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA e pregos.",
+    "dimensao": "27 x 20,5 x 8,5 cm",
+    "imagens": [
+      "06-12a",
+      "06-12b",
+      "06-12c",
+      "06-12d",
+      "06-12e"
+    ]
+  },
+  {
+    "id_peca": "0613",
+    "titulo": "06/13 TV 04",
+    "preco": 500,
+    "status": "X",
+    "tecnica": "Impressões offset em papel couché transferidas para EVA mesclado e pregos.",
+    "dimensao": "27 x 20,5 x 12 cm",
+    "imagens": [
+      "06-13a",
+      "06-13b",
+      "06-13c"
+    ]
+  },
+  {
+    "id_peca": "0614",
+    "titulo": "06/14 TV 05",
+    "preco": 700,
+    "status": "X",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA.",
+    "dimensao": "15 x 11 x 18 cm",
+    "imagens": [
+      "06-14a",
+      "06-14b",
+      "06-14c",
+      "06-14d"
+    ]
+  },
+  {
+    "id_peca": "0615",
+    "titulo": "06/15 Telefone 08",
+    "preco": 600,
+    "status": "X",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA e pregos.",
+    "dimensao": "27 x 20,5 x 10 cm",
+    "imagens": [
+      "06-15a",
+      "06-15b",
+      "06-15c"
+    ]
+  },
+  {
+    "id_peca": "0616",
+    "titulo": "06/16 Telefone 09",
+    "preco": 600,
+    "status": "X",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA e pregos.",
+    "dimensao": "27 x 13 x 8 cm",
+    "imagens": [
+      "06-16a",
+      "06-16b",
+      "06-16c"
+    ]
+  },
+  {
+    "id_peca": "0617",
+    "titulo": "06/17 Câmera fotográfica 07",
+    "preco": 600,
+    "status": "X",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA e tachinha.",
+    "dimensao": "23 x 20,5 x 3,5 cm",
+    "imagens": [
+      "06-17a",
+      "06-17b",
+      "06-17c",
+      "06-17d"
+    ]
+  },
+  {
     "id_peca": "0701",
     "titulo": "07/01 Microcomputador 04",
     "preco": 600,
     "status": "X",
-    "tecnica": "Impressões offset em papel couché, papel pedra e tinta carbono transferidas para pastel oleoso sobre refugo de EVA.",
+    "tecnica": "Impressões offset em papel couché, papel pedra e tinta carbono transferidas para pastel oleoso sobre refugo de EVA e prego.",
     "dimensao": "27 x 20,5 x 3 cm",
     "imagens": [
       "07-01a",
@@ -585,6 +767,89 @@
       "07-01d",
       "07-01e",
       "07-01f"
+    ]
+  },
+  {
+    "id_peca": "0703",
+    "titulo": "07/03 Stereo System Portátil 01",
+    "preco": 500,
+    "status": "X",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA e fixa fios.",
+    "dimensao": "26 x 19 x 4 cm",
+    "imagens": [
+      "07-03a",
+      "07-03b",
+      "07-03c"
+    ]
+  },
+  {
+    "id_peca": "0704",
+    "titulo": "07/04 Stereo System 05",
+    "preco": 500,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché e tinta carbono transferidas para refugo de EVA e pregos.",
+    "dimensao": "24 x 19 x 7 cm",
+    "imagens": [
+      "07-04a",
+      "07-04b"
+    ]
+  },
+  {
+    "id_peca": "0705",
+    "titulo": "07/05 TV de Bolso 01",
+    "preco": 600,
+    "status": "VENDIDAAA",
+    "tecnica": "Caneta permanente e impressões offset em papel couché transferidas para refugo de EVA e pregos.",
+    "dimensao": "25 x 22 x 5 cm",
+    "imagens": [
+      "07-05a",
+      "07-05b",
+      "07-05c"
+    ]
+  },
+  {
+    "id_peca": "0706",
+    "titulo": "07/06 Minigame 01",
+    "preco": 800,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché e tinta carbono transferidas para EVA mesclado, cigarro e pregos.",
+    "dimensao": "73 x 20,5 x 16 cm",
+    "imagens": [
+      "07-06a",
+      "07-06b",
+      "07-06c",
+      "07-06d"
+    ]
+  },
+  {
+    "id_peca": "0707",
+    "titulo": "07/07 TV 06",
+    "preco": 600,
+    "status": "X",
+    "tecnica": "Impressões offset em papel couché transferidas para pastel oleoso sobre refugo de EVA e pregos.",
+    "dimensao": "23 x 20,5 x 14 cm",
+    "imagens": [
+      "07-07a",
+      "07-07b",
+      "07-07c"
+    ]
+  },
+  {
+    "id_peca": "0708",
+    "titulo": "07/08 Telefone 10",
+    "preco": 1200,
+    "status": "X",
+    "tecnica": "Impressão offset em papel couché e tinta carbono transferidas para refugo de EVA, suporte angular, parafusos e porcas.",
+    "dimensao": "27 x 16 x 16 cm",
+    "imagens": [
+      "07-08a",
+      "07-08b",
+      "07-08c",
+      "07-08d",
+      "07-08e",
+      "07-08f",
+      "07-08g",
+      "07-08h"
     ]
   },
   {
@@ -605,7 +870,7 @@
     "id_peca": "0802",
     "titulo": "08/02 Microcomputador 05",
     "preco": 500,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Tinta carbono e impressões offset em papel couché transferidas para refugo de EVA.",
     "dimensao": "27 x 20,5 x 0,5 cm",
     "imagens": [
@@ -647,7 +912,7 @@
     "preco": 800,
     "status": "X",
     "tecnica": "Impressão offset em papel couché, tintas carbono e para carimbo transferidas para refugo de EVA.",
-    "dimensao": "27 x 20,5 x 0,3 cm",
+    "dimensao": "27 x 20,5 x 0,1 cm",
     "imagens": [
       "08-05a",
       "08-05b",
@@ -674,7 +939,7 @@
     "preco": 500,
     "status": "VENDIDAAA",
     "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA.",
-    "dimensao": "27 x 20,5 x 0,3 cm",
+    "dimensao": "27 x 20,5 x 0,2 cm",
     "imagens": [
       "08-07a",
       "08-07b",
@@ -693,6 +958,102 @@
       "08-08b",
       "08-08c",
       "08-08d"
+    ]
+  },
+  {
+    "id_peca": "0809",
+    "titulo": "08/09 Microfone 06",
+    "preco": 1861,
+    "status": "X",
+    "tecnica": "Caneta permanente, impressões digital e offset em papéis sulfite e couché transferidas para refugo de EVA.",
+    "dimensao": "27 x 20,5 x 0,3 cm",
+    "imagens": [
+      "08-09a",
+      "08-09b",
+      "08-09c",
+      "08-09d"
+    ]
+  },
+  {
+    "id_peca": "0810",
+    "titulo": "08/10 Stereo System 06",
+    "preco": 700,
+    "status": "X",
+    "tecnica": "Pastel oleoso sobre impressões offset em papel couché e tinta carbono transferidas para refugo de EVA.",
+    "dimensao": "27 x 20,5 x 0,2 cm",
+    "imagens": [
+      "08-10a",
+      "08-10b",
+      "08-10c",
+      "08-10d"
+    ]
+  },
+  {
+    "id_peca": "0811",
+    "titulo": "08/11 Câmera fotográfica 08",
+    "preco": 800,
+    "status": "X",
+    "tecnica": "Pastel oleoso sobre impressão offset em papéis de presente e couché, tintas acrílica e carbono transferidas para adesivos sobre refugo de EVA.",
+    "dimensao": "27 x 20,5 x 0,5 cm",
+    "imagens": [
+      "08-11a",
+      "08-11b",
+      "08-11c",
+      "08-11d"
+    ]
+  },
+  {
+    "id_peca": "0813",
+    "titulo": "08/13 TV 07",
+    "preco": 500,
+    "status": "X",
+    "tecnica": "Impressão offset em papéis de presente, couché e tinta acrílica transferidas para refugo de EVA.",
+    "dimensao": "27 x 20,5 x 0,5 cm",
+    "imagens": [
+      "08-13a",
+      "08-13b",
+      "08-13c"
+    ]
+  },
+  {
+    "id_peca": "0814",
+    "titulo": "08/14 Violino 01",
+    "preco": 500,
+    "status": "X",
+    "tecnica": "Impressões offset em papel couché transferidas para EVA estampado.",
+    "dimensao": "27 x 20,5 x 0,2 cm",
+    "imagens": [
+      "08-14a",
+      "08-14b",
+      "08-14c"
+    ]
+  },
+  {
+    "id_peca": "0815",
+    "titulo": "08/15 TV 08",
+    "preco": 500,
+    "status": "X",
+    "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA.",
+    "dimensao": "27 x 20,5 x 0,5 cm",
+    "imagens": [
+      "08-15a",
+      "08-15b",
+      "08-15c"
+    ]
+  },
+  {
+    "id_peca": "0824",
+    "titulo": "08/24 Filmadora 08",
+    "preco": 2400,
+    "status": "VENDIDAAA",
+    "tecnica": "Impressão jato de tinta em sulfite, impressões offset em papel couché e tinta acrílica transferidas para tatame de EVA.",
+    "dimensao": "27 x 20,5 x 1 cm",
+    "imagens": [
+      "08-24a",
+      "08-24b",
+      "08-24c",
+      "08-24d",
+      "08-24e"
     ]
   }
 ]
