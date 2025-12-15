@@ -28,7 +28,7 @@
   {
     "id_peca": "0203",
     "titulo": "02/03 Videocassete",
-    "preco": 150,
+    "preco": 300,
     "status": "X",
     "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
     "dimensao": "29 x 41 x 0,6 cm",
@@ -193,7 +193,7 @@
     "id_peca": "0307",
     "titulo": "03/07 Super Telão 01",
     "preco": 150,
-    "status": "VENDIDAAA",
+    "status": "ACERVO",
     "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica, suporte angular e parafuso.",
     "dimensao": "10 x 7,5 x 5,5 cm",
     "imagens": [
@@ -282,7 +282,7 @@
     "id_peca": "0401",
     "titulo": "04/01 TV 01",
     "preco": 1000,
-    "status": "VENDIDAAA",
+    "status": "ACERVO",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e prego.",
     "dimensao": "60 x 20,5 x 4 cm",
     "imagens": [
@@ -294,7 +294,7 @@
     "id_peca": "0402",
     "titulo": "04/02 Filmadora 02",
     "preco": 250,
-    "status": "VENDIDAAA",
+    "status": "ACERVO",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA",
     "dimensao": "27 x 20,5 x 6 cm",
     "imagens": [
@@ -331,7 +331,7 @@
     "id_peca": "0405",
     "titulo": "04/05 Microcomputador 03",
     "preco": 350,
-    "status": "VENDIDAAA",
+    "status": "ACERVO",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, tinta acrílica, aneis de borracha nitrílica e ganchos.",
     "dimensao": "19 x 37 x 12 cm",
     "imagens": [
@@ -359,7 +359,7 @@
     "id_peca": "0407",
     "titulo": "04/07 Videocassete 01",
     "preco": 250,
-    "status": "VENDIDAAA",
+    "status": "ACERVO",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, braçadeira e parafusos.",
     "dimensao": "26 x 19 x 5 cm",
     "imagens": [
@@ -437,7 +437,7 @@
     "id_peca": "0413",
     "titulo": "04/13 Microfone 01",
     "preco": 500,
-    "status": "VENDIDAAA",
+    "status": "ACERVO",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, suportes angulares e parafusos.",
     "dimensao": "27 x 15 x 7 cm",
     "imagens": [
@@ -562,7 +562,7 @@
     "id_peca": "0604",
     "titulo": "06/04 Stereo System 03",
     "preco": 2000,
-    "status": "VENDIDAAA",
+    "status": "ACERVO",
     "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA, parafusos, arruelas e porcas.",
     "dimensao": "14 x 18 x 14 cm",
     "imagens": [
@@ -838,7 +838,7 @@
     "id_peca": "0708",
     "titulo": "07/08 Telefone 10",
     "preco": 1200,
-    "status": "X",
+    "status": "ACERVO",
     "tecnica": "Impressão offset em papel couché e tinta carbono transferidas para refugo de EVA, suporte angular, parafusos e porcas.",
     "dimensao": "27 x 16 x 16 cm",
     "imagens": [
@@ -856,7 +856,7 @@
     "id_peca": "0801",
     "titulo": "08/01 Conjunto de som e imagem 02",
     "preco": 1800,
-    "status": "VENDIDAAA",
+    "status": "ACERVO",
     "tecnica": "Impressão offset em papel couché transferida para adesivo sobre EVA estampado.",
     "dimensao": "27 x 20,5 x 0,2 cm",
     "imagens": [
@@ -869,8 +869,8 @@
   {
     "id_peca": "0802",
     "titulo": "08/02 Microcomputador 05",
-    "preco": 500,
-    "status": "VENDIDAAA",
+    "preco": 700,
+    "status": "ACERVO",
     "tecnica": "Tinta carbono e impressões offset em papel couché transferidas para refugo de EVA.",
     "dimensao": "27 x 20,5 x 0,5 cm",
     "imagens": [
@@ -950,7 +950,7 @@
     "id_peca": "0808",
     "titulo": "08/08 Filmadora 07",
     "preco": 800,
-    "status": "VENDIDAAA",
+    "status": "ACERVO",
     "tecnica": "Impressão jato de tinta em sulfite e impressões offset em papel couché transferidas para tatame de EVA.",
     "dimensao": "27 x 20,5 x 1 cm",
     "imagens": [
@@ -1044,8 +1044,8 @@
   {
     "id_peca": "0824",
     "titulo": "08/24 Filmadora 08",
-    "preco": 2400,
-    "status": "VENDIDAAA",
+    "preco": 6000,
+    "status": "ACERVO",
     "tecnica": "Impressão jato de tinta em sulfite, impressões offset em papel couché e tinta acrílica transferidas para tatame de EVA.",
     "dimensao": "27 x 20,5 x 1 cm",
     "imagens": [
