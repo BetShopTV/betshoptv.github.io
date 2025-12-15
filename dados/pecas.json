@@ -67,7 +67,7 @@
     "id_peca": "0206",
     "titulo": "02/06 Câmera fotográfica 06",
     "preco": 150,
-    "status": "",
+    "status": "X",
     "tecnica": "Caneta esferográfica e impressão offset em papel couché transferida para EVA e pregos.",
     "dimensao": "29 x 20,5 x 0,6 cm",
     "imagens": [
@@ -79,7 +79,7 @@
     "id_peca": "0207",
     "titulo": "02/07 Telefone 06",
     "preco": 150,
-    "status": "",
+    "status": "X",
     "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
     "dimensao": "29 x 20,5 x 0,6 cm",
     "imagens": [
@@ -92,7 +92,7 @@
     "id_peca": "0208",
     "titulo": "02/08 Microfone 05",
     "preco": 150,
-    "status": "",
+    "status": "X",
     "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
     "dimensao": "29 x 20,5 x 0,6 cm",
     "imagens": [
@@ -104,7 +104,7 @@
     "id_peca": "0209",
     "titulo": "02/09 Super Telão 03",
     "preco": 150,
-    "status": "",
+    "status": "X",
     "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
     "dimensao": "29 x 20,5 x 0,6 cm",
     "imagens": [
@@ -964,7 +964,7 @@
     "id_peca": "0809",
     "titulo": "08/09 Microfone 06",
     "preco": 1861,
-    "status": "X",
+    "status": "ACERVO",
     "tecnica": "Caneta permanente, impressões digital e offset em papéis sulfite e couché transferidas para refugo de EVA.",
     "dimensao": "27 x 20,5 x 0,3 cm",
     "imagens": [
