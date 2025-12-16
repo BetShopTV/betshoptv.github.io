@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" href="https://betshoptv.com/FAVICON.png" type="image/x-icon">
+<title>BetShopTV - Seleção de Prêmios</title>
+
+<style>
+  /* --- Tokens & Reset --- */
+  :root{
+    --red:#ff0000; --ink:#2b2424; --beige:#bebab0; --white:#ffffff;
+    --bd-thin:1px; --bd-thick:2px;
+    --ff-cta:"Roboto Condensed", system-ui, -apple-system, sans-serif;
+    --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, sans-serif;
+    --fs-sm:clamp(.78rem,1vw,.9rem);
+    --app-max-width:1200px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);-webkit-font-smoothing:antialiased} 
+
+  /* --- Header Limpo --- */
+  header{position:sticky;top:0;z-index:100;background:var(--red);color:#fff; }
+  .hdr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;align-items:center;justify-content:center;padding:10px 16px}
+  .logo img{ display:block; height: clamp(50px, 5vw, 80px); width: auto; }
+  .page-title { font-family: var(--ff-cta); font-weight: 700; text-transform: uppercase; margin-left: 15px; font-size: 1.2rem; letter-spacing: 1px; }
+
+  /* --- Layout Principal --- */
+  main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 6px;min-height:80vh}
+
+  /* --- Barra de Filtros (Simplificada) --- */
+  .filters-bar{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; padding:10px 0 20px 0; border-bottom: 1px solid var(--ink); margin-bottom: 20px; }
+  .filters-group{ display: inline-flex; flex-wrap: wrap; gap: 6px; align-items: center;}
+  .filters-label{ font:700 var(--fs-sm)/1 var(--ff-cta); color:var(--ink); margin-right: 4px; text-transform: uppercase;}
+  
+  .chip, .select { appearance:none; border:1px solid var(--ink); background:var(--beige); color:var(--ink); padding:.26rem .50rem; min-height:30px; font:700 calc(var(--fs-sm) * .90)/1 var(--ff-cta); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; border-radius:0; }
+  .chip.is-active { background:var(--ink); color:var(--beige); border-color:var(--ink); }
+  .select:focus { outline:none!important; }
+
+  /* --- Galeria (Masonry) --- */
+  .galeria-container { display:flex; gap:8px; align-items:flex-start; }
+  .gal-col { flex:1; display:flex; flex-direction:column; gap:8px; }
+  
+  .gal-item { position: relative; width:100%; display:block; cursor: pointer; transition: transform 0.1s; }
+  .gal-item:hover img { filter: brightness(1.1); }
+
+  .gal-item img {
+    display:block; width:100%; height:auto; object-fit:cover;
+    border: 1px solid var(--ink);
+    transition: all 0.2s ease;
+  }
+
+/* --- Estados de Seleção --- */
+  
+  /* 1. Imagem: PB + Opacidade 50% */
+  .gal-item.selected img {
+    filter: grayscale(100%);
+    opacity: 0.94; /* Adiciona a transparência */
+    border: 1px solid var(--ink);
+    box-sizing: border-box;
+  }
+
+  /* 2. Badge Numérico: Centralizado */
+  .selection-badge {
+    position: absolute;
+    
+    /* Centralização Perfeita */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* Tamanho solicitado */
+    width: 24%;
+    height: 24%;
+    
+    /* Visual */
+    background-color: var(--red);
+    color: white;
+    font-family: var(--ff-cta);
+    
+    /* Flex para centralizar o número dentro do badge */
+    display: none; 
+    align-items: center; 
+    justify-content: center;
+    
+    font-weight: bold; 
+    font-size: clamp(24px, 2.4vw, 37px); /* Ajustei fonte para caber no 18% */
+    z-index: 20; 
+    pointer-events: none;
+  }
+
+  /* Mostra o badge apenas quando selecionado */
+  .gal-item.selected .selection-badge { 
+    display: flex; 
+  }
+/* --- 3. Título Fixo na Base (Atualizado para Flex) --- */
+.gal-titulo {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    gap: 4px; /* Espaço mínimo vital */
+    width: 100%;
+    background-color: var(--beige); 
+    color: var(--ink);
+    padding: 4px 6px; /* Padding reduzido para ganhar espaço */
+    margin-top: -1px;
+    box-sizing: border-box;
+    border: 1px solid #2b2424;
+  }
+  
+  /* Texto do título */
+  .gal-titulo-text {
+    /* Fonte levemente ajustada para caber */
+    font: 700 calc(var(--fs-sm) * 0.9)/1.1 var(--ff-cta);
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; /* Três pontinhos (...) se não couber */
+    
+    /* FLEX MAGIC: */
+    flex: 1;      /* Ocupa todo o espaço disponível */
+    min-width: 0; /* OBRIGATÓRIO para ellipsis funcionar em flexbox */
+    text-align: left;
+  }
+
+  /* Botão Espiar [ + ] */
+  .btn-spy {
+    background: #bebab0; 
+    border: 1px solid var(--ink); 
+    color: var(--ink);
+    font-family: var(--ff-cta);
+    font-weight: 300;
+    font-size: 1.3rem;
+    padding: 2px 18px;
+    cursor: pointer;
+    line-height: 1;
+    transition: all 0.2s;
+    /* FLEX MAGIC: */
+    flex-shrink: 0; /* Garante que o botão NUNCA seja esmagado */
+  }
+  }
+  .btn-spy:hover {
+    background: var(--white);
+    color: var(--ink);
+  }
+
+  /* --- MODAL DE DETALHES (Espiar) --- */
+ /* --- MODAL DE DETALHES (Visualizador Imersivo) --- */
+/* --- MODAL DE DETALHES (Visualizador Imersivo) --- */
+  .details-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9); /* Fundo bem escuro */
+    z-index: 300; display: none; justify-content: center; align-items: center;
+    opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(5px);
+  }
+  .details-overlay.open { display: flex; opacity: 1; }
+
+  .details-card {
+    background: var(--white);
+    /* Tamanhos mantidos do seu código */
+    width: 95%; max-width: 800px;
+    height: 90vh; max-height: 900px;
+    border: 1px solid var(--ink);
+    position: relative;
+    display: flex; flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  }
+
+  /* Container da Imagem (Scroll Nativo Habilitado) */
+  .details-img-container {
+    background: #f0f0f0; /* Fundo cinza claro mantido */
+    flex: 1;
+    position: relative;
+    
+    /* MUDANÇA: Habilita Scroll Nativo Horizontal */
+    display: flex;
+    overflow-x: auto;      /* Permite rolar */
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory; /* Obriga a parar na imagem certa */
+    scroll-behavior: smooth;
+    
+    /* Remove barra de rolagem visualmente */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .details-img-container::-webkit-scrollbar { display: none; }
+
+  /* As Imagens */
+  .details-img {
+    flex: 0 0 100%; /* Ocupa 100% da largura do container */
+    width: 100%; height: 100%;
+    object-fit: contain; /* Garante imagem inteira sem cortes */
+    display: block;
+    scroll-snap-align: center; /* Alinha ao centro ao soltar */
+  }
+
+  /* Área dos Quadrados (Dots) */
+  .car-dots-area {
+    background: var(--white);
+    padding: 12px 0 8px; /* Espaço mantido */
+    display: flex; justify-content: center; gap: 8px;
+    border-bottom: 1px solid #eee;
+    flex-shrink: 0;
+  }
+  
+  /* Quadrados (Estilo mantido) */
+  .dot {
+    width: 10px; height: 10px;
+    background: #ccc;
+    border-radius: 0; /* QUADRADO */
+    transition: background 0.2s;
+  }
+  .dot.active { background: var(--red); }
+
+  /* Informações + Botão Selecionar */
+  .details-info { 
+    padding: 15px 20px; 
+    background: var(--white);
+    flex-shrink: 0; /* Não encolhe */
+  }
+
+  /* Layout Flex para alinhar Texto (Esq) e Botão (Dir) */
+  .details-header-row {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start; 
+    gap: 15px;
+  }
+  
+  .details-texts { flex: 1; text-align: left; }
+
+  /* Tipografia (Mantida exata) */
+  .details-title { 
+    font-family: var(--ff-cta); font-size: 1.2rem; font-weight: 700; 
+    text-transform: uppercase; color: var(--ink); margin-bottom: 4px; line-height: 1.1;
+  }
+  .details-tech { 
+    font-family: var(--ff-body); font-size: 0.95rem; font-weight: 600; 
+    color: #555; margin-bottom: 4px; 
+  }
+  .details-dim { 
+    font-family: var(--ff-body); font-size: 0.9rem; color: #777; 
+  }
+
+  /* Novo Botão SELECIONAR dentro do modal */
+  .btn-modal-select {
+    background: var(--white);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    padding: 10px 16px;
+    font-family: var(--ff-cta); font-weight: 700; text-transform: uppercase;
+    font-size: 0.9rem;
+    cursor: pointer; white-space: nowrap; transition: all 0.2s;
+    min-width: 120px;
+  }
+  .btn-modal-select:hover { background: var(--ink); color: var(--white); }
+  
+  /* Estado Selecionado (Vermelho) */
+  .btn-modal-select.is-selected {
+    background: var(--red); color: var(--white); border-color: var(--red);
+  }
+
+  /* Botão Fechar (Estilo mantido exato) */
+  .btn-close-details {
+    position: absolute; top: -15px; right: -15px;
+    background: #f0f0f0; color: var(--red);
+    border: 4px solid rgba(0, 0, 0, 0.9);
+    width: 37px; height: 37px; border-radius: 50%;
+    font-size: 1rem; font-weight: bold;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 20;
+  }
+  .btn-close-details:hover { transform: scale(1.1); }
+
+  /* --- Footer --- */
+  footer { position:sticky; bottom:0; background:var(--ink); color:#fff; padding: 12px; text-align: center; font-family: var(--ff-cta); font-weight: 700; z-index: 100; display:flex; justify-content:center; gap:15px; align-items:center; }
+  .pill-counter { ; }
+  .btn-submit { background:var(--beige); color:var(--ink); border: 2px solid #2b2424; padding:10px 20px; font-weight:700; cursor:pointer; font-size:0.88em; letter-spacing:1px; }
+  .btn-submit:disabled { opacity:0; cursor:not-allowed; background:#555; }
+
+  /* --- Formulário Checkout --- */
+  .checkout-container { max-width:500px; margin:20px auto; text-align:left; background:var(--white); border:2px solid var(--ink); padding:20px; }
+  .checkout-container h2 { color:var(--red); text-transform:uppercase; margin-top:0; }
+  .form-group { margin-bottom:15px; }
+  .form-group label { display:block; font-weight:700; margin-bottom:5px; font-family:var(--ff-cta); }
+  .form-group input { width:100%; padding:10px; border:1px solid var(--ink); font-family:var(--ff-body); border-radius:0; }
+  .btn-back { background:transparent; border:1px solid var(--ink); padding:8px 16px; cursor:pointer; margin-right:10px; font-weight:700; }
+
+
+/* --- Painel de Revisão (Drawer) --- */
+.review-panel {
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  background: var(--beige); border-top: 2px solid var(--ink);
+  z-index: 150; /* Acima do footer */
+  transform: translateY(110%); /* Escondido por padrão */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex; flex-direction: column;
+  max-height: 66vh; /* Ocupa até 80% da tela */
+} 
+
+.review-panel.open { transform: translateY(0); }
+
+.review-header {
+  padding: 15px; background: var(--ink); color: var(--white);
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--ff-cta); font-weight: 700; text-transform: uppercase;
+}
+
+.review-body {
+  flex: 1; overflow-y: auto; padding: 15px;
+  background: #bebab0;
+}
+
+/* Item da Lista de Revisão */
+/* --- Painel de Revisão (Minimalista) --- */
+.review-panel {
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  background: var(--beige); 
+  border-top: 2px solid var(--ink); /* Topo vermelho sutil */
+  z-index: 150;
+  transform: translateY(110%);
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Animação elegante */
+  display: flex; flex-direction: column;
+  max-height: 66vh;
+}
+
+.review-panel.open { transform: translateY(0); }
+
+/* Cabeçalho Limpo */
+.review-header {
+  padding: 15px; 
+  background: var(--ink); 
+  color: var(--beige);
+  border-bottom: 1px solid var(--ink);
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--ff-cta); font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Corpo da Lista */
+.review-body {
+  flex: 1; overflow-y: auto; 
+  padding: 0px 10vh; /* Sem padding para as bordas encostarem */
+  background: var(--beige);
+}
+
+/* Item da Lista (Design 'Flat') */
+.review-item {
+  display: flex; align-items: center; gap: 15px;
+  background: var(--beige); 
+  border-bottom: 1px solid #2b2424; /* Divisória muito sutil */
+  padding: 10px 20px;
+}
+
+/* Numeração (1, 2, 3...) */
+.review-rank { 
+  font-family: var(--ff-cta); 
+  font-weight: 700; 
+  font-size: 1.1rem; 
+  color: var(--red); 
+  width: 25px; 
+  text-align: center;
+}
+
+/* Imagem (Sem Crop) */
+.review-thumb { 
+  height: 80px; /* Altura fixa para alinhar a lista */
+  width: auto;  /* Largura adapta-se à proporção */
+  max-width: 138px; /* Limite para não estourar em horizontais */
+  object-fit: contain; /* O SEGREDO: Mostra a imagem inteira sem cortar */
+  background-color: #f9f9f9; /* Fundo discreto se a imagem for transparente/estreita */
+  border: 1px solid #2b2424;
+}
+
+/* Informações */
+.review-info { flex: 1; display: flex; flex-direction: column; justify-content: center;}
+.review-title { 
+  font-family: var(--ff-body); 
+  font-size: clamp(0.73em, 1.3vw, 1em);
+  font-weight: 500;
+  color: var(--ink); 
+  line-height: 1.2;
+  text-align: left;
+}
+
+/* Ações (Setas e Lixo) */
+.review-actions { display: flex; gap: 5px; }
+
+.ctrl-btn {
+  background: transparent; 
+  border: 1px solid var(--ink); color: var(--ink);
+  width: 24px; height: 32px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; transition: all 0.2s;
+}
+
+/* Botão de Remover (Destaque sutil no hover) */
+.ctrl-btn.remove { 
+  border: 1px solid var(--red); 
+  color: var(--red); 
+}
+
+/* Botão Fechar Painel */
+.btn-close-panel { 
+  background: transparent; border: 0; 
+  color: var(--white); font-size: 1rem; cursor: pointer; 
+  line-height: 1; padding: 0 10px;
+}
+
+
+/* --- Modal de Envio Elegante --- */
+.envio-modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(43, 36, 36, 0.6); /* Cor Ink com transparência */
+  backdrop-filter: blur(2px); /* Desfoque sutil no fundo */
+  display: flex; justify-content: center; align-items: center;
+  z-index: 200; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.envio-modal-overlay.visible { opacity: 1; pointer-events: all; }
+
+.envio-card {
+  background: var(--white);
+  border: 1px solid var(--ink);
+  padding: 30px;
+  width: 90%; max-width: 400px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  transform: translateY(20px); transition: transform 0.3s ease;
+}
+.envio-modal-overlay.visible .envio-card { transform: translateY(0); }
+
+.envio-title { 
+  font-family: var(--ff-cta); font-weight: 700; text-transform: uppercase; 
+  color: var(--red); margin-bottom: 10px; font-size: 1.2rem; 
+}
+.envio-desc { font-size: 0.9rem; color: #555; margin-bottom: 20px; }
+
+.envio-input {
+  width: 100%; padding: 12px; 
+  border: 1px solid var(--ink); 
+  font-family: var(--ff-body); font-size: 1rem;
+  margin-bottom: 20px; outline: none;
+}
+.envio-input:focus { border-color: var(--red); }
+
+.btn-confirm {
+  width: 100%; background: var(--ink); color: white;
+  padding: 12px; font-weight: 700; border: 0; cursor: pointer;
+  font-family: var(--ff-cta); letter-spacing: 1px;
+}
+.btn-confirm:hover { background: var(--red); }
+.btn-cancel {
+  background: transparent; border: 0; text-decoration: underline;
+  color: #777; font-size: 0.8rem; margin-top: 15px; cursor: pointer;
+}
+
+
+  @media (max-width:768px){ .filters-bar { gap: 8px; } 
+      .review-body {
+  padding: 0px 1.8vh; /* Sem padding para as bordas encostarem */
+      
+  }
+</style>
+
+
+
+</head>
+<body>
+
+  <header>
+    <div class="hdr-inner">
+      <a class="logo" href="#">
+        <img src="https://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" />
+      </a>
+      <span class="page-title">SELEÇÃO DE PRÊMIOS</span>
+    </div>
+  </header>
+
+  <main id="app">
+    <div style="padding:40px; text-align:center;">Carregando catálogo de prêmios...</div>
+  </main>
+
+  <footer id="main-footer">
+      <div id="review-panel" class="review-panel">
+    <div class="review-header">
+      <span>Peças Selecionadas</span>
+      <button class="btn-close-panel" onclick="toggleReviewPanel()">✕</button>
+    </div>
+    
+    <div id="review-list" class="review-body">
+      </div>
+    
+    <div style="padding: 15px; background: var(--beige); text-align: center;">
+        <button class="btn-submit" onclick="showCheckoutForm()">FINALIZAR ENVIO</button>
+    </div>
+  </div>
+    <span id="counter" class="pill-counter"></span>
+    <button id="btn-finish" class="btn-submit" disabled></button>
+  </footer>
+
+  <input type="hidden" id="fNome"><input type="hidden" id="fEmail"><input type="hidden" id="fTelefone">
+  <input type="hidden" id="fFav"> <input type="hidden" id="fTotal" value="0.00"> ```
+
+<script>
+/* ================= CONFIG ================= */
+const JSON_URL = 'https://betshoptv.com/dados/pecas.json';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzel7_KO8q-hMGwWcTPd-112Z3NA2rDFiAHYgUIIc7lmZwkQITA36JHJET_xnerhAWZ/exec';
+
+/* ================= STATE ================= */
+let todasPecas = []; // Lista bruta
+let pecasExibidas = []; // Lista filtrada/ordenada
+let selecionados = []; // Array ordenado de IDs: [102, 505, 301...]
+
+let filtros = {
+  grupo: null, // null = todos
+  sort: 'group' // group | id
+};
+
+/* ================= INIT ================= */
+async function init(){
+  try {
+    const res = await fetch(JSON_URL);
+    const data = await res.json();
+    
+    // FILTRO MESTRE: Apenas peças DISPONÍVEIS (nem Vendida, nem Acervo)
+    // Para prêmios, só mostramos o que pode ser levado.
+    todasPecas = data.filter(p => {
+       const st = String(p.status || '').trim().toLowerCase();
+       // Se tiver "vendid" ou "acervo", remove da lista.
+       return !st.includes('vendid') && !st.includes('acervo');
+    });
+
+    renderApp();
+  } catch(e) {
+    document.getElementById('app').innerHTML = '<h3 style="color:red;text-align:center">Erro ao carregar dados.</h3>';
+    console.error(e);
+  }
+}
+
+/* ================= RENDERIZADORES ================= */
+function renderApp(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  
+  // 1. Filtros
+  app.appendChild(buildFilters());
+
+  // 2. Galeria
+  const galeria = buildGaleria();
+  app.appendChild(galeria);
+}
+
+function buildFilters(){
+  const bar = document.createElement('div');
+  bar.className = 'filters-bar';
+
+  // Grupos (Extraídos apenas das peças disponíveis)
+  const gWrap = document.createElement('div');
+  gWrap.className = 'filters-group';
+  gWrap.innerHTML = '<span class="filters-label">GRUPOS</span>';
+  
+  const grupos = [...new Set(todasPecas.map(p => String(p.id_peca).slice(0,2)))].sort();
+  
+  // Botão "Todos"
+  const btnAll = document.createElement('button');
+  btnAll.className = 'chip';
+  btnAll.textContent = 'TODOS';
+  if(!filtros.grupo) btnAll.classList.add('is-active');
+  btnAll.onclick = () => { filtros.grupo = null; renderApp(); };
+  gWrap.appendChild(btnAll);
+
+  grupos.forEach(g => {
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.textContent = g;
+    if(filtros.grupo === g) b.classList.add('is-active');
+    b.onclick = () => { filtros.grupo = (filtros.grupo === g) ? null : g; renderApp(); };
+    gWrap.appendChild(b);
+  });
+  bar.appendChild(gWrap);
+
+  // Ordenação Simples
+  const sWrap = document.createElement('div');
+  sWrap.className = 'filters-group';
+  sWrap.innerHTML = '<span class="filters-label">ORDEM</span>';
+  const sel = document.createElement('select');
+  sel.className = 'select';
+  sel.innerHTML = `<option value="group">Por Grupo</option><option value="id">Por Código</option>`;
+  sel.value = filtros.sort;
+  sel.onchange = (e) => { filtros.sort = e.target.value; renderApp(); };
+  sWrap.appendChild(sel);
+  bar.appendChild(sWrap);
+
+  return bar;
+}
+
+function buildGaleria(){
+  // 1. Filtrar lista atual
+  let lista = filtros.grupo 
+    ? todasPecas.filter(p => String(p.id_peca).startsWith(filtros.grupo))
+    : [...todasPecas];
+
+  // 2. Ordenar
+  lista.sort((a,b) => {
+      const idA = parseInt(a.id_peca);
+      const idB = parseInt(b.id_peca);
+      return idA - idB; 
+  });
+
+  // 3. Container Masonry (RESPONSIVO)
+  const container = document.createElement('div');
+  container.className = 'galeria-container';
+  
+  // --- LÓGICA SIMPLES DE COLUNAS ---
+  // Se a tela for menor que 768px (Tablet/Mobile), usa 2 colunas.
+  // Se for menor que 400px (Celular pequeno), usa 1 coluna (opcional, mas recomendado para não esmagar).
+  // Caso contrário, usa 3 colunas.
+  const w = window.innerWidth;
+  let numColunas = 3; 
+  if (w < 900) numColunas = 2;
+  // Se quiser forçar 2 colunas mesmo em telas muito pequenas, apague a linha abaixo:
+  if (w < 450) numColunas = 1; 
+  
+  const cols = Array.from({length: numColunas}, () => {
+    const d = document.createElement('div');
+    d.className = 'gal-col';
+    return d;
+  });
+  cols.forEach(c => container.appendChild(c));
+
+  // 4. Distribuição
+  lista.forEach((p, idx) => {
+    const item = document.createElement('div');
+    item.className = 'gal-item';
+    
+    // a) Checa status
+    const status = String(p.status||'');
+    if (/vendid/i.test(status)) item.classList.add('sold');
+    if (/acervo/i.test(status)) item.classList.add('acervo');
+
+    // b) Checa seleção
+    const selIdx = selecionados.indexOf(p.id_peca);
+    if(selIdx !== -1) item.classList.add('selected');
+    
+    // c) Define ID e Clique
+    item.dataset.id = p.id_peca;
+    item.onclick = () => toggleSelection(p.id_peca);
+
+    // --- ELEMENTOS ---
+    const img = new Image();
+    img.src = `https://betshoptv.com/img/tmb/${p.imagens[0]}.avif`;
+    img.onerror = function(){ this.src = this.src.replace('.avif','.jpg'); };
+    item.appendChild(img);
+
+    const badge = document.createElement('div');
+    badge.className = 'selection-badge';
+    badge.textContent = selIdx + 1; 
+    item.appendChild(badge);
+
+    const tit = document.createElement('div');
+    tit.className = 'gal-titulo';
+    tit.innerHTML = `
+        <span class="gal-titulo-text">${p.titulo || `Peça ${p.id_peca}`}</span>
+        <button class="btn-spy" onclick="event.stopPropagation(); openDetails('${p.id_peca}')"> + </button>
+    `;
+    item.appendChild(tit);
+
+    // Adiciona na coluna certa
+    cols[idx % numColunas].appendChild(item);
+  });
+
+  return container;
+}
+
+/* ================= LÓGICA DE SELEÇÃO ================= */
+function toggleSelection(id){
+  const idx = selecionados.indexOf(id);
+  if(idx === -1) {
+    selecionados.push(id);
+  } else {
+    selecionados.splice(idx, 1);
+  }
+  // Re-renderiza para atualizar números (1 virar 2, etc) e bordas
+  renderApp(); 
+  updateFooter();
+}
+
+function updateFooter(){
+  const counter = document.getElementById('counter');
+  const btn = document.getElementById('btn-finish');
+  
+  if(selecionados.length > 0){
+    counter.style.display = 'block';
+    btn.disabled = false;
+    // MUDANÇA: Agora abre o painel de edição
+    btn.textContent = `VER / EDITAR LISTA`; 
+    btn.onclick = toggleReviewPanel; // Muda a ação do botão
+  } else {
+    counter.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'SELECIONE SEUS PRÊMIOS';
+    btn.onclick = null;
+  }
+}
+
+/* ================= CHECKOUT / ENVIO ================= */
+// Bind do botão Enviar
+document.getElementById('btn-finish').onclick = () => {
+    showCheckoutForm();
+};
+
+/* ================= NOVO FLUXO DE ENVIO ================= */
+
+// 1. Em vez de mudar a página, abrimos o modal discreto
+function showCheckoutForm(){
+    // Atualiza a quantidade no texto
+    document.getElementById('qtd-confirma').textContent = selecionados.length;
+    
+    // Abre o modal
+    const modal = document.getElementById('modal-envio');
+    modal.classList.add('visible');
+    
+    // Foca no input
+    setTimeout(() => document.getElementById('final-nome').focus(), 100);
+}
+
+// 2. Fechar o modal
+function closeEnvioModal(){
+    document.getElementById('modal-envio').classList.remove('visible');
+}
+
+// 3. Enviar de fato (Simples e Direto)
+async function submitData(){
+    const nomeInput = document.getElementById('final-nome');
+    const nome = nomeInput.value.trim();
+    const btn = document.getElementById('btn-submit-final');
+    
+    if(!nome) {
+        alert('Por favor, digite seu nome.');
+        nomeInput.focus();
+        return;
+    }
+
+    // UI de Carregamento
+    const oldText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'ENVIANDO...';
+    btn.style.background = '#ccc';
+
+    // Prepara a lista JSON (Ordem, ID, Título)
+    const listaEstruturada = selecionados.map((id, index) => {
+        const p = todasPecas.find(item => item.id_peca === id);
+        return {
+            ordem: index + 1,
+            titulo: p ? `${p.id_peca} - ${p.titulo}` : id // Envia ID e Título juntos para facilitar leitura
+        };
+    });
+
+    const fd = new FormData();
+    fd.append('nome', nome);
+    fd.append('favoritas', JSON.stringify(listaEstruturada)); // Manda o JSON para o script ler
+
+    try {
+        await fetch(GAS_URL, { method:'POST', body:fd });
+        
+        // Sucesso: Feedback visual e reload
+        btn.textContent = 'SUCESSO!';
+        btn.style.background = 'var(--red)';
+        setTimeout(() => {
+            alert('Sua seleção foi recebida com sucesso!');
+            location.reload(); 
+        }, 500);
+        
+    } catch(err) {
+        console.error(err);
+        alert('Erro ao enviar. Tente novamente.');
+        btn.disabled = false;
+        btn.textContent = oldText;
+        btn.style.background = 'var(--ink)';
+    }
+}
+/* ================= PAINEL DE REVISÃO ================= */
+
+function toggleReviewPanel() {
+  const panel = document.getElementById('review-panel');
+  const isOpen = panel.classList.contains('open');
+  
+  if (!isOpen) {
+    renderReviewList(); // Desenha a lista atualizada ao abrir
+    panel.classList.add('open');
+  } else {
+    panel.classList.remove('open');
+  }
+}
+
+function renderReviewList() {
+  const container = document.getElementById('review-list');
+  container.innerHTML = '';
+
+  if (selecionados.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:#777;">Nenhum item selecionado.</p>';
+    return;
+  }
+
+  selecionados.forEach((id, index) => {
+    // Busca os dados da peça original
+    const p = todasPecas.find(item => item.id_peca === id);
+    if (!p) return;
+
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    div.innerHTML = `
+      <div style="font-weight:bold; font-size:1.2em; color:var(--ink); width:20px;">${index + 1}</div>
+      <img src="https://betshoptv.com/img/tmb/${p.imagens[0]}.avif" class="review-thumb">
+      <div class="review-info">
+        <span class="review-title">${p.titulo}</span>
+      </div>
+      <div class="review-actions">
+        ${index > 0 ? `<button class="ctrl-btn" onclick="moveItem(${index}, -1)">▲</button>` : '<div style="width:32px;"></div>'}
+        ${index < selecionados.length - 1 ? `<button class="ctrl-btn" onclick="moveItem(${index}, 1)">▼</button>` : '<div style="width:32px;"></div>'}
+        <button class="ctrl-btn remove" onclick="removeItem(${index})">✕</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// Funções de manipulação do Array
+function moveItem(index, direction) {
+  // Troca de lugar no array
+  const item = selecionados[index];
+  selecionados.splice(index, 1);
+  selecionados.splice(index + direction, 0, item);
+  
+  // Atualiza tudo
+  renderReviewList(); // Atualiza a lista no painel
+  renderApp();        // Atualiza os números na galeria atrás
+  updateFooter();
+}
+
+function removeItem(index) {
+  // Remove do array pelo índice
+  selecionados.splice(index, 1);
+  
+  renderReviewList();
+  renderApp();
+  updateFooter();
+  
+  // Se esvaziar, fecha o painel
+  if(selecionados.length === 0) toggleReviewPanel();
+}
+
+
+/* ================= LÓGICA DE DETALHES (ESPIAR) ================= */
+
+/* ================= LÓGICA DE DETALHES (CARROSSEL) ================= */
+/* ================= LÓGICA DE DETALHES (SWIPE) ================= */
+/* ================= LÓGICA DE DETALHES (NATIVA) ================= */
+let currentDetailId = null; // Guarda o ID da peça aberta
+
+function openDetails(id) {
+  const p = todasPecas.find(item => item.id_peca === id);
+  if (!p) return;
+  
+  currentDetailId = id; // Salva quem está aberto
+
+  // 1. Textos
+  document.getElementById('det-title').textContent = p.titulo;
+  document.getElementById('det-tech').textContent = p.tecnica;
+  document.getElementById('det-dim').textContent = p.dimensao;
+
+  // 2. Botão Selecionar (Estado Inicial)
+  updateModalBtnState();
+
+  // 3. Imagens e Dots
+  const container = document.getElementById('det-scroll-container');
+  const dotsContainer = document.getElementById('det-dots');
+  container.innerHTML = '';
+  dotsContainer.innerHTML = '';
+  
+  const listaImagens = Array.isArray(p.imagens) ? p.imagens : [p.imagens];
+  const totalSlides = listaImagens.length;
+
+  listaImagens.forEach((imgName, index) => {
+    // Imagem
+    const img = document.createElement('img');
+    img.className = 'details-img';
+    img.src = `https://betshoptv.com/img/otm/${imgName}.avif`;
+    img.onerror = function(){ this.src = `https://betshoptv.com/img/fallback/${imgName}.jpg`; };
+    container.appendChild(img);
+
+    // Dot (Quadrado)
+    if(totalSlides > 1){
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        if(index === 0) dot.classList.add('active');
+        dotsContainer.appendChild(dot);
+    }
+  });
+
+  // Esconde dots se só tiver 1 imagem
+  dotsContainer.style.display = totalSlides > 1 ? 'flex' : 'none';
+
+  // 4. Reset Scroll e Listener de "Scroll Spy"
+  container.scrollLeft = 0;
+  
+  // Função para acender o dot certo enquanto rola
+  container.onscroll = () => {
+      if(totalSlides <= 1) return;
+      const scrollLeft = container.scrollLeft;
+      const width = container.offsetWidth;
+      // Calcula qual slide está mais visível
+      const index = Math.round(scrollLeft / width);
+      
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((d, i) => d.classList.toggle('active', i === index));
+  };
+
+  // 5. Abrir
+  const modal = document.getElementById('modal-details');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  
+  // 6. Ativa Teclado
+  document.addEventListener('keydown', handleDetailKeys);
+}
+
+// Ação do Botão "SELECIONAR" dentro do Modal
+function handleModalSelect() {
+    if(!currentDetailId) return;
+    
+    // Usa a mesma função da galeria principal
+    toggleSelection(currentDetailId);
+    
+    // Atualiza apenas o botão visualmente
+    updateModalBtnState();
+}
+
+function updateModalBtnState() {
+    const btn = document.getElementById('btn-det-select');
+    // Verifica se está no array de selecionados
+    const isSelected = selecionados.includes(currentDetailId);
+    
+    if(isSelected) {
+        btn.textContent = 'REMOVER';
+        btn.classList.add('is-selected');
+    } else {
+        btn.textContent = 'SELECIONAR';
+        btn.classList.remove('is-selected');
+    }
+}
+
+// Navegação por Teclado
+function handleDetailKeys(e) {
+    const container = document.getElementById('det-scroll-container');
+    const width = container.offsetWidth;
+
+    if (e.key === 'Escape') {
+        closeDetails(null, true);
+    } 
+    else if (e.key === 'ArrowRight') {
+        container.scrollBy({ left: width, behavior: 'smooth' });
+    } 
+    else if (e.key === 'ArrowLeft') {
+        container.scrollBy({ left: -width, behavior: 'smooth' });
+    }
+}
+
+function closeDetails(e, force = false) {
+  if (force || e.target.id === 'modal-details') {
+    document.getElementById('modal-details').classList.remove('open');
+    document.body.style.overflow = '';
+    
+    // Limpa listeners e imagens
+    document.removeEventListener('keydown', handleDetailKeys);
+    setTimeout(() => document.getElementById('det-scroll-container').innerHTML = '', 300);
+  }
+}
+
+// Redesenha a galeria ao redimensionar a janela
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        renderApp(); 
+    }, 200);
+});
+
+// Inicia tudo
+window.addEventListener('DOMContentLoaded', init);
+
+</script>
+
+
+<div id="modal-envio" class="envio-modal-overlay">
+  <div class="envio-card">
+    <div class="envio-title">Confirmar Seleção</div>
+    <p class="envio-desc">
+      Você selecionou <strong id="qtd-confirma">0</strong> peças.<br><br><br><br><br><br><br>
+      Digite seu nome para registrar sua preferência.
+    </p>
+    
+    <input type="text" id="final-nome" class="envio-input" placeholder="Nome" autocomplete="name" style="text-align: center;">
+    
+    <button id="btn-submit-final" class="btn-confirm" onclick="submitData()">ENVIAR AGORA</button>
+    <button class="btn-cancel" onclick="closeEnvioModal()">Cancelar</button>
+  </div>
+</div>
+
+<div id="modal-details" class="details-overlay" onclick="closeDetails(event)">
+  <div class="details-card">
+    <button class="btn-close-details" onclick="closeDetails(null, true)">✕</button>
+    
+    <div class="details-img-container" id="det-scroll-container">
+       </div>
+
+    <div id="det-dots" class="car-dots-area"></div>
+    
+    <div class="details-info">
+      <div class="details-header-row">
+        
+        <div class="details-texts">
+          <div id="det-title" class="details-title"></div>
+          <div id="det-tech" class="details-tech"></div>
+          <div id="det-dim" class="details-dim"></div>
+        </div>
+
+        <button id="btn-det-select" class="btn-modal-select" onclick="handleModalSelect()">
+          SELECIONAR
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
