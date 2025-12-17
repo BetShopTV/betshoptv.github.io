@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <link rel="icon" href="https://betshoptv.com/FAVICON.png" type="image/x-icon">
-<title>BetShopTV⦿com | Seleção de Prêmios</title>
+<title>BetShopTV - Seleção de Prêmios</title>
 
 <style>
   /* --- Tokens & Reset --- */
@@ -50,6 +50,7 @@
     transition: height .3s ease;
     will-change: height;
     margin-left: 11px;
+        margin-top: 12px; /* <--- O SEGREDINHO AQUI (Ajuste o número se precisar) */
   }
   
   /* Mantém o shrink: */
@@ -374,7 +375,7 @@
   transform: translateY(110%);
   transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Animação elegante */
   display: flex; flex-direction: column;
-  max-height: 66vh;
+  max-height: 50vh;
 }
 
 .review-panel.open { transform: translateY(0); }
@@ -392,10 +393,15 @@
 
 /* Corpo da Lista */
 .review-body {
-  flex: 1; overflow-y: auto; 
-  padding: 0px 10vh; /* Sem padding para as bordas encostarem */
+  flex: 1; 
+  overflow-y: auto;       /* Scroll vertical permitido */
+  overflow-x: hidden;     /* Scroll horizontal PROIBIDO (Tiro e queda) */
+  padding: 0 5%;          /* Mudei de 10vh pra 5% pra ser mais responsivo */
   background: var(--beige);
 }
+  .review-body::-webkit-scrollbar{width:8px; border-radius:0;}
+  .review-body::-webkit-scrollbar-track{background:var(--beige);border-radius:0;}
+  .review-body::-webkit-scrollbar-thumb{background:var(--red)}
 
 /* Item da Lista (Design 'Flat') */
 .review-item {
@@ -509,9 +515,41 @@
 
 /* Lista de Doações */
 .donation-list-container { max-height: 35vh; overflow-y: auto; margin: 0 -20px 15px; padding: 0 20px; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+.donation-list-container::-webkit-scrollbar{width:8px; border-radius:0;}
+.donation-list-container::-webkit-scrollbar-track{background:var(--white);border-radius:0;}
+.donation-list-container::-webkit-scrollbar-thumb{background:var(--red)}
+
+
 .donation-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
-.d-name { font-weight: 700; display: block; color: var(--ink); font-size: 0.9rem; text-align: left; }
-.d-price { color: var(--ink); font-weight: 600; font-size: 0.85rem; }
+/* --- ALINHAMENTO PERFEITO DA LISTA --- */
+
+.donation-info { 
+  flex: 1; 
+  padding-right: 10px; 
+  
+  /* A Mágica do Alinhamento: */
+  display: flex;             /* Transforma em container flexível */
+  flex-direction: column;    /* Empilha: Um em cima do outro */
+  align-items: flex-start;   /* Trava tudo na esquerda */
+  justify-content: center;   /* Centraliza verticalmente no bloco */
+  text-align: left;          /* Garante que o texto obedeça */
+}
+
+.d-name { 
+  font-weight: 700; 
+  color: var(--ink); 
+  font-size: 0.9rem; 
+  line-height: 1.2;          /* Evita que nomes longos fiquem muito espaçados */
+  margin-bottom: 2px;        /* Espacinho mínimo antes do preço */
+  display: block;
+}
+
+.d-price { 
+  color: var(--red); 
+  font-weight: 600; 
+  font-size: 0.85rem; 
+  display: block;            /* Garante que o preço ocupe a própria linha */
+}
 
 .d-controls { display: flex; align-items: center; gap: 8px; }
 .d-btn { width: 28px; height: 28px; background: white; border: 1px solid var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: 700; }
@@ -581,7 +619,7 @@
 .welcome-section {
   background: var(--ink); /* Fundo preto total */
   margin-bottom: 24px;
-  margin-top: -100px;
+  margin-top: -127px;
   width: 100%;
 }
 
@@ -643,6 +681,65 @@
 .w-icon { font-size: clamp(1.24rem, 2vw, 1.4rem); margin-right: 13px; width: 25px; text-align: center; margin-left: -8px; }
 @keyframes slideDown { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
 
+/* --- TELA PIX (ESTILO BAFO) --- */
+/* --- TELA PIX (BRUTALISTA SECO) --- */
+.pix-wrapper {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  gap: 15px; margin-top: 10px;
+}
+
+/* Moldura simples: Linha preta, fundo branco */
+.pix-qr-frame {
+  background: var(--white);
+  padding: 8px;
+  border: 2px solid var(--ink);
+  margin-bottom: 5px;
+}
+
+.pix-img {
+  width: 180px; height: 180px; 
+  display: block; object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.pix-label {
+  font-family: var(--ff-cta); text-transform: uppercase; 
+  font-size: 0.8rem; letter-spacing: 1px; color: var(--ink);
+  margin-bottom: 4px; display: block;
+}
+
+.pix-value {
+  font-family: var(--ff-cta); 
+  font-size: 2.2rem; 
+  color: var(--red); 
+  font-weight: 700; 
+  line-height: 1;
+}
+
+/* Barra de Cópia: Bloco sólido */
+.pix-copy-box {
+  display: flex; width: 100%; 
+  border: 2px solid var(--ink);
+  background: var(--white);
+  height: 40px;
+}
+
+.pix-input {
+  flex: 1; border: none; background: transparent; padding: 0 10px;
+  font-family: monospace; font-size: 0.85rem; color: #555;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  outline: none;
+}
+
+.pix-btn-copy {
+  background: var(--ink); color: var(--white);
+  border: none; border-left: 2px solid var(--ink);
+  font-family: var(--ff-cta); font-weight: 700; letter-spacing: 0.5px;
+  padding: 0 20px; cursor: pointer;
+  min-width: 100px; /* Garante que o texto caiba quando mudar */
+}
+.pix-btn-copy:hover { background: var(--red); }
+
 
   @media (max-width:768px){ .filters-bar { gap: 8px; } 
       .review-body {
@@ -682,6 +779,7 @@
     border: 1px solid var(--red);
     cursor: default; /* Inativo por padrão */
     margin-right: 11px;
+        margin-top: 12px; /* <--- O SEGREDINHO AQUI (Ajuste o número se precisar) */
   "
   onclick="copyListToClipboard()"
 >
@@ -706,7 +804,7 @@
             <div style="display:flex; align-items:center;"><span class="w-icon" style="font-size: 24px; font-weight: 500; margin-top: -2px; margin-left: 2px;">☑</span> ESCOLHA </div>
           </summary>
           <div class="w-content">
-        <div style="margin-top: 8px;">Você pode enviar suas escolhas diretamente por mensagem, clicando em COPIAR SELEÇÃO, ou por aqui, através do menu EDITAR SELEÇÃO. </div>
+        <div style="margin-top: 3px;">Você pode enviar suas escolhas diretamente por mensagem, clicando em COPIAR SELEÇÃO, ou por aqui, através do menu EDITAR SELEÇÃO. </div>
        
         <div style="margin-top: 8px;">Suas peças são reservadas <strong>imediatamente</strong> após o envio, porém este catálogo será atualizado <strong>uma vez por dia</strong>.</div>
             
@@ -721,7 +819,7 @@
             <div style="display:flex; align-items:center;"><span class="w-icon" style="font-size: 24px; font-weight: 500; margin-top: -2px; margin-left: 2px;">❐</span>RECEBIMENTO</div>
           </summary>
           <div class="w-content">
-            <div style="margin-top: 8px;">As entregas e retiradas podem ser feitas até dia 20/12 ou a partir de 08/01. Se estiver pela região central de São Paulo, mais fácil ainda!</div>
+            <div style="margin-top: 3px;">As entregas e retiradas podem ser feitas até dia 20/12 ou a partir de 08/01. Se estiver pela região central de São Paulo, mais fácil ainda!</div>
             <div style="margin-top: 8px;">Para outras localidades, os envios serão combinados individualmente, com frete à parte. </div>
             <div style="margin-top: 8px;">As peças são entregues <strong>planificadas</strong>, contendo seus certificados e sugestões de montagem.</div>
           </div>
@@ -732,8 +830,8 @@
             <div style="display:flex; align-items:center;"><span class="w-icon" style="font-size: 24px; font-weight: 500; margin-top: 3px; margin-left: 2px;">⧉</span>APOIO</div>
           </summary>
           <div class="w-content">
-            <div style="margin-top: 8px;">Quer dar mais uma força, propor alguma troca?</div>
-            <div style="margin-top: 8px;">Conheça a <a href="#" onclick="goToDonation() ; return false;" style="color: red;"><strong>CARTELA DE DOAÇÕES</strong></a> ou fale conosco!</div>
+            <div style="margin-top: 3px; font-weight: 700;">Quer dar mais uma força, propor alguma troca?</div>
+            <div style="margin-top: 8px;">Conheça a <a href="#" onclick="goToDonation() ; return false;" style="color: red;"><strong>CARTELA DE DOAÇÕES</strong></a><br />ou fale conosco!</div>
             <div style="margin-top: 8px;">PIX: betshoptv@gmail.com</div>
           </div>
         </details>
@@ -777,9 +875,9 @@ const JSON_URL = 'https://betshoptv.com/dados/pecas.json';
 const GAS_URL  = 'https://script.google.com/macros/s/AKfycbzel7_KO8q-hMGwWcTPd-112Z3NA2rDFiAHYgUIIc7lmZwkQITA36JHJET_xnerhAWZ/exec';
 
 // Configuração PIX
-const PIX_CHAVE  = "CHAVE_PIX_AQUI"; // Coloque sua chave real
-const PIX_NOME   = "NOME_DO_TITULAR";
-const PIX_CIDADE = "CIDADE";
+const PIX_CHAVE  = "betshoptv@gmail.com"; // Coloque sua chave real
+const PIX_NOME   = "BETSHOPTV";
+const PIX_CIDADE = "SAOPAULO";
 
 /* ================= ESTADO DA APLICAÇÃO ================= */
 let todasPecas = [];
@@ -790,14 +888,26 @@ let nomeUsuario = "";
 
 // Catálogo Base (Item 1 tem preço dinâmico)
 const catalogoBase = [
-  { id: 1, nome: "Peças premiadas", preco: 0 }, 
-  { id: 2, nome: "Aluguel Dez/2025", preco: 2000.01 },
-  { id: 3, nome: "Hora/Trabalho", preco: 150.00 },
-  { id: 4, nome: "Pote de Gel Medium", preco: 62.40 },
-  { id: 5, nome: "Peça sob encomenda", preco: 1500.00 },
-  { id: 6, nome: "Refugo de EVA (kg)", preco: 5.99 },
-  { id: 7, nome: "Translado SP>RJ>SP", preco: 450.00 },
-  { id: 8, nome: "Playboy Fev/90 + Frete", preco: 273.38 }
+  { id: 1, nome: "Peças selecionadas por você (Média)", preco: 0 },
+  { id: 2, nome: "Hora/Trabalho", preco: 150.00 },
+  { id: 3, nome: "Luz (Dez/2025)", preco: 96.66 },
+  { id: 4, nome: "Internet + Telefonia Móvel (Média)", preco: 170.00 },
+  { id: 5, nome: "Pacote de Softwares Criativos (Licença Anual)", preco: 2400.00 },
+  { id: 6, nome: "Sessão de Análise (50min)", preco: 160.00 },
+  { id: 7, nome: "Aluguel + Cond. + Água (Dez/2025)", preco: 2000.01 },
+  { id: 8, nome: "Gel Médium Acrílico Fosco Corfix Arts (Pote 250ml)", preco: 63.87 },
+  { id: 9, nome: "Ferragens sortidas", preco: 20.00 },
+  { id: 10, nome: "Refugo de EVA (kg)", preco: 5.99 },
+  { id: 11, nome: "EVA Estampado/Mesclado (Média por Folha)", preco: 8.00 },
+  { id: 12, nome: "Placa de EVA (100 x 200 cm)", preco: 209.90 },
+  { id: 13, nome: "Montagem de peças em São Paulo", preco: 450.00 },
+  { id: 14, nome: "Embalagem personalizada", preco: 300.00 },
+  { id: 15, nome: "Peça inédita de Chop Shop AV", preco: 1200.00 },
+  { id: 16, nome: "Revista Playboy brasileira (Edição nº 175 + Frete)", preco: 273.38 },
+  { id: 17, nome: "Soprador Térmico Digital", preco: 669.00 },
+  { id: 18, nome: "Kit para Escultura em EVA", preco: 350.00 },
+  { id: 19, nome: "Micro Retífica + Pontas Extras", preco: 245.00 },
+  { id: 20, nome: "Pirógrafo", preco: 80.00 }
 ];
 let catalogoAtual = JSON.parse(JSON.stringify(catalogoBase)); // Cópia segura
 
@@ -891,7 +1001,7 @@ function buildGaleria(){
 
     const btnSpy = document.createElement('button');
     btnSpy.className = 'btn-spy';
-    btnSpy.textContent = '+';
+    btnSpy.textContent = '⌕';
     btnSpy.onclick = (e) => { e.stopPropagation(); openDetails(p.id_peca); };
     imgWrap.appendChild(btnSpy);
 
@@ -1080,19 +1190,28 @@ function goToDonation() {
     showScreen('step-donation');
 }
 
+/* ================= CÁLCULO DE PREÇO CORRIGIDO (MÉDIA SIMPLES) ================= */
 function calculateDynamicPrice() {
-    let soma = 0; let count = 0;
+    let soma = 0; 
+    let count = 0;
+
     selecionados.forEach(id => {
         const p = todasPecas.find(item => item.id_peca === id);
-        if (p && p.preco) { soma += parseFloat(p.preco); count++; }
+        // Garante que o preço seja tratado como número
+        if (p && p.preco) { 
+            soma += parseFloat(p.preco); 
+            count++; 
+        }
     });
-    // (Soma / Qtd) * 3
-    const media = count > 0 ? soma / count : 0;
-    const precoFinal = media * 3;
+
+    // Média Simples: Soma total dividido pela quantidade de peças
+    const precoFinal = count > 0 ? (soma / count) * 3 : 0;
     
+    // Atualiza o item 1 do catálogo
     const item1 = catalogoAtual.find(i => i.id === 1);
     if(item1) item1.preco = precoFinal;
 }
+
 
 // LÓGICA DE DIVISÃO DO PREÇO (Item < 0)
 /* ================= LÓGICA DE QUANTIDADE (GANGORRA DO ½) ================= */
@@ -1218,7 +1337,7 @@ function updateTotal() {
     
     if(totalGeral > 0) {
         btnPix.disabled = false;
-        btnPix.textContent = `PAGAR ${txtValor}`;
+        btnPix.textContent = `PAGAR`;
     } else {
         btnPix.disabled = true;
         btnPix.textContent = "GERAR PIX";
@@ -1240,47 +1359,83 @@ function addCustomItem() {
 function openCustomItem() { showScreen('step-custom'); }
 
 /* ================= ENVIO DOAÇÃO & PIX ================= */
+/* ================= ENVIO DOAÇÃO & PIX (CORRIGIDO PARA FRAÇÕES) ================= */
 async function submitDonation() {
     const itensEscolhidos = [];
+    let totalParaPix = 0;
+
+    // 1. Prepara os dados (Aplicando a matemática das frações)
     catalogoAtual.forEach(item => {
         const qtd = carrinho[item.id] || 0;
+        const divisor = item._fracao || 1; // Se não tiver fração, divide por 1
+
         if(qtd > 0) {
-            const precoFinal = (qtd===1 && item._valorDividido>0) ? item._valorDividido : item.preco;
-            itensEscolhidos.push({ nome: item.nome, preco: precoFinal, qtd: qtd, subtotal: precoFinal * qtd });
+            // O preço unitário real é o preço base dividido pela fração
+            const precoReal = item.preco / divisor;
+            const subtotal = precoReal * qtd;
+
+            totalParaPix += subtotal;
+
+            itensEscolhidos.push({ 
+                nome: item.nome + (divisor > 1 ? ` (1/${divisor})` : ""), // Avisa na planilha se for fração
+                preco: precoReal, 
+                qtd: qtd, 
+                subtotal: subtotal 
+            });
         }
     });
-    if(valorLivre > 0) itensEscolhidos.push({ nome: "Doação Livre", preco: valorLivre, qtd: 1, subtotal: valorLivre });
 
+    // 2. Adiciona valor livre
+    if(valorLivre > 0) {
+        itensEscolhidos.push({ 
+            nome: "Doação Livre", 
+            preco: valorLivre, 
+            qtd: 1, 
+            subtotal: valorLivre 
+        });
+        totalParaPix += valorLivre;
+    }
+
+    // Validação de Segurança
+    if(totalParaPix <= 0) { 
+        alert("O valor total deve ser maior que zero."); 
+        return; 
+    }
+
+    // 3. UI Loading
     const btn = document.getElementById('btn-pix');
     btn.textContent = "GERANDO PIX...";
     btn.disabled = true;
 
+    // 4. Envia para Planilha (Google Sheets)
     const fd = new FormData();
     fd.append('tipo', 'DOACAO');
     fd.append('nome', nomeUsuario);
     fd.append('conteudo', JSON.stringify(itensEscolhidos));
 
     try {
-        await fetch(GAS_URL, { method:'POST', body:fd });
+        // Envia dados em background
+        fetch(GAS_URL, { method:'POST', body:fd }).catch(e => console.error("Erro planilha silencioso", e));
         
-        // Gera PIX
-        let total = 0;
-        itensEscolhidos.forEach(i => total += i.subtotal);
-        if(total <= 0) { alert("Valor inválido"); return; }
+        // 5. GERA O PIX COM O VALOR EXATO
+        // O .toFixed(2) dentro da função gerarPixPayload vai arredondar centavos corretamente
+        const payload = gerarPixPayload(PIX_CHAVE, PIX_NOME, PIX_CIDADE, totalParaPix);
         
-        const payload = gerarPixPayload(PIX_CHAVE, PIX_NOME, PIX_CIDADE, total);
+        // Atualiza a tela do PIX
         document.getElementById('pix-copia-cola').value = payload;
-        document.getElementById('pix-valor-display').textContent = total.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+        document.getElementById('pix-valor-display').textContent = totalParaPix.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
         document.getElementById('pix-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(payload)}`;
         
+        // Mostra a tela
         showScreen('step-pix');
 
     } catch(err) {
-        console.error(err); alert('Erro ao registrar.');
-        btn.disabled = false; btn.textContent = 'GERAR PIX';
+        console.error(err); 
+        alert('Erro ao processar.');
+        btn.disabled = false; 
+        btn.textContent = 'GERAR PIX';
     }
 }
-
 /* ================= UTILITÁRIOS (Header, Pix Payload, Etc) ================= */
 function setupHeaderScroll() {
   window.addEventListener('scroll', () => {
@@ -1311,13 +1466,30 @@ function gerarPixPayload(chave, nome, cidade, valor) {
   return payload + (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
 }
 
+/* ================= COPIAR PIX (REAÇÃO SECA) ================= */
 function copyPixCode() {
   const input = document.getElementById('pix-copia-cola');
-  input.select(); navigator.clipboard.writeText(input.value);
-  const msg = document.getElementById('msg-copy');
-  msg.style.display = 'block'; setTimeout(() => msg.style.display = 'none', 3000);
+  const btn = document.getElementById('btn-copy-action');
+  
+  // Seleciona e Copia
+  input.select(); 
+  input.setSelectionRange(0, 99999); // Mobile
+  navigator.clipboard.writeText(input.value);
+  
+  // Reação do Botão
+  const originalText = btn.textContent;
+  
+  btn.textContent = 'COPIADO!';
+  btn.style.backgroundColor = 'var(--red)';
+  btn.style.color = 'var(--white)';
+  
+  // Reseta depois de 2 segundos
+  setTimeout(() => {
+    btn.textContent = originalText;
+    btn.style.backgroundColor = ''; // Volta ao CSS original (Ink)
+    btn.style.color = '';
+  }, 2000);
 }
-
 // Detalhes (Galeria Swipe)
 let currentDetailId = null;
 function openDetails(id) {
@@ -1388,6 +1560,28 @@ window.addEventListener('DOMContentLoaded', init);
   <div class="envio-card">
     <button onclick="closeFlow()" style="position:absolute; top:10px; right:15px; border:0; background:none; font-size:1.5rem; cursor:pointer;">✕</button>
 
+<div id="step-pix" class="screen">
+      <div class="envio-title">Pagamento via PIX</div>
+      <p class="envio-desc">Escaneie ou copie o código abaixo.</p>
+      
+      <div class="pix-wrapper">
+        
+        <div>
+          <span class="pix-label">VALOR TOTAL</span>
+          <div class="pix-value" id="pix-valor-display">R$ 0,00</div>
+        </div>
+
+        <div class="pix-qr-frame">
+          <img id="pix-qr-img" class="pix-img" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="QR Code">
+        </div>
+
+        <div class="pix-copy-box">
+          <input type="text" id="pix-copia-cola" class="pix-input" readonly value="Aguardando...">
+          <button id="btn-copy-action" class="pix-btn-copy" onclick="copyPixCode()">COPIAR</button>
+        </div>
+
+      </div>
+    </div>
     <div id="step-name" class="screen active">
       <div class="envio-title">Você escolheu <strong id="qtd-confirma">0</strong> peças!</div>
       <p class="envio-desc">
@@ -1422,9 +1616,11 @@ window.addEventListener('DOMContentLoaded', init);
           <input type="number" id="free-input" placeholder="0,00" oninput="updateFreeValue()">
         </div>
       </div>
-      
+      <div style="text-align: left;">
       <h2 style="font size: 0.8em;">ITENS</h2>
 <p style="margin-top: -13px; margin-bottom: 8px; padding: 4px 0px; font-weight:420; color:var(--ink); font-size: 0.88em;">Abaixo é possível selecionar frações das quantias no botão <strong>—</strong>, além de incluir propostas personalizadas em sua doação! </p>
+     </div>
+     
       <div class="donation-list-container" id="donation-list"></div>
 
       <button class="custom-item-btn" onclick="openCustomItem()"><span>+</span> Adicionar item personalizado</button>
@@ -1444,25 +1640,6 @@ window.addEventListener('DOMContentLoaded', init);
     </div>
   </div>
   
-  
-<div id="step-pix" class="screen">
-      <div class="envio-title">Pagamento via PIX</div>
-      <p class="envio-desc">Escaneie o QR Code ou copie o código abaixo.</p>
-      
-      <div class="pix-qr-box">
-        <img id="pix-qr-img" class="pix-img" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="QR Code">
-      </div>
-
-      <div class="pix-total-display" id="pix-valor-display">R$ 0,00</div>
-
-      <div class="pix-copy-row">
-        <input type="text" id="pix-copia-cola" class="pix-input-readonly" readonly value="Carregando código...">
-        <button class="btn-copy" onclick="copyPixCode()">COPIAR</button>
-      </div>
-      <div id="msg-copy" class="msg-success-copy">CÓDIGO COPIADO!</div>
-
-      <button class="btn-cancel" onclick="location.reload()">Já paguei! Fechar.</button>
-    </div>
     
     
 </div>
