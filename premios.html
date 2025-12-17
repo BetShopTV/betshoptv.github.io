@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -768,11 +769,13 @@
   disabled 
   style="
     margin-left: auto; /* Empurra para a direita */
-    font-weight: 500;
-    font-size: 0.8em;
-    letter-spacing: 0.66px;
-    min-height: 40px; 
-    padding: 8px 12px;
+    text-align: left;
+  font-size: clamp(14px, 2.5vw, 22px);
+  font-weight: 600; 
+  height: clamp(36px, 8vw, 188px);
+  padding: clamp(24px, 3vw, 30px) clamp(8px, 3vw, 18px);
+  letter-spacing: 0.5px;
+  line-height: 1.3em;
     /* ESTADO INICIAL: Bege (Fundo), Vermelho (Borda/Texto) */
     background: transparent;
     color: var(--red);
@@ -783,7 +786,8 @@
   "
   onclick="copyListToClipboard()"
 >
-  SELECIONE P/ COPIAR
+  SELECIONE
+  <br>P/ COPIAR
 </button>
 
 <textarea id="lista-copiar-oculta" style="position: absolute; left: -9999px;"></textarea>
@@ -832,7 +836,7 @@
           <div class="w-content">
             <div style="margin-top: 3px; font-weight: 700;">Quer dar mais uma força, propor alguma troca?</div>
             <div style="margin-top: 8px;">Conheça a <a href="#" onclick="goToDonation() ; return false;" style="color: red;"><strong>CARTELA DE DOAÇÕES</strong></a><br />ou fale conosco!</div>
-            <div style="margin-top: 8px;">PIX: betshoptv@gmail.com</div>
+            <div style="margin-top: 8px;">PIX: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a9cbccdddac1c6d9dddfe9cec4c8c0c587cac6c4">[email&#160;protected]</a></div>
           </div>
         </details>
 
@@ -869,7 +873,7 @@
   <input type="hidden" id="fNome"><input type="hidden" id="fEmail"><input type="hidden" id="fTelefone">
   <input type="hidden" id="fFav"> <input type="hidden" id="fTotal" value="0.00"> ```
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ================= CONFIGURAÇÕES GERAIS ================= */
 const JSON_URL = 'https://betshoptv.com/dados/pecas.json';
 const GAS_URL  = 'https://script.google.com/macros/s/AKfycbzel7_KO8q-hMGwWcTPd-112Z3NA2rDFiAHYgUIIc7lmZwkQITA36JHJET_xnerhAWZ/exec';
@@ -888,7 +892,7 @@ let nomeUsuario = "";
 
 // Catálogo Base (Item 1 tem preço dinâmico)
 const catalogoBase = [
-  { id: 1, nome: "Peças selecionadas por você", preco: 0 },
+  { id: 1, nome: "Peças selecionadas por você (Média)", preco: 0 },
   { id: 2, nome: "Hora/Trabalho", preco: 150.00 },
   { id: 3, nome: "Luz (Dez/2025)", preco: 96.66 },
   { id: 4, nome: "Internet + Telefonia Móvel (Média)", preco: 170.00 },
@@ -1042,7 +1046,7 @@ function updateFooter(){
     btnFinish.onclick = toggleReviewPanel; 
     
     btnCopy.disabled = false;
-    btnCopy.textContent = `COPIAR SELEÇÃO (${count})`;
+    btnCopy.innerHTML = `COPIAR<br>SELEÇÃO (${count})`;
     btnCopy.style.backgroundColor = 'var(--red)';
     btnCopy.style.borderColor = 'var(--red)';
     btnCopy.style.color = 'var(--white)';
@@ -1054,11 +1058,11 @@ function updateFooter(){
     counter.style.display = 'none';
     
     btnFinish.disabled = true;
-    btnFinish.textContent = 'SELECIONE SEUS PRÊMIOS';
+    btnFinish.textContent = 'SELECIONE SEUS PRÊMIOS'; 
     btnFinish.onclick = null;
     
     btnCopy.disabled = true;
-    btnCopy.textContent = 'COPIAR SELEÇÃO';
+    btnCopy.innerHTML = 'SELECIONE<br>P/ COPIAR';
     btnCopy.style.backgroundColor = 'var(--beige)';
     btnCopy.style.borderColor = 'var(--red)';
     btnCopy.style.color = 'var(--red)';
@@ -1073,24 +1077,28 @@ function copyListToClipboard() {
     const listaTxt = document.getElementById('lista-copiar-oculta').value;
     if (!listaTxt) { alert('A lista está vazia!'); return; }
     
-    navigator.clipboard.writeText(listaTxt).then(() => {
+navigator.clipboard.writeText(listaTxt).then(() => {
         const btn = document.getElementById('btn-copiar-selecao');
         const count = selecionados.length;
-        const defaultText = `COPIAR SELEÇÃO (${count})`;
+        
+        // 1. Coloca o <br> aqui na variável
+        const defaultText = `COPIAR<br>SELEÇÃO (${count})`;
 
-        btn.textContent = 'COPIADO! ✔';
+        // Muda temporariamente para o aviso de sucesso
+        btn.innerHTML = 'COPIADO! ✔'; // (Use innerHTML aqui também pra garantir)
         btn.style.backgroundColor = 'var(--ink)';
         btn.style.borderColor = 'var(--ink)';
         btn.style.color = 'var(--beige)';
-        
+      
         setTimeout(() => {
-            btn.textContent = defaultText;
+            // 2. AQUI O SEGREDO: tem que ser innerHTML para o <br> funcionar na volta!
+            btn.innerHTML = defaultText; 
+            
             btn.style.backgroundColor = 'var(--red)';
             btn.style.borderColor = 'var(--red)';
             btn.style.color = 'var(--white)';
         }, 1500);
-    });
-}
+    });}
 
 /* ================= PAINEL DE REVISÃO (DRAWER) ================= */
 function toggleReviewPanel() {
@@ -1674,5 +1682,6 @@ window.addEventListener('DOMContentLoaded', init);
   </div>
 </div>
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
