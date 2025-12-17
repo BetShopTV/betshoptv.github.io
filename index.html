@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -85,44 +86,59 @@ background-color: #ff0000;
   }
   /* ====== Galeria (Masonry / Pinterest) ====== */
   .galeria{
-    column-gap:2px; -webkit-column-gap:2px;
+    column-gap:4px; -webkit-column-gap:4px;
     column-count:3; -webkit-column-count:3; /* 3 colunas por padrão */
-    margin:0; padding:0;
+    margin:4px; padding:4px;
   }
   .gal-item{
     display:inline-block; width:100%;
-    margin:0 0 0px;
     break-inside:avoid; -webkit-column-break-inside:avoid;
     background:transparent; overflow:hidden;
   }
   .gal-item img{display:block;width:100%;height:auto;object-fit:cover;vertical-align:middle;background:transparent}
-  .gal-item .ttl{display:none!important}
 
-  /* VENDIDA — realce discreto */
-/* Estado "vendido" */
-.gal-item.sold {
-  position: relative;
-  filter: saturate(0.88) brightness(0.94);
-  opacity: 1;
+  /* Título fixo abaixo da imagem */
+/* --- BARRA DE TÍTULO + STATUS UNIFICADA --- */
+.gal-titulo {
+  display: flex;               /* Ativa o modo flexível */
+  justify-content: space-between; /* Título na esq, Status na dir */
+  align-items: center;         /* Centraliza verticalmente */
+  border: 1px solid #2b2424;
+  width: 100%;
+  background-color: transparent; /* Fundo da barra: Preto/Ink */
+  color: var(--ink);          /* Cor do texto: Bege */
+  font-family: var(--ff-cta);
+  font-weight: 500;
+  font-size: clamp(0.66em, 1vw, 0.88em);
+  padding: 8px 10px;           /* Espaçamento interno */
+  margin-top: -1px;            /* Cola na imagem */
+  margin-bottom: 13px;
+  box-sizing: border-box;
 }
 
-.gal-item.sold::after {
+/* --- MARCADOR: VENDIDA (Bola Vermelha) --- */ 
+/* O CSS insere automaticamente se o pai tiver a classe .sold */
+.gal-item.sold .gal-titulo::after {
   content: '⬤';
-  position: absolute;
-  top: 1.5vw;
-  right: 1.5vw;
   color: var(--red);
-  font-size: clamp(18px, 2.4vw, 27px);
-  line-height: 1;
-  
-  /* 🔥 Isola o pseudo do filtro */
-  filter: none;
-  mix-blend-mode: normal;
-  isolation: isolate;
+  font-size: 1.2em;
+  margin-left: 4px; /* Afasta do título */
 }
-.preco.sold { color: var(--red); }
 
+/* --- MARCADOR: ACERVO (Quadrado + Texto) --- */
+/* O CSS insere automaticamente se o pai tiver a classe .acervo */
+.gal-item.acervo .gal-titulo::after {
+  content: 'ACERVO';
+  color: var(--ink); /* Mantém beige para ler no fundo preto */
+  background: white;
+  padding: 2px 6px;
+  font-size: clamp(0.66em, 1vw, 0.88em);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  margin-left: 4px;
+}
 
+.preco.acervo { color: var(--ink); }
 
   /* ====== Feed / Post ====== */
   .feed{display:flex;flex-direction:column;gap:var(--gap-s)}
@@ -157,12 +173,109 @@ background-color: #ff0000;
   .dimens{font-size:13px;color:var(--ink);background:var(--beige);}
 
   /* Botões do post */
-  .meta .meta-footer{display:flex;justify-content:flex-end;gap:8px}
-  .btn{font-size:13px;font-family:var(--ff-cta);font-weight:700;padding:8px 12px;cursor:pointer;border-radius:0}
-  .add-btn{font-size:13px;border:2px solid var(--red);background:transparent;color:var(--red)}
-  .add-btn.added{font-size:13px;border-color:var(--ink);background:var(--ink);color:var(--beige)}
-  .fav-btn{font-size:13px; border:2px solid var(--red);background:var(--beige);color:var(--red)} 
-  .fav-btn.active{font-size:13px;border:2px solid var(--red);background:var(--red);color:var(--beige)}
+/* Container dos botões */
+.meta .meta-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;           /* Aumentei um pouco o gap para respirar */
+  align-items: center; /* <--- O SEGREDO: Alinha verticalmente pelo centro */
+}
+
+/* Estilo base dos botões */
+.btn {
+  font-size: 13px;
+  font-family: var(--ff-cta);
+  font-weight: 700;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 0;
+  /* Garante altura de linha consistente nos botões de texto */
+  line-height: 1.2; 
+}
+
+/* Botão Adicionar/Comprar */
+.add-btn {
+  font-size: 13px;
+  border: 2px solid var(--red);
+  background: transparent;
+  color: var(--red);
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: .04em;
+  font-weight: 700;
+  height: fit-content; /* Garante que ele não estique estranho */
+}
+
+.add-btn.added {
+  font-size: 13px;
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--beige);
+}
+
+/* Botão Favorito (Coração) */
+/* Botão Favorito (Coração com GIF) */
+.fav-btn {
+  /* --- 1. Tamanho e Layout (MANTIDOS) --- */
+  font-size: clamp(2.4rem, 2.4vw, 3rem);
+  border: none;
+  
+  /* Alinhamento */
+  margin-top: 0;
+  padding: 12px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  height: auto;
+  cursor: pointer;
+  
+  /* Garante que o fundo da CAIXA seja transparente */
+  background-color: transparent; 
+
+  /* --- 2. Efeito GIF no Texto --- */
+  
+  /* Define o GIF */
+  background-image: url('https://betshoptv.com/images/BGFAV.gif');
+  background-repeat: repeat;
+  background-size: auto;     /* Tamanho original */
+  background-position: center;
+
+  /* Recorta o fundo para aparecer APENAS dentro do coração */
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* Deixa a cor transparente para ver o GIF através dela */
+  color: transparent;
+
+  /* --- 3. Contorno --- */
+  -webkit-text-stroke: 1.5px red;
+}
+
+/* Estado Ativo (Quando selecionado) */
+.fav-btn.active {
+   /* Remove o GIF e deixa vermelho sólido */
+  /* Garante que o fundo da CAIXA seja transparente */
+  background-color: transparent; 
+
+  /* --- 2. Efeito GIF no Texto --- */
+  
+  /* Define o GIF */
+  background-image: url('https://betshoptv.com/images/fofertas.gif');
+  background-repeat: repeat;
+  background-size: auto;     /* Tamanho original */
+  background-position: center;
+
+  /* Recorta o fundo para aparecer APENAS dentro do coração */
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* Deixa a cor transparente para ver o GIF através dela */
+  color: transparent;
+
+  /* --- 3. Contorno --- */
+  -webkit-text-stroke: 3px red;
+}
+
  
   /* ====== Rifas ====== */
   @font-face{
@@ -1482,12 +1595,14 @@ let totalGeral     = 0;
   // FOFILTROS!!
   // FOFILTROS!!
   // FOFILTROS!!
-
+// FOFILTROS!!
 const filtros = {
-  disponiveis: false,      // "Peças" começa DESLIGADO
-  promo: false,            // NOVO: PROMOÇÃO (apenas R$ 150)
-  grupos: new Set(),       // ex.: Set { '01', '02', ... }
-  sort: 'group-desc'       // 'group-asc' | 'group-desc' | 'price-asc' | 'price-desc'
+  disponiveis: false,
+  promo: false,
+  acervo: false,
+  indisponiveis: false,
+  grupos: new Set(),
+  sort: 'random' // <--- MUDANÇA AQUI: começa como aleatório
 };
 
 
@@ -1501,6 +1616,15 @@ const fmt = (v) => {
   const inteiro = Math.round(n);
   return 'R$ ' + inteiro.toLocaleString('pt-BR');
 };
+
+// === HELPER: Embaralhar Array (Fisher-Yates Shuffle) ===
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 
 function imgWithFallback(src){
   const img = new Image();
@@ -1566,30 +1690,43 @@ function buildFilters(currentPage){ // 'galeria' | 'feed'
   lblPieces.textContent = 'PEÇAS';
   gPieces.appendChild(lblPieces);
 
-  const bDisp = document.createElement('button');
-  bDisp.type = 'button';
-  bDisp.className = 'chip';
-  bDisp.textContent = 'Disponíveis';
-  bDisp.setAttribute('aria-pressed', filtros.disponiveis ? 'true':'false');
-  bDisp.classList.toggle('is-active', !!filtros.disponiveis);
-  bDisp.addEventListener('click', ()=>{
-    filtros.disponiveis = !filtros.disponiveis;  // 🔸 NÃO mexe em nenhum outro filtro
+const bDisp = document.createElement('button');
+bDisp.type = 'button';
+bDisp.className = 'chip';
+bDisp.textContent = 'Disponíveis';
+bDisp.setAttribute('aria-pressed', filtros.disponiveis ? 'true':'false');
+bDisp.classList.toggle('is-active', !!filtros.disponiveis);
+
+bDisp.addEventListener('click', ()=>{
+  filtros.disponiveis = !filtros.disponiveis; 
+  
+  // --- CORREÇÃO: DESLIGA TUDO O QUE CONFLITA ---
+  if(filtros.disponiveis) {
+      filtros.acervo = false;
+      filtros.indisponiveis = false;
+      filtros.promo = false;
+  }
+  rerender();
+});
+gPieces.appendChild(bDisp);
+
+
+
+const bAcervo = document.createElement('button');
+  bAcervo.type = 'button';
+  bAcervo.className = 'chip';
+  bAcervo.textContent = 'Acervo';
+  bAcervo.setAttribute('aria-pressed', filtros.acervo ? 'true':'false');
+  bAcervo.classList.toggle('is-active', !!filtros.acervo);
+  bAcervo.addEventListener('click', ()=>{
+    filtros.acervo = !filtros.acervo;
+    // Opcional: Desligar outros filtros para focar só no acervo, se desejar
+    if(filtros.acervo) { filtros.disponiveis = false; filtros.promo = false; }
     rerender();
   });
-  gPieces.appendChild(bDisp);
-
-  const bPromo = document.createElement('button');
-  bPromo.type = 'button';
-  bPromo.className = 'chip';
-  bPromo.textContent = 'Promoção';
-  bPromo.setAttribute('aria-pressed', filtros.promo ? 'true':'false');
-  bPromo.classList.toggle('is-active', !!filtros.promo);
-  bPromo.addEventListener('click', ()=>{
-    filtros.promo = !filtros.promo;              // 🔸 idem
-    rerender();
-  });
-  gPieces.appendChild(bPromo);
-
+  gPieces.appendChild(bAcervo);
+  
+  
   row.appendChild(gPieces);
 
   // -------- Grupos --------
@@ -1619,7 +1756,7 @@ function buildFilters(currentPage){ // 'galeria' | 'feed'
   });
   row.appendChild(gGroups);
 
-  // -------- Ordenar (dropdown) --------
+// -------- Ordenar (dropdown) + Botão Shuffle (VERSÃO LIMPA) --------
   const gSort = document.createElement('div');
   gSort.className = 'filters-group';
 
@@ -1628,21 +1765,52 @@ function buildFilters(currentPage){ // 'galeria' | 'feed'
   lblSort.textContent = 'ORDENAR';
   gSort.appendChild(lblSort);
 
+  // 1. O Dropdown (AGORA SÓ COM AS 4 OPÇÕES)
   const selSort = document.createElement('select');
   selSort.className = 'select';
   selSort.setAttribute('aria-label','Ordenar resultados');
+  
+  // AQUI: Removi a linha do "Aleatório".
+  // Deixei o 'selected' no group-desc para ser o visual padrão das opções.
   selSort.innerHTML = `
     <option value="group-asc">Grupo: crescente</option>
-    <option value="group-desc">Grupo: decrescente</option>
+    <option value="group-desc" selected>Grupo: decrescente</option>
     <option value="price-asc">Preço: menor → maior</option>
     <option value="price-desc">Preço: maior → menor</option>
   `;
-  selSort.value = filtros.sort;
+  
+  // Gatilho do Dropdown (Bem mais simples agora)
   selSort.addEventListener('change', ()=>{
-    filtros.sort = selSort.value;                 // 🔸 idem
+    filtros.sort = selSort.value;
     rerender();
   });
   gSort.appendChild(selSort);
+
+  // 2. O Botão de Atualizar (↻)
+  const btnShuffle = document.createElement('button');
+  btnShuffle.type = 'button';
+  btnShuffle.className = 'chip'; 
+  btnShuffle.innerHTML = '↻';    
+  btnShuffle.title = "Misturar novamente";
+  btnShuffle.setAttribute('aria-label', 'Misturar novamente');
+  
+  btnShuffle.style.marginLeft = '4px'; 
+  btnShuffle.style.fontSize = '1.2em'; 
+  
+  // Gatilho do Botão
+  btnShuffle.addEventListener('click', () => {
+    // AVISA O SISTEMA: "O modo agora é aleatório"
+    filtros.sort = 'random';       
+    
+    // VISUAL: Tira a seleção do dropdown (fica em branco) para indicar 
+    // que não é nenhuma das 4 opções de ordem. Fica chique!
+    selSort.selectedIndex = -1;      
+
+    shuffleArray(pecas);           
+    rerender();                    
+  });
+  
+  gSort.appendChild(btnShuffle);
   row.appendChild(gSort);
 
   // -------- FEED (toggle de página, sem resetar filtros) --------
@@ -1665,29 +1833,41 @@ function buildFilters(currentPage){ // 'galeria' | 'feed'
   row.appendChild(gFeed);
 
   bar.appendChild(row);
-  return bar;
+  return bar; 
 }
 
-// === lista filtrada + ordenada, compartilhada por Galeria e Feed ===
+// === lista filtrada e ordenada (LÓGICA CORRIGIDA DEFINITIVA) ===
+// === lista filtrada e ordenada (LÓGICA CORRIGIDA DEFINITIVA + RANDOM) ===
 function getFilteredSortedList(source){
+  // Cria uma cópia da lista original (que já foi embaralhada no init)
   let lista = Array.isArray(source) ? [...source] : [];
 
-  // 1) Somente disponíveis
+  // 1. DISPONÍVEIS
   if (filtros.disponiveis) {
-    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
+    lista = lista.filter(p => String(p.status || '').trim().toLowerCase() === 'x');
   }
 
-  // 2) Promoção (apenas R$ 150)
+  // 2. ACERVO
+  if (filtros.acervo) {
+    lista = lista.filter(p => /acervo/i.test(String(p.status || '')));
+  }
+  
+  // 3. INDISPONÍVEIS
+  if (filtros.indisponiveis) {
+    lista = lista.filter(p => String(p.status || '').trim().toLowerCase() !== 'x');
+  }
+
+  // 4. PROMOÇÃO (R$ 150)
   if (filtros.promo) {
     lista = lista.filter(p => Number(p.preco) === 150);
   }
-
-  // 3) Grupos (multi)
+  
+  // 5. GRUPOS
   if (filtros.grupos && filtros.grupos.size > 0) {
     lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
   }
 
-  // 4) Ordenação
+// 6. ORDENAÇÃO
   const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
   const numKey   = p => parseInt(p.id_peca) || 0;
 
@@ -1697,11 +1877,23 @@ function getFilteredSortedList(source){
     lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
   } else if (filtros.sort === 'group-asc') {
     lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
-  } else { // 'group-desc' (default)
+  } else if (filtros.sort === 'random') {
+    // 🛑 PARE! Não faz nada aqui. 
+    // Respeita a ordem que veio do shuffleArray.
+  } else { 
+    // Fallback ('group-desc') - só ordena se NÃO for random
     lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
   }
 
   return lista;
+}
+ 
+ // Igual ao arquivo de premiações 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
 }
  
 // === FUNÇÃO PRINCIPAL DE RENDERIZAÇÃO DA GALERIA ===
@@ -1713,6 +1905,8 @@ function renderGaleria() {
   section.id = 'galeria';
 
   const colunas = 3; // mantém seu layout atual
+
+
 
   // Barra de filtros (nova)
 section.appendChild( buildFilters('galeria') );
@@ -1739,19 +1933,6 @@ if (filtros.promo) {
     lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
   }
 
-  // ====== ORDENAÇÃO ======
-  const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
-  const numKey   = p => parseInt(p.id_peca) || 0;
-
-  if (filtros.sort === 'price-asc') {
-    lista.sort((a,b)=> (parseFloat(a.preco||0) - parseFloat(b.preco||0)));
-  } else if (filtros.sort === 'price-desc') {
-    lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
-  } else if (filtros.sort === 'group-asc') {
-    lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
-  } else { // 'group-desc' (default)
-    lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
-  }
 
   // ====== GRID (mantém seu layout) ======
   const linhas = Math.ceil(lista.length / colunas);
@@ -1778,11 +1959,18 @@ if (filtros.promo) {
     item.className = 'gal-item';
     if (/vendid/i.test(p.status || '')) item.classList.add('sold');
     item.dataset.id = p.id_peca;
+    if (/acervo/i.test(p.status || '')) item.classList.add('acervo');
 
     const img = imgWithFallback('https://betshoptv.com/img/tmb/' + p.imagens[0] + '.avif');
     img.alt = p.titulo || `Peça ${p.id_peca}`;
     img.style = 'border: 1px solid #2b2424;';
     item.appendChild(img);
+
+// ...dentro do loop do renderGaleria...
+const tit = document.createElement('div');
+tit.className = 'gal-titulo';
+tit.textContent = p.titulo || ''; 
+item.appendChild(tit);
 
     let minIdx = 0;
     for (let i=1;i<colunas;i++){ if (alturas[i] < alturas[minIdx]) minIdx = i; }
@@ -1795,40 +1983,7 @@ if (filtros.promo) {
 }
 
 // === lista filtrada e ordenada (usada por Galeria e Feed) ===
-function getFilteredSortedList(source){
-  let lista = Array.isArray(source) ? [...source] : [];
-
-  // 1. somente disponíveis
-  if (filtros.disponiveis) {
-    lista = lista.filter(p => !/vendid/i.test(String(p.status || '')));
-  }
-
-  // 2. promoção (R$ 150)
-  if (filtros.promo) {
-    lista = lista.filter(p => Number(p.preco) === 150);
-  }
-
-  // 3. grupos
-  if (filtros.grupos && filtros.grupos.size > 0) {
-    lista = lista.filter(p => filtros.grupos.has(String(p.id_peca || '').slice(0,2)));
-  }
-
-  // 4. ordenação
-  const groupKey = p => parseInt(String(p.id_peca || '').slice(0,2)) || 0;
-  const numKey   = p => parseInt(p.id_peca) || 0;
-
-  if (filtros.sort === 'price-asc') {
-    lista.sort((a,b)=> (parseFloat(a.preco||0) - parseFloat(b.preco||0)));
-  } else if (filtros.sort === 'price-desc') {
-    lista.sort((a,b)=> (parseFloat(b.preco||0) - parseFloat(a.preco||0)));
-  } else if (filtros.sort === 'group-asc') {
-    lista.sort((a,b)=> (groupKey(a) - groupKey(b)) || (numKey(a) - numKey(b)));
-  } else { // 'group-desc'
-    lista.sort((a,b)=> (groupKey(b) - groupKey(a)) || (numKey(b) - numKey(a)));
-  }
-
-  return lista;
-}
+// === lista filtrada e ordenada (LÓGICA CORRIGIDA DEFINITIVA) ===
 
 
 
@@ -1857,7 +2012,10 @@ const base = getFilteredSortedList(pecas);
 // const base = getFilteredSortedList(pecas).slice().reverse();
 
 base.forEach(p => {
-  const sold = /vendid/i.test(String(p.status || ''));
+  const statusStr = String(p.status || '');
+  const sold = /vendid/i.test(statusStr);
+  const isAcervo = /acervo/i.test(statusStr); // <--- Detecta Acervo
+
   const post = document.createElement('article');
   post.className = 'post';
   post.id = 'post-' + p.id_peca;
@@ -1893,14 +2051,20 @@ base.forEach(p => {
   title.className = 'titulo';
   title.textContent = p.titulo || ('Peça ' + p.id_peca);
 
-  const price = document.createElement('div');
+ const price = document.createElement('div');
   price.className = 'preco';
+  
   if (sold){
     price.textContent = '⬤';
+    price.style.color = 'var(--red)'; // <--- AQUI A CORREÇÃO (no elemento 'price')
     price.classList.add('sold');
+  } else if (isAcervo) {   // <--- LÓGICA DO ACERVO
+    price.textContent = 'R$ ' + p.preco + '\u00A0\u00A0\u00A0\u00A0■ ACERVO';
+    price.classList.add('acervo');
   } else {
     price.textContent = fmt(p.preco);
   }
+  
   l1.appendChild(title);
   l1.appendChild(price);
 
@@ -1934,7 +2098,7 @@ base.forEach(p => {
     add.type = 'button';
     const estaSel = selecionadas.has(p.id_peca);
     if (estaSel) add.classList.add('added');
-    add.textContent = estaSel ? 'REMOVER' : 'ADICIONAR';
+    add.textContent = estaSel ? 'REMOVER' : 'COMPRAR';
     rightActions.appendChild(add);
 
     footerMeta.appendChild(leftActions);
@@ -1952,7 +2116,7 @@ base.forEach(p => {
       const id = p.id_peca;
       const isAdded = add.classList.toggle('added');
       if (isAdded) selecionadas.add(id); else selecionadas.delete(id);
-      add.textContent = isAdded ? 'REMOVER' : 'ADICIONAR';
+      add.textContent = isAdded ? 'REMOVER' : 'COMPRAR';
       calcularTotal();
       updatePills();
     });
@@ -2339,70 +2503,55 @@ function attachBindings(){
       document.getElementById('fFav').value     = [...favoritos].join(',');
       document.getElementById('fTotal').value   = Number(Math.floor(totalGeral||0)).toFixed(2);
 
- // PASSO 2 – PIX
-const totalInt = Math.floor(totalGeral || 0);
-const payload = gerarBRCode(totalInt);
+// PASSO 2 – LÓGICA DE EXIBIÇÃO (COM OU SEM PAGAMENTO)
+    const totalInt = Math.floor(totalGeral || 0);
+    const isFree = totalInt === 0; // Verifica se é gratuito (só favoritas)
+    const payload = isFree ? "" : gerarBRCode(totalInt); // Só gera PIX se tiver valor
 
-app.innerHTML = `
-  <section id="checkout-pix">
-    <div style="max-width:720px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
-      <h2>
-        Pagamento via PIX /
-        <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G"
-           target="_blank"
-           onclick="event.preventDefault();
-                    if(confirm('Total a pagar: R$ ${totalInt}'))
-                      window.open(this.href);"
-           style="color:var(--red); text-decoration:none;">
-           via PayPal
-        </a>
-      </h2>
-      <br />
-      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;justify-content:space-between;">
+    app.innerHTML = `
+      <section id="checkout-pix">
+        <div style="max-width:720px;margin:0 auto;background:#fff;border:1px solid #2b2424;padding:20px">
+          
+          ${!isFree ? `
+          <h2>
+            Pagamento via PIX /
+            <a href="https://www.paypal.com/donate/?hosted_button_id=369CQUU2V8P5G"
+               target="_blank"
+               onclick="event.preventDefault(); if(confirm('Total a pagar: R$ ${totalInt}')) window.open(this.href);"
+               style="color:var(--red); text-decoration:none;">
+               via PayPal
+            </a>
+          </h2>
+          <br />
+          <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;justify-content:center;">
+            <div style="flex:1;width:clamp(160px, 2vw, 380px);text-align:center;">
+              <div id="ck_qr" style="width:clamp(120px, 2vw, 380px);height:100%;margin:0 auto 10px;margin-top:8px;border:1px solid #2b2424;display:flex;align-items:center;justify-content:center;background:#fff;"></div>
+              
+              <button id="ck_copy" style="width:150px;background:#fff;color:var(--ink);border:1px solid #2b2424;padding:8px;cursor:pointer;font-weight:700;">
+                PIX Copia e Cola
+              </button>
+              <div id="ck_payload" style="display:none;">${payload}</div>
+            </div>
+          </div>
+          ` : `
+          <h2 style="color:var(--red);text-transform:uppercase;">Confirme o envio</h2>
+          <p style="font-size:1.1em; margin-top:10px;">
+             Você selecionou apenas <strong>Favoritas</strong>.<br>
+             Não há pagamento necessário. Clique em "ENVIAR" para registrar suas escolhas.
+          </p>
+          <div id="ck_qr" style="display:none"></div> <button id="ck_copy" style="display:none"></button>
+          <div id="ck_payload" style="display:none"></div>
+          `}
 
-        ${favoritos.size === 0 ? `
-        <div style="flex:1;min-width:220px;background:red;color:#2b2424;padding:2px;">
-          <a href="#"
-             data-modal-id="favoritos"
-             onclick="abrirModal(this); return false;"
-             style="display:inline-block;
-                    padding:2px 2px;font-family:var(--ff-cta);
-                    font-size:14px;text-decoration:none;text-transform:uppercase;">
-                    
-            <button style="border: 1px solid white; background: white; padding: 18px;cursor:pointer; text-align: left; color: red; font-weight: 500;">
-              <p style="margin:0 0 10px 0; margin-top: 8px; font-size:14px;line-height:1.2;text-align: left;">
-                Antes de apostar, você pode indicar quantas peças favoritas quiser!
-              </p>
-              <p style="margin-top: 8px; font-size:14px;line-height:1.2;text-align: left;">
-                Assim cada pessoa sorteada pode ganhar aquilo que mais gostou!
-              </p>
-              <p style="margin-top: 8px; font-size:14px;line-height:1.2;text-align: left;">
-                <strong>Clique aqui</strong> para abrir a mini-galeria.
-              </p>
+          <div style="display:flex;gap:8px;margin-top:38px;">
+            <button id="ck_back_data" style="flex:1; height:7.5vw; max-height:38px;">Voltar</button>
+            <button id="ck_finish" style="flex:1;height:7.5vw; max-height:38px;background:var(--red);color:#fff;">
+                ${isFree ? 'ENVIAR SELEÇÃO' : 'ENVIAR APOSTA'}
             </button>
-          </a> 
-        </div>` : ''}
-
-        <div style="flex:1;width:clamp(160px, 2vw, 380px);text-align:center;">
-          <div id="ck_qr" style="width:clamp(120px, 2vw, 380px);height:100%;margin:0 auto 10px;margin-top:8px;border:1px solid #2b2424;display:flex;align-items:center;justify-content:center;background:#fff;"></div>
-          
-          <button id="ck_copy" style="width:150px;background:#fff;color:var(--ink);border:1px solid #2b2424;padding:8px;cursor:pointer;font-weight:700;">
-            PIX Copia e Cola
-          </button>
-          
-          <!-- Aqui está o campo oculto que o botão precisa -->
-          <div id="ck_payload" style="display:none;">${payload}</div>
+          </div>
         </div>
-
-      </div>
-
-      <div style="display:flex;gap:8px;margin-top:38px;">
-        <button id="ck_back_data" style="flex:1; height:7.5vw; max-height:38px;">Voltar</button>
-        <button id="ck_finish" style="flex:1;height:7.5vw; max-height:38px;background:var(--red);color:#fff;">ENVIAR APOSTA</button>
-      </div>
-    </div>
-  </section>
-`;
+      </section>
+    `;
 
 // Render QR (se a lib existir)
 (function renderQR() {
@@ -2492,47 +2641,50 @@ document.getElementById('ck_finish').onclick = async ()=>{
 
 /* =============== Pills e Total ================= */
 /* ====== Footer: pills compactas + CTA dinâmico ====== */
+/* ====== Footer: pills compactas + CTA dinâmico ====== */
 function updatePills(){
-  const nbsp = '\u00A0';                           // espaço não-quebrável
+  const nbsp = '\u00A0';
   const pill = document.getElementById('pillCompact');
   const cta  = document.getElementById('ctaMain');
 
-  // monta lista só com contadores > 0 (mobile-friendly)
+  // Monta lista de contadores
   const parts = [];
-  if (selecionadas.size > 0) {
-    parts.push(`${selecionadas.size}${nbsp}${selecionadas.size === 1 ? 'Peça' : 'Peças'}`);
-  }
-  if (rifasSel.size > 0) {
-    parts.push(`${rifasSel.size}${nbsp}${rifasSel.size === 1 ? 'Rifa' : 'Rifas'}`);
-  }
-  if (favoritos.size > 0) {
-    parts.push(`${favoritos.size}${nbsp}${favoritos.size === 1 ? 'Favorita' : 'Favoritas'}`);
-  }
+  if (selecionadas.size > 0) parts.push(`${selecionadas.size}${nbsp}${selecionadas.size === 1 ? 'Peça' : 'Peças'}`);
+  if (rifasSel.size > 0)     parts.push(`${rifasSel.size}${nbsp}${rifasSel.size === 1 ? 'Rifa' : 'Rifas'}`);
+  if (favoritos.size > 0)    parts.push(`${favoritos.size}${nbsp}${favoritos.size === 1 ? 'Favorita' : 'Favoritas'}`);
 
-  // mostra/oculta a pill compacta
+  // Atualiza a Pill (texto pequeno)
   if (pill) {
     pill.textContent = parts.join(' · ');
     pill.style.display = parts.length ? 'inline-block' : 'none';
   }
 
-  // CTA único: label e estado
+  // --- LÓGICA DO BOTÃO PRINCIPAL (CTA) ---
   if (cta) {
+    // Se tiver valor monetário
     if (totalGeral > 0) {
-      // fmt() já remove casas decimais
       cta.textContent = `APOSTAR ${fmt(totalGeral)}`;
       cta.disabled = false;
-    } else {
+    } 
+    // Se NÃO tem valor, mas tem Favoritas (Gratuito)
+    else if (favoritos.size > 0) {
+      cta.textContent = 'ENVIAR FAVORITAS';
+      cta.disabled = false;
+    } 
+    // Se não tem nada
+    else {
       cta.textContent = 'FAÇAM SUAS APOSTAS!';
       cta.disabled = true;
     }
   }
-    // marca estado no footer para o CSS reagir
+
+  // Atualiza cor do rodapé (Vermelho se tiver qualquer atividade, Preto se vazio)
   const footer = document.querySelector('footer');
   if (footer) {
-    footer.classList.toggle('has-total',  totalGeral > 0);
-    footer.classList.toggle('no-total',   totalGeral === 0);
+    const temAtividade = (totalGeral > 0 || favoritos.size > 0);
+    footer.classList.toggle('has-total', temAtividade);
+    footer.classList.toggle('no-total', !temAtividade);
   }
-
 }
 
 
@@ -2593,9 +2745,10 @@ function openFeedAt(id){
 
 
 /* ======================== INIT ======================== */
+/* ======================== INIT ======================== */
 async function init(){
   try{
-    // começar com favoritos zerados (como pedido)
+    // começar com favoritos zerados
     localStorage.removeItem('BSTV_FAV'); favoritos.clear();
 
     const [rp, rr] = await Promise.all([
@@ -2606,6 +2759,9 @@ async function init(){
 
     pecas = await rp.json();
     rifas = await rr.json();
+
+    // === GOLPE DE MESTRE: Embaralhar assim que carrega! ===
+    shuffleArray(pecas); 
 
     // render inicial conforme hash
     attachAppDelegation();
@@ -2620,6 +2776,7 @@ async function init(){
       '<div style="padding:20px;color:#900;">Erro ao carregar dados. Veja o console.</div>';
   }
 }
+
 function renderHome() {
   const app = document.getElementById('app');
   const tpl = document.getElementById('page-sobre');
@@ -2711,7 +2868,7 @@ window.addEventListener('DOMContentLoaded', init);
   // Usa a mesma URL do checkout
   const GAS_URL = typeof window.GAS_URL === 'string'
     ? window.GAS_URL
-    : 'https://script.google.com/macros/s/AKfycbwsX8iGOv_mg0bhY8iRGACMGte56FXVo6ursYG_K4cq0Y50jW3g34_GX3uJU3U-Vwo0UQ/exec';
+    : 'https://script.google.com/macros/s/AKfycbwOeHsHlwj_-lBpRKOPGq5GSkzslBS23tKhTwGLKwBICPeZGZ2_SVRxVEWqXNzhmcbY/exec';
 
   document.addEventListener('DOMContentLoaded', function(){
     const form = document.getElementById('form-agendar');
@@ -3634,5 +3791,7 @@ function renderResumoSelecoes(){
 
 
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
+
