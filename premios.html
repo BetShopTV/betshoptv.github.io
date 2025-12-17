@@ -11,20 +11,54 @@
   :root{
     --red:#ff0000; --ink:#2b2424; --beige:#bebab0; --white:#ffffff;
     --bd-thin:1px; --bd-thick:2px;
+    --ff-normal:"Roboto", system-ui, -apple-system, sans-serif;
     --ff-cta:"Roboto Condensed", system-ui, -apple-system, sans-serif;
     --ff-body:"Roboto SemiCondensed", system-ui, -apple-system, sans-serif;
     --fs-sm:clamp(.78rem,1vw,.9rem);
+    --destaque: clamp(2.4rem,3.8vw, 2.7rem);
     --app-max-width:1200px;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--beige);color:var(--ink);font-family:var(--ff-body);-webkit-font-smoothing:antialiased} 
+  html,body{margin:0;padding:0.18vw;background:var(--beige);color:var(--ink);font-family:var(--ff-body);-webkit-font-smoothing:antialiased} 
 
-  /* --- Header Limpo --- */
-  header{position:sticky;top:0;z-index:100;background:var(--red);color:#fff; }
-  .hdr-inner{max-width:var(--app-max-width);margin:0 auto;display:flex;align-items:center;justify-content:center;padding:10px 16px}
-  .logo img{ display:block; height: clamp(50px, 5vw, 80px); width: auto; }
-  .page-title { font-family: var(--ff-cta); font-weight: 700; text-transform: uppercase; margin-left: 15px; font-size: 1.2rem; letter-spacing: 1px; }
+/* --- HEADER COM EFEITO SHRINK --- */
+/* --- HEADER SHRINK (DRAMÁTICO & LIMPO) --- */
+ /* --- Header Limpo (Ajustado para Alinhamento) --- */
+  header {
+    /* ... (Mantém o resto do seu estilo de header, incluindo o shrink) */
+    position: sticky; top: 0; z-index: 100;
+  }
 
+  .hdr-inner {
+    max-width: var(--app-max-width); /* Mantém o limite de largura */
+    margin: 0 auto;
+    
+    /* 1. Alinha o conteúdo à esquerda */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* <<< MUDANÇA CRÍTICA: Alinha à esquerda */
+    
+    /* 2. Aplica a mesma margem da galeria */
+    padding: 20px 6px; /* Padding vertical mantido, 6px horizontal igual ao main#app */
+    transition: padding .3s ease;
+  }
+  
+  .logo img { 
+    display: block; 
+    width: auto; 
+    height: clamp(88px, 16.9vw, 150px); /* Mantém o clamp chiquérrimo */
+    transition: height .3s ease;
+    will-change: height;
+    margin-left: 11px;
+  }
+  
+  /* Mantém o shrink: */
+  header.scrolled .hdr-inner {
+    padding: 6px 6px; /* Alinha o padding horizontal do shrink */
+  }
+  header.scrolled .logo img {
+    height: clamp(40px, 10vw, 88px);
+  }
   /* --- Layout Principal --- */
   main#app{max-width:var(--app-max-width);margin:20px auto;padding:0 6px;min-height:80vh}
 
@@ -33,13 +67,13 @@
   .filters-group{ display: inline-flex; flex-wrap: wrap; gap: 6px; align-items: center;}
   .filters-label{ font:700 var(--fs-sm)/1 var(--ff-cta); color:var(--ink); margin-right: 4px; text-transform: uppercase;}
   
-  .chip, .select { appearance:none; border:1px solid var(--ink); background:var(--beige); color:var(--ink); padding:.26rem .50rem; min-height:30px; font:700 calc(var(--fs-sm) * .90)/1 var(--ff-cta); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; border-radius:0; }
-  .chip.is-active { background:var(--ink); color:var(--beige); border-color:var(--ink); }
+  .chip, .select { appearance:none; margin-top: -18px; border:1px solid var(--ink); background:var(--ink); color:var(--beige); padding: 1.5vw 1.73vw; min-height:50px; max-height: 8.8vh; font:500 calc(var(--fs-sm) * 1.38)/1 var(--ff-cta); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+  .chip.is-active { background:var(--ink) ; color:var(--beige); border-color:var(--ink); }
   .select:focus { outline:none!important; }
 
   /* --- Galeria (Masonry) --- */
-  .galeria-container { display:flex; gap:8px; align-items:flex-start; }
-  .gal-col { flex:1; display:flex; flex-direction:column; gap:8px; }
+  .galeria-container { display:flex; gap:6px; align-items:flex-start; }
+  .gal-col { flex:1; display:flex; flex-direction:column; gap:6px; min-width: 0;}
   
   .gal-item { position: relative; width:100%; display:block; cursor: pointer; transition: transform 0.1s; }
   .gal-item:hover img { filter: brightness(1.1); }
@@ -106,12 +140,17 @@
     margin-top: -1px;
     box-sizing: border-box;
     border: 1px solid #2b2424;
+    margin-bottom: 24px;
   }
   
   /* Texto do título */
   .gal-titulo-text {
     /* Fonte levemente ajustada para caber */
-    font: 700 calc(var(--fs-sm) * 0.9)/1.1 var(--ff-cta);
+    font-weight: 600;
+    font-size: clamp(11px, 2vw, 15px);
+    margin-left: clamp(0px, 1vw, 13px);
+    margin-top: clamp(0px, 1vw, 4px);
+    margin-bottom: clamp(0px, 1vw, 4px);
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis; /* Três pontinhos (...) se não couber */
@@ -123,24 +162,39 @@
   }
 
   /* Botão Espiar [ + ] */
+  /* --- Botão Satélite (Overlay na Imagem) --- */
   .btn-spy {
-    background: #bebab0; 
-    border: 1px solid var(--ink); 
+    position: absolute;
+    top: -10px; 
+    right: 0;
+    z-index: 10;
+    
+    /* CLAMP CHIQUE: Responsividade fluida */
+    /* Mobile: 34px | Desktop: cresce até 44px */
+    width: clamp(20px, 2vw, 38px);
+    height: clamp(20px, 2vw, 38px);
+    
+    /* Fonte escala junto para o + ficar sempre centralizado e proporcional */
+    font-size: clamp(18px, 2vw, 27px);
+    
+    /* Visual */
+    background: var(--beige); 
     color: var(--ink);
-    font-family: var(--ff-cta);
-    font-weight: 300;
-    font-size: 1.3rem;
-    padding: 2px 18px;
-    cursor: pointer;
+    border: 1px solid var(--ink);
+
+    font-family: var(--ff-normal);
+    font-weight: 300; 
     line-height: 1;
-    transition: all 0.2s;
-    /* FLEX MAGIC: */
-    flex-shrink: 0; /* Garante que o botão NUNCA seja esmagado */
+    padding: 0;
+    
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
-  }
+  
   .btn-spy:hover {
-    background: var(--white);
-    color: var(--ink);
+    background: var(--ink);
+    color: var(--beige);
   }
 
   /* --- MODAL DE DETALHES (Espiar) --- */
@@ -407,59 +461,197 @@
 }
 
 
-/* --- Modal de Envio Elegante --- */
+/* --- ESTILOS DO FLUXO DE DOAÇÃO --- */
 .envio-modal-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(43, 36, 36, 0.6); /* Cor Ink com transparência */
-  backdrop-filter: blur(2px); /* Desfoque sutil no fundo */
-  display: flex; justify-content: center; align-items: center;
-  z-index: 200; opacity: 0; pointer-events: none;
-  transition: opacity 0.3s ease;
+  background: rgba(43, 36, 36, 0.7); backdrop-filter: blur(4px);
+  display: none; justify-content: center; align-items: center; z-index: 200;
+  opacity: 0; transition: opacity 0.3s ease;
 }
-.envio-modal-overlay.visible { opacity: 1; pointer-events: all; }
+.envio-modal-overlay.open { display: flex; opacity: 1; pointer-events: all; }
 
 .envio-card {
-  background: var(--white);
-  border: 1px solid var(--ink);
-  padding: 30px;
-  width: 90%; max-width: 400px;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  background: var(--white); border: 2px solid var(--ink);
+  width: 90%; max-width: 420px; padding: 30px; text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3); position: relative;
   transform: translateY(20px); transition: transform 0.3s ease;
 }
-.envio-modal-overlay.visible .envio-card { transform: translateY(0); }
+.envio-modal-overlay.open .envio-card { transform: translateY(0); }
 
-.envio-title { 
-  font-family: var(--ff-cta); font-weight: 700; text-transform: uppercase; 
-  color: var(--red); margin-bottom: 10px; font-size: 1.2rem; 
+/* Telas e Transições */
+.screen { display: none; animation: fadeIn 0.3s; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Tipografia e Inputs */
+.envio-title { font-family: var(--ff-cta); font-weight: 700; text-transform: uppercase; color: var(--red); font-size: 1.4rem; margin-bottom: 10px; }
+.envio-desc { font-size: 0.95rem; color: #555; margin-bottom: 20px; line-height: 1.4; }
+
+.input-field { 
+  width: 100%; padding: 12px; border: 1px solid var(--ink); 
+  font-family: var(--ff-body); font-size: 1rem; margin-bottom: 15px; 
+  text-align: center; border-radius: 0; 
 }
-.envio-desc { font-size: 0.9rem; color: #555; margin-bottom: 20px; }
+.input-field:focus { border-color: var(--red); outline: none; }
 
-.envio-input {
-  width: 100%; padding: 12px; 
-  border: 1px solid var(--ink); 
-  font-family: var(--ff-body); font-size: 1rem;
-  margin-bottom: 20px; outline: none;
-}
-.envio-input:focus { border-color: var(--red); }
-
-.btn-confirm {
-  width: 100%; background: var(--ink); color: white;
-  padding: 12px; font-weight: 700; border: 0; cursor: pointer;
-  font-family: var(--ff-cta); letter-spacing: 1px;
+/* Botões */
+.btn-confirm { 
+  width: 100%; padding: 14px; background: var(--ink); color: white; 
+  border: 0; font-family: var(--ff-cta); font-weight: 700; letter-spacing: 1px; 
+  cursor: pointer; font-size: 1rem; text-transform: uppercase; 
 }
 .btn-confirm:hover { background: var(--red); }
-.btn-cancel {
-  background: transparent; border: 0; text-decoration: underline;
-  color: #777; font-size: 0.8rem; margin-top: 15px; cursor: pointer;
+
+.btn-cancel { 
+  background: transparent; border: 0; text-decoration: underline; 
+  color: #777; font-size: 0.85rem; margin-top: 15px; cursor: pointer; 
 }
+
+/* Lista de Doações */
+.donation-list-container { max-height: 35vh; overflow-y: auto; margin: 0 -20px 15px; padding: 0 20px; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+.donation-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+.d-name { font-weight: 700; display: block; color: var(--ink); font-size: 0.9rem; text-align: left; }
+.d-price { color: var(--ink); font-weight: 600; font-size: 0.85rem; }
+
+.d-controls { display: flex; align-items: center; gap: 8px; }
+.d-btn { width: 28px; height: 28px; background: white; border: 1px solid var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: 700; }
+.d-qty { font-weight: 700; width: 20px; text-align: center; }
+
+/* Valor Livre e Total */
+.free-value-box { background: white; border: 2px solid var(--ink); padding: 12px; margin-bottom: 15px; text-align: left; }
+.free-label { font-family: var(--ff-cta); font-weight: 700; color: var(--ink); font-size: 0.85rem; text-transform: uppercase; }
+.free-input-wrapper { display: flex; align-items: center; border-bottom: 1px solid var(--ink); }
+#free-input { border: 0; font-size: 1.6rem; font-weight: 700; color: var(--red); width: 100%; outline: none; padding: 5px 0; font-family: var(--ff-cta); }
+
+.total-bar { background: var(--ink); color: white; padding: 15px; margin: 0 -30px -30px; display: flex; justify-content: space-between; align-items: center; }
+.total-val { font-size: 1.2rem; font-weight: 700; font-family: var(--ff-cta); }
+.btn-pay { background: var(--red); border: 0; color: white; padding: 8px 16px; font-weight: 700; cursor: pointer; }
+.btn-pay:disabled { background: #555; cursor: default; opacity: 0.7; }
+
+.custom-item-btn { width: 100%; border: 1px dashed var(--ink); background: transparent; padding: 10px; font-weight: 700; color: var(--ink); cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+/* --- TELA PIX (LAYOUT CORRIGIDO) --- */
+.pix-qr-box {
+  background: #fff;
+  padding: 10px;
+  border: 2px solid var(--ink);
+  display: inline-block;
+  margin-bottom: 15px;
+}
+.pix-img {
+  width: 180px; height: 180px; /* Tamanho fixo seguro */
+  display: block;
+  object-fit: contain;
+}
+.pix-total-display {
+  font-family: var(--ff-cta);
+  font-size: 1.6rem;
+  color: var(--red);
+  font-weight: 700;
+  margin-bottom: 15px;
+  display: block;
+}
+.pix-copy-row {
+  display: flex; gap: 5px; margin-bottom: 8px;
+  max-width: 100%; /* Segura para não estourar */
+}
+.pix-input-readonly {
+  flex: 1; /* Ocupa o espaço que der */
+  font-size: 0.85rem; color: #555;
+  padding: 10px;
+  border: 1px solid var(--ink);
+  background: #f4f4f4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; /* Corta texto longo */
+  font-family: monospace;
+  border-radius: 0;
+}
+.btn-copy {
+  background: var(--ink); color: #fff;
+  border: 0; font-weight: 700;
+  padding: 0 15px; cursor: pointer;
+  font-family: var(--ff-cta);
+  white-space: nowrap;
+}
+.btn-copy:active { background: var(--red); }
+.msg-success-copy { color: #27ae60; font-weight: bold; font-size: 0.8rem; display: none; margin-bottom: 15px; }
+
+
+/* --- ACCORDION DE BOAS-VINDAS (Abaixo do Header) --- */
+/* --- ACCORDION ALINHADO (WOW EFFECT) --- */
+.welcome-section {
+  background: var(--ink); /* Fundo preto total */
+  margin-bottom: 24px;
+  margin-top: -169px;
+  width: 100%;
+}
+
+/* O Segredo do Alinhamento 👇 */
+.w-wrapper {
+  max-width: calc(var(--app-max-width) / 3 );
+  margin: 0 auto;                  /* Centraliza */
+  padding: 0 6px;                  /* Mesma sangria do app */
+}
+
+.welcome-header {
+  padding: 8px 10px;
+  text-align: center;
+  color: var(--beige);
+}
+
+.welcome-title {
+  font-family: var(--ff-cta); font-weight: 700; font-size: 1.4rem; 
+  letter-spacing: 0.6px; text-transform: uppercase; margin: 0; color: var(--ink);
+}
+.welcome-subtitle {
+  font-family: var(--ff-body); color: var(--ink); font-size: 0.8rem; margin-top: 8px; margin-bottom: 8px;
+}
+
+/* Accordion */
+.w-accordion {
+  background: var(--white);
+  border-top: 1px solid #2b2424;
+  /* Sem borda superior para colar no header visualmente, ou com borda se preferir separado */
+}
+
+.w-details {
+  border: 1px solid #2b2424;
+  border-top: 0px;
+  background: var(--beige);
+  transition: background 0.2s;
+}
+.w-details[open] { background: #fff;}
+
+.w-summary {
+  list-style: none; padding: clamp(3px, 1vw, 12px) 20px; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--ff-cta); font-weight: 700; text-transform: uppercase;
+  font-size: 0.95rem; color: var(--ink); user-select: none;
+}
+.w-summary::-webkit-details-marker { display: none; }
+
+.w-summary::after {
+  content: '+'; font-size: 1.4rem; font-weight: 300; color: var(--red);
+  transition: transform 0.3s;
+}
+.w-details[open] .w-summary::after { content: '−'; transform: rotate(180deg); }
+
+.w-content {
+  padding: 0 20px 20px 60px;
+  font-family: var(--ff-body); font-size: 0.95rem; line-height: 1.5; color: #555;
+  text-align: left; animation: slideDown 0.3s ease-out;
+}
+.w-icon { font-size: clamp(1.24rem, 2vw, 1.4rem); margin-right: 13px; width: 25px; text-align: center; margin-left: -8px; }
+@keyframes slideDown { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
 
 
   @media (max-width:768px){ .filters-bar { gap: 8px; } 
       .review-body {
   padding: 0px 1.8vh; /* Sem padding para as bordas encostarem */
-      
   }
+  
+  .welcome-section {
+  margin-top: 0px;
+ }
 </style>
 
 
@@ -467,14 +659,88 @@
 </head>
 <body>
 
-  <header>
+<header>
     <div class="hdr-inner">
-      <a class="logo" href="#">
-        <img src="https://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" />
+      <a class="logo" href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
+          <img src="https://betshoptv.com/elementos/logo-bstv.png" alt="BetShopTV" />
       </a>
-      <span class="page-title">SELEÇÃO DE PRÊMIOS</span>
-    </div>
+      
+<button 
+  id="btn-copiar-selecao" 
+  class="chip" 
+  disabled 
+  style="
+    margin-left: auto; /* Empurra para a direita */
+    font-weight: 500;
+    font-size: 0.8em;
+    letter-spacing: 0.66px;
+    min-height: 40px; 
+    padding: 8px 12px;
+    /* ESTADO INICIAL: Bege (Fundo), Vermelho (Borda/Texto) */
+    background: transparent;
+    color: var(--red);
+    border: 1px solid var(--red);
+    cursor: default; /* Inativo por padrão */
+    margin-right: 11px;
+  "
+  onclick="copyListToClipboard()"
+>
+  SELECIONE PARA COPIAR
+</button>
+
+<textarea id="lista-copiar-oculta" style="position: absolute; left: -9999px;"></textarea>
+      </div>
   </header>
+
+<section class="welcome-section" style="background-color: #bebab0;">
+    <div class="w-wrapper"> <div class="welcome-header" style=" margin-bottom: 13px; background: red;">
+        <h2 class="welcome-title" style="color: white; background:red; font-weight: 400; padding: 8px; border-bottom: 1px solid white; ">VOCÊ GANHOU <strong>3</strong> PEÇAS!</h2>
+        <div style="margin-top: 8px;"><span class="welcome-subtitle" style="padding: 6px 9px; color: white;"><strong>Clique nas imagens</strong> para selecioná-las&nbsp;&nbsp;&nbsp;<br />&nbsp;&nbsp;&nbsp;e nos itens abaixo para saber mais.</span></div>
+      <div style="margin-top: 8px;"></div>
+      </div>
+
+      <div class="w-accordion">
+        
+        <details class="w-details">
+          <summary class="w-summary">
+            <div style="display:flex; align-items:center;"><span class="w-icon" style="font-size: 24px; font-weight: 500; margin-top: -2px; margin-left: 2px;">☑</span> ESCOLHA </div>
+          </summary>
+          <div class="w-content">
+        <div style="margin-top: 8px;">Você pode enviar suas escolhas diretamente por mensagem, clicando em COPIAR SELEÇÃO, ou por aqui, através do menu EDITAR SELEÇÃO. </div>
+       
+        <div style="margin-top: 8px;">Ao enviar suas escolhas, as peças são reservadas <strong>imediatamente</strong>, porém este catálogo é atualizado <strong>uma vez por dia</strong>.</div>
+            
+            <div style="margin-top: 8px;">Se quiser, selecione <strong>mais de 3 peças</strong> para indicar suas preferências em caso de duplicata.</div>
+         
+            <div style="margin-top: 8px;">Clique na lupa ⌕  para saber mais sobre cada peça e em ↻  para reordená-las na galeria! :)</div>
+            </div>
+        </details>
+
+        <details class="w-details">
+          <summary class="w-summary">
+            <div style="display:flex; align-items:center;"><span class="w-icon" style="font-size: 24px; font-weight: 500; margin-top: -2px; margin-left: 2px;">❐</span>RECEBIMENTO</div>
+          </summary>
+          <div class="w-content">
+            <div style="margin-top: 8px;">As entregas e retiradas podem ser feitas até dia 20/12 ou a partir de 08/01. Se estiver pela região central de São Paulo, mais fácil ainda!</div>
+            <div style="margin-top: 8px;">Para outras localidades, os envios serão combinados individualmente, com frete à parte. </div>
+            <div style="margin-top: 8px;">As peças são entregues <strong>planificadas</strong>, contendo seus certificados e sugestões de montagem.</div>
+          </div>
+        </details>
+
+        <details class="w-details">
+          <summary class="w-summary">
+            <div style="display:flex; align-items:center;"><span class="w-icon" style="font-size: 24px; font-weight: 500; margin-top: 3px; margin-left: 2px;">⧉</span>APOIO</div>
+          </summary>
+          <div class="w-content">
+            <div style="margin-top: 8px;">Quer dar mais uma força, propor alguma troca?</div>
+            <div style="margin-top: 8px;">Conheça a <a href="#" onclick="goToDonation() ; return false;" style="color: red;"><strong>CARTELA DE DOAÇÕES</strong></a> ou fale conosco!</div>
+            <div style="margin-top: 8px;">PIX: betshoptv@gmail.com</div>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
 
   <main id="app">
     <div style="padding:40px; text-align:center;">Carregando catálogo de prêmios...</div>
@@ -491,7 +757,11 @@
       </div>
     
     <div style="padding: 15px; background: var(--beige); text-align: center;">
-        <button class="btn-submit" onclick="showCheckoutForm()">FINALIZAR ENVIO</button>
+  <div class="review-footer">
+  <button class="btn-submit" onclick="openFlow()" style="width:100%">
+    ENVIAR
+  </button>
+</div>
     </div>
   </div>
     <span id="counter" class="pill-counter"></span>
@@ -504,7 +774,11 @@
 <script>
 /* ================= CONFIG ================= */
 const JSON_URL = 'https://betshoptv.com/dados/pecas.json';
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzel7_KO8q-hMGwWcTPd-112Z3NA2rDFiAHYgUIIc7lmZwkQITA36JHJET_xnerhAWZ/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzel7_KO8q-hMGwWcTPd-112Z3NA2rDFiAHYgUIIc7lmZwkQITA36JHJET_xnerhAWZ/exec'; 
+// DADOS DO PIX (PREENCHA AQUI!)
+const PIX_CHAVE  = "betshoptv@gmail.com"; 
+const PIX_NOME   = "BET SHOP TV"; // Sem acentos é mais seguro
+const PIX_CIDADE = "SAO PAULO";        // Sem acentos
 
 /* ================= STATE ================= */
 let todasPecas = []; // Lista bruta
@@ -515,7 +789,13 @@ let filtros = {
   grupo: null, // null = todos
   sort: 'group' // group | id
 };
-
+/* ================= FERRAMENTA DE ALEATORIEDADE ================= */
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 /* ================= INIT ================= */
 async function init(){
   try {
@@ -527,9 +807,12 @@ async function init(){
     todasPecas = data.filter(p => {
        const st = String(p.status || '').trim().toLowerCase();
        // Se tiver "vendid" ou "acervo", remove da lista.
-       return !st.includes('vendid') && !st.includes('acervo');
+return !st.includes('vendid') && !st.includes('acervo');
     });
-
+    
+    // 1. Aleatório na largada
+    shuffleArray(todasPecas);
+    
     renderApp();
   } catch(e) {
     document.getElementById('app').innerHTML = '<h3 style="color:red;text-align:center">Erro ao carregar dados.</h3>';
@@ -549,47 +832,23 @@ function renderApp(){
   const galeria = buildGaleria();
   app.appendChild(galeria);
 }
-
 function buildFilters(){
   const bar = document.createElement('div');
   bar.className = 'filters-bar';
-
-  // Grupos (Extraídos apenas das peças disponíveis)
-  const gWrap = document.createElement('div');
-  gWrap.className = 'filters-group';
-  gWrap.innerHTML = '<span class="filters-label">GRUPOS</span>';
   
-  const grupos = [...new Set(todasPecas.map(p => String(p.id_peca).slice(0,2)))].sort();
+  // Botão: REORDENAR (Mantido)
+  const btnShuffle = document.createElement('button');
+  btnShuffle.className = 'chip';
+  // Mantém a setinha grande estilizada
+  btnShuffle.innerHTML = '<span style="font-size: 1.6em; vertical-align: middle; line-height: 0; min-width: 30px;">↻</span>';
   
-  // Botão "Todos"
-  const btnAll = document.createElement('button');
-  btnAll.className = 'chip';
-  btnAll.textContent = 'TODOS';
-  if(!filtros.grupo) btnAll.classList.add('is-active');
-  btnAll.onclick = () => { filtros.grupo = null; renderApp(); };
-  gWrap.appendChild(btnAll);
+  btnShuffle.onclick = () => {
+      shuffleArray(todasPecas);
+      renderApp();
+  };
+  bar.appendChild(btnShuffle);
 
-  grupos.forEach(g => {
-    const b = document.createElement('button');
-    b.className = 'chip';
-    b.textContent = g;
-    if(filtros.grupo === g) b.classList.add('is-active');
-    b.onclick = () => { filtros.grupo = (filtros.grupo === g) ? null : g; renderApp(); };
-    gWrap.appendChild(b);
-  });
-  bar.appendChild(gWrap);
-
-  // Ordenação Simples
-  const sWrap = document.createElement('div');
-  sWrap.className = 'filters-group';
-  sWrap.innerHTML = '<span class="filters-label">ORDEM</span>';
-  const sel = document.createElement('select');
-  sel.className = 'select';
-  sel.innerHTML = `<option value="group">Por Grupo</option><option value="id">Por Código</option>`;
-  sel.value = filtros.sort;
-  sel.onchange = (e) => { filtros.sort = e.target.value; renderApp(); };
-  sWrap.appendChild(sel);
-  bar.appendChild(sWrap);
+  // (O botão "Escolhe pra mim" foi removido daqui)
 
   return bar;
 }
@@ -598,30 +857,17 @@ function buildGaleria(){
   // 1. Filtrar lista atual
   let lista = filtros.grupo 
     ? todasPecas.filter(p => String(p.id_peca).startsWith(filtros.grupo))
-    : [...todasPecas];
+    : [...todasPecas]; 
 
-  // 2. Ordenar
-  lista.sort((a,b) => {
-      const idA = parseInt(a.id_peca);
-      const idB = parseInt(b.id_peca);
-      return idA - idB; 
-  });
 
-  // 3. Container Masonry (RESPONSIVO)
+  // 3. Container Masonry
   const container = document.createElement('div');
   container.className = 'galeria-container';
   
-  // --- LÓGICA SIMPLES DE COLUNAS ---
-  // Se a tela for menor que 768px (Tablet/Mobile), usa 2 colunas.
-  // Se for menor que 400px (Celular pequeno), usa 1 coluna (opcional, mas recomendado para não esmagar).
-  // Caso contrário, usa 3 colunas.
-  const w = window.innerWidth;
-  let numColunas = 3; 
-  if (w < 900) numColunas = 2;
-  // Se quiser forçar 2 colunas mesmo em telas muito pequenas, apague a linha abaixo:
-  if (w < 450) numColunas = 1; 
+  // --- AQUI ESTÁ A TRAVA: SEMPRE 3 COLUNAS ---
+  const colunas = 3;  
   
-  const cols = Array.from({length: numColunas}, () => {
+  const cols = Array.from({length: colunas}, () => {
     const d = document.createElement('div');
     d.className = 'gal-col';
     return d;
@@ -633,40 +879,62 @@ function buildGaleria(){
     const item = document.createElement('div');
     item.className = 'gal-item';
     
-    // a) Checa status
+    // Status
     const status = String(p.status||'');
     if (/vendid/i.test(status)) item.classList.add('sold');
     if (/acervo/i.test(status)) item.classList.add('acervo');
 
-    // b) Checa seleção
+    // Seleção
     const selIdx = selecionados.indexOf(p.id_peca);
     if(selIdx !== -1) item.classList.add('selected');
     
-    // c) Define ID e Clique
     item.dataset.id = p.id_peca;
     item.onclick = () => toggleSelection(p.id_peca);
+// --- ELEMENTOS VISUAIS (GAMBIARRA DO WRAPPER) ---
 
-    // --- ELEMENTOS ---
+    // 1. Wrapper (O Envelope que segura Imagem + Botão)
+    const imgWrap = document.createElement('div');
+    imgWrap.style.position = 'relative'; // Essencial para o botão flutuar
+    imgWrap.style.width = '100%';        // Garante largura total
+    item.appendChild(imgWrap);
+
+// 2. Imagem (Vai DENTRO do Wrapper)
     const img = new Image();
     img.src = `https://betshoptv.com/img/tmb/${p.imagens[0]}.avif`;
-    img.onerror = function(){ this.src = this.src.replace('.avif','.jpg'); };
-    item.appendChild(img);
+    
+    img.onerror = function(){ 
+        this.onerror = null; // Previne loop infinito caso a fallback também falhe
+        // Aponta explicitamente para a pasta /fallback/ e muda para .jpg
+        this.src = `https://betshoptv.com/img/fallback/${p.imagens[0]}.jpg`; 
+    };
+    
+    imgWrap.appendChild(img);
 
+    // 3. Badge (Vai DENTRO do Wrapper)
     const badge = document.createElement('div');
     badge.className = 'selection-badge';
     badge.textContent = selIdx + 1; 
-    item.appendChild(badge);
+    imgWrap.appendChild(badge);
 
+    // 4. Botão [+] (Vai DENTRO do Wrapper, canto direito inferior)
+    const btnSpy = document.createElement('button');
+    btnSpy.className = 'btn-spy';
+    btnSpy.textContent = '⌕';
+    // O pulo do gato: stopPropagation impede que clique no + selecione a peça
+    btnSpy.onclick = (e) => { 
+        e.stopPropagation(); 
+        openDetails(p.id_peca); 
+    };
+    imgWrap.appendChild(btnSpy);
+
+    // 5. Barra de Título (FORA do wrapper, limpa, só texto)
     const tit = document.createElement('div');
     tit.className = 'gal-titulo';
-    tit.innerHTML = `
-        <span class="gal-titulo-text">${p.titulo || `Peça ${p.id_peca}`}</span>
-        <button class="btn-spy" onclick="event.stopPropagation(); openDetails('${p.id_peca}')"> + </button>
-    `;
+    tit.innerHTML = `<span class="gal-titulo-text">${p.titulo || `Peça ${p.id_peca}`}</span>`;
     item.appendChild(tit);
 
-    // Adiciona na coluna certa
-    cols[idx % numColunas].appendChild(item);
+    // Adiciona na coluna
+    cols[idx % colunas].appendChild(item);
   });
 
   return container;
@@ -685,21 +953,92 @@ function toggleSelection(id){
   updateFooter();
 }
 
+/* ================= LÓGICA DE CÓPIA PARA WHATSAPP ================= */
+
+// NOVO: Função que copia o texto da lista
+function copyListToClipboard() {
+    const listaTxt = document.getElementById('lista-copiar-oculta').value;
+    
+    if (!listaTxt) { 
+        alert('A lista está vazia! Selecione as peças primeiro.'); 
+        return;
+    }
+    
+    // 1. Copia o texto
+    navigator.clipboard.writeText(listaTxt).then(() => {
+        const btn = document.getElementById('btn-copiar-selecao');
+        const count = selecionados.length;
+        
+        // Salva estado de repouso (todo Vermelho) para reset
+        const defaultText = `COPIAR SELEÇÃO (${count})`;
+
+        // 2. Feedback Visual: FUNDO INK, BORDA INK, TEXTO BEIGE
+        btn.textContent = 'COPIADA! ✔';
+        btn.style.backgroundColor = 'var(--ink)';
+        btn.style.borderColor = 'var(--ink)';
+        btn.style.color = 'var(--beige)';
+        
+        // 3. Reseta após 1.5s para o estado ATIVO
+        setTimeout(() => {
+            btn.textContent = defaultText;
+            btn.style.backgroundColor = 'var(--red)'; // Volta ao estado ATIVO
+            btn.style.borderColor = 'var(--red)';
+            btn.style.color = 'var(--white)';
+        }, 1500);
+    }).catch(err => {
+        console.error('Erro ao copiar', err);
+        alert('Erro ao copiar a lista. Tente novamente.');
+    });
+}
+
+
+// NOVO: Atualiza o footer, o status do botão e a lista oculta
 function updateFooter(){
   const counter = document.getElementById('counter');
-  const btn = document.getElementById('btn-finish');
+  const btnFinish = document.getElementById('btn-finish');
+  const btnCopy = document.getElementById('btn-copiar-selecao');
+  const txtHidden = document.getElementById('lista-copiar-oculta');
+  const count = selecionados.length;
   
-  if(selecionados.length > 0){
+  if(count > 0){
+    // --- ESTADO ATIVO ---
+    
+    // Botão Finalizar
     counter.style.display = 'block';
-    btn.disabled = false;
-    // MUDANÇA: Agora abre o painel de edição
-    btn.textContent = `VER / EDITAR LISTA`; 
-    btn.onclick = toggleReviewPanel; // Muda a ação do botão
+    btnFinish.disabled = false;
+    btnFinish.textContent = `EDITAR SELEÇÃO (${count})`;
+    btnFinish.onclick = toggleReviewPanel; 
+    
+    // Botão Copiar (TODO VERMELHO)
+    btnCopy.disabled = false;
+    btnCopy.textContent = `COPIAR SELEÇÃO (${count})`;
+    btnCopy.style.backgroundColor = 'var(--red)';
+    btnCopy.style.borderColor = 'var(--red)';
+    btnCopy.style.color = 'var(--white)';
+    btnCopy.style.cursor = 'pointer';
+    
+    // Lista Oculta (formato por linha)
+    txtHidden.value = selecionados.join('\n');
+    
   } else {
+    // --- ESTADO INATIVO ---
+    
+    // Botão Finalizar
     counter.style.display = 'none';
-    btn.disabled = true;
-    btn.textContent = 'SELECIONE SEUS PRÊMIOS';
-    btn.onclick = null;
+    btnFinish.disabled = true;
+    btnFinish.textContent = 'SELECIONE SEUS PRÊMIOS';
+    btnFinish.onclick = null;
+    
+    // Botão Copiar (BEGE + BORDA VERMELHA)
+    btnCopy.disabled = true;
+    btnCopy.textContent = 'SELECIONE PARA COPIAR';
+    btnCopy.style.backgroundColor = 'transparent';
+    btnCopy.style.borderColor = 'var(--red)';
+    btnCopy.style.color = 'var(--red)';
+    btnCopy.style.cursor = 'default';
+    
+    // Lista Oculta
+    txtHidden.value = '';
   }
 }
 
@@ -710,75 +1049,269 @@ document.getElementById('btn-finish').onclick = () => {
 };
 
 /* ================= NOVO FLUXO DE ENVIO ================= */
+/* ================= STATE DOAÇÕES & FLUXO ================= */
+/* ================= LÓGICA DE DOAÇÕES & FLUXO ================= */
+let carrinho = {}; 
+let valorLivre = 0;
+let nomeUsuario = "";
 
-// 1. Em vez de mudar a página, abrimos o modal discreto
-function showCheckoutForm(){
-    // Atualiza a quantidade no texto
+// Catálogo Base (Item 1 é dinâmico)
+const catalogoBase = [
+  { id: 1, nome: "Média das Peças Selecionadas", preco: 0 }, 
+  { id: 2, nome: "Aluguel Dez/2025", preco: 2000.01 },
+  { id: 3, nome: "Hora/Trabalho", preco: 150.00 },
+  { id: 4, nome: "Pote de Gel Medium", preco: 62.40 },
+  { id: 5, nome: "Peça sob encomenda", preco: 1500.00 },
+  { id: 6, nome: "Refugo de EVA (kg)", preco: 5.99 },
+  { id: 7, nome: "Translado SP>RJ>SP", preco: 450.00 },
+  { id: 8, nome: "Playboy Fev/90 + Frete", preco: 273.38 }
+  { id: 9, nome: "Pacote de Softwares Criativos (Licença Anual)", preco: 2400.00 },
+];
+let catalogoAtual = [...catalogoBase];
+
+// --- NAVEGAÇÃO ---
+function openFlow() {
+    // Tenta fechar o painel de revisão se existir
+    const panel = document.getElementById('review-panel');
+    if(panel) panel.classList.remove('open');
+
     document.getElementById('qtd-confirma').textContent = selecionados.length;
-    
-    // Abre o modal
-    const modal = document.getElementById('modal-envio');
-    modal.classList.add('visible');
-    
-    // Foca no input
-    setTimeout(() => document.getElementById('final-nome').focus(), 100);
+    document.getElementById('main-modal').classList.add('open');
+    showScreen('step-name');
 }
 
-// 2. Fechar o modal
-function closeEnvioModal(){
-    document.getElementById('modal-envio').classList.remove('visible');
+function closeFlow() {
+    document.getElementById('main-modal').classList.remove('open');
 }
 
-// 3. Enviar de fato (Simples e Direto)
-async function submitData(){
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+// --- ENVIO PRÊMIOS ---
+async function submitPremios(){
     const nomeInput = document.getElementById('final-nome');
     const nome = nomeInput.value.trim();
-    const btn = document.getElementById('btn-submit-final');
+    const btn = document.getElementById('btn-envio-premios');
     
-    if(!nome) {
-        alert('Por favor, digite seu nome.');
-        nomeInput.focus();
-        return;
-    }
+    if(!nome) { alert('Digite seu nome!'); nomeInput.focus(); return; }
+    nomeUsuario = nome;
 
-    // UI de Carregamento
-    const oldText = btn.textContent;
-    btn.disabled = true;
-    btn.textContent = 'ENVIANDO...';
-    btn.style.background = '#ccc';
+    btn.disabled = true; btn.textContent = 'ENVIANDO...';
 
-    // Prepara a lista JSON (Ordem, ID, Título)
-    const listaEstruturada = selecionados.map((id, index) => {
+    const lista = selecionados.map((id, index) => {
         const p = todasPecas.find(item => item.id_peca === id);
-        return {
-            ordem: index + 1,
-            titulo: p ? `${p.id_peca} - ${p.titulo}` : id // Envia ID e Título juntos para facilitar leitura
-        };
+        return { ordem: index + 1, titulo: p ? `${p.id_peca} - ${p.titulo}` : id };
     });
 
     const fd = new FormData();
+    fd.append('tipo', 'PREMIO');
     fd.append('nome', nome);
-    fd.append('favoritas', JSON.stringify(listaEstruturada)); // Manda o JSON para o script ler
+    fd.append('conteudo', JSON.stringify(lista));
+
+    try {
+        await fetch(GAS_URL, { method:'POST', body:fd });
+        showScreen('step-success');
+    } catch(err) {
+        console.error(err); alert('Erro ao enviar.');
+        btn.disabled = false; btn.textContent = 'ENVIAR SELEÇÃO';
+    }
+}
+
+// --- DOAÇÃO & CÁLCULO DINÂMICO ---
+// Função para carregar a tela de doação, seja vindo do fluxo de sucesso ou de um link direto.
+function goToDonation() {
+    // 1. Garante que o modal principal esteja aberto, caso venha de um link/botão direto.
+    document.getElementById('main-modal').classList.add('open'); 
+    
+    // 2. Define um nome padrão. Isso é CRÍTICO para que o Apps Script aceite o envio
+    // se o usuário pular a tela de "Nome".
+    nomeUsuario = nomeUsuario || "Colaborador Rápido"; 
+
+    // 3. (O resto é a lógica que já funcionava)
+    calculateDynamicPrice(); 
+    renderList();
+    showScreen('step-donation');
+}
+
+function calculateDynamicPrice() {
+    let soma = 0; let count = 0;
+    selecionados.forEach(id => {
+        const p = todasPecas.find(item => item.id_peca === id);
+        if (p && p.preco) { soma += parseFloat(p.preco); count++; }
+    });
+    // Fórmula: (Soma / Qtd) * 3
+    const media = count > 0 ? soma / count : 0;
+    const precoFinal = media;
+
+    const item1 = catalogoAtual.find(i => i.id === 1);
+    if(item1) item1.preco = precoFinal;
+}
+
+function renderList() {
+    const container = document.getElementById('donation-list');
+    container.innerHTML = '';
+    catalogoAtual.forEach(item => {
+      const qtd = carrinho[item.id] || 0;
+      const precoStr = item.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+      const div = document.createElement('div');
+      div.className = 'donation-item';
+      div.innerHTML = `
+        <div class="donation-info"><span class="d-name">${item.nome}</span><span class="d-price">R$ ${precoStr}</span></div>
+        <div class="d-controls">
+          <div class="d-btn" onclick="updateQty(${item.id}, -1)">-</div><span class="d-qty">${qtd}</span><div class="d-btn" onclick="updateQty(${item.id}, 1)">+</div>
+        </div>`;
+      container.appendChild(div);
+    });
+    updateTotal();
+}
+
+function updateQty(id, delta) {
+    if (!carrinho[id]) carrinho[id] = 0;
+    carrinho[id] += delta;
+    if (carrinho[id] < 0) carrinho[id] = 0;
+    renderList(); 
+}
+
+function updateFreeValue() {
+    const input = document.getElementById('free-input');
+    let val = parseFloat(input.value.replace(',', '.'));
+    if (isNaN(val) || val < 0) val = 0;
+    valorLivre = val;
+    updateTotal();
+}
+
+function updateTotal() {
+    let totalItens = 0;
+    catalogoAtual.forEach(item => {
+        const qtd = carrinho[item.id] || 0;
+        totalItens += qtd * item.preco;
+    });
+    const totalGeral = totalItens + valorLivre;
+    const txtValor = totalGeral.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+    
+    document.getElementById('total-display').textContent = txtValor;
+    const btnPix = document.getElementById('btn-pix');
+    
+    if(totalGeral > 0) {
+        btnPix.disabled = false;
+        btnPix.textContent = `PAGAR`;
+    } else {
+        btnPix.disabled = true;
+        btnPix.textContent = "GERAR PIX";
+    }
+}
+
+function openCustomItem() { showScreen('step-custom'); }
+
+function addCustomItem() {
+    const desc = document.getElementById('custom-desc').value;
+    const val = parseFloat(document.getElementById('custom-val').value.replace(',', '.'));
+    if(!desc || isNaN(val) || val <= 0) return alert('Preencha corretamente.');
+    
+    const newId = Date.now();
+    catalogoAtual.push({ id: newId, nome: desc, preco: val });
+    carrinho[newId] = 1;
+    goToDonation();
+}
+
+/* ================= GERADOR DE PIX (ROBUSTO) ================= */
+
+/* ================= FUNÇÕES DO PIX ================= */
+
+// 1. Gera o Código (Payload)
+function gerarPixPayload(chave, nome, cidade, valor) {
+  const format = (id, val) => id + val.length.toString().padStart(2,'0') + val;
+  const valorStr = valor.toFixed(2);
+  
+  let payload = 
+    format('00', '01') +                           
+    format('26', format('00', 'BR.GOV.BCB.PIX') + format('01', chave)) +
+    format('52', '0000') +                         
+    format('53', '986') +                          
+    format('54', valorStr) +                       
+    format('58', 'BR') +                           
+    format('59', nome) +                           
+    format('60', cidade) +                         
+    format('62', format('05', '***'));             
+
+  payload += '6304'; // ID do CRC
+  
+  // Cálculo CRC16 (Polinômio 0x1021)
+  let crc = 0xFFFF;
+  for (let i = 0; i < payload.length; i++) {
+    crc ^= payload.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      if ((crc & 0x8000) !== 0) crc = (crc << 1) ^ 0x1021;
+      else crc = crc << 1;
+    }
+  }
+  return payload + (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+}
+
+// 2. Ação de Copiar
+function copyPixCode() {
+  const input = document.getElementById('pix-copia-cola');
+  input.select();
+  input.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(input.value);
+  
+  const msg = document.getElementById('msg-copy');
+  msg.style.display = 'block';
+  setTimeout(() => msg.style.display = 'none', 3000);
+}
+
+// 3. Atualize sua função submitDonation para usar isso
+// (Substitua a função submitDonation antiga por esta versão final)
+async function submitDonation() {
+    // A) Prepara os dados
+    const itensEscolhidos = [];
+    catalogoAtual.forEach(item => {
+        const qtd = carrinho[item.id] || 0;
+        if(qtd > 0) itensEscolhidos.push({ nome: item.nome, preco: item.preco, qtd: qtd, subtotal: item.preco * qtd });
+    });
+    if(valorLivre > 0) itensEscolhidos.push({ nome: "Doação Livre", preco: valorLivre, qtd: 1, subtotal: valorLivre });
+
+    const btn = document.getElementById('btn-pix');
+    btn.textContent = "GERANDO PIX...";
+    btn.disabled = true;
+
+    // B) Envia para Planilha
+    const fd = new FormData();
+    fd.append('tipo', 'DOACAO');
+    fd.append('nome', nomeUsuario);
+    fd.append('conteudo', JSON.stringify(itensEscolhidos));
 
     try {
         await fetch(GAS_URL, { method:'POST', body:fd });
         
-        // Sucesso: Feedback visual e reload
-        btn.textContent = 'SUCESSO!';
-        btn.style.background = 'var(--red)';
-        setTimeout(() => {
-            alert('Sua seleção foi recebida com sucesso!');
-            location.reload(); 
-        }, 500);
+        // C) GERA O PIX NA TELA
+        let total = 0;
+        catalogoAtual.forEach(i => { total += (carrinho[i.id]||0) * i.preco; });
+        total += valorLivre;
+
+        if(total <= 0) { alert("Valor total inválido."); return; }
+
+        // Gera código
+        const payload = gerarPixPayload(PIX_CHAVE, PIX_NOME, PIX_CIDADE, total);
         
+        // Atualiza UI
+        document.getElementById('pix-copia-cola').value = payload;
+        document.getElementById('pix-valor-display').textContent = total.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+        
+        // Gera QR Code (API Rápida)
+        document.getElementById('pix-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(payload)}`;
+
+        // Mostra tela
+        showScreen('step-pix');
+
     } catch(err) {
-        console.error(err);
-        alert('Erro ao enviar. Tente novamente.');
-        btn.disabled = false;
-        btn.textContent = oldText;
-        btn.style.background = 'var(--ink)';
+        console.error(err); alert('Erro ao processar doação.');
+        btn.disabled = false; btn.textContent = 'GERAR PIX';
     }
 }
+
 /* ================= PAINEL DE REVISÃO ================= */
 
 function toggleReviewPanel() {
@@ -977,35 +1510,108 @@ function closeDetails(e, force = false) {
   }
 }
 
-// Redesenha a galeria ao redimensionar a janela
-let resizeTimer;
-window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-        renderApp(); 
-    }, 200);
-});
+
+
+
+
+
 
 // Inicia tudo
 window.addEventListener('DOMContentLoaded', init);
+/* ================= HEADER SHRINK ================= */
+window.addEventListener('scroll', () => {
+  const header = document.querySelector('header');
+  // Passou de 10px? Já encolhe. Resposta rápida.
+  if (window.scrollY > 38) {
+    header.classList.add('scrolled');
+  } else {
+    header.classList.remove('scrolled');
+  }
+});
 
 </script>
 
 
-<div id="modal-envio" class="envio-modal-overlay">
+<div id="main-modal" class="envio-modal-overlay">
   <div class="envio-card">
-    <div class="envio-title">Confirmar Seleção</div>
-    <p class="envio-desc">
-      Você selecionou <strong id="qtd-confirma">0</strong> peças.<br><br><br><br><br><br><br>
-      Digite seu nome para registrar sua preferência.
-    </p>
-    
-    <input type="text" id="final-nome" class="envio-input" placeholder="Nome" autocomplete="name" style="text-align: center;">
-    
-    <button id="btn-submit-final" class="btn-confirm" onclick="submitData()">ENVIAR AGORA</button>
-    <button class="btn-cancel" onclick="closeEnvioModal()">Cancelar</button>
+    <button onclick="closeFlow()" style="position:absolute; top:10px; right:15px; border:0; background:none; font-size:1.5rem; cursor:pointer;">✕</button>
+
+    <div id="step-name" class="screen active">
+      <div class="envio-title">Você selecionou <strong id="qtd-confirma">0</strong> peças!</div>
+      <p class="envio-desc">
+        Qual seu nome?
+      </p>
+      <input type="text" id="final-nome" class="input-field" placeholder="♥" autocomplete="name">
+      <button id="btn-envio-premios" class="btn-confirm" onclick="submitPremios()">ENVIAR SELEÇÃO</button>
+    </div>
+
+    <div id="step-success" class="screen">
+      <div class="envio-title" style="color:var(--ink)">Sucelso!</div>
+      <div style="background:#f4f4f4; padding:15px; border:1px dashed var(--ink); margin-bottom:15px;">
+        <p style="margin:0 0 10px 0; font-weight:400; color:var(--ink);">Agradecemos a participação e desejamos um ótimo fim de ano! Em breve combinaremos o recebimento das peças.   </p>
+        <p style="margin:0 0 10px 0; font-weight:400; color:var(--ink);">Quer seguir contribuindo?   </p>
+        <button class="btn-confirm" onclick="goToDonation()" style="background: red;">APOIE AQUI</button>
+      </div>
+      <button class="btn-confirm" onclick="closeFlow()" style="max-width: 50%; font-size: 11px; font-weight: 420; max-width: 24%; color: #2b2424; background: #bebab0;">Concluir</button>
+    </div>
+
+    <div id="step-donation" class="screen">
+      <h2 style="text-align:left; font-size:1.2rem; border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:15px; color:var(--red); font-family:var(--ff-cta);"><font style="background: red; color: white; padding: 8px 12px;">CARTELA DE DOAÇÕES</font></h2>
+      
+      <div class="free-value-box">
+        <label class="free-label">Quero definir uma quantia:</label>
+        <div class="free-input-wrapper">
+          <span style="font-size:1.4rem; font-weight:700; margin-right:5px;">R$</span>
+          <input type="number" id="free-input" placeholder="0,00" oninput="updateFreeValue()">
+        </div>
+      </div>
+      
+      <h2 style="font size: 0.8em;">ITENS</h2>
+
+      <div class="donation-list-container" id="donation-list"></div>
+
+      <button class="custom-item-btn" onclick="openCustomItem()"><span>+</span> Adicionar item personalizado</button>
+<br>
+      <div class="total-bar">
+        TOTAL: <div class="total-val" id="total-display">R$ 0,00</div>
+        <button class="btn-pay" id="btn-pix" disabled onclick="submitDonation()">GERAR PIX</button>
+      </div>
+    </div>
+
+    <div id="step-custom" class="screen">
+      <div class="envio-title">Item Personalizado</div>
+      <input type="text" id="custom-desc" class="input-field" placeholder="Nome e/ou descrição do item">
+      <input type="number" id="custom-val" class="input-field" placeholder="💸 💸 💸">
+      <button class="btn-confirm" onclick="addCustomItem()">ADICIONAR À LISTA</button>
+      <button class="btn-cancel" onclick="goToDonation()">Cancelar</button>
+    </div>
   </div>
+  
+  
+<div id="step-pix" class="screen">
+      <div class="envio-title">Pagamento via PIX</div>
+      <p class="envio-desc">Escaneie o QR Code ou copie o código abaixo.</p>
+      
+      <div class="pix-qr-box">
+        <img id="pix-qr-img" class="pix-img" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="QR Code">
+      </div>
+
+      <div class="pix-total-display" id="pix-valor-display">R$ 0,00</div>
+
+      <div class="pix-copy-row">
+        <input type="text" id="pix-copia-cola" class="pix-input-readonly" readonly value="Carregando código...">
+        <button class="btn-copy" onclick="copyPixCode()">COPIAR</button>
+      </div>
+      <div id="msg-copy" class="msg-success-copy">CÓDIGO COPIADO!</div>
+
+      <button class="btn-cancel" onclick="location.reload()">Já paguei! Fechar.</button>
+    </div>
+    
+    
 </div>
+
+
+
 
 <div id="modal-details" class="details-overlay" onclick="closeDetails(event)">
   <div class="details-card">
