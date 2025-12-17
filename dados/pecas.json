@@ -29,7 +29,7 @@
     "id_peca": "0203",
     "titulo": "02/03 Videocassete",
     "preco": 300,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
     "dimensao": "29 x 41 x 0,6 cm",
     "imagens": [
@@ -42,7 +42,7 @@
     "id_peca": "0204",
     "titulo": "02/04 Microfone 04",
     "preco": 150,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
     "dimensao": "29 x 20,5 x 0,6 cm",
     "imagens": [
@@ -92,7 +92,7 @@
     "id_peca": "0208",
     "titulo": "02/08 Microfone 05",
     "preco": 150,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
     "dimensao": "29 x 20,5 x 0,6 cm",
     "imagens": [
@@ -143,7 +143,7 @@
     "id_peca": "0303",
     "titulo": "03/03 Polaroid 01",
     "preco": 150,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para EVA estampado, braçadeira e parafusos.",
     "dimensao": "23 x 25 x 08 cm",
     "imagens": [
@@ -548,7 +548,7 @@
     "id_peca": "0603",
     "titulo": "06/03 TV 02",
     "preco": 500,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressões offset em papel couché transferidas para EVA mesclado e prego.",
     "dimensao": "54 x 18 x 7 cm",
     "imagens": [
@@ -884,7 +884,7 @@
     "id_peca": "0803",
     "titulo": "08/03 Telefone 05",
     "preco": 600,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA.",
     "dimensao": "27 x 20,5 x 0,3 cm",
     "imagens": [
