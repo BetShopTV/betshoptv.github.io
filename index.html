@@ -849,9 +849,6 @@ div[id]:not(#feed) {
 </a>
       <nav class="nav">
         <a href="#galeria">GALERIA de OFERTAS</a>
-        
-<a href="#como">COMO FUNCIONA?</a>
-         <a href="#sobre">SOBRE NÓS</a>
  
       </nav>
     </div>
@@ -2369,13 +2366,14 @@ function parseHash(){
   return { page: pagePart || 'galeria', params: new URLSearchParams(query || '') };
 }
 
-function handleHashChange() {
+function handleHashChange() { 
   const { page, params } = parseHash();
 
-  // Sem hash ou #home → mostra conteúdo da home
+// MUDANÇA: Se não tiver hash (raiz do site) ou for #home...
+  // ... AGORA Carrega direto a GALERIA!
   if (!location.hash || page === 'home') { 
-    renderHome();
-    updateNavActive(''); // nenhum botão ativo
+    showPage('galeria', { updateHash: false });
+    updateNavActive('galeria'); // Mantém o botão da Galeria aceso
     return;
   }
 
