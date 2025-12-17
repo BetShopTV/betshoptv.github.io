@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <link rel="icon" href="https://betshoptv.com/FAVICON.png" type="image/x-icon">
-<title>BetShopTV - Seleção de Prêmios</title>
+<title>BetShopTV⦿com | Seleção de Prêmios</title>
 
 <style>
   /* --- Tokens & Reset --- */
@@ -410,7 +410,7 @@
   font-family: var(--ff-cta); 
   font-weight: 700; 
   font-size: 1.1rem; 
-  color: var(--red); 
+  color: var(--ink); 
   width: 25px; 
   text-align: center;
 }
@@ -472,7 +472,7 @@
 
 .envio-card {
   background: var(--white); border: 2px solid var(--ink);
-  width: 90%; max-width: 420px; padding: 30px; text-align: center;
+  width: 90%; max-width: 666px; padding: 30px; text-align: center;
   box-shadow: 0 20px 50px rgba(0,0,0,0.3); position: relative;
   transform: translateY(20px); transition: transform 0.3s ease;
 }
@@ -581,7 +581,7 @@
 .welcome-section {
   background: var(--ink); /* Fundo preto total */
   margin-bottom: 24px;
-  margin-top: -169px;
+  margin-top: -100px;
   width: 100%;
 }
 
@@ -685,7 +685,7 @@
   "
   onclick="copyListToClipboard()"
 >
-  SELECIONE PARA COPIAR
+  SELECIONE P/ COPIAR
 </button>
 
 <textarea id="lista-copiar-oculta" style="position: absolute; left: -9999px;"></textarea>
@@ -708,9 +708,9 @@
           <div class="w-content">
         <div style="margin-top: 8px;">Você pode enviar suas escolhas diretamente por mensagem, clicando em COPIAR SELEÇÃO, ou por aqui, através do menu EDITAR SELEÇÃO. </div>
        
-        <div style="margin-top: 8px;">Ao enviar suas escolhas, as peças são reservadas <strong>imediatamente</strong>, porém este catálogo é atualizado <strong>uma vez por dia</strong>.</div>
+        <div style="margin-top: 8px;">Suas peças são reservadas <strong>imediatamente</strong> após o envio, porém este catálogo será atualizado <strong>uma vez por dia</strong>.</div>
             
-            <div style="margin-top: 8px;">Se quiser, selecione <strong>mais de 3 peças</strong> para indicar suas preferências em caso de duplicata.</div>
+            <div style="margin-top: 8px;">Se quiser, selecione <strong>mais de 3 peças</strong> para ampliar suas indicações em caso de duplicata.</div>
          
             <div style="margin-top: 8px;">Clique na lupa ⌕  para saber mais sobre cada peça e em ↻  para reordená-las na galeria! :)</div>
             </div>
@@ -772,227 +772,153 @@
   <input type="hidden" id="fFav"> <input type="hidden" id="fTotal" value="0.00"> ```
 
 <script>
-/* ================= CONFIG ================= */
+/* ================= CONFIGURAÇÕES GERAIS ================= */
 const JSON_URL = 'https://betshoptv.com/dados/pecas.json';
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzel7_KO8q-hMGwWcTPd-112Z3NA2rDFiAHYgUIIc7lmZwkQITA36JHJET_xnerhAWZ/exec'; 
-// DADOS DO PIX (PREENCHA AQUI!)
-const PIX_CHAVE  = "betshoptv@gmail.com"; 
-const PIX_NOME   = "BET SHOP TV"; // Sem acentos é mais seguro
-const PIX_CIDADE = "SAO PAULO";        // Sem acentos
+const GAS_URL  = 'https://script.google.com/macros/s/AKfycbzel7_KO8q-hMGwWcTPd-112Z3NA2rDFiAHYgUIIc7lmZwkQITA36JHJET_xnerhAWZ/exec';
 
-/* ================= STATE ================= */
-let todasPecas = []; // Lista bruta
-let pecasExibidas = []; // Lista filtrada/ordenada
-let selecionados = []; // Array ordenado de IDs: [102, 505, 301...]
+// Configuração PIX
+const PIX_CHAVE  = "CHAVE_PIX_AQUI"; // Coloque sua chave real
+const PIX_NOME   = "NOME_DO_TITULAR";
+const PIX_CIDADE = "CIDADE";
 
-let filtros = {
-  grupo: null, // null = todos
-  sort: 'group' // group | id
-};
-/* ================= FERRAMENTA DE ALEATORIEDADE ================= */
+/* ================= ESTADO DA APLICAÇÃO ================= */
+let todasPecas = [];
+let selecionados = []; 
+let carrinho = {}; 
+let valorLivre = 0;
+let nomeUsuario = "";
+
+// Catálogo Base (Item 1 tem preço dinâmico)
+const catalogoBase = [
+  { id: 1, nome: "Peças premiadas", preco: 0 }, 
+  { id: 2, nome: "Aluguel Dez/2025", preco: 2000.01 },
+  { id: 3, nome: "Hora/Trabalho", preco: 150.00 },
+  { id: 4, nome: "Pote de Gel Medium", preco: 62.40 },
+  { id: 5, nome: "Peça sob encomenda", preco: 1500.00 },
+  { id: 6, nome: "Refugo de EVA (kg)", preco: 5.99 },
+  { id: 7, nome: "Translado SP>RJ>SP", preco: 450.00 },
+  { id: 8, nome: "Playboy Fev/90 + Frete", preco: 273.38 }
+];
+let catalogoAtual = JSON.parse(JSON.stringify(catalogoBase)); // Cópia segura
+
+/* ================= INICIALIZAÇÃO (O CORAÇÃO) ================= */
+async function init(){
+  try {
+    const res = await fetch(JSON_URL);
+    const data = await res.json();
+    
+    // Filtra apenas peças disponíveis
+    todasPecas = data.filter(p => {
+       const st = String(p.status || '').trim().toLowerCase();
+       return !st.includes('vendid') && !st.includes('acervo');
+    });
+    
+    // Aleatório na largada
+    shuffleArray(todasPecas);
+    
+    // Renderiza a Galeria
+    renderApp(); 
+    
+    // Ativa o Header Shrink
+    setupHeaderScroll();
+
+  } catch(e) {
+    document.getElementById('app').innerHTML = '<h3 style="color:red;text-align:center;padding:50px;">Erro ao carregar dados.<br>Tente recarregar a página.</h3>';
+    console.error(e);
+  }
+}
+
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
-/* ================= INIT ================= */
-async function init(){
-  try {
-    const res = await fetch(JSON_URL);
-    const data = await res.json();
-    
-    // FILTRO MESTRE: Apenas peças DISPONÍVEIS (nem Vendida, nem Acervo)
-    // Para prêmios, só mostramos o que pode ser levado.
-    todasPecas = data.filter(p => {
-       const st = String(p.status || '').trim().toLowerCase();
-       // Se tiver "vendid" ou "acervo", remove da lista.
-return !st.includes('vendid') && !st.includes('acervo');
-    });
-    
-    // 1. Aleatório na largada
-    shuffleArray(todasPecas);
-    
-    renderApp();
-  } catch(e) {
-    document.getElementById('app').innerHTML = '<h3 style="color:red;text-align:center">Erro ao carregar dados.</h3>';
-    console.error(e);
-  }
-}
 
-/* ================= RENDERIZADORES ================= */
+/* ================= RENDERIZAÇÃO DA GALERIA ================= */
 function renderApp(){
   const app = document.getElementById('app');
   app.innerHTML = '';
-  
-  // 1. Filtros
   app.appendChild(buildFilters());
-
-  // 2. Galeria
-  const galeria = buildGaleria();
-  app.appendChild(galeria);
+  app.appendChild(buildGaleria());
 }
+
 function buildFilters(){
   const bar = document.createElement('div');
   bar.className = 'filters-bar';
   
-  // Botão: REORDENAR (Mantido)
   const btnShuffle = document.createElement('button');
   btnShuffle.className = 'chip';
-  // Mantém a setinha grande estilizada
-  btnShuffle.innerHTML = '<span style="font-size: 1.6em; vertical-align: middle; line-height: 0; min-width: 30px;">↻</span>';
-  
-  btnShuffle.onclick = () => {
-      shuffleArray(todasPecas);
-      renderApp();
-  };
+  btnShuffle.innerHTML = '<span style="font-size: var(--destaque); vertical-align: middle; line-height: 0;">↻</span>';
+  btnShuffle.onclick = () => { shuffleArray(todasPecas); renderApp(); };
   bar.appendChild(btnShuffle);
-
-  // (O botão "Escolhe pra mim" foi removido daqui)
-
+  
   return bar;
 }
 
 function buildGaleria(){
-  // 1. Filtrar lista atual
-  let lista = filtros.grupo 
-    ? todasPecas.filter(p => String(p.id_peca).startsWith(filtros.grupo))
-    : [...todasPecas]; 
-
-
-  // 3. Container Masonry
   const container = document.createElement('div');
   container.className = 'galeria-container';
-  
-  // --- AQUI ESTÁ A TRAVA: SEMPRE 3 COLUNAS ---
-  const colunas = 3;  
-  
+  const colunas = 3; 
   const cols = Array.from({length: colunas}, () => {
-    const d = document.createElement('div');
-    d.className = 'gal-col';
-    return d;
+    const d = document.createElement('div'); d.className = 'gal-col'; return d;
   });
   cols.forEach(c => container.appendChild(c));
 
-  // 4. Distribuição
-  lista.forEach((p, idx) => {
+  todasPecas.forEach((p, idx) => {
     const item = document.createElement('div');
     item.className = 'gal-item';
     
-    // Status
-    const status = String(p.status||'');
-    if (/vendid/i.test(status)) item.classList.add('sold');
-    if (/acervo/i.test(status)) item.classList.add('acervo');
-
-    // Seleção
     const selIdx = selecionados.indexOf(p.id_peca);
     if(selIdx !== -1) item.classList.add('selected');
     
-    item.dataset.id = p.id_peca;
     item.onclick = () => toggleSelection(p.id_peca);
-// --- ELEMENTOS VISUAIS (GAMBIARRA DO WRAPPER) ---
 
-    // 1. Wrapper (O Envelope que segura Imagem + Botão)
+    // Wrapper Visual
     const imgWrap = document.createElement('div');
-    imgWrap.style.position = 'relative'; // Essencial para o botão flutuar
-    imgWrap.style.width = '100%';        // Garante largura total
+    imgWrap.style.position = 'relative'; imgWrap.style.width = '100%';        
     item.appendChild(imgWrap);
 
-// 2. Imagem (Vai DENTRO do Wrapper)
     const img = new Image();
     img.src = `https://betshoptv.com/img/tmb/${p.imagens[0]}.avif`;
-    
-    img.onerror = function(){ 
-        this.onerror = null; // Previne loop infinito caso a fallback também falhe
-        // Aponta explicitamente para a pasta /fallback/ e muda para .jpg
-        this.src = `https://betshoptv.com/img/fallback/${p.imagens[0]}.jpg`; 
-    };
-    
+    img.onerror = function(){ this.onerror = null; this.src = `https://betshoptv.com/img/fallback/${p.imagens[0]}.jpg`; };
     imgWrap.appendChild(img);
 
-    // 3. Badge (Vai DENTRO do Wrapper)
     const badge = document.createElement('div');
     badge.className = 'selection-badge';
     badge.textContent = selIdx + 1; 
     imgWrap.appendChild(badge);
 
-    // 4. Botão [+] (Vai DENTRO do Wrapper, canto direito inferior)
     const btnSpy = document.createElement('button');
     btnSpy.className = 'btn-spy';
-    btnSpy.textContent = '⌕';
-    // O pulo do gato: stopPropagation impede que clique no + selecione a peça
-    btnSpy.onclick = (e) => { 
-        e.stopPropagation(); 
-        openDetails(p.id_peca); 
-    };
+    btnSpy.textContent = '+';
+    btnSpy.onclick = (e) => { e.stopPropagation(); openDetails(p.id_peca); };
     imgWrap.appendChild(btnSpy);
 
-    // 5. Barra de Título (FORA do wrapper, limpa, só texto)
     const tit = document.createElement('div');
     tit.className = 'gal-titulo';
     tit.innerHTML = `<span class="gal-titulo-text">${p.titulo || `Peça ${p.id_peca}`}</span>`;
     item.appendChild(tit);
 
-    // Adiciona na coluna
     cols[idx % colunas].appendChild(item);
   });
-
   return container;
 }
 
-/* ================= LÓGICA DE SELEÇÃO ================= */
+/* ================= LÓGICA DE SELEÇÃO & INTERFACE ================= */
 function toggleSelection(id){
   const idx = selecionados.indexOf(id);
-  if(idx === -1) {
-    selecionados.push(id);
-  } else {
-    selecionados.splice(idx, 1);
-  }
-  // Re-renderiza para atualizar números (1 virar 2, etc) e bordas
+  if (idx === -1) selecionados.push(id);
+  else selecionados.splice(idx, 1);
+  updateAllUI();
+}
+
+function updateAllUI() {
   renderApp(); 
   updateFooter();
+  if(document.getElementById('review-panel').classList.contains('open')) renderReviewList();
 }
 
-/* ================= LÓGICA DE CÓPIA PARA WHATSAPP ================= */
-
-// NOVO: Função que copia o texto da lista
-function copyListToClipboard() {
-    const listaTxt = document.getElementById('lista-copiar-oculta').value;
-    
-    if (!listaTxt) { 
-        alert('A lista está vazia! Selecione as peças primeiro.'); 
-        return;
-    }
-    
-    // 1. Copia o texto
-    navigator.clipboard.writeText(listaTxt).then(() => {
-        const btn = document.getElementById('btn-copiar-selecao');
-        const count = selecionados.length;
-        
-        // Salva estado de repouso (todo Vermelho) para reset
-        const defaultText = `COPIAR SELEÇÃO (${count})`;
-
-        // 2. Feedback Visual: FUNDO INK, BORDA INK, TEXTO BEIGE
-        btn.textContent = 'COPIADA! ✔';
-        btn.style.backgroundColor = 'var(--ink)';
-        btn.style.borderColor = 'var(--ink)';
-        btn.style.color = 'var(--beige)';
-        
-        // 3. Reseta após 1.5s para o estado ATIVO
-        setTimeout(() => {
-            btn.textContent = defaultText;
-            btn.style.backgroundColor = 'var(--red)'; // Volta ao estado ATIVO
-            btn.style.borderColor = 'var(--red)';
-            btn.style.color = 'var(--white)';
-        }, 1500);
-    }).catch(err => {
-        console.error('Erro ao copiar', err);
-        alert('Erro ao copiar a lista. Tente novamente.');
-    });
-}
-
-
-// NOVO: Atualiza o footer, o status do botão e a lista oculta
 function updateFooter(){
   const counter = document.getElementById('counter');
   const btnFinish = document.getElementById('btn-finish');
@@ -1001,15 +927,10 @@ function updateFooter(){
   const count = selecionados.length;
   
   if(count > 0){
-    // --- ESTADO ATIVO ---
-    
-    // Botão Finalizar
-    counter.style.display = 'block';
     btnFinish.disabled = false;
     btnFinish.textContent = `EDITAR SELEÇÃO (${count})`;
     btnFinish.onclick = toggleReviewPanel; 
     
-    // Botão Copiar (TODO VERMELHO)
     btnCopy.disabled = false;
     btnCopy.textContent = `COPIAR SELEÇÃO (${count})`;
     btnCopy.style.backgroundColor = 'var(--red)';
@@ -1017,79 +938,110 @@ function updateFooter(){
     btnCopy.style.color = 'var(--white)';
     btnCopy.style.cursor = 'pointer';
     
-    // Lista Oculta (formato por linha)
     txtHidden.value = selecionados.join('\n');
-    
   } else {
-    // --- ESTADO INATIVO ---
-    
-    // Botão Finalizar
+    // Estado Inativo
     counter.style.display = 'none';
+    
     btnFinish.disabled = true;
     btnFinish.textContent = 'SELECIONE SEUS PRÊMIOS';
     btnFinish.onclick = null;
     
-    // Botão Copiar (BEGE + BORDA VERMELHA)
     btnCopy.disabled = true;
-    btnCopy.textContent = 'SELECIONE PARA COPIAR';
-    btnCopy.style.backgroundColor = 'transparent';
+    btnCopy.textContent = 'COPIAR SELEÇÃO';
+    btnCopy.style.backgroundColor = 'var(--beige)';
     btnCopy.style.borderColor = 'var(--red)';
     btnCopy.style.color = 'var(--red)';
     btnCopy.style.cursor = 'default';
     
-    // Lista Oculta
     txtHidden.value = '';
   }
 }
 
-/* ================= CHECKOUT / ENVIO ================= */
-// Bind do botão Enviar
-document.getElementById('btn-finish').onclick = () => {
-    showCheckoutForm();
-};
+/* ================= COPIAR P/ WHATSAPP ================= */
+function copyListToClipboard() {
+    const listaTxt = document.getElementById('lista-copiar-oculta').value;
+    if (!listaTxt) { alert('A lista está vazia!'); return; }
+    
+    navigator.clipboard.writeText(listaTxt).then(() => {
+        const btn = document.getElementById('btn-copiar-selecao');
+        const count = selecionados.length;
+        const defaultText = `COPIAR SELEÇÃO (${count})`;
 
-/* ================= NOVO FLUXO DE ENVIO ================= */
-/* ================= STATE DOAÇÕES & FLUXO ================= */
-/* ================= LÓGICA DE DOAÇÕES & FLUXO ================= */
-let carrinho = {}; 
-let valorLivre = 0;
-let nomeUsuario = "";
+        btn.textContent = 'COPIADO! ✔';
+        btn.style.backgroundColor = 'var(--ink)';
+        btn.style.borderColor = 'var(--ink)';
+        btn.style.color = 'var(--beige)';
+        
+        setTimeout(() => {
+            btn.textContent = defaultText;
+            btn.style.backgroundColor = 'var(--red)';
+            btn.style.borderColor = 'var(--red)';
+            btn.style.color = 'var(--white)';
+        }, 1500);
+    });
+}
 
-// Catálogo Base (Item 1 é dinâmico)
-const catalogoBase = [
-  { id: 1, nome: "Média das Peças Selecionadas", preco: 0 }, 
-  { id: 2, nome: "Aluguel Dez/2025", preco: 2000.01 },
-  { id: 3, nome: "Hora/Trabalho", preco: 150.00 },
-  { id: 4, nome: "Pote de Gel Medium", preco: 62.40 },
-  { id: 5, nome: "Peça sob encomenda", preco: 1500.00 },
-  { id: 6, nome: "Refugo de EVA (kg)", preco: 5.99 },
-  { id: 7, nome: "Translado SP>RJ>SP", preco: 450.00 },
-  { id: 8, nome: "Playboy Fev/90 + Frete", preco: 273.38 }
-  { id: 9, nome: "Pacote de Softwares Criativos (Licença Anual)", preco: 2400.00 },
-];
-let catalogoAtual = [...catalogoBase];
+/* ================= PAINEL DE REVISÃO (DRAWER) ================= */
+function toggleReviewPanel() {
+  const panel = document.getElementById('review-panel');
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')) renderReviewList();
+}
 
-// --- NAVEGAÇÃO ---
+function renderReviewList() {
+  const container = document.getElementById('review-list');
+  container.innerHTML = '';
+  if (selecionados.length === 0) {
+    container.innerHTML = '<div style="padding:40px; text-align:center; color:#999;">Lista vazia.</div>';
+    return;
+  }
+  selecionados.forEach((id, index) => {
+    const p = todasPecas.find(item => item.id_peca === id);
+    if (!p) return;
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    div.innerHTML = `
+      <div class="review-rank">#${index + 1}</div>
+      <img src="https://betshoptv.com/img/tmb/${p.imagens[0]}.avif" class="review-thumb">
+      <div class="review-info"><span class="review-title">${p.titulo}</span></div>
+      <div class="review-actions">
+        ${index > 0 ? `<button class="ctrl-btn" onclick="moveItem(${index}, -1)">▲</button>` : '<div style="width:24px"></div>'}
+        ${index < selecionados.length - 1 ? `<button class="ctrl-btn" onclick="moveItem(${index}, 1)">▼</button>` : '<div style="width:24px"></div>'}
+        <button class="ctrl-btn remove" onclick="removeItem(${index})">✕</button>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function moveItem(index, direction) {
+  const item = selecionados[index];
+  selecionados.splice(index, 1);
+  selecionados.splice(index + direction, 0, item);
+  updateAllUI();
+}
+function removeItem(index) {
+  selecionados.splice(index, 1);
+  updateAllUI();
+  if(selecionados.length === 0) toggleReviewPanel();
+}
+
+/* ================= FLUXO DE ENVIO (MODAIS) ================= */
 function openFlow() {
-    // Tenta fechar o painel de revisão se existir
     const panel = document.getElementById('review-panel');
     if(panel) panel.classList.remove('open');
-
     document.getElementById('qtd-confirma').textContent = selecionados.length;
     document.getElementById('main-modal').classList.add('open');
     showScreen('step-name');
 }
 
-function closeFlow() {
-    document.getElementById('main-modal').classList.remove('open');
-}
-
+function closeFlow() { document.getElementById('main-modal').classList.remove('open'); }
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
 
-// --- ENVIO PRÊMIOS ---
+/* ================= ENVIO PRÊMIOS ================= */
 async function submitPremios(){
     const nomeInput = document.getElementById('final-nome');
     const nome = nomeInput.value.trim();
@@ -1119,18 +1071,11 @@ async function submitPremios(){
     }
 }
 
-// --- DOAÇÃO & CÁLCULO DINÂMICO ---
-// Função para carregar a tela de doação, seja vindo do fluxo de sucesso ou de um link direto.
+/* ================= DOAÇÃO & CÁLCULO ================= */
 function goToDonation() {
-    // 1. Garante que o modal principal esteja aberto, caso venha de um link/botão direto.
     document.getElementById('main-modal').classList.add('open'); 
-    
-    // 2. Define um nome padrão. Isso é CRÍTICO para que o Apps Script aceite o envio
-    // se o usuário pular a tela de "Nome".
     nomeUsuario = nomeUsuario || "Colaborador Rápido"; 
-
-    // 3. (O resto é a lógica que já funcionava)
-    calculateDynamicPrice(); 
+    calculateDynamicPrice();
     renderList();
     showScreen('step-donation');
 }
@@ -1141,37 +1086,107 @@ function calculateDynamicPrice() {
         const p = todasPecas.find(item => item.id_peca === id);
         if (p && p.preco) { soma += parseFloat(p.preco); count++; }
     });
-    // Fórmula: (Soma / Qtd) * 3
+    // (Soma / Qtd) * 3
     const media = count > 0 ? soma / count : 0;
-    const precoFinal = media;
-
+    const precoFinal = media * 3;
+    
     const item1 = catalogoAtual.find(i => i.id === 1);
     if(item1) item1.preco = precoFinal;
 }
 
+// LÓGICA DE DIVISÃO DO PREÇO (Item < 0)
+/* ================= LÓGICA DE QUANTIDADE (GANGORRA DO ½) ================= */
+/* ================= LÓGICA DE QUANTIDADE (ESCADINHA DAS FRAÇÕES) ================= */
+function updateQty(id, delta) {
+    if (!carrinho[id]) carrinho[id] = 0;
+    const item = catalogoAtual.find(i => i.id === id);
+    if (!item) return;
+
+    // Se _fracao não existe, assume 1 (inteiro)
+    if (!item._fracao) item._fracao = 1;
+
+    // --- CLICOU NO MAIS (+) ---
+    // Caminho: 1/8 -> 1/4 -> 1/2 -> 0 -> 1 -> 2 ...
+    if (delta > 0) {
+        if (carrinho[id] === 1 && item._fracao > 1) {
+            // Estamos nas frações, vamos subir
+            if (item._fracao === 8) item._fracao = 4;      // 1/8 -> 1/4
+            else if (item._fracao === 4) item._fracao = 2; // 1/4 -> 1/2
+            else if (item._fracao === 2) {                 // 1/2 -> 0
+                item._fracao = 1;
+                carrinho[id] = 0;
+            }
+        } else {
+            // Vida normal (0 -> 1 -> 2...)
+            carrinho[id]++;
+            item._fracao = 1; 
+        }
+
+    // --- CLICOU NO MENOS (-) ---
+    // Caminho: ... 2 -> 1 -> 0 -> 1/2 -> 1/4 -> 1/8
+    } else {
+        if (carrinho[id] === 0) {
+            // Entra no "Submundo" das frações (0 -> 1/2)
+            if (item.preco > 0) {
+                carrinho[id] = 1; // Ativa visualmente
+                item._fracao = 2; // Define divisor como 2
+            }
+        } else if (carrinho[id] === 1 && item._fracao > 1) {
+            // Desce a escadinha das frações
+            if (item._fracao === 2) item._fracao = 4;      // 1/2 -> 1/4
+            else if (item._fracao === 4) item._fracao = 8; // 1/4 -> 1/8
+            // Se já é 8 (1/8), não faz nada (trava no fundo)
+        } else {
+            // Vida normal (3 -> 2 -> 1 -> 0)
+            carrinho[id]--;
+            if (carrinho[id] === 0) item._fracao = 1;
+        }
+    }
+    
+    // Segurança
+    if (carrinho[id] < 0) carrinho[id] = 0;
+    
+    renderList();
+}
+
+
+/* ================= RENDERIZAÇÃO (COM SÍMBOLOS CHIQ) ================= */
 function renderList() {
     const container = document.getElementById('donation-list');
     container.innerHTML = '';
+    
     catalogoAtual.forEach(item => {
       const qtd = carrinho[item.id] || 0;
-      const precoStr = item.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+      const divisor = item._fracao || 1;
+      
+      // 1. Define o Preço Visual
+      // Se tiver fração, divide o preço. Senão, preço cheio.
+      const precoReal = item.preco / divisor;
+      const precoStr = precoReal.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+
+      // 2. Define o Símbolo da Quantidade
+      let displayQtd = qtd;
+      if (qtd === 1 && divisor > 1) {
+          if (divisor === 2) displayQtd = '½';
+          if (divisor === 4) displayQtd = '¼';
+          if (divisor === 8) displayQtd = '⅛';
+      }
+      
       const div = document.createElement('div');
       div.className = 'donation-item';
       div.innerHTML = `
-        <div class="donation-info"><span class="d-name">${item.nome}</span><span class="d-price">R$ ${precoStr}</span></div>
+        <div class="donation-info">
+            <span class="d-name">${item.nome}</span>
+            <span class="d-price">R$ ${precoStr}</span>
+        </div>
         <div class="d-controls">
-          <div class="d-btn" onclick="updateQty(${item.id}, -1)">-</div><span class="d-qty">${qtd}</span><div class="d-btn" onclick="updateQty(${item.id}, 1)">+</div>
+          <div class="d-btn" onclick="updateQty(${item.id}, -1)">-</div>
+          <span class="d-qty" style=" font-size:1.1em;">${displayQtd}</span>
+          <div class="d-btn" onclick="updateQty(${item.id}, 1)">+</div>
         </div>`;
       container.appendChild(div);
     });
     updateTotal();
-}
-
-function updateQty(id, delta) {
-    if (!carrinho[id]) carrinho[id] = 0;
-    carrinho[id] += delta;
-    if (carrinho[id] < 0) carrinho[id] = 0;
-    renderList(); 
 }
 
 function updateFreeValue() {
@@ -1182,13 +1197,20 @@ function updateFreeValue() {
     updateTotal();
 }
 
+/* ================= CÁLCULO TOTAL (FRAÇÕES) ================= */
 function updateTotal() {
     let totalItens = 0;
+    
     catalogoAtual.forEach(item => {
         const qtd = carrinho[item.id] || 0;
-        totalItens += qtd * item.preco;
+        const divisor = item._fracao || 1; // Se não tiver, divide por 1 (neutro)
+        
+        // A matemática é simples: (Quantidade * Preço) / Divisor
+        // Se qtd=1 e divisor=4 (1/4), ele soma (1 * Preço) / 4
+        totalItens += (qtd * item.preco) / divisor;
     });
-    const totalGeral = totalItens + valorLivre;
+
+    const totalGeral = totalItens + (valorLivre || 0);
     const txtValor = totalGeral.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
     
     document.getElementById('total-display').textContent = txtValor;
@@ -1196,49 +1218,88 @@ function updateTotal() {
     
     if(totalGeral > 0) {
         btnPix.disabled = false;
-        btnPix.textContent = `PAGAR`;
+        btnPix.textContent = `PAGAR ${txtValor}`;
     } else {
         btnPix.disabled = true;
         btnPix.textContent = "GERAR PIX";
     }
 }
 
-function openCustomItem() { showScreen('step-custom'); }
-
 function addCustomItem() {
     const desc = document.getElementById('custom-desc').value;
     const val = parseFloat(document.getElementById('custom-val').value.replace(',', '.'));
     if(!desc || isNaN(val) || val <= 0) return alert('Preencha corretamente.');
-    
     const newId = Date.now();
     catalogoAtual.push({ id: newId, nome: desc, preco: val });
     carrinho[newId] = 1;
+    document.getElementById('custom-desc').value = '';
+    document.getElementById('custom-val').value = '';
     goToDonation();
 }
 
-/* ================= GERADOR DE PIX (ROBUSTO) ================= */
+function openCustomItem() { showScreen('step-custom'); }
 
-/* ================= FUNÇÕES DO PIX ================= */
+/* ================= ENVIO DOAÇÃO & PIX ================= */
+async function submitDonation() {
+    const itensEscolhidos = [];
+    catalogoAtual.forEach(item => {
+        const qtd = carrinho[item.id] || 0;
+        if(qtd > 0) {
+            const precoFinal = (qtd===1 && item._valorDividido>0) ? item._valorDividido : item.preco;
+            itensEscolhidos.push({ nome: item.nome, preco: precoFinal, qtd: qtd, subtotal: precoFinal * qtd });
+        }
+    });
+    if(valorLivre > 0) itensEscolhidos.push({ nome: "Doação Livre", preco: valorLivre, qtd: 1, subtotal: valorLivre });
 
-// 1. Gera o Código (Payload)
+    const btn = document.getElementById('btn-pix');
+    btn.textContent = "GERANDO PIX...";
+    btn.disabled = true;
+
+    const fd = new FormData();
+    fd.append('tipo', 'DOACAO');
+    fd.append('nome', nomeUsuario);
+    fd.append('conteudo', JSON.stringify(itensEscolhidos));
+
+    try {
+        await fetch(GAS_URL, { method:'POST', body:fd });
+        
+        // Gera PIX
+        let total = 0;
+        itensEscolhidos.forEach(i => total += i.subtotal);
+        if(total <= 0) { alert("Valor inválido"); return; }
+        
+        const payload = gerarPixPayload(PIX_CHAVE, PIX_NOME, PIX_CIDADE, total);
+        document.getElementById('pix-copia-cola').value = payload;
+        document.getElementById('pix-valor-display').textContent = total.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+        document.getElementById('pix-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(payload)}`;
+        
+        showScreen('step-pix');
+
+    } catch(err) {
+        console.error(err); alert('Erro ao registrar.');
+        btn.disabled = false; btn.textContent = 'GERAR PIX';
+    }
+}
+
+/* ================= UTILITÁRIOS (Header, Pix Payload, Etc) ================= */
+function setupHeaderScroll() {
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('header');
+    if (window.scrollY > 10) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  });
+}
+
 function gerarPixPayload(chave, nome, cidade, valor) {
   const format = (id, val) => id + val.length.toString().padStart(2,'0') + val;
   const valorStr = valor.toFixed(2);
-  
   let payload = 
     format('00', '01') +                           
     format('26', format('00', 'BR.GOV.BCB.PIX') + format('01', chave)) +
-    format('52', '0000') +                         
-    format('53', '986') +                          
-    format('54', valorStr) +                       
-    format('58', 'BR') +                           
-    format('59', nome) +                           
-    format('60', cidade) +                         
+    format('52', '0000') + format('53', '986') + format('54', valorStr) +                       
+    format('58', 'BR') + format('59', nome) + format('60', cidade) +                         
     format('62', format('05', '***'));             
-
-  payload += '6304'; // ID do CRC
-  
-  // Cálculo CRC16 (Polinômio 0x1021)
+  payload += '6304';
   let crc = 0xFFFF;
   for (let i = 0; i < payload.length; i++) {
     crc ^= payload.charCodeAt(i) << 8;
@@ -1250,286 +1311,77 @@ function gerarPixPayload(chave, nome, cidade, valor) {
   return payload + (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
 }
 
-// 2. Ação de Copiar
 function copyPixCode() {
   const input = document.getElementById('pix-copia-cola');
-  input.select();
-  input.setSelectionRange(0, 99999);
-  navigator.clipboard.writeText(input.value);
-  
+  input.select(); navigator.clipboard.writeText(input.value);
   const msg = document.getElementById('msg-copy');
-  msg.style.display = 'block';
-  setTimeout(() => msg.style.display = 'none', 3000);
+  msg.style.display = 'block'; setTimeout(() => msg.style.display = 'none', 3000);
 }
 
-// 3. Atualize sua função submitDonation para usar isso
-// (Substitua a função submitDonation antiga por esta versão final)
-async function submitDonation() {
-    // A) Prepara os dados
-    const itensEscolhidos = [];
-    catalogoAtual.forEach(item => {
-        const qtd = carrinho[item.id] || 0;
-        if(qtd > 0) itensEscolhidos.push({ nome: item.nome, preco: item.preco, qtd: qtd, subtotal: item.preco * qtd });
-    });
-    if(valorLivre > 0) itensEscolhidos.push({ nome: "Doação Livre", preco: valorLivre, qtd: 1, subtotal: valorLivre });
-
-    const btn = document.getElementById('btn-pix');
-    btn.textContent = "GERANDO PIX...";
-    btn.disabled = true;
-
-    // B) Envia para Planilha
-    const fd = new FormData();
-    fd.append('tipo', 'DOACAO');
-    fd.append('nome', nomeUsuario);
-    fd.append('conteudo', JSON.stringify(itensEscolhidos));
-
-    try {
-        await fetch(GAS_URL, { method:'POST', body:fd });
-        
-        // C) GERA O PIX NA TELA
-        let total = 0;
-        catalogoAtual.forEach(i => { total += (carrinho[i.id]||0) * i.preco; });
-        total += valorLivre;
-
-        if(total <= 0) { alert("Valor total inválido."); return; }
-
-        // Gera código
-        const payload = gerarPixPayload(PIX_CHAVE, PIX_NOME, PIX_CIDADE, total);
-        
-        // Atualiza UI
-        document.getElementById('pix-copia-cola').value = payload;
-        document.getElementById('pix-valor-display').textContent = total.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
-        
-        // Gera QR Code (API Rápida)
-        document.getElementById('pix-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(payload)}`;
-
-        // Mostra tela
-        showScreen('step-pix');
-
-    } catch(err) {
-        console.error(err); alert('Erro ao processar doação.');
-        btn.disabled = false; btn.textContent = 'GERAR PIX';
-    }
-}
-
-/* ================= PAINEL DE REVISÃO ================= */
-
-function toggleReviewPanel() {
-  const panel = document.getElementById('review-panel');
-  const isOpen = panel.classList.contains('open');
-  
-  if (!isOpen) {
-    renderReviewList(); // Desenha a lista atualizada ao abrir
-    panel.classList.add('open');
-  } else {
-    panel.classList.remove('open');
-  }
-}
-
-function renderReviewList() {
-  const container = document.getElementById('review-list');
-  container.innerHTML = '';
-
-  if (selecionados.length === 0) {
-    container.innerHTML = '<p style="text-align:center; color:#777;">Nenhum item selecionado.</p>';
-    return;
-  }
-
-  selecionados.forEach((id, index) => {
-    // Busca os dados da peça original
-    const p = todasPecas.find(item => item.id_peca === id);
-    if (!p) return;
-
-    const div = document.createElement('div');
-    div.className = 'review-item';
-    div.innerHTML = `
-      <div style="font-weight:bold; font-size:1.2em; color:var(--ink); width:20px;">${index + 1}</div>
-      <img src="https://betshoptv.com/img/tmb/${p.imagens[0]}.avif" class="review-thumb">
-      <div class="review-info">
-        <span class="review-title">${p.titulo}</span>
-      </div>
-      <div class="review-actions">
-        ${index > 0 ? `<button class="ctrl-btn" onclick="moveItem(${index}, -1)">▲</button>` : '<div style="width:32px;"></div>'}
-        ${index < selecionados.length - 1 ? `<button class="ctrl-btn" onclick="moveItem(${index}, 1)">▼</button>` : '<div style="width:32px;"></div>'}
-        <button class="ctrl-btn remove" onclick="removeItem(${index})">✕</button>
-      </div>
-    `;
-    container.appendChild(div);
-  });
-}
-
-// Funções de manipulação do Array
-function moveItem(index, direction) {
-  // Troca de lugar no array
-  const item = selecionados[index];
-  selecionados.splice(index, 1);
-  selecionados.splice(index + direction, 0, item);
-  
-  // Atualiza tudo
-  renderReviewList(); // Atualiza a lista no painel
-  renderApp();        // Atualiza os números na galeria atrás
-  updateFooter();
-}
-
-function removeItem(index) {
-  // Remove do array pelo índice
-  selecionados.splice(index, 1);
-  
-  renderReviewList();
-  renderApp();
-  updateFooter();
-  
-  // Se esvaziar, fecha o painel
-  if(selecionados.length === 0) toggleReviewPanel();
-}
-
-
-/* ================= LÓGICA DE DETALHES (ESPIAR) ================= */
-
-/* ================= LÓGICA DE DETALHES (CARROSSEL) ================= */
-/* ================= LÓGICA DE DETALHES (SWIPE) ================= */
-/* ================= LÓGICA DE DETALHES (NATIVA) ================= */
-let currentDetailId = null; // Guarda o ID da peça aberta
-
+// Detalhes (Galeria Swipe)
+let currentDetailId = null;
 function openDetails(id) {
   const p = todasPecas.find(item => item.id_peca === id);
   if (!p) return;
-  
-  currentDetailId = id; // Salva quem está aberto
-
-  // 1. Textos
+  currentDetailId = id;
   document.getElementById('det-title').textContent = p.titulo;
   document.getElementById('det-tech').textContent = p.tecnica;
   document.getElementById('det-dim').textContent = p.dimensao;
-
-  // 2. Botão Selecionar (Estado Inicial)
   updateModalBtnState();
-
-  // 3. Imagens e Dots
+  
   const container = document.getElementById('det-scroll-container');
   const dotsContainer = document.getElementById('det-dots');
-  container.innerHTML = '';
-  dotsContainer.innerHTML = '';
-  
+  container.innerHTML = ''; dotsContainer.innerHTML = '';
   const listaImagens = Array.isArray(p.imagens) ? p.imagens : [p.imagens];
-  const totalSlides = listaImagens.length;
-
+  
   listaImagens.forEach((imgName, index) => {
-    // Imagem
-    const img = document.createElement('img');
-    img.className = 'details-img';
+    const img = document.createElement('img'); img.className = 'details-img';
     img.src = `https://betshoptv.com/img/otm/${imgName}.avif`;
     img.onerror = function(){ this.src = `https://betshoptv.com/img/fallback/${imgName}.jpg`; };
     container.appendChild(img);
-
-    // Dot (Quadrado)
-    if(totalSlides > 1){
-        const dot = document.createElement('div');
-        dot.className = 'dot';
+    if(listaImagens.length > 1){
+        const dot = document.createElement('div'); dot.className = 'dot';
         if(index === 0) dot.classList.add('active');
         dotsContainer.appendChild(dot);
     }
   });
-
-  // Esconde dots se só tiver 1 imagem
-  dotsContainer.style.display = totalSlides > 1 ? 'flex' : 'none';
-
-  // 4. Reset Scroll e Listener de "Scroll Spy"
+  dotsContainer.style.display = listaImagens.length > 1 ? 'flex' : 'none';
   container.scrollLeft = 0;
-  
-  // Função para acender o dot certo enquanto rola
   container.onscroll = () => {
-      if(totalSlides <= 1) return;
-      const scrollLeft = container.scrollLeft;
-      const width = container.offsetWidth;
-      // Calcula qual slide está mais visível
-      const index = Math.round(scrollLeft / width);
-      
+      if(listaImagens.length <= 1) return;
+      const index = Math.round(container.scrollLeft / container.offsetWidth);
       const dots = document.querySelectorAll('.dot');
       dots.forEach((d, i) => d.classList.toggle('active', i === index));
   };
-
-  // 5. Abrir
-  const modal = document.getElementById('modal-details');
-  modal.classList.add('open');
-  document.body.style.overflow = 'hidden';
-  
-  // 6. Ativa Teclado
-  document.addEventListener('keydown', handleDetailKeys);
+  document.getElementById('modal-details').classList.add('open');
 }
 
-// Ação do Botão "SELECIONAR" dentro do Modal
 function handleModalSelect() {
     if(!currentDetailId) return;
-    
-    // Usa a mesma função da galeria principal
     toggleSelection(currentDetailId);
-    
-    // Atualiza apenas o botão visualmente
     updateModalBtnState();
 }
-
 function updateModalBtnState() {
     const btn = document.getElementById('btn-det-select');
-    // Verifica se está no array de selecionados
     const isSelected = selecionados.includes(currentDetailId);
-    
-    if(isSelected) {
-        btn.textContent = 'REMOVER';
-        btn.classList.add('is-selected');
-    } else {
-        btn.textContent = 'SELECIONAR';
-        btn.classList.remove('is-selected');
-    }
+    if(isSelected) { btn.textContent = 'REMOVER'; btn.classList.add('is-selected'); }
+    else { btn.textContent = 'SELECIONAR'; btn.classList.remove('is-selected'); }
+}
+function closeDetails(e, force) {
+  if (force || e.target.id === 'modal-details') document.getElementById('modal-details').classList.remove('open');
 }
 
-// Navegação por Teclado
-function handleDetailKeys(e) {
-    const container = document.getElementById('det-scroll-container');
-    const width = container.offsetWidth;
-
-    if (e.key === 'Escape') {
-        closeDetails(null, true);
-    } 
-    else if (e.key === 'ArrowRight') {
-        container.scrollBy({ left: width, behavior: 'smooth' });
-    } 
-    else if (e.key === 'ArrowLeft') {
-        container.scrollBy({ left: -width, behavior: 'smooth' });
-    }
+// Boas Vindas
+function closeWelcome() {
+  const modal = document.getElementById('modal-welcome');
+  modal.style.opacity = '0';
+  setTimeout(() => { modal.classList.remove('open'); modal.style.display = 'none'; }, 300);
 }
 
-function closeDetails(e, force = false) {
-  if (force || e.target.id === 'modal-details') {
-    document.getElementById('modal-details').classList.remove('open');
-    document.body.style.overflow = '';
-    
-    // Limpa listeners e imagens
-    document.removeEventListener('keydown', handleDetailKeys);
-    setTimeout(() => document.getElementById('det-scroll-container').innerHTML = '', 300);
-  }
-}
-
-
-
-
-
-
-
-// Inicia tudo
+// Inicializa
 window.addEventListener('DOMContentLoaded', init);
-/* ================= HEADER SHRINK ================= */
-window.addEventListener('scroll', () => {
-  const header = document.querySelector('header');
-  // Passou de 10px? Já encolhe. Resposta rápida.
-  if (window.scrollY > 38) {
-    header.classList.add('scrolled');
-  } else {
-    header.classList.remove('scrolled');
-  }
-});
-
 </script>
+
 
 
 <div id="main-modal" class="envio-modal-overlay">
@@ -1537,7 +1389,7 @@ window.addEventListener('scroll', () => {
     <button onclick="closeFlow()" style="position:absolute; top:10px; right:15px; border:0; background:none; font-size:1.5rem; cursor:pointer;">✕</button>
 
     <div id="step-name" class="screen active">
-      <div class="envio-title">Você selecionou <strong id="qtd-confirma">0</strong> peças!</div>
+      <div class="envio-title">Você escolheu <strong id="qtd-confirma">0</strong> peças!</div>
       <p class="envio-desc">
         Qual seu nome?
       </p>
@@ -1547,12 +1399,17 @@ window.addEventListener('scroll', () => {
 
     <div id="step-success" class="screen">
       <div class="envio-title" style="color:var(--ink)">Sucelso!</div>
+      <p class="envio-desc">Em breve combinaremos o recebimento das peças. 
+        <br /><font style="margin-top: 18px;">Agradecemos sua participação e desejamos uma ótima passagem de ano!</font></p>
       <div style="background:#f4f4f4; padding:15px; border:1px dashed var(--ink); margin-bottom:15px;">
-        <p style="margin:0 0 10px 0; font-weight:400; color:var(--ink);">Agradecemos a participação e desejamos um ótimo fim de ano! Em breve combinaremos o recebimento das peças.   </p>
-        <p style="margin:0 0 10px 0; font-weight:400; color:var(--ink);">Quer seguir contribuindo?   </p>
-        <button class="btn-confirm" onclick="goToDonation()" style="background: red;">APOIE AQUI</button>
+
+        <p style="margin:0 0 10px 0; font-weight:500; color:var(--ink); font-size: 0.94em;">A <a href="https://betshoptv.com/#galeria" target="_blank" style="color: red;"><strong>BetShopTV.com</strong></a> seguirá ativa!</p>
+        <p style="margin:0 0 10px 0; font-weight:400; color:var(--ink); font-size: 0.88em;">Quer colaborar com a continuidade deste e outros projetos associados? Propor alguma troca? Presentear alguém?</p>
+        <p style="margin:0 0 10px 0; font-weight:400; color:var(--ink); font-size: 0.88em;">As peças de <strong><em>Chop Shop AV</em></strong> seguem à venda na <a href="https://betshoptv.com/#galeria" target="_blank" style="color: red;"><strong>Galeria de Ofertas</strong></a>!</p>
+        <br><p style="margin:0 0 10px 0; font-weight:500; color:var(--ink); font-size: 0.94em;">Para colaborar de outras formas: </p>
+        <button class="btn-confirm" onclick="goToDonation()" style="background: red;">CARTELA DE DOAÇÕES</button>
       </div>
-      <button class="btn-confirm" onclick="closeFlow()" style="max-width: 50%; font-size: 11px; font-weight: 420; max-width: 24%; color: #2b2424; background: #bebab0;">Concluir</button>
+      <button class="btn-confirm" onclick="closeFlow()" style="max-width: 50%; font-size: 11px; font-weight: 420; color: #2b2424; background: #bebab0;">Concluir</button>
     </div>
 
     <div id="step-donation" class="screen">
@@ -1567,7 +1424,7 @@ window.addEventListener('scroll', () => {
       </div>
       
       <h2 style="font size: 0.8em;">ITENS</h2>
-
+<p style="margin-top: -13px; margin-bottom: 8px; padding: 4px 0px; font-weight:420; color:var(--ink); font-size: 0.88em;">Abaixo é possível selecionar frações das quantias no botão <strong>—</strong>, além de incluir propostas personalizadas em sua doação! </p>
       <div class="donation-list-container" id="donation-list"></div>
 
       <button class="custom-item-btn" onclick="openCustomItem()"><span>+</span> Adicionar item personalizado</button>
