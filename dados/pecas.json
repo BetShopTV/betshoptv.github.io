@@ -269,7 +269,7 @@
     "id_peca": "0313",
     "titulo": "03/13 Câmera fotográfica 02",
     "preco": 250,
-    "status": "VENDIDAAA",
+    "status": "X",
     "tecnica": "Impressão offset em papel couché transferida para EVA estampado e pregos.",
     "dimensao": "51 x 20,5 x 13 cm",
     "imagens": [
@@ -411,7 +411,7 @@
     "id_peca": "0411",
     "titulo": "04/11 Filmadora 04",
     "preco": 400,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e tachinha.",
     "dimensao": "18 x 41 x 4 cm",
     "imagens": [
@@ -424,7 +424,7 @@
     "id_peca": "0412",
     "titulo": "04/12 Telefone 02",
     "preco": 400,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, arruela e tachinhas.",
     "dimensao": "52 x 22 x 3 cm",
     "imagens": [
@@ -647,7 +647,7 @@
     "id_peca": "0610",
     "titulo": "06/10 Telefone 04",
     "preco": 800,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA e pregos.",
     "dimensao": "61 x 41 x 4,5 cm",
     "imagens": [
