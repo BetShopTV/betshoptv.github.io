@@ -1840,9 +1840,12 @@ function getFilteredSortedList(source){
   let lista = Array.isArray(source) ? [...source] : [];
 
   // 1. DISPONÍVEIS
-  if (filtros.disponiveis) {
-    lista = lista.filter(p => String(p.status || '').trim().toLowerCase() === 'x');
-  }
+if (filtros.disponiveis) {
+  lista = lista.filter(p => {
+    const s = String(p.status || '').trim().toLowerCase();
+    return s === 'x' || s.includes('acervo');
+  });
+}
 
   // 2. ACERVO
   if (filtros.acervo) {
