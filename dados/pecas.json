@@ -256,7 +256,7 @@
     "id_peca": "0312",
     "titulo": "03/12 Microcomputador 02",
     "preco": 250,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica e ganchos.",
     "dimensao": "27 x 20,5 x 3 cm",
     "imagens": [
@@ -1006,7 +1006,7 @@
     "id_peca": "0813",
     "titulo": "08/13 TV 07",
     "preco": 500,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papéis de presente, couché e tinta acrílica transferidas para refugo de EVA.",
     "dimensao": "27 x 20,5 x 0,5 cm",
     "imagens": [
@@ -1032,7 +1032,7 @@
     "id_peca": "0816",
     "titulo": "08/16 TV 08",
     "preco": 500,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA.",
     "dimensao": "27 x 20,5 x 0,5 cm",
     "imagens": [
