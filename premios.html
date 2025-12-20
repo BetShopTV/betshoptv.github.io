@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -950,13 +951,42 @@ function shuffleArray(array) {
 }
 
 /* ================= RENDERIZAÇÃO DA GALERIA ================= */
+/* ================= RENDERIZAÇÃO DA GALERIA ================= */
 function renderApp(){
   const app = document.getElementById('app');
   app.innerHTML = '';
+  
+  // 1. Botão de Filtro/Shuffle
   app.appendChild(buildFilters());
+
+  // === CONTADOR COM LINHA ===
+  const contador = document.createElement('div');
+  
+  // Estilo atualizado: border-bottom cria a linha
+  contador.style = `
+    width: 100%; 
+    text-align: center; 
+    padding: 2px 0 24px 0;      /* Espaço entre texto e linha */
+    margin-bottom: 24px;        /* Espaço da linha para as fotos */
+    border-bottom: 1px solid var(--ink); /* A LINHA */
+    font-weight: 700; 
+    font-size: 0.9em; 
+    color: var(--ink); 
+    opacity: 0.7; 
+    font-family: var(--ff-cta); 
+    letter-spacing: 1px;
+  `;
+  
+  const total = todasPecas.length;
+  const termo = total === 1 ? 'PEÇA' : 'PEÇAS';
+  
+  contador.textContent = `${total} ${termo} DISPONÍVEIS`;
+  app.appendChild(contador);
+  // ==========================
+
+  // 2. A Galeria
   app.appendChild(buildGaleria());
 }
-
 function buildFilters(){
   const bar = document.createElement('div');
   bar.className = 'filters-bar';
@@ -1018,6 +1048,8 @@ function buildGaleria(){
   });
   return container;
 }
+
+
 
 /* ================= LÓGICA DE SELEÇÃO & INTERFACE ================= */
 function toggleSelection(id){
@@ -1682,6 +1714,7 @@ window.addEventListener('DOMContentLoaded', init);
   </div>
 </div>
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
