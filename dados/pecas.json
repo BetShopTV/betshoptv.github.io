@@ -27,7 +27,7 @@
   },
   {
     "id_peca": "0203",
-    "titulo": "02/03 Videocassete",
+    "titulo": "02/03 Videocassete 04",
     "preco": 300,
     "status": "VENDIDAAA",
     "tecnica": "Impressão offset em papel couché transferida para EVA e pregos.",
@@ -374,7 +374,7 @@
     "titulo": "04/08 Super Telão 02",
     "preco": 250,
     "status": "VENDIDAAA",
-    "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e ferragens.",
+    "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e tarrachinhas.",
     "dimensao": "53 x 15 x 3 cm",
     "imagens": [
       "04-08a",
@@ -387,7 +387,7 @@
     "titulo": "04/09 Telefone 01",
     "preco": 250,
     "status": "VENDIDAAA",
-    "tecnica": "Impressão offset em papel couché transferida para refugo de EVA e ferragens.",
+    "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, pregos e tarrachinhas.",
     "dimensao": "52 x 27 x 6 cm",
     "imagens": [
       "04-09a"
@@ -425,7 +425,7 @@
     "titulo": "04/12 Telefone 02",
     "preco": 400,
     "status": "VENDIDAAA",
-    "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, arruela e tachinhas.",
+    "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, arruela e parafusos.",
     "dimensao": "52 x 22 x 3 cm",
     "imagens": [
       "04-12a",
@@ -435,7 +435,7 @@
   },
   {
     "id_peca": "0413",
-    "titulo": "04/13 Microfone 01",
+    "titulo": "06/10 Telefone 04",
     "preco": 500,
     "status": "ACERVO",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA, suportes angulares e parafusos.",
