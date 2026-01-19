@@ -2,28 +2,118 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Triagem Santacosta</title>
+<title>Triagem Santacosta - V2</title>
 <style>
-    body { margin: 0; display: flex; height: 100vh; font-family: sans-serif; overflow: hidden; }
-    #sidebar { width: 300px; background: #3c4743; color: #4aff98; overflow-y: auto; padding: 10px; flex-shrink: 0; }
-    #sidebar a { display: block; padding: 10px; color: #4aff98; text-decoration: none; border-bottom: 1px solid #444; font-size: 14px; }
-    #sidebar a:hover, #sidebar a.active { background: #4aff98; color: #3c4743; }
-    #preview { flex-grow: 1; border: none; background: #f0f0f0; }
-    /* Aviso caso bloqueie */
-    .blocked-msg { display: none; padding: 20px; text-align: center; color: #555; }
-</style>
-</head>
+    body { margin: 0; display: flex; height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
+    
+    /* BARRA LATERAL (Cores Atualizadas) */
+    #sidebar { 
+        width: 320px; 
+        background: #3c4743; /* Seu fundo */
+        color: #4aff98;      /* Sua cor de texto */
+        display: flex; 
+        flex-direction: column; 
+        border-right: 1px solid #2f3835;
+        flex-shrink: 0;
+    }
+
+    /* CONTROLES DO TOPO */
+    #controls {
+        padding: 15px;
+        background: #2f3835; /* Um tom levemente mais escuro para contraste */
+        border-bottom: 1px solid #4aff98;
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+    }
+
+    button {
+        padding: 8px 12px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 12px;
+        text-transform: uppercase;
+        transition: 0.2s;
+    }
+
+    /* Botão Principal com a cor neon */
+    .btn-filter { background: #4aff98; color: #3c4743; }
+    .btn-filter:hover { background: #3fd982; }
+    .btn-filter.active { background: #fff; color: #3c4743; }
+
+    /* Botão Copiar (Outline style para não brigar com o principal) */
+    .btn-copy { background: transparent; border: 1px solid #4aff98; color: #4aff98; }
+    .btn-copy:hover { background: #4aff98; color: #3c4743; }
+    
+    /* Texto de status */
+    #status { font-size: 11px; color: #8fa399; margin-top: 5px; }
+
+    /* LISTA */
+    #link-list {
+        overflow-y: auto;
+        flex-grow: 1;
+        padding: 0;
+    }
+
+    .item {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #4a5752; /* Divisória sutil */
+        padding: 8px 10px;
+        transition: background 0.2s;
+    }
+
+    .item:hover { background: #44504c; }
+    .item.selected-bg { background: #2f3835; } 
+
+    input[type="checkbox"] {
+        margin-right: 10px;
+        cursor: pointer;
+        accent-color: #4aff98; /* Checkbox fica da cor do tema */
+        width: 16px;
+        height: 16px;
+    }
+
+    .item a {
+        color: #4aff98; /* Seu texto */
+        text-decoration: none;
+        font-size: 13px;
+        flex-grow: 1;
+        cursor: pointer;
+        display: block;
+        padding: 5px 5px;
+        border-radius: 4px;
+    }
+
+    /* Comportamento Hover/Active que você pediu (Inverte as cores) */
+    .item a:hover, .item a.active { 
+        background: #4aff98; 
+        color: #3c4743; 
+    }
+
+    /* IFRAME */
+    #preview { flex-grow: 1; border: none; background: #fff; }
+    
+    /* Ocultar itens quando filtrado */
+    .hidden { display: none !important; }
+</style></head>
 <body>
 
 <div id="sidebar">
-    <h3>⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦</h3>
+    <div id="controls">
+        <button onclick="toggleFilter()" id="btnFilter" class="btn-filter">Visualizar Apenas Selecionados</button>
+        <button onclick="copySelection()" class="btn-copy">Copiar Seleção (CSV)</button>
+        <div id="status" style="font-size: 15px; color: #bebab0; margin-top: 5px;"><center>0 itens selecionados</center></div>
+    </div>
     <div id="link-list"></div>
 </div>
 
 <iframe id="preview" name="previewFrame" src="about:blank"></iframe>
 
 <script>
-    // LISTA DE LINKS GERADA A PARTIR DO CSV
+    // DADOS
     const links = [
         { name: "1. Walkie-Talkie", url: "https://www.santacosta.net/walkie-talkie" },
         { name: "2. Escultura-Desenho", url: "https://www.santacosta.net/escultura-desenho" },
@@ -50,7 +140,7 @@
         { name: "23. Hércules & Luna", url: "https://www.santacosta.net/hercules-luna" },
         { name: "24. Over VI", url: "https://www.santacosta.net/over-vi" },
         { name: "25. Pilha Ascendente", url: "https://www.santacosta.net/pilha-ascendente" },
-        { name: "26. Insght e Odenação", url: "https://www.santacosta.net/insght-e-odenacao" },
+        { name: "26. Insght e Odenacao", url: "https://www.santacosta.net/insght-e-odenacao" },
         { name: "27. Exora", url: "https://www.santacosta.net/exora" },
         { name: "28. O Equilibrista", url: "https://www.santacosta.net/o-equilibrista" },
         { name: "29. 3pra1", url: "https://www.santacosta.net/3pra1" },
@@ -190,20 +280,107 @@
 
     const listContainer = document.getElementById('link-list');
     const iframe = document.getElementById('preview');
+    const statusDiv = document.getElementById('status');
+    let isFiltered = false;
 
-    links.forEach(item => {
+    // INICIALIZAÇÃO DA LISTA
+    links.forEach((item, index) => {
+        // Cria container do item
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.id = `item-${index}`;
+
+        // Cria Checkbox
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.onchange = (e) => {
+            item.selected = e.target.checked;
+            updateStatus();
+            if (item.selected) {
+                div.classList.add('selected-bg');
+            } else {
+                div.classList.remove('selected-bg');
+            }
+        };
+
+        // Cria Link
         const a = document.createElement('a');
-        // AQUI ESTÁ A MÁGICA: USAMOS O NOME JÁ COM O NÚMERO
         a.textContent = item.name; 
         a.href = item.url;
         a.target = "previewFrame"; 
         a.onclick = (e) => {
-            // Remove classe active dos outros
-            document.querySelectorAll('#sidebar a').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.item a').forEach(el => el.classList.remove('active'));
             e.target.classList.add('active');
         };
-        listContainer.appendChild(a);
+
+        div.appendChild(checkbox);
+        div.appendChild(a);
+        listContainer.appendChild(div);
     });
+
+    // ATUALIZAR CONTADOR
+    function updateStatus() {
+        const count = links.filter(l => l.selected).length;
+        statusDiv.textContent = `${count} itens selecionados`;
+    }
+
+    // FUNÇÃO: ALTERNAR FILTRO
+    function toggleFilter() {
+        isFiltered = !isFiltered;
+        const btn = document.getElementById('btnFilter');
+        const items = document.querySelectorAll('.item');
+
+        if (isFiltered) {
+            btn.textContent = "Ver Todos";
+            btn.classList.add('active');
+            
+            // Esconde quem não está selecionado
+            links.forEach((link, idx) => {
+                if (!link.selected) {
+                    document.getElementById(`item-${idx}`).classList.add('hidden');
+                }
+            });
+
+        } else {
+            btn.textContent = "Visualizar Apenas Selecionados";
+            btn.classList.remove('active');
+            
+            // Mostra todo mundo
+            items.forEach(div => div.classList.remove('hidden'));
+        }
+    }
+
+    // FUNÇÃO: COPIAR PARA CLIPBOARD
+    function copySelection() {
+        const selectedLinks = links.filter(l => l.selected);
+        
+        if (selectedLinks.length === 0) {
+            alert("Nenhum item selecionado para copiar.");
+            return;
+        }
+
+        // Formato: "Nome;URL" (para colar fácil no Excel como CSV)
+        const textToCopy = selectedLinks.map(l => `${l.name} - ${l.url}`).join('\n');
+
+        // Tenta copiar
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert("Lista copiada! Agora é só colar (Ctrl+V) onde quiser.");
+        }).catch(err => {
+            // Fallback caso o navegador bloqueie (comum em arquivos locais)
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert("Lista copiada (via método alternativo)!");
+            } catch (err) {
+                prompt("O navegador bloqueou a cópia automática. Copie manualmente abaixo:", textToCopy);
+            }
+            document.body.removeChild(textArea);
+        });
+    }
 </script>
+
 </body>
 </html>
