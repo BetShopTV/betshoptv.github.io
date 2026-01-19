@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Triagem Santacosta - V2</title>
 <style>
-    body { margin: 0; display: flex; height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
+    body { margin: 0; display: flex; height: 100vh; font-family: 'Roboto Mono'; overflow: hidden; }
     
     /* BARRA LATERAL (Cores Atualizadas) */
     #sidebar { 
@@ -25,15 +25,16 @@
         display: flex;
         gap: 10px;
         flex-direction: column;
+        font-family: 'Roboto Mono';
     }
 
     button {
         padding: 8px 12px;
+        font-family: 'Roboto Mono';
         cursor: pointer;
         border: none;
         border-radius: 4px;
-        font-weight: bold;
-        font-size: 12px;
+        font-size: 13px;
         text-transform: uppercase;
         transition: 0.2s;
     }
@@ -72,8 +73,8 @@
         margin-right: 10px;
         cursor: pointer;
         accent-color: #4aff98; /* Checkbox fica da cor do tema */
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
     }
 
     .item a {
@@ -103,9 +104,9 @@
 
 <div id="sidebar">
     <div id="controls">
-        <button onclick="toggleFilter()" id="btnFilter" class="btn-filter">Visualizar Apenas Selecionados</button>
-        <button onclick="copySelection()" class="btn-copy">Copiar Seleção (CSV)</button>
-        <div id="status" style="font-size: 15px; color: #bebab0; margin-top: 5px;"><center>0 itens selecionados</center></div>
+        <button onclick="toggleFilter()" id="btnFilter" class="btn-filter">Visualizar Selecionados</button>
+        <button onclick="copySelection()" class="btn-copy">Copiar Seleção</button>
+        <div id="status" style="font-size: 13px; color: #bebab0; margin-top: 5px;"><center>0 itens selecionados</center></div>
     </div>
     <div id="link-list"></div>
 </div>
@@ -342,7 +343,7 @@
             });
 
         } else {
-            btn.textContent = "Visualizar Apenas Selecionados";
+            btn.textContent = "Visualizar Selecionados";
             btn.classList.remove('active');
             
             // Mostra todo mundo
