@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Triagem Santacosta</title>
+<style>
+    body { margin: 0; display: flex; height: 100vh; font-family: sans-serif; overflow: hidden; }
+    #sidebar { width: 300px; background: #3c4743; color: #4aff98; overflow-y: auto; padding: 10px; flex-shrink: 0; }
+    #sidebar a { display: block; padding: 10px; color: #4aff98; text-decoration: none; border-bottom: 1px solid #444; font-size: 14px; }
+    #sidebar a:hover, #sidebar a.active { background: #4aff98; color: #3c4743; }
+    #preview { flex-grow: 1; border: none; background: #f0f0f0; }
+    /* Aviso caso bloqueie */
+    .blocked-msg { display: none; padding: 20px; text-align: center; color: #555; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+    <h3>⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦</h3>
+    <div id="link-list"></div>
+</div>
+
+<iframe id="preview" name="previewFrame" src="about:blank"></iframe>
+
+<script>
+    // LISTA DE LINKS GERADA A PARTIR DO CSV
+    const links = [
+        { name: "1. Walkie-Talkie", url: "https://www.santacosta.net/walkie-talkie" },
+        { name: "2. Escultura-Desenho", url: "https://www.santacosta.net/escultura-desenho" },
+        { name: "3. Draco", url: "https://www.santacosta.net/draco" },
+        { name: "4. pilha 10", url: "https://www.santacosta.net/serie-pilha-n10" },
+        { name: "5. pilha 11", url: "https://www.santacosta.net/serie-pilha-n11" },
+        { name: "6. Baby’s on fire I", url: "https://www.santacosta.net/babys-on-fire-i" },
+        { name: "7. Pequeno Deslocamento", url: "https://www.santacosta.net/pequeno-deslocamento" },
+        { name: "8. pilha 15", url: "https://www.santacosta.net/serie-pilha-n15" },
+        { name: "9. Estrutura II", url: "https://www.santacosta.net/estrutura-ii" },
+        { name: "10. Reflexos Trinos", url: "https://www.santacosta.net/reflexos-trinos" },
+        { name: "11. Cópia 3pra1 2 2017", url: "https://www.santacosta.net/copia-3pra1-2-2017" },
+        { name: "12. Over I", url: "https://www.santacosta.net/over-i" },
+        { name: "13. Over V", url: "https://www.santacosta.net/over-v" },
+        { name: "14. Cassiopeia", url: "https://www.santacosta.net/cassiopeia" },
+        { name: "15. pilha 4", url: "https://www.santacosta.net/serie-pilha-n4" },
+        { name: "16. Estrutura IV", url: "https://www.santacosta.net/estrutura-iv" },
+        { name: "17. Wilson Levitante", url: "https://www.santacosta.net/wilson-levitante" },
+        { name: "18. Winnie 1", url: "https://www.santacosta.net/winnie-1" },
+        { name: "19. Dragão Negro 1", url: "https://www.santacosta.net/dragao-negro-1" },
+        { name: "20. Coral IV", url: "https://www.santacosta.net/coral-iv" },
+        { name: "21. Lua de Cristal", url: "https://www.santacosta.net/lua-de-cristal" },
+        { name: "22. A Nascente", url: "https://www.santacosta.net/a-nascente" },
+        { name: "23. Hércules & Luna", url: "https://www.santacosta.net/hercules-luna" },
+        { name: "24. Over VI", url: "https://www.santacosta.net/over-vi" },
+        { name: "25. Pilha Ascendente", url: "https://www.santacosta.net/pilha-ascendente" },
+        { name: "26. Insght e Odenação", url: "https://www.santacosta.net/insght-e-odenacao" },
+        { name: "27. Exora", url: "https://www.santacosta.net/exora" },
+        { name: "28. O Equilibrista", url: "https://www.santacosta.net/o-equilibrista" },
+        { name: "29. 3pra1", url: "https://www.santacosta.net/3pra1" },
+        { name: "30. pilha 6", url: "https://www.santacosta.net/serie-pilha-n6" },
+        { name: "31. Over IV", url: "https://www.santacosta.net/over-iv" },
+        { name: "32. Lili Marleen", url: "https://www.santacosta.net/lili-marleen" },
+        { name: "33. Over The Fridge III", url: "https://www.santacosta.net/over-the-fridge-iii" },
+        { name: "34. pilha 18", url: "https://www.santacosta.net/serie-pilha-n18" },
+        { name: "35. Bloco Bivolt", url: "https://www.santacosta.net/bloco-bivolt" },
+        { name: "36. Spark", url: "https://www.santacosta.net/spark" },
+        { name: "37. Over The Fridge II", url: "https://www.santacosta.net/over-the-fridge-ii" },
+        { name: "38. pilha 12", url: "https://www.santacosta.net/serie-pilha-n12" },
+        { name: "39. Cópia Lua de Cristal 2017", url: "https://www.santacosta.net/copia-lua-de-cristal-2017" },
+        { name: "40. Rock n Roll", url: "https://www.santacosta.net/rock-n-roll" },
+        { name: "41. Variação VIII", url: "https://www.santacosta.net/variacao-viii" },
+        { name: "42. Cópia Meia Saco 2016", url: "https://www.santacosta.net/copia-meia-saco-2016" },
+        { name: "43. It's All Over", url: "https://www.santacosta.net/its-all-over-2017" },
+        { name: "44. Pequenos Traumas Urbantes II", url: "https://www.santacosta.net/pequenos-traumas-urbantes-ii" },
+        { name: "45. pilha 5", url: "https://www.santacosta.net/serie-pilha-n5" },
+        { name: "46. Junção Encoberta", url: "https://www.santacosta.net/juncao-encoberta" },
+        { name: "47. Sobreposição Infantário", url: "https://www.santacosta.net/sobreposicao-infantario" },
+        { name: "48. Rimbaud", url: "https://www.santacosta.net/rimbaud" },
+        { name: "49. Trava Negra", url: "https://www.santacosta.net/trava-negra" },
+        { name: "50. Objeto de Parede", url: "https://www.santacosta.net/objeto-de-parede" },
+        { name: "51. Britney", url: "https://www.santacosta.net/britney" },
+        { name: "52. White Stripes", url: "https://www.santacosta.net/white-stripes" },
+        { name: "53. Swish Wish 4", url: "https://www.santacosta.net/swish-wish-4" },
+        { name: "54. Sobreposição Deslocamento", url: "https://www.santacosta.net/sobreposicao-deslocamento" },
+        { name: "55. Bluezinho", url: "https://www.santacosta.net/bluezinho" },
+        { name: "56. Junção Exposta", url: "https://www.santacosta.net/juncao-exposta" },
+        { name: "57. Objeto de Parede V", url: "https://www.santacosta.net/objeto-de-parede-v" },
+        { name: "58. Over Geeta", url: "https://www.santacosta.net/over-geeta-2015" },
+        { name: "59. Bug", url: "https://www.santacosta.net/bug" },
+        { name: "60. Swish Wish 2", url: "https://www.santacosta.net/swish-wish-2" },
+        { name: "61. N4", url: "https://www.santacosta.net/n4" },
+        { name: "62. Voadora Delícia", url: "https://www.santacosta.net/voadora-delicia" },
+        { name: "63. O Sol e o Unicórnio", url: "https://www.santacosta.net/o-sol-e-o-unicornio" },
+        { name: "64. Sweet Manba", url: "https://www.santacosta.net/sweet-manba" },
+        { name: "65. Insight & Ordenação II", url: "https://www.santacosta.net/insight-ordenacao-ii" },
+        { name: "66. Cópia Frozen 2018", url: "https://www.santacosta.net/copia-frozen-2018" },
+        { name: "67. Auf Wiedersehen, Herr Diktator", url: "https://www.santacosta.net/auf-wiedersehen-her-diktator" },
+        { name: "68. Agonia e Êxtase", url: "https://www.santacosta.net/agonia-e-extase" },
+        { name: "69. Ghetto Freak", url: "https://www.santacosta.net/ghetto-freak" },
+        { name: "70. Sexta Marte", url: "https://www.santacosta.net/sexta-marte" },
+        { name: "71. Pequenos Traumas Urbantes 1", url: "https://www.santacosta.net/pequenos-traumas-urbantes-1" },
+        { name: "72. Long Hard Road Out of Hell", url: "https://www.santacosta.net/long-hard-road-out-of-hell" },
+        { name: "73. La Escalera", url: "https://www.santacosta.net/la-escalera" },
+        { name: "74. Swish Wish 3", url: "https://www.santacosta.net/swish-wish-3" },
+        { name: "75. Estrutura VIII", url: "https://www.santacosta.net/estrutura-viii" },
+        { name: "76. Trago do Silêncio", url: "https://www.santacosta.net/trago-do-silencio" },
+        { name: "77. Estrutura III", url: "https://www.santacosta.net/estrutura-iii" },
+        { name: "78. Baby’s on fire III", url: "https://www.santacosta.net/babys-on-fire-iii" },
+        { name: "79. Outra Língua", url: "https://www.santacosta.net/outra-lingua" },
+        { name: "80. pilha 9", url: "https://www.santacosta.net/serie-pilha-n9" },
+        { name: "81. Nino", url: "https://www.santacosta.net/nino" },
+        { name: "82. pilha 20", url: "https://www.santacosta.net/serie-pilha-n20" },
+        { name: "83. Pintura D splay", url: "https://www.santacosta.net/pintura-d-splay" },
+        { name: "84. pilha 14", url: "https://www.santacosta.net/serie-pilha-n14" },
+        { name: "85. Enfeito", url: "https://www.santacosta.net/enfeito" },
+        { name: "86. Escultura de Colagem", url: "https://www.santacosta.net/escultura-de-colagem" },
+        { name: "87. Leo H", url: "https://www.santacosta.net/leo-h" },
+        { name: "88. Serpentarius", url: "https://www.santacosta.net/serpentarius" },
+        { name: "89. Dragão Verde", url: "https://www.santacosta.net/dragao-verde" },
+        { name: "90. pilha 19", url: "https://www.santacosta.net/serie-pilha-n19" },
+        { name: "91. Balyba", url: "https://www.santacosta.net/balyba" },
+        { name: "92. Orion", url: "https://www.santacosta.net/orion" },
+        { name: "93. Objeto de Parede VI", url: "https://www.santacosta.net/objeto-de-parede-vi" },
+        { name: "94. Estrutura VI", url: "https://www.santacosta.net/estrutura-vi" },
+        { name: "95. Objeto Contrastante", url: "https://www.santacosta.net/objeto-contrastante" },
+        { name: "96. Napalm", url: "https://www.santacosta.net/napalm" },
+        { name: "97. Variação II", url: "https://www.santacosta.net/variacao-ii" },
+        { name: "98. Blackbird", url: "https://www.santacosta.net/blackbird" },
+        { name: "99. pilha 2", url: "https://www.santacosta.net/serie-pilha-n2" },
+        { name: "100. Meia Saco", url: "https://www.santacosta.net/meia-saco" },
+        { name: "101. O Xamã e a Desculpa", url: "https://www.santacosta.net/o-xama-e-a-desculpa" },
+        { name: "102. Infantário Pareado", url: "https://www.santacosta.net/infantario-pareado" },
+        { name: "103. Baby’s on fire II", url: "https://www.santacosta.net/babys-on-fire-ii" },
+        { name: "104. Over The Fridge", url: "https://www.santacosta.net/over-the-fridge-2016" },
+        { name: "105. pilha 1", url: "https://www.santacosta.net/serie-pilha-n1" },
+        { name: "106. B&G", url: "https://www.santacosta.net/b-g" },
+        { name: "107. Junção Estranha", url: "https://www.santacosta.net/juncao-estranha" },
+        { name: "108. Escultura de Paisagem", url: "https://www.santacosta.net/escultura-de-paisagem" },
+        { name: "109. Lua", url: "https://www.santacosta.net/lua" },
+        { name: "110. Fardo", url: "https://www.santacosta.net/fardo" },
+        { name: "111. Estrutura I", url: "https://www.santacosta.net/estrutura-i" },
+        { name: "112. Madam", url: "https://www.santacosta.net/madam" },
+        { name: "113. Ninho", url: "https://www.santacosta.net/ninho" },
+        { name: "114. pilha 17", url: "https://www.santacosta.net/serie-pilha-n17" },
+        { name: "115. Swish Wish", url: "https://www.santacosta.net/swish-wish" },
+        { name: "116. Estrutura V", url: "https://www.santacosta.net/estrutura-v" },
+        { name: "117. Dragão Vermelho", url: "https://www.santacosta.net/dragao-vermelho" },
+        { name: "118. Pequenos Traumas Urbanos III", url: "https://www.santacosta.net/pequenos-traumas-urbanos-iii" },
+        { name: "119. Mafalda", url: "https://www.santacosta.net/mafalda" },
+        { name: "120. O Noivo", url: "https://www.santacosta.net/o-noivo" },
+        { name: "121. Matrix Medusa", url: "https://www.santacosta.net/matrix-medusa" },
+        { name: "122. Clayborn", url: "https://www.santacosta.net/clayborn" },
+        { name: "123. Over The Fridge IV", url: "https://www.santacosta.net/over-the-fridge-iv" },
+        { name: "124. Estrutura VII", url: "https://www.santacosta.net/estrutura-vii" },
+        { name: "125. Coral", url: "https://www.santacosta.net/coral" },
+        { name: "126. pilha 16", url: "https://www.santacosta.net/serie-pilha-n16" },
+        { name: "127. Cópia Pequenos Traumas Urbanos II 2", url: "https://www.santacosta.net/copia-pequenos-traumas-urbanos-ii-2" },
+        { name: "128. pilha 7", url: "https://www.santacosta.net/serie-pilha-n7" },
+        { name: "129. pilha 8", url: "https://www.santacosta.net/serie-pilha-n8" },
+        { name: "130. Over The Fridge I", url: "https://www.santacosta.net/over-the-fridge-i-2016" },
+        { name: "131. 11 Degraus", url: "https://www.santacosta.net/11-degraus" },
+        { name: "132. Over Bikini Wasabi", url: "https://www.santacosta.net/over-bikini-wasabi" },
+        { name: "133. Petit Voiture", url: "https://www.santacosta.net/petit-voiture" },
+        { name: "134. pilha 3", url: "https://www.santacosta.net/serie-pilha-n3" },
+        { name: "135. Over II", url: "https://www.santacosta.net/over-ii" },
+        { name: "136. Over III", url: "https://www.santacosta.net/over-iii" },
+        { name: "137. Animal Negro", url: "https://www.santacosta.net/animal-negro" },
+        { name: "138. Tensão e Ruptura", url: "https://www.santacosta.net/tensao-e-ruptura" },
+        { name: "139. 3pra1 2", url: "https://www.santacosta.net/3pra1-2" },
+        { name: "140. Cova", url: "https://www.santacosta.net/cova" },
+        { name: "141. 1, 2, 33", url: "https://www.santacosta.net/1-2-33" },
+        { name: "142. Variação I", url: "https://www.santacosta.net/variacao-i" },
+        { name: "143. 12:21", url: "https://www.santacosta.net/1221" },
+        { name: "144. Badalo", url: "https://www.santacosta.net/badalo" },
+        { name: "145. Residência W", url: "https://www.santacosta.net/residencia-w" },
+        { name: "146. Textos", url: "https://www.santacosta.net/textos" },
+        { name: "147. Exposição Over Witty - Galeria Emma Thomas", url: "https://www.santacosta.net/exposicao-over-witty-2016" },
+        { name: "148. Cópia Exp 2", url: "https://www.santacosta.net/copia-exp-2" },
+        { name: "149. Biografia", url: "https://www.santacosta.net/biografia" },
+        { name: "150. Lava", url: "https://www.santacosta.net/lava" },
+        { name: "151. 26º SLAC", url: "https://www.santacosta.net/26o-slac" },
+        { name: "152. Exposição Over Witty", url: "https://www.santacosta.net/exposicao-over-witty" },
+        { name: "153. Fullscreen Page", url: "https://www.santacosta.net/fullscreen-page" },
+        { name: "154. It's All Over", url: "https://www.santacosta.net/it-s-all-over-2017" },
+        { name: "155. Currículo", url: "https://www.santacosta.net/curriculo" },
+        { name: "156. Notícias", url: "https://www.santacosta.net/noticias" },
+        { name: "157. Santacosta", url: "https://www.santacosta.net/santacosta" },
+        { name: "158. Sirva-se do que quiser", url: "https://www.santacosta.net/sirva-se-do-que-quiser" },
+        { name: "159. Trabalhos / Works", url: "https://www.santacosta.net/trabalhos-works" },
+        { name: "160. Exposições - Galeria Lamb Arts", url: "https://www.santacosta.net/exposicoes-galeria-lamb-arts" },
+        { name: "161. Cópia Exp 1", url: "https://www.santacosta.net/copia-exp-1" },
+    ];
+
+    const listContainer = document.getElementById('link-list');
+    const iframe = document.getElementById('preview');
+
+    links.forEach(item => {
+        const a = document.createElement('a');
+        // AQUI ESTÁ A MÁGICA: USAMOS O NOME JÁ COM O NÚMERO
+        a.textContent = item.name; 
+        a.href = item.url;
+        a.target = "previewFrame"; 
+        a.onclick = (e) => {
+            // Remove classe active dos outros
+            document.querySelectorAll('#sidebar a').forEach(el => el.classList.remove('active'));
+            e.target.classList.add('active');
+        };
+        listContainer.appendChild(a);
+    });
+</script>
+</body>
+</html>
