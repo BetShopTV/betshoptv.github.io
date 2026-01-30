@@ -2,22 +2,22 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Organizador Santacosta - V4 (Load/Save)</title>
+<title>Organizador Santacosta - V6 (Edição & Ordem)</title>
 <style>
     body { margin: 0; display: flex; height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
     
-    /* --- CORES PERSONALIZADAS --- */
     :root {
         --bg-color: #3c4743;
         --text-color: #4aff98;
         --border-color: #2f3835;
         --hover-color: #44504c;
         --accent-bg: #2f3835;
+        --collection-bg: #222826;
+        --remove-color: #ff6b6b;
     }
 
-    /* BARRA LATERAL */
     #sidebar { 
-        width: 340px; 
+        width: 360px; 
         background: var(--bg-color); 
         color: var(--text-color); 
         display: flex; 
@@ -26,7 +26,7 @@
         flex-shrink: 0;
     }
 
-    /* ÁREA DE CONTROLES */
+    /* CONTROLES */
     #controls {
         padding: 15px;
         background: var(--accent-bg);
@@ -41,12 +41,12 @@
     .btn-row { display: flex; gap: 5px; }
 
     button {
-        padding: 8px;
+        padding: 6px;
         cursor: pointer;
         border: 1px solid var(--text-color);
         border-radius: 4px;
         font-weight: bold;
-        font-size: 11px;
+        font-size: 10px;
         text-transform: uppercase;
         background: transparent;
         color: var(--text-color);
@@ -55,10 +55,9 @@
     }
 
     button:hover { background: var(--text-color); color: var(--bg-color); }
-    
-    /* Botão Principal de Ação */
-    #btnCreate { background: var(--text-color); color: var(--bg-color); border: none; }
-    #btnCreate:hover { background: #fff; }
+    #btnCreateGroup { background: rgba(74, 255, 152, 0.2); }
+    #btnCreateCollection { background: rgba(255, 255, 255, 0.1); border-color: #fff; color: #fff; }
+    #btnCreateCollection:hover { background: #fff; color: #000; }
 
     /* ÁREA DE ROLAGEM */
     #sidebar-content {
@@ -67,7 +66,6 @@
         padding-bottom: 50px;
     }
 
-    /* SEÇÕES (Grupos e Lista) */
     .section-title {
         padding: 10px 15px;
         background: rgba(0,0,0,0.2);
@@ -75,110 +73,129 @@
         text-transform: uppercase;
         letter-spacing: 1px;
         color: #8fa399;
-        border-bottom: 1px solid var(--border-color);
         border-top: 1px solid var(--border-color);
-        margin-top: 0px;
+        border-bottom: 1px solid var(--border-color);
     }
 
-    /* ESTILO DOS GRUPOS */
+    /* --- SUPER GRUPO (COLEÇÃO) --- */
+    .collection-container {
+        border-bottom: 1px solid var(--border-color);
+        background: var(--collection-bg);
+        margin-bottom: 5px;
+    }
+    .collection-header {
+        padding: 8px 10px;
+        font-size: 13px;
+        font-weight: 900;
+        color: #fff;
+        background: #1a1f1d;
+        cursor: pointer;
+        display: flex; justify-content: space-between;
+        border-left: 4px solid #fff;
+    }
+    .collection-content { padding-left: 10px; }
+
+    /* --- GRUPO --- */
     .group-container {
         border-bottom: 1px solid var(--border-color);
+        margin-top: 1px;
     }
     
     .group-header {
-        padding: 10px 15px;
+        padding: 8px 10px;
         background: #36403c;
-        cursor: pointer;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        font-weight: bold;
         user-select: none;
     }
     .group-header:hover { background: var(--hover-color); }
-    .group-header span { font-size: 14px; }
-    .group-count { font-size: 11px; opacity: 0.7; }
+    .group-check { margin-right: 8px; }
+
+    .group-title-area {
+        flex-grow: 1;
+        cursor: pointer;
+        display: flex; justify-content: space-between;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    .group-count { font-size: 10px; opacity: 0.7; font-weight: normal; }
 
     .group-items {
-        display: block; /* Padrão aberto */
+        display: block; 
         background: rgba(0,0,0,0.1);
         padding-bottom: 5px;
     }
     .group-items.collapsed { display: none; }
 
-    /* Itens dentro do grupo (sem checkbox, recuados) */
-    .sub-item {
-        padding: 6px 15px 6px 25px; /* Recuo */
-        font-size: 13px;
-        color: var(--text-color);
-        cursor: pointer;
-        border-left: 2px solid transparent;
-        display: block;
-        opacity: 0.9;
-    }
-    .sub-item:hover { background: var(--hover-color); opacity: 1; }
-    .sub-item.active { border-left: 4px solid var(--text-color); background: rgba(74, 255, 152, 0.1); font-weight: bold; }
-
-
-    /* ESTILO DA LISTA GERAL (Com Checkbox) */
-    .list-item {
+    /* --- ITEM DENTRO DO GRUPO (Com Botão Remover) --- */
+    .sub-item-row {
         display: flex;
         align-items: center;
-        border-bottom: 1px solid var(--border-color);
-        padding: 8px 10px;
+        padding: 0 10px 0 25px; /* Recuo */
         transition: background 0.2s;
     }
-    .list-item:hover { background: var(--hover-color); }
-    .list-item.selected-bg { background: #45524d; } 
+    .sub-item-row:hover { background: rgba(255,255,255,0.05); }
 
-    input[type="checkbox"] {
-        margin-right: 10px;
-        cursor: pointer;
-        accent-color: var(--text-color);
-        width: 16px;
-        height: 16px;
-    }
-
-    .item-link {
+    .sub-item {
+        padding: 6px 0;
+        font-size: 12px;
         color: var(--text-color);
-        text-decoration: none;
-        font-size: 13px;
-        flex-grow: 1;
         cursor: pointer;
+        text-decoration: none;
+        flex-grow: 1;
+        opacity: 0.9;
+        border-left: 2px solid transparent;
+        padding-left: 5px;
+    }
+    .sub-item:hover { opacity: 1; color: #fff; }
+    .sub-item.active { border-left: 4px solid var(--text-color); font-weight: bold; opacity: 1; }
+
+    /* Botão Remover (X) */
+    .btn-remove-item {
+        color: var(--remove-color);
+        font-weight: bold;
+        cursor: pointer;
+        padding: 4px 8px;
+        font-size: 14px;
+        opacity: 0; /* Invisível até passar o mouse */
+        transition: opacity 0.2s;
+    }
+    .sub-item-row:hover .btn-remove-item { opacity: 1; }
+    .btn-remove-item:hover { background: rgba(255,0,0,0.2); border-radius: 4px; }
+
+
+    /* ITEM GERAL (Lista solta) */
+    .list-item {
+        display: flex; align-items: center;
+        border-bottom: 1px solid var(--border-color);
+        padding: 6px 10px;
+    }
+    .list-item.selected-bg { background: #45524d; } 
+    
+    input[type="checkbox"] {
+        cursor: pointer; accent-color: var(--text-color);
+        width: 14px; height: 14px; margin-right: 8px;
     }
 
-    /* IFRAME */
     #preview { flex-grow: 1; border: none; background: #fff; }
 
-    /* MODAL (Janela Flutuante) */
+    /* MODAL */
     .modal {
-        display: none; 
-        position: fixed; 
-        z-index: 100; 
+        display: none; position: fixed; z-index: 100; 
         left: 0; top: 0; width: 100%; height: 100%; 
-        background-color: rgba(0,0,0,0.7); 
+        background-color: rgba(0,0,0,0.8); 
         align-items: center; justify-content: center;
     }
     .modal-content {
-        background-color: var(--bg-color);
-        padding: 20px;
-        border: 1px solid var(--text-color);
-        width: 400px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        box-shadow: 0 0 20px rgba(74, 255, 152, 0.2);
+        background-color: var(--bg-color); padding: 20px;
+        border: 1px solid var(--text-color); width: 450px;
+        display: flex; flex-direction: column; gap: 10px;
     }
     textarea {
-        width: 100%; height: 200px;
-        background: #222; color: #fff;
-        border: 1px solid #555;
-        padding: 10px;
-        resize: none;
-        font-family: monospace;
-        box-sizing: border-box; /* Garante que padding não estoure */
+        width: 100%; height: 250px; background: #222; color: #fff;
+        border: 1px solid #555; padding: 10px; resize: none; font-family: monospace;
+        font-size: 11px;
     }
-    .modal h3 { margin: 0 0 10px 0; color: var(--text-color); font-size: 16px;}
 
 </style>
 </head>
@@ -186,20 +203,20 @@
 
 <div id="sidebar">
     <div id="controls">
-        <button id="btnCreate" onclick="createGroup()">+ Criar Grupo com Seleção</button>
-        <div class="btn-row">
+        <button id="btnCreateGroup" onclick="createGroup()">1. Criar Grupo (Itens Selecionados)</button>
+        <button id="btnCreateCollection" onclick="createCollection()">2. Agrupar Grupos Selecionados</button>
+        
+        <div class="btn-row" style="margin-top:5px; border-top: 1px solid #555; padding-top: 5px;">
             <button onclick="copyStructure()">Copiar Relatório</button>
             <button onclick="openImportModal()">Carregar Relatório</button>
         </div>
         <button onclick="toggleGeneralList()" id="btnToggleList">Esconder Lista Geral</button>
-        <div id="status" style="font-size: 11px; color: #8fa399; margin-top: 2px;">Selecione itens abaixo para agrupar</div>
+        
+        <div id="status" style="font-size: 10px; color: #8fa399; margin-top: 2px;">Pronto.</div>
     </div>
 
     <div id="sidebar-content">
-        <div class="section-title">Grupos Criados</div>
-        <div id="groups-container"></div>
-
-        <div class="section-title" id="general-title">Lista Geral (Não agrupados)</div>
+        <div id="structure-container"></div> <div class="section-title" id="general-title">Lista Geral</div>
         <div id="general-list"></div>
     </div>
 </div>
@@ -208,9 +225,8 @@
 
 <div id="importModal" class="modal">
     <div class="modal-content">
-        <h3>Carregar Relatório</h3>
-        <p style="font-size: 12px; margin:0; opacity: 0.8;">Cole o texto do relatório abaixo para restaurar seus grupos.</p>
-        <textarea id="importText" placeholder="### GRUPO: Exemplo ###..."></textarea>
+        <h3 style="margin:0; color: #fff;">Carregar Relatório</h3>
+        <textarea id="importText" placeholder="Cole aqui seu relatório..."></textarea>
         <div class="btn-row">
             <button onclick="closeImportModal()">Cancelar</button>
             <button onclick="processImport()" style="background: var(--text-color); color: var(--bg-color);">Carregar</button>
@@ -219,7 +235,7 @@
 </div>
 
 <script>
-    // --- DADOS MESTRE ---
+    // --- DADOS ---
     let links = [
         { name: "1. Walkie-Talkie", url: "https://www.santacosta.net/walkie-talkie", grouped: false },
         { name: "2. Escultura-Desenho", url: "https://www.santacosta.net/escultura-desenho", grouped: false },
@@ -384,13 +400,11 @@
         { name: "161. Cópia Exp 1", url: "https://www.santacosta.net/copia-exp-1", grouped: false },
     ];
 
-    let groupList = []; 
-    const generalListContainer = document.getElementById('general-list');
-    const groupsContainer = document.getElementById('groups-container');
-    const iframe = document.getElementById('preview');
-    let generalListVisible = true;
+    // Groups & Collections
+    let groups = [];
+    let collections = [];
 
-    // --- CONFIGURAÇÃO INICIAL (CARREGAR "EXCLUÍDOS") ---
+    // Pre-load exclusions
     const preloadedExclusions = [
         "https://www.santacosta.net/walkie-talkie",
         "https://www.santacosta.net/serie-pilha-n11",
@@ -447,8 +461,14 @@
     ];
 
     function init() {
-        // Pré-carrega o grupo EXCLUÍDOS
-        groupList.push("EXCLUÍDOS");
+        // 1. Limpeza de Nomes (Remove numeração)
+        links.forEach(l => {
+            // Regex: Começa com numeros, seguido de ponto e espaços opcional
+            l.name = l.name.replace(/^\d+\.\s*/, '');
+        });
+
+        // 2. Setup Grupo Excluídos
+        groups.push({ name: "EXCLUÍDOS", collection: null, selected: false, collapsed: true });
         
         links.forEach(link => {
             if (preloadedExclusions.includes(link.url)) {
@@ -459,67 +479,48 @@
         render();
     }
 
-
-    // --- FUNÇÕES PRINCIPAIS ---
+    // --- RENDER ---
+    const structureContainer = document.getElementById('structure-container');
+    const generalListContainer = document.getElementById('general-list');
+    const iframe = document.getElementById('preview');
+    let generalListVisible = true;
 
     function render() {
-        // 1. Limpar as áreas
+        structureContainer.innerHTML = "";
         generalListContainer.innerHTML = "";
-        groupsContainer.innerHTML = "";
 
-        // 2. Renderizar Grupos
-        groupList.forEach(groupName => {
-            // Itens deste grupo
-            const items = links.filter(l => l.grouped === groupName);
-            
-            // Container do grupo
-            const groupDiv = document.createElement('div');
-            groupDiv.className = 'group-container';
-
-            // Cabeçalho (Nome + Setinha)
+        // 1. RENDER COLLECTIONS
+        collections.forEach(col => {
+            const colDiv = document.createElement('div');
+            colDiv.className = 'collection-container';
             const header = document.createElement('div');
-            header.className = 'group-header';
-            header.innerHTML = `<span>${groupName}</span><span class="group-count">(${items.length}) ▼</span>`;
-            
-            // Lista de itens (Accordion)
-            const itemsDiv = document.createElement('div');
-            itemsDiv.className = 'group-items'; 
-            
-            // Se for EXCLUÍDOS, começa fechado para economizar espaço
-            if(groupName === "EXCLUÍDOS") {
-                itemsDiv.classList.add('collapsed');
-                header.innerHTML = `<span>${groupName}</span><span class="group-count">(${items.length}) ►</span>`;
-            }
+            header.className = 'collection-header';
+            header.textContent = col.name;
+            colDiv.appendChild(header);
 
-            // Evento Accordion
-            header.onclick = () => {
-                itemsDiv.classList.toggle('collapsed');
-                const arrow = itemsDiv.classList.contains('collapsed') ? '►' : '▼';
-                header.querySelector('.group-count').innerHTML = `(${items.length}) ${arrow}`;
-            };
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'collection-content';
 
-            // Itens dentro do grupo
-            items.forEach(item => {
-                const subItem = document.createElement('a');
-                subItem.className = 'sub-item';
-                subItem.textContent = item.name;
-                subItem.onclick = (e) => loadPreview(item.url, e.target);
-                itemsDiv.appendChild(subItem);
-            });
+            const childGroups = groups.filter(g => g.collection === col.name);
+            childGroups.forEach(g => contentDiv.appendChild(createGroupElement(g)));
 
-            groupDiv.appendChild(header);
-            groupDiv.appendChild(itemsDiv);
-            groupsContainer.appendChild(groupDiv);
+            colDiv.appendChild(contentDiv);
+            structureContainer.appendChild(colDiv);
         });
 
-        // 3. Renderizar Lista Geral (Resto)
+        // 2. RENDER INDEPENDENT GROUPS
+        const indepGroups = groups.filter(g => g.collection === null);
+        indepGroups.forEach(g => structureContainer.appendChild(createGroupElement(g)));
+
+        // 3. RENDER GENERAL LIST (Sorted Alphabetically)
         const ungrouped = links.filter(l => l.grouped === false);
-        
+        // ORDENAÇÃO A-Z
+        ungrouped.sort((a, b) => a.name.localeCompare(b.name));
+
         ungrouped.forEach((item, index) => {
             const div = document.createElement('div');
             div.className = 'list-item';
-            div.id = `item-gen-${index}`;
-
+            
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.checked = item.selected || false;
@@ -527,12 +528,12 @@
                 item.selected = e.target.checked;
                 if(item.selected) div.classList.add('selected-bg');
                 else div.classList.remove('selected-bg');
-                updateStatus(ungrouped);
+                updateStatus();
             };
 
             const a = document.createElement('a');
-            a.className = 'item-link';
             a.textContent = item.name;
+            a.style.fontSize = "12px"; a.style.cursor="pointer"; a.style.color="var(--text-color)";
             a.onclick = (e) => loadPreview(item.url, e.target);
 
             div.appendChild(checkbox);
@@ -540,137 +541,210 @@
             generalListContainer.appendChild(div);
         });
 
-        // Atualizar status inicial
-        updateStatus(ungrouped);
+        updateStatus();
     }
 
-    function loadPreview(url, element) {
-        iframe.src = url;
-        document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
-        if(element) element.classList.add('active');
+    function createGroupElement(group) {
+        // Items in this group
+        const items = links.filter(l => l.grouped === group.name);
+        // ORDENAÇÃO A-Z DENTRO DO GRUPO
+        items.sort((a, b) => a.name.localeCompare(b.name));
+
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'group-container';
+
+        const header = document.createElement('div');
+        header.className = 'group-header';
+
+        const check = document.createElement('input');
+        check.type = 'checkbox';
+        check.className = 'group-check';
+        check.checked = group.selected || false;
+        check.onchange = (e) => {
+            group.selected = e.target.checked;
+            updateStatus();
+        };
+
+        const titleArea = document.createElement('div');
+        titleArea.className = 'group-title-area';
+        const arrow = group.collapsed ? '►' : '▼';
+        titleArea.innerHTML = `<span>${group.name}</span><span class="group-count">(${items.length}) ${arrow}</span>`;
+        
+        const itemsDiv = document.createElement('div');
+        itemsDiv.className = 'group-items';
+        if (group.collapsed) itemsDiv.classList.add('collapsed');
+
+        titleArea.onclick = () => {
+            group.collapsed = !group.collapsed;
+            render();
+        };
+
+        // Render items inside with Remove Button
+        items.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'sub-item-row';
+
+            // Link
+            const sub = document.createElement('a');
+            sub.className = 'sub-item';
+            sub.textContent = item.name;
+            sub.onclick = (e) => loadPreview(item.url, e.target);
+
+            // Remove Button
+            const btnRemove = document.createElement('span');
+            btnRemove.className = 'btn-remove-item';
+            btnRemove.textContent = '✕';
+            btnRemove.title = "Remover do grupo";
+            btnRemove.onclick = (e) => {
+                removeFromGroup(item);
+                e.stopPropagation(); // Impede clique no item
+            };
+
+            row.appendChild(sub);
+            row.appendChild(btnRemove); // Botão à direita
+            itemsDiv.appendChild(row);
+        });
+
+        header.appendChild(check);
+        header.appendChild(titleArea);
+        groupDiv.appendChild(header);
+        groupDiv.appendChild(itemsDiv);
+
+        return groupDiv;
+    }
+
+    // --- ACTIONS ---
+
+    function removeFromGroup(item) {
+        item.grouped = false; // Volta pra lista geral
+        item.selected = false;
+        render();
     }
 
     function createGroup() {
         const selectedItems = links.filter(l => l.grouped === false && l.selected);
-        
         if (selectedItems.length === 0) {
-            alert("Selecione itens da Lista Geral para criar um grupo.");
+            alert("Selecione itens da lista geral.");
             return;
         }
+        const name = prompt("Nome do Grupo:");
+        if(!name) return;
 
-        const groupName = prompt("Nome do novo grupo:", "Nova Seleção");
-        if (!groupName) return;
-
-        if (!groupList.includes(groupName)) {
-            // Adiciona novos grupos no topo (abaixo do Excluídos se quiser manter ordem, mas topo é melhor pra UX)
-            groupList.unshift(groupName); 
-        }
-
-        selectedItems.forEach(item => {
-            item.grouped = groupName;
-            item.selected = false; 
-        });
-
+        groups.unshift({ name: name, collection: null, selected: false });
+        selectedItems.forEach(i => { i.grouped = name; i.selected = false; });
         render();
     }
 
-    function updateStatus(ungroupedList) {
-        const count = ungroupedList.filter(l => l.selected).length;
-        document.getElementById('status').textContent = `${count} itens selecionados`;
+    function createCollection() {
+        const selectedGroups = groups.filter(g => g.selected && g.collection === null);
+        if (selectedGroups.length === 0) {
+            alert("Selecione grupos independentes para criar um Super Grupo.");
+            return;
+        }
+        const name = prompt("Nome do Super Grupo (Coleção):");
+        if(!name) return;
+
+        collections.unshift({ name: name });
+        selectedGroups.forEach(g => {
+            g.collection = name;
+            g.selected = false;
+        });
+        render();
+    }
+
+    function loadPreview(url, el) {
+        iframe.src = url;
+        document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
+        if(el) el.classList.add('active');
     }
 
     function toggleGeneralList() {
         generalListVisible = !generalListVisible;
-        const listDiv = document.getElementById('general-list');
-        const titleDiv = document.getElementById('general-title');
-        const btn = document.getElementById('btnToggleList');
-
-        if(generalListVisible) {
-            listDiv.style.display = 'block';
-            titleDiv.style.display = 'block';
-            btn.textContent = "Esconder Lista Geral";
-        } else {
-            listDiv.style.display = 'none';
-            titleDiv.style.display = 'none';
-            btn.textContent = "Mostrar Lista Geral";
-        }
+        document.getElementById('general-list').style.display = generalListVisible ? 'block' : 'none';
+        document.getElementById('general-title').style.display = generalListVisible ? 'block' : 'none';
+        document.getElementById('btnToggleList').textContent = generalListVisible ? "Esconder Lista Geral" : "Mostrar Lista Geral";
     }
 
-    // --- COPIAR E COLAR (IMPORT/EXPORT) ---
+    function updateStatus() {
+        const iCount = links.filter(l => l.grouped === false && l.selected).length;
+        const gCount = groups.filter(g => g.selected).length;
+        document.getElementById('status').textContent = `Sel: ${iCount} itens, ${gCount} grupos`;
+    }
 
+    // --- IMPORT / EXPORT ---
     function copyStructure() {
-        if (groupList.length === 0) {
-            alert("Nenhum grupo para copiar.");
-            return;
-        }
-
-        let report = "### RELATÓRIO SANTACOSTA ###\n\n";
-
-        groupList.forEach(gName => {
-            report += `### GRUPO: ${gName} ###\n`;
-            links.filter(l => l.grouped === gName).forEach(item => {
-                report += `- ${item.name} (${item.url})\n`;
+        let text = "### RELATÓRIO HIERÁRQUICO SANTACOSTA ###\n\n";
+        collections.forEach(col => {
+            text += `>>> SUPER: ${col.name}\n`;
+            const childGroups = groups.filter(g => g.collection === col.name);
+            childGroups.forEach(g => {
+                text += `   ### GRUPO: ${g.name}\n`;
+                links.filter(l => l.grouped === g.name).forEach(i => {
+                    text += `   - ${i.name} (${i.url})\n`;
+                });
             });
-            report += "\n";
+            text += "\n";
         });
-
-        navigator.clipboard.writeText(report).then(() => {
-            alert("Relatório copiado para a área de transferência.");
-        });
+        const indepGroups = groups.filter(g => g.collection === null);
+        if(indepGroups.length > 0) {
+            text += ">>> INDEPENDENTES\n";
+            indepGroups.forEach(g => {
+                text += `### GRUPO: ${g.name}\n`;
+                links.filter(l => l.grouped === g.name).forEach(i => {
+                    text += `- ${i.name} (${i.url})\n`;
+                });
+            });
+        }
+        navigator.clipboard.writeText(text).then(() => alert("Copiado!"));
     }
 
-    // Modal Functions
-    const modal = document.getElementById('importModal');
-    function openImportModal() { modal.style.display = "flex"; }
-    function closeImportModal() { modal.style.display = "none"; }
+    function openImportModal() { document.getElementById('importModal').style.display = 'flex'; }
+    function closeImportModal() { document.getElementById('importModal').style.display = 'none'; }
 
     function processImport() {
         const text = document.getElementById('importText').value;
-        if(!text.trim()) return;
+        if(!text) return;
 
-        // Resetar tudo primeiro
-        groupList = [];
+        groups = [];
+        collections = [];
         links.forEach(l => { l.grouped = false; l.selected = false; });
 
-        // Parsing
         const lines = text.split('\n');
+        let currentCollection = null;
         let currentGroup = null;
- 
+
         lines.forEach(line => {
             line = line.trim();
-            
-            // Detecta Grupo
-            if (line.startsWith('### GRUPO:')) {
-                // Formato: ### GRUPO: Nome ###
-                const match = line.match(/### GRUPO: (.*?) ###/);
-                if (match && match[1]) {
-                    currentGroup = match[1];
-                    groupList.push(currentGroup);
-                }
-            } 
-            // Detecta Item
-            else if (line.startsWith('- ') && currentGroup) {
-                // Tenta extrair URL que está entre parenteses
+            if(!line) return;
+
+            if(line.startsWith('>>> SUPER:')) {
+                currentCollection = line.replace('>>> SUPER:', '').trim();
+                collections.push({ name: currentCollection });
+                currentGroup = null;
+            }
+            else if(line.startsWith('>>> INDEPENDENTES')) {
+                currentCollection = null;
+                currentGroup = null;
+            }
+            else if(line.startsWith('### GRUPO:')) {
+                const gName = line.replace('### GRUPO:', '').trim();
+                currentGroup = gName;
+                groups.push({ name: gName, collection: currentCollection, selected: false });
+            }
+            else if(line.startsWith('- ') && currentGroup) {
                 const urlMatch = line.match(/\((https?:\/\/.*?)\)/);
-                if (urlMatch && urlMatch[1]) {
-                    const url = urlMatch[1];
-                    // Encontrar item na lista mestre
-                    const foundItem = links.find(l => l.url === url);
-                    if (foundItem) {
-                        foundItem.grouped = currentGroup;
-                    }
+                if (urlMatch) {
+                    const found = links.find(l => l.url === urlMatch[1]);
+                    if(found) found.grouped = currentGroup;
                 }
             }
         });
-
         render();
         closeImportModal();
-        alert("Relatório carregado com sucesso!");
+        alert("Restaurado!");
     }
 
-    // Iniciar
     init();
-
 </script>
 </body>
 </html>
