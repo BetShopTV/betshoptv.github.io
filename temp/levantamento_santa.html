@@ -2,386 +2,675 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Triagem Santacosta - V2</title>
+<title>Organizador Santacosta - V4 (Load/Save)</title>
 <style>
-    body { margin: 0; display: flex; height: 100vh; font-family: 'Roboto Mono'; overflow: hidden; }
+    body { margin: 0; display: flex; height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
     
-    /* BARRA LATERAL (Cores Atualizadas) */
+    /* --- CORES PERSONALIZADAS --- */
+    :root {
+        --bg-color: #3c4743;
+        --text-color: #4aff98;
+        --border-color: #2f3835;
+        --hover-color: #44504c;
+        --accent-bg: #2f3835;
+    }
+
+    /* BARRA LATERAL */
     #sidebar { 
-        width: 320px; 
-        background: #3c4743; /* Seu fundo */
-        color: #4aff98;      /* Sua cor de texto */
+        width: 340px; 
+        background: var(--bg-color); 
+        color: var(--text-color); 
         display: flex; 
         flex-direction: column; 
-        border-right: 1px solid #2f3835;
+        border-right: 1px solid var(--border-color);
         flex-shrink: 0;
     }
 
-    /* CONTROLES DO TOPO */
+    /* ÁREA DE CONTROLES */
     #controls {
         padding: 15px;
-        background: #2f3835; /* Um tom levemente mais escuro para contraste */
-        border-bottom: 1px solid #4aff98;
+        background: var(--accent-bg);
+        border-bottom: 1px solid var(--text-color);
         display: flex;
-        gap: 10px;
         flex-direction: column;
-        font-family: 'Roboto Mono';
+        gap: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        z-index: 10;
     }
 
+    .btn-row { display: flex; gap: 5px; }
+
     button {
-        padding: 8px 12px;
-        font-family: 'Roboto Mono';
+        padding: 8px;
         cursor: pointer;
-        border: none;
+        border: 1px solid var(--text-color);
         border-radius: 4px;
-        font-size: 13px;
+        font-weight: bold;
+        font-size: 11px;
         text-transform: uppercase;
+        background: transparent;
+        color: var(--text-color);
+        flex-grow: 1;
         transition: 0.2s;
     }
 
-    /* Botão Principal com a cor neon */
-    .btn-filter { background: #4aff98; color: #3c4743; }
-    .btn-filter:hover { background: #3fd982; }
-    .btn-filter.active { background: #fff; color: #3c4743; }
-
-    /* Botão Copiar (Outline style para não brigar com o principal) */
-    .btn-copy { background: transparent; border: 1px solid #4aff98; color: #4aff98; }
-    .btn-copy:hover { background: #4aff98; color: #3c4743; }
+    button:hover { background: var(--text-color); color: var(--bg-color); }
     
-    /* Texto de status */
-    #status { font-size: 11px; color: #8fa399; margin-top: 5px; }
+    /* Botão Principal de Ação */
+    #btnCreate { background: var(--text-color); color: var(--bg-color); border: none; }
+    #btnCreate:hover { background: #fff; }
 
-    /* LISTA */
-    #link-list {
+    /* ÁREA DE ROLAGEM */
+    #sidebar-content {
         overflow-y: auto;
         flex-grow: 1;
-        padding: 0;
+        padding-bottom: 50px;
     }
 
-    .item {
+    /* SEÇÕES (Grupos e Lista) */
+    .section-title {
+        padding: 10px 15px;
+        background: rgba(0,0,0,0.2);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #8fa399;
+        border-bottom: 1px solid var(--border-color);
+        border-top: 1px solid var(--border-color);
+        margin-top: 0px;
+    }
+
+    /* ESTILO DOS GRUPOS */
+    .group-container {
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .group-header {
+        padding: 10px 15px;
+        background: #36403c;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+        user-select: none;
+    }
+    .group-header:hover { background: var(--hover-color); }
+    .group-header span { font-size: 14px; }
+    .group-count { font-size: 11px; opacity: 0.7; }
+
+    .group-items {
+        display: block; /* Padrão aberto */
+        background: rgba(0,0,0,0.1);
+        padding-bottom: 5px;
+    }
+    .group-items.collapsed { display: none; }
+
+    /* Itens dentro do grupo (sem checkbox, recuados) */
+    .sub-item {
+        padding: 6px 15px 6px 25px; /* Recuo */
+        font-size: 13px;
+        color: var(--text-color);
+        cursor: pointer;
+        border-left: 2px solid transparent;
+        display: block;
+        opacity: 0.9;
+    }
+    .sub-item:hover { background: var(--hover-color); opacity: 1; }
+    .sub-item.active { border-left: 4px solid var(--text-color); background: rgba(74, 255, 152, 0.1); font-weight: bold; }
+
+
+    /* ESTILO DA LISTA GERAL (Com Checkbox) */
+    .list-item {
         display: flex;
         align-items: center;
-        border-bottom: 1px solid #4a5752; /* Divisória sutil */
+        border-bottom: 1px solid var(--border-color);
         padding: 8px 10px;
         transition: background 0.2s;
     }
-
-    .item:hover { background: #44504c; }
-    .item.selected-bg { background: #2f3835; } 
+    .list-item:hover { background: var(--hover-color); }
+    .list-item.selected-bg { background: #45524d; } 
 
     input[type="checkbox"] {
         margin-right: 10px;
         cursor: pointer;
-        accent-color: #4aff98; /* Checkbox fica da cor do tema */
-        width: 18px;
-        height: 18px;
+        accent-color: var(--text-color);
+        width: 16px;
+        height: 16px;
     }
 
-    .item a {
-        color: #4aff98; /* Seu texto */
+    .item-link {
+        color: var(--text-color);
         text-decoration: none;
         font-size: 13px;
         flex-grow: 1;
         cursor: pointer;
-        display: block;
-        padding: 5px 5px;
-        border-radius: 4px;
-    }
-
-    /* Comportamento Hover/Active que você pediu (Inverte as cores) */
-    .item a:hover, .item a.active { 
-        background: #4aff98; 
-        color: #3c4743; 
     }
 
     /* IFRAME */
     #preview { flex-grow: 1; border: none; background: #fff; }
-    
-    /* Ocultar itens quando filtrado */
-    .hidden { display: none !important; }
-</style></head>
+
+    /* MODAL (Janela Flutuante) */
+    .modal {
+        display: none; 
+        position: fixed; 
+        z-index: 100; 
+        left: 0; top: 0; width: 100%; height: 100%; 
+        background-color: rgba(0,0,0,0.7); 
+        align-items: center; justify-content: center;
+    }
+    .modal-content {
+        background-color: var(--bg-color);
+        padding: 20px;
+        border: 1px solid var(--text-color);
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: 0 0 20px rgba(74, 255, 152, 0.2);
+    }
+    textarea {
+        width: 100%; height: 200px;
+        background: #222; color: #fff;
+        border: 1px solid #555;
+        padding: 10px;
+        resize: none;
+        font-family: monospace;
+        box-sizing: border-box; /* Garante que padding não estoure */
+    }
+    .modal h3 { margin: 0 0 10px 0; color: var(--text-color); font-size: 16px;}
+
+</style>
+</head>
 <body>
 
 <div id="sidebar">
     <div id="controls">
-        <button onclick="toggleFilter()" id="btnFilter" class="btn-filter">Visualizar Selecionados</button>
-        <button onclick="copySelection()" class="btn-copy">Copiar Seleção</button>
-        <div id="status" style="font-size: 13px; color: #bebab0; margin-top: 5px;"><center>0 itens selecionados</center></div>
+        <button id="btnCreate" onclick="createGroup()">+ Criar Grupo com Seleção</button>
+        <div class="btn-row">
+            <button onclick="copyStructure()">Copiar Relatório</button>
+            <button onclick="openImportModal()">Carregar Relatório</button>
+        </div>
+        <button onclick="toggleGeneralList()" id="btnToggleList">Esconder Lista Geral</button>
+        <div id="status" style="font-size: 11px; color: #8fa399; margin-top: 2px;">Selecione itens abaixo para agrupar</div>
     </div>
-    <div id="link-list"></div>
+
+    <div id="sidebar-content">
+        <div class="section-title">Grupos Criados</div>
+        <div id="groups-container"></div>
+
+        <div class="section-title" id="general-title">Lista Geral (Não agrupados)</div>
+        <div id="general-list"></div>
+    </div>
 </div>
 
 <iframe id="preview" name="previewFrame" src="about:blank"></iframe>
 
+<div id="importModal" class="modal">
+    <div class="modal-content">
+        <h3>Carregar Relatório</h3>
+        <p style="font-size: 12px; margin:0; opacity: 0.8;">Cole o texto do relatório abaixo para restaurar seus grupos.</p>
+        <textarea id="importText" placeholder="### GRUPO: Exemplo ###..."></textarea>
+        <div class="btn-row">
+            <button onclick="closeImportModal()">Cancelar</button>
+            <button onclick="processImport()" style="background: var(--text-color); color: var(--bg-color);">Carregar</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    // DADOS
-    const links = [
-        { name: "1. Walkie-Talkie", url: "https://www.santacosta.net/walkie-talkie" },
-        { name: "2. Escultura-Desenho", url: "https://www.santacosta.net/escultura-desenho" },
-        { name: "3. Draco", url: "https://www.santacosta.net/draco" },
-        { name: "4. pilha 10", url: "https://www.santacosta.net/serie-pilha-n10" },
-        { name: "5. pilha 11", url: "https://www.santacosta.net/serie-pilha-n11" },
-        { name: "6. Baby’s on fire I", url: "https://www.santacosta.net/babys-on-fire-i" },
-        { name: "7. Pequeno Deslocamento", url: "https://www.santacosta.net/pequeno-deslocamento" },
-        { name: "8. pilha 15", url: "https://www.santacosta.net/serie-pilha-n15" },
-        { name: "9. Estrutura II", url: "https://www.santacosta.net/estrutura-ii" },
-        { name: "10. Reflexos Trinos", url: "https://www.santacosta.net/reflexos-trinos" },
-        { name: "11. Cópia 3pra1 2 2017", url: "https://www.santacosta.net/copia-3pra1-2-2017" },
-        { name: "12. Over I", url: "https://www.santacosta.net/over-i" },
-        { name: "13. Over V", url: "https://www.santacosta.net/over-v" },
-        { name: "14. Cassiopeia", url: "https://www.santacosta.net/cassiopeia" },
-        { name: "15. pilha 4", url: "https://www.santacosta.net/serie-pilha-n4" },
-        { name: "16. Estrutura IV", url: "https://www.santacosta.net/estrutura-iv" },
-        { name: "17. Wilson Levitante", url: "https://www.santacosta.net/wilson-levitante" },
-        { name: "18. Winnie 1", url: "https://www.santacosta.net/winnie-1" },
-        { name: "19. Dragão Negro 1", url: "https://www.santacosta.net/dragao-negro-1" },
-        { name: "20. Coral IV", url: "https://www.santacosta.net/coral-iv" },
-        { name: "21. Lua de Cristal", url: "https://www.santacosta.net/lua-de-cristal" },
-        { name: "22. A Nascente", url: "https://www.santacosta.net/a-nascente" },
-        { name: "23. Hércules & Luna", url: "https://www.santacosta.net/hercules-luna" },
-        { name: "24. Over VI", url: "https://www.santacosta.net/over-vi" },
-        { name: "25. Pilha Ascendente", url: "https://www.santacosta.net/pilha-ascendente" },
-        { name: "26. Insght e Odenacao", url: "https://www.santacosta.net/insght-e-odenacao" },
-        { name: "27. Exora", url: "https://www.santacosta.net/exora" },
-        { name: "28. O Equilibrista", url: "https://www.santacosta.net/o-equilibrista" },
-        { name: "29. 3pra1", url: "https://www.santacosta.net/3pra1" },
-        { name: "30. pilha 6", url: "https://www.santacosta.net/serie-pilha-n6" },
-        { name: "31. Over IV", url: "https://www.santacosta.net/over-iv" },
-        { name: "32. Lili Marleen", url: "https://www.santacosta.net/lili-marleen" },
-        { name: "33. Over The Fridge III", url: "https://www.santacosta.net/over-the-fridge-iii" },
-        { name: "34. pilha 18", url: "https://www.santacosta.net/serie-pilha-n18" },
-        { name: "35. Bloco Bivolt", url: "https://www.santacosta.net/bloco-bivolt" },
-        { name: "36. Spark", url: "https://www.santacosta.net/spark" },
-        { name: "37. Over The Fridge II", url: "https://www.santacosta.net/over-the-fridge-ii" },
-        { name: "38. pilha 12", url: "https://www.santacosta.net/serie-pilha-n12" },
-        { name: "39. Cópia Lua de Cristal 2017", url: "https://www.santacosta.net/copia-lua-de-cristal-2017" },
-        { name: "40. Rock n Roll", url: "https://www.santacosta.net/rock-n-roll" },
-        { name: "41. Variação VIII", url: "https://www.santacosta.net/variacao-viii" },
-        { name: "42. Cópia Meia Saco 2016", url: "https://www.santacosta.net/copia-meia-saco-2016" },
-        { name: "43. It's All Over", url: "https://www.santacosta.net/its-all-over-2017" },
-        { name: "44. Pequenos Traumas Urbantes II", url: "https://www.santacosta.net/pequenos-traumas-urbantes-ii" },
-        { name: "45. pilha 5", url: "https://www.santacosta.net/serie-pilha-n5" },
-        { name: "46. Junção Encoberta", url: "https://www.santacosta.net/juncao-encoberta" },
-        { name: "47. Sobreposição Infantário", url: "https://www.santacosta.net/sobreposicao-infantario" },
-        { name: "48. Rimbaud", url: "https://www.santacosta.net/rimbaud" },
-        { name: "49. Trava Negra", url: "https://www.santacosta.net/trava-negra" },
-        { name: "50. Objeto de Parede", url: "https://www.santacosta.net/objeto-de-parede" },
-        { name: "51. Britney", url: "https://www.santacosta.net/britney" },
-        { name: "52. White Stripes", url: "https://www.santacosta.net/white-stripes" },
-        { name: "53. Swish Wish 4", url: "https://www.santacosta.net/swish-wish-4" },
-        { name: "54. Sobreposição Deslocamento", url: "https://www.santacosta.net/sobreposicao-deslocamento" },
-        { name: "55. Bluezinho", url: "https://www.santacosta.net/bluezinho" },
-        { name: "56. Junção Exposta", url: "https://www.santacosta.net/juncao-exposta" },
-        { name: "57. Objeto de Parede V", url: "https://www.santacosta.net/objeto-de-parede-v" },
-        { name: "58. Over Geeta", url: "https://www.santacosta.net/over-geeta-2015" },
-        { name: "59. Bug", url: "https://www.santacosta.net/bug" },
-        { name: "60. Swish Wish 2", url: "https://www.santacosta.net/swish-wish-2" },
-        { name: "61. N4", url: "https://www.santacosta.net/n4" },
-        { name: "62. Voadora Delícia", url: "https://www.santacosta.net/voadora-delicia" },
-        { name: "63. O Sol e o Unicórnio", url: "https://www.santacosta.net/o-sol-e-o-unicornio" },
-        { name: "64. Sweet Manba", url: "https://www.santacosta.net/sweet-manba" },
-        { name: "65. Insight & Ordenação II", url: "https://www.santacosta.net/insight-ordenacao-ii" },
-        { name: "66. Cópia Frozen 2018", url: "https://www.santacosta.net/copia-frozen-2018" },
-        { name: "67. Auf Wiedersehen, Herr Diktator", url: "https://www.santacosta.net/auf-wiedersehen-her-diktator" },
-        { name: "68. Agonia e Êxtase", url: "https://www.santacosta.net/agonia-e-extase" },
-        { name: "69. Ghetto Freak", url: "https://www.santacosta.net/ghetto-freak" },
-        { name: "70. Sexta Marte", url: "https://www.santacosta.net/sexta-marte" },
-        { name: "71. Pequenos Traumas Urbantes 1", url: "https://www.santacosta.net/pequenos-traumas-urbantes-1" },
-        { name: "72. Long Hard Road Out of Hell", url: "https://www.santacosta.net/long-hard-road-out-of-hell" },
-        { name: "73. La Escalera", url: "https://www.santacosta.net/la-escalera" },
-        { name: "74. Swish Wish 3", url: "https://www.santacosta.net/swish-wish-3" },
-        { name: "75. Estrutura VIII", url: "https://www.santacosta.net/estrutura-viii" },
-        { name: "76. Trago do Silêncio", url: "https://www.santacosta.net/trago-do-silencio" },
-        { name: "77. Estrutura III", url: "https://www.santacosta.net/estrutura-iii" },
-        { name: "78. Baby’s on fire III", url: "https://www.santacosta.net/babys-on-fire-iii" },
-        { name: "79. Outra Língua", url: "https://www.santacosta.net/outra-lingua" },
-        { name: "80. pilha 9", url: "https://www.santacosta.net/serie-pilha-n9" },
-        { name: "81. Nino", url: "https://www.santacosta.net/nino" },
-        { name: "82. pilha 20", url: "https://www.santacosta.net/serie-pilha-n20" },
-        { name: "83. Pintura D splay", url: "https://www.santacosta.net/pintura-d-splay" },
-        { name: "84. pilha 14", url: "https://www.santacosta.net/serie-pilha-n14" },
-        { name: "85. Enfeito", url: "https://www.santacosta.net/enfeito" },
-        { name: "86. Escultura de Colagem", url: "https://www.santacosta.net/escultura-de-colagem" },
-        { name: "87. Leo H", url: "https://www.santacosta.net/leo-h" },
-        { name: "88. Serpentarius", url: "https://www.santacosta.net/serpentarius" },
-        { name: "89. Dragão Verde", url: "https://www.santacosta.net/dragao-verde" },
-        { name: "90. pilha 19", url: "https://www.santacosta.net/serie-pilha-n19" },
-        { name: "91. Balyba", url: "https://www.santacosta.net/balyba" },
-        { name: "92. Orion", url: "https://www.santacosta.net/orion" },
-        { name: "93. Objeto de Parede VI", url: "https://www.santacosta.net/objeto-de-parede-vi" },
-        { name: "94. Estrutura VI", url: "https://www.santacosta.net/estrutura-vi" },
-        { name: "95. Objeto Contrastante", url: "https://www.santacosta.net/objeto-contrastante" },
-        { name: "96. Napalm", url: "https://www.santacosta.net/napalm" },
-        { name: "97. Variação II", url: "https://www.santacosta.net/variacao-ii" },
-        { name: "98. Blackbird", url: "https://www.santacosta.net/blackbird" },
-        { name: "99. pilha 2", url: "https://www.santacosta.net/serie-pilha-n2" },
-        { name: "100. Meia Saco", url: "https://www.santacosta.net/meia-saco" },
-        { name: "101. O Xamã e a Desculpa", url: "https://www.santacosta.net/o-xama-e-a-desculpa" },
-        { name: "102. Infantário Pareado", url: "https://www.santacosta.net/infantario-pareado" },
-        { name: "103. Baby’s on fire II", url: "https://www.santacosta.net/babys-on-fire-ii" },
-        { name: "104. Over The Fridge", url: "https://www.santacosta.net/over-the-fridge-2016" },
-        { name: "105. pilha 1", url: "https://www.santacosta.net/serie-pilha-n1" },
-        { name: "106. B&G", url: "https://www.santacosta.net/b-g" },
-        { name: "107. Junção Estranha", url: "https://www.santacosta.net/juncao-estranha" },
-        { name: "108. Escultura de Paisagem", url: "https://www.santacosta.net/escultura-de-paisagem" },
-        { name: "109. Lua", url: "https://www.santacosta.net/lua" },
-        { name: "110. Fardo", url: "https://www.santacosta.net/fardo" },
-        { name: "111. Estrutura I", url: "https://www.santacosta.net/estrutura-i" },
-        { name: "112. Madam", url: "https://www.santacosta.net/madam" },
-        { name: "113. Ninho", url: "https://www.santacosta.net/ninho" },
-        { name: "114. pilha 17", url: "https://www.santacosta.net/serie-pilha-n17" },
-        { name: "115. Swish Wish", url: "https://www.santacosta.net/swish-wish" },
-        { name: "116. Estrutura V", url: "https://www.santacosta.net/estrutura-v" },
-        { name: "117. Dragão Vermelho", url: "https://www.santacosta.net/dragao-vermelho" },
-        { name: "118. Pequenos Traumas Urbanos III", url: "https://www.santacosta.net/pequenos-traumas-urbanos-iii" },
-        { name: "119. Mafalda", url: "https://www.santacosta.net/mafalda" },
-        { name: "120. O Noivo", url: "https://www.santacosta.net/o-noivo" },
-        { name: "121. Matrix Medusa", url: "https://www.santacosta.net/matrix-medusa" },
-        { name: "122. Clayborn", url: "https://www.santacosta.net/clayborn" },
-        { name: "123. Over The Fridge IV", url: "https://www.santacosta.net/over-the-fridge-iv" },
-        { name: "124. Estrutura VII", url: "https://www.santacosta.net/estrutura-vii" },
-        { name: "125. Coral", url: "https://www.santacosta.net/coral" },
-        { name: "126. pilha 16", url: "https://www.santacosta.net/serie-pilha-n16" },
-        { name: "127. Cópia Pequenos Traumas Urbanos II 2", url: "https://www.santacosta.net/copia-pequenos-traumas-urbanos-ii-2" },
-        { name: "128. pilha 7", url: "https://www.santacosta.net/serie-pilha-n7" },
-        { name: "129. pilha 8", url: "https://www.santacosta.net/serie-pilha-n8" },
-        { name: "130. Over The Fridge I", url: "https://www.santacosta.net/over-the-fridge-i-2016" },
-        { name: "131. 11 Degraus", url: "https://www.santacosta.net/11-degraus" },
-        { name: "132. Over Bikini Wasabi", url: "https://www.santacosta.net/over-bikini-wasabi" },
-        { name: "133. Petit Voiture", url: "https://www.santacosta.net/petit-voiture" },
-        { name: "134. pilha 3", url: "https://www.santacosta.net/serie-pilha-n3" },
-        { name: "135. Over II", url: "https://www.santacosta.net/over-ii" },
-        { name: "136. Over III", url: "https://www.santacosta.net/over-iii" },
-        { name: "137. Animal Negro", url: "https://www.santacosta.net/animal-negro" },
-        { name: "138. Tensão e Ruptura", url: "https://www.santacosta.net/tensao-e-ruptura" },
-        { name: "139. 3pra1 2", url: "https://www.santacosta.net/3pra1-2" },
-        { name: "140. Cova", url: "https://www.santacosta.net/cova" },
-        { name: "141. 1, 2, 33", url: "https://www.santacosta.net/1-2-33" },
-        { name: "142. Variação I", url: "https://www.santacosta.net/variacao-i" },
-        { name: "143. 12:21", url: "https://www.santacosta.net/1221" },
-        { name: "144. Badalo", url: "https://www.santacosta.net/badalo" },
-        { name: "145. Residência W", url: "https://www.santacosta.net/residencia-w" },
-        { name: "146. Textos", url: "https://www.santacosta.net/textos" },
-        { name: "147. Exposição Over Witty - Galeria Emma Thomas", url: "https://www.santacosta.net/exposicao-over-witty-2016" },
-        { name: "148. Cópia Exp 2", url: "https://www.santacosta.net/copia-exp-2" },
-        { name: "149. Biografia", url: "https://www.santacosta.net/biografia" },
-        { name: "150. Lava", url: "https://www.santacosta.net/lava" },
-        { name: "151. 26º SLAC", url: "https://www.santacosta.net/26o-slac" },
-        { name: "152. Exposição Over Witty", url: "https://www.santacosta.net/exposicao-over-witty" },
-        { name: "153. Fullscreen Page", url: "https://www.santacosta.net/fullscreen-page" },
-        { name: "154. It's All Over", url: "https://www.santacosta.net/it-s-all-over-2017" },
-        { name: "155. Currículo", url: "https://www.santacosta.net/curriculo" },
-        { name: "156. Notícias", url: "https://www.santacosta.net/noticias" },
-        { name: "157. Santacosta", url: "https://www.santacosta.net/santacosta" },
-        { name: "158. Sirva-se do que quiser", url: "https://www.santacosta.net/sirva-se-do-que-quiser" },
-        { name: "159. Trabalhos / Works", url: "https://www.santacosta.net/trabalhos-works" },
-        { name: "160. Exposições - Galeria Lamb Arts", url: "https://www.santacosta.net/exposicoes-galeria-lamb-arts" },
-        { name: "161. Cópia Exp 1", url: "https://www.santacosta.net/copia-exp-1" },
+    // --- DADOS MESTRE ---
+    let links = [
+        { name: "1. Walkie-Talkie", url: "https://www.santacosta.net/walkie-talkie", grouped: false },
+        { name: "2. Escultura-Desenho", url: "https://www.santacosta.net/escultura-desenho", grouped: false },
+        { name: "3. Draco", url: "https://www.santacosta.net/draco", grouped: false },
+        { name: "4. pilha 10", url: "https://www.santacosta.net/serie-pilha-n10", grouped: false },
+        { name: "5. pilha 11", url: "https://www.santacosta.net/serie-pilha-n11", grouped: false },
+        { name: "6. Baby’s on fire I", url: "https://www.santacosta.net/babys-on-fire-i", grouped: false },
+        { name: "7. Pequeno Deslocamento", url: "https://www.santacosta.net/pequeno-deslocamento", grouped: false },
+        { name: "8. pilha 15", url: "https://www.santacosta.net/serie-pilha-n15", grouped: false },
+        { name: "9. Estrutura II", url: "https://www.santacosta.net/estrutura-ii", grouped: false },
+        { name: "10. Reflexos Trinos", url: "https://www.santacosta.net/reflexos-trinos", grouped: false },
+        { name: "11. Cópia 3pra1 2 2017", url: "https://www.santacosta.net/copia-3pra1-2-2017", grouped: false },
+        { name: "12. Over I", url: "https://www.santacosta.net/over-i", grouped: false },
+        { name: "13. Over V", url: "https://www.santacosta.net/over-v", grouped: false },
+        { name: "14. Cassiopeia", url: "https://www.santacosta.net/cassiopeia", grouped: false },
+        { name: "15. pilha 4", url: "https://www.santacosta.net/serie-pilha-n4", grouped: false },
+        { name: "16. Estrutura IV", url: "https://www.santacosta.net/estrutura-iv", grouped: false },
+        { name: "17. Wilson Levitante", url: "https://www.santacosta.net/wilson-levitante", grouped: false },
+        { name: "18. Winnie 1", url: "https://www.santacosta.net/winnie-1", grouped: false },
+        { name: "19. Dragão Negro 1", url: "https://www.santacosta.net/dragao-negro-1", grouped: false },
+        { name: "20. Coral IV", url: "https://www.santacosta.net/coral-iv", grouped: false },
+        { name: "21. Lua de Cristal", url: "https://www.santacosta.net/lua-de-cristal", grouped: false },
+        { name: "22. A Nascente", url: "https://www.santacosta.net/a-nascente", grouped: false },
+        { name: "23. Hércules & Luna", url: "https://www.santacosta.net/hercules-luna", grouped: false },
+        { name: "24. Over VI", url: "https://www.santacosta.net/over-vi", grouped: false },
+        { name: "25. Pilha Ascendente", url: "https://www.santacosta.net/pilha-ascendente", grouped: false },
+        { name: "26. Insght e Odenacao", url: "https://www.santacosta.net/insght-e-odenacao", grouped: false },
+        { name: "27. Exora", url: "https://www.santacosta.net/exora", grouped: false },
+        { name: "28. O Equilibrista", url: "https://www.santacosta.net/o-equilibrista", grouped: false },
+        { name: "29. 3pra1", url: "https://www.santacosta.net/3pra1", grouped: false },
+        { name: "30. pilha 6", url: "https://www.santacosta.net/serie-pilha-n6", grouped: false },
+        { name: "31. Over IV", url: "https://www.santacosta.net/over-iv", grouped: false },
+        { name: "32. Lili Marleen", url: "https://www.santacosta.net/lili-marleen", grouped: false },
+        { name: "33. Over The Fridge III", url: "https://www.santacosta.net/over-the-fridge-iii", grouped: false },
+        { name: "34. pilha 18", url: "https://www.santacosta.net/serie-pilha-n18", grouped: false },
+        { name: "35. Bloco Bivolt", url: "https://www.santacosta.net/bloco-bivolt", grouped: false },
+        { name: "36. Spark", url: "https://www.santacosta.net/spark", grouped: false },
+        { name: "37. Over The Fridge II", url: "https://www.santacosta.net/over-the-fridge-ii", grouped: false },
+        { name: "38. pilha 12", url: "https://www.santacosta.net/serie-pilha-n12", grouped: false },
+        { name: "39. Cópia Lua de Cristal 2017", url: "https://www.santacosta.net/copia-lua-de-cristal-2017", grouped: false },
+        { name: "40. Rock n Roll", url: "https://www.santacosta.net/rock-n-roll", grouped: false },
+        { name: "41. Variação VIII", url: "https://www.santacosta.net/variacao-viii", grouped: false },
+        { name: "42. Cópia Meia Saco 2016", url: "https://www.santacosta.net/copia-meia-saco-2016", grouped: false },
+        { name: "43. It's All Over", url: "https://www.santacosta.net/its-all-over-2017", grouped: false },
+        { name: "44. Pequenos Traumas Urbantes II", url: "https://www.santacosta.net/pequenos-traumas-urbantes-ii", grouped: false },
+        { name: "45. pilha 5", url: "https://www.santacosta.net/serie-pilha-n5", grouped: false },
+        { name: "46. Junção Encoberta", url: "https://www.santacosta.net/juncao-encoberta", grouped: false },
+        { name: "47. Sobreposição Infantário", url: "https://www.santacosta.net/sobreposicao-infantario", grouped: false },
+        { name: "48. Rimbaud", url: "https://www.santacosta.net/rimbaud", grouped: false },
+        { name: "49. Trava Negra", url: "https://www.santacosta.net/trava-negra", grouped: false },
+        { name: "50. Objeto de Parede", url: "https://www.santacosta.net/objeto-de-parede", grouped: false },
+        { name: "51. Britney", url: "https://www.santacosta.net/britney", grouped: false },
+        { name: "52. White Stripes", url: "https://www.santacosta.net/white-stripes", grouped: false },
+        { name: "53. Swish Wish 4", url: "https://www.santacosta.net/swish-wish-4", grouped: false },
+        { name: "54. Sobreposição Deslocamento", url: "https://www.santacosta.net/sobreposicao-deslocamento", grouped: false },
+        { name: "55. Bluezinho", url: "https://www.santacosta.net/bluezinho", grouped: false },
+        { name: "56. Junção Exposta", url: "https://www.santacosta.net/juncao-exposta", grouped: false },
+        { name: "57. Objeto de Parede V", url: "https://www.santacosta.net/objeto-de-parede-v", grouped: false },
+        { name: "58. Over Geeta", url: "https://www.santacosta.net/over-geeta-2015", grouped: false },
+        { name: "59. Bug", url: "https://www.santacosta.net/bug", grouped: false },
+        { name: "60. Swish Wish 2", url: "https://www.santacosta.net/swish-wish-2", grouped: false },
+        { name: "61. N4", url: "https://www.santacosta.net/n4", grouped: false },
+        { name: "62. Voadora Delícia", url: "https://www.santacosta.net/voadora-delicia", grouped: false },
+        { name: "63. O Sol e o Unicórnio", url: "https://www.santacosta.net/o-sol-e-o-unicornio", grouped: false },
+        { name: "64. Sweet Manba", url: "https://www.santacosta.net/sweet-manba", grouped: false },
+        { name: "65. Insight & Ordenação II", url: "https://www.santacosta.net/insight-ordenacao-ii", grouped: false },
+        { name: "66. Cópia Frozen 2018", url: "https://www.santacosta.net/copia-frozen-2018", grouped: false },
+        { name: "67. Auf Wiedersehen, Herr Diktator", url: "https://www.santacosta.net/auf-wiedersehen-her-diktator", grouped: false },
+        { name: "68. Agonia e Êxtase", url: "https://www.santacosta.net/agonia-e-extase", grouped: false },
+        { name: "69. Ghetto Freak", url: "https://www.santacosta.net/ghetto-freak", grouped: false },
+        { name: "70. Sexta Marte", url: "https://www.santacosta.net/sexta-marte", grouped: false },
+        { name: "71. Pequenos Traumas Urbantes 1", url: "https://www.santacosta.net/pequenos-traumas-urbantes-1", grouped: false },
+        { name: "72. Long Hard Road Out of Hell", url: "https://www.santacosta.net/long-hard-road-out-of-hell", grouped: false },
+        { name: "73. La Escalera", url: "https://www.santacosta.net/la-escalera", grouped: false },
+        { name: "74. Swish Wish 3", url: "https://www.santacosta.net/swish-wish-3", grouped: false },
+        { name: "75. Estrutura VIII", url: "https://www.santacosta.net/estrutura-viii", grouped: false },
+        { name: "76. Trago do Silêncio", url: "https://www.santacosta.net/trago-do-silencio", grouped: false },
+        { name: "77. Estrutura III", url: "https://www.santacosta.net/estrutura-iii", grouped: false },
+        { name: "78. Baby’s on fire III", url: "https://www.santacosta.net/babys-on-fire-iii", grouped: false },
+        { name: "79. Outra Língua", url: "https://www.santacosta.net/outra-lingua", grouped: false },
+        { name: "80. pilha 9", url: "https://www.santacosta.net/serie-pilha-n9", grouped: false },
+        { name: "81. Nino", url: "https://www.santacosta.net/nino", grouped: false },
+        { name: "82. pilha 20", url: "https://www.santacosta.net/serie-pilha-n20", grouped: false },
+        { name: "83. Pintura D splay", url: "https://www.santacosta.net/pintura-d-splay", grouped: false },
+        { name: "84. pilha 14", url: "https://www.santacosta.net/serie-pilha-n14", grouped: false },
+        { name: "85. Enfeito", url: "https://www.santacosta.net/enfeito", grouped: false },
+        { name: "86. Escultura de Colagem", url: "https://www.santacosta.net/escultura-de-colagem", grouped: false },
+        { name: "87. Leo H", url: "https://www.santacosta.net/leo-h", grouped: false },
+        { name: "88. Serpentarius", url: "https://www.santacosta.net/serpentarius", grouped: false },
+        { name: "89. Dragão Verde", url: "https://www.santacosta.net/dragao-verde", grouped: false },
+        { name: "90. pilha 19", url: "https://www.santacosta.net/serie-pilha-n19", grouped: false },
+        { name: "91. Balyba", url: "https://www.santacosta.net/balyba", grouped: false },
+        { name: "92. Orion", url: "https://www.santacosta.net/orion", grouped: false },
+        { name: "93. Objeto de Parede VI", url: "https://www.santacosta.net/objeto-de-parede-vi", grouped: false },
+        { name: "94. Estrutura VI", url: "https://www.santacosta.net/estrutura-vi", grouped: false },
+        { name: "95. Objeto Contrastante", url: "https://www.santacosta.net/objeto-contrastante", grouped: false },
+        { name: "96. Napalm", url: "https://www.santacosta.net/napalm", grouped: false },
+        { name: "97. Variação II", url: "https://www.santacosta.net/variacao-ii", grouped: false },
+        { name: "98. Blackbird", url: "https://www.santacosta.net/blackbird", grouped: false },
+        { name: "99. pilha 2", url: "https://www.santacosta.net/serie-pilha-n2", grouped: false },
+        { name: "100. Meia Saco", url: "https://www.santacosta.net/meia-saco", grouped: false },
+        { name: "101. O Xamã e a Desculpa", url: "https://www.santacosta.net/o-xama-e-a-desculpa", grouped: false },
+        { name: "102. Infantário Pareado", url: "https://www.santacosta.net/infantario-pareado", grouped: false },
+        { name: "103. Baby’s on fire II", url: "https://www.santacosta.net/babys-on-fire-ii", grouped: false },
+        { name: "104. Over The Fridge", url: "https://www.santacosta.net/over-the-fridge-2016", grouped: false },
+        { name: "105. pilha 1", url: "https://www.santacosta.net/serie-pilha-n1", grouped: false },
+        { name: "106. B&G", url: "https://www.santacosta.net/b-g", grouped: false },
+        { name: "107. Junção Estranha", url: "https://www.santacosta.net/juncao-estranha", grouped: false },
+        { name: "108. Escultura de Paisagem", url: "https://www.santacosta.net/escultura-de-paisagem", grouped: false },
+        { name: "109. Lua", url: "https://www.santacosta.net/lua", grouped: false },
+        { name: "110. Fardo", url: "https://www.santacosta.net/fardo", grouped: false },
+        { name: "111. Estrutura I", url: "https://www.santacosta.net/estrutura-i", grouped: false },
+        { name: "112. Madam", url: "https://www.santacosta.net/madam", grouped: false },
+        { name: "113. Ninho", url: "https://www.santacosta.net/ninho", grouped: false },
+        { name: "114. pilha 17", url: "https://www.santacosta.net/serie-pilha-n17", grouped: false },
+        { name: "115. Swish Wish", url: "https://www.santacosta.net/swish-wish", grouped: false },
+        { name: "116. Estrutura V", url: "https://www.santacosta.net/estrutura-v", grouped: false },
+        { name: "117. Dragão Vermelho", url: "https://www.santacosta.net/dragao-vermelho", grouped: false },
+        { name: "118. Pequenos Traumas Urbanos III", url: "https://www.santacosta.net/pequenos-traumas-urbanos-iii", grouped: false },
+        { name: "119. Mafalda", url: "https://www.santacosta.net/mafalda", grouped: false },
+        { name: "120. O Noivo", url: "https://www.santacosta.net/o-noivo", grouped: false },
+        { name: "121. Matrix Medusa", url: "https://www.santacosta.net/matrix-medusa", grouped: false },
+        { name: "122. Clayborn", url: "https://www.santacosta.net/clayborn", grouped: false },
+        { name: "123. Over The Fridge IV", url: "https://www.santacosta.net/over-the-fridge-iv", grouped: false },
+        { name: "124. Estrutura VII", url: "https://www.santacosta.net/estrutura-vii", grouped: false },
+        { name: "125. Coral", url: "https://www.santacosta.net/coral", grouped: false },
+        { name: "126. pilha 16", url: "https://www.santacosta.net/serie-pilha-n16", grouped: false },
+        { name: "127. Cópia Pequenos Traumas Urbanos II 2", url: "https://www.santacosta.net/copia-pequenos-traumas-urbanos-ii-2", grouped: false },
+        { name: "128. pilha 7", url: "https://www.santacosta.net/serie-pilha-n7", grouped: false },
+        { name: "129. pilha 8", url: "https://www.santacosta.net/serie-pilha-n8", grouped: false },
+        { name: "130. Over The Fridge I", url: "https://www.santacosta.net/over-the-fridge-i-2016", grouped: false },
+        { name: "131. 11 Degraus", url: "https://www.santacosta.net/11-degraus", grouped: false },
+        { name: "132. Over Bikini Wasabi", url: "https://www.santacosta.net/over-bikini-wasabi", grouped: false },
+        { name: "133. Petit Voiture", url: "https://www.santacosta.net/petit-voiture", grouped: false },
+        { name: "134. pilha 3", url: "https://www.santacosta.net/serie-pilha-n3", grouped: false },
+        { name: "135. Over II", url: "https://www.santacosta.net/over-ii", grouped: false },
+        { name: "136. Over III", url: "https://www.santacosta.net/over-iii", grouped: false },
+        { name: "137. Animal Negro", url: "https://www.santacosta.net/animal-negro", grouped: false },
+        { name: "138. Tensão e Ruptura", url: "https://www.santacosta.net/tensao-e-ruptura", grouped: false },
+        { name: "139. 3pra1 2", url: "https://www.santacosta.net/3pra1-2", grouped: false },
+        { name: "140. Cova", url: "https://www.santacosta.net/cova", grouped: false },
+        { name: "141. 1, 2, 33", url: "https://www.santacosta.net/1-2-33", grouped: false },
+        { name: "142. Variação I", url: "https://www.santacosta.net/variacao-i", grouped: false },
+        { name: "143. 12:21", url: "https://www.santacosta.net/1221", grouped: false },
+        { name: "144. Badalo", url: "https://www.santacosta.net/badalo", grouped: false },
+        { name: "145. Residência W", url: "https://www.santacosta.net/residencia-w", grouped: false },
+        { name: "146. Textos", url: "https://www.santacosta.net/textos", grouped: false },
+        { name: "147. Exposição Over Witty - Galeria Emma Thomas", url: "https://www.santacosta.net/exposicao-over-witty-2016", grouped: false },
+        { name: "148. Cópia Exp 2", url: "https://www.santacosta.net/copia-exp-2", grouped: false },
+        { name: "149. Biografia", url: "https://www.santacosta.net/biografia", grouped: false },
+        { name: "150. Lava", url: "https://www.santacosta.net/lava", grouped: false },
+        { name: "151. 26º SLAC", url: "https://www.santacosta.net/26o-slac", grouped: false },
+        { name: "152. Exposição Over Witty", url: "https://www.santacosta.net/exposicao-over-witty", grouped: false },
+        { name: "153. Fullscreen Page", url: "https://www.santacosta.net/fullscreen-page", grouped: false },
+        { name: "154. It's All Over", url: "https://www.santacosta.net/it-s-all-over-2017", grouped: false },
+        { name: "155. Currículo", url: "https://www.santacosta.net/curriculo", grouped: false },
+        { name: "156. Notícias", url: "https://www.santacosta.net/noticias", grouped: false },
+        { name: "157. Santacosta", url: "https://www.santacosta.net/santacosta", grouped: false },
+        { name: "158. Sirva-se do que quiser", url: "https://www.santacosta.net/sirva-se-do-que-quiser", grouped: false },
+        { name: "159. Trabalhos / Works", url: "https://www.santacosta.net/trabalhos-works", grouped: false },
+        { name: "160. Exposições - Galeria Lamb Arts", url: "https://www.santacosta.net/exposicoes-galeria-lamb-arts", grouped: false },
+        { name: "161. Cópia Exp 1", url: "https://www.santacosta.net/copia-exp-1", grouped: false },
     ];
 
-    const listContainer = document.getElementById('link-list');
+    let groupList = []; 
+    const generalListContainer = document.getElementById('general-list');
+    const groupsContainer = document.getElementById('groups-container');
     const iframe = document.getElementById('preview');
-    const statusDiv = document.getElementById('status');
-    let isFiltered = false;
+    let generalListVisible = true;
 
-    // INICIALIZAÇÃO DA LISTA
-    links.forEach((item, index) => {
-        // Cria container do item
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.id = `item-${index}`;
+    // --- CONFIGURAÇÃO INICIAL (CARREGAR "EXCLUÍDOS") ---
+    const preloadedExclusions = [
+        "https://www.santacosta.net/walkie-talkie",
+        "https://www.santacosta.net/serie-pilha-n11",
+        "https://www.santacosta.net/serie-pilha-n15",
+        "https://www.santacosta.net/copia-3pra1-2-2017",
+        "https://www.santacosta.net/over-v",
+        "https://www.santacosta.net/serie-pilha-n4",
+        "https://www.santacosta.net/lua-de-cristal",
+        "https://www.santacosta.net/a-nascente",
+        "https://www.santacosta.net/over-vi",
+        "https://www.santacosta.net/exora",
+        "https://www.santacosta.net/serie-pilha-n6",
+        "https://www.santacosta.net/lili-marleen",
+        "https://www.santacosta.net/serie-pilha-n18",
+        "https://www.santacosta.net/over-the-fridge-ii",
+        "https://www.santacosta.net/serie-pilha-n12",
+        "https://www.santacosta.net/copia-lua-de-cristal-2017",
+        "https://www.santacosta.net/rock-n-roll",
+        "https://www.santacosta.net/copia-meia-saco-2016",
+        "https://www.santacosta.net/pequenos-traumas-urbantes-ii",
+        "https://www.santacosta.net/serie-pilha-n5",
+        "https://www.santacosta.net/sobreposicao-infantario",
+        "https://www.santacosta.net/rimbaud",
+        "https://www.santacosta.net/swish-wish-4",
+        "https://www.santacosta.net/bluezinho",
+        "https://www.santacosta.net/over-geeta-2015",
+        "https://www.santacosta.net/bug",
+        "https://www.santacosta.net/voadora-delicia",
+        "https://www.santacosta.net/sweet-manba",
+        "https://www.santacosta.net/auf-wiedersehen-her-diktator",
+        "https://www.santacosta.net/ghetto-freak",
+        "https://www.santacosta.net/sexta-marte",
+        "https://www.santacosta.net/pequenos-traumas-urbantes-1",
+        "https://www.santacosta.net/babys-on-fire-iii",
+        "https://www.santacosta.net/serie-pilha-n20",
+        "https://www.santacosta.net/enfeito",
+        "https://www.santacosta.net/leo-h",
+        "https://www.santacosta.net/serie-pilha-n19",
+        "https://www.santacosta.net/objeto-contrastante",
+        "https://www.santacosta.net/napalm",
+        "https://www.santacosta.net/serie-pilha-n2",
+        "https://www.santacosta.net/meia-saco",
+        "https://www.santacosta.net/o-xama-e-a-desculpa",
+        "https://www.santacosta.net/serie-pilha-n1",
+        "https://www.santacosta.net/juncao-estranha",
+        "https://www.santacosta.net/madam",
+        "https://www.santacosta.net/o-noivo",
+        "https://www.santacosta.net/matrix-medusa",
+        "https://www.santacosta.net/copia-pequenos-traumas-urbanos-ii-2",
+        "https://www.santacosta.net/serie-pilha-n7",
+        "https://www.santacosta.net/over-the-fridge-i-2016",
+        "https://www.santacosta.net/serie-pilha-n3",
+        "https://www.santacosta.net/over-ii"
+    ];
 
-        // Cria Checkbox
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.onchange = (e) => {
-            item.selected = e.target.checked;
-            updateStatus();
-            if (item.selected) {
-                div.classList.add('selected-bg');
-            } else {
-                div.classList.remove('selected-bg');
+    function init() {
+        // Pré-carrega o grupo EXCLUÍDOS
+        groupList.push("EXCLUÍDOS");
+        
+        links.forEach(link => {
+            if (preloadedExclusions.includes(link.url)) {
+                link.grouped = "EXCLUÍDOS";
             }
-        };
-
-        // Cria Link
-        const a = document.createElement('a');
-        a.textContent = item.name; 
-        a.href = item.url;
-        a.target = "previewFrame"; 
-        a.onclick = (e) => {
-            document.querySelectorAll('.item a').forEach(el => el.classList.remove('active'));
-            e.target.classList.add('active');
-        };
-
-        div.appendChild(checkbox);
-        div.appendChild(a);
-        listContainer.appendChild(div);
-    });
-
-    // ATUALIZAR CONTADOR
-    function updateStatus() {
-        const count = links.filter(l => l.selected).length;
-        statusDiv.textContent = `${count} itens selecionados`;
+        });
+        
+        render();
     }
 
-    // FUNÇÃO: ALTERNAR FILTRO
-    function toggleFilter() {
-        isFiltered = !isFiltered;
-        const btn = document.getElementById('btnFilter');
-        const items = document.querySelectorAll('.item');
 
-        if (isFiltered) {
-            btn.textContent = "Ver Todos";
-            btn.classList.add('active');
+    // --- FUNÇÕES PRINCIPAIS ---
+
+    function render() {
+        // 1. Limpar as áreas
+        generalListContainer.innerHTML = "";
+        groupsContainer.innerHTML = "";
+
+        // 2. Renderizar Grupos
+        groupList.forEach(groupName => {
+            // Itens deste grupo
+            const items = links.filter(l => l.grouped === groupName);
             
-            // Esconde quem não está selecionado
-            links.forEach((link, idx) => {
-                if (!link.selected) {
-                    document.getElementById(`item-${idx}`).classList.add('hidden');
-                }
+            // Container do grupo
+            const groupDiv = document.createElement('div');
+            groupDiv.className = 'group-container';
+
+            // Cabeçalho (Nome + Setinha)
+            const header = document.createElement('div');
+            header.className = 'group-header';
+            header.innerHTML = `<span>${groupName}</span><span class="group-count">(${items.length}) ▼</span>`;
+            
+            // Lista de itens (Accordion)
+            const itemsDiv = document.createElement('div');
+            itemsDiv.className = 'group-items'; 
+            
+            // Se for EXCLUÍDOS, começa fechado para economizar espaço
+            if(groupName === "EXCLUÍDOS") {
+                itemsDiv.classList.add('collapsed');
+                header.innerHTML = `<span>${groupName}</span><span class="group-count">(${items.length}) ►</span>`;
+            }
+
+            // Evento Accordion
+            header.onclick = () => {
+                itemsDiv.classList.toggle('collapsed');
+                const arrow = itemsDiv.classList.contains('collapsed') ? '►' : '▼';
+                header.querySelector('.group-count').innerHTML = `(${items.length}) ${arrow}`;
+            };
+
+            // Itens dentro do grupo
+            items.forEach(item => {
+                const subItem = document.createElement('a');
+                subItem.className = 'sub-item';
+                subItem.textContent = item.name;
+                subItem.onclick = (e) => loadPreview(item.url, e.target);
+                itemsDiv.appendChild(subItem);
             });
 
-        } else {
-            btn.textContent = "Visualizar Selecionados";
-            btn.classList.remove('active');
-            
-            // Mostra todo mundo
-            items.forEach(div => div.classList.remove('hidden'));
-        }
+            groupDiv.appendChild(header);
+            groupDiv.appendChild(itemsDiv);
+            groupsContainer.appendChild(groupDiv);
+        });
+
+        // 3. Renderizar Lista Geral (Resto)
+        const ungrouped = links.filter(l => l.grouped === false);
+        
+        ungrouped.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'list-item';
+            div.id = `item-gen-${index}`;
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = item.selected || false;
+            checkbox.onchange = (e) => {
+                item.selected = e.target.checked;
+                if(item.selected) div.classList.add('selected-bg');
+                else div.classList.remove('selected-bg');
+                updateStatus(ungrouped);
+            };
+
+            const a = document.createElement('a');
+            a.className = 'item-link';
+            a.textContent = item.name;
+            a.onclick = (e) => loadPreview(item.url, e.target);
+
+            div.appendChild(checkbox);
+            div.appendChild(a);
+            generalListContainer.appendChild(div);
+        });
+
+        // Atualizar status inicial
+        updateStatus(ungrouped);
     }
 
-    // FUNÇÃO: COPIAR PARA CLIPBOARD
-    function copySelection() {
-        const selectedLinks = links.filter(l => l.selected);
+    function loadPreview(url, element) {
+        iframe.src = url;
+        document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
+        if(element) element.classList.add('active');
+    }
+
+    function createGroup() {
+        const selectedItems = links.filter(l => l.grouped === false && l.selected);
         
-        if (selectedLinks.length === 0) {
-            alert("Nenhum item selecionado para copiar.");
+        if (selectedItems.length === 0) {
+            alert("Selecione itens da Lista Geral para criar um grupo.");
             return;
         }
 
-        // Formato: "Nome;URL" (para colar fácil no Excel como CSV)
-        const textToCopy = selectedLinks.map(l => `${l.name} - ${l.url}`).join('\n');
+        const groupName = prompt("Nome do novo grupo:", "Nova Seleção");
+        if (!groupName) return;
 
-        // Tenta copiar
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            alert("Lista copiada! Agora é só colar (Ctrl+V) onde quiser.");
-        }).catch(err => {
-            // Fallback caso o navegador bloqueie (comum em arquivos locais)
-            const textArea = document.createElement("textarea");
-            textArea.value = textToCopy;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                alert("Lista copiada (via método alternativo)!");
-            } catch (err) {
-                prompt("O navegador bloqueou a cópia automática. Copie manualmente abaixo:", textToCopy);
-            }
-            document.body.removeChild(textArea);
+        if (!groupList.includes(groupName)) {
+            // Adiciona novos grupos no topo (abaixo do Excluídos se quiser manter ordem, mas topo é melhor pra UX)
+            groupList.unshift(groupName); 
+        }
+
+        selectedItems.forEach(item => {
+            item.grouped = groupName;
+            item.selected = false; 
+        });
+
+        render();
+    }
+
+    function updateStatus(ungroupedList) {
+        const count = ungroupedList.filter(l => l.selected).length;
+        document.getElementById('status').textContent = `${count} itens selecionados`;
+    }
+
+    function toggleGeneralList() {
+        generalListVisible = !generalListVisible;
+        const listDiv = document.getElementById('general-list');
+        const titleDiv = document.getElementById('general-title');
+        const btn = document.getElementById('btnToggleList');
+
+        if(generalListVisible) {
+            listDiv.style.display = 'block';
+            titleDiv.style.display = 'block';
+            btn.textContent = "Esconder Lista Geral";
+        } else {
+            listDiv.style.display = 'none';
+            titleDiv.style.display = 'none';
+            btn.textContent = "Mostrar Lista Geral";
+        }
+    }
+
+    // --- COPIAR E COLAR (IMPORT/EXPORT) ---
+
+    function copyStructure() {
+        if (groupList.length === 0) {
+            alert("Nenhum grupo para copiar.");
+            return;
+        }
+
+        let report = "### RELATÓRIO SANTACOSTA ###\n\n";
+
+        groupList.forEach(gName => {
+            report += `### GRUPO: ${gName} ###\n`;
+            links.filter(l => l.grouped === gName).forEach(item => {
+                report += `- ${item.name} (${item.url})\n`;
+            });
+            report += "\n";
+        });
+
+        navigator.clipboard.writeText(report).then(() => {
+            alert("Relatório copiado para a área de transferência.");
         });
     }
-</script>
 
+    // Modal Functions
+    const modal = document.getElementById('importModal');
+    function openImportModal() { modal.style.display = "flex"; }
+    function closeImportModal() { modal.style.display = "none"; }
+
+    function processImport() {
+        const text = document.getElementById('importText').value;
+        if(!text.trim()) return;
+
+        // Resetar tudo primeiro
+        groupList = [];
+        links.forEach(l => { l.grouped = false; l.selected = false; });
+
+        // Parsing
+        const lines = text.split('\n');
+        let currentGroup = null;
+ 
+        lines.forEach(line => {
+            line = line.trim();
+            
+            // Detecta Grupo
+            if (line.startsWith('### GRUPO:')) {
+                // Formato: ### GRUPO: Nome ###
+                const match = line.match(/### GRUPO: (.*?) ###/);
+                if (match && match[1]) {
+                    currentGroup = match[1];
+                    groupList.push(currentGroup);
+                }
+            } 
+            // Detecta Item
+            else if (line.startsWith('- ') && currentGroup) {
+                // Tenta extrair URL que está entre parenteses
+                const urlMatch = line.match(/\((https?:\/\/.*?)\)/);
+                if (urlMatch && urlMatch[1]) {
+                    const url = urlMatch[1];
+                    // Encontrar item na lista mestre
+                    const foundItem = links.find(l => l.url === url);
+                    if (foundItem) {
+                        foundItem.grouped = currentGroup;
+                    }
+                }
+            }
+        });
+
+        render();
+        closeImportModal();
+        alert("Relatório carregado com sucesso!");
+    }
+
+    // Iniciar
+    init();
+
+</script>
 </body>
 </html>
