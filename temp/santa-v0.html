@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Santacosta | Visualizador</title>
+<style>
+    /* --- RESET E ESTRUTURA --- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+        background-color: #111; 
+        color: #eee;
+        height: 100vh; /* Altura total da janela */
+        overflow: hidden; /* IMPORTANTE: Impede barra de rolagem dupla */
+        display: flex;
+        flex-direction: column;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* --- ESTILIZAÇÃO DO SCROLLBAR (Menu) --- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1a1a1a; }
+    ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #666; }
+
+    /* --- CABEÇALHO FIXO --- */
+    .header-fixed {
+        height: 60px; /* Altura fixa */
+        background-color: rgba(20, 20, 20, 0.98);
+        border-bottom: 1px solid #333;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        position: relative;
+        z-index: 100; /* Garante que fique acima do iframe */
+        flex-shrink: 0; /* Impede que o header encolha */
+    }
+
+    /* --- LOGO --- */
+    .logo {
+        font-weight: 700;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 14px;
+        z-index: 102;
+    }
+
+    /* --- ÁREA DE CONTEÚDO (IFRAME) --- */
+    .viewer-container {
+        flex-grow: 1; /* Ocupa todo o espaço restante */
+        width: 100%;
+        position: relative;
+        background: #000;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: block;
+    }
+
+    /* --- NAVEGAÇÃO DESKTOP --- */
+    .nav-desktop {
+        display: flex;
+        gap: 25px;
+        align-items: center;
+    }
+
+    .nav-item {
+        position: relative;
+    }
+
+    .group-btn {
+        padding: 10px 0;
+        color: #aaa;
+        font-size: 13px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: color 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .group-btn:hover, .nav-item.active .group-btn { color: #fff; }
+    
+    .arrow { font-size: 9px; transition: transform 0.3s; }
+    .nav-item.active .arrow { transform: rotate(180deg); }
+
+    /* --- DROPDOWN MENU --- */
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 320px;
+        background: #222;
+        border: 1px solid #333;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s ease;
+        max-height: 0;
+        overflow: hidden;
+    }
+
+    .nav-item.active .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(15px); /* Espaçamento do topo */
+        max-height: 300px; /* Limite visual */
+    }
+
+    /* Lista interna */
+    .works-list {
+        max-height: 290px;
+        overflow-y: auto;
+        padding: 5px 0;
+    }
+
+    .work-link {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 10px 15px;
+        border-bottom: 1px solid #2a2a2a;
+        transition: background 0.2s, color 0.2s;
+        color: #ccc;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+    .work-link:last-child { border-bottom: none; }
+    .work-link:hover { background: #333; color: #4aff98; }
+    
+    .work-year {
+        font-size: 10px;
+        color: #666;
+        margin-left: 10px;
+        white-space: nowrap;
+    }
+
+    /* --- MOBILE --- */
+    .hamburger { display: none; cursor: pointer; z-index: 102; }
+    .bar { width: 22px; height: 2px; background-color: #fff; margin: 5px 0; transition: 0.4s; }
+
+    .mobile-active .bar:nth-child(1) { transform: rotate(-45deg) translate(-5px, 5px); }
+    .mobile-active .bar:nth-child(2) { opacity: 0; }
+    .mobile-active .bar:nth-child(3) { transform: rotate(45deg) translate(-5px, -5px); }
+
+    @media (max-width: 768px) {
+        .hamburger { display: block; }
+        
+        .nav-desktop {
+            position: fixed;
+            top: 60px; /* Abaixo do header */
+            right: -100%;
+            width: 100%;
+            height: calc(100vh - 60px);
+            background: rgba(15, 15, 15, 0.98);
+            backdrop-filter: blur(10px);
+            flex-direction: column;
+            align-items: stretch;
+            padding: 20px;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            border-top: 1px solid #333;
+        }
+
+        .nav-desktop.open { right: 0; }
+
+        .nav-item { width: 100%; border-bottom: 1px solid #2a2a2a; }
+        
+        .group-btn { 
+            width: 100%; 
+            justify-content: space-between; 
+            font-size: 16px; 
+            padding: 20px 10px;
+            color: #eee;
+        }
+
+        .dropdown-menu {
+            position: static;
+            width: 100%;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            transform: none;
+            transition: max-height 0.3s ease;
+        }
+        
+        .nav-item.active .dropdown-menu {
+            transform: none;
+            background: #1a1a1a;
+            max-height: 500px; /* Permite abrir bastante no mobile */
+        }
+    }
+</style>
+</head>
+<body>
+
+    <header class="header-fixed">
+        <a href="#" class="logo" onclick="resetFrame()">SANTACOSTA</a>
+        
+        <div class="hamburger" id="hamburger-btn">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <nav class="nav-desktop" id="main-nav">
+            </nav>
+    </header>
+
+    <main class="viewer-container">
+        <iframe name="conteudo-site" id="main-frame" src="about:blank"></iframe>
+    </main>
+
+<script>
+    // =======================================================
+    // 1. DADOS
+    // =======================================================
+    
+    // BOTA BOTA BOTA O JSON AQUIÃÃ!
+    const dadosObras = [
+    {
+        "TITULO": "Estrutura I",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/estrutura-i",
+        "ANO": "2013"
+    },
+    {
+        "TITULO": "Estrutura II",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/estrutura-ii",
+        "ANO": "2013"
+    },
+    {
+        "TITULO": "Estrutura V",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/estrutura-v",
+        "ANO": "2013"
+    },
+    {
+        "TITULO": "Estrutura VI",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/estrutura-vi",
+        "ANO": "2013"
+    },
+    {
+        "TITULO": "Estrutura VII",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/estrutura-vii",
+        "ANO": "2013"
+    },
+    {
+        "TITULO": "Estrutura VIII",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/estrutura-viii",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Pilha ascendente",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/pilha-ascendente",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Reflexos trinos",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/reflexos-trinos",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Tensão e ruptura",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/tensao-e-ruptura",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "n.4, Cartões que não dei",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/n4",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "pilha 1",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n1",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 12",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n12",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 14",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n14",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 15",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n15",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 16",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n16",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 17",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n17",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 18",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n18",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 19",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n19",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 2",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n2",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 23",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n20",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 3",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n3",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 4",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n4",
+        "ANO": ""
+    },
+    {
+        "TITULO": "pilha 5",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/serie-pilha-n5",
+        "ANO": ""
+    },
+    {
+        "TITULO": "3pra1,2",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/3pra1-2",
+        "ANO": "2017"
+    },
+    {
+        "TITULO": "Animal negro",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/animal-negro",
+        "ANO": "2018"
+    },
+    {
+        "TITULO": "Bug",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/bug",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Clayborn",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/clayborn",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Enfeito",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/enfeito",
+        "ANO": "2014-2017"
+    },
+    {
+        "TITULO": "Escultura de colagem",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/escultura-de-colagem",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Exnora",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/exora",
+        "ANO": "2018"
+    },
+    {
+        "TITULO": "Fardo",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/fardo",
+        "ANO": "2018"
+    },
+    {
+        "TITULO": "Junção encoberta",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/juncao-encoberta",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Junção estranha",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/juncao-estranha",
+        "ANO": "2018"
+    },
+    {
+        "TITULO": "La escalera",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/la-escalera",
+        "ANO": "2016"
+    },
+    {
+        "TITULO": "Madam",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/madam",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "O sol e o unicórnio",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/o-sol-e-o-unicornio",
+        "ANO": "2016"
+    },
+    {
+        "TITULO": "O xamã e a desculpa",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/o-xama-e-a-desculpa",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Palavras Cruzadas",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/palavras-cruzadas",
+        "ANO": "2017"
+    },
+    {
+        "TITULO": "Rimbaud",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/rimbaud",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Sobreposição e deslocamento",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/sobreposicao-deslocamento",
+        "ANO": "2017"
+    },
+    {
+        "TITULO": "Trago do silêncio",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/trago-do-silencio",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "White Stripes",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/white-stripes",
+        "ANO": "2018"
+    },
+    {
+        "TITULO": "11 degraus",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/11-degraus",
+        "ANO": "2017"
+    },
+    {
+        "TITULO": "3pra1",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/3pra1",
+        "ANO": "2015"
+    },
+    {
+        "TITULO": "B&G",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/b-g",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Bluezinho",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/bluezinho",
+        "ANO": "2016"
+    },
+    {
+        "TITULO": "Britney",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/britney",
+        "ANO": "2017"
+    },
+    {
+        "TITULO": "Ghetto freak",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/ghetto-freak",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Infantario pareado",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/infantario-pareado",
+        "ANO": "2017"
+    },
+    {
+        "TITULO": "Junção exposta",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/juncao-exposta",
+        "ANO": "2016"
+    },
+    {
+        "TITULO": "Lua",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/lua",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Matrix-Medusa",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/matrix-medusa",
+        "ANO": "2016"
+    },
+    {
+        "TITULO": "Ninho",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/ninho",
+        "ANO": "2015"
+    },
+    {
+        "TITULO": "Objeto Constratante",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/objeto-contrastante",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Outra língua",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/outra-lingua",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Over I",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/over-i",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Over bikini wasabi",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/over-bikini-wasabi",
+        "ANO": "2015"
+    },
+    {
+        "TITULO": "Over the fridge II",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/over-the-fridge-ii",
+        "ANO": "2016"
+    },
+    {
+        "TITULO": "Pequenos traumas urbanos III",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/pequenos-traumas-urbanos-iii",
+        "ANO": "2015"
+    },
+    {
+        "TITULO": "Petit Voiture",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/petit-voiture",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Sobreposição-Infantário",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/sobreposicao-infantario",
+        "ANO": "2016"
+    },
+    {
+        "TITULO": "Swish-wish #1",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/swish-wish",
+        "ANO": "2017"
+    },
+    {
+        "TITULO": "Swish-wish #2",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/swish-wish-2",
+        "ANO": "2017"
+    },
+    {
+        "TITULO": "Swish-wish #3",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/swish-wish-3",
+        "ANO": "2017"
+    },
+    {
+        "TITULO": "Swish-wish #4",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/swish-wish-4",
+        "ANO": "2017"
+    },
+    {
+        "TITULO": "Tamanco",
+        "GRUPO": "OBJETOS",
+        "URL": "#",
+        "ANO": "2016"
+    },
+    {
+        "TITULO": "Wilson levitante",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/wilson-levitante",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Badalo",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/badalo",
+        "ANO": "2016"
+    },
+    {
+        "TITULO": "Blackbird",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/blackbird",
+        "ANO": "2018"
+    },
+    {
+        "TITULO": "Coral VI",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/coral",
+        "ANO": "2015"
+    },
+    {
+        "TITULO": "Escultura-Desenho",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/escultura-desenho",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Frozen",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/copia-frozen-2018",
+        "ANO": "2018"
+    },
+    {
+        "TITULO": "Objeto de parede V",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/objeto-de-parede-v",
+        "ANO": "2018"
+    },
+    {
+        "TITULO": "Objeto de parede VI",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/objeto-de-parede-vi",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Pequeno deslocamento",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/pequeno-deslocamento",
+        "ANO": "2018"
+    },
+    {
+        "TITULO": "Pintura d'splay",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/pintura-d-splay",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Resgate-Unicórnio",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/o-sol-e-o-unicornio",
+        "ANO": "2014-16"
+    },
+    {
+        "TITULO": "Rock'n'roll",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/rock-n-roll",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Trava negra",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/trava-negra",
+        "ANO": "2018"
+    },
+    {
+        "TITULO": "Walkie-Talkie",
+        "GRUPO": "PAREDE",
+        "URL": "https://www.santacosta.net/walkie-talkie",
+        "ANO": "2016"
+    },
+    {
+        "TITULO": "A nascente",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/a-nascente",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Balyba hi",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/balyba",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Cova (I)",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/cova",
+        "ANO": ""
+    },
+    {
+        "TITULO": "Cova (II)",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/cova",
+        "ANO": ""
+    },
+    {
+        "TITULO": "Draco",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/draco",
+        "ANO": "2012"
+    },
+    {
+        "TITULO": "Hercules-Luna",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/hercules-luna",
+        "ANO": "2017"
+    },
+    {
+        "TITULO": "Insight e ordenação I",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/insght-e-odenacao",
+        "ANO": "2018"
+    },
+    {
+        "TITULO": "Insight e ordenação II",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/insight-ordenacao-ii",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Long, hard road out of hell",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/long-hard-road-out-of-hell",
+        "ANO": "2010/2011"
+    },
+    {
+        "TITULO": "Mafalda",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/mafalda",
+        "ANO": "2011"
+    },
+    {
+        "TITULO": "Napalm-R",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/napalm",
+        "ANO": "2012"
+    },
+    {
+        "TITULO": "O equilibrista",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/o-equilibrista",
+        "ANO": "2019"
+    },
+    {
+        "TITULO": "Objeto de parede IV",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/objeto-de-parede",
+        "ANO": "2015"
+    },
+    {
+        "TITULO": "Orion",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/orion",
+        "ANO": "2012"
+    },
+    {
+        "TITULO": "Serpentarius",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/serpentarius",
+        "ANO": "2014"
+    },
+    {
+        "TITULO": "Variação VIII",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/variacao-viii",
+        "ANO": "2015"
+    }
+];
+
+    // =======================================================
+    // 2. LÓGICA
+    // =======================================================
+
+    function sortWorks(a, b) {
+        const anoA = a.ANO ? a.ANO.toString() : "0000";
+        const anoB = b.ANO ? b.ANO.toString() : "0000";
+        // Ano Decrescente
+        if (anoB !== anoA) return anoB.localeCompare(anoA, undefined, { numeric: true });
+        // Título A-Z
+        return a.TITULO.localeCompare(b.TITULO);
+    }
+
+    // Agrupamento
+    const groups = {};
+    dadosObras.forEach(obra => {
+        if (!groups[obra.GRUPO]) groups[obra.GRUPO] = [];
+        groups[obra.GRUPO].push(obra);
+    });
+
+    // Ordenação e Renderização
+    const navContainer = document.getElementById('main-nav');
+    const sortedGroupNames = Object.keys(groups).sort();
+
+sortedGroupNames.forEach(groupName => {
+        groups[groupName].sort(sortWorks);
+
+        const navItem = document.createElement('div');
+        navItem.className = 'nav-item';
+
+        // --- NOVO: Variável para controlar o tempo deste item específico
+        let closeTimer;
+
+        const btn = document.createElement('div');
+        btn.className = 'group-btn';
+        btn.innerHTML = `${groupName} <span class="arrow">▼</span>`;
+        
+        // Toggle do Menu (Clique)
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            
+            // Se estiver abrindo este, limpa timer anterior se houver
+            if (closeTimer) clearTimeout(closeTimer);
+
+            document.querySelectorAll('.nav-item.active').forEach(item => {
+                if (item !== navItem) item.classList.remove('active');
+            });
+            navItem.classList.toggle('active');
+        });
+
+        // --- NOVO: Lógica de 5 segundos (Desktop) ---
+        
+        // 1. Quando o mouse sai da área do botão+menu
+        navItem.addEventListener('mouseleave', () => {
+            // Só executa se for desktop e se o menu estiver aberto
+            if (window.innerWidth > 768 && navItem.classList.contains('active')) {
+                closeTimer = setTimeout(() => {
+                    navItem.classList.remove('active');
+                }, 5000); // 5000 milissegundos = 5 segundos
+            }
+        });
+
+        // 2. Se o mouse voltar antes dos 5s, cancela o fechamento
+        navItem.addEventListener('mouseenter', () => {
+            if (closeTimer) clearTimeout(closeTimer);
+        });
+        // ---------------------------------------------
+
+        const dropdown = document.createElement('div');
+        dropdown.className = 'dropdown-menu';
+
+        const worksList = document.createElement('div');
+        worksList.className = 'works-list';
+
+        groups[groupName].forEach(work => {
+            const link = document.createElement('a');
+            link.href = work.URL;
+            link.className = 'work-link';
+            link.target = "conteudo-site";
+            
+            const yearText = work.ANO ? `<span class="work-year">${work.ANO}</span>` : '';
+            link.innerHTML = `<span>${work.TITULO}</span> ${yearText}`;
+            
+            link.addEventListener('click', () => {
+                if(window.innerWidth <= 768) {
+                    toggleMobileMenu();
+                } else {
+                    navItem.classList.remove('active');
+                }
+            });
+            
+            worksList.appendChild(link);
+        });
+
+        dropdown.appendChild(worksList);
+        navItem.appendChild(btn);
+        navItem.appendChild(dropdown);
+        navContainer.appendChild(navItem);
+    });
+
+    // =======================================================
+    // 3. MENU MOBILE
+    // =======================================================
+    const hamburger = document.getElementById('hamburger-btn');
+    const navDesktop = document.getElementById('main-nav');
+
+    function toggleMobileMenu() {
+        hamburger.classList.toggle('mobile-active');
+        navDesktop.classList.toggle('open');
+    }
+
+    hamburger.addEventListener('click', toggleMobileMenu);
+
+    // Resetar iframe ao clicar no logo
+    function resetFrame() {
+        document.getElementById('main-frame').src = "about:blank";
+    }
+
+    // Fechar ao clicar fora (Desktop)
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth > 768) {
+            if (!navDesktop.contains(e.target)) {
+                document.querySelectorAll('.nav-item.active').forEach(item => {
+                    item.classList.remove('active');
+                });
+            }
+        }
+    });
+
+</script>
+</body>
+</html>
+
+
+
