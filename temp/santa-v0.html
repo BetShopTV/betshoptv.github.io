@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SANTA V0
+<title>SANTA V1
 </title>
     
 <style>
@@ -63,15 +63,30 @@
     }
 
     /* --- ÁREA DO SITE (IFRAME) --- */
+/* --- ÁREA DE CONTEÚDO (CONTAINER DE CORTE) --- */
+/* --- ÁREA DE CONTEÚDO --- */
     .viewer-container {
         flex-grow: 1;
         width: 100%;
         position: relative;
         background: #000;
         z-index: 1;
+        overflow: hidden; /* Mantém o corte visual */
     }
 
-    iframe { width: 100%; height: 100%; border: none; display: block; }
+    iframe {
+        width: 100%;
+        height: 100%; /* Altura padrão para TRABALHOS */
+        border: none;
+        display: block;
+        transition: margin-top 0.4s ease, height 0.4s ease; /* Transição suave */
+    }
+
+    /* CLASSE ATIVADA APENAS PARA EXPOSIÇÕES, BIO, ETC */
+    iframe.cut-header {
+        height: calc(100% + 138px); /* Compensa o corte */
+        margin-top: -138px;         /* O corte solicitado */
+    }
 
     /* --- NAVEGAÇÃO PRINCIPAL (DESKTOP) --- */
     .nav-desktop {
@@ -338,6 +353,18 @@
     </main>
 
 <script>
+    // =======================================================
+    // 0. FUNÇÃO DE CONTROLE DO IFRAME (Corte de Cabeçalho)
+    // =======================================================
+    function setFrameMode(mode) {
+        const iframe = document.getElementById('main-frame');
+        if (mode === 'cut') {
+            iframe.classList.add('cut-header'); // Aplica o corte (-138px)
+        } else {
+            iframe.classList.remove('cut-header'); // Remove o corte (Normal)
+        }
+    }
+
     // =======================================================
     // 1. DADOS
     // =======================================================
@@ -667,7 +694,7 @@
     {
         "TITULO": "Palavras Cruzadas",
         "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/copia-frozen-2018",
+        "URL": "https://www.santacosta.net/palavras-cruzadas",
         "ANO": "2017",
         "IMG1": "",
         "IMG2": "",
@@ -1667,7 +1694,7 @@
 
     const navContainer = document.getElementById('main-nav');
 
-    // Função de Ordenação de Obras (Ano desc > A-Z)
+    // Função de Ordenação
     function sortWorks(a, b) {
         const anoA = a.ANO ? a.ANO.toString() : "0000";
         const anoB = b.ANO ? b.ANO.toString() : "0000";
@@ -1688,60 +1715,52 @@
             mainBtn.className = 'main-link-btn';
             mainBtn.innerHTML = `TRABALHOS <span class="arrow-main">▼</span>`;
             
-            // Timer para fechar (2 segundos)
             let closeTimer;
 
-            // Eventos do Pai (Trabalhos)
             mainBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 toggleDropdown(navItem);
             });
 
-            // Hover (Desktop): Fecha após 2s
+            // Timer 2s
             navItem.addEventListener('mouseleave', () => {
                 if (window.innerWidth > 768 && navItem.classList.contains('active')) {
                     closeTimer = setTimeout(() => {
                         navItem.classList.remove('active');
-                        // Fecha submenus internos também para resetar estado
+                        // Fecha submenus internos ao sair
                         navItem.querySelectorAll('.sub-group-btn.open').forEach(b => clickSubGroup(b));
                     }, 2000); 
                 }
             });
+            navItem.addEventListener('mouseenter', () => clearTimeout(closeTimer));
 
-            navItem.addEventListener('mouseenter', () => {
-                if (closeTimer) clearTimeout(closeTimer);
-            });
-
-            // Container do Dropdown Principal
             const dropdown = document.createElement('div');
             dropdown.className = 'dropdown-menu';
 
             // Gerar Subgrupos
             subgruposTrabalhos.forEach(subName => {
-                if (groups[subName]) { // Só cria se existir obras
+                if (groups[subName]) {
                     const subContainer = document.createElement('div');
                     subContainer.className = 'sub-group-container';
                     
-                    // Botão do Subgrupo (Acordeão)
                     const subBtn = document.createElement('div');
                     subBtn.className = 'sub-group-btn';
                     subBtn.innerHTML = `${subName} <span class="arrow-sub">▼</span>`;
                     
-                    // Lista Oculta
                     const worksList = document.createElement('div');
                     worksList.className = 'works-list';
                     
-                    // Preencher Obras
                     groups[subName].sort(sortWorks);
+                    
+                    // AQUI: TRABALHOS -> MODO 'NORMAL' (Sem corte)
                     groups[subName].forEach(work => {
-                        const link = createWorkLink(work);
+                        const link = createWorkLink(work, 'normal');
                         worksList.appendChild(link);
                     });
 
-                    // Click do Subgrupo
                     subBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        // Fecha outros subgrupos irmãos (efeito sanfona exclusivo)
+                        // Fecha irmãos
                         dropdown.querySelectorAll('.sub-group-btn.open').forEach(otherBtn => {
                             if (otherBtn !== subBtn) clickSubGroup(otherBtn);
                         });
@@ -1760,26 +1779,28 @@
         
         } else {
             // --- CASOS NORMAIS (Exposições, Bio, Notícias...) ---
-            // Verifica se é um grupo de obras ou página única
             const groupItems = groups[menuItemName];
             
             if (groupItems) {
                 const navItem = document.createElement('div');
                 navItem.className = 'nav-item';
 
-                // Se tiver só 1 item e não for EXPOSIÇÃO (exposições geralmente são várias)
-                // Ajuste lógico: Se for BIO, TEXTOS ou NOTÍCIAS, trata como link direto se tiver só 1
+                // Link Direto (Bio, Textos, Notícias - se tiver só 1 item)
                 if (groupItems.length === 1 && ["BIO", "TEXTOS", "NOTÍCIAS"].includes(menuItemName)) {
                     const link = document.createElement('a');
                     link.className = 'main-link-btn';
                     link.href = groupItems[0].URL;
                     link.target = "conteudo-site";
                     link.innerHTML = menuItemName;
-                    link.addEventListener('click', closeAllMenus);
+                    
+                    link.addEventListener('click', () => {
+                        setFrameMode('cut'); // AQUI: MODO 'CUT'
+                        closeAllMenus();
+                    });
+                    
                     navItem.appendChild(link);
                 } else {
-                    // Dropdown padrão (Lista simples sem subgrupos)
-                    // Ex: EXPOSIÇÕES
+                    // Dropdown Padrão (Exposições)
                     let closeTimer;
                     
                     const btn = document.createElement('div');
@@ -1791,7 +1812,6 @@
                         toggleDropdown(navItem);
                     });
 
-                    // Timer 2s
                     navItem.addEventListener('mouseleave', () => {
                         if (window.innerWidth > 768 && navItem.classList.contains('active')) {
                             closeTimer = setTimeout(() => {
@@ -1804,16 +1824,17 @@
                     const dropdown = document.createElement('div');
                     dropdown.className = 'dropdown-menu';
                     
-                    // Lista direta (sem subgrupos)
-                    // Reusando estilos da works-list mas visível direto
                     const worksList = document.createElement('div');
-                    worksList.className = 'works-list expanded'; // Classe expanded força visibilidade
-                    worksList.style.maxHeight = "400px"; // Override height
+                    worksList.className = 'works-list expanded'; // Sempre visível
+                    worksList.style.maxHeight = "400px";
                     worksList.style.background = "transparent";
+                    worksList.style.overflowY = "auto"; // Garante scroll se tiver muitas exposições
 
                     groupItems.sort(sortWorks);
+                    
+                    // AQUI: EXPOSIÇÕES -> MODO 'CUT' (Com corte)
                     groupItems.forEach(work => {
-                        const link = createWorkLink(work);
+                        const link = createWorkLink(work, 'cut');
                         worksList.appendChild(link);
                     });
 
@@ -1830,7 +1851,7 @@
     // 4. FUNÇÕES AUXILIARES
     // =======================================================
 
-    function createWorkLink(work) {
+    function createWorkLink(work, mode) {
         const link = document.createElement('a');
         link.href = work.URL;
         link.className = 'work-link';
@@ -1839,12 +1860,15 @@
         const yearText = work.ANO ? `<span class="work-year">${work.ANO}</span>` : '';
         link.innerHTML = `<span>${work.TITULO}</span> ${yearText}`;
         
-        link.addEventListener('click', closeAllMenus);
+        link.addEventListener('click', () => {
+            setFrameMode(mode); // Aplica o modo solicitado
+            closeAllMenus();
+        });
+        
         return link;
     }
 
     function toggleDropdown(navItem) {
-        // Se estiver abrindo, fecha os outros
         if (!navItem.classList.contains('active')) {
             document.querySelectorAll('.nav-item.active').forEach(item => {
                 item.classList.remove('active');
@@ -1880,7 +1904,6 @@
         navDesktop.classList.toggle('open');
         
         if (!navDesktop.classList.contains('open')) {
-            // Resetar estados ao fechar mobile
             document.querySelectorAll('.nav-item.active').forEach(i => i.classList.remove('active'));
             document.querySelectorAll('.sub-group-btn.open').forEach(b => clickSubGroup(b));
         }
@@ -1893,29 +1916,24 @@
 
     function resetFrame() {
         document.getElementById('main-frame').src = "about:blank";
+        setFrameMode('normal'); // Reseta o corte ao voltar pro início
         if (navDesktop.classList.contains('open')) toggleMobileMenu();
     }
+    
+    // Ativa o reset no logo
+    document.querySelector('.logo').addEventListener('click', resetFrame);
 
-    // FECHAR AO CLICAR FORA (INCLUINDO IFRAME VIA BLURRED EVENT SE POSSÍVEL)
-    // Nota: Iframe captura clicks, então o evento de 'click' no body não funciona se clicar no site.
-    // A solução mais robusta para "clique no iframe" é usar um overlay invisível ou aceitar que o hover resolve no desktop.
-    // Mas para cliques no próprio menu/header fora dos botões:
     document.addEventListener('click', (e) => {
         const header = document.querySelector('.header-fixed');
         if (!header.contains(e.target)) {
-            // Fecha Desktop Dropdowns
             if (window.innerWidth > 768) {
                 document.querySelectorAll('.nav-item.active').forEach(item => {
                     item.classList.remove('active');
                 });
-            } else {
-                // Fecha Mobile se clicar fora (na parte escura do menu se houver gap, ou reset)
-                // Geralmente no mobile o menu ocupa tudo, então esse caso é raro.
             }
         }
     });
 
-    // Tentar detectar foco no iframe (quando o usuário clica no site) para fechar menu
     window.addEventListener('blur', () => {
         if (window.innerWidth > 768) {
             document.querySelectorAll('.nav-item.active').forEach(item => {
