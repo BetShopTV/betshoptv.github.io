@@ -1,20 +1,31 @@
-<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SANTA V0
 </title>
-
-
-
+    
 <style>
-    /* --- RESET E ESTRUTURA --- */
+    /* --- CORES E VARIÁVEIS --- */
+    :root {
+        --verde-claro: #4aff98;
+        --verde-medio: #2f3835;
+        --verde-escuro: #171c1a;
+        --texto-principal: #ffffff;
+        --texto-secundario: #b3b3b3; 
+        --linha-divisoria: #333333;
+    }
+
+    /* --- RESET --- */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-        background-color: #111; 
-        color: #eee;
-        height: 100vh; /* Altura total da janela */
-        overflow: hidden; /* IMPORTANTE: Impede barra de rolagem dupla */
+        background-color: var(--verde-escuro); 
+        color: var(--texto-principal);
+        height: 100vh;
+        overflow: hidden; /* Trava rolagem global */
         display: flex;
         flex-direction: column;
     }
@@ -22,186 +33,287 @@
     a { text-decoration: none; color: inherit; }
     ul { list-style: none; }
 
-    /* --- ESTILIZAÇÃO DO SCROLLBAR (Menu) --- */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { color: #4aff98; background: #1a1a1a; }
-    ::-webkit-scrollbar-thumb { background: #4aff98; border-radius: 2px; }
-    ::-webkit-scrollbar-thumb:hover { background: #2f3835; }
+    /* --- SCROLLBAR CUSTOMIZADA --- */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--verde-escuro); }
+    ::-webkit-scrollbar-thumb { background: var(--verde-medio); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--verde-claro); }
 
     /* --- CABEÇALHO FIXO --- */
     .header-fixed {
-        height: 60px; /* Altura fixa */
-        background-color: rgba(20, 20, 20, 0.98);
-        border-bottom: 1px solid #333;
+        height: 60px;
+        background-color: var(--verde-escuro);
+        border-bottom: 1px solid var(--linha-divisoria);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 20px;
+        padding: 0 4vw; /* Espaçamento proporcional lateral */
         position: relative;
-        z-index: 100; /* Garante que fique acima do iframe */
-        flex-shrink: 0; /* Impede que o header encolha */
+        z-index: 2000;
+        flex-shrink: 0;
     }
 
-    /* --- LOGO --- */
     .logo {
-        font-weight: 700;
-        color: #fff;
+        font-weight: 900;
+        color: var(--texto-principal);
         text-transform: uppercase;
         letter-spacing: 2px;
-        font-size: 14px;
-        z-index: 102;
+        font-size: 18px;
+        cursor: pointer;
     }
 
-    /* --- ÁREA DE CONTEÚDO (IFRAME) --- */
+    /* --- ÁREA DO SITE (IFRAME) --- */
     .viewer-container {
-        flex-grow: 1; /* Ocupa todo o espaço restante */
+        flex-grow: 1;
         width: 100%;
         position: relative;
         background: #000;
+        z-index: 1;
     }
 
-    iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-        display: block;
-    }
+    iframe { width: 100%; height: 100%; border: none; display: block; }
 
-    /* --- NAVEGAÇÃO DESKTOP --- */
+    /* --- NAVEGAÇÃO PRINCIPAL (DESKTOP) --- */
     .nav-desktop {
         display: flex;
-        gap: 25px;
+        gap: 3vw;
+        align-items: center;
+        height: 100%;
+    }
+
+    /* Item de Nível Superior (Ex: Trabalhos, Exposições) */
+    .nav-item {
+        position: relative;
+        height: 100%;
+        display: flex;
         align-items: center;
     }
 
-    .nav-item {
-        position: relative;
-    }
-
-    .group-btn {
-        padding: 10px 0;
-        color: #aaa;
+    .main-link-btn {
+        color: var(--texto-secundario);
         font-size: 13px;
         letter-spacing: 1px;
         cursor: pointer;
-        transition: color 0.3s;
+        transition: color 0.2s;
         display: flex;
         align-items: center;
         gap: 6px;
+        height: 100%;
+        text-transform: uppercase;
+        font-weight: 700;
     }
-    .group-btn:hover, .nav-item.active .group-btn { color: #fff; }
     
-    .arrow { font-size: 9px; transition: transform 0.3s; }
-    .nav-item.active .arrow { transform: rotate(180deg); }
+    .main-link-btn:hover, .nav-item.active > .main-link-btn { color: var(--texto-principal); }
+    .nav-item.active .arrow-main { transform: rotate(180deg); color: var(--verde-claro); }
+    .arrow-main { font-size: 9px; transition: transform 0.2s; }
 
-    /* --- DROPDOWN MENU --- */
+    /* --- DROPDOWN PRINCIPAL --- */
     .dropdown-menu {
         position: absolute;
-        top: 100%;
+        top: 60px;
         right: 0;
-        width: 320px;
-        background: #222;
-        border: 1px solid #333;
+        width: 340px; /* Um pouco mais largo para acomodar submenus */
+        background: var(--verde-escuro);
+        border: 1px solid var(--linha-divisoria);
         border-top: none;
-        border-radius: 0 0 4px 4px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         
         opacity: 0;
         visibility: hidden;
         transform: translateY(-10px);
         transition: all 0.2s ease;
         max-height: 0;
-        overflow: hidden;
+        overflow: hidden; /* Importante para o efeito acordeão */
+        display: flex;
+        flex-direction: column;
     }
 
     .nav-item.active .dropdown-menu {
         opacity: 1;
         visibility: visible;
-        transform: translateY(15px); /* Espaçamento do topo */
-        max-height: 300px; /* Limite visual */
+        transform: translateY(0);
+        max-height: 80vh; /* Altura máxima segura */
     }
 
-    /* Lista interna */
+    /* --- SUB-GRUPOS (Dentro de Trabalhos) --- */
+    .sub-group-container {
+        border-bottom: 1px solid var(--linha-divisoria);
+    }
+    .sub-group-container:last-child { border-bottom: none; }
+
+    .sub-group-btn {
+        padding: 15px 20px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--texto-secundario);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--verde-escuro);
+        transition: background 0.2s;
+    }
+
+    .sub-group-btn:hover { background: var(--verde-medio); color: var(--texto-principal); }
+    .sub-group-btn.open { color: var(--verde-claro); }
+    .sub-group-btn.open .arrow-sub { transform: rotate(180deg); }
+
+    .arrow-sub { font-size: 8px; transition: transform 0.2s; }
+
+    /* Lista de Obras (Escondida por padrão dentro do subgrupo) */
     .works-list {
-        max-height: 290px;
-        overflow-y: auto;
-        padding: 5px 0;
+        max-height: 0;
+        overflow-y: auto; /* Scroll interno se a lista for longa */
+        background: #111; /* Fundo levemente mais escuro para diferenciar */
+        transition: max-height 0.3s ease;
+    }
+    
+    .works-list.expanded {
+        max-height: 300px; /* Limite de altura do scroll interno */
     }
 
+    /* Link Individual da Obra */
     .work-link {
         display: flex;
         justify-content: space-between;
         align-items: baseline;
-        padding: 10px 15px;
-        border-bottom: 1px solid #2a2a2a;
-        transition: background 0.2s, color 0.2s;
-        color: #ccc;
+        padding: 12px 20px 12px 30px; /* Mais indentado à esquerda */
+        border-bottom: 1px solid #222;
+        color: #999;
         font-size: 12px;
         line-height: 1.4;
     }
     .work-link:last-child { border-bottom: none; }
-    .work-link:hover { background: #2f3835; color: #4aff98; }
+    .work-link:hover { color: var(--verde-claro); background: #1a1a1a; }
     
-    .work-year {
-        font-size: 10px;
-        color: #666;
-        margin-left: 10px;
-        white-space: nowrap;
-    }
+    .work-year { font-size: 10px; color: #555; margin-left: 10px; }
+
 
     /* --- MOBILE --- */
-    .hamburger { display: none; cursor: pointer; z-index: 102; }
-    .bar { width: 22px; height: 2px; background-color: #fff; margin: 5px 0; transition: 0.4s; }
+    .hamburger { display: none; cursor: pointer; padding: 10px; }
+    .bar { width: 24px; height: 2px; background-color: var(--texto-principal); margin: 6px 0; transition: 0.3s; }
 
-    .mobile-active .bar:nth-child(1) { transform: rotate(-45deg) translate(-5px, 5px); }
+    .mobile-active .bar:nth-child(1) { transform: rotate(-45deg) translate(-6px, 5px); background-color: var(--verde-claro); }
     .mobile-active .bar:nth-child(2) { opacity: 0; }
-    .mobile-active .bar:nth-child(3) { transform: rotate(45deg) translate(-5px, -5px); }
+    .mobile-active .bar:nth-child(3) { transform: rotate(45deg) translate(-6px, -6px); background-color: var(--verde-claro); }
 
+/* =========================================
+       CORREÇÃO DEFINITIVA MOBILE (FUNDO DO CSS)
+       ========================================= */
     @media (max-width: 768px) {
         .hamburger { display: block; }
-        
+
+        /* Container Principal do Menu: Fixo e com Scroll Próprio */
         .nav-desktop {
             position: fixed;
-            top: 60px; /* Abaixo do header */
-            right: -100%;
+            top: 60px; 
+            right: 0;
+            bottom: 0; /* Ancora no chão, ocupa altura total */
             width: 100%;
-            height: calc(100vh - 60px);
-            background: rgba(15, 15, 15, 0.98);
-            backdrop-filter: blur(10px);
+            height: auto; /* Remove altura calculada */
+            background-color: var(--verde-escuro);
+            
             flex-direction: column;
             align-items: stretch;
-            padding: 20px;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto;
-            border-top: 1px solid #333;
+            padding: 0;
+            margin: 0;
+            gap: 0;
+            
+            transform: translateX(100%); /* Escondido */
+            transition: transform 0.3s ease; /* Só anima a entrada lateral */
+            overflow-y: auto; /* Scroll vertical ativado */
+            z-index: 1999;
+            border-top: 1px solid var(--linha-divisoria);
         }
 
-        .nav-desktop.open { right: 0; }
+        .nav-desktop.open { transform: translateX(0); }
 
-        .nav-item { width: 100%; border-bottom: 1px solid #2a2a2a; }
-        
-        .group-btn { 
-            width: 100%; 
-            justify-content: space-between; 
-            font-size: 16px; 
-            padding: 20px 10px;
-            color: #eee;
-        }
-
-        .dropdown-menu {
-            position: static;
+        /* Item do Menu (Trabalhos, Exposições...) */
+        .nav-item {
             width: 100%;
-            background: transparent;
+            height: auto; /* Altura automática para crescer com o conteúdo */
+            display: flex;
+            flex-direction: column; /* Coloca o dropdown EMBAIXO do botão */
+            border-bottom: 1px solid var(--linha-divisoria);
+            position: static; /* Remove posicionamento relativo que buga o layout */
+        }
+
+        /* Botão Principal */
+        .main-link-btn, .group-btn {
+            width: 100%;
+            padding: 20px 25px;
+            font-size: 15px;
+            justify-content: space-between;
+            height: 60px; /* Altura fixa apenas para o botão clicável */
+        }
+
+        /* DROPDOWN (O Container dos sub-itens) */
+        /* Por padrão: INVISÍVEL e SEM ESPAÇO */
+        .dropdown-menu {
+            position: static; /* Flutuação desligada */
+            width: 100%;
+            background: #111;
             border: none;
             box-shadow: none;
+            opacity: 1;
+            visibility: visible;
             transform: none;
-            transition: max-height 0.3s ease;
+            
+            /* O SEGRED0: */
+            display: none; 
         }
-        
+
+        /* Quando o pai está .active, o dropdown vira um bloco visível */
         .nav-item.active .dropdown-menu {
-            transform: none;
-            background: #1a1a1a;
-            max-height: 500px; /* Permite abrir bastante no mobile */
+            display: block; 
+            border-top: 1px solid var(--linha-divisoria);
+        }
+
+        /* Botão de Subgrupo (Pinturas, Esculturas...) */
+        .sub-group-btn {
+            padding: 18px 30px;
+            background: transparent;
+            border-bottom: 1px solid #222;
+        }
+
+        /* LISTA FINAL DE OBRAS */
+        /* Por padrão: INVISÍVEL */
+/* --- LISTA DE OBRAS (O SCROLL INTERNO) --- */
+    .works-list {
+        background: #0f0f0f; /* Fundo levemente distinto */
+        
+        /* Estado Fechado */
+        max-height: 0;
+        overflow: hidden; 
+        display: none; /* Garante que não ocupa espaço quando fechado */
+        
+        transition: none; /* Remove transição de altura para evitar lag */
+    }
+    
+    .works-list.expanded {
+        /* Estado Aberto */
+        display: block;
+        
+        /* AQUI ESTÁ A MÁGICA DO SCROLL: */
+        max-height: 260px; /* Altura exata para caber aprox. 6 itens (40px cada) */
+        overflow-y: auto;  /* Força a barra de rolagem APENAS aqui dentro */
+        
+        border-bottom: 1px solid var(--linha-divisoria);
+        border-top: 1px solid #222;
+    }
+
+    /* Scrollbar interna mais fina e discreta para a lista */
+    .works-list::-webkit-scrollbar { width: 4px; }
+    .works-list::-webkit-scrollbar-track { background: #0f0f0f; }
+    .works-list::-webkit-scrollbar-thumb { background: var(--verde-claro); }
+    .works-list::-webkit-scrollbar-thumb:hover { background: var(--verde-medio); }
+
+
+        /* Link da Obra */
+        .work-link {
+            padding: 15px 40px; /* Indentação visual */
+            font-size: 14px;
+            border-bottom: 1px solid #1a1a1a;
         }
     }
 </style>
@@ -209,7 +321,7 @@
 <body>
 
     <header class="header-fixed">
-        <a href="#" class="logo" onclick="resetFrame()">SANTACOSTA</a>
+        <div class="logo" onclick="resetFrame()">SANTACOSTA</div>
         
         <div class="hamburger" id="hamburger-btn">
             <div class="bar"></div>
@@ -233,685 +345,1532 @@
     // BOTA BOTA BOTA O JSON AQUIÃÃ!
     const dadosObras = [
     {
-        "TITULO": "Estrutura I",
-        "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/estrutura-i",
-        "ANO": "2013"
+        "TITULO": "NOTÍCIAS",
+        "GRUPO": "NOTÍCIAS",
+        "URL": "https://www.santacosta.net/noticias",
+        "ANO": "",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
     },
     {
-        "TITULO": "Estrutura II",
-        "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/estrutura-ii",
-        "ANO": "2013"
+        "TITULO": "TEXTOS",
+        "GRUPO": "TEXTOS",
+        "URL": "https://www.santacosta.net/textos",
+        "ANO": "",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
     },
     {
-        "TITULO": "Estrutura V",
-        "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/estrutura-v",
-        "ANO": "2013"
-    },
-    {
-        "TITULO": "Estrutura VI",
-        "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/estrutura-vi",
-        "ANO": "2013"
-    },
-    {
-        "TITULO": "Estrutura VII",
-        "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/estrutura-vii",
-        "ANO": "2013"
-    },
-    {
-        "TITULO": "Estrutura VIII",
-        "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/estrutura-viii",
-        "ANO": "2014"
-    },
-    {
-        "TITULO": "Pilha ascendente",
-        "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/pilha-ascendente",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Reflexos trinos",
-        "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/reflexos-trinos",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Tensão e ruptura",
-        "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/tensao-e-ruptura",
-        "ANO": "2019"
+        "TITULO": "BIO",
+        "GRUPO": "BIO",
+        "URL": "https://www.santacosta.net/biografia",
+        "ANO": "",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
     },
     {
         "TITULO": "n.4, Cartões que não dei",
         "GRUPO": "COLAGENS",
         "URL": "https://www.santacosta.net/n4",
-        "ANO": "2019"
+        "ANO": "2019",
+        "IMG1": "https://static.wixstatic.com/media/afed94_836a5993122e442bbbfc92582c9eceee~mv2_d_4320_2880_s_4_2.jpg/v1/fill/w_875,h_584,al_c,q_90,enc_avif,quality_auto/afed94_836a5993122e442bbbfc92582c9eceee~mv2_d_4320_2880_s_4_2.jpg",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "30,5 x 43 cm.",
+        "TECNICA_PT": "Colagem sobre papel de algodão.",
+        "TECNICA_EN": "Collage on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_a1d12d24b6874e7c86c21d46fdaadd2f~mv2_d_4320_2880_s_4_2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "4320x2880"
     },
     {
-        "TITULO": "pilha 1",
+        "TITULO": "Reflexos trinos",
         "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/serie-pilha-n1",
-        "ANO": ""
+        "URL": "https://www.santacosta.net/reflexos-trinos",
+        "ANO": "2019",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "42,5 x 41 cm.",
+        "TECNICA_PT": "Colagem sobre papel de algodão.",
+        "TECNICA_EN": "Collage on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_bf3b74d20cde40689306fb9f6e92271b~mv2_d_3240_3187_s_4_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "3240x3187"
     },
     {
-        "TITULO": "pilha 12",
+        "TITULO": "Tensão e ruptura",
         "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/serie-pilha-n12",
-        "ANO": ""
+        "URL": "https://www.santacosta.net/tensao-e-ruptura",
+        "ANO": "2019",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "42,5 x 28,5 cm.",
+        "TECNICA_PT": "Colagem sobre papel de algodão.",
+        "TECNICA_EN": "Collage on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_ce5a08e542424b949484274aa958e38a~mv2_d_2184_3240_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "2184x3240"
+    },
+    {
+        "TITULO": "Pilha ascendente",
+        "GRUPO": "COLAGENS",
+        "URL": "https://www.santacosta.net/pilha-ascendente",
+        "ANO": "2019",
+        "IMG1": "https://static.wixstatic.com/media/afed94_e00e21e85fe641d3b62b1479e9ba8cbd~mv2_d_2349_3240_s_2.png/v1/fill/w_499,h_688,al_c,q_95,enc_avif,quality_auto/afed94_e00e21e85fe641d3b62b1479e9ba8cbd~mv2_d_2349_3240_s_2.png",
+        "IMG2": "https://static.wixstatic.com/media/afed94_6e14f99e1cf94f64b433f4aae03a35fb~mv2_d_2349_3240_s_2.png/v1/fill/w_499,h_688,al_c,q_95,enc_avif,quality_auto/afed94_6e14f99e1cf94f64b433f4aae03a35fb~mv2_d_2349_3240_s_2.png",
+        "IMG3": "https://static.wixstatic.com/media/afed94_5c5ad3dff8ad4738b82978f59e50a4a0~mv2_d_2349_3240_s_2.png/v1/fill/w_499,h_688,al_c,q_95,enc_avif,quality_auto/afed94_5c5ad3dff8ad4738b82978f59e50a4a0~mv2_d_2349_3240_s_2.png",
+        "IMG4": "https://static.wixstatic.com/media/afed94_5d7b3d31ec7340a8b24906f1bfb16df6~mv2_d_2349_3240_s_2.png/v1/fill/w_499,h_688,al_c,q_95,enc_avif,quality_auto/afed94_5d7b3d31ec7340a8b24906f1bfb16df6~mv2_d_2349_3240_s_2.png",
+        "IMG5": "https://static.wixstatic.com/media/afed94_fc9aa47c260146f8b388f0bf399d6fa7~mv2_d_2349_3240_s_2.png/v1/fill/w_499,h_688,al_c,q_95,enc_avif,quality_auto/afed94_fc9aa47c260146f8b388f0bf399d6fa7~mv2_d_2349_3240_s_2.png",
+        "DIMENSOES_FISICAS": "42,5 x 31 cm.",
+        "TECNICA_PT": "Colagem sobre papel de algodão.",
+        "TECNICA_EN": "Collage on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_34722566c42b41bea9a0c6fc561c0822~mv2_d_2349_3240_s_2.png/v1/fill/w_499,h_688,al_c,q_95,enc_avif,quality_auto/afed94_34722566c42b41bea9a0c6fc561c0822~mv2_d_2349_3240_s_2.png",
+        "DIMENSOES_PX": "2349x3240"
     },
     {
         "TITULO": "pilha 14",
         "GRUPO": "COLAGENS",
         "URL": "https://www.santacosta.net/serie-pilha-n14",
-        "ANO": ""
-    },
-    {
-        "TITULO": "pilha 15",
-        "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/serie-pilha-n15",
-        "ANO": ""
+        "ANO": "",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "21 x 14 cm.",
+        "TECNICA_PT": "Colagem sobre papel de algodão.",
+        "TECNICA_EN": "Collage on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_b21731f2b31742cfaacc2f816a6dbc02~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
         "TITULO": "pilha 16",
         "GRUPO": "COLAGENS",
         "URL": "https://www.santacosta.net/serie-pilha-n16",
-        "ANO": ""
+        "ANO": "",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "21 x 14 cm.",
+        "TECNICA_PT": "Colagem sobre papel de algodão.",
+        "TECNICA_EN": "Collage on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_1b419174472144978d51eadde220a8fb~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
         "TITULO": "pilha 17",
         "GRUPO": "COLAGENS",
         "URL": "https://www.santacosta.net/serie-pilha-n17",
-        "ANO": ""
+        "ANO": "",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "21 x 14 cm.",
+        "TECNICA_PT": "Colagem sobre papel de algodão.",
+        "TECNICA_EN": "Collage on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_c49dcccc5a7b4dc487afb44f71c306aa~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
-        "TITULO": "pilha 18",
+        "TITULO": "Estrutura VIII",
         "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/serie-pilha-n18",
-        "ANO": ""
+        "URL": "https://www.santacosta.net/estrutura-viii",
+        "ANO": "2014",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "41 x 41 cm.",
+        "TECNICA_PT": "Acrílica, óleo e fita adesiva sobre papel de algodão.",
+        "TECNICA_EN": "Acrylic, oil and adhesive tape on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_9663bdb6746142259242435ced058ed7~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1800x1800"
     },
     {
-        "TITULO": "pilha 19",
+        "TITULO": "Estrutura VII",
         "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/serie-pilha-n19",
-        "ANO": ""
+        "URL": "https://www.santacosta.net/estrutura-vii",
+        "ANO": "2013",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "30 x 30 cm.",
+        "TECNICA_PT": "Acrílica, óleo e grafite sobre papel de algodão.",
+        "TECNICA_EN": "Acrylic, oil and graphite on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_cef41d18634a45d1bac087ee3bb79420~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
-        "TITULO": "pilha 2",
+        "TITULO": "Estrutura VI",
         "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/serie-pilha-n2",
-        "ANO": ""
+        "URL": "https://www.santacosta.net/estrutura-vi",
+        "ANO": "2013",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "30 x 30 cm.",
+        "TECNICA_PT": "Acrílica, óleo, carvão e marcador permanente sobre papel de algodão.",
+        "TECNICA_EN": "Acrylic, oil, charcoal and permanent marker on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_d4173f3da5a54ed19bd9cabd04be13ed~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
-        "TITULO": "pilha 23",
+        "TITULO": "Estrutura V",
         "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/serie-pilha-n20",
-        "ANO": ""
+        "URL": "https://www.santacosta.net/estrutura-v",
+        "ANO": "2013",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "30 x 30 cm.",
+        "TECNICA_PT": "Acrílica e óleo sobre papel de algodão.",
+        "TECNICA_EN": "Acrylic and oil on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_f639efa6403041ccafcf579911aa07e0~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
-        "TITULO": "pilha 3",
+        "TITULO": "Estrutura II",
         "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/serie-pilha-n3",
-        "ANO": ""
+        "URL": "https://www.santacosta.net/estrutura-ii",
+        "ANO": "2013",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "30 x 30 cm.",
+        "TECNICA_PT": "Acrílica e óleo sobre papel de algodão.",
+        "TECNICA_EN": "Acrylic and oil on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_b23cd4bbb84b4a63ab076f3ee32919d9~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
-        "TITULO": "pilha 4",
+        "TITULO": "Estrutura I",
         "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/serie-pilha-n4",
-        "ANO": ""
-    },
-    {
-        "TITULO": "pilha 5",
-        "GRUPO": "COLAGENS",
-        "URL": "https://www.santacosta.net/serie-pilha-n5",
-        "ANO": ""
-    },
-    {
-        "TITULO": "3pra1,2",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/3pra1-2",
-        "ANO": "2017"
-    },
-    {
-        "TITULO": "Animal negro",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/animal-negro",
-        "ANO": "2018"
-    },
-    {
-        "TITULO": "Bug",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/bug",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Clayborn",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/clayborn",
-        "ANO": "2014"
-    },
-    {
-        "TITULO": "Enfeito",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/enfeito",
-        "ANO": "2014-2017"
+        "URL": "https://www.santacosta.net/estrutura-i",
+        "ANO": "2013",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "30 x 30 cm.",
+        "TECNICA_PT": "Acrílica e óleo sobre papel de algodão.",
+        "TECNICA_EN": "Acrylic and oil on cotton paper.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_68408f3284e343ff8c3dcd8d6af955de~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
         "TITULO": "Escultura de colagem",
         "GRUPO": "ESCULTURAS",
         "URL": "https://www.santacosta.net/escultura-de-colagem",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Exnora",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/exora",
-        "ANO": "2018"
+        "ANO": "2019",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "240 x 80 x 80 cm.",
+        "TECNICA_PT": "Acrílica sobre madeira, bloco de concreto, mdf, fita adesiva e pvc",
+        "TECNICA_EN": "Acrylic on wood, concrete block, mdf, adhesive tape and pvc",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_3ad72fc8bca04f608a46c4bbc17017e2~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
         "TITULO": "Fardo",
         "GRUPO": "ESCULTURAS",
         "URL": "https://www.santacosta.net/fardo",
-        "ANO": "2018"
-    },
-    {
-        "TITULO": "Junção encoberta",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/juncao-encoberta",
-        "ANO": "2014"
-    },
-    {
-        "TITULO": "Junção estranha",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/juncao-estranha",
-        "ANO": "2018"
-    },
-    {
-        "TITULO": "La escalera",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/la-escalera",
-        "ANO": "2016"
-    },
-    {
-        "TITULO": "Madam",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/madam",
-        "ANO": "2014"
-    },
-    {
-        "TITULO": "O sol e o unicórnio",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/o-sol-e-o-unicornio",
-        "ANO": "2016"
-    },
-    {
-        "TITULO": "O xamã e a desculpa",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/o-xama-e-a-desculpa",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Palavras Cruzadas",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/palavras-cruzadas",
-        "ANO": "2017"
-    },
-    {
-        "TITULO": "Rimbaud",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/rimbaud",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Sobreposição e deslocamento",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/sobreposicao-deslocamento",
-        "ANO": "2017"
-    },
-    {
-        "TITULO": "Trago do silêncio",
-        "GRUPO": "ESCULTURAS",
-        "URL": "https://www.santacosta.net/trago-do-silencio",
-        "ANO": "2014"
+        "ANO": "2018",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "25 x 40 x 30 cm.",
+        "TECNICA_PT": "Blocos de granito, fita de nylon e tinta acrílica.",
+        "TECNICA_EN": "Granite blocks, nylon tape and acrylic paint.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_8f71780d49f24a3b96a425eaf9b31a99~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "964x1280"
     },
     {
         "TITULO": "White Stripes",
         "GRUPO": "ESCULTURAS",
         "URL": "https://www.santacosta.net/white-stripes",
-        "ANO": "2018"
+        "ANO": "2018",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "155 x 70 x 44 cm.",
+        "TECNICA_PT": "Madeira, mdf, fita adesiva, cabo elétrico e manta asfáltica.",
+        "TECNICA_EN": "Wood, mdf, adhesive tape, electric cable and asphalt membrane.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_5b5339016a9840fcae9bae398256b3cb~mv2_d_5184_3456_s_4_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "5184x3456"
     },
     {
-        "TITULO": "11 degraus",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/11-degraus",
-        "ANO": "2017"
+        "TITULO": "Animal negro",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/animal-negro",
+        "ANO": "2018",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "178 x 36 x 32 cm",
+        "TECNICA_PT": "Madeira, fita adesiva, fita de cetim, spray, borracha e tubo pvc.",
+        "TECNICA_EN": "Wood, adhesive and satin tape, spray, rubber and pvc tube.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_285001ea42834db58517ef76a0bf075e~mv2_d_2934_3240_s_4_2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "2934x3240"
     },
     {
-        "TITULO": "3pra1",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/3pra1",
-        "ANO": "2015"
+        "TITULO": "Palavras Cruzadas",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/palavras-cruzadas",
+        "ANO": "2017",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "115 x 45 x 105 cm.",
+        "TECNICA_PT": "Acrílica, madeira, pvc, metal e blocos de concreto.",
+        "TECNICA_EN": "Acrylic, wood, pvc, metal and concrete blocks.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_7b839fe76f164d0c882027606c33f56f~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "853x1280"
     },
     {
-        "TITULO": "B&G",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/b-g",
-        "ANO": "2014"
+        "TITULO": "Sobreposição e deslocamento",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/sobreposicao-deslocamento",
+        "ANO": "2017",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "155 x 50 x 30 cm",
+        "TECNICA_PT": "Acrílica, madeira, mdf e manta asfáltica.",
+        "TECNICA_EN": "Acrylic, wood, mdf and asphalt membrane.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_88196bf14b254a7fa7d5fec99ba308f5~mv2_d_2259_2954_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "2259x2954"
     },
     {
-        "TITULO": "Bluezinho",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/bluezinho",
-        "ANO": "2016"
+        "TITULO": "3pra1,2",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/3pra1-2",
+        "ANO": "2017",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "40 x 30 x 25 cm",
+        "TECNICA_PT": "Blocos de granito, fio de nylon e tinta acrílica.",
+        "TECNICA_EN": "Granite blocks, nylon wire and acrylic paint.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_fc92b63ecdf54cafbcfcd9d484400a4f~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1800x1800"
     },
     {
-        "TITULO": "Britney",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/britney",
-        "ANO": "2017"
+        "TITULO": "O sol e o unicórnio",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/o-sol-e-o-unicornio",
+        "ANO": "2016",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "99 x 48 x 20 cm",
+        "TECNICA_PT": "Acrílica sobre tela, blocos de concreto e granito, manta asfáltica e madeira",
+        "TECNICA_EN": "Acrylic on canvas, concrete and granite blocks, asphalt membrane and wood",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_05cdcc9afcc94d69ab5367db7106abaf~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1800x1800"
     },
     {
-        "TITULO": "Ghetto freak",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/ghetto-freak",
-        "ANO": "2014"
+        "TITULO": "La escalera",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/la-escalera",
+        "ANO": "2016",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "140 x 30 x 30 cm.",
+        "TECNICA_PT": "Madeira, tinta acrílica, cimento e bloco de concreto.",
+        "TECNICA_EN": "Wood, acrylic, cement and concrete block.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_0db9956bdff0436da3a300cad8cd42b5~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1800x1800"
     },
     {
-        "TITULO": "Infantario pareado",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/infantario-pareado",
-        "ANO": "2017"
+        "TITULO": "Junção encoberta",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/juncao-encoberta",
+        "ANO": "2014",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "20 x 18 x 16 cm.",
+        "TECNICA_PT": "Bloco de granito, acrílica e tecido.",
+        "TECNICA_EN": "Granite block, acrylic and fabric.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_37a66ba5db364a4e9976e28fe2d28672~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1800x1800"
     },
     {
-        "TITULO": "Junção exposta",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/juncao-exposta",
-        "ANO": "2016"
+        "TITULO": "Trago do silêncio",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/trago-do-silencio",
+        "ANO": "2014",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "156 x 30 x 10 cm.",
+        "TECNICA_PT": "Madeira, cimento e acrílica.",
+        "TECNICA_EN": "Wood, cement and acrylic.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_6159583e4ec04debab365f80aa7a6e61~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1800x1800"
     },
     {
-        "TITULO": "Lua",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/lua",
-        "ANO": "2014"
-    },
-    {
-        "TITULO": "Matrix-Medusa",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/matrix-medusa",
-        "ANO": "2016"
-    },
-    {
-        "TITULO": "Ninho",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/ninho",
-        "ANO": "2015"
-    },
-    {
-        "TITULO": "Objeto Constratante",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/objeto-contrastante",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Outra língua",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/outra-lingua",
-        "ANO": "2014"
-    },
-    {
-        "TITULO": "Over I",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/over-i",
-        "ANO": "2014"
-    },
-    {
-        "TITULO": "Over bikini wasabi",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/over-bikini-wasabi",
-        "ANO": "2015"
-    },
-    {
-        "TITULO": "Over the fridge II",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/over-the-fridge-ii",
-        "ANO": "2016"
-    },
-    {
-        "TITULO": "Pequenos traumas urbanos III",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/pequenos-traumas-urbanos-iii",
-        "ANO": "2015"
+        "TITULO": "Clayborn",
+        "GRUPO": "ESCULTURAS",
+        "URL": "https://www.santacosta.net/clayborn",
+        "ANO": "2014",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "40 x 35 x 30 cm.",
+        "TECNICA_PT": "Blocos de granito, corrente de ferro e tinta acrílica.",
+        "TECNICA_EN": "Granite blocks, iron chain and acrylic paint.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_c3bf1f2307b2420496283349ed1724e6~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1800x1800"
     },
     {
         "TITULO": "Petit Voiture",
         "GRUPO": "OBJETOS",
         "URL": "https://www.santacosta.net/petit-voiture",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Sobreposição-Infantário",
-        "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/sobreposicao-infantario",
-        "ANO": "2016"
+        "ANO": "2019",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "24 x 24 x 14 cm.",
+        "TECNICA_PT": "Blocos de concreto, pvc, metal, manta asfáltica, tinta de acrílica e rodízios.",
+        "TECNICA_EN": "Concrete blocks, pvc, metal, asphalt blanket, acrylic paint and castors.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_7d99db5a1060431bb77a2ece85e9a063~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "4320x3240"
     },
     {
         "TITULO": "Swish-wish #1",
         "GRUPO": "OBJETOS",
         "URL": "https://www.santacosta.net/swish-wish",
-        "ANO": "2017"
+        "ANO": "2017",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "23 x 19 x 12,5 cm",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto.",
+        "TECNICA_EN": "Acrylic on concrete blocks.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_d8e894ac3b7c47f187971a2853679479~mv2_d_1690_2148_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1690x2148"
     },
     {
         "TITULO": "Swish-wish #2",
         "GRUPO": "OBJETOS",
         "URL": "https://www.santacosta.net/swish-wish-2",
-        "ANO": "2017"
+        "ANO": "2017",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "23 x 28 x 25 cm",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto.",
+        "TECNICA_EN": "Acrylic on concrete blocks.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_d673cb25c3c44c449cb2f97e80ced304~mv2_d_2408_1925_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "2408x1925"
     },
     {
         "TITULO": "Swish-wish #3",
         "GRUPO": "OBJETOS",
         "URL": "https://www.santacosta.net/swish-wish-3",
-        "ANO": "2017"
+        "ANO": "2017",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "23 x 19 x 12,5 cm",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto.",
+        "TECNICA_EN": "Acrylic on concrete blocks.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_27aa731f31cf44f2af63c4cc3ce3786a~mv2_d_2291_1908_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "2291x1908"
     },
     {
-        "TITULO": "Swish-wish #4",
+        "TITULO": "Over bikini wasabi",
         "GRUPO": "OBJETOS",
-        "URL": "https://www.santacosta.net/swish-wish-4",
-        "ANO": "2017"
+        "URL": "https://www.santacosta.net/over-bikini-wasabi",
+        "ANO": "2015",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "12 x 9,5 x 19,5 cm.",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto",
+        "TECNICA_EN": "Acrylic on concrete blocks",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_296cf22636344f14a8c4c4708605be35~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "Over I",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/over-i",
+        "ANO": "2014",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "44,5 x 17 x 6 cm.",
+        "TECNICA_PT": "Tijolos de concreto e acrílica.",
+        "TECNICA_EN": "Concrete bricks and acrylic.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_4397327e4c1a4f0ead948e5c0f4ace4d~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "11 degraus",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/11-degraus",
+        "ANO": "2017",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "33 x 58 x 21 cm",
+        "TECNICA_PT": "Acrílica e esmalte sobre madeira e manta asfáltica.",
+        "TECNICA_EN": "Acrylic and enamel on wood and asphalt membrane.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_5eade2df7ed3400a867ec435ccd6da16~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "Infantario pareado",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/infantario-pareado",
+        "ANO": "2017",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "21 x 28 x 21 cm",
+        "TECNICA_PT": "Acrílica e esmalte sobre madeira e manta asfáltica.",
+        "TECNICA_EN": "Acrylic and enamel on wood and asphalt membrane.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_1b734640c7064ddf8197d2c18607ea24~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "Britney",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/britney",
+        "ANO": "2017",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "12 x 19,5 x 9,5 cm",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e manta asfáltica.",
+        "TECNICA_EN": "Acrylic on concrete blocks and asphalt membrane.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_ee69b43a6cc043b9805e575339f4fb1e~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
         "TITULO": "Tamanco",
         "GRUPO": "OBJETOS",
-        "URL": "#",
-        "ANO": "2016"
+        "URL": "https://www.santacosta.net/copia-3pra1-2-2017",
+        "ANO": "2016",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "16 x 10 x 22 cm",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto, manta asfáltica e fita adesiva.",
+        "TECNICA_EN": "Acrylic on concrete blocks, asphalt membrane and adhesive tape.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_a7fc99890f9b421fb71dd0febd3efa3d~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "Junção exposta",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/juncao-exposta",
+        "ANO": "2016",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "19 x 19,5 x 5,5 cm",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e manta asfáltica.",
+        "TECNICA_EN": "Acrylic on concrete blocks and asphalt membrane.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_ebd0d5f9daa64c929721f9ba68e2dad7~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "Pequenos traumas urbanos III",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/pequenos-traumas-urbanos-iii",
+        "ANO": "2015",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "blocks 6 x 47 x 25 cm",
+        "TECNICA_PT": "Acrílica, cimento e blocos de concreto.",
+        "TECNICA_EN": "Acrylic, cement and concrete.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_504971d7207c4654a15384ec63488a46~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1800x1800"
+    },
+    {
+        "TITULO": "Ninho",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/ninho",
+        "ANO": "2015",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "11,5 x 30 x 26 cm.",
+        "TECNICA_PT": "Acrílica, cabo, blocos de concreto e borracha.",
+        "TECNICA_EN": "Acrylic, cable, concrete blocks and rubber.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_f6ae08db29b14402b32c0d9fb861ea3a~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "3pra1",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/3pra1",
+        "ANO": "2015",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "24,5 x 9,5 x 19,5 cm.",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e tecido.",
+        "TECNICA_EN": "Acrylic on concrete blocks and fabric.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_010add518067473fa0533a64411c55f8~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1800x1800"
     },
     {
         "TITULO": "Wilson levitante",
         "GRUPO": "OBJETOS",
         "URL": "https://www.santacosta.net/wilson-levitante",
-        "ANO": "2014"
+        "ANO": "2014",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "26 x 10 x 19,5 cm",
+        "TECNICA_PT": "Blocos de concreto, tinta acrílica, vidro e bola de tênis.",
+        "TECNICA_EN": "Concrete blocks, acrylic, glass and tennis ball.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_67392896b44f42f0a1503820cfce8f6a~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1280x1055"
     },
     {
-        "TITULO": "Badalo",
-        "GRUPO": "PAREDE",
-        "URL": "https://www.santacosta.net/badalo",
-        "ANO": "2016"
+        "TITULO": "B&G",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/b-g",
+        "ANO": "2014",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "18,5 x 19,5 x 9,5 cm.",
+        "TECNICA_PT": "Tijolos de concreto, acrílica e cordão dourado.",
+        "TECNICA_EN": "Concrete bricks, acrylic and golden string.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_4a668efc2bc248e9ab006524b39d05eb~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1800x1800"
     },
     {
-        "TITULO": "Blackbird",
-        "GRUPO": "PAREDE",
-        "URL": "https://www.santacosta.net/blackbird",
-        "ANO": "2018"
+        "TITULO": "Outra língua",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/outra-lingua",
+        "ANO": "2014",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "9,5 x 12 x 16,5 cm.",
+        "TECNICA_PT": "Tijolo de concreto, acrílica e osso",
+        "TECNICA_EN": "Concrete brick, acrylic and bone",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_01791bd6b18d49ceabb934cb7d3a40be~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
-        "TITULO": "Coral VI",
-        "GRUPO": "PAREDE",
-        "URL": "https://www.santacosta.net/coral",
-        "ANO": "2015"
-    },
-    {
-        "TITULO": "Escultura-Desenho",
-        "GRUPO": "PAREDE",
-        "URL": "https://www.santacosta.net/escultura-desenho",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Frozen",
-        "GRUPO": "PAREDE",
-        "URL": "https://www.santacosta.net/copia-frozen-2018",
-        "ANO": "2018"
-    },
-    {
-        "TITULO": "Objeto de parede V",
-        "GRUPO": "PAREDE",
-        "URL": "https://www.santacosta.net/objeto-de-parede-v",
-        "ANO": "2018"
-    },
-    {
-        "TITULO": "Objeto de parede VI",
-        "GRUPO": "PAREDE",
-        "URL": "https://www.santacosta.net/objeto-de-parede-vi",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Pequeno deslocamento",
-        "GRUPO": "PAREDE",
-        "URL": "https://www.santacosta.net/pequeno-deslocamento",
-        "ANO": "2018"
+        "TITULO": "Lua",
+        "GRUPO": "OBJETOS",
+        "URL": "https://www.santacosta.net/lua",
+        "ANO": "2014",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "30 x 21 x 16 cm.",
+        "TECNICA_PT": "Bola, tinta acrílica e bloco de granito.",
+        "TECNICA_EN": "Ball, acrylic and granite block.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_c77d126547f74c4c9fd3b1f33b5715e1~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
         "TITULO": "Pintura d'splay",
-        "GRUPO": "PAREDE",
+        "GRUPO": "OBJETOS DE PAREDE",
         "URL": "https://www.santacosta.net/pintura-d-splay",
-        "ANO": "2019"
+        "ANO": "2019",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "176 x 123 x 83 cm. (trabalho dupla face)",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, estrutura de ferro e rodízios.",
+        "TECNICA_EN": "Acrylic and oil on canvas, iron frame and castors.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_1f4472aeec9043ada2b1a3229f11b794~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "4320x3240"
     },
     {
-        "TITULO": "Resgate-Unicórnio",
-        "GRUPO": "PAREDE",
-        "URL": "https://www.santacosta.net/o-sol-e-o-unicornio",
-        "ANO": "2014-16"
+        "TITULO": "Objeto de parede VI",
+        "GRUPO": "OBJETOS DE PAREDE",
+        "URL": "https://www.santacosta.net/objeto-de-parede-vi",
+        "ANO": "2019",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "128 x 64 x 10 cm.",
+        "TECNICA_PT": "Pvc, cabo elétrico,correntes de metal.",
+        "TECNICA_EN": "PVC, electric cable, metal chains.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_d4ff7e244e954b4faa6a66a14954b033~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "4320x3240"
     },
     {
-        "TITULO": "Rock'n'roll",
-        "GRUPO": "PAREDE",
-        "URL": "https://www.santacosta.net/rock-n-roll",
-        "ANO": "2019"
+        "TITULO": "Escultura-Desenho",
+        "GRUPO": "OBJETOS DE PAREDE",
+        "URL": "https://www.santacosta.net/escultura-desenho",
+        "ANO": "2019",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "110 x 50 x 25 cm.",
+        "TECNICA_PT": "Galho, corrente de metal, fio eléctrico e tinta acrílica.",
+        "TECNICA_EN": "Twig, metal chain, electric wire and acrylic paint.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_531e94b93ecc45eeb59b38a2d67ffcfc~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "4320x3240"
+    },
+    {
+        "TITULO": "Pequeno deslocamento",
+        "GRUPO": "OBJETOS DE PAREDE",
+        "URL": "https://www.santacosta.net/pequeno-deslocamento",
+        "ANO": "2018",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "160 x 34 x 6 cm",
+        "TECNICA_PT": "Acrílica sobre tela, madeira e cinta de nylon.",
+        "TECNICA_EN": "Acrylic on canvas, wood and nylon strap.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_9fb844e980d946bdbc9c6eefc0047b53~mv2_d_5184_3456_s_4_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "5184x3456"
+    },
+    {
+        "TITULO": "Objeto de parede V",
+        "GRUPO": "OBJETOS DE PAREDE",
+        "URL": "https://www.santacosta.net/objeto-de-parede-v",
+        "ANO": "2018",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "98 x 60 x 6 cm",
+        "TECNICA_PT": "Óleo sobre tela, madeira, corrente de metal e spray.",
+        "TECNICA_EN": "Oil on canvas, wood, metal chain and spray.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_704bdeee7a46476da29ae7066fa7c19b~mv2_d_5184_3456_s_4_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "5184x3456"
+    },
+    {
+        "TITULO": "Frozen",
+        "GRUPO": "OBJETOS DE PAREDE",
+        "URL": "https://www.santacosta.net/copia-frozen-2018",
+        "ANO": "2018",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "115 x 45 x 105 cm.",
+        "TECNICA_PT": "Acrílica, madeira, pvc, metal e blocos de concreto.",
+        "TECNICA_EN": "Acrylic, wood, pvc, metal and concrete blocks.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_efb7afa9d4d046f4850b9ce56cbcf1e6~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "Blackbird",
+        "GRUPO": "OBJETOS DE PAREDE",
+        "URL": "https://www.santacosta.net/blackbird",
+        "ANO": "2018",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "133 x 76 x 6 cm",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, madeira, rede de pvc, fita adesiva, cabo elétrico e spray.",
+        "TECNICA_EN": "Acrylic and oil on canvas, wood, pvc net, adhesive tape, electric cable and spray.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_e883c50fb5c34b879c402dafa432e934~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
         "TITULO": "Trava negra",
-        "GRUPO": "PAREDE",
+        "GRUPO": "OBJETOS DE PAREDE",
         "URL": "https://www.santacosta.net/trava-negra",
-        "ANO": "2018"
+        "ANO": "2018",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "110 x 142 x 6 cm",
+        "TECNICA_PT": "Acrílica sobre tela, madeira, rede de pvc, fita adesiva, corrente de metal e lâmpada..",
+        "TECNICA_EN": "Acrylic on canvas, wood, pvc net, adhesive tape, metal chain and lamp.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_514ae9181faa4988a1b95a3b5e608187~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
-        "TITULO": "Walkie-Talkie",
-        "GRUPO": "PAREDE",
-        "URL": "https://www.santacosta.net/walkie-talkie",
-        "ANO": "2016"
+        "TITULO": "Resgate-Unicórnio",
+        "GRUPO": "OBJETOS DE PAREDE",
+        "URL": "https://www.santacosta.net/o-sol-e-o-unicornio",
+        "ANO": "2014-16",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "99 x 48 x 20 cm",
+        "TECNICA_PT": "Acrílica sobre tela, blocos de concreto e granito, manta asfáltica e madeira",
+        "TECNICA_EN": "Acrylic on canvas, concrete and granite blocks, asphalt membrane and wood",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_f7634f4ad98a4f8ea3024842e0805932~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1800x1800"
     },
     {
-        "TITULO": "A nascente",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/a-nascente",
-        "ANO": "2014"
+        "TITULO": "Badalo",
+        "GRUPO": "OBJETOS DE PAREDE",
+        "URL": "https://www.santacosta.net/badalo",
+        "ANO": "2016",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "173 x 156 x 55 cm",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, fita adesiva, manta asfáltica, estrutura em ferro e zinco e rodízios.",
+        "TECNICA_EN": "Acrylic and oil on canvas, adhesive tape, asphalt membrane, iron and zinc structure and wheels.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_e032ca5991d847fe9e58aa42979be83d~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
-        "TITULO": "Balyba hi",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/balyba",
-        "ANO": "2014"
-    },
-    {
-        "TITULO": "Cova (I)",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/cova",
-        "ANO": ""
-    },
-    {
-        "TITULO": "Cova (II)",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/cova",
-        "ANO": ""
-    },
-    {
-        "TITULO": "Draco",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/draco",
-        "ANO": "2012"
-    },
-    {
-        "TITULO": "Hercules-Luna",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/hercules-luna",
-        "ANO": "2017"
-    },
-    {
-        "TITULO": "Insight e ordenação I",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/insght-e-odenacao",
-        "ANO": "2018"
-    },
-    {
-        "TITULO": "Insight e ordenação II",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/insight-ordenacao-ii",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Long, hard road out of hell",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/long-hard-road-out-of-hell",
-        "ANO": "2010/2011"
+        "TITULO": "Coral VI",
+        "GRUPO": "OBJETOS DE PAREDE",
+        "URL": "https://www.santacosta.net/coral",
+        "ANO": "2015",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "180 x 120 cm.",
+        "TECNICA_PT": "Acrílica sobre tela e blocos de granito.",
+        "TECNICA_EN": "Acrylic on canvas and granite blocks.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_7687e7b968574937a3a73589dc720450~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
         "TITULO": "Mafalda",
         "GRUPO": "PINTURAS",
         "URL": "https://www.santacosta.net/mafalda",
-        "ANO": "2011"
-    },
-    {
-        "TITULO": "Napalm-R",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/napalm",
-        "ANO": "2012"
-    },
-    {
-        "TITULO": "O equilibrista",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/o-equilibrista",
-        "ANO": "2019"
-    },
-    {
-        "TITULO": "Objeto de parede IV",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/objeto-de-parede",
-        "ANO": "2015"
-    },
-    {
-        "TITULO": "Orion",
-        "GRUPO": "PINTURAS",
-        "URL": "https://www.santacosta.net/orion",
-        "ANO": "2012"
+        "ANO": "2011",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "160 x 100 cm.",
+        "TECNICA_PT": "Acrílica e óleo sobre tela.",
+        "TECNICA_EN": "Acrylic and oil on canvas.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_71aa896ab84b48299964277ace99c5eb~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
         "TITULO": "Serpentarius",
         "GRUPO": "PINTURAS",
         "URL": "https://www.santacosta.net/serpentarius",
-        "ANO": "2014"
+        "ANO": "2014",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "120 x 160 cm.",
+        "TECNICA_PT": "Óleo sobre tela.",
+        "TECNICA_EN": "Oil on canvas.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_01029298360d44ecba78843d6acec2ae~mv2_d_1800_1800_s_2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1800x1800"
+    },
+    {
+        "TITULO": "Orion",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/orion",
+        "ANO": "2012",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "180 x 150 cm",
+        "TECNICA_PT": "Acrílica e óleo sobre tela.",
+        "TECNICA_EN": "Acrylic and oil on canvas.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_a54190ab33884aada6ea57ec9ac60b10~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "Draco",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/draco",
+        "ANO": "2012",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "180 x 180 cm.",
+        "TECNICA_PT": "Acrílica e óleo sobre tela.",
+        "TECNICA_EN": "Acrylic and oil on canvas.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_8130e62593cf434989559b8d249e5217~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "Balyba hi",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/balyba",
+        "ANO": "2014",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "100 x 150 cm.",
+        "TECNICA_PT": "Óleo sobre tela.",
+        "TECNICA_EN": "Oil on canvas.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_1bee33688b654b4fb5cf340721489b60~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
     },
     {
         "TITULO": "Variação VIII",
         "GRUPO": "PINTURAS",
         "URL": "https://www.santacosta.net/variacao-viii",
-        "ANO": "2015"
+        "ANO": "2015",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "60 x 80 cm.",
+        "TECNICA_PT": "Acrílica, óleo, spray e grampos sobre tela.",
+        "TECNICA_EN": "Acrylic, oil, spray and staples on canvas.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_3af2973e9e204596b02ccc0b0e667ee6~mv2_d_1400_1240_s_2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1400x1240"
+    },
+    {
+        "TITULO": "Cova (I)",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/cova",
+        "ANO": "",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "200 x 150 cm.",
+        "TECNICA_PT": "Acrílica e óleo sobre tela.",
+        "TECNICA_EN": "Acrylic and oil on canvas.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_e206a584c3f54f089e28b67dbeec1f17~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "Cova (II)",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/cova",
+        "ANO": "",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "200 x 150 cm.",
+        "TECNICA_PT": "Acrílica e óleo sobre tela.",
+        "TECNICA_EN": "Acrylic and oil on canvas.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_623fc336113544f1b5859ce42667178b~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "Objeto de parede IV",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/objeto-de-parede",
+        "ANO": "2015",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "73 x 75 cm.",
+        "TECNICA_PT": "Acrílica, óleo e placas de mdf sobre tela.",
+        "TECNICA_EN": "Acrylic, oil and mdf board on canvas.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_4552a63d69564997aaeff1049e64a2f6~mv2_d_1800_1800_s_2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1800x1800"
+    },
+    {
+        "TITULO": "Hercules-Luna",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/hercules-luna",
+        "ANO": "2017",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "180 x 180 x 4 cm",
+        "TECNICA_PT": "Acrílica, óleo sobre tela, manta asfáltica e corrente de ferro.",
+        "TECNICA_EN": "Acrylic, oil on canvas, asphalt membrane and iron chain.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_2f6744edac0e43cd852d26c989b87944~mv2_d_2237_2222_s_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "2237x2222"
+    },
+    {
+        "TITULO": "Insight e ordenação I",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/insght-e-odenacao",
+        "ANO": "2018",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "162 x 122 cm.",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, fita adesiva, madeira e manta asfáltica.",
+        "TECNICA_EN": "Acrylic and oil on canvas, adhesive tape, wood and asphalt membrane.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_5376b0e9db2e4b9b87d5d454f5a2d443~mv2_d_3456_5184_s_4_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "3456x5184"
+    },
+    {
+        "TITULO": "Insight e ordenação II",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/insight-ordenacao-ii",
+        "ANO": "2019",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "89,5 × 114 × 4 cm.",
+        "TECNICA_PT": "Óleo sobre tela, madeira e manta asfáltica.",
+        "TECNICA_EN": "Oil on canvas, wood and asphalt blanket.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_57ed50125182445aa9c581f0ecac8888~mv2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "O equilibrista",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/o-equilibrista",
+        "ANO": "2019",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "100 x 100 cm.",
+        "TECNICA_PT": "Óleo e acrílica sobre tela.",
+        "TECNICA_EN": "Oil and acrylic on canvas.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_fab32a5f376944939b3b6ec4f489d65e~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_85/image.png",
+        "DIMENSOES_PX": "4320x3240"
+    },
+    {
+        "TITULO": "Long, hard road out of hell",
+        "GRUPO": "PINTURAS",
+        "URL": "https://www.santacosta.net/long-hard-road-out-of-hell",
+        "ANO": "2010/2011",
+        "IMG1": "",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "100 x 150 cm.",
+        "TECNICA_PT": "Óleo sobre tela.",
+        "TECNICA_EN": "Oil on canvas.",
+        "IMG_URL": "https://static.wixstatic.com/media/afed94_389935f7153242b89a38ec5227fc55fd~mv2.jpg/v1/fill/w_600,h_600,al_c,q_85/image.jpg",
+        "DIMENSOES_PX": "1080x1080"
+    },
+    {
+        "TITULO": "Over-Witty",
+        "GRUPO": "EXPOSIÇÃO",
+        "URL": "https://www.santacosta.net/exposicao-over-witty",
+        "ANO": "2016",
+        "IMG1": "Exposição Over-Witty no Espaço Qualcasa, SP Jun/16.\n​\nat Qualcasa, Sao Paulo.\n\n​\n\nFotos: Ivan Padovani",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
+    },
+    {
+        "TITULO": "It's all over",
+        "GRUPO": "EXPOSIÇÃO",
+        "URL": "https://www.santacosta.net/it-s-all-over-2017",
+        "ANO": "2017",
+        "IMG1": "It's all over, 2017\n​\nInstalação feita no Salão dos Arcos do Theatro\n\nMunicipal de São Paulo maio/2017.\n\nAcrílica e serigráfica sobre blocos de granito.\n\n​\n\nInstallation done in the Hall of the Arches of the Municipal Theater of São Paulo May / 2017\n\nAcrylic and screen printing ink on granite blocks.",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
+    },
+    {
+        "TITULO": "LAVA!",
+        "GRUPO": "EXPOSIÇÃO",
+        "URL": "https://www.santacosta.net/lava",
+        "ANO": "2018",
+        "IMG1": "LAVA\n​\nResidência Fonte, São Paulo abr. 2018",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
+    },
+    {
+        "TITULO": "Sobreposição e deslocamento",
+        "GRUPO": "EXPOSIÇÃO",
+        "URL": "https://www.santacosta.net/copia-exp-2",
+        "ANO": "2018",
+        "IMG1": "Sobreposição e deslocamento\n​\n4o programa de exposições MAB, Blumenau de set. a out. 2018",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
+    },
+    {
+        "TITULO": "Sobre o Sol ou a Noite desce?",
+        "GRUPO": "EXPOSIÇÃO",
+        "URL": "https://www.santacosta.net/copia-exp-1",
+        "ANO": "2018",
+        "IMG1": "Sobe o Sol ou a Noite desce?  \n​\nVÃO, São Paulo - out. 2018\n\nOrganização Carla Chaim, Marcelo Amorim e Nino Cais",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
+    },
+    {
+        "TITULO": "26o SLAC",
+        "GRUPO": "EXPOSIÇÃO",
+        "URL": "https://www.santacosta.net/26o-slac",
+        "ANO": "2019",
+        "IMG1": "26o SLAC\n​\nMuseu Histórico de Limeira, de nov. 2018 a jan. 2019\n\njuri Sylvia Furegatti, Tadeu Chiarelli e Valeria Piccoli",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
+    },
+    {
+        "TITULO": "Residência W",
+        "GRUPO": "EXPOSIÇÃO",
+        "URL": "https://www.santacosta.net/residencia-w",
+        "ANO": "",
+        "IMG1": "Residência W - Ribeirão Preto",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
+    },
+    {
+        "TITULO": "Dia 1o, 9o andar",
+        "GRUPO": "EXPOSIÇÃO",
+        "URL": "https://www.santacosta.net/sirva-se-do-que-quiser",
+        "ANO": "",
+        "IMG1": "Dia 1o, 9o andar - Galeria Lamb Arts - SP",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
+    },
+    {
+        "TITULO": "Sirva-se do que quiser",
+        "GRUPO": "EXPOSIÇÃO",
+        "URL": "https://www.santacosta.net/exposicoes-galeria-lamb-arts",
+        "ANO": "",
+        "IMG1": "Sirva-se do que quiser - Galeria de Arte e Pesquisa - UFES",
+        "IMG2": "",
+        "IMG3": "",
+        "IMG4": "",
+        "IMG5": "",
+        "DIMENSOES_FISICAS": "",
+        "TECNICA_PT": "",
+        "TECNICA_EN": "",
+        "IMG_URL": "",
+        "DIMENSOES_PX": ""
     }
-];
+]; 
 
     // =======================================================
-    // 2. LÓGICA
+    // 2. CONFIGURAÇÃO DE ORDEM
+    // =======================================================
+    
+    // ORDEM DO MENU AQUIÃ!
+    // Liste os grupos EXATAMENTE como estão no JSON (maiúsculas importam).
+    // O que não estiver aqui será ignorado ou jogado pro final.
+    const ordemMenu = [
+        "TRABALHOS",    // Vai conter os subgrupos (Pinturas, Esculturas...)
+        "EXPOSIÇÃO",    // Mudado para singular conforme seu JSON atual ("EXPOSIÇÃO")
+        "NOTÍCIAS",
+        "TEXTOS",
+        "BIO"
+    ];
+
+    // Subgrupos que pertencem a "TRABALHOS"
+    const subgruposTrabalhos = [
+        "PINTURAS", 
+        "OBJETOS DE PAREDE", 
+        "OBJETOS", 
+        "ESCULTURAS", 
+        "COLAGENS",
+        "PAREDE" // Caso exista no JSON antigo
+    ];
+
+    // =======================================================
+    // 3. LÓGICA DE GERAÇÃO HIERÁRQUICA
     // =======================================================
 
+    // Agrupamento Inicial
+    const groups = {};
+    dadosObras.forEach(obra => {
+        if(obra.GRUPO) {
+            const nomeGrupo = obra.GRUPO.trim();
+            if (!groups[nomeGrupo]) groups[nomeGrupo] = [];
+            groups[nomeGrupo].push(obra);
+        }
+    });
+
+    const navContainer = document.getElementById('main-nav');
+
+    // Função de Ordenação de Obras (Ano desc > A-Z)
     function sortWorks(a, b) {
         const anoA = a.ANO ? a.ANO.toString() : "0000";
         const anoB = b.ANO ? b.ANO.toString() : "0000";
-        // Ano Decrescente
         if (anoB !== anoA) return anoB.localeCompare(anoA, undefined, { numeric: true });
-        // Título A-Z
         return a.TITULO.localeCompare(b.TITULO);
     }
 
-    // Agrupamento
-    const groups = {};
-    dadosObras.forEach(obra => {
-        if (!groups[obra.GRUPO]) groups[obra.GRUPO] = [];
-        groups[obra.GRUPO].push(obra);
-    });
-
-    // Ordenação e Renderização
-    const navContainer = document.getElementById('main-nav');
-    const sortedGroupNames = Object.keys(groups).sort();
-
-sortedGroupNames.forEach(groupName => {
-        groups[groupName].sort(sortWorks);
-
-        const navItem = document.createElement('div');
-        navItem.className = 'nav-item';
-
-        // --- NOVO: Variável para controlar o tempo deste item específico
-        let closeTimer;
-
-        const btn = document.createElement('div');
-        btn.className = 'group-btn';
-        btn.innerHTML = `${groupName} <span class="arrow">▼</span>`;
+    // Geração baseada na ORDEM MANUAL
+    ordemMenu.forEach(menuItemName => {
         
-        // Toggle do Menu (Clique)
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
+        // --- CASO ESPECIAL: TRABALHOS (Menu Pai) ---
+        if (menuItemName === "TRABALHOS") {
+            const navItem = document.createElement('div');
+            navItem.className = 'nav-item';
             
-            // Se estiver abrindo este, limpa timer anterior se houver
-            if (closeTimer) clearTimeout(closeTimer);
+            // Botão Principal
+            const mainBtn = document.createElement('div');
+            mainBtn.className = 'main-link-btn';
+            mainBtn.innerHTML = `TRABALHOS <span class="arrow-main">▼</span>`;
+            
+            // Timer para fechar (2 segundos)
+            let closeTimer;
 
-            document.querySelectorAll('.nav-item.active').forEach(item => {
-                if (item !== navItem) item.classList.remove('active');
+            // Eventos do Pai (Trabalhos)
+            mainBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDropdown(navItem);
             });
-            navItem.classList.toggle('active');
-        });
 
-        // --- NOVO: Lógica de 5 segundos (Desktop) ---
-        
-        // 1. Quando o mouse sai da área do botão+menu
-        navItem.addEventListener('mouseleave', () => {
-            // Só executa se for desktop e se o menu estiver aberto
-            if (window.innerWidth > 768 && navItem.classList.contains('active')) {
-                closeTimer = setTimeout(() => {
-                    navItem.classList.remove('active');
-                }, 5000); // 5000 milissegundos = 5 segundos
-            }
-        });
-
-        // 2. Se o mouse voltar antes dos 5s, cancela o fechamento
-        navItem.addEventListener('mouseenter', () => {
-            if (closeTimer) clearTimeout(closeTimer);
-        });
-        // ---------------------------------------------
-
-        const dropdown = document.createElement('div');
-        dropdown.className = 'dropdown-menu';
-
-        const worksList = document.createElement('div');
-        worksList.className = 'works-list';
-
-        groups[groupName].forEach(work => {
-            const link = document.createElement('a');
-            link.href = work.URL;
-            link.className = 'work-link';
-            link.target = "conteudo-site";
-            
-            const yearText = work.ANO ? `<span class="work-year">${work.ANO}</span>` : '';
-            link.innerHTML = `<span>${work.TITULO}</span> ${yearText}`;
-            
-            link.addEventListener('click', () => {
-                if(window.innerWidth <= 768) {
-                    toggleMobileMenu();
-                } else {
-                    navItem.classList.remove('active');
+            // Hover (Desktop): Fecha após 2s
+            navItem.addEventListener('mouseleave', () => {
+                if (window.innerWidth > 768 && navItem.classList.contains('active')) {
+                    closeTimer = setTimeout(() => {
+                        navItem.classList.remove('active');
+                        // Fecha submenus internos também para resetar estado
+                        navItem.querySelectorAll('.sub-group-btn.open').forEach(b => clickSubGroup(b));
+                    }, 2000); 
                 }
             });
-            
-            worksList.appendChild(link);
-        });
 
-        dropdown.appendChild(worksList);
-        navItem.appendChild(btn);
-        navItem.appendChild(dropdown);
-        navContainer.appendChild(navItem);
+            navItem.addEventListener('mouseenter', () => {
+                if (closeTimer) clearTimeout(closeTimer);
+            });
+
+            // Container do Dropdown Principal
+            const dropdown = document.createElement('div');
+            dropdown.className = 'dropdown-menu';
+
+            // Gerar Subgrupos
+            subgruposTrabalhos.forEach(subName => {
+                if (groups[subName]) { // Só cria se existir obras
+                    const subContainer = document.createElement('div');
+                    subContainer.className = 'sub-group-container';
+                    
+                    // Botão do Subgrupo (Acordeão)
+                    const subBtn = document.createElement('div');
+                    subBtn.className = 'sub-group-btn';
+                    subBtn.innerHTML = `${subName} <span class="arrow-sub">▼</span>`;
+                    
+                    // Lista Oculta
+                    const worksList = document.createElement('div');
+                    worksList.className = 'works-list';
+                    
+                    // Preencher Obras
+                    groups[subName].sort(sortWorks);
+                    groups[subName].forEach(work => {
+                        const link = createWorkLink(work);
+                        worksList.appendChild(link);
+                    });
+
+                    // Click do Subgrupo
+                    subBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        // Fecha outros subgrupos irmãos (efeito sanfona exclusivo)
+                        dropdown.querySelectorAll('.sub-group-btn.open').forEach(otherBtn => {
+                            if (otherBtn !== subBtn) clickSubGroup(otherBtn);
+                        });
+                        clickSubGroup(subBtn);
+                    });
+
+                    subContainer.appendChild(subBtn);
+                    subContainer.appendChild(worksList);
+                    dropdown.appendChild(subContainer);
+                }
+            });
+
+            navItem.appendChild(mainBtn);
+            navItem.appendChild(dropdown);
+            navContainer.appendChild(navItem);
+        
+        } else {
+            // --- CASOS NORMAIS (Exposições, Bio, Notícias...) ---
+            // Verifica se é um grupo de obras ou página única
+            const groupItems = groups[menuItemName];
+            
+            if (groupItems) {
+                const navItem = document.createElement('div');
+                navItem.className = 'nav-item';
+
+                // Se tiver só 1 item e não for EXPOSIÇÃO (exposições geralmente são várias)
+                // Ajuste lógico: Se for BIO, TEXTOS ou NOTÍCIAS, trata como link direto se tiver só 1
+                if (groupItems.length === 1 && ["BIO", "TEXTOS", "NOTÍCIAS"].includes(menuItemName)) {
+                    const link = document.createElement('a');
+                    link.className = 'main-link-btn';
+                    link.href = groupItems[0].URL;
+                    link.target = "conteudo-site";
+                    link.innerHTML = menuItemName;
+                    link.addEventListener('click', closeAllMenus);
+                    navItem.appendChild(link);
+                } else {
+                    // Dropdown padrão (Lista simples sem subgrupos)
+                    // Ex: EXPOSIÇÕES
+                    let closeTimer;
+                    
+                    const btn = document.createElement('div');
+                    btn.className = 'main-link-btn';
+                    btn.innerHTML = `${menuItemName} <span class="arrow-main">▼</span>`;
+                    
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        toggleDropdown(navItem);
+                    });
+
+                    // Timer 2s
+                    navItem.addEventListener('mouseleave', () => {
+                        if (window.innerWidth > 768 && navItem.classList.contains('active')) {
+                            closeTimer = setTimeout(() => {
+                                navItem.classList.remove('active');
+                            }, 2000);
+                        }
+                    });
+                    navItem.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+
+                    const dropdown = document.createElement('div');
+                    dropdown.className = 'dropdown-menu';
+                    
+                    // Lista direta (sem subgrupos)
+                    // Reusando estilos da works-list mas visível direto
+                    const worksList = document.createElement('div');
+                    worksList.className = 'works-list expanded'; // Classe expanded força visibilidade
+                    worksList.style.maxHeight = "400px"; // Override height
+                    worksList.style.background = "transparent";
+
+                    groupItems.sort(sortWorks);
+                    groupItems.forEach(work => {
+                        const link = createWorkLink(work);
+                        worksList.appendChild(link);
+                    });
+
+                    dropdown.appendChild(worksList);
+                    navItem.appendChild(btn);
+                    navItem.appendChild(dropdown);
+                }
+                navContainer.appendChild(navItem);
+            }
+        }
     });
 
     // =======================================================
-    // 3. MENU MOBILE
+    // 4. FUNÇÕES AUXILIARES
+    // =======================================================
+
+    function createWorkLink(work) {
+        const link = document.createElement('a');
+        link.href = work.URL;
+        link.className = 'work-link';
+        link.target = "conteudo-site";
+        
+        const yearText = work.ANO ? `<span class="work-year">${work.ANO}</span>` : '';
+        link.innerHTML = `<span>${work.TITULO}</span> ${yearText}`;
+        
+        link.addEventListener('click', closeAllMenus);
+        return link;
+    }
+
+    function toggleDropdown(navItem) {
+        // Se estiver abrindo, fecha os outros
+        if (!navItem.classList.contains('active')) {
+            document.querySelectorAll('.nav-item.active').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+        navItem.classList.toggle('active');
+    }
+
+    function clickSubGroup(btn) {
+        btn.classList.toggle('open');
+        const list = btn.nextElementSibling;
+        list.classList.toggle('expanded');
+    }
+
+    function closeAllMenus() {
+        if(window.innerWidth <= 768) {
+            toggleMobileMenu();
+        } else {
+            document.querySelectorAll('.nav-item.active').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+    }
+
+    // =======================================================
+    // 5. CONTROLE GERAL E MOBILE
     // =======================================================
     const hamburger = document.getElementById('hamburger-btn');
     const navDesktop = document.getElementById('main-nav');
@@ -919,30 +1878,53 @@ sortedGroupNames.forEach(groupName => {
     function toggleMobileMenu() {
         hamburger.classList.toggle('mobile-active');
         navDesktop.classList.toggle('open');
+        
+        if (!navDesktop.classList.contains('open')) {
+            // Resetar estados ao fechar mobile
+            document.querySelectorAll('.nav-item.active').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.sub-group-btn.open').forEach(b => clickSubGroup(b));
+        }
     }
 
-    hamburger.addEventListener('click', toggleMobileMenu);
+    hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMobileMenu();
+    });
 
-    // Resetar iframe ao clicar no logo
     function resetFrame() {
         document.getElementById('main-frame').src = "about:blank";
+        if (navDesktop.classList.contains('open')) toggleMobileMenu();
     }
 
-    // Fechar ao clicar fora (Desktop)
+    // FECHAR AO CLICAR FORA (INCLUINDO IFRAME VIA BLURRED EVENT SE POSSÍVEL)
+    // Nota: Iframe captura clicks, então o evento de 'click' no body não funciona se clicar no site.
+    // A solução mais robusta para "clique no iframe" é usar um overlay invisível ou aceitar que o hover resolve no desktop.
+    // Mas para cliques no próprio menu/header fora dos botões:
     document.addEventListener('click', (e) => {
-        if (window.innerWidth > 768) {
-            if (!navDesktop.contains(e.target)) {
+        const header = document.querySelector('.header-fixed');
+        if (!header.contains(e.target)) {
+            // Fecha Desktop Dropdowns
+            if (window.innerWidth > 768) {
                 document.querySelectorAll('.nav-item.active').forEach(item => {
                     item.classList.remove('active');
                 });
+            } else {
+                // Fecha Mobile se clicar fora (na parte escura do menu se houver gap, ou reset)
+                // Geralmente no mobile o menu ocupa tudo, então esse caso é raro.
             }
+        }
+    });
+
+    // Tentar detectar foco no iframe (quando o usuário clica no site) para fechar menu
+    window.addEventListener('blur', () => {
+        if (window.innerWidth > 768) {
+            document.querySelectorAll('.nav-item.active').forEach(item => {
+                item.classList.remove('active');
+            });
         }
     });
 
 </script>
 </body>
 </html>
-
-
-
 
