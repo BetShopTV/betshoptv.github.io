@@ -193,7 +193,7 @@
     "id_peca": "0307",
     "titulo": "03/07 Super Telão 01",
     "preco": 150,
-    "status": "ACERVO",
+    "status": "X",
     "tecnica": "Impressão offset em papel couché transferida para EVA estampado, tinta acrílica, suporte angular e parafuso.",
     "dimensao": "10 x 7,5 x 5,5 cm",
     "imagens": [
@@ -294,7 +294,7 @@
     "id_peca": "0402",
     "titulo": "04/02 Filmadora 02",
     "preco": 250,
-    "status": "ACERVO",
+    "status": "X",
     "tecnica": "Impressão offset em papel couché transferida para refugo de EVA",
     "dimensao": "27 x 20,5 x 6 cm",
     "imagens": [
@@ -578,7 +578,7 @@
     "id_peca": "0605",
     "titulo": "06/05 Telefone 03",
     "preco": 350,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA.",
     "dimensao": "4 x 20,5 x 24 cm",
     "imagens": [
@@ -717,7 +717,7 @@
     "id_peca": "0615",
     "titulo": "06/15 Telefone 08",
     "preco": 600,
-    "status": "X",
+    "status": "VENDIDAAA",
     "tecnica": "Impressões offset em papel couché transferidas para refugo de EVA e pregos.",
     "dimensao": "27 x 20,5 x 10 cm",
     "imagens": [
