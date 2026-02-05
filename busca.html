@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca de Peças - BetShopTV</title>
+    <style>
+        :root { 
+            --red: #ff0000; --ink: #2b2424; --beige: #bebab0; --white: #ffffff;
+            --ff-body: "Roboto SemiCondensed", sans-serif;
+        }
+        
+        body { 
+            background: var(--beige); color: var(--ink); font-family: var(--ff-body); 
+            margin: 0; padding: 2vw; display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* Container de Busca Centralizado */
+        .search-area {
+            display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 30px;
+        }
+
+        .search-box { display: flex; width: clamp(250px, 40%, 500px); }
+        input { flex: 1; padding: 12px; border: 1px solid var(--ink); font-size: 1.2rem; outline: none; text-align: center; }
+        button.btn-buscar { padding: 12px 25px; background: var(--red); color: #fff; cursor: pointer; font-weight: bold; border: 1px solid var(--ink); border-left: none; }
+
+        /* Setas Centralizadas Abaixo */
+        .nav-controls { display: flex; gap: 40px; }
+        .nav-arrow { 
+            background: none; border: none; color: var(--ink); font-size: 2.5rem; 
+            cursor: pointer; font-weight: bold; padding: 5px 20px; transition: color 0.2s;
+        }
+        .nav-arrow:hover { color: var(--red); }
+
+        #error-msg { color: var(--red); font-weight: bold; margin-bottom: 20px; display: none; }
+
+        /* Container Principal */
+        #result { display: none; width: 88vw; max-width: 1200px; }
+
+        /* Ficha técnica */
+        .info-container { 
+            background: var(--white); padding: clamp(20px, 4vw, 40px); margin-bottom: 20px; 
+            border: 1px solid var(--ink); text-align: left; 
+        }
+        .info-container h2 { color: var(--red); margin: 0 0 15px 0; font-size: clamp(1.8rem, 5vw, 3rem); }
+        .info-container p { margin: 10px 0; font-size: clamp(0.9rem, 2vw, 1.2rem); line-height: 1.4; }
+
+        /* --- GRID CORRIGIDO (SEM CROP) --- */
+        .gallery { 
+            display: grid;
+            /* Cria colunas dinâmicas: Mínimo de 300px, máximo de 1 fração do espaço */
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            width: 100%;
+            align-items: start; /* Alinha ao topo para evitar esticamentos verticais */
+        }
+
+        .gallery img {
+            width: 100%;    /* Ocupa toda a largura da célula do grid */
+            height: auto;   /* A altura se ajusta proporcionalmente. ZERO CROP. */
+            border: 1px solid var(--ink);
+            cursor: pointer;
+            display: block; /* Remove espaços indesejados abaixo da imagem */
+        }
+
+        /* Lightbox */
+        #lightbox {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--beige); z-index: 1000; justify-content: center; align-items: center;
+            overflow-y: hidden; 
+        }
+        .lb-content { display: flex; overflow-x: scroll; scroll-snap-type: x mandatory; width: 100%; height: 100%; gap: 0; }
+        .lb-content img { scroll-snap-align: center; width: 100vw; height: 100vh; object-fit: contain; flex-shrink: 0; padding: 40px; box-sizing: border-box; }
+
+        /* Scrollbar Personalizada */
+        .lb-content::-webkit-scrollbar { height: 12px; }
+        .lb-content::-webkit-scrollbar-track { background: var(--beige); }
+        .lb-content::-webkit-scrollbar-thumb { background: var(--red); border-radius: 10px; border: 2px solid var(--beige); }
+
+        .lb-close { position: absolute; top: 20px; right: 30px; color: var(--red); font-size: 50px; cursor: pointer; z-index: 1010; font-weight: bold; }
+
+        @media (max-width: 850px) {
+            .search-box, #result { width: 94vw; }
+            /* No mobile, uma coluna só */
+            .gallery { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="search-area">
+        <div class="search-box">
+            <input type="text" id="idBusca" placeholder="0000" maxlength="4" onkeydown="if(event.key==='Enter') buscarPorInput()">
+            <button class="btn-buscar" onclick="buscarPorInput()">BUSCAR</button>
+        </div>
+        
+        <div class="nav-controls">
+            <button class="nav-arrow" onclick="navegar(-1)" title="Anterior">&lt;</button>
+            <button class="nav-arrow" onclick="navegar(1)" title="Próxima">&gt;</button>
+        </div>
+    </div>
+
+    <div id="error-msg">NÃO ENCONTRADO</div>
+
+    <div id="result">
+        <div class="info-container">
+            <h2 id="det-title"></h2>
+            <p><strong>Técnica:</strong> <span id="det-tech"></span></p>
+            <p><strong>Dimensões:</strong> <span id="det-dim"></span></p>
+        </div>
+        <div class="gallery" id="det-gallery"></div>
+    </div>
+
+    <div id="lightbox" onclick="fecharAoClicarBackground(event)">
+        <span class="lb-close" onclick="fecharLightbox()">&times;</span>
+        <div class="lb-content" id="lb-images"></div>
+    </div>
+
+    <script>
+        let todasPecasValidas = [];
+        let indiceAtual = -1;
+        let pecaExibida = null;
+
+        async function carregarDados() {
+            try {
+                const resposta = await fetch('https://betshoptv.com/dados/pecas.json');
+                const dados = await resposta.json();
+                todasPecasValidas = dados.filter(p => p.titulo && p.titulo.trim() !== "");
+            } catch (e) { console.error("Erro ao carregar banco de dados."); }
+        }
+        carregarDados();
+
+        function buscarPorInput() {
+            const id = document.getElementById('idBusca').value;
+            const index = todasPecasValidas.findIndex(p => p.id_peca === id);
+            if (index !== -1) {
+                exibirPeca(index);
+            } else {
+                document.getElementById('result').style.display = 'none';
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        function navegar(direcao) {
+            if (todasPecasValidas.length === 0) return;
+            let novoIndice = indiceAtual + direcao;
+            if (novoIndice < 0) novoIndice = todasPecasValidas.length - 1;
+            if (novoIndice >= todasPecasValidas.length) novoIndice = 0;
+            exibirPeca(novoIndice);
+        }
+
+        function exibirPeca(index) {
+            indiceAtual = index;
+            pecaExibida = todasPecasValidas[index];
+            document.getElementById('idBusca').value = pecaExibida.id_peca;
+            document.getElementById('error-msg').style.display = 'none';
+            document.getElementById('det-title').innerText = pecaExibida.titulo;
+            document.getElementById('det-tech').innerText = pecaExibida.tecnica;
+            document.getElementById('det-dim').innerText = pecaExibida.dimensao;
+            
+            const gallery = document.getElementById('det-gallery');
+            gallery.innerHTML = '';
+            pecaExibida.imagens.forEach((imgName, idx) => {
+                const img = document.createElement('img');
+                img.src = `https://betshoptv.com/img/fallback/${imgName}.jpg`;
+                img.onclick = () => abrirLightbox(idx);
+                gallery.appendChild(img);
+            });
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function abrirLightbox(index) {
+            const lb = document.getElementById('lightbox');
+            const lbContent = document.getElementById('lb-images');
+            lbContent.innerHTML = '';
+            const imgs = pecaExibida.imagens;
+            const total = imgs.length;
+            const nomesComClones = [imgs[total-1], ...imgs, imgs[0]];
+
+            nomesComClones.forEach(name => {
+                const img = document.createElement('img');
+                img.src = `https://betshoptv.com/img/fallback/${name}.jpg`;
+                lbContent.appendChild(img);
+            });
+
+            lb.style.display = 'flex';
+            setTimeout(() => {
+                lbContent.scrollLeft = (index + 1) * window.innerWidth;
+            }, 10);
+
+            lbContent.onscroll = () => {
+                if (lbContent.scrollLeft <= 0) {
+                    lbContent.scrollLeft = total * window.innerWidth;
+                } else if (lbContent.scrollLeft >= (total + 1) * window.innerWidth) {
+                    lbContent.scrollLeft = window.innerWidth;
+                }
+            };
+        }
+
+        function fecharLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+        function fecharAoClicarBackground(e) { if (e.target.tagName !== 'IMG') fecharLightbox(); }
+
+        // Navegação por teclado (Global + Lightbox)
+        window.addEventListener('keydown', (e) => {
+            const lb = document.getElementById('lightbox');
+            const estaNoLightbox = lb.style.display === 'flex';
+
+            if (estaNoLightbox) {
+                const content = document.getElementById('lb-images');
+                if (e.key === 'Escape') fecharLightbox();
+                if (e.key === 'ArrowRight') content.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+                if (e.key === 'ArrowLeft') content.scrollBy({ left: -window.innerWidth, behavior: 'smooth' });
+            } else {
+                if (e.key === 'ArrowRight') navegar(1);
+                if (e.key === 'ArrowLeft') navegar(-1);
+            }
+        });
+    </script>
+</body>
+</html>
