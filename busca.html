@@ -93,6 +93,16 @@
 
         .lb-close { position: absolute; top: 20px; right: 30px; color: var(--red); font-size: 50px; cursor: pointer; z-index: 1010; font-weight: bold; }
 
+/* Sinalização de Status */
+        .status-container { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        
+        .tag-acervo { 
+            border: 1px solid var(--ink); padding: 2px 8px; 
+            font-size: 0.8rem; font-weight: bold; letter-spacing: 1px; background: #bebab0;
+        }
+
+        .dot-status { color: var(--red); font-size: 1.2rem; }
+
         /* Ajustes Mobile */
         @media (max-width: 1000px) { .gallery { column-count: 3; } }
         @media (max-width: 700px) { .gallery { column-count: 2; } }
@@ -122,6 +132,7 @@
             <h2 id="det-title"></h2>
             <p><span id="det-tech"></span></p>
             <p> <span id="det-dim"></span></p>
+            <div id="det-status" class="status-container"></div>
         </div>
         <div class="gallery" id="det-gallery"></div>
     </div>
@@ -160,7 +171,7 @@
             exibirPeca(novoIndice);
         }
 
-        function exibirPeca(index) {
+function exibirPeca(index) {
             indiceAtual = index;
             pecaExibida = todasPecasValidas[index];
             document.getElementById('idBusca').value = pecaExibida.id_peca;
@@ -168,7 +179,20 @@
             document.getElementById('det-title').innerText = pecaExibida.titulo;
             document.getElementById('det-tech').innerText = pecaExibida.tecnica;
             document.getElementById('det-dim').innerText = pecaExibida.dimensao;
+
+            // --- Lógica de Sinalização ---
+            const statusContainer = document.getElementById('det-status');
+            statusContainer.innerHTML = ''; // Limpa antes de inserir
             
+            if (pecaExibida.status && pecaExibida.status !== "X") {
+                if (pecaExibida.status.toUpperCase() === "ACERVO") {
+                    statusContainer.innerHTML = '<span class="tag-acervo">ACERVO</span>';
+                } else {
+                    // Para qualquer outro status (ex: Vendido), mostra o ponto
+                    statusContainer.innerHTML = '<span class="dot-status">⬤</span>';
+                }
+            }
+
             const gallery = document.getElementById('det-gallery');
             gallery.innerHTML = '';
             pecaExibida.imagens.forEach((imgName, idx) => {
@@ -179,7 +203,6 @@
             });
             document.getElementById('result').style.display = 'block';
         }
-
         function abrirLightbox(index) {
             const lb = document.getElementById('lightbox');
             const lbContent = document.getElementById('lb-images');
