@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="icon" href="https://betshoptv.com/FAVICON.png" type="image/x-icon">
-    <title>BUSCA - BetShopTV</title>
+    <title>BUSCA</title>
     <style>
         :root { 
             --red: #ff0000; --ink: #2b2424; --beige: #bebab0; --white: #ffffff;
@@ -219,6 +219,42 @@
                 if (e.key === 'ArrowLeft') navegar(-1);
             }
         });
+        
+        // 1. Navegação por Roda do Mouse / Trackpad (Desktop)
+let scrollCooldown = false;
+window.addEventListener('wheel', (e) => {
+    const lb = document.getElementById('lightbox');
+    // Só navega entre peças se o lightbox estiver FECHADO
+    if (lb.style.display === 'flex') return;
+
+    // Detecta scroll horizontal ou vertical vigoroso
+    if (!scrollCooldown && (Math.abs(e.deltaX) > 40 || Math.abs(e.deltaY) > 80)) {
+        scrollCooldown = true;
+        navegar(e.deltaX > 0 || e.deltaY > 0 ? 1 : -1);
+         
+        // Timer para evitar que um único "scroll" pule 10 peças de uma vez
+        setTimeout(() => { scrollCooldown = false; }, 500); 
+    }
+});
+
+// 2. Navegação por Gesto de Deslizar (Mobile Swipe)
+let touchStartX = 0;
+window.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+window.addEventListener('touchend', (e) => {
+    const lb = document.getElementById('lightbox');
+    if (lb.style.display === 'flex') return;
+
+    let touchEndX = e.changedTouches[0].screenX;
+    let diff = touchStartX - touchEndX;
+
+    // Se o deslize for maior que 100px, troca de peça
+    if (Math.abs(diff) > 100) {
+        navegar(diff > 0 ? 1 : -1);
+    }
+}, { passive: true });
     </script>
 </body>
 </html>
