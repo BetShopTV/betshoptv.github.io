@@ -1,6 +1,7 @@
 [
   {
     "id_peca": "0201",
+    "apelido": "yashica-mara",
     "titulo": "02/01 Câmera fotográfica 04",
     "preco": 150,
     "status": "X",
@@ -14,6 +15,7 @@
   },
   {
     "id_peca": "0202",
+    "apelido": "abilio-cuisine",
     "titulo": "02/02 Auto Rádio 04",
     "preco": 150,
     "status": "X",
@@ -27,6 +29,7 @@
   },
   {
     "id_peca": "0203",
+    "apelido": "video-sapiens",
     "titulo": "02/03 Videocassete 04",
     "preco": 300,
     "status": "VENDIDAAA",
@@ -40,6 +43,7 @@
   },
   {
     "id_peca": "0204",
+    "apelido": "cher-beltrao",
     "titulo": "02/04 Microfone 04",
     "preco": 150,
     "status": "VENDIDAAA",
@@ -53,6 +57,7 @@
   },
   {
     "id_peca": "0205",
+    "apelido": "kodak-gold100",
     "titulo": "02/05 Câmera fotográfica 05",
     "preco": 150,
     "status": "VENDIDAAA",
@@ -65,6 +70,7 @@
   },
   {
     "id_peca": "0206",
+    "apelido": "caneta-casarao",
     "titulo": "02/06 Câmera fotográfica 06",
     "preco": 150,
     "status": "X",
@@ -77,6 +83,7 @@
   },
   {
     "id_peca": "0207",
+    "apelido": "disk-cancan",
     "titulo": "02/07 Telefone 06",
     "preco": 150,
     "status": "X",
@@ -90,6 +97,7 @@
   },
   {
     "id_peca": "0208",
+    "apelido": "trisal-lobao",
     "titulo": "02/08 Microfone 05",
     "preco": 150,
     "status": "VENDIDAAA",
@@ -102,6 +110,7 @@
   },
   {
     "id_peca": "0209",
+    "apelido": "sai-de-baixo",
     "titulo": "02/09 Super Telão 03",
     "preco": 150,
     "status": "X",
@@ -114,6 +123,7 @@
   },
   {
     "id_peca": "0301",
+    "apelido": "brincao-pendente",
     "titulo": "03/01 Rádio 01",
     "preco": 150,
     "status": "VENDIDAAA",
@@ -128,6 +138,7 @@
   },
   {
     "id_peca": "0302",
+    "apelido": "roberta-close",
     "titulo": "03/02 Câmera fotográfica 01",
     "preco": 150,
     "status": "X",
@@ -141,6 +152,7 @@
   },
   {
     "id_peca": "0303",
+    "apelido": "sorvete-porrete",
     "titulo": "03/03 Polaroid 01",
     "preco": 150,
     "status": "VENDIDAAA",
@@ -154,6 +166,7 @@
   },
   {
     "id_peca": "0304",
+    "apelido": "helice-tubular",
     "titulo": "03/04 Auto Rádio 01",
     "preco": 150,
     "status": "X",
@@ -166,6 +179,7 @@
   },
   {
     "id_peca": "0305",
+    "apelido": "display-tv",
     "titulo": "03/05 TV Portátil 01",
     "preco": 200,
     "status": "VENDIDAAA",
@@ -179,6 +193,7 @@
   },
   {
     "id_peca": "0306",
+    "apelido": "motel-fueon",
     "titulo": "03/06 Stereo System 01",
     "preco": 150,
     "status": "X",
@@ -191,6 +206,7 @@
   },
   {
     "id_peca": "0307",
+    "apelido": "supertelao-fleon",
     "titulo": "03/07 Super Telão 01",
     "preco": 150,
     "status": "X",
@@ -203,6 +219,7 @@
   },
   {
     "id_peca": "0308",
+    "apelido": "moinho-buraco",
     "titulo": "03/08 Auto Rádio 02",
     "preco": 250,
     "status": "X",
@@ -216,6 +233,7 @@
   },
   {
     "id_peca": "0309",
+    "apelido": "abraco-brasil",
     "titulo": "03/09 Conjunto de som e imagem 01",
     "preco": 150,
     "status": "VENDIDAAA",
@@ -228,6 +246,7 @@
   },
   {
     "id_peca": "0310",
+    "apelido": "mechamadegostoso",
     "titulo": "03/10 Filmadora 01",
     "preco": 150,
     "status": "VENDIDAAA",
@@ -241,6 +260,7 @@
   },
   {
     "id_peca": "0311",
+    "apelido": "funcionario-globo",
     "titulo": "03/11 Microcomputador 01",
     "preco": 150,
     "status": "X",
@@ -254,6 +274,7 @@
   },
   {
     "id_peca": "0312",
+    "apelido": "faculdades-br",
     "titulo": "03/12 Microcomputador 02",
     "preco": 250,
     "status": "VENDIDAAA",
@@ -267,6 +288,7 @@
   },
   {
     "id_peca": "0313",
+    "apelido": "yashica-mila",
     "titulo": "03/13 Câmera fotográfica 02",
     "preco": 250,
     "status": "X",
@@ -280,6 +302,7 @@
   },
   {
     "id_peca": "0401",
+    "apelido": "figueiredo-tortura",
     "titulo": "04/01 TV 01",
     "preco": 1000,
     "status": "ACERVO",
@@ -292,6 +315,7 @@
   },
   {
     "id_peca": "0402",
+    "apelido": "boni-comendo",
     "titulo": "04/02 Filmadora 02",
     "preco": 250,
     "status": "X",
@@ -304,6 +328,7 @@
   },
   {
     "id_peca": "0403",
+    "apelido": "rodeio-gemeas",
     "titulo": "04/03 Filmadora 03",
     "preco": 400,
     "status": "VENDIDAAA",
@@ -317,6 +342,7 @@
   },
   {
     "id_peca": "0404",
+    "apelido": "flip-charge",
     "titulo": "04/04 Telão 01",
     "preco": 300,
     "status": "VENDIDAAA",
@@ -329,6 +355,7 @@
   },
   {
     "id_peca": "0405",
+    "apelido": "bombomzao",
     "titulo": "04/05 Microcomputador 03",
     "preco": 350,
     "status": "ACERVO",
@@ -343,6 +370,7 @@
   },
   {
     "id_peca": "0406",
+    "apelido": "orquidea",
     "titulo": "04/06 Auto Rádio 03",
     "preco": 300,
     "status": "VENDIDAAA",
@@ -357,6 +385,7 @@
   },
   {
     "id_peca": "0407",
+    "apelido": "sil-buarque",
     "titulo": "04/07 Videocassete 01",
     "preco": 250,
     "status": "ACERVO",
@@ -371,6 +400,7 @@
   },
   {
     "id_peca": "0408",
+    "apelido": "brasil-milionario",
     "titulo": "04/08 Super Telão 02",
     "preco": 250,
     "status": "VENDIDAAA",
@@ -384,6 +414,7 @@
   },
   {
     "id_peca": "0409",
+    "apelido": "tech-cowboy",
     "titulo": "04/09 Telefone 01",
     "preco": 250,
     "status": "VENDIDAAA",
@@ -395,6 +426,7 @@
   },
   {
     "id_peca": "0410",
+    "apelido": "tripa-cassino",
     "titulo": "04/10 Caça-níquel 01",
     "preco": 400,
     "status": "VENDIDAAA",
@@ -409,6 +441,7 @@
   },
   {
     "id_peca": "0411",
+    "apelido": "carlton-glauber",
     "titulo": "04/11 Filmadora 04",
     "preco": 400,
     "status": "VENDIDAAA",
@@ -422,6 +455,7 @@
   },
   {
     "id_peca": "0412",
+    "apelido": "objeto-nobre",
     "titulo": "04/12 Telefone 02",
     "preco": 400,
     "status": "VENDIDAAA",
@@ -435,6 +469,7 @@
   },
   {
     "id_peca": "0413",
+    "apelido": "piadas-azul",
     "titulo": "06/10 Telefone 04",
     "preco": 500,
     "status": "ACERVO",
@@ -448,6 +483,7 @@
   },
   {
     "id_peca": "0501",
+    "apelido": "mola-marrom",
     "titulo": "05/01 Piano 01",
     "preco": 300,
     "status": "VENDIDAAA",
@@ -461,6 +497,7 @@
   },
   {
     "id_peca": "0505",
+    "apelido": "seo-pinto-abaporu",
     "titulo": "05/05 TV Portátil 02",
     "preco": 600,
     "status": "X",
@@ -476,6 +513,7 @@
   },
   {
     "id_peca": "0506",
+    "apelido": "antena-niemeyer",
     "titulo": "05/06 Antena Parabólica 01",
     "preco": 500,
     "status": "VENDIDAAA",
@@ -492,6 +530,7 @@
   },
   {
     "id_peca": "0507",
+    "apelido": "anjo-angelica",
     "titulo": "05/07 Stereo System 02",
     "preco": 600,
     "status": "VENDIDAAA",
@@ -508,6 +547,7 @@
   },
   {
     "id_peca": "0508",
+    "apelido": "braco-de-ferro",
     "titulo": "05/08 Videocassete 02",
     "preco": 300,
     "status": "VENDIDAAA",
@@ -520,6 +560,7 @@
   },
   {
     "id_peca": "0601",
+    "apelido": "cine-pepino",
     "titulo": "06/01 Filmadora 05",
     "preco": 400,
     "status": "VENDIDAAA",
@@ -533,6 +574,7 @@
   },
   {
     "id_peca": "0602",
+    "apelido": "muque-extracao",
     "titulo": "06/02 Som Automotivo 01",
     "preco": 400,
     "status": "X",
@@ -546,6 +588,7 @@
   },
   {
     "id_peca": "0603",
+    "apelido": "hilton-burini",
     "titulo": "06/03 TV 02",
     "preco": 500,
     "status": "VENDIDAAA",
@@ -560,6 +603,7 @@
   },
   {
     "id_peca": "0604",
+    "apelido": "batata-mochila",
     "titulo": "06/04 Stereo System 03",
     "preco": 2000,
     "status": "ACERVO",
@@ -576,6 +620,7 @@
   },
   {
     "id_peca": "0605",
+    "apelido": "barra-collor",
     "titulo": "06/05 Telefone 03",
     "preco": 350,
     "status": "VENDIDAAA",
@@ -590,6 +635,7 @@
   },
   {
     "id_peca": "0606",
+    "apelido": "t-cipis",
     "titulo": "06/06 Videocassete 03",
     "preco": 300,
     "status": "X",
@@ -604,6 +650,7 @@
   },
   {
     "id_peca": "0607",
+    "apelido": "ziraldo-cima",
     "titulo": "06/07 Microfone 02",
     "preco": 350,
     "status": "X",
@@ -618,6 +665,7 @@
   },
   {
     "id_peca": "0608",
+    "apelido": "ziraldo-baixo",
     "titulo": "06/08 TV 03",
     "preco": 350,
     "status": "X",
@@ -632,6 +680,7 @@
   },
   {
     "id_peca": "0609",
+    "apelido": "duartes-trancadas",
     "titulo": "06/09 Microfone 03",
     "preco": 800,
     "status": "X",
@@ -645,6 +694,7 @@
   },
   {
     "id_peca": "0610",
+    "apelido": "motel-semana",
     "titulo": "06/10 Telefone 04",
     "preco": 800,
     "status": "VENDIDAAA",
@@ -660,6 +710,7 @@
   },
   {
     "id_peca": "0611",
+    "apelido": "tira-tora",
     "titulo": "06/11 Antena Parabólica 02",
     "preco": 1000,
     "status": "VENDIDAAA",
@@ -673,6 +724,7 @@
   },
   {
     "id_peca": "0612",
+    "apelido": "cipis-motel",
     "titulo": "06/12 Telefone 07",
     "preco": 500,
     "status": "X",
@@ -688,6 +740,7 @@
   },
   {
     "id_peca": "0613",
+    "apelido": "chave-dedo",
     "titulo": "06/13 TV 04",
     "preco": 500,
     "status": "VENDIDAAA",
@@ -701,6 +754,7 @@
   },
   {
     "id_peca": "0614",
+    "apelido": "doggy-style",
     "titulo": "06/14 TV 05",
     "preco": 700,
     "status": "X",
@@ -715,6 +769,7 @@
   },
   {
     "id_peca": "0615",
+    "apelido": "pica-piercing",
     "titulo": "06/15 Telefone 08",
     "preco": 600,
     "status": "VENDIDAAA",
@@ -728,6 +783,7 @@
   },
   {
     "id_peca": "0616",
+    "apelido": "xu-itau",
     "titulo": "06/16 Telefone 09",
     "preco": 600,
     "status": "VENDIDAAA",
@@ -741,6 +797,7 @@
   },
   {
     "id_peca": "0617",
+    "apelido": "dona-marlene",
     "titulo": "06/17 Câmera fotográfica 07",
     "preco": 600,
     "status": "X",
@@ -755,6 +812,7 @@
   },
   {
     "id_peca": "0701",
+    "apelido": "quadrado-moeda",
     "titulo": "07/01 Microcomputador 04",
     "preco": 600,
     "status": "X",
@@ -771,6 +829,7 @@
   },
   {
     "id_peca": "0703",
+    "apelido": "travesseiro-meninos",
     "titulo": "07/03 Stereo System Portátil 01",
     "preco": 500,
     "status": "X",
@@ -784,6 +843,7 @@
   },
   {
     "id_peca": "0704",
+    "apelido": "muque-cobogo",
     "titulo": "07/04 Stereo System 05",
     "preco": 500,
     "status": "X",
@@ -796,6 +856,7 @@
   },
   {
     "id_peca": "0705",
+    "apelido": "mask-marmita",
     "titulo": "07/05 TV de Bolso 01",
     "preco": 600,
     "status": "VENDIDAAA",
@@ -809,6 +870,7 @@
   },
   {
     "id_peca": "0706",
+    "apelido": "carbono-tecnicolor",
     "titulo": "07/06 Minigame 01",
     "preco": 800,
     "status": "VENDIDAAA",
@@ -823,6 +885,7 @@
   },
   {
     "id_peca": "0707",
+    "apelido": "brahma-bandana",
     "titulo": "07/07 TV 06",
     "preco": 600,
     "status": "X",
@@ -836,6 +899,7 @@
   },
   {
     "id_peca": "0708",
+    "apelido": "amilcar-carbono",
     "titulo": "07/08 Telefone 10",
     "preco": 1200,
     "status": "ACERVO",
@@ -854,6 +918,7 @@
   },
   {
     "id_peca": "0801",
+    "apelido": "juju-lichtenstein",
     "titulo": "08/01 Conjunto de som e imagem 02",
     "preco": 1800,
     "status": "ACERVO",
@@ -868,6 +933,7 @@
   },
   {
     "id_peca": "0802",
+    "apelido": "zefiro-bamerindus",
     "titulo": "08/02 Microcomputador 05",
     "preco": 700,
     "status": "VENDIDAAA",
@@ -882,6 +948,7 @@
   },
   {
     "id_peca": "0803",
+    "apelido": "motel-leda",
     "titulo": "08/03 Telefone 05",
     "preco": 600,
     "status": "VENDIDAAA",
@@ -895,6 +962,7 @@
   },
   {
     "id_peca": "0804",
+    "apelido": "beach-office",
     "titulo": "08/04 Microcomputador 06",
     "preco": 500,
     "status": "VENDIDAAA",
@@ -908,6 +976,7 @@
   },
   {
     "id_peca": "0805",
+    "apelido": "pecados-nazareth",
     "titulo": "08/05 Rádio Embutido 01",
     "preco": 800,
     "status": "VENDIDAAA",
@@ -922,6 +991,7 @@
   },
   {
     "id_peca": "0806",
+    "apelido": "romero-system",
     "titulo": "08/06 Stereo System 04",
     "preco": 500,
     "status": "VENDIDAAA",
@@ -935,6 +1005,7 @@
   },
   {
     "id_peca": "0807",
+    "apelido": "chroma-lynch",
     "titulo": "08/07 Filmadora 06",
     "preco": 500,
     "status": "VENDIDAAA",
@@ -948,6 +1019,7 @@
   },
   {
     "id_peca": "0808",
+    "apelido": "caballero-on-03/94",
     "titulo": "08/08 Filmadora 07",
     "preco": 800,
     "status": "ACERVO",
@@ -962,6 +1034,7 @@
   },
   {
     "id_peca": "0809",
+    "apelido": "boleto-lambada",
     "titulo": "08/09 Microfone 06",
     "preco": 1861,
     "status": "ACERVO",
@@ -976,6 +1049,7 @@
   },
   {
     "id_peca": "0810",
+    "apelido": "tarsila-von-ha",
     "titulo": "08/10 Stereo System 06",
     "preco": 700,
     "status": "X",
@@ -990,6 +1064,7 @@
   },
   {
     "id_peca": "0811",
+    "apelido": "senna-lichtenstein",
     "titulo": "08/11 Câmera fotográfica 08",
     "preco": 800,
     "status": "VENDIDAAA",
@@ -1004,6 +1079,7 @@
   },
   {
     "id_peca": "0813",
+    "apelido": "miro-podrao",
     "titulo": "08/13 TV 07",
     "preco": 500,
     "status": "VENDIDAAA",
@@ -1017,6 +1093,7 @@
   },
   {
     "id_peca": "0814",
+    "apelido": "harry-potter-coracao",
     "titulo": "08/14 Violino 01",
     "preco": 500,
     "status": "VENDIDAAA",
@@ -1030,6 +1107,7 @@
   },
   {
     "id_peca": "0816",
+    "apelido": "kruger-motel",
     "titulo": "08/16 TV 08",
     "preco": 500,
     "status": "VENDIDAAA",
@@ -1043,6 +1121,7 @@
   },
   {
     "id_peca": "0824",
+    "apelido": "esquerra-haring",
     "titulo": "08/24 Filmadora 08",
     "preco": 6000,
     "status": "ACERVO",
