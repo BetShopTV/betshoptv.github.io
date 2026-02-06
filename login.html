@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BetShopTV - Minha Coleção</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Semi+Condensed:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* --- Tokens & Reset --- */
+  :root{
+    --red:#ff0000; --ink:#2b2424; --beige:#bebab0; --white:#ffffff;
+    --bd-thin:1px; 
+    --bd-thick:1px; /* ALTERADO: Tudo 1px agora */
+    --ff-normal:"Roboto", system-ui, sans-serif;
+    --ff-cta:"Roboto Condensed", system-ui, sans-serif;
+    --ff-body:"Roboto SemiCondensed", system-ui, sans-serif;
+    --app-max-width:1200px;
+  }
+  
+  *{box-sizing:border-box}
+  
+  html,body{
+    margin:0; padding:0;
+    background:var(--beige);
+    color:var(--ink);
+    font-family:var(--ff-body);
+    min-height: 100vh;
+  }
+
+  body {
+    padding: 2vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* --- Tipografia --- */
+  h1, h2, h3 { margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: -0.02em; }
+  
+  /* --- Layout Geral --- */
+  .app-container {
+    width: 100%;
+    max-width: var(--app-max-width);
+    margin: 0 auto;
+  }
+
+  /* --- Tela de Login --- */
+  #login-screen {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .login-box {
+    background: var(--white);
+    padding: 3rem 2rem;
+    border: var(--bd-thick) solid var(--ink);
+    /* ALTERADO: Removido box-shadow */
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* NOVO: Logo responsivo com Clamp */
+  .login-logo {
+    width: clamp(120px, 25vw, 220px); /* Mínimo 120px, Pref 25% da tela, Máx 220px */
+    height: auto;
+    margin-bottom: 2rem;
+    display: block;
+  }
+
+  .login-input {
+    width: clamp(120px, 25vw, 220px); /* Mínimo 120px, Pref 25% da tela, Máx 220px */
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: var(--bd-thin) solid var(--ink);
+    font-family: var(--ff-normal);
+    font-size: 1rem;
+    background: #f4f4f4;
+    border-radius: 0; /* Garantir que não tenha arredondamento */
+  }
+  
+  .login-input:focus { background: #bebab0; }
+
+  /* --- Botões --- */
+  .btn {
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: var(--ff-cta);
+    font-weight: 700;
+    border: var(--bd-thick) solid var(--ink);
+    transition: all 1.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+  }
+
+  .btn-primary {
+    background: var(--red);
+    color: var(--white);
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    width: clamp(120px, 25vw, 220px); /* Mínimo 120px, Pref 25% da tela, Máx 220px */
+    border: 1px solid red;
+  }
+  
+  .btn-primary:hover { background: var(--ink); color: var(--beige); border: 1px solid var(--ink); }
+
+  .btn-ghost {
+    background: transparent;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .btn-ghost:hover { background: var(--ink); color: var(--beige); }
+
+  .error-msg { color: var(--red); margin-top: 10px; font-weight: bold; display: none; }
+
+  /* --- Dashboard (Área Logada) --- */
+  #dashboard-screen { display: none; width: 100%; }
+
+  header.user-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: var(--bd-thick) solid var(--ink);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  /* --- Grid de Obras --- */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    align-items: start; /* Alinha os cards no topo, já que terão alturas diferentes */
+  }
+
+  .card {
+    background: var(--white);
+    border: var(--bd-thick) solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* ALTERADO: Removido transition e hover effect */
+  }
+
+  .card-figure {
+    position: relative;
+    /* ALTERADO: Removido aspect-ratio para não cortar */
+    border-bottom: var(--bd-thick) solid var(--ink);
+    background: #000;
+    display: flex; /* Garante que a imagem preencha */
+  }
+
+  .card-img {
+    width: 100%; 
+    height: auto; /* ALTERADO: Altura automática para não distorcer nem cortar */
+    display: block;
+  }
+
+  .card-badge {
+    position: absolute;
+    top: 10px; left: 10px;
+    background: var(--red);
+    color: var(--white);
+    font-family: var(--ff-cta);
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    font-weight: 700;
+    z-index: 2;
+  }
+
+  .card-body {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* ALTERADO: Título menor */
+  .card-title { font-size: 1rem; line-height: 1.1; font-family: var(--ff-cta); }
+  .card-meta { font-size: 0.9rem; color: #555; }
+  
+  .card-footer {
+    padding: 1rem;
+    border-top: var(--bd-thin) solid #eee;
+    background: #fafafa;
+  }
+
+  .btn-view {
+    width: 100%;
+    background: var(--ink);
+    color: var(--white);
+    padding: 0.8rem;
+    font-size: 1rem;
+  }
+  .btn-view:hover { background: var(--red); }
+
+  /* --- Modal Completo --- */
+  .modal-overlay {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(43,36,36,0.95);
+    z-index: 999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .modal-content {
+    background: var(--white);
+    width: 100%; max-width: 900px;
+    max-height: 90vh;
+    border: var(--bd-thick) solid var(--ink);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    position: relative;
+    /* ALTERADO: Removido box-shadow */
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 0; right: 0;
+    background: var(--red);
+    color: var(--white);
+    border: none;
+    width: 40px; height: 40px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+    border-left: var(--bd-thick) solid var(--ink);
+    border-bottom: var(--bd-thick) solid var(--ink);
+  }
+
+  .modal-gallery {
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-right: var(--bd-thick) solid var(--ink);
+  }
+
+  .main-image-container {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 20px;
+  }
+
+  #modal-img-display {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Garante que a imagem inteira apareça no modal */
+  }
+
+  .thumbs-container {
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    width: 100%;
+    overflow-x: auto;
+    background: var(--ink);
+    border-top: var(--bd-thick) solid var(--ink);
+  }
+
+  .thumb {
+    width: 60px; height: 60px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .thumb.active { border-color: var(--red); opacity: 1; }
+
+  .modal-details {
+    padding: 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 3rem; /* Espaço para o botão fechar */
+  }
+
+  /* ALTERADO: Título do modal menor */
+  #modal-title { font-size: 1.5rem; line-height: 1.1; margin-bottom:1rem; }
+
+  .detail-label { font-size: 0.8rem; text-transform: uppercase; color: #777; font-weight: 700; }
+  .detail-value { font-size: 1.1rem; margin-bottom: 1rem; font-family: var(--ff-normal); }
+  
+  .btn-download {
+    margin-top: auto;
+    background: var(--beige);
+    color: var(--ink);
+    text-decoration: none;
+    text-align: center;
+    padding: 1rem;
+    font-family: var(--ff-cta);
+    font-weight: 700;
+    border: var(--bd-thick) solid var(--ink);
+    transition: all 0.2s;
+  }
+  .btn-download:hover { background: var(--ink); color: var(--white); }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .modal-content { grid-template-columns: 1fr; overflow-y: auto; max-height: 95vh; }
+    .modal-gallery { height: auto; border-right: none; border-bottom: var(--bd-thick) solid var(--ink); min-height: 300px; }
+    .modal-details { padding-top: 2rem; }
+  }
+
+</style>
+</head>
+<body>
+
+  <div id="loading" style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); font-family:var(--ff-cta); font-size:1.5rem; color:var(--ink); text-transform:uppercase;">
+    Carregando coleção...
+  </div>
+
+  <div class="app-container">
+    
+    <div id="login-screen" style="display:none;">
+      <div class="login-box">
+        <img src="https://betshoptv.com/elementos/logo-bstv.png" alt="BSTV" class="login-logo">
+        
+        <input type="text" id="input-aposta" class="login-input enter-trigger" placeholder="NÚMERO DA APOSTA">
+        <input type="password" id="input-apelido" class="login-input enter-trigger" placeholder="SENHA">
+        
+        <button class="btn btn-primary" onclick="fazerLogin()" id="btn-login">ACESSAR COLEÇÃO</button>
+        <div id="error-msg" class="error-msg">DADOS INVÁLIDOS</div>
+      </div>
+    </div>
+
+    <div id="dashboard-screen">
+      <header class="user-header">
+        <div>
+          <h2 style="font-family:var(--ff-cta); color:var(--red);">MINHAS PEÇAS</h2>
+          <span id="user-welcome" style="font-size:1.1rem; font-family: var(--ff-normal);">Bem-vindo(a)</span>
+        </div>
+        <button class="btn btn-ghost" onclick="location.reload()">SAIR</button>
+      </header>
+
+      <div id="cards-container" class="gallery-grid">
+        </div>
+      
+      <div id="empty-state" style="display:none; text-align:center; padding:3rem; opacity:0.6; font-family: var(--ff-cta); text-transform:uppercase;">
+        <h3>Nenhuma peça localizada para esta aposta.</h3>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="modal-overlay" class="modal-overlay" onclick="fecharModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="fecharModalSimples()">X</button>
+      
+      <div class="modal-gallery">
+        <div class="main-image-container">
+          <img id="modal-img-display" src="" alt="Detalhe">
+        </div>
+        <div class="thumbs-container" id="modal-thumbs">
+          </div>
+      </div>
+
+      <div class="modal-details">
+        <div>
+          <h2 id="modal-title">TITULO DA PEÇA</h2>
+          <div class="detail-label">TÉCNICA</div>
+          <div id="modal-tecnica" class="detail-value">-</div>
+          
+          <div class="detail-label">DIMENSÃO</div>
+          <div id="modal-dimensao" class="detail-value">-</div>
+          
+          <div class="detail-label">CÓDIGO DE ACERVO</div>
+          <div id="modal-id" class="detail-value">-</div>
+        </div>
+        
+        <a id="btn-download" href="#" target="_blank" class="btn-download" download>BAIXAR IMAGEM (ALTA RESOLUÇÃO)</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- CONFIGURAÇÃO ---
+    const URL_REGUA = 'https://betshoptv.com/dados/passa_regua.json';
+    const URL_PECAS = 'https://betshoptv.com/dados/pecas.json';
+    
+    let dadosRegua = [];
+    let dadosPecas = [];
+
+    // --- INICIALIZAÇÃO ---
+    document.addEventListener("DOMContentLoaded", () => {
+        // Configurar listener do Enter nos inputs
+        const inputs = document.querySelectorAll('.enter-trigger');
+        inputs.forEach(input => {
+            input.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    fazerLogin();
+                }
+            });
+        });
+
+        // Carregar dados
+        Promise.all([
+        fetch(URL_REGUA).then(r => r.json()),
+        fetch(URL_PECAS).then(r => r.json())
+        ])
+        .then(([regua, pecas]) => {
+        dadosRegua = regua;
+        dadosPecas = pecas;
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+        })
+        .catch(err => {
+        document.getElementById('loading').innerHTML = 'ERRO DE CONEXÃO<br><span style="font-size:1rem">Tente recarregar a página</span>';
+        console.error(err);
+        });
+    });
+
+
+    // --- LÓGICA DE LOGIN ---
+    function fazerLogin() {
+      const loginInput = document.getElementById('input-aposta').value.trim();
+      const senhaInput = document.getElementById('input-apelido').value.trim();
+      const errorDiv = document.getElementById('error-msg');
+
+      if(!loginInput || !senhaInput) {
+        errorDiv.innerText = "PREENCHA TODOS OS CAMPOS";
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      const usuario = dadosRegua.find(u => 
+        String(u.aposta).toLowerCase() === loginInput.toLowerCase() && 
+        String(u.apelido_1).toLowerCase() === senhaInput.toLowerCase()
+      );
+
+      if (usuario) {
+        errorDiv.style.display = 'none';
+        iniciarDashboard(usuario);
+      } else {
+        errorDiv.innerText = "DADOS INCORRETOS";
+        errorDiv.style.display = 'block';
+      }
+    }
+
+    // --- RENDERIZAÇÃO DASHBOARD ---
+    function iniciarDashboard(usuario) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard-screen').style.display = 'block';
+      
+      document.getElementById('user-welcome').innerText = `Olá, ${usuario.apelido_1} (Aposta #${usuario.aposta})`;
+
+      const container = document.getElementById('cards-container');
+      container.innerHTML = '';
+
+      const idsUsuario = [usuario.id_1, usuario.id_2, usuario.id_3].map(id => String(id).trim()).filter(id => id !== "");
+      const minhasPecas = dadosPecas.filter(p => idsUsuario.includes(String(p.id_peca)));
+
+      if(minhasPecas.length === 0) {
+        document.getElementById('empty-state').style.display = 'block';
+        return;
+      }
+
+      minhasPecas.forEach(peca => {
+        const listaImagens = processarImagens(peca.imagens);
+        // Usa imagem TMB para o card
+        const imgCapa = listaImagens.length > 0 ? getUrlImgTmb(listaImagens[0]) : 'https://via.placeholder.com/400x400?text=SEM+IMAGEM';
+
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-figure">
+            <span class="card-badge">SUA OBRA</span>
+            <img src="${imgCapa}" loading="lazy" class="card-img" alt="${peca.titulo}">
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">${peca.titulo}</h3>
+            <div class="card-meta">${peca.tecnica || 'Técnica mista'}</div>
+            <div class="card-meta" style="font-size:0.8rem; margin-top:auto; padding-top:10px;">ID: ${peca.id_peca}</div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-view">VER DETALHES</button>
+          </div>
+        `;
+        
+        card.querySelector('.btn-view').onclick = () => abrirModal(peca, listaImagens);
+        card.onclick = (e) => { if(!e.target.closest('button')) abrirModal(peca, listaImagens); };
+        
+        container.appendChild(card);
+      });
+    }
+
+    // --- LÓGICA DO MODAL (GALERIA) ---
+    function abrirModal(peca, imagens) {
+      const modal = document.getElementById('modal-overlay');
+      const imgDisplay = document.getElementById('modal-img-display');
+      const thumbsContainer = document.getElementById('modal-thumbs');
+      const btnDownload = document.getElementById('btn-download');
+
+      document.getElementById('modal-title').innerText = peca.titulo;
+      document.getElementById('modal-tecnica').innerText = peca.tecnica || '-';
+      document.getElementById('modal-dimensao').innerText = peca.dimensao || '-';
+      document.getElementById('modal-id').innerText = peca.id_peca;
+
+      thumbsContainer.innerHTML = '';
+
+      // Função para mudar imagem principal e link de download
+      const setMainImage = (codigoImg) => {
+        // Display usa TMB (rápido) ou JPG se preferir qualidade no modal
+        // Usando JPG fallback para o display do modal também para melhor qualidade
+        imgDisplay.src = getUrlImgFallback(codigoImg); 
+        
+        // ALTERADO: Link de download usa a pasta fallback e .jpg
+        btnDownload.href = getUrlImgFallback(codigoImg);
+        
+        Array.from(thumbsContainer.children).forEach(t => t.classList.remove('active'));
+        const activeThumb = document.getElementById(`thumb-${codigoImg}`);
+        if(activeThumb) activeThumb.classList.add('active');
+      };
+
+      if(imagens.length > 0) {
+        setMainImage(imagens[0]);
+
+        if(imagens.length > 1) {
+            imagens.forEach(cod => {
+            const img = document.createElement('img');
+            img.src = getUrlImgTmb(cod); // Thumbs usam TMB
+            img.className = 'thumb';
+            img.id = `thumb-${cod}`;
+            img.onclick = () => setMainImage(cod);
+            thumbsContainer.appendChild(img);
+            });
+            thumbsContainer.style.display = 'flex';
+        } else {
+             thumbsContainer.style.display = 'none';
+        }
+      } else {
+        imgDisplay.src = 'https://via.placeholder.com/600x400?text=SEM+FOTO';
+        thumbsContainer.style.display = 'none';
+        btnDownload.style.display = 'none';
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function fecharModal(e) {
+      if(e.target.id === 'modal-overlay') {
+        document.getElementById('modal-overlay').style.display = 'none';
+      }
+    }
+    
+    function fecharModalSimples() {
+       document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    // --- HELPERS ---
+    function processarImagens(campoImagens) {
+      if(Array.isArray(campoImagens)) return campoImagens;
+      if(!campoImagens) return [];
+      return String(campoImagens).split(/[;,]/).map(s => s.trim()).filter(Boolean);
+    }
+
+    // Helper para imagem de exibição (Thumb AVIF)
+    function getUrlImgTmb(codigo) {
+      return `https://betshoptv.com/img/tmb/${codigo}.avif`;
+    }
+
+    // ALTERADO: Novo helper para imagem de download (Fallback JPG)
+    function getUrlImgFallback(codigo) {
+      return `https://betshoptv.com/img/otm/${codigo}.avif`;
+    }
+
+  </script>
+</body>
+</html>
