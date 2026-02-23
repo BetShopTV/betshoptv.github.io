@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SANTACOSTA | Galeria</title>
+<style>
+    :root {
+        --verde-claro: #4aff98;
+        --verde-escuro: #171c1a;
+        --texto-secundario: #b3b3b3; 
+        --linha-divisoria: #333333;
+        --altura-obra: 55vh; /* Altura fixa das imagens */
+        --gap-obras: 40px;   /* Espaçamento horizontal fixo */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    
+    body { 
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+        background-color: var(--verde-escuro); 
+        color: #fff;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* --- HEADER --- */
+    .header-fixed {
+        height: 60px;
+        background-color: var(--verde-escuro);
+        border-bottom: 1px solid var(--linha-divisoria);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4vw;
+        z-index: 2000;
+        flex-shrink: 0;
+    }
+
+    .logo { font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; }
+
+    /* --- ÁREA DE SCROLL --- */
+    .viewer-container {
+        flex-grow: 1;
+        overflow-y: auto;
+        background: #000;
+        scroll-behavior: smooth;
+    }
+
+    #home-view { padding: 40px 0; display: flex; flex-direction: column; gap: 80px; }
+
+    .category-section { display: flex; flex-direction: column; gap: 20px; position: relative; }
+
+    .category-title {
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        color: var(--verde-claro);
+        margin-left: 4vw;
+        font-weight: 900;
+    }
+
+    /* --- CARROSSEL --- */
+    .carousel-outer { position: relative; width: 100%; display: flex; align-items: center; }
+
+    .carousel-track {
+        display: flex;
+        gap: var(--gap-obras);
+        overflow-x: auto;
+        height: var(--altura-obra);
+        padding: 0 50vw; /* Padding de 50vw permite centralizar a primeira e a última imagem */
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+
+    .carousel-item {
+        flex: 0 0 auto;
+        height: 100%;
+        scroll-snap-align: center;
+        display: flex;
+        align-items: center;
+    }
+
+    .carousel-item img {
+        height: 100%;
+        width: auto; /* Mantém proporção */
+        display: block;
+        opacity: 0.69; /* Inativas ficam foscas */
+        transition: opacity 0.3s ease;
+        border: none;
+    }
+
+    .carousel-item.active img { opacity: 1; }
+
+    /* --- SETAS --- */
+    .nav-arrow {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 8vw;
+        background: transparent;
+        color: var(--verde-claro);
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s;
+    }
+    .nav-arrow:hover { background: rgba(255,255,255,0.05); }
+    .arrow-left { left: 0; }
+    .arrow-right { right: 0; }
+
+    /* --- INFO DISPLAY --- */
+    .active-info-display {
+        text-align: center;
+        min-height: 60px;
+        padding-top: 15px;
+    }
+    .info-title { font-size: 14px; font-weight: 700; color: var(--verde-claro); letter-spacing: 0.4px; }
+    .info-year { font-size: 11px; color: var(--texto-secundario); margin-top: 4px; }
+
+    /* IFRAME */
+    #main-frame { width: 100%; height: 100%; border: none; display: none; }
+    #main-frame.active { display: block; }
+    #home-view.hidden { display: none; }
+
+    /* MENU */
+    .nav-desktop { display: flex; gap: 3vw; }
+    .nav-item { cursor: pointer; text-transform: uppercase; font-size: 13px; font-weight: 700; color: var(--texto-secundario); }
+    .nav-item:hover { color: #fff; }
+
+    @media (max-width: 768px) {
+        :root { --altura-obra: 45vh; }
+        .nav-arrow { width: 15vw; }
+        .nav-desktop { display: none; } /* Simplificado para focar no carrossel */
+    }
+</style>
+</head>
+<body>
+
+    <header class="header-fixed">
+        <div class="logo" onclick="showHome()">SANTACOSTA</div>
+        <nav class="nav-desktop" id="main-nav"></nav>
+    </header>
+
+    <main class="viewer-container" id="scroll-container">
+        <div id="home-view"></div>
+        <iframe name="conteudo-site" id="main-frame" src="about:blank"></iframe>
+    </main>
+
+<script>
+    // BOTA BOTA BOTA O JSON AQUIÃÃ!
+    const dadosObras = [
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "n.4, Cartões que não dei",
+        "ANO": "2019",
+        "TECNICA_PT": "Cartões de visita, tinta acrílica, fita adesiva e caixa de ferro",
+        "TECNICA_EN": "Visit cards, acrylic paint, adhesive tape and iron box",
+        "DIMENSOES": "5,5 x 39 x 37 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_a1d12d24b6874e7c86c21d46fdaadd2f~mv2_d_4320_2880_s_4_2.jpg",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_a1d12d24b6874e7c86c21d46fdaadd2f~mv2_d_4320_2880_s_4_2.jpg/v1/fill/w_700,h_467,al_c,q_90,enc_avif,quality_auto/afed94_a1d12d24b6874e7c86c21d46fdaadd2f~mv2_d_4320_2880_s_4_2.jpg",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "n.4, Cartões que não dei",
+        "ANO": "2019",
+        "TECNICA_PT": "Cartões de visita, tinta acrílica, fita adesiva e caixa de ferro",
+        "TECNICA_EN": "Visit cards, acrylic paint, adhesive tape and iron box",
+        "DIMENSOES": "5,5 x 39 x 37 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_836a5993122e442bbbfc92582c9eceee~mv2_d_4320_2880_s_4_2.jpg",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_836a5993122e442bbbfc92582c9eceee~mv2_d_4320_2880_s_4_2.jpg/v1/fill/w_700,h_467,al_c,q_90,enc_avif,quality_auto/afed94_836a5993122e442bbbfc92582c9eceee~mv2_d_4320_2880_s_4_2.jpg",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/6",
+        "TITULO": "Pilha ascendente",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica, manta asfáltica, folha de alumínio e fita adesiva e isolante sobre papel",
+        "TECNICA_EN": "Acrylic, asphalt membrane, aluminum foil, adhesive and insulating tape on paper",
+        "DIMENSOES": "84 x 59 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_34722566c42b41bea9a0c6fc561c0822~mv2_d_2349_3240_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_34722566c42b41bea9a0c6fc561c0822~mv2_d_2349_3240_s_2.png/v1/fill/w_399,h_550,al_c,q_95,enc_avif,quality_auto/afed94_34722566c42b41bea9a0c6fc561c0822~mv2_d_2349_3240_s_2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "2/6",
+        "TITULO": "Pilha ascendente",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica, manta asfáltica, folha de alumínio e fita adesiva e isolante sobre papel",
+        "TECNICA_EN": "Acrylic, asphalt membrane, aluminum foil, adhesive and insulating tape on paper",
+        "DIMENSOES": "84 x 59 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_e00e21e85fe641d3b62b1479e9ba8cbd~mv2_d_2349_3240_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_e00e21e85fe641d3b62b1479e9ba8cbd~mv2_d_2349_3240_s_2.png/v1/fill/w_399,h_550,al_c,q_95,enc_avif,quality_auto/afed94_e00e21e85fe641d3b62b1479e9ba8cbd~mv2_d_2349_3240_s_2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "3/6",
+        "TITULO": "Pilha ascendente",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica, manta asfáltica, folha de alumínio e fita adesiva e isolante sobre papel",
+        "TECNICA_EN": "Acrylic, asphalt membrane, aluminum foil, adhesive and insulating tape on paper",
+        "DIMENSOES": "84 x 59 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_6e14f99e1cf94f64b433f4aae03a35fb~mv2_d_2349_3240_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_6e14f99e1cf94f64b433f4aae03a35fb~mv2_d_2349_3240_s_2.png/v1/fill/w_399,h_550,al_c,q_95,enc_avif,quality_auto/afed94_6e14f99e1cf94f64b433f4aae03a35fb~mv2_d_2349_3240_s_2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "4/6",
+        "TITULO": "Pilha ascendente",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica, manta asfáltica, folha de alumínio e fita adesiva e isolante sobre papel",
+        "TECNICA_EN": "Acrylic, asphalt membrane, aluminum foil, adhesive and insulating tape on paper",
+        "DIMENSOES": "84 x 59 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_5c5ad3dff8ad4738b82978f59e50a4a0~mv2_d_2349_3240_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_5c5ad3dff8ad4738b82978f59e50a4a0~mv2_d_2349_3240_s_2.png/v1/fill/w_399,h_550,al_c,q_95,enc_avif,quality_auto/afed94_5c5ad3dff8ad4738b82978f59e50a4a0~mv2_d_2349_3240_s_2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "5/6",
+        "TITULO": "Pilha ascendente",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica, manta asfáltica, folha de alumínio e fita adesiva e isolante sobre papel",
+        "TECNICA_EN": "Acrylic, asphalt membrane, aluminum foil, adhesive and insulating tape on paper",
+        "DIMENSOES": "84 x 59 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_5d7b3d31ec7340a8b24906f1bfb16df6~mv2_d_2349_3240_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_5d7b3d31ec7340a8b24906f1bfb16df6~mv2_d_2349_3240_s_2.png/v1/fill/w_399,h_550,al_c,q_95,enc_avif,quality_auto/afed94_5d7b3d31ec7340a8b24906f1bfb16df6~mv2_d_2349_3240_s_2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "6/6",
+        "TITULO": "Pilha ascendente",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica, manta asfáltica, folha de alumínio e fita adesiva e isolante sobre papel",
+        "TECNICA_EN": "Acrylic, asphalt membrane, aluminum foil, adhesive and insulating tape on paper",
+        "DIMENSOES": "84 x 59 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_fc9aa47c260146f8b388f0bf399d6fa7~mv2_d_2349_3240_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_fc9aa47c260146f8b388f0bf399d6fa7~mv2_d_2349_3240_s_2.png/v1/fill/w_399,h_550,al_c,q_95,enc_avif,quality_auto/afed94_fc9aa47c260146f8b388f0bf399d6fa7~mv2_d_2349_3240_s_2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Reflexos trinos",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica e folha de alumínio sobre papel",
+        "TECNICA_EN": "Acrylic and aluminum foil on paper",
+        "DIMENSOES": "150 x 150 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_bf3b74d20cde40689306fb9f6e92271b~mv2_d_3240_3187_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_bf3b74d20cde40689306fb9f6e92271b~mv2_d_3240_3187_s_4_2.png/v1/fill/w_550,h_541,al_c,q_95,enc_avif,quality_auto/afed94_bf3b74d20cde40689306fb9f6e92271b~mv2_d_3240_3187_s_4_2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Tensão e ruptura",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica, linha de algodão, fita isolante e folha de alumínio sobre papel",
+        "TECNICA_EN": "Acrylic, cotton thread, insulating tape and aluminum foil on paper",
+        "DIMENSOES": "150 x 100 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_ce5a08e542424b949484274aa958e38a~mv2_d_2184_3240_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_ce5a08e542424b949484274aa958e38a~mv2_d_2184_3240_s_2.png/v1/fill/w_371,h_550,al_c,q_95,enc_avif,quality_auto/afed94_ce5a08e542424b949484274aa958e38a~mv2_d_2184_3240_s_2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Estrutura VIII",
+        "ANO": "2014",
+        "TECNICA_PT": "Carvão, marcador permanente e óleo sobre papel de algodão.",
+        "TECNICA_EN": "Charcoal, permanent marker and oil on cotton paper.",
+        "DIMENSOES": "70 x 50 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_5bc5935cffd840eca35066a287fa3f93~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_5bc5935cffd840eca35066a287fa3f93~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_5bc5935cffd840eca35066a287fa3f93~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Estrutura I",
+        "ANO": "2013",
+        "TECNICA_PT": "Acrílica, carvão, fita crepe e marcador permanente sobre papel de algodão.",
+        "TECNICA_EN": "Acrylic, charcoal, masking tape and permanent marker on cotton paper.",
+        "DIMENSOES": "70 x 100 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_b23cd4bbb84b4a63ab076f3ee32919d9~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_b23cd4bbb84b4a63ab076f3ee32919d9~mv2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_b23cd4bbb84b4a63ab076f3ee32919d9~mv2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Estrutura II",
+        "ANO": "2013",
+        "TECNICA_PT": "Acrílica, carvão, fita crepe e marcador permanente sobre papel de algodão.",
+        "TECNICA_EN": "Acrylic, charcoal, masking tape and permanent marker on cotton paper.",
+        "DIMENSOES": "100 x 70 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_68408f3284e343ff8c3dcd8d6af955de~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_68408f3284e343ff8c3dcd8d6af955de~mv2.png/v1/fill/w_750,h_600,al_c,q_95,enc_avif,quality_auto/afed94_68408f3284e343ff8c3dcd8d6af955de~mv2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Estrutura V",
+        "ANO": "2013",
+        "TECNICA_PT": "Carvão, marcador permanente e óleo sobre papel de algodão.",
+        "TECNICA_EN": "Charcoal, permanent marker and oil on cotton paper.",
+        "DIMENSOES": "70 x 50 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_f639efa6403041ccafcf579911aa07e0~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_f639efa6403041ccafcf579911aa07e0~mv2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_f639efa6403041ccafcf579911aa07e0~mv2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Estrutura VI",
+        "ANO": "2013",
+        "TECNICA_PT": "Acrílica, óleo, carvão e marcador permanente sobre papel de algodão.",
+        "TECNICA_EN": "Acrylic, oil, charcoal and permanent marker on cotton paper.",
+        "DIMENSOES": "100 x 70 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d4173f3da5a54ed19bd9cabd04be13ed~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_d4173f3da5a54ed19bd9cabd04be13ed~mv2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d4173f3da5a54ed19bd9cabd04be13ed~mv2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Estrutura VII",
+        "ANO": "2014",
+        "TECNICA_PT": "Carvão, marcador permanente e óleo sobre papel de algodão.",
+        "TECNICA_EN": "Charcoal, permanent marker and oil on cotton paper.",
+        "DIMENSOES": "70 x 50 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_cef41d18634a45d1bac087ee3bb79420~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_cef41d18634a45d1bac087ee3bb79420~mv2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_cef41d18634a45d1bac087ee3bb79420~mv2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Série Pilha, n.14",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica, fita adesiva e folha de alumínio sobre papel",
+        "TECNICA_EN": "Acrylic, adhesive tape and aluminium foil on paper",
+        "DIMENSOES": "70 x 50 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_c79883a82b8c4c44971032703ecf0752~mv2_d_1565_2160_s_2.jpg",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_c79883a82b8c4c44971032703ecf0752~mv2_d_1565_2160_s_2.jpg/v1/fill/w_398,h_550,al_c,q_90,enc_avif,quality_auto/afed94_c79883a82b8c4c44971032703ecf0752~mv2_d_1565_2160_s_2.jpg",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Série Pilha, n.16",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica, fita adesiva, manta asfáltica e folha de alumínio sobre papel",
+        "TECNICA_EN": "Acrylic, adhesive tape, asphalt blanket and aluminum foil on paper",
+        "DIMENSOES": "70 x 50 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_a008bc79c2ec440295ae4ea44c78f777~mv2_d_1565_2160_s_2.jpg",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_a008bc79c2ec440295ae4ea44c78f777~mv2_d_1565_2160_s_2.jpg/v1/fill/w_398,h_550,al_c,q_90,enc_avif,quality_auto/afed94_a008bc79c2ec440295ae4ea44c78f777~mv2_d_1565_2160_s_2.jpg",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Série Pilha, n.17",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílico, fita adesiva e folha de alumínio sobre papel",
+        "TECNICA_EN": "Acrylic, adhesive tape and aluminum foil on paper",
+        "DIMENSOES": "50 x 35 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_2704a8d67051492d9dc9bbcbb869eb8e~mv2_d_1571_2160_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_2704a8d67051492d9dc9bbcbb869eb8e~mv2_d_1571_2160_s_2.png/v1/fill/w_364,h_500,al_c,q_95,enc_avif,quality_auto/afed94_2704a8d67051492d9dc9bbcbb869eb8e~mv2_d_1571_2160_s_2.png",
+        "CATEGORIA": "COLAGENS"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Animal negro",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto, zinco e aço corten",
+        "TECNICA_EN": "Acrylic on concrete blocks, zinc and corten steel",
+        "DIMENSOES": "82 x 30 x 33 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_285001ea42834db58517ef76a0bf075e~mv2_d_2934_3240_s_4_2.jpg",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_285001ea42834db58517ef76a0bf075e~mv2_d_2934_3240_s_4_2.jpg/v1/fill/w_543,h_600,al_c,q_90,enc_avif,quality_auto/afed94_285001ea42834db58517ef76a0bf075e~mv2_d_2934_3240_s_4_2.jpg",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Animal negro",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto, zinco e aço corten",
+        "TECNICA_EN": "Acrylic on concrete blocks, zinc and corten steel",
+        "DIMENSOES": "82 x 30 x 33 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_62563f0fa1ea4d67b65fc81957ce21aa~mv2_d_3000_3240_s_4_2.jpg",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_62563f0fa1ea4d67b65fc81957ce21aa~mv2_d_3000_3240_s_4_2.jpg/v1/fill/w_556,h_600,al_c,q_90,enc_avif,quality_auto/afed94_62563f0fa1ea4d67b65fc81957ce21aa~mv2_d_3000_3240_s_4_2.jpg",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "1/3",
+        "TITULO": "Escultura de colagem",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica sobre madeira, bloco de concreto, mdf, fita adesiva e pvc",
+        "TECNICA_EN": "Acrylic on wood, concrete block, mdf, duct tape and pvc",
+        "DIMENSOES": "84 x 30 x 18 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_4479d1946fec4ad0bdb8f179689352c8~mv2_d_2934_3240_s_4_2.jpg",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_4479d1946fec4ad0bdb8f179689352c8~mv2_d_2934_3240_s_4_2.jpg/v1/fill/w_543,h_600,al_c,q_90,enc_avif,quality_auto/afed94_4479d1946fec4ad0bdb8f179689352c8~mv2_d_2934_3240_s_4_2.jpg",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "2/3",
+        "TITULO": "Escultura de colagem",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica sobre madeira, bloco de concreto, mdf, fita adesiva e pvc",
+        "TECNICA_EN": "Acrylic on wood, concrete block, mdf, duct tape and pvc",
+        "DIMENSOES": "84 x 30 x 18 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_07ee281bad1b4df1818e93a1acc4a4d2~mv2_d_2934_3240_s_4_2.jpg",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_07ee281bad1b4df1818e93a1acc4a4d2~mv2_d_2934_3240_s_4_2.jpg/v1/fill/w_543,h_600,al_c,q_90,enc_avif,quality_auto/afed94_07ee281bad1b4df1818e93a1acc4a4d2~mv2_d_2934_3240_s_4_2.jpg",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "3/3",
+        "TITULO": "Escultura de colagem",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica sobre madeira, bloco de concreto, mdf, fita adesiva e pvc",
+        "TECNICA_EN": "Acrylic on wood, concrete block, mdf, duct tape and pvc",
+        "DIMENSOES": "84 x 30 x 18 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_81c683254b9e4e88a378f05faa215f8e~mv2_d_2934_3240_s_4_2.jpg",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_81c683254b9e4e88a378f05faa215f8e~mv2_d_2934_3240_s_4_2.jpg/v1/fill/w_543,h_600,al_c,q_90,enc_avif,quality_auto/afed94_81c683254b9e4e88a378f05faa215f8e~mv2_d_2934_3240_s_4_2.jpg",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Fardo",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e cinta de nylon.",
+        "TECNICA_EN": "Acrylic on concrete blocks and nylon strap.",
+        "DIMENSOES": "44 x 38 x 14 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_8f71780d49f24a3b96a425eaf9b31a99~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_8f71780d49f24a3b96a425eaf9b31a99~mv2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_8f71780d49f24a3b96a425eaf9b31a99~mv2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Fardo",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e cinta de nylon.",
+        "TECNICA_EN": "Acrylic on concrete blocks and nylon strap.",
+        "DIMENSOES": "44 x 38 x 14 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_7a25befdfe8744df9d0c2efc7cfc0e84~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_7a25befdfe8744df9d0c2efc7cfc0e84~mv2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_7a25befdfe8744df9d0c2efc7cfc0e84~mv2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "1/4",
+        "TITULO": "White Stripes",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e tela de metal",
+        "TECNICA_EN": "Acrylic on concrete blocks and metal net",
+        "DIMENSOES": "90 x 53 x 25 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d0f096a80d474fb3b06714a3c5aad122~mv2_d_4975_3317_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_d0f096a80d474fb3b06714a3c5aad122~mv2_d_4975_3317_s_4_2.png/v1/fill/w_800,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d0f096a80d474fb3b06714a3c5aad122~mv2_d_4975_3317_s_4_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "2/4",
+        "TITULO": "White Stripes",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e tela de metal",
+        "TECNICA_EN": "Acrylic on concrete blocks and metal net",
+        "DIMENSOES": "90 x 53 x 25 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_5b5339016a9840fcae9bae398256b3cb~mv2_d_5184_3456_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_5b5339016a9840fcae9bae398256b3cb~mv2_d_5184_3456_s_4_2.png/v1/fill/w_800,h_600,al_c,q_95,enc_avif,quality_auto/afed94_5b5339016a9840fcae9bae398256b3cb~mv2_d_5184_3456_s_4_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "3/4",
+        "TITULO": "White Stripes",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e tela de metal",
+        "TECNICA_EN": "Acrylic on concrete blocks and metal net",
+        "DIMENSOES": "90 x 53 x 25 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d0c55cf591ac42f58c5985d79b4bce8c~mv2_d_5184_3456_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_d0c55cf591ac42f58c5985d79b4bce8c~mv2_d_5184_3456_s_4_2.png/v1/fill/w_800,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d0c55cf591ac42f58c5985d79b4bce8c~mv2_d_5184_3456_s_4_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "4/4",
+        "TITULO": "White Stripes",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e tela de metal",
+        "TECNICA_EN": "Acrylic on concrete blocks and metal net",
+        "DIMENSOES": "90 x 53 x 25 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_a89905cb40934b6488b056e69e75b33b~mv2_d_4817_3211_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_a89905cb40934b6488b056e69e75b33b~mv2_d_4817_3211_s_4_2.png/v1/fill/w_800,h_600,al_c,q_95,enc_avif,quality_auto/afed94_a89905cb40934b6488b056e69e75b33b~mv2_d_4817_3211_s_4_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "3pra1,2",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto, manta asfáltica e corrente de ferro.",
+        "TECNICA_EN": "Acrylic on concrete blocks, asphalt membrane and iron chain.",
+        "DIMENSOES": "31 x 69,5 x 10 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_fc92b63ecdf54cafbcfcd9d484400a4f~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_fc92b63ecdf54cafbcfcd9d484400a4f~mv2_d_1800_1800_s_2.png/v1/fill/w_800,h_500,al_c,q_95,enc_avif,quality_auto/afed94_fc92b63ecdf54cafbcfcd9d484400a4f~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "3pra1,2",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto, manta asfáltica e corrente de ferro.",
+        "TECNICA_EN": "Acrylic on concrete blocks, asphalt membrane and iron chain.",
+        "DIMENSOES": "31 x 69,5 x 10 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_66d1978badbf4f69a9d666cdf7f67cea~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_66d1978badbf4f69a9d666cdf7f67cea~mv2_d_1800_1800_s_2.png/v1/fill/w_800,h_500,al_c,q_95,enc_avif,quality_auto/afed94_66d1978badbf4f69a9d666cdf7f67cea~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Sobreposição e deslocamento",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica, blocos de concreto, tela de pvc e manta asfáltica.",
+        "TECNICA_EN": "Acrylic, concrete blocks, pvc net and asphalt membrane.",
+        "DIMENSOES": "50 x 30 x 21 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_88196bf14b254a7fa7d5fec99ba308f5~mv2_d_2259_2954_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_88196bf14b254a7fa7d5fec99ba308f5~mv2_d_2259_2954_s_2.png/v1/fill/w_459,h_600,al_c,q_95,enc_avif,quality_auto/afed94_88196bf14b254a7fa7d5fec99ba308f5~mv2_d_2259_2954_s_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Sobreposição e deslocamento",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica, blocos de concreto, tela de pvc e manta asfáltica.",
+        "TECNICA_EN": "Acrylic, concrete blocks, pvc net and asphalt membrane.",
+        "DIMENSOES": "50 x 30 x 21 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_ef650fc076d1455299e6536f59376e46~mv2_d_1869_2544_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_ef650fc076d1455299e6536f59376e46~mv2_d_1869_2544_s_2.png/v1/fill/w_441,h_600,al_c,q_95,enc_avif,quality_auto/afed94_ef650fc076d1455299e6536f59376e46~mv2_d_1869_2544_s_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "1/3",
+        "TITULO": "Palavras Cruzadas",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica, madeira, pvc, metal e blocos de concreto.",
+        "TECNICA_EN": "Acrylic, wood, pvc, metal and concrete blocks.",
+        "DIMENSOES": "115 x 45 x 105 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_7b839fe76f164d0c882027606c33f56f~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_7b839fe76f164d0c882027606c33f56f~mv2.png/v1/fill/w_400,h_600,al_c,q_95,enc_avif,quality_auto/afed94_7b839fe76f164d0c882027606c33f56f~mv2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "2/3",
+        "TITULO": "Palavras Cruzadas",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica, madeira, pvc, metal e blocos de concreto.",
+        "TECNICA_EN": "Acrylic, wood, pvc, metal and concrete blocks.",
+        "DIMENSOES": "115 x 45 x 105 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_9bc04d841bc84e1fa418e2204d07ec1a~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_9bc04d841bc84e1fa418e2204d07ec1a~mv2.png/v1/fill/w_383,h_600,al_c,q_95,enc_avif,quality_auto/afed94_9bc04d841bc84e1fa418e2204d07ec1a~mv2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "3/3",
+        "TITULO": "Palavras Cruzadas",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica, madeira, pvc, metal e blocos de concreto.",
+        "TECNICA_EN": "Acrylic, wood, pvc, metal and concrete blocks.",
+        "DIMENSOES": "115 x 45 x 105 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_e31542fb7a994748abf7592635c5329c~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_e31542fb7a994748abf7592635c5329c~mv2.png/v1/fill/w_463,h_600,al_c,q_95,enc_avif,quality_auto/afed94_e31542fb7a994748abf7592635c5329c~mv2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "La escalera",
+        "ANO": "2016",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto, manta asfáltica e madeira.",
+        "TECNICA_EN": "Acrylic on concrete blocks, asphalt membrane and wood.",
+        "DIMENSOES": "54,5 x 27 x 22 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_0db9956bdff0436da3a300cad8cd42b5~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_0db9956bdff0436da3a300cad8cd42b5~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_0db9956bdff0436da3a300cad8cd42b5~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "O sol e o unicórnio",
+        "ANO": "2016",
+        "TECNICA_PT": "Acrílica sobre tela, blocos de concreto e granito, manta asfáltica e madeira",
+        "TECNICA_EN": "Acrylic on canvas, concrete and granite blocks, asphalt membrane and wood",
+        "DIMENSOES": "99 x 48 x 20 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_05cdcc9afcc94d69ab5367db7106abaf~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_05cdcc9afcc94d69ab5367db7106abaf~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_05cdcc9afcc94d69ab5367db7106abaf~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Clayborn",
+        "ANO": "2014",
+        "TECNICA_PT": "Concreto, ferro, alumínio e tecido.",
+        "TECNICA_EN": "Concrete, iron, aluminum and fabric.",
+        "DIMENSOES": "140 x 98 x 40 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_c3bf1f2307b2420496283349ed1724e6~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_c3bf1f2307b2420496283349ed1724e6~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_c3bf1f2307b2420496283349ed1724e6~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Junção encoberta",
+        "ANO": "2014",
+        "TECNICA_PT": "Madeira, acrílica, cabo e tecido.",
+        "TECNICA_EN": "Wood, acrylic, cabble and fabric.",
+        "DIMENSOES": "102 x 9 x 102 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_ddf2c1f688eb4c13a149323fd67362f1~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_ddf2c1f688eb4c13a149323fd67362f1~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_ddf2c1f688eb4c13a149323fd67362f1~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Trago do silêncio",
+        "ANO": "2014",
+        "TECNICA_PT": "Cilindro de concreto, acrílica, ferro, fita isolante e guia de nylon.",
+        "TECNICA_EN": "Concrete cylinder, acrylic, iron, electrical tape and nylon leash.",
+        "DIMENSOES": "93 x 64 x 21ø cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_6159583e4ec04debab365f80aa7a6e61~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_6159583e4ec04debab365f80aa7a6e61~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_6159583e4ec04debab365f80aa7a6e61~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "ESCULTURAS"
+    }
+]; 
+
+    const categoriasOrdem = ["COLAGENS", "ESCULTURAS", "PINTURAS", "OBJETOS"];
+    let carrosselAtivo = null;
+
+    function init() {
+        renderHome();
+        setupIntersectionObserver();
+        setupKeyboardNav();
+    }
+
+    function renderHome() {
+        const home = document.getElementById('home-view');
+        home.innerHTML = '';
+        
+        categoriasOrdem.forEach(cat => {
+            const obras = dadosObras.filter(o => o.CATEGORIA === cat && o.CONTADOR && o.CONTADOR.startsWith("1/"));
+            if (obras.length === 0) return;
+
+            const section = document.createElement('section');
+            section.className = 'category-section';
+            section.innerHTML = `
+                <h2 class="category-title">${cat}</h2>
+                <div class="carousel-outer">
+                    <button class="nav-arrow arrow-left" onclick="scrollBtn(this, -1)">❮</button>
+                    <div class="carousel-track">
+                        ${obras.map(o => `
+                            <div class="carousel-item" data-title="${o.TITULO}" data-year="${o.ANO}">
+                                <img src="${o.IMG_LOW}" alt="${o.TITULO}" onclick="openWork('${o.URL}')">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="nav-arrow arrow-right" onclick="scrollBtn(this, 1)">❯</button>
+                </div>
+                <div class="active-info-display">
+                    <div class="info-title"></div>
+                    <div class="info-year"></div>
+                </div>
+            `;
+            home.appendChild(section);
+        });
+    }
+
+    // Scroll via botões
+    window.scrollBtn = (btn, dir) => {
+        const track = btn.parentElement.querySelector('.carousel-track');
+        const scrollAmount = window.innerWidth * 0.6 * dir;
+        track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    };
+
+    // Observer para detectar imagem central
+    function setupIntersectionObserver() {
+        const options = {
+            root: document.getElementById('scroll-container'),
+            rootMargin: '0px -49% 0px -49%', // Foca em uma linha de 2% no centro
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const item = entry.target;
+                    const section = item.closest('.category-section');
+                    const titleEl = section.querySelector('.info-title');
+                    const yearEl = section.querySelector('.info-year');
+
+                    // Resetar e Ativar
+                    section.querySelectorAll('.carousel-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+
+                    // Atualizar Texto
+                    titleEl.innerText = item.dataset.title;
+                    yearEl.innerText = item.dataset.year;
+
+                    // Marcar este carrossel como o ativo para o teclado
+                    carrosselAtivo = item.closest('.carousel-track');
+                }
+            });
+        }, options);
+
+        document.querySelectorAll('.carousel-item').forEach(item => observer.observe(item));
+    }
+
+    // Navegação por Teclado
+    function setupKeyboardNav() {
+        document.addEventListener('keydown', (e) => {
+            if (!carrosselAtivo || mainFrame.classList.contains('active')) return;
+            
+            const scrollAmount = window.innerWidth * 0.4;
+            if (e.key === 'ArrowRight') carrosselAtivo.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            if (e.key === 'ArrowLeft') carrosselAtivo.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+    }
+
+    function openWork(url) {
+        if (!url) return;
+        document.getElementById('home-view').classList.add('hidden');
+        const frame = document.getElementById('main-frame');
+        frame.src = url;
+        frame.classList.add('active');
+    }
+
+    function showHome() {
+        document.getElementById('main-frame').classList.remove('active');
+        document.getElementById('main-frame').src = 'about:blank';
+        document.getElementById('home-view').classList.remove('hidden');
+    }
+
+    init();
+</script>
+</body>
+</html>
