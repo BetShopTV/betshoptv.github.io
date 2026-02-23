@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SANTACOSTA | Galeria</title>
+<title>SANTACOSTA | Portal</title>
 <style>
     :root {
         --verde-claro: #4aff98;
@@ -45,7 +45,7 @@
     .viewer-container { flex-grow: 1; overflow-y: auto; background: #000; scroll-behavior: smooth; }
     #content-view { padding: 20px 0; display: flex; flex-direction: column; }
 
-    /* --- GRID INICIAL (3 COLUNAS) --- */
+    /* --- GRID INICIAL (3 COLUNAS SEMPRE) --- */
     .categories-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -54,93 +54,66 @@
     }
     .grid-item { cursor: pointer; padding-bottom: 20px; }
     .grid-item .category-title-main { 
-        font-size: var(--font-cat); 
-        color: #fff; 
-        letter-spacing: 1.5px; 
-        margin-bottom: 8px; 
-        display: block; 
-        text-transform: uppercase;
-        font-weight: 700;
+        font-size: var(--font-cat); color: #fff; letter-spacing: 1.5px; 
+        margin-bottom: 8px; display: block; text-transform: uppercase; font-weight: 700;
     }
     .grid-item .thumb-container { width: 100%; aspect-ratio: 1/1; background: #111; overflow: hidden; }
-    .grid-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
-    .grid-item:hover img { filter: brightness(1.2); }
+    .grid-item img { width: 100%; height: 100%; object-fit: cover; } /* REMOVIDO HOVER EFFECT */
 
     /* --- TOP NAV (MODO ATIVO) --- */
     .top-nav-list { 
-        display: flex; 
-        flex-direction: row; 
-        flex-wrap: wrap;
-        border-bottom: 1px solid var(--linha-divisoria); 
-        margin-bottom: 5px; 
+        display: flex; flex-direction: row; flex-wrap: wrap;
+        border-bottom: 1px solid var(--linha-divisoria); margin-bottom: 5px; 
     }
     .nav-link-item { 
-        flex: 1;
-        padding: 15px 10px; 
-        font-size: var(--font-cat); 
-        text-transform: uppercase; 
-        color: var(--texto-secundario); 
-        cursor: pointer; 
-        letter-spacing: 1.5px;
-        text-align: center;
-        border-right: 1px solid #222;
-        transition: 0.2s;
+        flex: 1; padding: 15px 10px; font-size: var(--font-cat); 
+        text-transform: uppercase; color: var(--texto-secundario); 
+        cursor: pointer; letter-spacing: 1.5px; text-align: center;
+        border-right: 1px solid #222; transition: 0.2s;
     }
     .nav-link-item:last-child { border-right: none; }
     .nav-link-item:hover { color: #fff; background: #111; }
 
     /* --- ACTIVE HEADER --- */
     .active-section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px 4vw;
-        background: #080808;
-        border-bottom: 1px solid #222;
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 20px 4vw; background: #080808; border-bottom: 1px solid #222;
     }
-    .active-title { font-size: clamp(12px, 1.5vw, 16px); font-weight: 900; color: var(--verde-claro); letter-spacing: 3px; text-transform: uppercase; }
+    .active-title { 
+        font-size: clamp(12px, 1.5vw, 16px); font-weight: 900; 
+        color: var(--verde-claro); letter-spacing: 3px; text-transform: uppercase;
+        cursor: pointer;
+    }
+    .active-title:hover { opacity: 0.7; }
+    
     .nav-arrows-container { display: flex; gap: 30px; }
     .nav-arrow { background: transparent; color: var(--verde-claro); border: none; font-size: 22px; cursor: pointer; }
 
     /* --- CARROSSEL --- */
     .carousel-container { padding: 40px 0; }
     .carousel-track {
-        display: flex;
-        gap: var(--gap-obras);
-        overflow-x: auto;
-        height: var(--altura-obra);
-        padding: 0 50vw;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
+        display: flex; gap: var(--gap-obras); overflow-x: auto;
+        height: var(--altura-obra); padding: 0 50vw;
+        scroll-snap-type: x mandatory; scrollbar-width: none;
     }
     .carousel-track::-webkit-scrollbar { display: none; }
 
     .carousel-item { flex: 0 0 auto; height: 100%; scroll-snap-align: center; display: flex; align-items: center; }
     .carousel-item img { 
-        height: 100%; 
-        width: auto; 
-        max-width: 100vw; 
-        opacity: 0.8; 
-        transition: opacity 0.4s ease; 
-        object-fit: contain;
-        cursor: pointer;
+        height: 100%; width: auto; max-width: 100vw; 
+        opacity: 0.8; transition: opacity 0.4s ease; 
+        object-fit: contain; cursor: pointer;
     }
     .carousel-item.active img { opacity: 1; }
 
     /* --- FICHA TÉCNICA --- */
     .info-display { text-align: center; padding: 20px 4vw; }
     .info-line { font-size: 14px; line-height: 1.6; }
-    .info-line strong { font-weight: 700; text-transform: uppercase; color: var(--verde-claro); }
+    .info-line strong { font-weight: 700; color: var(--verde-claro); } /* REMOVIDO UPPERCASE */
     .info-line span { color: var(--texto-secundario); margin-left: 4px; }
     
     .detail-specs { margin-top: 15px; font-size: 13px; color: var(--texto-secundario); max-width: 600px; margin-left: auto; margin-right: auto; }
     .detail-specs i { font-style: italic; opacity: 0.7; display: block; margin: 4px 0; }
-    .btn-back { 
-        display: inline-block; margin-top: 25px; font-size: 10px; text-transform: uppercase; 
-        letter-spacing: 2px; color: var(--verde-claro); cursor: pointer; border: 1px solid var(--verde-claro);
-        padding: 8px 15px; transition: 0.3s;
-    }
-    .btn-back:hover { background: var(--verde-claro); color: #000; }
 
     @media (max-width: 768px) {
         :root { --gap-obras: 40px; }
@@ -1281,12 +1254,13 @@
 
     const ordemCategorias = ["PINTURAS", "OBJETOS DE PAREDE", "OBJETOS", "ESCULTURAS", "COLAGENS"];
     let activeCategory = null;
-    let selectedWork = null;
+    let selectedWorkTitle = null;
     let carrosselAtivo = null;
+    let pendingScrollTitle = null; // Memória de qual obra centralizar
 
     function init() {
         render();
-        setupKeyboardNav();
+        setupGlobalKeys();
     }
 
     function render() {
@@ -1294,16 +1268,13 @@
         container.innerHTML = '';
         const scrollBox = document.getElementById('scroll-container');
 
-        if (selectedWork) {
-            // --- MODO 3: DETALHE DA OBRA (IMERSÃO) ---
+        if (selectedWorkTitle) {
             renderWorkDetail(container);
             scrollBox.scrollTop = 0;
         } else if (activeCategory) {
-            // --- MODO 2: GALERIA DA CATEGORIA ---
             renderCategoryView(container);
             scrollBox.scrollTop = 0;
         } else {
-            // --- MODO 1: GRID INICIAL ---
             renderHomeGrid(container);
         }
     }
@@ -1317,7 +1288,8 @@
             const randomObra = obrasCat[Math.floor(Math.random() * obrasCat.length)];
             const item = document.createElement('div');
             item.className = 'grid-item';
-            item.onclick = () => setActiveCategory(cat);
+            // Ao clicar no grid, passamos o título da obra sorteada para abrir nela
+            item.onclick = () => setActiveCategory(cat, randomObra.TITULO);
             item.innerHTML = `
                 <span class="category-title-main">${cat} ▼</span>
                 <div class="thumb-container"><img src="${randomObra.IMG_LOW}" alt="${cat}"></div>
@@ -1328,7 +1300,91 @@
     }
 
     function renderCategoryView(container) {
-        // Top Nav
+        renderTopNav(container);
+        const header = document.createElement('div');
+        header.className = 'active-section-header';
+        header.innerHTML = `
+            <div class="active-title" onclick="resetPage()">${activeCategory}</div>
+            <div class="nav-arrows-container">
+                <button class="nav-arrow" onclick="scrollTrack(-1)">❮</button>
+                <button class="nav-arrow" onclick="scrollTrack(1)">❯</button>
+            </div>
+        `;
+        container.appendChild(header);
+
+        const obrasCat = dadosObras.filter(o => o.CATEGORIA === activeCategory && o.CONTADOR && o.CONTADOR.startsWith("1/"));
+        const carouselDiv = document.createElement('div');
+        carouselDiv.className = 'carousel-container';
+        carouselDiv.innerHTML = `
+            <div class="carousel-track">
+                ${obrasCat.map(o => `
+                    <div class="carousel-item" data-title="${o.TITULO}" data-year="${o.ANO}">
+                        <img src="${o.IMG_LOW}" alt="${o.TITULO}" onclick="setWorkDetail(\`${o.TITULO.replace(/'/g, "\\'")}\`)">
+                    </div>
+                `).join('')}
+            </div>
+            <div class="info-display"><div class="info-line"></div></div>
+        `;
+        container.appendChild(carouselDiv);
+
+        setTimeout(() => {
+            const track = carouselDiv.querySelector('.carousel-track');
+            carrosselAtivo = track;
+            setupObserver(carouselDiv, false);
+            
+            // Lógica de Scroll para posição salva
+            if (pendingScrollTitle) {
+                const target = track.querySelector(`.carousel-item[data-title="${pendingScrollTitle}"]`);
+                if (target) target.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
+                pendingScrollTitle = null;
+            }
+        }, 50);
+    }
+
+    function renderWorkDetail(container) {
+        renderTopNav(container);
+        const imagensDaObra = dadosObras.filter(o => o.TITULO === selectedWorkTitle && o.CATEGORIA === activeCategory);
+        const base = imagensDaObra[0];
+
+        const header = document.createElement('div');
+        header.className = 'active-section-header';
+        header.innerHTML = `
+            <div class="active-title" onclick="closeWorkDetail()">${activeCategory}</div>
+            <div class="nav-arrows-container">
+                <button class="nav-arrow" onclick="switchWork(-1)">❮</button>
+                <button class="nav-arrow" onclick="switchWork(1)">❯</button>
+            </div>
+        `;
+        container.appendChild(header);
+
+        const carouselDiv = document.createElement('div');
+        carouselDiv.className = 'carousel-container';
+        carouselDiv.innerHTML = `
+            <div class="carousel-track">
+                ${imagensDaObra.map(img => `
+                    <div class="carousel-item">
+                        <img src="${img.IMG_LOW}" alt="${img.TITULO}">
+                    </div>
+                `).join('')}
+            </div>
+            <div class="info-display">
+                <div class="info-line"><strong>${base.TITULO}</strong><span>${base.ANO ? ', ' + base.ANO : ''}</span></div>
+                <div class="detail-specs">
+                    ${base.TECNICA_PT || ''}
+                    <i>${base.TECNICA_EN || ''}</i>
+                    ${base.DIMENSOES || ''}
+                </div>
+            </div>
+        `;
+        container.appendChild(carouselDiv);
+
+        setTimeout(() => {
+            carrosselAtivo = carouselDiv.querySelector('.carousel-track');
+            setupObserver(carouselDiv, true);
+        }, 50);
+    }
+
+    function renderTopNav(container) {
         const topNav = document.createElement('div');
         topNav.className = 'top-nav-list';
         ordemCategorias.filter(c => c !== activeCategory).forEach(cat => {
@@ -1339,92 +1395,35 @@
             topNav.appendChild(navItem);
         });
         container.appendChild(topNav);
-
-        // Header
-        const header = document.createElement('div');
-        header.className = 'active-section-header';
-        header.innerHTML = `
-            <div class="active-title">${activeCategory}</div>
-            <div class="nav-arrows-container">
-                <button class="nav-arrow" onclick="scrollBtn(-1)">❮</button>
-                <button class="nav-arrow" onclick="scrollBtn(1)">❯</button>
-            </div>
-        `;
-        container.appendChild(header);
-
-        // Galeria (Apenas imagens 1/X)
-        const obrasCat = dadosObras.filter(o => o.CATEGORIA === activeCategory && o.CONTADOR && o.CONTADOR.startsWith("1/"));
-        const carouselDiv = document.createElement('div');
-        carouselDiv.className = 'carousel-container';
-        carouselDiv.innerHTML = `
-            <div class="carousel-track">
-                ${obrasCat.map(o => `
-                    <div class="carousel-item" data-title="${o.TITULO}" data-year="${o.ANO}">
-                        <img src="${o.IMG_LOW}" alt="${o.TITULO}" onclick="setWorkDetail('${o.TITULO}')">
-                    </div>
-                `).join('')}
-            </div>
-            <div class="info-display"><div class="info-line"></div></div>
-        `;
-        container.appendChild(carouselDiv);
-
-        setTimeout(() => {
-            carrosselAtivo = carouselDiv.querySelector('.carousel-track');
-            setupObserver(carouselDiv, false);
-        }, 50);
     }
 
-    function renderWorkDetail(container) {
-        // Encontra todas as imagens da mesma obra
-        const imagensObra = dadosObras.filter(o => o.TITULO === selectedWork && o.CATEGORIA === activeCategory);
-        const base = imagensObra[0];
+    // --- LÓGICA DE NAVEGAÇÃO ---
+    function setActiveCategory(cat, title = null) { 
+        activeCategory = cat; 
+        selectedWorkTitle = null; 
+        pendingScrollTitle = title;
+        render(); 
+    }
+    
+    function setWorkDetail(titulo) { selectedWorkTitle = titulo; render(); }
+    
+    function closeWorkDetail() { 
+        pendingScrollTitle = selectedWorkTitle; // Salva onde estávamos para a volta
+        selectedWorkTitle = null; 
+        render(); 
+    }
+    
+    function resetPage() { activeCategory = null; selectedWorkTitle = null; carrosselAtivo = null; render(); }
 
-        const detailDiv = document.createElement('div');
-        detailDiv.className = 'work-detail-view';
-        detailDiv.innerHTML = `
-            <div class="active-section-header">
-                <div class="active-title">${base.TITULO}</div>
-                <div class="nav-arrows-container">
-                    <button class="nav-arrow" onclick="scrollBtn(-1)">❮</button>
-                    <button class="nav-arrow" onclick="scrollBtn(1)">❯</button>
-                </div>
-            </div>
-            <div class="carousel-container">
-                <div class="carousel-track">
-                    ${imagensObra.map(img => `
-                        <div class="carousel-item">
-                            <img src="${img.IMG_LOW}" alt="${img.TITULO}">
-                        </div>
-                    `).join('')}
-                </div>
-                <div class="info-display">
-                    <div class="info-line"><strong>${base.TITULO}</strong><span>${base.ANO ? ', ' + base.ANO : ''}</span></div>
-                    <div class="detail-specs">
-                        ${base.TECNICA_PT || ''}
-                        <i>${base.TECNICA_EN || ''}</i>
-                        ${base.DIMENSOES || ''}
-                    </div>
-                    <div class="btn-back" onclick="closeWorkDetail()">Voltar para ${activeCategory}</div>
-                </div>
-            </div>
-        `;
-        container.appendChild(detailDiv);
-
-        setTimeout(() => {
-            carrosselAtivo = detailDiv.querySelector('.carousel-track');
-            setupObserver(detailDiv, true);
-        }, 50);
+    function scrollTrack(dir) {
+        if (carrosselAtivo) carrosselAtivo.scrollBy({ left: window.innerWidth * 0.7 * dir, behavior: 'smooth' });
     }
 
-    // --- FUNÇÕES DE ESTADO ---
-    function setActiveCategory(cat) { activeCategory = cat; selectedWork = null; render(); }
-    function setWorkDetail(titulo) { selectedWork = titulo; render(); }
-    function closeWorkDetail() { selectedWork = null; render(); }
-    function resetPage() { activeCategory = null; selectedWork = null; carrosselAtivo = null; render(); }
-
-    function scrollBtn(dir) {
-        if (!carrosselAtivo) return;
-        carrosselAtivo.scrollBy({ left: window.innerWidth * 0.7 * dir, behavior: 'smooth' });
+    function switchWork(dir) {
+        const catList = dadosObras.filter(o => o.CATEGORIA === activeCategory && o.CONTADOR && o.CONTADOR.startsWith("1/"));
+        let idx = catList.findIndex(o => o.TITULO === selectedWorkTitle);
+        idx = (idx + dir + catList.length) % catList.length;
+        setWorkDetail(catList[idx].TITULO);
     }
 
     function setupObserver(parent, isDetail) {
@@ -1435,7 +1434,6 @@
                     const item = entry.target;
                     parent.querySelectorAll('.carousel-item').forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
-                    
                     if (!isDetail) {
                         const infoEl = parent.querySelector('.info-line');
                         const anoPart = item.dataset.year ? `, <span>${item.dataset.year}</span>` : '';
@@ -1447,12 +1445,15 @@
         parent.querySelectorAll('.carousel-item').forEach(item => observer.observe(item));
     }
 
-    function setupKeyboardNav() {
+    function setupGlobalKeys() {
         document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (selectedWorkTitle) closeWorkDetail();
+                else if (activeCategory) resetPage();
+            }
             if (!carrosselAtivo) return;
-            const amt = window.innerWidth * 0.4;
-            if (e.key === 'ArrowRight') carrosselAtivo.scrollBy({ left: amt, behavior: 'smooth' });
-            if (e.key === 'ArrowLeft') carrosselAtivo.scrollBy({ left: -amt, behavior: 'smooth' });
+            if (e.key === 'ArrowRight') selectedWorkTitle ? switchWork(1) : scrollTrack(1);
+            if (e.key === 'ArrowLeft') selectedWorkTitle ? switchWork(-1) : scrollTrack(-1);
         });
     }
 
