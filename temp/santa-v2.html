@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SANTACOSTA | Galeria</title>
+<title>SANTACOSTA | V2</title>
 <style>
     :root {
         --verde-claro: #4aff98;
         --verde-escuro: #171c1a;
         --texto-secundario: #b3b3b3; 
         --linha-divisoria: #333333;
-        --altura-obra: 55vh; /* Altura fixa das imagens */
-        --gap-obras: 40px;   /* Espaçamento horizontal fixo */
+        /* MANTIDO: Suas alterações de CSS */
+        --altura-obra: 42vh; 
+        --gap-obras: 88px;   
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -49,28 +50,60 @@
         scroll-behavior: smooth;
     }
 
-    #home-view { padding: 40px 0; display: flex; flex-direction: column; gap: 80px; }
+    #home-view { padding: 40px 0; display: flex; flex-direction: column; gap: 40px; }
 
-    .category-section { display: flex; flex-direction: column; gap: 20px; position: relative; }
+    .category-section { display: flex; flex-direction: column; border-bottom: 1px solid #222; padding-bottom: 20px; }
+    
+    /* Cabeçalho da Categoria com Título e Setas */
+    .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 4vw;
+        cursor: pointer;
+        height: 50px;
+        transition: background 0.2s;
+    }
+    .category-header:hover { background: rgba(255,255,255,0.03); }
 
     .category-title {
         font-size: 14px;
         text-transform: uppercase;
         letter-spacing: 3px;
         color: var(--verde-claro);
-        margin-left: 4vw;
         font-weight: 900;
     }
 
+    .nav-arrows-container { display: flex; gap: 20px; }
+    .nav-arrow {
+        background: transparent;
+        color: var(--verde-claro);
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 5px 10px;
+        transition: opacity 0.2s;
+    }
+    .nav-arrow:hover { opacity: 0.6; }
+
+    /* Corpo da Galeria (Escondido por padrão) */
+    .category-body {
+        display: none; /* Só aparece quando clicado */
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .category-section.open .category-body { display: flex; }
+
     /* --- CARROSSEL --- */
-    .carousel-outer { position: relative; width: 100%; display: flex; align-items: center; }
+    .carousel-outer { position: relative; width: 100%; }
 
     .carousel-track {
         display: flex;
         gap: var(--gap-obras);
         overflow-x: auto;
         height: var(--altura-obra);
-        padding: 0 50vw; /* Padding de 50vw permite centralizar a primeira e a última imagem */
+        padding: 0 50vw;
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
     }
@@ -86,59 +119,36 @@
 
     .carousel-item img {
         height: 100%;
-        width: auto; /* Mantém proporção */
+        width: auto;
         display: block;
-        opacity: 0.69; /* Inativas ficam foscas */
-        transition: opacity 0.3s ease;
-        border: none;
+        opacity: 0.15;
+        transition: opacity 0.4s ease;
     }
-
     .carousel-item.active img { opacity: 1; }
-
-    /* --- SETAS --- */
-    .nav-arrow {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 8vw;
-        background: transparent;
-        color: var(--verde-claro);
-        border: none;
-        font-size: 24px;
-        cursor: pointer;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.3s;
-    }
-    .nav-arrow:hover { background: rgba(255,255,255,0.05); }
-    .arrow-left { left: 0; }
-    .arrow-right { right: 0; }
 
     /* --- INFO DISPLAY --- */
     .active-info-display {
         text-align: center;
-        min-height: 60px;
-        padding-top: 15px;
+        min-height: 40px;
+        font-size: 14px;
+        color: #fff;
     }
-    .info-title { font-size: 14px; font-weight: 700; color: var(--verde-claro); letter-spacing: 0.4px; }
-    .info-year { font-size: 11px; color: var(--texto-secundario); margin-top: 4px; }
+    .info-line strong { font-weight: 700; text-transform: uppercase; color: var(--verde-claro); }
+    .info-line span { color: var(--texto-secundario); margin-left: 2px; }
 
     /* IFRAME */
     #main-frame { width: 100%; height: 100%; border: none; display: none; }
     #main-frame.active { display: block; }
     #home-view.hidden { display: none; }
 
-    /* MENU */
+    /* MENU SUPERIOR */
     .nav-desktop { display: flex; gap: 3vw; }
-    .nav-item { cursor: pointer; text-transform: uppercase; font-size: 13px; font-weight: 700; color: var(--texto-secundario); }
+    .nav-item { cursor: pointer; text-transform: uppercase; font-size: 12px; font-weight: 700; color: var(--texto-secundario); }
     .nav-item:hover { color: #fff; }
 
     @media (max-width: 768px) {
-        :root { --altura-obra: 45vh; }
-        .nav-arrow { width: 15vw; }
-        .nav-desktop { display: none; } /* Simplificado para focar no carrossel */
+        :root { --gap-obras: 40px; }
+        .nav-desktop { display: none; }
     }
 </style>
 </head>
@@ -155,8 +165,658 @@
     </main>
 
 <script>
+    // -------------------------------------------------------
     // BOTA BOTA BOTA O JSON AQUIÃÃ!
     const dadosObras = [
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Insight e ordenação II",
+        "ANO": "2019",
+        "TECNICA_PT": "Óleo sobre tela, madeira e manta asfáltica.",
+        "TECNICA_EN": "Oil on canvas, wood and asphalt blanket.",
+        "DIMENSOES": "89,5 × 114 × 4 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_852e37cfe83d4973a497616069b21661~mv2_d_3240_2565_s_4_2.jpg",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_852e37cfe83d4973a497616069b21661~mv2_d_3240_2565_s_4_2.jpg/v1/fill/w_938,h_743,al_c,q_90,enc_avif,quality_auto/afed94_852e37cfe83d4973a497616069b21661~mv2_d_3240_2565_s_4_2.jpg",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "O equilibrista",
+        "ANO": "2019",
+        "TECNICA_PT": "Óleo sobre tela e manta asfáltica.",
+        "TECNICA_EN": "Oil on canvas and asphalt blanket.",
+        "DIMENSOES": "120 x 180 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_fab32a5f376944939b3b6ec4f489d65e~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_fab32a5f376944939b3b6ec4f489d65e~mv2_d_4320_3240_s_4_2.png/v1/fill/w_750,h_563,al_c,q_95,enc_avif,quality_auto/afed94_fab32a5f376944939b3b6ec4f489d65e~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Insight e ordenação",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, fita adesiva, madeira e manta asfáltica.",
+        "TECNICA_EN": "Acrylic and oil on canvas, adhesive tape, wood and asphalt membrane.",
+        "DIMENSOES": "162 x 122 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_357b5928ec0c4fa789b24a2f1ad865fa~mv2_d_3456_5184_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_357b5928ec0c4fa789b24a2f1ad865fa~mv2_d_3456_5184_s_4_2.png/v1/fill/w_400,h_600,al_c,q_95,enc_avif,quality_auto/afed94_357b5928ec0c4fa789b24a2f1ad865fa~mv2_d_3456_5184_s_4_2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Hercules Luna",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica, óleo sobre tela, manta asfáltica e corrente de ferro.",
+        "TECNICA_EN": "Acrylic, oil on canvas, asphalt membrane and iron chain.",
+        "DIMENSOES": "180 x 180 x 4 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_2f6744edac0e43cd852d26c989b87944~mv2_d_2237_2222_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_2f6744edac0e43cd852d26c989b87944~mv2_d_2237_2222_s_2.png/v1/fill/w_600,h_596,al_c,q_95,enc_avif,quality_auto/afed94_2f6744edac0e43cd852d26c989b87944~mv2_d_2237_2222_s_2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Objeto de parede IV",
+        "ANO": "2015",
+        "TECNICA_PT": "Acrílica, óleo e placas de mdf sobre tela.",
+        "TECNICA_EN": "Acrylic, oil and mdf board on canvas.",
+        "DIMENSOES": "73 x 75 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_01c9e17ab544457892e4487d060cfe4d~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_01c9e17ab544457892e4487d060cfe4d~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_01c9e17ab544457892e4487d060cfe4d~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Variação VIII",
+        "ANO": "2015",
+        "TECNICA_PT": "Acrílica, óleo, spray e grampos sobre tela.",
+        "TECNICA_EN": "Acrylic, oil, spray and staples on canvas.",
+        "DIMENSOES": "60 x 80 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_2ab7a22425344288977cc730a13ef9b6~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_2ab7a22425344288977cc730a13ef9b6~mv2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_2ab7a22425344288977cc730a13ef9b6~mv2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Balyba",
+        "ANO": "2014",
+        "TECNICA_PT": "Óleo sobre tela.",
+        "TECNICA_EN": "Oil on canvas.",
+        "DIMENSOES": "100 x 150 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_25806c0c3d7d4c57b13acb341719f54a~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_25806c0c3d7d4c57b13acb341719f54a~mv2_d_1800_1800_s_2.png/v1/fill/w_750,h_550,al_c,q_95,enc_avif,quality_auto/afed94_25806c0c3d7d4c57b13acb341719f54a~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Serpentarius",
+        "ANO": "2014",
+        "TECNICA_PT": "Óleo sobre tela.",
+        "TECNICA_EN": "Oil on canvas.",
+        "DIMENSOES": "120 x 160 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_f0901e2417ab46408225db125b02fa58~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_f0901e2417ab46408225db125b02fa58~mv2_d_1800_1800_s_2.png/v1/fill/w_750,h_600,al_c,q_95,enc_avif,quality_auto/afed94_f0901e2417ab46408225db125b02fa58~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Draco",
+        "ANO": "2012",
+        "TECNICA_PT": "Acrílica e óleo sobre tela.",
+        "TECNICA_EN": "Acrylic and oil on canvas.",
+        "DIMENSOES": "180 x 180 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_743ff1bb46214cc0b8dc39133948e71c~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_743ff1bb46214cc0b8dc39133948e71c~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_743ff1bb46214cc0b8dc39133948e71c~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Orion",
+        "ANO": "2012",
+        "TECNICA_PT": "Acrílica e óleo sobre tela.",
+        "TECNICA_EN": "Acrylic and oil on canvas.",
+        "DIMENSOES": "180 x 150 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_678a33bde30443458098439244386f36~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_678a33bde30443458098439244386f36~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_678a33bde30443458098439244386f36~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Mafalda",
+        "ANO": "2011",
+        "TECNICA_PT": "Acrílica e óleo sobre tela.",
+        "TECNICA_EN": "Acrylic and oil on canvas.",
+        "DIMENSOES": "160 x 100 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_38dff4564d47411cb937940bae453d6c~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_38dff4564d47411cb937940bae453d6c~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_38dff4564d47411cb937940bae453d6c~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Long, hard road out of hell",
+        "ANO": "2010/2011",
+        "TECNICA_PT": "Acrílica e óleo sobre tela.",
+        "TECNICA_EN": "Acrylic and oil on canvas.",
+        "DIMENSOES": "160 x 100 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_60ecc166419340f0af4f7c56cd7cdfd6~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_60ecc166419340f0af4f7c56cd7cdfd6~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_60ecc166419340f0af4f7c56cd7cdfd6~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Cova, reminiscências e aquilo que devo lembrar",
+        "ANO": "2013-2015",
+        "TECNICA_PT": "Acrílica e óleo sobre tela.",
+        "TECNICA_EN": "Acrylic and oil on canvas.",
+        "DIMENSOES": "200 x 150 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_c633515881a3440f80b2fce79a3b1b2e~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_c633515881a3440f80b2fce79a3b1b2e~mv2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_c633515881a3440f80b2fce79a3b1b2e~mv2.png",
+        "CATEGORIA": "PINTURAS"
+    },
+    {
+        "CONTADOR": "1/3",
+        "TITULO": "Escultura-Desenho",
+        "ANO": "2019",
+        "TECNICA_PT": "Galho, corrente de metal, fio eléctrico e tinta acrílica.",
+        "TECNICA_EN": "Twig, metal chain, electric wire and acrylic paint.",
+        "DIMENSOES": "110 x 50 x 25 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_531e94b93ecc45eeb59b38a2d67ffcfc~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_531e94b93ecc45eeb59b38a2d67ffcfc~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_531e94b93ecc45eeb59b38a2d67ffcfc~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "2/3",
+        "TITULO": "Escultura-Desenho",
+        "ANO": "2019",
+        "TECNICA_PT": "Galho, corrente de metal, fio eléctrico e tinta acrílica.",
+        "TECNICA_EN": "Twig, metal chain, electric wire and acrylic paint.",
+        "DIMENSOES": "110 x 50 x 25 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_55a65639a47b471cb1612f5db741883f~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_55a65639a47b471cb1612f5db741883f~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_55a65639a47b471cb1612f5db741883f~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "3/3",
+        "TITULO": "Escultura-Desenho",
+        "ANO": "2019",
+        "TECNICA_PT": "Galho, corrente de metal, fio eléctrico e tinta acrílica.",
+        "TECNICA_EN": "Twig, metal chain, electric wire and acrylic paint.",
+        "DIMENSOES": "110 x 50 x 25 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d424f23ebbbe47ca9301a5fa1b0108d2~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_d424f23ebbbe47ca9301a5fa1b0108d2~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d424f23ebbbe47ca9301a5fa1b0108d2~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Objeto de parede VI",
+        "ANO": "2019",
+        "TECNICA_PT": "Pvc, cabo elétrico,correntes de metal.",
+        "TECNICA_EN": "PVC, electric cable, metal chains.",
+        "DIMENSOES": "128 x 64 x 10 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d4ff7e244e954b4faa6a66a14954b033~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_d4ff7e244e954b4faa6a66a14954b033~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d4ff7e244e954b4faa6a66a14954b033~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Objeto de parede VI",
+        "ANO": "2019",
+        "TECNICA_PT": "Pvc, cabo elétrico,correntes de metal.",
+        "TECNICA_EN": "PVC, electric cable, metal chains.",
+        "DIMENSOES": "128 x 64 x 10 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_7a23872b033f46f6b987dffafebbe0ef~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_7a23872b033f46f6b987dffafebbe0ef~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_7a23872b033f46f6b987dffafebbe0ef~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "1/4",
+        "TITULO": "Pintura d'splay",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, estrutura de ferro e rodízios.",
+        "TECNICA_EN": "Acrylic and oil on canvas, iron frame and castors.",
+        "DIMENSOES": "176 x 123 x 83 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_1f4472aeec9043ada2b1a3229f11b794~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_1f4472aeec9043ada2b1a3229f11b794~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_1f4472aeec9043ada2b1a3229f11b794~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "2/4",
+        "TITULO": "Pintura d'splay",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, estrutura de ferro e rodízios.",
+        "TECNICA_EN": "Acrylic and oil on canvas, iron frame and castors.",
+        "DIMENSOES": "176 x 123 x 83 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_85fc74a67b65433f9c1cc0fc9f8d6c0b~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_85fc74a67b65433f9c1cc0fc9f8d6c0b~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_85fc74a67b65433f9c1cc0fc9f8d6c0b~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "3/4",
+        "TITULO": "Pintura d'splay",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, estrutura de ferro e rodízios.",
+        "TECNICA_EN": "Acrylic and oil on canvas, iron frame and castors.",
+        "DIMENSOES": "176 x 123 x 83 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_1cc34907407049c49065b3837b9bc90a~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_1cc34907407049c49065b3837b9bc90a~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_1cc34907407049c49065b3837b9bc90a~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "4/4",
+        "TITULO": "Pintura d'splay",
+        "ANO": "2019",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, estrutura de ferro e rodízios.",
+        "TECNICA_EN": "Acrylic and oil on canvas, iron frame and castors.",
+        "DIMENSOES": "176 x 123 x 83 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_e0905656a30046fda0b2c9ebcc7c8d16~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_e0905656a30046fda0b2c9ebcc7c8d16~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_e0905656a30046fda0b2c9ebcc7c8d16~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Blackbird",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, madeira, rede de pvc, fita adesiva, cabo elétrico e spray.",
+        "TECNICA_EN": "Acrylic and oil on canvas, wood, pvc net, adhesive tape, electric cable and spray.",
+        "DIMENSOES": "133 x 76 x 6 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_7f2282730f0243af961db78795426b26~mv2_d_2823_4153_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_7f2282730f0243af961db78795426b26~mv2_d_2823_4153_s_4_2.png/v1/fill/w_408,h_600,al_c,q_95,enc_avif,quality_auto/afed94_7f2282730f0243af961db78795426b26~mv2_d_2823_4153_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Frozen",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica e óleo sobre tela e correntes de ferro.",
+        "TECNICA_EN": "Acrylic and oil on canvas and iron chains.",
+        "DIMENSOES": "69 x 30 x 4 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d868297d2ca5412c872839aaea926e50~mv2_d_3421_5333_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_d868297d2ca5412c872839aaea926e50~mv2_d_3421_5333_s_4_2.png/v1/fill/w_385,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d868297d2ca5412c872839aaea926e50~mv2_d_3421_5333_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Objeto de parede V",
+        "ANO": "2018",
+        "TECNICA_PT": "Óleo sobre tela, madeira, corrente de metal e spray.",
+        "TECNICA_EN": "Oil on canvas, wood, metal chain and spray.",
+        "DIMENSOES": "98 x 60 x 6 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_704bdeee7a46476da29ae7066fa7c19b~mv2_d_5184_3456_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_704bdeee7a46476da29ae7066fa7c19b~mv2_d_5184_3456_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_704bdeee7a46476da29ae7066fa7c19b~mv2_d_5184_3456_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Objeto de parede V",
+        "ANO": "2018",
+        "TECNICA_PT": "Óleo sobre tela, madeira, corrente de metal e spray.",
+        "TECNICA_EN": "Oil on canvas, wood, metal chain and spray.",
+        "DIMENSOES": "98 x 60 x 6 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_5b7813c2aa534adeadeec5d8d5d99fcf~mv2_d_5184_3456_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_5b7813c2aa534adeadeec5d8d5d99fcf~mv2_d_5184_3456_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_5b7813c2aa534adeadeec5d8d5d99fcf~mv2_d_5184_3456_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Pequeno deslocamento",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica sobre tela, madeira e cinta de nylon.",
+        "TECNICA_EN": "Acrylic on canvas, wood and nylon strap.",
+        "DIMENSOES": "160 x 34 x 6 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_032143524ee54736be4a805a9a2b6067~mv2_d_5184_3456_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_032143524ee54736be4a805a9a2b6067~mv2_d_5184_3456_s_4_2.png/v1/fill/w_650,h_600,al_c,q_95,enc_avif,quality_auto/afed94_032143524ee54736be4a805a9a2b6067~mv2_d_5184_3456_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Pequeno deslocamento",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica sobre tela, madeira e cinta de nylon.",
+        "TECNICA_EN": "Acrylic on canvas, wood and nylon strap.",
+        "DIMENSOES": "160 x 34 x 6 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_9fb844e980d946bdbc9c6eefc0047b53~mv2_d_5184_3456_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_9fb844e980d946bdbc9c6eefc0047b53~mv2_d_5184_3456_s_4_2.png/v1/fill/w_650,h_600,al_c,q_95,enc_avif,quality_auto/afed94_9fb844e980d946bdbc9c6eefc0047b53~mv2_d_5184_3456_s_4_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Trava negra",
+        "ANO": "2018",
+        "TECNICA_PT": "Acrílica sobre tela, madeira, rede de pvc, fita adesiva, corrente de metal e lâmpada..",
+        "TECNICA_EN": "Acrylic on canvas, wood, pvc net, adhesive tape, metal chain and lamp.",
+        "DIMENSOES": "110 x 142 x 6 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_bacd97503e164f1ca186395f550ab1c0~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_bacd97503e164f1ca186395f550ab1c0~mv2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_bacd97503e164f1ca186395f550ab1c0~mv2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Badalo",
+        "ANO": "2016",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, fita adesiva, manta asfáltica, estrutura em ferro e zinco e rodízios.",
+        "TECNICA_EN": "Acrylic and oil on canvas, adhesive tape, asphalt membrane, iron and zinc structure and wheels.",
+        "DIMENSOES": "173 x 156 x 55 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_e032ca5991d847fe9e58aa42979be83d~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_e032ca5991d847fe9e58aa42979be83d~mv2.png/v1/fill/w_900,h_600,al_c,q_95,enc_avif,quality_auto/afed94_e032ca5991d847fe9e58aa42979be83d~mv2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Badalo",
+        "ANO": "2016",
+        "TECNICA_PT": "Acrílica e óleo sobre tela, fita adesiva, manta asfáltica, estrutura em ferro e zinco e rodízios.",
+        "TECNICA_EN": "Acrylic and oil on canvas, adhesive tape, asphalt membrane, iron and zinc structure and wheels.",
+        "DIMENSOES": "173 x 156 x 55 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_7d1976aafd7342f3b52a845dd42f74f0~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_7d1976aafd7342f3b52a845dd42f74f0~mv2_d_1800_1800_s_2.png/v1/fill/w_900,h_600,al_c,q_95,enc_avif,quality_auto/afed94_7d1976aafd7342f3b52a845dd42f74f0~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Coral VI",
+        "ANO": "2015",
+        "TECNICA_PT": "Acrílica sobre tela e blocos de granito.",
+        "TECNICA_EN": "Acrylic on canvas and granite blocks.",
+        "DIMENSOES": "180 x 120 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d99eeae0bc304c2ea799a7e31e43287e~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_d99eeae0bc304c2ea799a7e31e43287e~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d99eeae0bc304c2ea799a7e31e43287e~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Resgate-Unicórnio",
+        "ANO": "2014",
+        "TECNICA_PT": "Tinta acrílica, à óleo, madeira, mdf e fita adesiva sobre tela .",
+        "TECNICA_EN": "Acrylic, oil, wood, mdf, and adhesive tape on canvas.",
+        "DIMENSOES": "153 x 80 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_f7634f4ad98a4f8ea3024842e0805932~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_f7634f4ad98a4f8ea3024842e0805932~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_f7634f4ad98a4f8ea3024842e0805932~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "OBJETOS_DE_PAREDE"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Petite Voiture",
+        "ANO": "2019",
+        "TECNICA_PT": "Blocos de concreto, pvc, metal, manta asfáltica, tinta de acrílica e rodízios.",
+        "TECNICA_EN": "Concrete blocks, pvc, metal, asphalt blanket, acrylic paint and castors.",
+        "DIMENSOES": "24 x 24 x 14 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_7d99db5a1060431bb77a2ece85e9a063~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_7d99db5a1060431bb77a2ece85e9a063~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_7d99db5a1060431bb77a2ece85e9a063~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Petite Voiture",
+        "ANO": "2019",
+        "TECNICA_PT": "Blocos de concreto, pvc, metal, manta asfáltica, tinta de acrílica e rodízios.",
+        "TECNICA_EN": "Concrete blocks, pvc, metal, asphalt blanket, acrylic paint and castors.",
+        "DIMENSOES": "24 x 24 x 14 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_30b52ec4ebf643ea9def3d2036e587f2~mv2_d_4320_3240_s_4_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_30b52ec4ebf643ea9def3d2036e587f2~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_30b52ec4ebf643ea9def3d2036e587f2~mv2_d_4320_3240_s_4_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "11 degraus",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica e esmalte sobre madeira e manta asfáltica.",
+        "TECNICA_EN": "Acrylic and enamel on wood and asphalt membrane.",
+        "DIMENSOES": "33 x 58 x 21 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_5eade2df7ed3400a867ec435ccd6da16~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_5eade2df7ed3400a867ec435ccd6da16~mv2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_5eade2df7ed3400a867ec435ccd6da16~mv2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "11 degraus",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica e esmalte sobre madeira e manta asfáltica.",
+        "TECNICA_EN": "Acrylic and enamel on wood and asphalt membrane.",
+        "DIMENSOES": "33 x 58 x 21 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_27387aba5f614e58bc0029333fa1bcc4~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_27387aba5f614e58bc0029333fa1bcc4~mv2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_27387aba5f614e58bc0029333fa1bcc4~mv2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Britney",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e manta asfáltica.",
+        "TECNICA_EN": "Acrylic on concrete blocks and asphalt membrane.",
+        "DIMENSOES": "12 x 19,5 x 9,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_daeb7611a7274b828faf5250cd5adb96~mv2_d_2822_1977_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_daeb7611a7274b828faf5250cd5adb96~mv2_d_2822_1977_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_daeb7611a7274b828faf5250cd5adb96~mv2_d_2822_1977_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Britney",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e manta asfáltica.",
+        "TECNICA_EN": "Acrylic on concrete blocks and asphalt membrane.",
+        "DIMENSOES": "12 x 19,5 x 9,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_6399064932a24fc1b9c6f66cd2329893~mv2_d_3289_2192_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_6399064932a24fc1b9c6f66cd2329893~mv2_d_3289_2192_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_6399064932a24fc1b9c6f66cd2329893~mv2_d_3289_2192_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/3",
+        "TITULO": "Infantario pareado",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica e esmalte sobre madeira e manta asfáltica.",
+        "TECNICA_EN": "Acrylic and enamel on wood and asphalt membrane.",
+        "DIMENSOES": "21 x 28 x 21 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_1b734640c7064ddf8197d2c18607ea24~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_1b734640c7064ddf8197d2c18607ea24~mv2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_1b734640c7064ddf8197d2c18607ea24~mv2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "2/3",
+        "TITULO": "Infantario pareado",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica e esmalte sobre madeira e manta asfáltica.",
+        "TECNICA_EN": "Acrylic and enamel on wood and asphalt membrane.",
+        "DIMENSOES": "21 x 28 x 21 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_05726258b0fe4d4aa6f08bc64fa31e91~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_05726258b0fe4d4aa6f08bc64fa31e91~mv2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_05726258b0fe4d4aa6f08bc64fa31e91~mv2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "3/3",
+        "TITULO": "Infantario pareado",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica e esmalte sobre madeira e manta asfáltica.",
+        "TECNICA_EN": "Acrylic and enamel on wood and asphalt membrane.",
+        "DIMENSOES": "21 x 28 x 21 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_6d65846aef6b4c608e7f9a184c317bfc~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_6d65846aef6b4c608e7f9a184c317bfc~mv2_d_1800_1800_s_2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_6d65846aef6b4c608e7f9a184c317bfc~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Swish-wish #1",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto.",
+        "TECNICA_EN": "Acrylic on concrete blocks.",
+        "DIMENSOES": "23 x 19 x 12,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d8e894ac3b7c47f187971a2853679479~mv2_d_1690_2148_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_d8e894ac3b7c47f187971a2853679479~mv2_d_1690_2148_s_2.png/v1/fill/w_472,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d8e894ac3b7c47f187971a2853679479~mv2_d_1690_2148_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Swish-wish #1",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto.",
+        "TECNICA_EN": "Acrylic on concrete blocks.",
+        "DIMENSOES": "23 x 19 x 12,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_1f01a4d3d52046c6be89e430e32b7036~mv2_d_1897_2257_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_1f01a4d3d52046c6be89e430e32b7036~mv2_d_1897_2257_s_2.png/v1/fill/w_504,h_600,al_c,q_95,enc_avif,quality_auto/afed94_1f01a4d3d52046c6be89e430e32b7036~mv2_d_1897_2257_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Swish-wish #2",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto.",
+        "TECNICA_EN": "Acrylic on concrete blocks.",
+        "DIMENSOES": "23 x 28 x 25 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d673cb25c3c44c449cb2f97e80ced304~mv2_d_2408_1925_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_d673cb25c3c44c449cb2f97e80ced304~mv2_d_2408_1925_s_2.png/v1/fill/w_700,h_560,al_c,q_95,enc_avif,quality_auto/afed94_d673cb25c3c44c449cb2f97e80ced304~mv2_d_2408_1925_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Swish-wish #2",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto.",
+        "TECNICA_EN": "Acrylic on concrete blocks.",
+        "DIMENSOES": "23 x 28 x 25 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_f1dedf54ecaf4932bb06094236f0af60~mv2_d_2001_1858_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_f1dedf54ecaf4932bb06094236f0af60~mv2_d_2001_1858_s_2.png/v1/fill/w_646,h_600,al_c,q_95,enc_avif,quality_auto/afed94_f1dedf54ecaf4932bb06094236f0af60~mv2_d_2001_1858_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/2",
+        "TITULO": "Swish-wish #3",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto.",
+        "TECNICA_EN": "Acrylic on concrete blocks.",
+        "DIMENSOES": "23 x 19 x 12,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_27aa731f31cf44f2af63c4cc3ce3786a~mv2_d_2291_1908_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_27aa731f31cf44f2af63c4cc3ce3786a~mv2_d_2291_1908_s_2.png/v1/fill/w_700,h_583,al_c,q_95,enc_avif,quality_auto/afed94_27aa731f31cf44f2af63c4cc3ce3786a~mv2_d_2291_1908_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "2/2",
+        "TITULO": "Swish-wish #3",
+        "ANO": "2017",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto.",
+        "TECNICA_EN": "Acrylic on concrete blocks.",
+        "DIMENSOES": "23 x 19 x 12,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_969754b1b7b3400395db6b86f1cca96b~mv2_d_2400_1889_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_969754b1b7b3400395db6b86f1cca96b~mv2_d_2400_1889_s_2.png/v1/fill/w_700,h_551,al_c,q_95,enc_avif,quality_auto/afed94_969754b1b7b3400395db6b86f1cca96b~mv2_d_2400_1889_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Junção exposta",
+        "ANO": "2016",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e manta asfáltica.",
+        "TECNICA_EN": "Acrylic on concrete blocks and asphalt membrane.",
+        "DIMENSOES": "19 x 19,5 x 5,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_875cdcef01064637979e8484b06c9f23~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_875cdcef01064637979e8484b06c9f23~mv2_d_1800_1800_s_2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_875cdcef01064637979e8484b06c9f23~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Tamanco",
+        "ANO": "2016",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto, manta asfáltica e fita adesiva.",
+        "TECNICA_EN": "Acrylic on concrete blocks, asphalt membrane and adhesive tape.",
+        "DIMENSOES": "16 x 10 x 22 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_12de1d63930e4a43b82837c80407dca5~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_12de1d63930e4a43b82837c80407dca5~mv2_d_1800_1800_s_2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_12de1d63930e4a43b82837c80407dca5~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "3pra1",
+        "ANO": "2015",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto e tecido.",
+        "TECNICA_EN": "Acrylic on concrete blocks and fabric.",
+        "DIMENSOES": "24,5 x 9,5 x 19,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_352d3a8778984ad7b6dd03e32484e4b6~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_352d3a8778984ad7b6dd03e32484e4b6~mv2_d_1800_1800_s_2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_352d3a8778984ad7b6dd03e32484e4b6~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Ninho",
+        "ANO": "2015",
+        "TECNICA_PT": "Acrílica, cabo, blocos de concreto e borracha.",
+        "TECNICA_EN": "Acrylic, cable, concrete blocks and rubber.",
+        "DIMENSOES": "11,5 x 30 x 26 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_fc972e2f906748b5b09cebdc1b98ed9c~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_fc972e2f906748b5b09cebdc1b98ed9c~mv2_d_1800_1800_s_2.png/v1/fill/w_800,h_600,al_c,q_95,enc_avif,quality_auto/afed94_fc972e2f906748b5b09cebdc1b98ed9c~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Over bikini wasabi",
+        "ANO": "2015",
+        "TECNICA_PT": "Acrílica sobre blocos de concreto",
+        "TECNICA_EN": "Acrylic on concrete blocks",
+        "DIMENSOES": "12 x 9,5 x 19,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_dab006e4d69646d9b04f2b966294dec5~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_dab006e4d69646d9b04f2b966294dec5~mv2_d_1800_1800_s_2.png/v1/fill/w_550,h_550,al_c,q_95,enc_avif,quality_auto/afed94_dab006e4d69646d9b04f2b966294dec5~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Pequenos traumas urbanos III",
+        "ANO": "2015",
+        "TECNICA_PT": "Acrílica, cimento e blocos de concreto.",
+        "TECNICA_EN": "Acrylic, cement and concrete.",
+        "DIMENSOES": "blocks 6 x 47 x 25 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_504971d7207c4654a15384ec63488a46~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_504971d7207c4654a15384ec63488a46~mv2_d_1800_1800_s_2.png/v1/fill/w_800,h_600,al_c,q_95,enc_avif,quality_auto/afed94_504971d7207c4654a15384ec63488a46~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "B&G",
+        "ANO": "2014",
+        "TECNICA_PT": "Tijolos de concreto, acrílica e cordão dourado.",
+        "TECNICA_EN": "Concrete bricks, acrylic and golden string.",
+        "DIMENSOES": "18,5 x 19,5 x 9,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_4a668efc2bc248e9ab006524b39d05eb~mv2_d_1800_1800_s_2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_4a668efc2bc248e9ab006524b39d05eb~mv2_d_1800_1800_s_2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_4a668efc2bc248e9ab006524b39d05eb~mv2_d_1800_1800_s_2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Lua",
+        "ANO": "2014",
+        "TECNICA_PT": "Bola, tinta acrílica e bloco de granito.",
+        "TECNICA_EN": "Ball, acrylic and granite block.",
+        "DIMENSOES": "30 x 21 x 16 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_e248d422b8264e479fb7e1e9824851bf~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_e248d422b8264e479fb7e1e9824851bf~mv2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_e248d422b8264e479fb7e1e9824851bf~mv2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Outra língua",
+        "ANO": "2014",
+        "TECNICA_PT": "Tijolo de concreto, acrílica e osso",
+        "TECNICA_EN": "Concrete brick, acrylic and bone",
+        "DIMENSOES": "9,5 x 12 x 16,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_fe24f6132c0445bd9ffb0a159b3fd70a~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_fe24f6132c0445bd9ffb0a159b3fd70a~mv2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_fe24f6132c0445bd9ffb0a159b3fd70a~mv2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Over I",
+        "ANO": "2014",
+        "TECNICA_PT": "Tijolos de concreto e acrílica.",
+        "TECNICA_EN": "Concrete bricks and acrylic.",
+        "DIMENSOES": "44,5 x 17 x 6 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_4397327e4c1a4f0ead948e5c0f4ace4d~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_4397327e4c1a4f0ead948e5c0f4ace4d~mv2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_4397327e4c1a4f0ead948e5c0f4ace4d~mv2.png",
+        "CATEGORIA": "OBJETOS"
+    },
+    {
+        "CONTADOR": "1/1",
+        "TITULO": "Wilson levitante",
+        "ANO": "2014",
+        "TECNICA_PT": "Blocos de concreto, tinta acrílica, vidro e bola de tênis.",
+        "TECNICA_EN": "Concrete bocks, acrylic, glass and tennis ball.",
+        "DIMENSOES": "26 x 10 x 19,5 cm",
+        "IMG_HIGH": "https://static.wixstatic.com/media/afed94_67392896b44f42f0a1503820cfce8f6a~mv2.png",
+        "IMG_LOW": "https://static.wixstatic.com/media/afed94_67392896b44f42f0a1503820cfce8f6a~mv2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_67392896b44f42f0a1503820cfce8f6a~mv2.png",
+        "CATEGORIA": "OBJETOS"
+    },
     {
         "CONTADOR": "1/2",
         "TITULO": "n.4, Cartões que não dei",
@@ -620,8 +1280,9 @@
         "CATEGORIA": "ESCULTURAS"
     }
 ]; 
+    // -------------------------------------------------------
 
-    const categoriasOrdem = ["COLAGENS", "ESCULTURAS", "PINTURAS", "OBJETOS"];
+    const categoriasOrdem = ["PINTURAS", "OBJETOS_DE_PAREDE", "OBJETOS", "ESCULTURAS", "COLAGENS"];
     let carrosselAtivo = null;
 
     function init() {
@@ -640,32 +1301,62 @@
 
             const section = document.createElement('section');
             section.className = 'category-section';
+            
             section.innerHTML = `
-                <h2 class="category-title">${cat}</h2>
-                <div class="carousel-outer">
-                    <button class="nav-arrow arrow-left" onclick="scrollBtn(this, -1)">❮</button>
-                    <div class="carousel-track">
-                        ${obras.map(o => `
-                            <div class="carousel-item" data-title="${o.TITULO}" data-year="${o.ANO}">
-                                <img src="${o.IMG_LOW}" alt="${o.TITULO}" onclick="openWork('${o.URL}')">
-                            </div>
-                        `).join('')}
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <h2 class="category-title">${cat}</h2>
+                    <div class="nav-arrows-container">
+                        <button class="nav-arrow" onclick="scrollBtn(this, -1, event)">❮</button>
+                        <button class="nav-arrow" onclick="scrollBtn(this, 1, event)">❯</button>
                     </div>
-                    <button class="nav-arrow arrow-right" onclick="scrollBtn(this, 1)">❯</button>
                 </div>
-                <div class="active-info-display">
-                    <div class="info-title"></div>
-                    <div class="info-year"></div>
+                <div class="category-body">
+                    <div class="carousel-outer">
+                        <div class="carousel-track">
+                            ${obras.map(o => `
+                                <div class="carousel-item" data-title="${o.TITULO}" data-year="${o.ANO}">
+                                    <img src="${o.IMG_LOW}" alt="${o.TITULO}" onclick="openWork('${o.URL}')">
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="active-info-display">
+                        <div class="info-line"></div>
+                    </div>
                 </div>
             `;
             home.appendChild(section);
         });
     }
 
-    // Scroll via botões
-    window.scrollBtn = (btn, dir) => {
-        const track = btn.parentElement.querySelector('.carousel-track');
-        const scrollAmount = window.innerWidth * 0.6 * dir;
+    // Toggle da categoria (Abrir/Fechar)
+    window.toggleCategory = (header) => {
+        const section = header.parentElement;
+        const wasOpen = section.classList.contains('open');
+        
+        // Opcional: Fecha outras antes de abrir a nova
+        // document.querySelectorAll('.category-section').forEach(s => s.classList.remove('open'));
+        
+        if (!wasOpen) {
+            section.classList.add('open');
+            // Define o carrossel desta seção como ativo para o teclado
+            carrosselAtivo = section.querySelector('.carousel-track');
+        } else {
+            section.classList.remove('open');
+        }
+    };
+
+    // Scroll via botões alinhados à direita
+    window.scrollBtn = (btn, dir, event) => {
+        event.stopPropagation(); // Não fecha a aba ao clicar na seta
+        const section = btn.closest('.category-section');
+        const track = section.querySelector('.carousel-track');
+        
+        if (!section.classList.contains('open')) {
+            toggleCategory(section.querySelector('.category-header'));
+        }
+
+        const scrollAmount = window.innerWidth * 0.5 * dir;
         track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     };
 
@@ -673,7 +1364,7 @@
     function setupIntersectionObserver() {
         const options = {
             root: document.getElementById('scroll-container'),
-            rootMargin: '0px -49% 0px -49%', // Foca em uma linha de 2% no centro
+            rootMargin: '0px -49% 0px -49%',
             threshold: 0
         };
 
@@ -682,19 +1373,20 @@
                 if (entry.isIntersecting) {
                     const item = entry.target;
                     const section = item.closest('.category-section');
-                    const titleEl = section.querySelector('.info-title');
-                    const yearEl = section.querySelector('.info-year');
+                    const infoEl = section.querySelector('.info-line');
 
-                    // Resetar e Ativar
+                    // Resetar e Ativar Opacidade
                     section.querySelectorAll('.carousel-item').forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
 
-                    // Atualizar Texto
-                    titleEl.innerText = item.dataset.title;
-                    yearEl.innerText = item.dataset.year;
+                    // Formatação: TÍTULO, ANO (Título Bold)
+                    const anoTexto = item.dataset.year ? `, ${item.dataset.year}` : '';
+                    infoEl.innerHTML = `<strong>${item.dataset.title}</strong><span>${anoTexto}</span>`;
 
-                    // Marcar este carrossel como o ativo para o teclado
-                    carrosselAtivo = item.closest('.carousel-track');
+                    // Sincroniza o carrossel ativo para o teclado conforme o scroll manual
+                    if (section.classList.contains('open')) {
+                        carrosselAtivo = item.closest('.carousel-track');
+                    }
                 }
             });
         }, options);
@@ -705,9 +1397,9 @@
     // Navegação por Teclado
     function setupKeyboardNav() {
         document.addEventListener('keydown', (e) => {
-            if (!carrosselAtivo || mainFrame.classList.contains('active')) return;
+            if (!carrosselAtivo || document.getElementById('main-frame').classList.contains('active')) return;
             
-            const scrollAmount = window.innerWidth * 0.4;
+            const scrollAmount = window.innerWidth * 0.3;
             if (e.key === 'ArrowRight') carrosselAtivo.scrollBy({ left: scrollAmount, behavior: 'smooth' });
             if (e.key === 'ArrowLeft') carrosselAtivo.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
         });
@@ -727,6 +1419,7 @@
         document.getElementById('home-view').classList.remove('hidden');
     }
 
+    // Inicializa
     init();
 </script>
 </body>
