@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SANTACOSTA | V2</title>
+<title>SANTACOSTA | Galeria</title>
 <style>
     :root {
         --verde-claro: #4aff98;
         --verde-escuro: #171c1a;
         --texto-secundario: #b3b3b3; 
         --linha-divisoria: #333333;
-        /* MANTIDO: Suas alterações de CSS */
         --altura-obra: 42vh; 
-        --gap-obras: 88px;   
+        --gap-obras: 88px;
+        --font-cat: clamp(10px, 1.2vw, 14px);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -39,65 +39,71 @@
         z-index: 2000;
         flex-shrink: 0;
     }
-
     .logo { font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; }
 
-    /* --- ÁREA DE SCROLL --- */
-    .viewer-container {
-        flex-grow: 1;
-        overflow-y: auto;
-        background: #000;
-        scroll-behavior: smooth;
+    /* --- CONTAINER --- */
+    .viewer-container { flex-grow: 1; overflow-y: auto; background: #000; scroll-behavior: smooth; }
+    #content-view { padding: 20px 0; display: flex; flex-direction: column; }
+
+    /* --- GRID INICIAL (3 COLUNAS) --- */
+    .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding: 0 4vw;
     }
+    .grid-item { cursor: pointer; padding-bottom: 20px; }
+    .grid-item .category-title-main { 
+        font-size: var(--font-cat); 
+        color: #fff; 
+        letter-spacing: 1.5px; 
+        margin-bottom: 8px; 
+        display: block; 
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+    .grid-item .thumb-container { width: 100%; aspect-ratio: 1/1; background: #111; overflow: hidden; }
+    .grid-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+    .grid-item:hover img { filter: brightness(1.2); }
 
-    #home-view { padding: 40px 0; display: flex; flex-direction: column; gap: 40px; }
+    /* --- TOP NAV (MODO ATIVO) --- */
+    .top-nav-list { 
+        display: flex; 
+        flex-direction: row; 
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--linha-divisoria); 
+        margin-bottom: 5px; 
+    }
+    .nav-link-item { 
+        flex: 1;
+        padding: 15px 10px; 
+        font-size: var(--font-cat); 
+        text-transform: uppercase; 
+        color: var(--texto-secundario); 
+        cursor: pointer; 
+        letter-spacing: 1.5px;
+        text-align: center;
+        border-right: 1px solid #222;
+        transition: 0.2s;
+    }
+    .nav-link-item:last-child { border-right: none; }
+    .nav-link-item:hover { color: #fff; background: #111; }
 
-    .category-section { display: flex; flex-direction: column; border-bottom: 1px solid #222; padding-bottom: 20px; }
-    
-    /* Cabeçalho da Categoria com Título e Setas */
-    .category-header {
+    /* --- ACTIVE HEADER --- */
+    .active-section-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 4vw;
-        cursor: pointer;
-        height: 50px;
-        transition: background 0.2s;
+        padding: 20px 4vw;
+        background: #080808;
+        border-bottom: 1px solid #222;
     }
-    .category-header:hover { background: rgba(255,255,255,0.03); }
-
-    .category-title {
-        font-size: 14px;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        color: var(--verde-claro);
-        font-weight: 900;
-    }
-
-    .nav-arrows-container { display: flex; gap: 20px; }
-    .nav-arrow {
-        background: transparent;
-        color: var(--verde-claro);
-        border: none;
-        font-size: 20px;
-        cursor: pointer;
-        padding: 5px 10px;
-        transition: opacity 0.2s;
-    }
-    .nav-arrow:hover { opacity: 0.6; }
-
-    /* Corpo da Galeria (Escondido por padrão) */
-    .category-body {
-        display: none; /* Só aparece quando clicado */
-        flex-direction: column;
-        gap: 20px;
-        margin-top: 20px;
-    }
-    .category-section.open .category-body { display: flex; }
+    .active-title { font-size: clamp(12px, 1.5vw, 16px); font-weight: 900; color: var(--verde-claro); letter-spacing: 3px; text-transform: uppercase; }
+    .nav-arrows-container { display: flex; gap: 30px; }
+    .nav-arrow { background: transparent; color: var(--verde-claro); border: none; font-size: 22px; cursor: pointer; }
 
     /* --- CARROSSEL --- */
-    .carousel-outer { position: relative; width: 100%; }
-
+    .carousel-container { padding: 40px 0; }
     .carousel-track {
         display: flex;
         gap: var(--gap-obras);
@@ -109,59 +115,50 @@
     }
     .carousel-track::-webkit-scrollbar { display: none; }
 
-    .carousel-item {
-        flex: 0 0 auto;
-        height: 100%;
-        scroll-snap-align: center;
-        display: flex;
-        align-items: center;
-    }
-
-    .carousel-item img {
-        height: 100%;
-        width: auto;
-        display: block;
-        opacity: 0.15;
-        transition: opacity 0.4s ease;
+    .carousel-item { flex: 0 0 auto; height: 100%; scroll-snap-align: center; display: flex; align-items: center; }
+    .carousel-item img { 
+        height: 100%; 
+        width: auto; 
+        max-width: 100vw; 
+        opacity: 0.8; 
+        transition: opacity 0.4s ease; 
+        object-fit: contain;
+        cursor: pointer;
     }
     .carousel-item.active img { opacity: 1; }
 
-    /* --- INFO DISPLAY --- */
-    .active-info-display {
-        text-align: center;
-        min-height: 40px;
-        font-size: 14px;
-        color: #fff;
-    }
+    /* --- FICHA TÉCNICA --- */
+    .info-display { text-align: center; padding: 20px 4vw; }
+    .info-line { font-size: 14px; line-height: 1.6; }
     .info-line strong { font-weight: 700; text-transform: uppercase; color: var(--verde-claro); }
-    .info-line span { color: var(--texto-secundario); margin-left: 2px; }
-
-    /* IFRAME */
-    #main-frame { width: 100%; height: 100%; border: none; display: none; }
-    #main-frame.active { display: block; }
-    #home-view.hidden { display: none; }
-
-    /* MENU SUPERIOR */
-    .nav-desktop { display: flex; gap: 3vw; }
-    .nav-item { cursor: pointer; text-transform: uppercase; font-size: 12px; font-weight: 700; color: var(--texto-secundario); }
-    .nav-item:hover { color: #fff; }
+    .info-line span { color: var(--texto-secundario); margin-left: 4px; }
+    
+    .detail-specs { margin-top: 15px; font-size: 13px; color: var(--texto-secundario); max-width: 600px; margin-left: auto; margin-right: auto; }
+    .detail-specs i { font-style: italic; opacity: 0.7; display: block; margin: 4px 0; }
+    .btn-back { 
+        display: inline-block; margin-top: 25px; font-size: 10px; text-transform: uppercase; 
+        letter-spacing: 2px; color: var(--verde-claro); cursor: pointer; border: 1px solid var(--verde-claro);
+        padding: 8px 15px; transition: 0.3s;
+    }
+    .btn-back:hover { background: var(--verde-claro); color: #000; }
 
     @media (max-width: 768px) {
         :root { --gap-obras: 40px; }
-        .nav-desktop { display: none; }
+        .top-nav-list { display: grid; grid-template-columns: repeat(2, 1fr); }
+        .nav-link-item { border-right: 1px solid #222; border-bottom: 1px solid #222; }
+        .nav-link-item:nth-child(2n) { border-right: none; }
+        .grid-item .category-title-main { font-size: 9px; letter-spacing: 0.5px; }
     }
 </style>
 </head>
 <body>
 
     <header class="header-fixed">
-        <div class="logo" onclick="showHome()">SANTACOSTA</div>
-        <nav class="nav-desktop" id="main-nav"></nav>
+        <div class="logo" onclick="resetPage()">SANTACOSTA</div>
     </header>
 
     <main class="viewer-container" id="scroll-container">
-        <div id="home-view"></div>
-        <iframe name="conteudo-site" id="main-frame" src="about:blank"></iframe>
+        <div id="content-view"></div>
     </main>
 
 <script>
@@ -320,7 +317,7 @@
         "DIMENSOES": "110 x 50 x 25 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_531e94b93ecc45eeb59b38a2d67ffcfc~mv2_d_4320_3240_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_531e94b93ecc45eeb59b38a2d67ffcfc~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_531e94b93ecc45eeb59b38a2d67ffcfc~mv2_d_4320_3240_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "2/3",
@@ -331,7 +328,7 @@
         "DIMENSOES": "110 x 50 x 25 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_55a65639a47b471cb1612f5db741883f~mv2_d_4320_3240_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_55a65639a47b471cb1612f5db741883f~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_55a65639a47b471cb1612f5db741883f~mv2_d_4320_3240_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "3/3",
@@ -342,7 +339,7 @@
         "DIMENSOES": "110 x 50 x 25 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d424f23ebbbe47ca9301a5fa1b0108d2~mv2_d_4320_3240_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_d424f23ebbbe47ca9301a5fa1b0108d2~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d424f23ebbbe47ca9301a5fa1b0108d2~mv2_d_4320_3240_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "1/2",
@@ -353,7 +350,7 @@
         "DIMENSOES": "128 x 64 x 10 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d4ff7e244e954b4faa6a66a14954b033~mv2_d_4320_3240_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_d4ff7e244e954b4faa6a66a14954b033~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d4ff7e244e954b4faa6a66a14954b033~mv2_d_4320_3240_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "2/2",
@@ -364,7 +361,7 @@
         "DIMENSOES": "128 x 64 x 10 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_7a23872b033f46f6b987dffafebbe0ef~mv2_d_4320_3240_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_7a23872b033f46f6b987dffafebbe0ef~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_7a23872b033f46f6b987dffafebbe0ef~mv2_d_4320_3240_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "1/4",
@@ -375,7 +372,7 @@
         "DIMENSOES": "176 x 123 x 83 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_1f4472aeec9043ada2b1a3229f11b794~mv2_d_4320_3240_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_1f4472aeec9043ada2b1a3229f11b794~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_1f4472aeec9043ada2b1a3229f11b794~mv2_d_4320_3240_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "2/4",
@@ -386,7 +383,7 @@
         "DIMENSOES": "176 x 123 x 83 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_85fc74a67b65433f9c1cc0fc9f8d6c0b~mv2_d_4320_3240_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_85fc74a67b65433f9c1cc0fc9f8d6c0b~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_85fc74a67b65433f9c1cc0fc9f8d6c0b~mv2_d_4320_3240_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "3/4",
@@ -397,7 +394,7 @@
         "DIMENSOES": "176 x 123 x 83 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_1cc34907407049c49065b3837b9bc90a~mv2_d_4320_3240_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_1cc34907407049c49065b3837b9bc90a~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_1cc34907407049c49065b3837b9bc90a~mv2_d_4320_3240_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "4/4",
@@ -408,7 +405,7 @@
         "DIMENSOES": "176 x 123 x 83 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_e0905656a30046fda0b2c9ebcc7c8d16~mv2_d_4320_3240_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_e0905656a30046fda0b2c9ebcc7c8d16~mv2_d_4320_3240_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_e0905656a30046fda0b2c9ebcc7c8d16~mv2_d_4320_3240_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "1/1",
@@ -419,7 +416,7 @@
         "DIMENSOES": "133 x 76 x 6 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_7f2282730f0243af961db78795426b26~mv2_d_2823_4153_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_7f2282730f0243af961db78795426b26~mv2_d_2823_4153_s_4_2.png/v1/fill/w_408,h_600,al_c,q_95,enc_avif,quality_auto/afed94_7f2282730f0243af961db78795426b26~mv2_d_2823_4153_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "1/1",
@@ -430,7 +427,7 @@
         "DIMENSOES": "69 x 30 x 4 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d868297d2ca5412c872839aaea926e50~mv2_d_3421_5333_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_d868297d2ca5412c872839aaea926e50~mv2_d_3421_5333_s_4_2.png/v1/fill/w_385,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d868297d2ca5412c872839aaea926e50~mv2_d_3421_5333_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "1/2",
@@ -441,7 +438,7 @@
         "DIMENSOES": "98 x 60 x 6 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_704bdeee7a46476da29ae7066fa7c19b~mv2_d_5184_3456_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_704bdeee7a46476da29ae7066fa7c19b~mv2_d_5184_3456_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_704bdeee7a46476da29ae7066fa7c19b~mv2_d_5184_3456_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "2/2",
@@ -452,7 +449,7 @@
         "DIMENSOES": "98 x 60 x 6 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_5b7813c2aa534adeadeec5d8d5d99fcf~mv2_d_5184_3456_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_5b7813c2aa534adeadeec5d8d5d99fcf~mv2_d_5184_3456_s_4_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_5b7813c2aa534adeadeec5d8d5d99fcf~mv2_d_5184_3456_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "1/2",
@@ -463,7 +460,7 @@
         "DIMENSOES": "160 x 34 x 6 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_032143524ee54736be4a805a9a2b6067~mv2_d_5184_3456_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_032143524ee54736be4a805a9a2b6067~mv2_d_5184_3456_s_4_2.png/v1/fill/w_650,h_600,al_c,q_95,enc_avif,quality_auto/afed94_032143524ee54736be4a805a9a2b6067~mv2_d_5184_3456_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "2/2",
@@ -474,7 +471,7 @@
         "DIMENSOES": "160 x 34 x 6 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_9fb844e980d946bdbc9c6eefc0047b53~mv2_d_5184_3456_s_4_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_9fb844e980d946bdbc9c6eefc0047b53~mv2_d_5184_3456_s_4_2.png/v1/fill/w_650,h_600,al_c,q_95,enc_avif,quality_auto/afed94_9fb844e980d946bdbc9c6eefc0047b53~mv2_d_5184_3456_s_4_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "1/1",
@@ -485,7 +482,7 @@
         "DIMENSOES": "110 x 142 x 6 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_bacd97503e164f1ca186395f550ab1c0~mv2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_bacd97503e164f1ca186395f550ab1c0~mv2.png/v1/fill/w_700,h_600,al_c,q_95,enc_avif,quality_auto/afed94_bacd97503e164f1ca186395f550ab1c0~mv2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "1/2",
@@ -496,7 +493,7 @@
         "DIMENSOES": "173 x 156 x 55 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_e032ca5991d847fe9e58aa42979be83d~mv2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_e032ca5991d847fe9e58aa42979be83d~mv2.png/v1/fill/w_900,h_600,al_c,q_95,enc_avif,quality_auto/afed94_e032ca5991d847fe9e58aa42979be83d~mv2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "2/2",
@@ -507,7 +504,7 @@
         "DIMENSOES": "173 x 156 x 55 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_7d1976aafd7342f3b52a845dd42f74f0~mv2_d_1800_1800_s_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_7d1976aafd7342f3b52a845dd42f74f0~mv2_d_1800_1800_s_2.png/v1/fill/w_900,h_600,al_c,q_95,enc_avif,quality_auto/afed94_7d1976aafd7342f3b52a845dd42f74f0~mv2_d_1800_1800_s_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "1/1",
@@ -518,7 +515,7 @@
         "DIMENSOES": "180 x 120 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_d99eeae0bc304c2ea799a7e31e43287e~mv2_d_1800_1800_s_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_d99eeae0bc304c2ea799a7e31e43287e~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_d99eeae0bc304c2ea799a7e31e43287e~mv2_d_1800_1800_s_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "1/1",
@@ -529,7 +526,7 @@
         "DIMENSOES": "153 x 80 cm",
         "IMG_HIGH": "https://static.wixstatic.com/media/afed94_f7634f4ad98a4f8ea3024842e0805932~mv2_d_1800_1800_s_2.png",
         "IMG_LOW": "https://static.wixstatic.com/media/afed94_f7634f4ad98a4f8ea3024842e0805932~mv2_d_1800_1800_s_2.png/v1/fill/w_600,h_600,al_c,q_95,enc_avif,quality_auto/afed94_f7634f4ad98a4f8ea3024842e0805932~mv2_d_1800_1800_s_2.png",
-        "CATEGORIA": "OBJETOS_DE_PAREDE"
+        "CATEGORIA": "OBJETOS DE PAREDE"
     },
     {
         "CONTADOR": "1/2",
@@ -1282,144 +1279,183 @@
 ]; 
     // -------------------------------------------------------
 
-    const categoriasOrdem = ["PINTURAS", "OBJETOS_DE_PAREDE", "OBJETOS", "ESCULTURAS", "COLAGENS"];
+    const ordemCategorias = ["PINTURAS", "OBJETOS DE PAREDE", "OBJETOS", "ESCULTURAS", "COLAGENS"];
+    let activeCategory = null;
+    let selectedWork = null;
     let carrosselAtivo = null;
 
     function init() {
-        renderHome();
-        setupIntersectionObserver();
+        render();
         setupKeyboardNav();
     }
 
-    function renderHome() {
-        const home = document.getElementById('home-view');
-        home.innerHTML = '';
-        
-        categoriasOrdem.forEach(cat => {
-            const obras = dadosObras.filter(o => o.CATEGORIA === cat && o.CONTADOR && o.CONTADOR.startsWith("1/"));
-            if (obras.length === 0) return;
+    function render() {
+        const container = document.getElementById('content-view');
+        container.innerHTML = '';
+        const scrollBox = document.getElementById('scroll-container');
 
-            const section = document.createElement('section');
-            section.className = 'category-section';
-            
-            section.innerHTML = `
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <h2 class="category-title">${cat}</h2>
-                    <div class="nav-arrows-container">
-                        <button class="nav-arrow" onclick="scrollBtn(this, -1, event)">❮</button>
-                        <button class="nav-arrow" onclick="scrollBtn(this, 1, event)">❯</button>
-                    </div>
-                </div>
-                <div class="category-body">
-                    <div class="carousel-outer">
-                        <div class="carousel-track">
-                            ${obras.map(o => `
-                                <div class="carousel-item" data-title="${o.TITULO}" data-year="${o.ANO}">
-                                    <img src="${o.IMG_LOW}" alt="${o.TITULO}" onclick="openWork('${o.URL}')">
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                    <div class="active-info-display">
-                        <div class="info-line"></div>
-                    </div>
-                </div>
-            `;
-            home.appendChild(section);
-        });
+        if (selectedWork) {
+            // --- MODO 3: DETALHE DA OBRA (IMERSÃO) ---
+            renderWorkDetail(container);
+            scrollBox.scrollTop = 0;
+        } else if (activeCategory) {
+            // --- MODO 2: GALERIA DA CATEGORIA ---
+            renderCategoryView(container);
+            scrollBox.scrollTop = 0;
+        } else {
+            // --- MODO 1: GRID INICIAL ---
+            renderHomeGrid(container);
+        }
     }
 
-    // Toggle da categoria (Abrir/Fechar)
-    window.toggleCategory = (header) => {
-        const section = header.parentElement;
-        const wasOpen = section.classList.contains('open');
-        
-        // Opcional: Fecha outras antes de abrir a nova
-        // document.querySelectorAll('.category-section').forEach(s => s.classList.remove('open'));
-        
-        if (!wasOpen) {
-            section.classList.add('open');
-            // Define o carrossel desta seção como ativo para o teclado
-            carrosselAtivo = section.querySelector('.carousel-track');
-        } else {
-            section.classList.remove('open');
-        }
-    };
+    function renderHomeGrid(container) {
+        const grid = document.createElement('div');
+        grid.className = 'categories-grid';
+        ordemCategorias.forEach(cat => {
+            const obrasCat = dadosObras.filter(o => o.CATEGORIA === cat && o.CONTADOR && o.CONTADOR.startsWith("1/"));
+            if (obrasCat.length === 0) return;
+            const randomObra = obrasCat[Math.floor(Math.random() * obrasCat.length)];
+            const item = document.createElement('div');
+            item.className = 'grid-item';
+            item.onclick = () => setActiveCategory(cat);
+            item.innerHTML = `
+                <span class="category-title-main">${cat} ▼</span>
+                <div class="thumb-container"><img src="${randomObra.IMG_LOW}" alt="${cat}"></div>
+            `;
+            grid.appendChild(item);
+        });
+        container.appendChild(grid);
+    }
 
-    // Scroll via botões alinhados à direita
-    window.scrollBtn = (btn, dir, event) => {
-        event.stopPropagation(); // Não fecha a aba ao clicar na seta
-        const section = btn.closest('.category-section');
-        const track = section.querySelector('.carousel-track');
-        
-        if (!section.classList.contains('open')) {
-            toggleCategory(section.querySelector('.category-header'));
-        }
+    function renderCategoryView(container) {
+        // Top Nav
+        const topNav = document.createElement('div');
+        topNav.className = 'top-nav-list';
+        ordemCategorias.filter(c => c !== activeCategory).forEach(cat => {
+            const navItem = document.createElement('div');
+            navItem.className = 'nav-link-item';
+            navItem.innerText = cat;
+            navItem.onclick = () => setActiveCategory(cat);
+            topNav.appendChild(navItem);
+        });
+        container.appendChild(topNav);
 
-        const scrollAmount = window.innerWidth * 0.5 * dir;
-        track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    };
+        // Header
+        const header = document.createElement('div');
+        header.className = 'active-section-header';
+        header.innerHTML = `
+            <div class="active-title">${activeCategory}</div>
+            <div class="nav-arrows-container">
+                <button class="nav-arrow" onclick="scrollBtn(-1)">❮</button>
+                <button class="nav-arrow" onclick="scrollBtn(1)">❯</button>
+            </div>
+        `;
+        container.appendChild(header);
 
-    // Observer para detectar imagem central
-    function setupIntersectionObserver() {
-        const options = {
-            root: document.getElementById('scroll-container'),
-            rootMargin: '0px -49% 0px -49%',
-            threshold: 0
-        };
+        // Galeria (Apenas imagens 1/X)
+        const obrasCat = dadosObras.filter(o => o.CATEGORIA === activeCategory && o.CONTADOR && o.CONTADOR.startsWith("1/"));
+        const carouselDiv = document.createElement('div');
+        carouselDiv.className = 'carousel-container';
+        carouselDiv.innerHTML = `
+            <div class="carousel-track">
+                ${obrasCat.map(o => `
+                    <div class="carousel-item" data-title="${o.TITULO}" data-year="${o.ANO}">
+                        <img src="${o.IMG_LOW}" alt="${o.TITULO}" onclick="setWorkDetail('${o.TITULO}')">
+                    </div>
+                `).join('')}
+            </div>
+            <div class="info-display"><div class="info-line"></div></div>
+        `;
+        container.appendChild(carouselDiv);
 
+        setTimeout(() => {
+            carrosselAtivo = carouselDiv.querySelector('.carousel-track');
+            setupObserver(carouselDiv, false);
+        }, 50);
+    }
+
+    function renderWorkDetail(container) {
+        // Encontra todas as imagens da mesma obra
+        const imagensObra = dadosObras.filter(o => o.TITULO === selectedWork && o.CATEGORIA === activeCategory);
+        const base = imagensObra[0];
+
+        const detailDiv = document.createElement('div');
+        detailDiv.className = 'work-detail-view';
+        detailDiv.innerHTML = `
+            <div class="active-section-header">
+                <div class="active-title">${base.TITULO}</div>
+                <div class="nav-arrows-container">
+                    <button class="nav-arrow" onclick="scrollBtn(-1)">❮</button>
+                    <button class="nav-arrow" onclick="scrollBtn(1)">❯</button>
+                </div>
+            </div>
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    ${imagensObra.map(img => `
+                        <div class="carousel-item">
+                            <img src="${img.IMG_LOW}" alt="${img.TITULO}">
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="info-display">
+                    <div class="info-line"><strong>${base.TITULO}</strong><span>${base.ANO ? ', ' + base.ANO : ''}</span></div>
+                    <div class="detail-specs">
+                        ${base.TECNICA_PT || ''}
+                        <i>${base.TECNICA_EN || ''}</i>
+                        ${base.DIMENSOES || ''}
+                    </div>
+                    <div class="btn-back" onclick="closeWorkDetail()">Voltar para ${activeCategory}</div>
+                </div>
+            </div>
+        `;
+        container.appendChild(detailDiv);
+
+        setTimeout(() => {
+            carrosselAtivo = detailDiv.querySelector('.carousel-track');
+            setupObserver(detailDiv, true);
+        }, 50);
+    }
+
+    // --- FUNÇÕES DE ESTADO ---
+    function setActiveCategory(cat) { activeCategory = cat; selectedWork = null; render(); }
+    function setWorkDetail(titulo) { selectedWork = titulo; render(); }
+    function closeWorkDetail() { selectedWork = null; render(); }
+    function resetPage() { activeCategory = null; selectedWork = null; carrosselAtivo = null; render(); }
+
+    function scrollBtn(dir) {
+        if (!carrosselAtivo) return;
+        carrosselAtivo.scrollBy({ left: window.innerWidth * 0.7 * dir, behavior: 'smooth' });
+    }
+
+    function setupObserver(parent, isDetail) {
+        const options = { root: document.getElementById('scroll-container'), rootMargin: '0px -49% 0px -49%', threshold: 0 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const item = entry.target;
-                    const section = item.closest('.category-section');
-                    const infoEl = section.querySelector('.info-line');
-
-                    // Resetar e Ativar Opacidade
-                    section.querySelectorAll('.carousel-item').forEach(i => i.classList.remove('active'));
+                    parent.querySelectorAll('.carousel-item').forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
-
-                    // Formatação: TÍTULO, ANO (Título Bold)
-                    const anoTexto = item.dataset.year ? `, ${item.dataset.year}` : '';
-                    infoEl.innerHTML = `<strong>${item.dataset.title}</strong><span>${anoTexto}</span>`;
-
-                    // Sincroniza o carrossel ativo para o teclado conforme o scroll manual
-                    if (section.classList.contains('open')) {
-                        carrosselAtivo = item.closest('.carousel-track');
+                    
+                    if (!isDetail) {
+                        const infoEl = parent.querySelector('.info-line');
+                        const anoPart = item.dataset.year ? `, <span>${item.dataset.year}</span>` : '';
+                        infoEl.innerHTML = `<strong>${item.dataset.title}</strong>${anoPart}`;
                     }
                 }
             });
         }, options);
-
-        document.querySelectorAll('.carousel-item').forEach(item => observer.observe(item));
+        parent.querySelectorAll('.carousel-item').forEach(item => observer.observe(item));
     }
 
-    // Navegação por Teclado
     function setupKeyboardNav() {
         document.addEventListener('keydown', (e) => {
-            if (!carrosselAtivo || document.getElementById('main-frame').classList.contains('active')) return;
-            
-            const scrollAmount = window.innerWidth * 0.3;
-            if (e.key === 'ArrowRight') carrosselAtivo.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            if (e.key === 'ArrowLeft') carrosselAtivo.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            if (!carrosselAtivo) return;
+            const amt = window.innerWidth * 0.4;
+            if (e.key === 'ArrowRight') carrosselAtivo.scrollBy({ left: amt, behavior: 'smooth' });
+            if (e.key === 'ArrowLeft') carrosselAtivo.scrollBy({ left: -amt, behavior: 'smooth' });
         });
     }
 
-    function openWork(url) {
-        if (!url) return;
-        document.getElementById('home-view').classList.add('hidden');
-        const frame = document.getElementById('main-frame');
-        frame.src = url;
-        frame.classList.add('active');
-    }
-
-    function showHome() {
-        document.getElementById('main-frame').classList.remove('active');
-        document.getElementById('main-frame').src = 'about:blank';
-        document.getElementById('home-view').classList.remove('hidden');
-    }
-
-    // Inicializa
     init();
 </script>
 </body>
