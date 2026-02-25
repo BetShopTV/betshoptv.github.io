@@ -59,6 +59,18 @@ body {
     width: calc((100% - 60px) / 2); /* Ajusta para a largura da 1ª célula (1fr) */
 }
 
+        .dropdown-item { padding: 15px 20px; 
+        border-bottom: 1px solid var(--verde-escuro); 
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Esta linha centraliza o texto/conteúdo */
+        gap: 10px;
+        cursor: pointer;
+}
+
+.dropdown-item:hover {
+        background-color: var(--verde-vivo);
+    }
 /* Localize ou adicione este bloco específico */
 #drop-filtro {
     left: calc((100% - 60px) / 2 - 1px); /* Posiciona exatamente no início da 2ª coluna */
@@ -72,19 +84,6 @@ body {
     left: 2px; 
     border-left: none; 
 }
-        .dropdown-item { padding: 15px 20px; 
-        border-bottom: 1px solid var(--verde-escuro); 
-        display: flex;
-        align-items: center;
-        justify-content: flex-start; /* Alinha o conteúdo à esquerda */
-        gap: 10px;
-        cursor: pointer;
-}
-
-.dropdown-item:hover {
-        background-color: var(--verde-vivo);
-    }
-
         /* --- GRID --- */
         #main-container { padding: var(--gap); background: var(--fundo-medio); }
         .grid-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); border-right: 1px solid var(--verde-escuro-fundo); border-left: 1px solid var(--verde-escuro-fundo);  }
