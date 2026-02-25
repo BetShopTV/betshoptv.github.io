@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SANTACOSTA | v4</title>
+    <title>v3 | SANTA</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,24 +12,34 @@
             --verde-medio: #697369;
             --fundo-claro: #f5f7f6;
             --fundo-medio: #e5eae7;
+            --verde-escuro-fundo: #203820;
             --gap: 4px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; border-radius: 0 !important; }
 
-        body {
-            font-family: 'JetBrains Mono', monospace;
-            background-color: var(--fundo-medio);
-            color: var(--verde-escuro);
-            -webkit-tap-highlight-color: transparent;
-        }
+body {
+    font-family: 'JetBrains Mono', monospace;
+    background-color: var(--verde-escuro-fundo); /* Cor das margens laterais */
+    display: flex;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#site-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    background-color: var(--fundo-claro); /* Fundo real do conteúdo */
+    min-height: 100vh;
+    position: relative;
+}
 
         .icon-svg { width: 22px; height: 22px; fill: var(--verde-escuro); display: inline-block; vertical-align: middle; }
 
         /* --- HEADER --- */
         header { position: sticky; top: 0; z-index: 1000; background: var(--verde-vivo); border-bottom: 1px solid var(--verde-escuro); }
-        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; margin-right: 8px; }
-        .logo { font-size: 1rem; font-weight: 700; cursor: pointer; letter-spacing: 1px; margin-left: 8px; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; height: 60px;}
+        .logo { font-size: 1.1rem; font-weight: 700; cursor: pointer; letter-spacing: 1px; margin-left: 24px;}
         .nav-bar { display: grid; grid-template-columns: 1fr 60px 1fr; background: var(--fundo-claro); border-top: 1px solid var(--verde-escuro); height: 48px; }
         .nav-item { display: flex; align-items: center; justify-content: center; cursor: pointer; border-right: 1px solid var(--verde-escuro); font-size: 0.75rem; text-transform: uppercase; gap: 8px; }
         .nav-item:last-child { border-right: none; font-weight: 700; }
@@ -39,41 +49,38 @@
         .dropdown-item { padding: 15px 20px; border-bottom: 1px solid var(--verde-escuro); display: flex; align-items: center; gap: 10px; cursor: pointer; }
 
         /* --- GRID --- */
-        #main-container { padding: var(--gap); }
-        .grid-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .obra-miniatura { aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; }
+        #main-container { padding: var(--gap); background: var(--fundo-medio);}
+        .grid-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
+        .obra-miniatura { aspect-ratio: 3/4; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; }
         .obra-miniatura img { width: 100%; height: 100%; object-fit: contain; }
         .obra-miniatura.ativo { filter: grayscale(100%); }
 
         /* --- ACORDEÃO (CARROSSEL) --- */
-        .acordeao-container { grid-column: 1 / -1; background: var(--fundo-claro); padding-bottom: 50px; }
-        .carousel-view { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; height: 55vh; scroll-behavior: smooth; }
+        .acordeao-container { grid-column: 1 / -1; background: var(--fundo-claro); margin-bottom: 4px; margin-top: 4px; padding-top: 4px; padding-bottom: 4px; }
+        .carousel-view { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; height: 60vh; scroll-behavior: smooth; }
         .carousel-view::-webkit-scrollbar { display: none; }
-        .carousel-view img { flex: 0 0 100%; width: 90%; height: 90%; object-fit: contain; scroll-snap-align: center; padding: 20px; }
+        .carousel-view img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: contain; scroll-snap-align: center; padding: 20px; }
+
         .indicadores { display: flex; justify-content: center; gap: 4px; margin: 20px 0; }
-        .ponto { width: 45px; height: 12px; border: 1px solid var(--verde-escuro); background: var(--fundo-medio); cursor: pointer; margin-top: -50px; }
+        .ponto { width: 45px; height: 12px; border: 1px solid var(--verde-escuro); background: var(--fundo-medio); cursor: pointer; }
         .ponto.ativo { background: var(--verde-vivo); }
 
-        .ficha-tecnica { text-align: center; padding: 0 50px; font-size: 0.8rem; line-height: 1.5; position: relative; margin-top: -38px; }
+        .ficha-tecnica { text-align: center; padding: 0 50px; font-size: 0.8rem; line-height: 1.5; position: relative; margin-bottom: 18px;}
         .ficha-tecnica strong { display: block; margin-bottom: 4px; }
         .ficha-tecnica i { display: block; color: var(--verde-medio); font-style: italic; margin-bottom: 4px; }
 
-        .seta-obra { position: absolute; top: 50%; transform: translateY(-50%); background: var(--verde-vivo); padding: 8px 12px; border: 1px solid var(--verde-escuro); cursor: pointer; user-select: none; }
-        .seta-esq { left: 10px; }
-        .seta-dir { right: 10px; }
-
         /* --- MODO LISTA --- */
-        .lista-layout { display: flex; flex-direction: column; gap: 80px; padding-top: 20px; }
+        .lista-layout { display: flex; flex-direction: column; gap: 50px; padding-top: 20px; }
         #menu-full { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--verde-vivo); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; gap: 25px; }
         #menu-full a { text-decoration: none; color: var(--verde-escuro); font-size: 1.8rem; font-weight: 700; }
     </style>
 </head>
 <body>
-
+<div id="site-wrapper">
 <header>
     <div class="header-top">
         <div class="logo">SANTACOSTA</div>
-        <div onclick="toggleMenu(true)" style="cursor:pointer;">
+        <div onclick="toggleMenu(true)" style="cursor:pointer;  margin-right: 24px;">
             <svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
         </div>
     </div>
@@ -104,7 +111,7 @@
 </div>
 
 <main id="main-container" class="grid-layout"></main>
-
+</div>
 <script>
     // BOTA BOTA BOTA O JSON AQUIÃÃ!
     const dadosObras = [
@@ -1272,12 +1279,12 @@
             ${obra.fotos.length > 1 ? `<div class="indicadores" id="dots-${carouselId}">
                 ${obra.fotos.map((_, i) => `<div class="ponto ${i===0?'ativo':''}" onclick="scrollCarousel('${carouselId}', ${i})"></div>`).join('')}
             </div>` : ''}
-            <div class="ficha-tecnica">
-                ${isGrid ? `<div class="seta-obra seta-esq" onclick="navObra(${idx-1},'${lista.map(o=>o.TITULO).join('|')}')"><</div>` : ''}
-                <strong>${obra.TITULO}, ${obra.ANO}</strong>
-                <span>${obra.TECNICA_PT}</span><i>${obra.TECNICA_EN}</i><span>${obra.DIMENSOES}</span>
-                ${isGrid ? `<div class="seta-obra seta-dir" onclick="navObra(${idx+1},'${lista.map(o=>o.TITULO).join('|')}')">></div>` : ''}
-            </div>
+<div class="ficha-tecnica">
+    <strong>${obra.TITULO}, ${obra.ANO}</strong>
+    <span>${obra.TECNICA_PT}</span>
+    <i>${obra.TECNICA_EN}</i>
+    <span>${obra.DIMENSOES}</span>
+</div>
         `;
         return div;
     }
@@ -1295,15 +1302,8 @@
         render(lista);
         if (tituloAberto) setTimeout(() => {
             const h = document.querySelector('header').offsetHeight;
-            window.scrollTo({ top: document.querySelector('.acordeao-container').offsetTop - h - -1, behavior: 'smooth' });
-        }, 100); 
-    }
-
-    function navObra(newIdx, titulosStr) {
-        const titulos = titulosStr.split('|');
-        if (newIdx < 0) newIdx = titulos.length - 1; if (newIdx >= titulos.length) newIdx = 0;
-        tituloAberto = titulos[newIdx];
-        render(filtrarEAgrupar(dadosObras));
+            window.scrollTo({ top: document.querySelector('.acordeao-container').offsetTop - h - 0, behavior: 'smooth' });
+        }, 100);
     }
 
     function toggleDropdown(id) {
