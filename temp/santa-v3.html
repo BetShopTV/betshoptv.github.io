@@ -12,7 +12,7 @@
             --verde-medio: #697369;
             --fundo-claro: #f5f7f6;
             --fundo-medio: #e5eae7;
-            --verde-escuro-fundo: #203820;
+            --verde-escuro-fundo: #202420;
             --gap: 4px;
         }
 
@@ -32,25 +32,26 @@ body {
     background-color: var(--fundo-claro); /* Fundo real do conteúdo */
     min-height: 100vh;
     position: relative;
+    
 }
 
         .icon-svg { width: 22px; height: 22px; fill: var(--verde-escuro); display: inline-block; vertical-align: middle; }
 
         /* --- HEADER --- */
-        header { position: sticky; top: 0; z-index: 1000; background: var(--verde-vivo); border-bottom: 1px solid var(--verde-escuro); }
-        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; height: 60px;}
+        header { position: sticky; top: 0; z-index: 1000; background: var(--verde-vivo);  }
+        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; height: 60px; border-bottom: 1px solid var(--verde-escuro-fundo); border-right: 1px solid var(--verde-escuro-fundo); border-left: 1px solid var(--verde-escuro-fundo);}
         .logo { font-size: 1.1rem; font-weight: 700; cursor: pointer; letter-spacing: 1px; margin-left: 24px;}
-        .nav-bar { display: grid; grid-template-columns: 1fr 60px 1fr; background: var(--fundo-claro); border-top: 1px solid var(--verde-escuro); height: 48px; }
-        .nav-item { display: flex; align-items: center; background: var(--fundo-claro); justify-content: center; cursor: pointer; border-right: 1px solid var(--verde-escuro); font-size: 0.75rem; text-transform: uppercase; gap: 8px; }
+        .nav-bar { display: grid; grid-template-columns: 1fr 60px 1fr; background: var(--fundo-claro); height: 48px; border-bottom: 1px solid var(--verde-escuro);}
+        .nav-item { display: flex; align-items: center; background: var(--fundo-claro); justify-content: center; cursor: pointer; border: 1px solid var(--verde-escuro); font-size: 0.75rem; text-transform: uppercase; gap: 8px; }
         .nav-item:last-child { border-right: none; font-weight: 700; }
 
         /* Dropdowns */
-        .dropdown-content { position: absolute; top: 100%; background: var(--fundo-claro); border: 1px solid var(--verde-escuro); display: none; z-index: 1001; width: 100%; }
+        .dropdown-content { position: absolute; top: 100%; background: var(--fundo-claro); display: none; z-index: 1001; width: 100%; border-right: 1px solid var(--verde-escuro-fundo); border-left: 1px solid var(--verde-escuro-fundo); }
         .dropdown-item { padding: 15px 20px; border-bottom: 1px solid var(--verde-escuro); display: flex; align-items: center; gap: 10px; cursor: pointer; }
 
         /* --- GRID --- */
-        #main-container { padding: var(--gap); background: var(--fundo-medio);}
-        .grid-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
+        #main-container { padding: var(--gap); background: var(--fundo-medio); }
+        .grid-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); border-right: 1px solid var(--verde-escuro-fundo); border-left: 1px solid var(--verde-escuro-fundo);  }
         .obra-miniatura { aspect-ratio: 3/4; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; }
         .obra-miniatura img { width: 100%; height: 100%; object-fit: contain; }
         .obra-miniatura.ativo { filter: grayscale(100%); }
@@ -71,8 +72,8 @@ body {
 
         /* --- MODO LISTA --- */
         .lista-layout { display: flex; flex-direction: column; gap: 50px; padding-top: 20px; }
-        #menu-full { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--verde-vivo); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; gap: 25px; }
-        #menu-full a { text-decoration: none; color: var(--verde-escuro); font-size: 1.8rem; font-weight: 700; }
+        #menu-full { position: fixed; top: 0; left: 0; width: 100vw; height: 42vh; background: var(--verde-vivo); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; gap: 25px; }
+        #menu-full a { text-decoration: none; color: var(--verde-escuro); font-size: 1rem; font-weight: 500; letter-spacing: 1px; padding: 8px 18px; background: var(--fundo-medio); }
     </style>
 </head>
 <body>
@@ -106,7 +107,7 @@ body {
 </header>
 
 <div id="menu-full">
-    <div onclick="toggleMenu(false)" style="position:absolute; top:20px; right:20px; font-size:2rem; cursor:pointer;">✕</div>
+    <div onclick="toggleMenu(false)" style="position:absolute; top:18px; right:60px; font-size:1.3rem; cursor:pointer;">✕</div>
     <a href="#">TRABALHOS</a><a href="#">BIO</a><a href="#">NOTÍCIAS</a><a href="#">CONTATO</a>
 </div>
 
