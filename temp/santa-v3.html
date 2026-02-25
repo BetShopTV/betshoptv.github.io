@@ -59,19 +59,31 @@ body {
     width: calc((100% - 60px) / 2); /* Ajusta para a largura da 1ª célula (1fr) */
 }
 
+/* Localize ou adicione este bloco específico */
+#drop-filtro {
+    left: calc((100% - 60px) / 2 - 1px); /* Posiciona exatamente no início da 2ª coluna */
+    transform: none; /* Remove qualquer centralização anterior se houver */
+    min-width: 160px; /* Largura mínima para o texto não quebrar */
+    width: auto;
+}
+
 /* Garanta que o drop-cat não tenha borda esquerda para alinhar com o design seco */
 #drop-cat { 
-    left: 0; 
+    left: 2px; 
     border-left: none; 
 }
         .dropdown-item { padding: 15px 20px; 
-        border-left: 1px solid var(--verde-escuro); 
         border-bottom: 1px solid var(--verde-escuro); 
         display: flex;
         align-items: center;
-        justify-content: center; /* Esta linha centraliza o texto/conteúdo */
+        justify-content: flex-start; /* Alinha o conteúdo à esquerda */
         gap: 10px;
-        cursor: pointer; }
+        cursor: pointer;
+}
+
+.dropdown-item:hover {
+        background-color: var(--verde-vivo);
+    }
 
         /* --- GRID --- */
         #main-container { padding: var(--gap); background: var(--fundo-medio); }
