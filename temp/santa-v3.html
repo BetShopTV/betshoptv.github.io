@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>v3 | SANTA</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
     <style>
         :root {
             --verde-vivo: #e2ff8f;
@@ -109,6 +109,56 @@ body {
         .lista-layout { display: flex; flex-direction: column; gap: 50px; padding-top: 20px; }
         #menu-full { position: fixed; top: 0; left: 0; width: 100vw; height: 42vh; background: var(--verde-vivo); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; gap: 25px; }
         #menu-full a { text-decoration: none; color: var(--verde-escuro); font-size: 1rem; font-weight: 500; letter-spacing: 1px; padding: 8px 18px; background: var(--fundo-medio); }
+    
+/* --- LIGHTBOX ATUALIZADO --- */
+        #lightbox {
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh;
+            /* Cor #202420 com 88% de opacidade (e0 em hex) */
+            background-color: rgba(32, 36, 32, 0.94); 
+            z-index: 3000;
+            display: none;
+            flex-direction: column;
+        }
+
+        #lightbox-content {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            height: 100%;
+            align-items: center; /* Centraliza a imagem verticalmente */
+        }
+
+        #lightbox-content::-webkit-scrollbar { display: none; }
+
+        #lightbox-content img {
+            flex: 0 0 100vw; /* Cada slide ocupa a largura da tela para o scroll */
+            width: 94%;      /* Limita a largura da imagem */
+            height: 94%;     /* Limita a altura da imagem */
+            max-width: 94vw; 
+            max-height: 94vh;
+            object-fit: contain;
+            scroll-snap-align: center;
+            margin: 0 auto;  /* Centraliza a imagem horizontalmente dentro do slide */
+        }
+
+        .close-lb {
+            position: absolute;
+            top:18px; 
+            right:60px;
+            font-size: 1.3rem; /* Tamanho solicitado */
+            color: var(--verde-vivo); /* Cor verde vivo #e2ff8f */
+            cursor: pointer;
+            z-index: 3001;
+            font-weight: 500;
+        }
+        
+        
+    
     </style>
 </head>
 <body>
@@ -138,6 +188,12 @@ body {
                 <svg class="icon-svg" viewBox="0 0 512 512"><g transform="translate(64,64)"><path d="M106.6,0 L384,0 L384,42.6 L106.6,42.6 L106.6,0 Z M0,0 L64,0 L64,42.6 L0,42.6 L0,0 Z M106.6,106.6 L384,106.6 L384,149.3 L106.6,149.3 L106.6,106.6 Z M0,106.6 L64,106.6 L64,149.3 L0,149.3 L0,106.6 Z M106.6,213.3 L384,213.3 L384,256 L106.6,256 L106.6,213.3 Z M0,213.3 L64,213.3 L64,256 L0,256 L0,213.3 Z M106.6,320 L384,320 L384,362.6 L106.6,362.6 L106.6,320 Z M0,320 L64,320 L64,362.6 L0,362.6 L0,320 Z"/></g></svg> LISTA
             </div>
         </div>
+
+<div id="lightbox" onclick="closeLightbox()">
+        <div class="close-lb" onclick="closeLightbox()">✕</div>
+        <div id="lightbox-content"></div>
+    </div>
+    
     </div>
 </header>
 
@@ -1268,17 +1324,31 @@ body {
     let catAtiva = 'TODOS';
     let tituloAberto = null;
     const categoriasList = ["PINTURA", "OBJETO", "ESCULTURA", "COLAGEM"];
+    let lightboxAberto = false; // Controle de estado do Lightbox
 
-    function init() { render(filtrarEAgrupar(dadosObras)); renderDropdownCat(); }
+    function init() { 
+        render(filtrarEAgrupar(dadosObras)); 
+        renderDropdownCat(); 
+    }
 
     function filtrarEAgrupar(dados) {
         const agrupar = {};
         dados.forEach(item => {
             const k = `${item.TITULO}-${item.ANO}`;
-            if (!agrupar[k]) agrupar[k] = { ...item, fotos: [] };
+            if (!agrupar[k]) {
+                // Adicionamos fotosHigh para carregar os links em alta resolução no Lightbox
+                agrupar[k] = { ...item, fotos: [], fotosHigh: [] };
+            }
             agrupar[k].fotos.push(item.IMG_LOW);
+            agrupar[k].fotosHigh.push(item.IMG_HIGH); // Captura o link de alta resolução
         });
-        const final = Object.values(agrupar).sort((a,b) => parseInt(b.ANO.match(/\d{4}/g).pop()) - parseInt(a.ANO.match(/\d{4}/g).pop()));
+        
+        const final = Object.values(agrupar).sort((a,b) => {
+            const anoA = a.ANO.match(/\d{4}/g) ? parseInt(a.ANO.match(/\d{4}/g).pop()) : 0;
+            const anoB = b.ANO.match(/\d{4}/g) ? parseInt(b.ANO.match(/\d{4}/g).pop()) : 0;
+            return anoB - anoA;
+        });
+
         return catAtiva === 'TODOS' ? final : final.filter(o => o.CATEGORIA === catAtiva);
     }
 
@@ -1297,7 +1367,9 @@ body {
                 min.innerHTML = `<img src="${obra.fotos[0]}" alt="${obra.TITULO}">`;
                 min.onclick = () => toggleObra(obra, lista);
                 container.appendChild(min);
-                if (i === fimLinha && tituloAberto) container.appendChild(renderDetalhe(lista[idxAberto], idxAberto, lista));
+                if (i === fimLinha && tituloAberto) {
+                    container.appendChild(renderDetalhe(lista[idxAberto], idxAberto, lista));
+                }
             } else {
                 container.appendChild(renderDetalhe(obra, i, lista, false));
             }
@@ -1308,26 +1380,58 @@ body {
         const div = document.createElement('div');
         div.className = 'acordeao-container';
         const carouselId = `carousel-${idx}`;
+        
         div.innerHTML = `
             <div class="carousel-view" id="${carouselId}" onscroll="syncDots('${carouselId}', ${obra.fotos.length})">
-                ${obra.fotos.map(f => `<img src="${f}">`).join('')}
+                ${obra.fotos.map((f, i) => `
+                    <img src="${f}" onclick="openLightbox(${idx}, ${i})" style="cursor: zoom-in;">
+                `).join('')}
             </div>
             ${obra.fotos.length > 1 ? `<div class="indicadores" id="dots-${carouselId}">
-                ${obra.fotos.map((_, i) => `<div class="ponto ${i===0?'ativo':''}" onclick="scrollCarousel('${carouselId}', ${i})"></div>`).join('')}
+                ${obra.fotos.map((_, i) => `
+                    <div class="ponto ${i===0?'ativo':''}" onclick="scrollCarousel('${carouselId}', ${i})"></div>
+                `).join('')}
             </div>` : ''}
-<div class="ficha-tecnica">
-    <strong>${obra.TITULO}, ${obra.ANO}</strong>
-    <span>${obra.TECNICA_PT}</span>
-    <i>${obra.TECNICA_EN}</i>
-    <span>${obra.DIMENSOES}</span>
-</div>
+            <div class="ficha-tecnica">
+                <strong>${obra.TITULO}, ${obra.ANO}</strong>
+                <span>${obra.TECNICA_PT}</span>
+                <i>${obra.TECNICA_EN}</i>
+                <span>${obra.DIMENSOES}</span>
+            </div>
         `;
         return div;
     }
 
-    function scrollCarousel(id, idx) { const el = document.getElementById(id); el.scrollTo({ left: el.offsetWidth * idx, behavior: 'smooth' }); }
+    // --- FUNÇÕES DO LIGHTBOX ---
+function openLightbox(obraIdx, fotoIdx) {
+        const listaAtual = filtrarEAgrupar(dadosObras);
+        const obra = listaAtual[obraIdx];
+        const content = document.getElementById('lightbox-content');
+        
+        // Adicionamos o stopPropagation() para a imagem não "avisar" o fundo que foi clicada
+        content.innerHTML = obra.fotosHigh.map(f => `
+            <img src="${f}" onclick="event.stopPropagation()">
+        `).join('');
+        
+        document.getElementById('lightbox').style.display = 'flex';
+        lightboxAberto = true;
+
+        setTimeout(() => {
+            content.scrollTo({ left: content.offsetWidth * fotoIdx, behavior: 'instant' });
+        }, 10);
+    }
+function closeLightbox() {
+        document.getElementById('lightbox').style.display = 'none';
+        lightboxAberto = false;
+    }    function changeLightboxImg(dir) {
+        const lb = document.getElementById('lightbox-content');
+        // 'dir' será -1 para esquerda e 1 para direita
+        lb.scrollBy({ left: window.innerWidth * dir, behavior: 'smooth' });
+    }
+
     function syncDots(id, total) {
-        const el = document.getElementById(id); const dots = document.getElementById(`dots-${id}`);
+        const el = document.getElementById(id); 
+        const dots = document.getElementById(`dots-${id}`);
         if (!dots) return;
         const current = Math.round(el.scrollLeft / el.offsetWidth);
         Array.from(dots.children).forEach((d, i) => d.classList.toggle('ativo', i === current));
@@ -1336,41 +1440,71 @@ body {
     function toggleObra(obra, lista) {
         tituloAberto = tituloAberto === obra.TITULO ? null : obra.TITULO;
         render(lista);
-        if (tituloAberto) setTimeout(() => {
-            const h = document.querySelector('header').offsetHeight;
-            window.scrollTo({ top: document.querySelector('.acordeao-container').offsetTop - h - 0, behavior: 'smooth' });
-        }, 100);
+        if (tituloAberto) {
+            setTimeout(() => {
+                const h = document.querySelector('header').offsetHeight;
+                const acordeao = document.querySelector('.acordeao-container');
+                if(acordeao) window.scrollTo({ top: acordeao.offsetTop - h, behavior: 'smooth' });
+            }, 100);
+        }
     }
 
+    // --- DROPDOWNS E MENUS ---
     function toggleDropdown(id) {
-        const el = document.getElementById(id); const vis = el.style.display === 'block';
+        const el = document.getElementById(id); 
+        const vis = el.style.display === 'block';
         document.querySelectorAll('.dropdown-content').forEach(d => d.style.display = 'none');
         el.style.display = vis ? 'none' : 'block';
     }
 
     function setModo(m) { modoVis = m; toggleDropdown('drop-filtro'); init(); }
-    function setCat(c) { catAtiva = c; document.getElementById('cat-label').innerText = c; toggleDropdown('drop-cat'); init(); }
-function renderDropdownCat() {
-    const d = document.getElementById('drop-cat');
-    let listaDropdown;
-
-    if (catAtiva === 'TODOS') {
-        // Se TODOS está selecionado (no topo), mostra apenas as categorias específicas
-        listaDropdown = categoriasList;
-    } else {
-        // Se uma categoria está selecionada, mostra as outras e joga o TODOS para o fim
-        const outrasCategorias = categoriasList.filter(c => c !== catAtiva);
-        listaDropdown = [...outrasCategorias, 'TODOS'];
+    
+    function setCat(c) { 
+        catAtiva = c; 
+        document.getElementById('cat-label').innerText = c; 
+        toggleDropdown('drop-cat'); 
+        init(); 
     }
 
-    // Gera o HTML sem duplicar o que já está no topo
-    d.innerHTML = listaDropdown.map(c => 
-        `<div class="dropdown-item" onclick="setCat('${c}')">${c}</div>`
-    ).join('');
-}
+    function renderDropdownCat() {
+        const d = document.getElementById('drop-cat');
+        let listaDropdown;
 
-function toggleMenu(open) { document.getElementById('menu-full').style.display = open ? 'flex' : 'none'; }
-    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') { tituloAberto = null; render(filtrarEAgrupar(dadosObras)); } });
+        if (catAtiva === 'TODOS') {
+            listaDropdown = categoriasList;
+        } else {
+            const outrasCategorias = categoriasList.filter(c => c !== catAtiva);
+            listaDropdown = [...outrasCategorias, 'TODOS'];
+        }
+
+        d.innerHTML = listaDropdown.map(c => 
+            `<div class="dropdown-item" onclick="setCat('${c}')">${c}</div>`
+        ).join('');
+    }
+
+    function toggleMenu(open) { 
+        document.getElementById('menu-full').style.display = open ? 'flex' : 'none'; 
+    }
+
+    // --- EVENTOS DE TECLADO ---
+    window.addEventListener('keydown', (e) => { 
+        if (e.key === 'Escape') { 
+            if (lightboxAberto) {
+                closeLightbox();
+            } else {
+                tituloAberto = null; 
+                render(filtrarEAgrupar(dadosObras)); 
+            }
+        } 
+        
+        // Navegação por setas no Lightbox
+        if (lightboxAberto) {
+            const lb = document.getElementById('lightbox-content');
+            if (e.key === 'ArrowRight') lb.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+            if (e.key === 'ArrowLeft') lb.scrollBy({ left: -window.innerWidth, behavior: 'smooth' });
+        }
+    });
+
     init();
 </script>
 </body>
