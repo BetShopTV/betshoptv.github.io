@@ -46,8 +46,24 @@ body {
         .nav-item:last-child { border-right: none; font-weight: 700; }
 
         /* Dropdowns */
-        .dropdown-content { position: absolute; top: 100%; background: var(--fundo-claro); display: none; z-index: 1001; width: 100%; border-right: 1px solid var(--verde-escuro-fundo); border-left: 1px solid var(--verde-escuro-fundo); }
-        .dropdown-item { padding: 15px 20px; border-bottom: 1px solid var(--verde-escuro); display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        /* Localize este bloco e altere a largura */
+.dropdown-content {
+    position: absolute;
+    top: 100%;
+    background: var(--fundo-claro);
+    border-right: 1px solid var(--verde-escuro);
+    border-left: 1px solid var(--verde-escuro);
+    display: none;
+    z-index: 1001;
+    width: calc((100% - 60px) / 2); /* Ajusta para a largura da 1ª célula (1fr) */
+}
+
+/* Garanta que o drop-cat não tenha borda esquerda para alinhar com o design seco */
+#drop-cat { 
+    left: 0; 
+    border-left: none; 
+}
+        .dropdown-item { padding: 15px 20px; border-left: 1px solid var(--verde-escuro); border-bottom: 1px solid var(--verde-escuro); display: flex; align-items: center; gap: 10px; cursor: pointer; }
 
         /* --- GRID --- */
         #main-container { padding: var(--gap); background: var(--fundo-medio); }
@@ -1315,12 +1331,26 @@ body {
 
     function setModo(m) { modoVis = m; toggleDropdown('drop-filtro'); init(); }
     function setCat(c) { catAtiva = c; document.getElementById('cat-label').innerText = c; toggleDropdown('drop-cat'); init(); }
-    function renderDropdownCat() {
-        const d = document.getElementById('drop-cat');
-        const l = catAtiva === 'TOTAL' ? [...categoriasList, 'TODOS'] : [catAtiva, ...categoriasList.filter(c=>c!==catAtiva), 'TODOS'];
-        d.innerHTML = l.map(c => `<div class="dropdown-item" onclick="setCat('${c}')">${c}</div>`).join('');
+function renderDropdownCat() {
+    const d = document.getElementById('drop-cat');
+    let listaDropdown;
+
+    if (catAtiva === 'TODOS') {
+        // Se TODOS está selecionado (no topo), mostra apenas as categorias específicas
+        listaDropdown = categoriasList;
+    } else {
+        // Se uma categoria está selecionada, mostra as outras e joga o TODOS para o fim
+        const outrasCategorias = categoriasList.filter(c => c !== catAtiva);
+        listaDropdown = [...outrasCategorias, 'TODOS'];
     }
-    function toggleMenu(open) { document.getElementById('menu-full').style.display = open ? 'flex' : 'none'; }
+
+    // Gera o HTML sem duplicar o que já está no topo
+    d.innerHTML = listaDropdown.map(c => 
+        `<div class="dropdown-item" onclick="setCat('${c}')">${c}</div>`
+    ).join('');
+}
+
+function toggleMenu(open) { document.getElementById('menu-full').style.display = open ? 'flex' : 'none'; }
     window.addEventListener('keydown', (e) => { if (e.key === 'Escape') { tituloAberto = null; render(filtrarEAgrupar(dadosObras)); } });
     init();
 </script>
