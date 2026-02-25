@@ -1429,6 +1429,14 @@ function closeLightbox() {
         lb.scrollBy({ left: window.innerWidth * dir, behavior: 'smooth' });
     }
 
+function scrollCarousel(id, idx) {
+        const el = document.getElementById(id);
+        if (el) {
+            // Move o scroll do carrossel para a posição da imagem (largura do item * índice) [cite: 38, 40]
+            el.scrollTo({ left: el.offsetWidth * idx, behavior: 'smooth' });
+        }
+    }
+
     function syncDots(id, total) {
         const el = document.getElementById(id); 
         const dots = document.getElementById(`dots-${id}`);
