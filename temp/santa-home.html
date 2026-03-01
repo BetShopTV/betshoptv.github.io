@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -66,6 +67,7 @@
     line-height: 0.85;
     text-transform: uppercase;
     cursor: pointer;
+    margin-top: 18vh;
 
     /* A mágica: 20s, movimento suave, loop infinito e alternado */
     animation: pulsacaoSaturada 30s ease-in-out infinite alternate;
@@ -107,6 +109,9 @@
             border-bottom: 2px solid var(--verde-vivo); /* Ativa o underline [cite: 18] */
         }
 
+        @media (max-width: 768px) {
+            .logo { margin-top: -24vh; }
+        }
     </style>
 </head>
 <body>
@@ -182,5 +187,6 @@ let currentZoom = 1;
     });
 </script>
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v67327c56f0bb4ef8b305cae61679db8f1769101564043" integrity="sha512-rdcWY47ByXd76cbCFzznIcEaCN71jqkWBBqlwhF1SY7KubdLKZiEGeP7AyieKZlGP9hbY/MhGrwXzJC/HulNyg==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
