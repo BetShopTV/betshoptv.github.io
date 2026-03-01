@@ -80,7 +80,7 @@ header {
 .desktop-nav a {
     text-decoration: none;
     color: var(--verde-escuro-fundo);
-    font-size: 0.9rem;
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
     font-weight: 500;
     text-transform: uppercase;    
     transition: border-color 0.1s ease;
@@ -109,12 +109,16 @@ header {
             font-size: 0.75rem; text-transform: uppercase;
             cursor: pointer;
         }
+        
+                .nav-item:hover { 
+background: var(--verde-vivo);
+        }
 
         /* --- CONTEÚDO --- */
         #main-container { padding: 60px 20px; max-width: 1000px; margin: 0 auto; }
         
         .bio-text {
-            font-size: clamp(1rem, 1.8vw, 1.25rem);
+            font-size: clamp(0.9rem, 1.8vw, 1.2rem);
             line-height: 1.6;
             color: var(--verde-escuro-fundo);
             margin-bottom: 80px;
@@ -130,16 +134,16 @@ header {
         }
 
         .cv-group h2 {
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 1.8vw, 1.2rem);
             text-transform: uppercase;
             letter-spacing: 2px;
             color: var(--verde-medio);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-bottom: 1px solid var(--verde-vivo);
             display: inline-block;
         }
 
-        .cv-item { font-size: 0.85rem; margin-bottom: 12px; display: flex; gap: 15px; line-height: 1.4; }
+        .cv-item { font-size: clamp(0.8rem, 1.8vw, 1.1rem); margin-bottom: 12px; display: flex; gap: 15px; line-height: 1.4; letter-spacing:-0.2px; }
         .cv-year { font-weight: 800; min-width: 45px; color: var(--verde-escuro-fundo); }
         .cv-desc { color: var(--verde-escuro); }
 
@@ -197,7 +201,7 @@ header {
 <div id="site-wrapper">
     <header id="dynamic-header">
         <div class="header-top">
-            <div class="logo" onclick="location.href='https://betshoptv.com/temp/santa-v3'">SANTACOSTA</div>
+            <div class="logo" onclick="location.href='https://betshoptv.com/temp/santa-home'">SANTACOSTA</div>
             <nav class="desktop-nav">
                 <a href="https://betshoptv.com/temp/santa-v3">TRABALHOS</a>
                 <a href="#">EXPOSIÇÕES</a>
@@ -212,7 +216,7 @@ header {
         </div>
         <div class="nav-bar">
             <div class="nav-item" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">BIO</div>
-            <div class="nav-item"></div>
+            <div class="nav-item" style="cursor: default;"></div>
             <div class="nav-item" onclick="document.getElementById('cv-alvo').scrollIntoView({behavior: 'smooth'})">CV</div>
         </div>
     </header>
