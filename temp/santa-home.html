@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANTACOSTA</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --verde-vivo: #e2ff8f; /* [cite: 2] */
+            --fundo-escuro: #202420; /* [cite: 3] */
+            --zoom: 1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'JetBrains Mono', monospace; /* [cite: 5] */
+            background-color: var(--fundo-escuro);
+            height: 100vh;
+            overflow: hidden; /* Bloqueia scrollbar [cite: 40] */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- BACKGROUND DINÂMICO --- */
+        #bg-performance {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: url('https://betshoptv.com/temp/home.jpg') center/cover no-repeat;
+            transform: scale(var(--zoom));
+            transition: transform 0.1s ease-out; /* Movimento orgânico  */
+        }
+
+        /* --- HERO CONTAINER --- */
+        .hero-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: fit-content;
+        }
+
+/* 1. Definimos a performance da pulsação */
+@keyframes pulsacaoSaturada {
+    0% {
+        /* Estado original/natural */
+        filter: saturate(100%) brightness(1);
+    }
+    100% {
+        /* Estado de saturação máxima solicitado */
+        filter: saturate(500%) brightness(1.3);
+    }
+}
+
+/* 2. Aplicamos ao seletor do logo */
+.logo {
+    font-weight: 800;
+    letter-spacing: -4px;
+    font-size: clamp(4rem, 15vw, 12rem);
+    color: var(--verde-vivo); 
+    line-height: 0.85;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    /* A mágica: 20s, movimento suave, loop infinito e alternado */
+    animation: pulsacaoSaturada 30s ease-in-out infinite alternate;
+    
+    /* Garante renderização fluida em hardware GTX/Intel */
+    will-change: filter;
+}
+
+        /* --- MENU ALINHADO (LARGURA TOTAL DO LOGO) --- */
+        .nav-curadoria {
+            width: 100%; /* Força a largura do logo */
+            display: flex;
+            justify-content: space-between; /* Distribui itens nas extremidades */
+            align-items: center;
+            margin-top: 0.6em; /* O "espaço de uma quebra de linha" */
+        }
+
+/* --- ESTADO INICIAL DOS LINKS --- */
+        .nav-curadoria a {
+            text-decoration: none;
+            color: var(--verde-vivo);
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: clamp(1rem, 3vw, 2.4rem); 
+            
+            /* Preparação para a interatividade [cite: 105] */
+            transition: filter 0.4s ease, border-color 0.4s ease; 
+            
+            /* Estratégia de borda para evitar saltos  */
+            border-bottom: 2px solid transparent; 
+            padding-bottom: 2px;
+            display: inline-block;
+        }
+
+        /* --- HOVER: SATURAÇÃO + UNDERLINE --- */
+        .nav-curadoria a:hover {
+            /* Removido o espaço: saturate(300%) agora funciona */
+            filter: saturate(500%) brightness(1.3); 
+            border-bottom: 2px solid var(--verde-vivo); /* Ativa o underline [cite: 18] */
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="bg-performance"></div>
+
+<div class="hero-container">
+    <div class="logo" onclick="location.href='https://betshoptv.com/temp/santa-bio'">SANTACOSTA</div>
+    <nav class="nav-curadoria">
+        <a href="https://betshoptv.com/temp/santa-v3">Trabalhos</a>
+        <a href="#">Exposições</a>
+        <a href="#">Textos</a>
+        <a href="#">Bio</a>
+    </nav>
+</div>
+
+<script>
+    let currentZoom = 1;
+    const maxZoom = 4; // 100% original + 300% [cite: 70, 72]
+    
+    // Performance de Scroll sem Barra
+    window.addEventListener('wheel', (e) => {
+        // Sensibilidade ajustada para ser fluida, não brusca
+        currentZoom += e.deltaY * 0.002; 
+        
+        // Limites do Piano Preparado
+        if (currentZoom < 1) currentZoom = 1;
+        if (currentZoom > maxZoom) currentZoom = maxZoom;
+        
+        document.documentElement.style.setProperty('--zoom', currentZoom);
+    }, { passive: true });
+
+    // Suporte para movimento em dispositivos móveis
+    let lastTouchY = 0;
+    window.addEventListener('touchstart', e => { lastTouchY = e.touches[0].clientY; });
+    window.addEventListener('touchmove', e => {
+        const delta = lastTouchY - e.touches[0].clientY;
+        currentZoom += delta * 0.005;
+        currentZoom = Math.min(Math.max(currentZoom, 1), maxZoom);
+        document.documentElement.style.setProperty('--zoom', currentZoom);
+        lastTouchY = e.touches[0].clientY;
+    });
+</script>
+
+</body>
+</html>
