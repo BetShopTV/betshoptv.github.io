@@ -92,8 +92,12 @@ header {
 }
 
 .desktop-nav a:hover {
-    border-bottom: 1px solid var(--verde-medio); /* Underline verde-medio */
+    text-decoration: underline;
+    text-decoration-color: var(--fundo-claro);
+    text-underline-offset: 0px; /* Dá o "ritmo editorial" e evita o choque com a fonte */
+    text-decoration-thickness: 10px; /* Define a força da linha */
 }
+
 
 
         .mobile-menu-trigger { display: none; margin-left: auto; cursor: pointer; }
@@ -339,7 +343,7 @@ justify-content: center;
             <nav class="desktop-nav">
                 <a style="font-weight: 400; cursor: default; color: var(--verde-medio)">TRABALHOS</a>
                 <a href="#">EXPOSIÇÕES</a>
-                <a href="#">TEXTOS</a>
+                <a href="https://betshoptv.com/temp/santa-textos">TEXTOS</a>
                 <a href="#">NOTÍCIAS</a>
                 <a href="https://betshoptv.com/temp/santa-bio">BIO</a>
             </nav>
@@ -383,7 +387,7 @@ justify-content: center;
         <div onclick="toggleMenu(false)" style="position:absolute; top:20px; right:8vw; font-size:2.4rem; font-weight: 800; cursor:pointer;">✕</div>
         <a href="https://betshoptv.com/temp/santa-v3" style="font-size:2.4rem; font-weight: 800;">TRABALHOS</a>
         <a href="#" onclick="toggleMenu(false); document.getElementById('cv-alvo').scrollIntoView({behavior: 'smooth'})" style="font-size:2.4rem; font-weight: 800;">EXPOSIÇÕES</a>
-        <a href="#" style="font-size:2.4rem; font-weight: 800;">TEXTOS</a>
+        <a href="https://betshoptv.com/temp/santa-textos" style="font-size:2.4rem; font-weight: 800;">TEXTOS</a>
         <a href="#" style="font-size:2.4rem; font-weight: 800;">NOTÍCIAS</a>
         <a href="https://betshoptv.com/temp/santa-bio" onclick="toggleMenu(false); window.scrollTo({top: 0, behavior: 'smooth'})" style="font-size:2.4rem; font-weight: 800;">BIO</a>
     </div>
