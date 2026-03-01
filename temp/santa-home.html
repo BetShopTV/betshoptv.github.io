@@ -8,8 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --verde-vivo: #e2ff8f; /* [cite: 2] */
-            --fundo-escuro: #202420; /* [cite: 3] */
+            --verde-vivo: #e2ff8f;
+            --verde-escuro: #505a50;
+            --verde-medio: #697369;
+            --fundo-claro: #f5f7f6;
+            --fundo-medio: #e5eae7;
+            --verde-escuro-fundo: #202420;
             --zoom: 1;
         }
 
@@ -91,24 +95,17 @@
             color: var(--verde-vivo);
             font-weight: 800;
             text-transform: uppercase;
-            font-size: clamp(0.8rem, 3vw, 3rem); 
-            
-            /* Preparação para a interatividade [cite: 105] */
-            transition: filter 0.4s ease, border-color 0.4s ease; 
-            
-            /* Estratégia de borda para evitar saltos  */
-            border-bottom: 2px solid transparent; 
-            padding-bottom: 2px;
-            display: inline-block;
+            font-size: clamp(0.8rem, 3vw, 3rem);
         }
 
         /* --- HOVER: SATURAÇÃO + UNDERLINE --- */
         .nav-curadoria a:hover {
-            /* Removido o espaço: saturate(300%) agora funciona */
-            filter: saturate(500%) brightness(1.3); 
-            border-bottom: 2px solid var(--verde-vivo); /* Ativa o underline [cite: 18] */
+    text-decoration: underline;
+    text-decoration-color: var(--fundo-medio);
+    text-underline-offset: 0.5px; /* Dá o "ritmo editorial" e evita o choque com a fonte */
+    text-decoration-thickness: 18px; /* Define a força da linha */
         }
-
+ 
         @media (max-width: 768px) {
             .logo { margin-top: -24vh; }
         }
