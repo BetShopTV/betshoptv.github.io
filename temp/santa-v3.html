@@ -210,7 +210,8 @@ background: var(--verde-vivo);
 
 /* Centraliza APENAS as palavras do menu TODOS/PINTURA/OBJETO */
 #drop-cat .dropdown-item {
-    justify-content: center;
+justify-content: center;
+    
 }
 
 /* Mantém GRID e LISTA alinhados à esquerda (junto ao ícone) */
@@ -241,8 +242,17 @@ background: var(--verde-vivo);
 
         /* --- MODO LISTA --- */
         .lista-layout { display: flex; flex-direction: column; gap: 50px; padding-top: 20px; }
-        #menu-full { position: fixed; top: 0; left: 0; width: 100vw; height: 42vh; background: var(--verde-vivo); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; gap: 25px; }
-        #menu-full a { text-decoration: none; color: var(--verde-escuro); font-size: 1rem; font-weight: 500; letter-spacing: 1px; padding: 8px 18px; background: var(--fundo-medio); }
+        /* --- MENU FULL (MOBILE) --- */
+        #menu-full { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: var(--verde-vivo); z-index: 2000; display: none; 
+            flex-direction: column; justify-content: center; align-items: center; gap: 30px;
+        }
+
+        #menu-full a { 
+            text-decoration: none; color: var(--verde-escuro-fundo); 
+            font-size: 1.5rem; font-weight: 800;
+        }
     
 /* --- LIGHTBOX ATUALIZADO --- */
         #lightbox {
@@ -329,9 +339,9 @@ background: var(--verde-vivo);
             <nav class="desktop-nav">
                 <a style="font-weight: 400; cursor: default; color: var(--verde-medio)">TRABALHOS</a>
                 <a href="#">EXPOSIÇÕES</a>
-                <a href="#cv-alvo">TEXTOS</a>
+                <a href="#">TEXTOS</a>
                 <a href="#">NOTÍCIAS</a>
-                <a href="#">BIO</a>
+                <a href="https://betshoptv.com/temp/santa-bio">BIO</a>
             </nav>
             
             <div class="mobile-menu-trigger" onclick="toggleMenu(true)">
@@ -369,10 +379,14 @@ background: var(--verde-vivo);
     </div>
 </header>
 
-<div id="menu-full">
-    <div onclick="toggleMenu(false)" style="position:absolute; top:18px; right:60px; font-size:1.3rem; cursor:pointer;">✕</div>
-    <a href="#">TRABALHOS</a><a href="#https://betshoptv.com/temp/santa-bio.html">BIO</a><a href="#">NOTÍCIAS</a><a href="#">CONTATO</a>
-</div>
+    <div id="menu-full">
+        <div onclick="toggleMenu(false)" style="position:absolute; top:20px; right:8vw; font-size:2.4rem; font-weight: 800; cursor:pointer;">✕</div>
+        <a href="https://betshoptv.com/temp/santa-v3" style="font-size:2.4rem; font-weight: 800;">TRABALHOS</a>
+        <a href="#" onclick="toggleMenu(false); document.getElementById('cv-alvo').scrollIntoView({behavior: 'smooth'})" style="font-size:2.4rem; font-weight: 800;">EXPOSIÇÕES</a>
+        <a href="#" style="font-size:2.4rem; font-weight: 800;">TEXTOS</a>
+        <a href="#" style="font-size:2.4rem; font-weight: 800;">NOTÍCIAS</a>
+        <a href="#" onclick="toggleMenu(false); window.scrollTo({top: 0, behavior: 'smooth'})" style="font-size:2.4rem; font-weight: 800;">BIO</a>
+    </div>
 
 <main id="main-container" class="grid-layout"></main>
 </div>
