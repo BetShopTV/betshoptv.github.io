@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -14,6 +15,7 @@
             --fundo-medio: #e5eae7;
             --verde-escuro-fundo: #202420;
             --gap: 4px;
+            --scroll-ratio: 0; /* Controlado via JS para o shrink fluido */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; border-radius: 0 !important; }
@@ -35,54 +37,186 @@ body {
     
 }
 
-        .icon-svg { width: 18px; height: 18px; fill: var(--verde-escuro-fundo); display: inline-block; vertical-align: middle; }
+        /* --- HEADER DINÂMICO --- */
+/* No seletor header */
+header { 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000; 
+    background: var(--verde-vivo);
+    border-bottom: 1px solid var(--verde-escuro-fundo);
+    /* REMOVA a linha transition: height 0.2s ease; */
+}
 
-        /* --- HEADER --- */
-        header { position: sticky; top: 0; z-index: 1000; background: var(--verde-vivo);  }
-        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; height: 66px; border-bottom: 1px solid var(--verde-escuro-fundo); border-right: 1px solid var(--verde-escuro-fundo); border-left: 1px solid var(--verde-escuro-fundo);}
-        .logo { font-size: clamp(1.13rem, 2vw, 1.38rem); font-weight: 500; cursor: pointer; letter-spacing: 1px; margin-left: 24px; vertical-align: middle; }
-        .nav-bar { display: grid; grid-template-columns: 1fr 60px 1fr; background: var(--fundo-claro); height: 48px; border-bottom: 1px solid var(--verde-escuro);}
-        .nav-item { display: flex; align-items: center; background: var(--fundo-claro); justify-content: center; cursor: pointer; border: 1px solid var(--verde-escuro); font-size: 0.75rem; text-transform: uppercase; gap: 8px; }
-        .nav-item:last-child { border-right: none; font-weight: 700; }
+/* No seletor .header-top */
+.header-top { 
+    display: flex; 
+    align-items: center; 
+    padding: 0 4vw;
+    /* Altura reduz de 100px para 60px (40% de redução) */
+    height: calc(100px - (var(--scroll-ratio) * 40px));
+    /* REMOVA a linha transition: height 0.2s ease; */
+}
+
+/* No seletor .logo */
+.logo { 
+    font-weight: 800; 
+    cursor: pointer; 
+    letter-spacing: -2px;
+    /* Fonte reduz de 4rem para 2.4rem (40% de redução) */
+    font-size: calc(4rem - (var(--scroll-ratio) * 1.6rem));
+    margin-right: 40px;
+    line-height: 1;
+    /* REMOVA qualquer transição de font-size aqui */
+}
+
+        /* Menu Desktop */
+/* No seletor .desktop-nav */
+.desktop-nav {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    margin-left: auto; /* Alinha o menu à direita */
+    margin-right: 0;   /* Garante que encoste no padding de 4vw do pai */
+}
+
+/* Adicione esta nova regra para o efeito de mouseover */
+.desktop-nav a {
+    text-decoration: none;
+    color: var(--verde-escuro-fundo);
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    font-weight: 500;
+    text-transform: uppercase;    
+    transition: border-color 0.1s ease;
+    border-bottom: 1px solid transparent; /* Reserva o espaço para não pular no hover */
+}
+
+.desktop-nav a:hover {
+    border-bottom: 1px solid var(--verde-medio); /* Underline verde-medio */
+}
+
+
+        .mobile-menu-trigger { display: none; margin-left: auto; cursor: pointer; }
+/* --- AJUSTE DE ÍCONES E SETA --- */
+.icon-svg { 
+    width: 18px; 
+    height: 18px; 
+    fill: var(--verde-escuro-fundo); 
+    transition: transform 0.3s ease; /* Para a rotação suave */
+}
+
+/* Seta 30% menor (aprox. 12px) */
+.icon-seta { 
+    width: 12px; 
+    height: 12px; 
+}
+
+/* --- NAV BAR E DROPDOWN --- */
+.nav-bar { 
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr; 
+    background: var(--fundo-claro); 
+    height: 48px; 
+    position: relative; /* Necessário para o alinhamento do drop */
+    border-top: 1px solid var(--verde-escuro-fundo);
+    
+}
+
+/* Classe para girar a seta */
+.seta-aberta {
+    transform: rotate(180deg);
+}
+
+/* --- NAV ITEM: CENTRALIZAÇÃO TOTAL --- */
+.nav-item { 
+    display: flex;
+    align-items: center; 
+    justify-content: center; /* Centraliza o conjunto Texto + Seta */
+    background: var(--fundo-claro); 
+    cursor: pointer; 
+    border-right: 1px solid var(--verde-escuro); /* Mantém a grade única [cite: 815, 883] */
+    font-size: 0.75rem; 
+    text-transform: uppercase; 
+    gap: 8px; /* Espaço entre 'TODOS' e a Seta  */
+    height: 100%;
+}
+
+.nav-item:last-child { border-right: none; } /* Evita borda dupla no canto direito [cite: 885] */
+
+        
+                .nav-item:hover { 
+background: var(--verde-vivo);
+        }
 
         /* Dropdowns */
         /* Localize este bloco e altere a largura */
+/* --- CONTAINERS: FIM DA BORDA DUPLA --- */
 .dropdown-content {
     position: absolute;
-    font-size: 0.75em;
-    top: 100%;
+    top: 100%; /* Brota exatamente abaixo da borda da nav-bar [cite: 887] */
     background: var(--fundo-medio);
-    border-right: 1px solid var(--verde-escuro);
-    border-left: 1px solid var(--verde-escuro);
-    display: none;
     z-index: 1001;
-    width: calc((100% - 60px) / 2); /* Ajusta para a largura da 1ª célula (1fr) */
+    display: none;
+    /* Borda de 1px em tudo, exceto no topo para não dobrar com a barra [cite: 802, 883] */
+    border: 1px solid var(--verde-escuro);
+    border-top: none; 
 }
 
-        .dropdown-item { padding: 15px 20px; 
-        border-bottom: 1px solid var(--verde-escuro); 
-        display: flex;
-        align-items: center;
-        justify-content: center; /* Esta linha centraliza o texto/conteúdo */
-        gap: 10px;
-        cursor: pointer;
+/* --- ITENS: ALINHAMENTO SENIOR --- */
+.dropdown-item {
+    padding: 12px 20px; /* 21px alinha o ícone com o centro da célula de 60px [cite: 815, 889] */
+    border-bottom: 1px solid var(--verde-escuro);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Texto vem logo após o ícone [cite: 890] */
+    gap: 12px; /* Espaço curto e elegante entre ícone e nome [cite: 890] */
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: var(--verde-escuro-fundo);
+    border-bottom: 1px solid var(--verde-escuro);
+    transition: background 0.2s ease;
+}
+
+.dropdown-item:first-child {
+    border-top: 1px solid var(--verde-escuro-fundo); /* Limpeza na base do menu [cite: 889] */
+}
+
+.dropdown-item:last-child {
+    border-bottom: 0px solid var(--verde-escuro-fundo); /* Limpeza na base do menu [cite: 889] */
+}
+
+
+/* Garante que o ícone mantenha o tamanho original da Agência [cite: 878] */
+.dropdown-item .icon-svg {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
 }
 
 .dropdown-item:hover {
         background-color: var(--verde-vivo);
     }
-/* Localize ou adicione este bloco específico */
+#drop-cat {
+    left: -1px; /* Compensa a borda lateral da nav-bar [cite: 897] */
+    width: calc((100% - 60px) / 2 + 1px);
+}
+ 
 #drop-filtro {
-    left: calc((100% - 60px) / 2 - 1px); /* Posiciona exatamente no início da 2ª coluna */
-    transform: none; /* Remove qualquer centralização anterior se houver */
-    min-width: 160px; /* Largura mínima para o texto não quebrar */
+    /* Alinha exatamente com o início da célula central de 60px [cite: 893] */
+    left: calc((100% - 60px) / 2 - 1px);
     width: auto;
+    min-width: 160px;
+} 
+
+/* Centraliza APENAS as palavras do menu TODOS/PINTURA/OBJETO */
+#drop-cat .dropdown-item {
+    justify-content: center;
 }
 
-/* Garanta que o drop-cat não tenha borda esquerda para alinhar com o design seco */
-#drop-cat { 
-    left: 2px; 
-    border-left: none; 
+/* Mantém GRID e LISTA alinhados à esquerda (junto ao ícone) */
+#drop-filtro .dropdown-item {
+    justify-content: flex-start;
+    padding-left: 21px; /* Alinhamento sênior com o ícone de cima */
 }
         /* --- GRID --- */
         #main-container { padding: var(--gap); background: var(--fundo-medio); }
@@ -159,29 +293,58 @@ body {
             font-weight: 500;
         }
         
-        /* Transição para Desktop */
-@media (min-width: 1000px) {
-    .logo {
-        font-weight: 300; /* Peso para Desktop */
-    }
+        
+                /* --- MENU FULL (MOBILE) --- */
+        #menu-full { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: var(--verde-vivo); z-index: 2000; display: none; 
+            flex-direction: column; justify-content: center; align-items: center; gap: 30px;
+        }
+
+        #menu-full a { 
+            text-decoration: none; color: var(--verde-escuro-fundo); 
+            font-size: 1.5rem; font-weight: 800;
+        }
+
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 850px) {
+            .desktop-nav { display: none; }
+            .mobile-menu-trigger { display: block; }
+            .header-top { height: 70px !important; } /* Altura fixa mais discreta no mobile */
+            .logo { font-size: 2rem !important; margin-right: 0; }
+            .nav-bar { grid-template-columns: 1fr 1fr; }
+            .nav-item:nth-child(2) { display: none; }
+            .contact-wrapper { flex-direction: column; align-items: center; text-align: center; }
+            .contact-links { align-items: center; }
+        
 }
     
     </style>
 </head>
 <body>
 <div id="site-wrapper">
-<header>
-    <div class="header-top">
-        <div class="logo">SANTACOSTA</div>
-        <div onclick="toggleMenu(true)" style="cursor:pointer;  margin-right: 24px;">
-            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    <header id="dynamic-header">
+        <div class="header-top">
+            <div class="logo" onclick="location.href='https://betshoptv.com/temp/santa-home'">SANTACOSTA</div>
+            <nav class="desktop-nav">
+                <a style="font-weight: 400; cursor: default; color: var(--verde-medio)">TRABALHOS</a>
+                <a href="#">EXPOSIÇÕES</a>
+                <a href="#cv-alvo">TEXTOS</a>
+                <a href="#">NOTÍCIAS</a>
+                <a href="#">BIO</a>
+            </nav>
+            
+            <div class="mobile-menu-trigger" onclick="toggleMenu(true)">
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+            </div>
         </div>
-    </div>
     <div class="nav-bar">
         <div class="nav-item" onclick="toggleDropdown('drop-cat')">
-            <span id="cat-label">TODOS</span>
-            <span id="cat-icon-placeholder"><svg class="icon-svg" viewBox="0 0 1024 1024"><path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z"/></svg></span>
-        </div>
+    <span id="cat-label">TODOS</span>&nbsp;
+    <svg class="icon-svg icon-seta" id="seta-cat" viewBox="0 0 1024 1024">
+        <path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z"/>
+    </svg>
+</div>
         <div class="nav-item" onclick="toggleDropdown('drop-filtro')">
             <svg class="icon-svg" viewBox="0 0 35 35"><path d="M5.42,34.44a1.25,1.25,0,0,1-1.25-1.25V1.81a1.25,1.25,0,0,1,2.5,0V33.19A1.25,1.25,0,0,1,5.42,34.44Z"/><path d="M9.34,27.41H1.5a1.25,1.25,0,0,1,0-2.5H9.34a1.25,1.25,0,0,1,0,2.5Z"/><path d="M29.58,34.44a1.25,1.25,0,0,1-1.25-1.25V1.81a1.25,1.25,0,1,1,2.5,0V33.19A1.25,1.25,0,0,1,29.58,34.44Z"/><path d="M33.5,27.41H25.66a1.25,1.25,0,0,1,0-2.5H33.5a1.25,1.25,0,0,1,0,2.5Z"/><path d="M17.5,34.44a1.25,1.25,0,0,1-1.25-1.25V1.81a1.25,1.25,0,1,1,2.5,0V33.19A1.25,1.25,0,0,1,17.5,34.44Z"/><path d="M21.42,10.09H13.58a1.25,1.25,0,0,1,0-2.5h7.84a1.25,1.25,0,0,1,0,2.5Z"/></svg>
         </div>
@@ -189,10 +352,12 @@ body {
         <div id="drop-cat" class="dropdown-content"></div>
         <div id="drop-filtro" class="dropdown-content">
             <div class="dropdown-item" onclick="setModo('GRID')">
-                <svg class="icon-svg" viewBox="0 0 32 32"><rect x="2" y="2" width="7" height="7"/><rect x="12" y="2" width="7" height="7"/><rect x="22" y="2" width="7" height="7"/><rect x="2" y="12" width="7" height="7"/><rect x="12" y="12" width="7" height="7"/><rect x="22" y="12" width="7" height="7"/><rect x="2" y="22" width="7" height="7"/><rect x="12" y="22" width="7" height="7"/><rect x="22" y="22" width="7" height="7"/></svg> GRID
+                <svg class="icon-svg" viewBox="0 0 32 32"><rect x="2" y="2" width="7" height="7"/><rect x="12" y="2" width="7" height="7"/><rect x="22" y="2" width="7" height="7"/><rect x="2" y="12" width="7" height="7"/><rect x="12" y="12" width="7" height="7"/><rect x="22" y="12" width="7" height="7"/><rect x="2" y="22" width="7" height="7"/><rect x="12" y="22" width="7" height="7"/><rect x="22" y="22" width="7" height="7"/>
+                </svg> GRID
             </div>
             <div class="dropdown-item" onclick="setModo('LISTA')">
-                <svg class="icon-svg" viewBox="0 0 512 512"><g transform="translate(64,64)"><path d="M106.6,0 L384,0 L384,42.6 L106.6,42.6 L106.6,0 Z M0,0 L64,0 L64,42.6 L0,42.6 L0,0 Z M106.6,106.6 L384,106.6 L384,149.3 L106.6,149.3 L106.6,106.6 Z M0,106.6 L64,106.6 L64,149.3 L0,149.3 L0,106.6 Z M106.6,213.3 L384,213.3 L384,256 L106.6,256 L106.6,213.3 Z M0,213.3 L64,213.3 L64,256 L0,256 L0,213.3 Z M106.6,320 L384,320 L384,362.6 L106.6,362.6 L106.6,320 Z M0,320 L64,320 L64,362.6 L0,362.6 L0,320 Z"/></g></svg> LISTA
+                <svg class="icon-svg" viewBox="0 0 512 512"><g transform="translate(64,64)"><path d="M106.6,0 L384,0 L384,42.6 L106.6,42.6 L106.6,0 Z M0,0 L64,0 L64,42.6 L0,42.6 L0,0 Z M106.6,106.6 L384,106.6 L384,149.3 L106.6,149.3 L106.6,106.6 Z M0,106.6 L64,106.6 L64,149.3 L0,149.3 L0,106.6 Z M106.6,213.3 L384,213.3 L384,256 L106.6,256 L106.6,213.3 Z M0,213.3 L64,213.3 L64,256 L0,256 L0,213.3 Z M106.6,320 L384,320 L384,362.6 L106.6,362.6 L106.6,320 Z M0,320 L64,320 L64,362.6 L0,362.6 L0,320 Z"/></g>
+                </svg> LISTA
             </div>
         </div>
 
@@ -1465,13 +1630,15 @@ function scrollCarousel(id, idx) {
     }
 
     // --- DROPDOWNS E MENUS ---
-    function toggleDropdown(id) {
-        const el = document.getElementById(id); 
-        const vis = el.style.display === 'block';
-        document.querySelectorAll('.dropdown-content').forEach(d => d.style.display = 'none');
-        el.style.display = vis ? 'none' : 'block';
-    }
-
+function toggleDropdown(id) {
+    const el = document.getElementById(id);
+    const isVisible = el.style.display === 'block';
+    
+    // Fecha outros drops abertos para manter o "Piano Preparado" limpo [cite: 685, 748]
+    document.querySelectorAll('.dropdown-content').forEach(d => d.style.display = 'none');
+    
+    el.style.display = isVisible ? 'none' : 'block';
+}
     function setModo(m) { modoVis = m; toggleDropdown('drop-filtro'); init(); }
     
     function setCat(c) { 
@@ -1501,6 +1668,7 @@ function scrollCarousel(id, idx) {
         document.getElementById('menu-full').style.display = open ? 'flex' : 'none'; 
     }
 
+
     // --- EVENTOS DE TECLADO ---
     window.addEventListener('keydown', (e) => { 
         if (e.key === 'Escape') { 
@@ -1522,5 +1690,37 @@ function scrollCarousel(id, idx) {
 
     init();
 </script>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Controle do Scroll Fluido para o Header Shrink
+    window.onscroll = () => {
+        const scrollThreshold = 200; // Distância em pixels para completar o shrink
+        const ratio = Math.min(window.scrollY / scrollThreshold, 1);
+        document.documentElement.style.setProperty('--scroll-ratio', ratio);
+    };
+ 
+    function toggleMenu(open) { 
+        document.getElementById('menu-full').style.display = open ? 'flex' : 'none'; 
+    }
+
+    function togglePB(el) {
+        // Alterna entre o estado original e o filtro de escala de cinza conforme o código base [cite: 366, 367]
+        if (el.style.filter === "grayscale(100%)") {
+            el.style.filter = "grayscale(0%)";
+        } else {
+            el.style.filter = "grayscale(100%)";
+        }
+    }
+    
+    window.onscroll = () => {
+    // 150px é um número ideal para uma transição rápida e orgânica
+    const scrollThreshold = 380; 
+    const ratio = Math.min(window.scrollY / scrollThreshold, 1);
+    document.documentElement.style.setProperty('--scroll-ratio', ratio);
+};
+    
+</script>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v67327c56f0bb4ef8b305cae61679db8f1769101564043" integrity="sha512-rdcWY47ByXd76cbCFzznIcEaCN71jqkWBBqlwhF1SY7KubdLKZiEGeP7AyieKZlGP9hbY/MhGrwXzJC/HulNyg==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
