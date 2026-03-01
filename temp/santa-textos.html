@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIO | SANTACOSTA</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --verde-vivo: #e2ff8f;
+            --verde-escuro: #505a50;
+            --verde-medio: #697369;
+            --fundo-claro: #f5f7f6;
+            --fundo-medio: #e5eae7;
+            --verde-escuro-fundo: #202420;
+            --scroll-ratio: 0; /* Controlado via JS para o shrink fluido */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--verde-escuro-fundo);
+            display: flex;
+            justify-content: center;
+        }
+
+        #site-wrapper {
+            width: 100%;
+            max-width: 1400px;
+            background-color: var(--fundo-claro);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* --- HEADER DINÂMICO --- */
+/* No seletor header */
+header { 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000; 
+    background: var(--verde-vivo);
+    border-bottom: 1px solid var(--verde-escuro-fundo);
+    /* REMOVA a linha transition: height 0.2s ease; */
+}
+
+/* No seletor .header-top */
+.header-top { 
+    display: flex; 
+    align-items: center; 
+    padding: 0 4vw;
+    /* Altura reduz de 100px para 60px (40% de redução) */
+    height: calc(100px - (var(--scroll-ratio) * 40px));
+    /* REMOVA a linha transition: height 0.2s ease; */
+}
+
+/* No seletor .logo */
+.logo { 
+    font-weight: 800; 
+    cursor: pointer; 
+    letter-spacing: -2px;
+    /* Fonte reduz de 4rem para 2.4rem (40% de redução) */
+    font-size: calc(4rem - (var(--scroll-ratio) * 1.6rem));
+    margin-right: 40px;
+    line-height: 1;
+    /* REMOVA qualquer transição de font-size aqui */
+}
+
+        /* Menu Desktop */
+/* No seletor .desktop-nav */
+.desktop-nav {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    margin-left: auto; /* Alinha o menu à direita */
+    margin-right: 0;   /* Garante que encoste no padding de 4vw do pai */
+}
+
+/* Adicione esta nova regra para o efeito de mouseover */
+.desktop-nav a {
+    text-decoration: none;
+    color: var(--verde-escuro-fundo);
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    font-weight: 500;
+    text-transform: uppercase;    
+    transition: border-color 0.1s ease;
+    border-bottom: 1px solid transparent; /* Reserva o espaço para não pular no hover */
+}
+
+.desktop-nav a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--fundo-claro);
+    text-underline-offset: 0px; /* Dá o "ritmo editorial" e evita o choque com a fonte */
+    text-decoration-thickness: 10px; /* Define a força da linha */
+}
+
+
+        .mobile-menu-trigger { display: none; margin-left: auto; cursor: pointer; }
+        .icon-svg { width: 24px; height: 24px; fill: var(--verde-escuro-fundo); }
+
+        .nav-bar { 
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr; 
+            background: var(--fundo-claro); 
+            height: 48px; 
+            border-top: 1px solid var(--verde-escuro-fundo);
+        }
+
+        .nav-item { 
+            display: flex; align-items: center; justify-content: center; 
+            border-right: 1px solid var(--verde-escuro); 
+            font-size: 0.9rem; text-transform: uppercase;
+            cursor: pointer;
+        }
+        
+                .nav-item:hover { 
+background: var(--verde-vivo);
+        }
+
+        /* --- SEÇÃO DE TEXTOS (ACORDEÃO EDITORIAL) --- */
+        #textos-container {
+            padding: 60px 5vw;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .texto-item {
+            border-bottom: 1px solid var(--verde-medio);
+            padding: 40px 0;
+        }
+
+        .texto-header {
+            cursor: pointer;
+        }
+/* --- FORMATAÇÃO FIXA E HOVER (HIGHLIGHTER) --- */
+.texto-header.ativo .titulo-texto,
+.texto-header:hover .titulo-texto {
+    color: var(--verde-escuro-fundo);
+    background-color: transparent; 
+    text-decoration: underline;
+    text-decoration-color: var(--verde-vivo);
+    text-underline-offset: 1px; 
+    text-decoration-thickness: 18px;
+    /* Garante que o destaque fique atrás do texto em alguns navegadores */
+    text-decoration-skip-ink: none; 
+}
+
+        .autor-tag {
+            font-size: 0.85rem;
+            color: var(--verde-medio);
+            text-transform: uppercase;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .titulo-texto {
+            font-size: clamp(1.5rem, 4vw, 2.7rem);
+            font-weight: 800;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+        
+                .titulo-texto:hover {
+    /* Mantém a cor do texto original ou a que você desejar */
+    color: var(--verde-escuro-fundo);
+    
+    /* Remove o fundo se quiser que o destaque seja apenas a linha */
+    background-color: transparent; 
+    
+    /* Ativa o underline e define a cor e o respiro */
+    text-decoration: underline;
+    text-decoration-color: var(--verde-vivo);
+    text-underline-offset: 1px; /* Dá o "ritmo editorial" e evita o choque com a fonte */
+    text-decoration-thickness: 18px; /* Define a força da linha */
+}
+ 
+        /* Dropdown Content */
+/* --- TOGGLE SECO --- */
+.texto-corpo {
+    display: none; /* Esconde imediatamente */
+    overflow: hidden;
+}
+
+.texto-corpo.aberto {
+    display: block; /* Mostra imediatamente */
+    padding-top: 40px;
+}
+
+        .inner-content {
+            font-size: clamp(1rem, 1.8vw, 1.15rem);
+            line-height: 1.8;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .inner-content p { margin-bottom: 25px; }
+
+        blockquote {
+            border-left: 4px solid var(--verde-vivo);
+            padding-left: 25px;
+            margin: 40px 0;
+            font-style: italic;
+            color: var(--verde-medio);
+        }
+
+        .footnotes {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--verde-medio);
+            font-size: 0.8rem;
+            color: var(--verde-medio);
+            line-height: 1.5;
+        }
+
+        /* --- MENU FULL (MOBILE) --- */
+        #menu-full { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: var(--verde-vivo); z-index: 2000; display: none; 
+            flex-direction: column; justify-content: center; align-items: center; gap: 30px;
+        }
+
+        #menu-full a { 
+            text-decoration: none; color: var(--verde-escuro-fundo); 
+            font-size: 1.5rem; font-weight: 800;
+        }
+
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 850px) {
+            .header-top { height: 70px !important; }
+            .desktop-nav { display: none; }
+            .mobile-menu-trigger { display: block; }
+            .header-top { height: 70px !important; } /* Altura fixa mais discreta no mobile */
+            .logo { font-size: 2rem !important; margin-right: 0; }
+            .nav-bar { grid-template-columns: 1fr 1fr; }
+            .nav-item:nth-child(2) { display: none; }
+            .contact-wrapper { flex-direction: column; align-items: center; text-align: center; }
+            .contact-links { align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="site-wrapper">
+    <header id="dynamic-header">
+        <div class="header-top">
+            <div class="logo" onclick="location.href='https://betshoptv.com/temp/santa-home'">SANTACOSTA</div>
+            <nav class="desktop-nav">
+                <a href="https://betshoptv.com/temp/santa-v3">TRABALHOS</a>
+                <a href="#">EXPOSIÇÕES</a>
+                <a style="font-weight: 400; cursor: default; color: var(--verde-medio)">TEXTOS</a>
+                <a href="#">NOTÍCIAS</a>
+                <a href="https://betshoptv.com/temp/santa-bio">BIO</a>
+            </nav>
+            </div>
+    </header>
+
+    <div id="menu-full">
+        <div onclick="toggleMenu(false)" style="position:absolute; top:20px; right:8vw; font-size:2.4rem; font-weight: 800; cursor:pointer;">✕</div>
+        <a href="https://betshoptv.com/temp/santa-v3" style="font-size:2.4rem; font-weight: 800;">TRABALHOS</a>
+        <a href="#" onclick="toggleMenu(false); document.getElementById('cv-alvo').scrollIntoView({behavior: 'smooth'})" style="font-size:2.4rem; font-weight: 800;">EXPOSIÇÕES</a>
+        <a href="#" style="font-size:2.4rem; font-weight: 800;">TEXTOS</a>
+        <a href="#" style="font-size:2.4rem; font-weight: 800;">NOTÍCIAS</a>
+        <a href="#" onclick="toggleMenu(false); window.scrollTo({top: 0, behavior: 'smooth'})" style="font-size:2.4rem; font-weight: 800;">BIO</a>
+    </div>
+
+    <main id="textos-container">
+
+        <div class="texto-item">
+            <div class="texto-header" onclick="toggleTexto(this)">
+                <span class="autor-tag">Marcelo Amorim</span>
+                <h2 class="titulo-texto">SALA DE ACONTECIMENTOS<br>Nos olhos de quem vê</h2>
+            </div>
+            <div class="texto-corpo">
+                <div class="inner-content">
+                    <p>Ainda hoje um conjunto de regras a respeito da arte, noções que a princípio distinguiriam o que é arte do que não é, podem ser uma pedra no caminho do receptor de arte contemporânea. Um imaginário onde reinam conceitos como exclusividade, inspiração, destreza, entre outros, características com as quais a arte atual veio romper, ainda confunde e distância o público dos trabalhos que não se encaixam nestas premissas.</p>
+                    <p>Talvez valha a pena retroceder no tempo e pensar em Duchamp, que preconiza a ideia de que a obra estava no olhar do espectador e não em uma visão fechada proposta pelo artista. Desde Duchamp a distinção entre o que é ou não é arte perdeu sua importância, visto que essa “diferença” passa a ser produzida pelo referencial de observação. Tal ideia vai refletir em diversos trabalhos artísticos onde se radicaliza a questão da recepção. Por isso gostaria de relembrar aqui este momento de efervescência posto em prática a partir da década de 60 em que proposições artísticas deram maior autonomia à recepção, transformando-a de fato em coautoria.</p>
+                    <blockquote>"Os móbiles de Calder, os espetáculos coletivos do Living Theatre, os happenings do grupo Fluxus, as instalações e ambientes imaginados por artistas como Donald Judd, Richard Serra ou Robert Morris, os bichos de Lygia Clark, os parangolés de Hélio Oiticica são apenas alguns exemplos... de obras que pressupõem a intervenção ativa do espectador"</blockquote>
+                    <p>Mas dentre tantos artistas, destaco aqui o papel de Allan Kaprow. A autoria do termo e do gênero artístico happening é creditada ao artista devido ao seu trabalho 18 happenings in 6 parts, realizado no outono de 1959 na Reuben Gallery em Nova Iorque...</p>
+                    <p>Kaprow fazia parte de uma época onde a valorização de gestos e objetos comuns era crescente em diversos campos artísticos...</p>
+                    <p>Kaprow moveu-se de um trabalho com pintura ao estilo Expressionista abstrato da época para a chamada action collage, uma tradução daquela pintura com o uso de objetos geralmente banais. Em seguida ele trabalha com environments. Tais trabalhos mobilizam outros sentidos que não apenas a visão: som, cheiro, tato...</p>
+                    <p>Da ideia de environment, ele parte para esta espécie de teatro ao estilo de uma colagem, batizado de happening. Neste ponto seus trabalhos passam a contemplar a recepção e a relação com os espaços...</p>
+                    <p>Todas estas ações dependeram da participação de pessoas, algumas delas só existem sob a forma de relato, algumas foram documentadas através de fotografias. Allan Kaprow não estava interessado em produzir obras para museus...</p>
+                    <p>Talvez seja desejável relembrar a efervescência dos anos 1960, porque 2019 tem sido assustadoramente retrógrado. Talvez porque seja preciso relembrar que os limites da arte foram expandidos e não precisamos nos manter presos à padrões que não funcionam mais.</p>
+                    <p>O Hermes Artes Visuais sendo uma organização dirigida por artistas e voltada para a orientação de processos de jovens artistas procura estimular a dimensão experimental da arte e a pensar criticamente os formatos dados...</p>
+                    <p>Somos artistas traçando uma curadoria para outros artistas e por isso ao invés de fazermos um recorte formal ou temático, como cabe aos curadores, nos demos a liberdade de lançar proposições aos participantes do Hermes...</p>
+                    <p>Que a exposição então se torne uma "Sala de Acontecimentos". Ecoando nossos encontros que acontecem em uma sala, transformando a galeria não apenas em um espaço expositivo, mas de experiências e reafirmando a ideia de processo...</p>
+                    <div class="footnotes">
+                        1 .MACHADO, Arlindo .1997. Hipermídia: o Labirinto como Metáfora. | 2 .GOLDBERG, RoseLee. 2001. Performance Art: From Futurism to the Present. | 3 RODENBECK, Judith, Life Like Art, Artforum, (setembro, 2006). | 5 DANTO, Arthur C. ,2003. O mundo como armazém.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="texto-item">
+            <div class="texto-header" onclick="toggleTexto(this)">
+                <span class="autor-tag">Carolina Lauriano</span>
+                <h2 class="titulo-texto">Sirva-se do que você quiser</h2>
+            </div>
+            <div class="texto-corpo">
+                <div class="inner-content">
+                    <p>Esta exposição não se articula por meio de coincidências temáticas ou de linguagem. Sendo assim, a mostra pretende apresentar o olhar de oito artistas contemporâneos sobre seus próprios conceitos criativos, exibindo a diversidade de suas produções.</p>
+                    <p>Vai além do acaso observar que, mesmo buscando alternativas ao uso de temáticas, a diversidade das produções reunidas nesta mostra se convergem não somente por sua contundência de expressão artística. Quando observamos em conjunto os trabalho de Carlos Pileggi, Daniel Antônio, Daré, Élcio Miazaki, Mariana Whately, Sandra Lapage, Santacosta e Thais Stoklos, verificamos que as pesquisas aqui apresentadas se debruçam, em maior ou menor escala, sobre coleta, gesto e acúmulo.</p>
+                    <p>Nesse viés, a coletiva explora as relações de resinificação e deslocamento de objetos comuns, do imaginário e do cotidiano, a fim de expandir as possibilidades de olhar esses mesmos objetos, uma vez que, para os artistas, não interessa devolvê-los para seu lugar comum...</p>
+                    <p>Na soma desses movimentos, Sobreposição e Deslocamento confirma-se, por fim, como uma mostra dedicada a observar como os artistas lidam, hoje, com a ressignificação do sentido do que, para nós, é a apenas cotidiano...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="texto-item">
+            <div class="texto-header" onclick="toggleTexto(this)">
+                <span class="autor-tag">Marcelo Amorim</span>
+                <h2 class="titulo-texto">Sobe o sol ou a noite desce?</h2>
+            </div>
+            <div class="texto-corpo">
+                <div class="inner-content">
+                    <p>É curioso pensar que na recente história da arte a pintura pouco comparece. O livro Art since 1900 publicado em 2005, escrito por famosos historiadores da arte, é repleto de pinturas em seus primeiros capítulos que tratam do começo do século XX... Já nos capítulos finais, nem sequer 5% da imagens ali reproduzidas são pinturas.</p>
+                    <p>Recentemente a obra Portrait of an artist (pool with two figures) foi oferecida em leilão pelo valor inicial de 80 milhões de dólares... tornando Hockney o artista vivo mais caro do mundo. Esses números espetaculares dão a entender que continuamos pintando e consumindo pintura...</p>
+                    <p>Existe uma visão que se criou no contexto de 1968 que coloca a pintura como uma mídia antiquada, que não daria conta das complexidades do mundo contemporâneo. Foi a primeira vez que se falou de morte da pintura. Contudo, o que se pode ver ao longo das décadas seguintes... foi muito mais um jogo de luz e sombras.</p>
+                    <p>Existem vantagens: é uma linguagem que registra plasticamente o preciso tempo que o artista esteve em contato com o material, coordenando a mão que treme, a visão que borra e o cérebro que divaga...</p>
+                    <p>Temos a tendência de pensar na pintura como eterna... mas isso é só impressão, nada é perene. Os museus em chamas estão aí para nos lembrar que a arte precisa ser vista para estar viva. Tudo precisa ser feito continuamente e todos corremos o perigo do desaparecimento.</p>
+                    <p style="font-weight: 800; margin-top: 20px;">Marcelo Amorim</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="texto-item">
+            <div class="texto-header" onclick="toggleTexto(this)">
+                <span class="autor-tag">Santacosta</span>
+                <h2 class="titulo-texto">A construção da matéria</h2>
+            </div>
+            <div class="texto-corpo">
+                <div class="inner-content">
+                    <p>A fatura das obras de Santacosta ocorre através da articulação da matéria a partir de suas especificidades. O procedimento utilizado pelo artista se vale da junção de artefatos e materiais diversos, com o intuito de criar tensão pelo modo como se relacionam.</p>
+                    <p>O ponto de partida de sua pesquisa mais recente ocorreu por meio da união de aparatos que recebia através de doações ou que eram coletados na rua, e que o estimularam a expandir seu olhar para novos meios de criar...</p>
+                    <p>As estruturas se configuram em uma lógica entre a pintura e o objeto. O aspecto pictórico está principalmente no rastro do gesto, ao manipular a matéria, e na cor ácida das tintas; o caráter objetual é o que decorre da soma de elementos...</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+ 
+<script>
+    // Controle do Scroll (v4 Fidelity)
+    window.onscroll = () => {
+        const scrollThreshold = 380;
+        const ratio = Math.min(window.scrollY / scrollThreshold, 1);
+        document.documentElement.style.setProperty('--scroll-ratio', ratio);
+    };
+
+    // Função de Acordeão (Abrir/Fechar Textos)
+function toggleTexto(header) {
+    const corpo = header.nextElementSibling;
+    const todosOsCorpos = document.querySelectorAll('.texto-corpo');
+    const todosOsHeaders = document.querySelectorAll('.texto-header');
+    const jaEstavaAberto = corpo.classList.contains('aberto');
+
+    // 1. Reseta tudo (Exclusividade: apenas um aberto e um ativo por vez)
+    todosOsCorpos.forEach(t => t.classList.remove('aberto'));
+    todosOsHeaders.forEach(h => h.classList.remove('ativo'));
+
+    if (!jaEstavaAberto) {
+        // 2. Ativa o atual
+        corpo.classList.add('aberto');
+        header.classList.add('ativo');
+
+        // 3. Scroll Seco
+        const headerHeight = document.querySelector('header').offsetHeight;
+        const elementPosition = header.getBoundingClientRect().top + window.scrollY;
+        const offsetPosition = elementPosition - headerHeight;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'instant'
+        });
+    }
+}
+</script>
+
+</body>
+</html>
