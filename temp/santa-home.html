@@ -89,7 +89,7 @@
             color: var(--verde-vivo);
             font-weight: 800;
             text-transform: uppercase;
-            font-size: clamp(1rem, 3vw, 2.4rem); 
+            font-size: clamp(0.8rem, 3vw, 3rem); 
             
             /* Preparação para a interatividade [cite: 105] */
             transition: filter 0.4s ease, border-color 0.4s ease; 
@@ -115,38 +115,69 @@
 
 <div class="hero-container">
     <div class="logo" onclick="location.href='https://betshoptv.com/temp/santa-bio'">SANTACOSTA</div>
+    <br>
     <nav class="nav-curadoria">
-        <a href="https://betshoptv.com/temp/santa-v3">Trabalhos</a>
-        <a href="#">Exposições</a>
-        <a href="#">Textos</a>
+        <a href="https://betshoptv.com/temp/santa-v3">Trabalhos</a>&nbsp;
+        <a href="#">Exposições</a>&nbsp;
+        <a href="#">Textos</a>&nbsp;
+        <a href="#">Notícias</a>&nbsp;
         <a href="#">Bio</a>
     </nav>
 </div>
 
 <script>
-    let currentZoom = 1;
-    const maxZoom = 4; // 100% original + 300% [cite: 70, 72]
+let currentZoom = 1;
+    const minZoom = 1;
+    const maxZoom = 4; // 100% + 300% de zoom extra [cite: 70]
     
-    // Performance de Scroll sem Barra
-    window.addEventListener('wheel', (e) => {
-        // Sensibilidade ajustada para ser fluida, não brusca
-        currentZoom += e.deltaY * 0.002; 
-        
-        // Limites do Piano Preparado
-        if (currentZoom < 1) currentZoom = 1;
-        if (currentZoom > maxZoom) currentZoom = maxZoom;
-        
+    // Configurações do Loop (40s ida e volta = 20s cada trecho)
+    let direction = 1; // 1 para aumentar, -1 para diminuir
+    const totalCycleTime = 1800000; // 40 segundos em milissegundos
+    const step = (maxZoom - minZoom) / (totalCycleTime / 2 / 16.67); // Incremento por frame (60fps)
+
+    function animateBackground() {
+        // Aplica o movimento automático (Linear, sem ease)
+        currentZoom += step * direction;
+
+        // Inverte a direção nos limites (Indo e vindo)
+        if (currentZoom >= maxZoom) {
+            currentZoom = maxZoom;
+            direction = -1;
+        } else if (currentZoom <= minZoom) {
+            currentZoom = minZoom;
+            direction = 1;
+        }
+
+        updateZoom();
+        requestAnimationFrame(animateBackground);
+    }
+
+    // Função central de atualização
+    function updateZoom() {
         document.documentElement.style.setProperty('--zoom', currentZoom);
+    }
+
+    // Interferência do Usuário (O Piano Preparado) [cite: 105]
+    window.addEventListener('wheel', (e) => {
+        // O usuário altera o valor, e a animação retoma desse novo ponto
+        currentZoom += e.deltaY * 0.002;
+        
+        // Garante que o usuário não saia dos limites do design
+        currentZoom = Math.min(Math.max(currentZoom, minZoom), maxZoom);
+        updateZoom();
     }, { passive: true });
 
-    // Suporte para movimento em dispositivos móveis
+    // Inicia a performance visual
+    requestAnimationFrame(animateBackground);
+
+    // Suporte Touch (Mantido para sua infraestrutura mobile)
     let lastTouchY = 0;
     window.addEventListener('touchstart', e => { lastTouchY = e.touches[0].clientY; });
     window.addEventListener('touchmove', e => {
         const delta = lastTouchY - e.touches[0].clientY;
         currentZoom += delta * 0.005;
-        currentZoom = Math.min(Math.max(currentZoom, 1), maxZoom);
-        document.documentElement.style.setProperty('--zoom', currentZoom);
+        currentZoom = Math.min(Math.max(currentZoom, minZoom), maxZoom);
+        updateZoom();
         lastTouchY = e.touches[0].clientY;
     });
 </script>
