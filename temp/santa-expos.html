@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXPOSIÇÕES | SANTACOSTA</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --verde-vivo: #e2ff8f;
+            --verde-escuro: #505a50;
+            --verde-medio: #697369;
+            --fundo-claro: #f5f7f6;
+            --fundo-medio: #e5eae7;
+            --verde-escuro-fundo: #202420;
+            --gap: 4px;
+            --scroll-ratio: 0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; border-radius: 0 !important; }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--verde-escuro-fundo);
+            display: flex;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #site-wrapper {
+            width: 100%;
+            max-width: 1400px;
+            background-color: var(--fundo-medio);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* --- HEADER DINÂMICO (Design Consolidado) --- */
+        header { 
+            position: sticky;
+            top: 0; 
+            z-index: 1000; 
+            background: var(--verde-vivo);
+            border-bottom: 1px solid var(--verde-escuro-fundo);
+        }
+
+        .header-top { 
+            display: flex; 
+            align-items: center; 
+            padding: 0 4vw;
+            height: calc(100px - (var(--scroll-ratio) * 40px));
+        }
+
+        .logo { 
+            font-weight: 800;
+            cursor: pointer; 
+            letter-spacing: -2px;
+            font-size: calc(4rem - (var(--scroll-ratio) * 1.6rem));
+            margin-right: 40px;
+            line-height: 1;
+            color: var(--verde-escuro-fundo);
+        }
+
+        .desktop-nav {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .desktop-nav a {
+            text-decoration: none;
+            color: var(--verde-escuro-fundo);
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            font-weight: 500;
+            text-transform: uppercase;    
+            border-bottom: 1px solid transparent;
+        }
+
+        .desktop-nav a:hover {
+            text-decoration: underline;
+            text-decoration-color: var(--fundo-claro);
+            text-underline-offset: 0px;
+            text-decoration-thickness: 10px;
+        }
+
+        .mobile-menu-trigger { display: none; margin-left: auto; cursor: pointer; }
+        .icon-svg { width: 18px; height: 18px; fill: var(--verde-escuro-fundo); }
+
+        .nav-bar { 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--fundo-claro); 
+            height: 48px; 
+            border-top: 1px solid var(--verde-escuro-fundo);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        /* --- GRID (Modificado p/ Exposições) --- */
+        #main-container { padding: var(--gap) var(--gap) 15vh var(--gap); background: var(--fundo-medio); }
+        
+        .grid-layout { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 8px; 
+        }
+
+        .obra-miniatura { 
+            background: var(--fundo-claro); 
+            display: flex; 
+            flex-direction: column;
+            cursor: pointer; 
+            overflow: hidden; 
+            padding-bottom: 12px;
+        }
+
+        .thumb-img-wrapper {
+            width: 100%;
+            aspect-ratio: 3/2; /* Ajuste para fotos de exposição */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .obra-miniatura img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+}
+
+/* --- INFOS DA THUMBNAIL (Typography Fluid) --- */
+.expo-thumb-info {
+    padding: 12px 18px 8px;
+    color: var(--verde-escuro-fundo); /* [cite: 6, 80, 118, 244] */
+}
+
+.expo-thumb-info strong { 
+    display: block; 
+    font-weight: 800; 
+    /* Flui de 1.1rem (mobile) até 1.8rem (desktop) */
+    font-size: clamp(0.94rem, 0.94rem + 1vw, 1.55em); 
+    margin-bottom: 4px;
+    line-height: 1.2;
+    letter-spacing: -0.8px;
+}
+
+.expo-thumb-info span { 
+    color: var(--verde-medio); /* [cite: 3, 77, 115, 241] */
+    /* Flui de 0.75rem (mobile) até 0.9rem (desktop) */
+    font-size: clamp(0.73rem, 0.73rem + 0.25vw, 0.94rem); 
+    font-weight: 500;
+    display: block;
+}
+
+/* O sublinhado aparece tanto no mouseover quanto quando a célula está ativa */
+.obra-miniatura:hover .expo-thumb-info strong,
+.obra-miniatura.ativo .expo-thumb-info strong {
+    text-decoration: underline;
+    text-decoration-color: var(--verde-vivo);
+    text-underline-offset: 0px;
+    text-decoration-thickness: 10px;
+    text-decoration-skip-ink: none;
+}
+        
+        /* A imagem só ganha cor no mouseover; no estado ativo (aberto), ela volta/fica em P&B */
+.obra-miniatura:hover img { filter: grayscale(0%); }
+.obra-miniatura.ativo img { filter: grayscale(100%); }
+
+        /* --- ACORDEÃO (Igual Trabalhos) --- */
+        .acordeao-container { 
+            grid-column: 1 / -1; 
+            background: var(--fundo-claro); 
+            margin: 50px 0;
+            border-bottom: 1px solid var(--verde-vivo); 
+            border-top: 1px solid var(--verde-vivo);
+        }
+
+        .carousel-view { 
+            display: flex; 
+            overflow-x: auto; 
+            scroll-snap-type: x mandatory; 
+            scrollbar-width: none;
+            height: 60vh; 
+            scroll-behavior: smooth; 
+        }
+        .carousel-view::-webkit-scrollbar { display: none; }
+        .carousel-view img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: contain; scroll-snap-align: center; padding: 20px; }
+
+        .indicadores { display: flex; justify-content: center; gap: 4px; margin: 20px 0; }
+        .ponto { width: 45px; height: 12px; border: 1px solid var(--verde-escuro); background: var(--fundo-medio); cursor: pointer; }
+        .ponto.ativo { background: var(--verde-vivo); }
+
+        .ficha-tecnica { text-align: center; padding: 0 50px 30px; font-size: 0.75rem; line-height: 1.4; }
+        .ficha-tecnica strong { display: block; font-size: 1.1rem; margin-bottom: 6px; }
+        .ficha-tecnica span { display: block; color: var(--verde-medio); }
+
+        /* --- LIGHTBOX --- */
+        #lightbox {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: rgba(32, 36, 32, 0.94); z-index: 3000;
+            display: none; flex-direction: column;
+        }
+        #lightbox-content { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; height: 100%; align-items: center; }
+        #lightbox-content img { flex: 0 0 100vw; width: 94%; height: 94%; object-fit: contain; scroll-snap-align: center; margin: 0 auto; }
+        .close-lb { position: absolute; top:18px; right:60px; font-size: 1.3rem; color: var(--verde-vivo); cursor: pointer; z-index: 3001; font-weight: 500; }
+
+        /* --- MENU FULL (MOBILE) --- */
+        #menu-full { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: var(--verde-vivo); z-index: 2000; display: none; 
+            flex-direction: column; justify-content: center; align-items: center; gap: 30px;
+        }
+
+        #menu-full a { 
+            text-decoration: none; color: var(--verde-escuro-fundo); 
+            font-size: 1.5rem; font-weight: 800;
+        }
+
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 850px) {
+            .desktop-nav { display: none; }
+            .mobile-menu-trigger { display: block; }
+            .header-top { height: 70px !important; }
+            .logo { font-size: 2rem !important; }
+            .grid-layout { grid-template-columns: repeat(2, 1fr); gap: 6px; } /* 2 Colunas Mobile */
+            .expo-thumb-info { padding: 12px 12px 8px; }
+            .carousel-view { height: 50vh; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="site-wrapper">
+    <header id="dynamic-header">
+        <div class="header-top">
+            <div class="logo" onclick="location.href='https://betshoptv.com/temp/santa-home'">SANTACOSTA</div>
+            <nav class="desktop-nav">
+                <a href="https://betshoptv.com/temp/santa-v3">TRABALHOS</a>
+                <a style="font-weight: 400; cursor: default; color: var(--verde-medio)">EXPOSIÇÕES</a>
+                <a href="https://betshoptv.com/temp/santa-textos">TEXTOS</a>
+                <a href="https://betshoptv.com/temp/santa-noticias">NOTÍCIAS</a>
+                <a href="https://betshoptv.com/temp/santa-bio">BIO</a>
+            </nav>
+            <div class="mobile-menu-trigger" onclick="toggleMenu(true)">
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+            </div>
+        </div>
+    </header> 
+<br>
+    <div id="menu-full">
+        <div onclick="toggleMenu(false)" style="position:absolute; top:20px; right:8vw; font-size:2.4rem; font-weight: 800; cursor:pointer;">✕</div>
+        <a href="https://betshoptv.com/temp/santa-v3" style="font-size:2.4rem; font-weight: 800;">TRABALHOS</a>
+        <a href="#" onclick="toggleMenu(false); document.getElementById('cv-alvo').scrollIntoView({behavior: 'smooth'})" style="font-size:2.4rem; font-weight: 800;">EXPOSIÇÕES</a>
+        <a href="https://betshoptv.com/temp/santa-textos" style="font-size:2.4rem; font-weight: 800;">TEXTOS</a>
+        <a href="https://betshoptv.com/temp/santa-noticias" style="font-size:2.4rem; font-weight: 800;">NOTÍCIAS</a>
+        <a href="https://betshoptv.com/temp/santa-bio" style="font-size:2.4rem; font-weight: 800;">BIO</a>
+    </div>
+
+    <main id="main-container" class="grid-layout"></main>
+</div>
+
+<div id="lightbox" onclick="closeLightbox()">
+    <div class="close-lb">✕</div>
+    <div id="lightbox-content"></div>
+</div>
+
+<script>
+    let dadosExpos = [];
+    let tituloAberto = null;
+    let lightboxAberto = false; 
+
+    async function init() {
+        const resp = await fetch('https://betshoptv.com/temp/expos.json');
+        const data = await resp.json();
+        dadosExpos = agruparExpos(data);
+        render(dadosExpos);
+    }
+
+    function agruparExpos(data) {
+        const agrupar = {};
+        data.forEach(item => {
+            if (!agrupar[item.TEXTO]) {
+                agrupar[item.TEXTO] = { ...item, fotos: [], fotosHigh: [] };
+            }
+            agrupar[item.TEXTO].fotos.push(item.IMG_LOW);
+            agrupar[item.TEXTO].fotosHigh.push(item.IMG_HIGH);
+        });
+        return Object.values(agrupar);
+    }
+
+    function render(lista) {
+        const container = document.getElementById('main-container');
+        container.innerHTML = '';
+        
+        const cols = window.innerWidth > 850 ? 3 : 2;
+        const idxAberto = lista.findIndex(o => o.TEXTO === tituloAberto);
+        const fimLinha = idxAberto !== -1 ? Math.min(Math.floor(idxAberto / cols) * cols + (cols - 1), lista.length - 1) : -1;
+
+        lista.forEach((expo, i) => {
+            const min = document.createElement('div');
+            min.className = `obra-miniatura ${tituloAberto === expo.TEXTO ? 'ativo' : ''}`;
+            min.innerHTML = `
+                <div class="thumb-img-wrapper">
+                    <img src="${expo.fotos[0]}" alt="${expo.TEXTO}">
+                </div>
+                <div class="expo-thumb-info">
+                    <strong>${expo.TEXTO}</strong>
+                    <span>${expo.LOCAL}</span>
+                </div>
+            `;
+            min.onclick = () => toggleExpo(expo, lista);
+            container.appendChild(min);
+
+            if (i === fimLinha && tituloAberto) {
+                container.appendChild(renderDetalhe(lista[idxAberto], idxAberto));
+            }
+        });
+    }
+
+    function renderDetalhe(expo, idx) {
+        const div = document.createElement('div');
+        div.className = 'acordeao-container';
+        const carouselId = `carousel-${idx}`;
+        
+        div.innerHTML = `
+            <div class="carousel-view" id="${carouselId}" onscroll="syncDots('${carouselId}')">
+                ${expo.fotos.map((f, i) => `<img src="${f}" onclick="openLightbox(${idx}, ${i})">`).join('')}
+            </div>
+            ${expo.fotos.length > 1 ? `
+                <div class="indicadores" id="dots-${carouselId}">
+                    ${expo.fotos.map((_, i) => `<div class="ponto ${i===0?'ativo':''}" onclick="scrollCarousel('${carouselId}', ${i})"></div>`).join('')}
+                </div>` : ''}
+            <div class="ficha-tecnica">
+                <strong>${expo.TEXTO}</strong>
+                <span>${expo.LOCAL} | ${expo.CIDADE} | ${expo.DATA}</span>
+                <p style="margin-top:10px; color:var(--verde-escuro)">${expo.INFO}</p>
+            </div>
+        `;
+        return div;
+    }
+
+    function toggleExpo(expo, lista) {
+        tituloAberto = (tituloAberto === expo.TEXTO) ? null : expo.TEXTO;
+        render(lista);
+        if (tituloAberto) {
+            setTimeout(() => {
+                const h = document.querySelector('header').offsetHeight;
+                const acordeao = document.querySelector('.acordeao-container');
+                if(acordeao) window.scrollTo({ top: acordeao.offsetTop - h + 1, behavior: 'smooth' });
+            }, 100);
+        }
+    }
+
+    function scrollCarousel(id, idx) {
+        const el = document.getElementById(id);
+        el.scrollTo({ left: el.offsetWidth * idx, behavior: 'smooth' });
+    }
+
+    function syncDots(id) {
+        const el = document.getElementById(id);
+        const dots = document.getElementById(`dots-${id}`);
+        if (!dots) return;
+        const current = Math.round(el.scrollLeft / el.offsetWidth);
+        Array.from(dots.children).forEach((d, i) => d.classList.toggle('ativo', i === current));
+    }
+
+    function openLightbox(expoIdx, fotoIdx) {
+        const content = document.getElementById('lightbox-content');
+        content.innerHTML = dadosExpos[expoIdx].fotosHigh.map(f => `<img src="${f}">`).join('');
+        document.getElementById('lightbox').style.display = 'flex';
+        setTimeout(() => content.scrollTo({ left: content.offsetWidth * fotoIdx, behavior: 'instant' }), 10);
+        lightboxAberto = true; 
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+    lightboxAberto = false; 
+}
+
+    function toggleMenu(open) { document.getElementById('menu-full').style.display = open ? 'flex' : 'none'; }
+
+    window.onscroll = () => {
+        const ratio = Math.min(window.scrollY / 300, 1);
+        document.documentElement.style.setProperty('--scroll-ratio', ratio);
+    };
+    
+    window.addEventListener('keydown', (e) => { 
+    if (e.key === 'Escape') { 
+        if (lightboxAberto) {
+            closeLightbox(); // Fecha o zoom se estiver aberto 
+        } else {
+            tituloAberto = null; // Caso contrário, fecha o acordeão do grid 
+            render(dadosExpos); 
+        }
+    } 
+});
+
+    init();
+</script>
+</body>
+</html>
