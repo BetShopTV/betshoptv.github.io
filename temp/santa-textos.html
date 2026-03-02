@@ -240,6 +240,7 @@ background: var(--verde-vivo);
         }
     </style>
 </head>
+    
 <body>
 
 <div id="site-wrapper">
@@ -253,7 +254,12 @@ background: var(--verde-vivo);
                 <a href="#">NOTÍCIAS</a>
                 <a href="https://betshoptv.com/temp/santa-bio">BIO</a>
             </nav>
+            
+            <div class="mobile-menu-trigger" onclick="toggleMenu(true)">
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
             </div>
+        </div>
+        
     </header>
 
     <div id="menu-full">
@@ -349,6 +355,10 @@ background: var(--verde-vivo);
         const ratio = Math.min(window.scrollY / scrollThreshold, 1);
         document.documentElement.style.setProperty('--scroll-ratio', ratio);
     };
+    
+        function toggleMenu(open) { 
+        document.getElementById('menu-full').style.display = open ? 'flex' : 'none'; 
+    }
 
     // Função de Acordeão (Abrir/Fechar Textos)
 function toggleTexto(header) {
