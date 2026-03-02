@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -20,10 +19,10 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'JetBrains Mono', monospace; /* [cite: 5] */
-            background-color: var(--fundo-escuro);
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--verde-escuro-fundo);
             height: 100vh;
-            overflow: hidden; /* Bloqueia scrollbar [cite: 40] */
+            overflow: hidden; /* Bloqueia scrollbar [cite: 6] */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -37,9 +36,13 @@
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            background: url('https://betshoptv.com/temp/home.jpg') center/cover no-repeat;
+            /* Imagem controlada pelo JS agora */
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
             transform: scale(var(--zoom));
-            transition: transform 0.1s ease-out; /* Movimento orgânico  */
+            transition: transform 0.1s ease-out;
+            cursor: crosshair; /* Feedback visual de que é clicável [cite: 84] */
         }
 
         /* --- HERO CONTAINER --- */
@@ -48,62 +51,52 @@
             flex-direction: column;
             align-items: center;
             width: fit-content;
+            pointer-events: none; /* Permite clicar no BG através do container */
         }
 
-/* 1. Definimos a performance da pulsação */
-@keyframes pulsacaoSaturada {
-    0% {
-        /* Estado original/natural */
-        filter: saturate(100%) brightness(1);
-    }
-    100% {
-        /* Estado de saturação máxima solicitado */
-        filter: saturate(500%) brightness(1.3);
-    }
-}
+        .logo, .nav-curadoria {
+            pointer-events: auto; /* Devolve o clique apenas para o que importa  */
+        }
 
-/* 2. Aplicamos ao seletor do logo */
-.logo {
-    font-weight: 800;
-    letter-spacing: -4px;
-    font-size: clamp(4rem, 15vw, 12rem);
-    color: var(--verde-vivo); 
-    line-height: 0.85;
-    text-transform: uppercase;
-    cursor: pointer;
-    margin-top: 18vh;
+        @keyframes pulsacaoSaturada {
+            0% { color: var(--verde-vivo);  }
+            100% { color: var(--fundo-medio); }
+        }
 
-    /* A mágica: 20s, movimento suave, loop infinito e alternado */
-    animation: pulsacaoSaturada 30s ease-in-out infinite alternate;
-    
-    /* Garante renderização fluida em hardware GTX/Intel */
-    will-change: filter;
-}
+        .logo {
+            font-weight: 800;
+            letter-spacing: -4px;
+            font-size: clamp(4rem, 15vw, 12rem);
+            line-height: 0.85;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 18vh;
+            animation: pulsacaoSaturada 30s ease-in-out infinite alternate;
+            will-change: color;
+        }
 
-        /* --- MENU ALINHADO (LARGURA TOTAL DO LOGO) --- */
         .nav-curadoria {
-            width: 100%; /* Força a largura do logo */
+            width: 100%;
             display: flex;
-            justify-content: space-between; /* Distribui itens nas extremidades */
+            justify-content: space-between;
             align-items: center;
-            margin-top: 0.6em; /* O "espaço de uma quebra de linha" */
+            margin-top: 0.6em;
         }
 
-/* --- ESTADO INICIAL DOS LINKS --- */
         .nav-curadoria a {
             text-decoration: none;
-            color: var(--verde-vivo);
+            animation: pulsacaoSaturada 30s ease-in-out infinite alternate;
+            will-change: color;
             font-weight: 800;
             text-transform: uppercase;
-            font-size: clamp(0.8rem, 3vw, 3rem);
+            font-size: clamp(0.8rem, 2.7vw, 2.7rem);
         }
 
-        /* --- HOVER: SATURAÇÃO + UNDERLINE --- */
         .nav-curadoria a:hover {
-    text-decoration: underline;
-    text-decoration-color: var(--fundo-medio);
-    text-underline-offset: 0.5px; /* Dá o "ritmo editorial" e evita o choque com a fonte */
-    text-decoration-thickness: 18px; /* Define a força da linha */
+            text-decoration: underline;
+            text-decoration-color: var(--fundo-medio);
+            text-underline-offset: 0.5px;
+            text-decoration-thickness: 12px;
         }
  
         @media (max-width: 768px) {
@@ -126,22 +119,45 @@
         <a href="https://betshoptv.com/temp/santa-bio">Bio</a>
     </nav>
 </div>
-
+      
 <script>
-let currentZoom = 1;
+    // LISTA DE IMAGENS ATUALIZADA
+    const imagensFundo = [
+        'https://betshoptv.com/temp/img/01_MAC7917_T2.jpg',
+        'https://betshoptv.com/temp/img/01_MAC7963_T.jpg',
+        'https://betshoptv.com/temp/img/02_MAC8018_T.jpg',
+        'https://betshoptv.com/temp/img/02_MAC8027_T.jpg',
+        'https://betshoptv.com/temp/img/02_MAC8050_T.jpg',
+        'https://betshoptv.com/temp/img/03_MAC8086_T.jpg',
+        'https://betshoptv.com/temp/img/06_250826_rafael_massape_006.jpg',
+        'https://betshoptv.com/temp/img/07_250826_rafael_massape_061.jpg',
+        'https://betshoptv.com/temp/img/08_MAC8201_T.jpg'
+    ];
+
+    const bgElement = document.getElementById('bg-performance');
+
+    // FUNÇÃO PARA MUDAR IMAGEM ALEATORIAMENTE
+    function mudarImagem() {
+        const indexAleatorio = Math.floor(Math.random() * imagensFundo.length);
+        bgElement.style.backgroundImage = `url('${imagensFundo[indexAleatorio]}')`;
+    }
+
+    // Inicializa a imagem no load
+    mudarImagem();
+
+    // Evento de clique no fundo (bg-performance)
+    bgElement.addEventListener('click', mudarImagem);
+
+    /* --- LÓGICA DE ZOOM (MANTIDA DO ORIGINAL) --- */
+    let currentZoom = 1;
     const minZoom = 1;
-    const maxZoom = 4; // 100% + 300% de zoom extra [cite: 70]
-    
-    // Configurações do Loop (40s ida e volta = 20s cada trecho)
-    let direction = 1; // 1 para aumentar, -1 para diminuir
-    const totalCycleTime = 1800000; // 40 segundos em milissegundos
-    const step = (maxZoom - minZoom) / (totalCycleTime / 2 / 16.67); // Incremento por frame (60fps)
+    const maxZoom = 2;
+    let direction = 1;
+    const totalCycleTime = 1300000;
+    const step = (maxZoom - minZoom) / (totalCycleTime / 2 / 16.67);
 
     function animateBackground() {
-        // Aplica o movimento automático (Linear, sem ease)
         currentZoom += step * direction;
-
-        // Inverte a direção nos limites (Indo e vindo)
         if (currentZoom >= maxZoom) {
             currentZoom = maxZoom;
             direction = -1;
@@ -149,30 +165,23 @@ let currentZoom = 1;
             currentZoom = minZoom;
             direction = 1;
         }
-
         updateZoom();
         requestAnimationFrame(animateBackground);
     }
 
-    // Função central de atualização
     function updateZoom() {
         document.documentElement.style.setProperty('--zoom', currentZoom);
     }
 
-    // Interferência do Usuário (O Piano Preparado) [cite: 105]
     window.addEventListener('wheel', (e) => {
-        // O usuário altera o valor, e a animação retoma desse novo ponto
         currentZoom += e.deltaY * 0.002;
-        
-        // Garante que o usuário não saia dos limites do design
         currentZoom = Math.min(Math.max(currentZoom, minZoom), maxZoom);
         updateZoom();
     }, { passive: true });
 
-    // Inicia a performance visual
     requestAnimationFrame(animateBackground);
 
-    // Suporte Touch (Mantido para sua infraestrutura mobile)
+    /* --- SUPORTE TOUCH --- */
     let lastTouchY = 0;
     window.addEventListener('touchstart', e => { lastTouchY = e.touches[0].clientY; });
     window.addEventListener('touchmove', e => {
@@ -183,7 +192,5 @@ let currentZoom = 1;
         lastTouchY = e.touches[0].clientY;
     });
 </script>
-
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v67327c56f0bb4ef8b305cae61679db8f1769101564043" integrity="sha512-rdcWY47ByXd76cbCFzznIcEaCN71jqkWBBqlwhF1SY7KubdLKZiEGeP7AyieKZlGP9hbY/MhGrwXzJC/HulNyg==" data-cf-beacon='{"version":"2024.11.0","token":"f27ea51c9a684f4fbfb255dbc4c4de38","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
