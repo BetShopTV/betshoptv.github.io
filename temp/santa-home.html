@@ -109,7 +109,7 @@
 <div id="bg-performance"></div>
 
 <div class="hero-container">
-    <div class="logo" onclick="location.href='https://betshoptv.com/temp/santa-v3'">SANTACOSTA</div>
+    <div class="logo" style="cursor: default;">SANTACOSTA</div>
     <br>
     <nav class="nav-curadoria">
         <a href="https://betshoptv.com/temp/santa-v3">Trabalhos</a>&nbsp;
@@ -150,9 +150,9 @@
     /* --- LÓGICA DE ZOOM (MANTIDA DO ORIGINAL) --- */
     let currentZoom = 1;
     const minZoom = 1;
-    const maxZoom = 2;
+    const maxZoom = 2.4;
     let direction = 1;
-    const totalCycleTime = 1300000;
+    const totalCycleTime = 1180000;
     const step = (maxZoom - minZoom) / (totalCycleTime / 2 / 16.67);
 
     function animateBackground() {
