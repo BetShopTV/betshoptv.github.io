@@ -99,12 +99,12 @@
         }
 
         /* --- GRID (Modificado p/ Exposições) --- */
-        #main-container { padding: var(--gap) var(--gap) 15vh var(--gap); background: var(--fundo-medio); }
+        #main-container { padding: 24px 76px; margin: 0 auto; background: var(--fundo-medio); }
         
         .grid-layout { 
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
-            gap: 8px; 
+            gap: 18px; 
         }
 
         .obra-miniatura { 
@@ -141,7 +141,7 @@
     display: block; 
     font-weight: 800; 
     /* Flui de 1.1rem (mobile) até 1.8rem (desktop) */
-    font-size: clamp(0.94rem, 0.94rem + 1vw, 1.55em); 
+    font-size: clamp(0.88rem, 0.88rem + 1vw, 1.38em); 
     margin-bottom: 4px;
     line-height: 1.2;
     letter-spacing: -0.8px;
@@ -221,12 +221,13 @@
 
         /* --- RESPONSIVIDADE --- */
         @media (max-width: 850px) {
+            #main-container { padding: 0px 8px; } 
             .desktop-nav { display: none; }
             .mobile-menu-trigger { display: block; }
             .header-top { height: 70px !important; }
             .logo { font-size: 2rem !important; }
-            .grid-layout { grid-template-columns: repeat(2, 1fr); gap: 6px; } /* 2 Colunas Mobile */
-            .expo-thumb-info { padding: 12px 12px 8px; }
+            .grid-layout { grid-template-columns: repeat(2, 1fr); gap: 8px; } /* 2 Colunas Mobile */
+            .expo-thumb-info { padding: 12px 12px 8px; letter-spacing: -0.2px; }
             .carousel-view { height: 50vh; }
         }
     </style>
