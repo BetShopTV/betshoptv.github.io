@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="icon" href="https://betshoptv.com/FAVICON.png" type="image/x-icon">
+      <link rel="icon" href="https://betshoptv.github.io/FAVICON.png" type="image/x-icon">
     <title>BUSCA</title>
     <style>
         :root { 
@@ -149,7 +149,7 @@
 
         async function carregarDados() {
             try {
-                const resposta = await fetch('https://betshoptv.com/dados/pecas.json');
+                const resposta = await fetch('https://betshoptv.github.io/dados/pecas.json');
                 const dados = await resposta.json();
                 todasPecasValidas = dados.filter(p => p.titulo && p.titulo.trim() !== "");
             } catch (e) { console.error("Erro ao carregar banco de dados."); }
@@ -197,7 +197,7 @@ function exibirPeca(index) {
             gallery.innerHTML = '';
             pecaExibida.imagens.forEach((imgName, idx) => {
                 const img = document.createElement('img');
-                img.src = `https://betshoptv.com/img/fallback/${imgName}.jpg`;
+                img.src = `https://betshoptv.github.io/img/fallback/${imgName}.jpg`;
                 img.onclick = () => abrirLightbox(idx);
                 gallery.appendChild(img);
             });
@@ -213,7 +213,7 @@ function exibirPeca(index) {
 
             nomesComClones.forEach(name => {
                 const img = document.createElement('img');
-                img.src = `https://betshoptv.com/img/fallback/${name}.jpg`;
+                img.src = `https://betshoptv.github.io/img/fallback/${name}.jpg`;
                 lbContent.appendChild(img);
             });
 
