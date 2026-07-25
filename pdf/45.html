@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://betshoptv.github.io/FAVICON.png" type="image/x-icon">
+    <title>BetShopTV - Aposta 45</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --red: #ff0000;
+            --ink: #2b2424;
+            --beige: #bebab0;
+            --white: #ffffff;
+            --ff-body: "Roboto Semi Condensed", sans-serif;
+        }
+        
+        body, html {
+            background: var(--beige);
+            color: var(--ink);
+            font-family: var(--ff-body);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .master-container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* CABEÇALHO */
+        .top-bar {
+            background-color: var(--red);
+            width: 100%;
+            height: 100px; 
+            box-sizing: border-box;
+        }
+
+        .top-bar-inner {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .bar-logo {
+            height: 100%;
+            width: auto;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+
+        .bar-title {
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 0;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        /* DESTAQUE - CENTRALIZADO NA TELA */
+        .aposta-destaque {
+            width: 100%; /* Garante centralização absoluta na tela */
+            text-align: center;
+            margin: 40px 0 20px 0;
+            border-bottom: 1px solid rgba(43, 36, 36, 0.2);
+            padding-bottom: 20px;
+        }
+
+        .aposta-destaque h2 {
+            font-size: 1.8rem;
+            margin: 0 0 5px 0;
+            letter-spacing: 2px;
+        }
+
+        .aposta-destaque p {
+            font-size: 1.2rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        /* GALERIA - LINHA ÚNICA */
+        .gallery-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center; /* Centraliza o bloco todo */
+            gap: 30px; /* Espaçamento entre as peças */
+            flex-wrap: nowrap; /* FORÇA A LINHA ÚNICA NO DESKTOP */
+            padding-top: 20px;
+            margin-bottom: 60px;
+        }
+
+        .artwork-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 0 0 auto; /* Impede que os cards sejam esmagados pelo flexbox */
+        }
+
+        .artwork-card img {
+            height: 350px;
+            width: auto;   
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        .artwork-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 0 15px 0;
+            line-height: 1.3;
+            text-align: left;
+            max-width: 250px;
+        }
+
+        /* BOTÃO DE DOWNLOAD */
+        .btn-action {
+            display: inline-block;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+        }
+
+        .btn-download {
+            background-color: var(--ink);
+            color: var(--beige);
+        }
+
+        .btn-download:hover {
+            background-color: var(--red);
+            color: var(--white);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="top-bar">
+        <div class="top-bar-inner master-container">
+            <img src="https://betshoptv.github.io/elementos/logo-bstv.png" alt="BetShopTV" class="bar-logo">
+            <h1 class="bar-title">GUIA DE MONTAGEM E CONSERVAÇÃO</h1>
+        </div>
+    </header>
+
+    <div class="aposta-destaque">
+        <h2>PEÇAS ESCOLHIDAS</h2>
+        <p>Aposta nº 45</p>
+    </div>
+
+    <main class="gallery-container master-container" id="gallery-container"></main>
+
+    <script>
+        const idsDisponiveis = ["0615", "0501", "0605"];
+
+        async function carregarEFiltrarObras() {
+            try {
+                const resposta = await fetch('https://betshoptv.github.io/dados/pecas.json');
+                const dadosJson = await resposta.json();
+                const pecasFiltradas = dadosJson.filter(peca => idsDisponiveis.includes(peca.id_peca));
+                renderizarGaleria(pecasFiltradas);
+            } catch (erro) {
+                console.error("Erro ao cruzar o banco de dados:", erro);
+            }
+        }
+
+        function renderizarGaleria(pecas) {
+            const container = document.getElementById('gallery-container');
+
+            pecas.forEach(peca => {
+                const nomeDaImagem = (peca.imagens && peca.imagens.length > 0) ? peca.imagens[0] : 'fallback';
+                
+                const urlImagem = `https://betshoptv.github.io/img/fallback/${nomeDaImagem}.jpg`;
+                const urlPdf = `https://betshoptv.github.io/pdf/${peca.id_peca}.pdf`;
+
+                const card = document.createElement('div');
+                card.className = 'artwork-card';
+
+                card.innerHTML = `
+                    <img src="${urlImagem}" alt="${peca.titulo}">
+                    <h2 class="artwork-title">${peca.titulo}</h2>
+                    <a href="${urlPdf}" download="BetShopTV_Guia_de_Montagem_${peca.id_peca}.pdf" class="btn-action btn-download">BAIXAR PDF</a>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        carregarEFiltrarObras();
+    </script>
+</body>
+</html>
