@@ -4,15 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://betshoptv.github.io/FAVICON.png" type="image/x-icon">
-    <title>BetShopTV - Aposta 46wm</title>
+    <title>BetShopTV - Guia de Montagem - Aposta 46</title>
+    
+    <!-- Importação da família completa da Roboto Semi Condensed -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
     <style>
-        /* 1. VARIÁVEIS E RESET */
+        /* =========================================
+           1. VARIÁVEIS E RESET
+           ========================================= */
         :root {
             --red: #ff0000;
             --ink: #2b2424;
             --beige: #bebab0;
             --white: #ffffff;
-            --ff-body: "Roboto SemiCondensed", sans-serif;
+            --ff-body: "Roboto Semi Condensed", sans-serif;
         }
         
         body, html {
@@ -24,90 +32,111 @@
             overflow-x: hidden;
         }
 
-        /* 2. CABEÇALHO (Mais robusto, logo maior à direita) */
-.top-bar {
+        /* =========================================
+           2. CONTÊINER MESTRE (Alinhamento global)
+           ========================================= */
+        /* Esta classe garante que o cabeçalho, a galeria e o PDF 
+           tenham exatamente a mesma largura e alinhamento */
+        .master-container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* =========================================
+           3. CABEÇALHO
+           ========================================= */
+        .top-bar {
             background-color: var(--red);
             width: 100%;
-            height: 100px;
+            height: 100px; 
+            box-sizing: border-box;
+        }
+
+        /* O interior do cabeçalho usa o master-container para alinhar com o resto */
+        .top-bar-inner {
+            height: 100%;
             display: flex;
-            justify-content: flex-start; /* Mudança principal aqui */
             align-items: center;
-            padding: 0 4%; 
+            justify-content: flex-start;
+        }
+
+        .bar-logo {
+            height: 100%;
+            width: auto;
+            padding: 4px; /* Padding solicitado */
             box-sizing: border-box;
         }
 
         .bar-title {
             color: var(--white);
             font-size: 1.5rem;
-            font-weight: normal;
+            font-weight: 700; /* Peso 700 conforme solicitado */
             letter-spacing: 1px;
             margin: 0;
+            flex-grow: 1; /* Ocupa todo o espaço restante */
+            text-align: center; /* Centraliza no espaço restante */
         }
 
-        .bar-logo {
-            height: 100%; /* Ocupa a altura total do cabeçalho */
-            width: auto;
-            padding: 4px; /* O padding exato solicitado */
-            box-sizing: border-box; /* Garante que o padding não estoure a altura */
-            margin-right: 120px; /* Dá um respiro entre o logotipo e o texto */
-        }
-
-        /* 3. TEXTO CENTRAL DE DESTAQUE */
+        /* =========================================
+           4. TEXTO CENTRAL DE DESTAQUE
+           ========================================= */
         .aposta-destaque {
             text-align: center;
-            margin: 40px 0 40px 0;
-
+            margin: 40px 0 20px 0;
+            border-bottom: 1px solid rgba(43, 36, 36, 0.2);
+            padding-bottom: 20px;
         }
 
         .aposta-destaque h2 {
             font-size: 1.8rem;
             margin: 0 0 5px 0;
-            letter-spacing: 1.5px;
-            color: var(--ink);
-            font-weight: 700;
+            letter-spacing: 2px;
         }
 
         .aposta-destaque p {
             font-size: 1.2rem;
             margin: 0;
-            color: var(--red);
+            font-weight: 700;
         }
 
-        /* 4. GALERIA (Imagens com altura fixa) */
+        /* =========================================
+           5. GALERIA DE OBRAS
+           ========================================= */
         .gallery-container {
-            width: 92%;
-            margin: 30px auto;
             display: flex;
             flex-direction: row;
-            justify-content: center; /* Centraliza o bloco de obras */
-            gap: 40px;
-            flex-wrap: wrap; /* Permite quebrar linha em telas menores */
+            justify-content: space-between; /* Distribui os itens na largura total */
+            gap: 20px;
+            flex-wrap: wrap; 
+            padding-top: 20px;
         }
 
         .artwork-card {
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* Mantém título e botões alinhados à esquerda da imagem */
+            align-items: flex-start;
         }
 
         .artwork-card img {
-            height: 350px; /* ALTURA FIXA PARA TODAS AS IMAGENS */
-            width: auto;   /* LARGURA VARIÁVEL (adapta à proporção) */
+            height: 350px; /* Altura fixa */
+            width: auto;   
             object-fit: contain;
             margin-bottom: 15px;
-            background-color: var(--beige); /* Remove qualquer fundo branco excedente */
         }
 
         .artwork-title {
             font-size: 1.1rem;
-            font-weight: bold;
+            font-weight: 700;
             margin: 0 0 15px 0;
             line-height: 1.3;
             text-align: left;
-            max-width: 250px; /* Evita que títulos muito longos estiquem o layout */
+            max-width: 250px;
         }
 
-        /* 5. GRUPO DE BOTÕES */
+        /* =========================================
+           6. BOTÕES
+           ========================================= */
         .button-group {
             display: flex;
             flex-direction: row;
@@ -118,7 +147,7 @@
             display: inline-block;
             padding: 8px 15px;
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 700;
             text-decoration: none;
             cursor: pointer;
             border: none;
@@ -146,57 +175,62 @@
             color: var(--beige);
         }
 
-        /* 6. VISUALIZADOR DE PDF (Iframe) */
+        /* =========================================
+           7. VISUALIZADOR DE PDF
+           ========================================= */
         .pdf-viewer-section {
-            width: 92%;
-            margin: 40px auto;
-            display: none; /* Escondido por padrão, aparece ao clicar em VISUALIZAR */
+            display: none; /* Escondido por padrão */
             flex-direction: column;
-            align-items: center;
+            margin-top: 40px;
+            margin-bottom: 60px;
         }
 
         .btn-fechar-pdf {
             align-self: flex-end;
             background-color: var(--red);
-            color: white;
+            color: var(--white);
             border: none;
-            padding: 5px 15px;
-            font-weight: bold;
+            padding: 8px 15px;
+            font-weight: 700;
             cursor: pointer;
-            margin-bottom: 10px;
+            margin-bottom: 0;
         }
 
-        .pdf-viewer-section iframe {
+        /* Contêiner onde o <embed> será injetado pelo JS */
+        .pdf-embed-container {
             width: 100%;
-            height: 70vh; /* Ocupa 70% da altura da tela */
+            height: 80vh; /* Altura relativa ao tamanho da tela */
             border: 2px solid var(--ink);
+            background-color: #e5e5e5;
+            box-sizing: border-box;
         }
 
     </style>
 </head>
 <body>
 
-    <!-- Cabeçalho -->
-<!-- Cabeçalho -->
+    <!-- Cabeçalho (Usando master-container internamente) -->
     <header class="top-bar">
-        <img src="https://betshoptv.github.io/elementos/logo-bstv.png" alt="BetShopTV" class="bar-logo">
-        <h1 class="bar-title">GUIA DE MONTAGEM E CONSERVAÇÃO</h1>
+        <div class="top-bar-inner master-container">
+            <img src="https://betshoptv.github.io/elementos/logo-bstv.png" alt="BetShopTV" class="bar-logo">
+            <h1 class="bar-title">GUIA DE MONTAGEM E CONSERVAÇÃO</h1>
+        </div>
     </header>
 
-    <!-- Destaque da Aposta -->
-    <div class="aposta-destaque">
+    <!-- Destaque da Aposta (Usando master-container) -->
+    <div class="aposta-destaque master-container">
         <h2>PEÇAS ESCOLHIDAS</h2>
-        <p style="font-weight: 400; color: var(--ink);">Aposta nº 46</p>
+        <p>Aposta nº 46</p>
     </div>
-<div style="
-            border-top: 1px solid var(--ink);"></div>
-    <!-- Galeria de Obras -->
-    <main class="gallery-container" id="gallery-container"></main>
 
-    <!-- Visualizador Embutido de PDF -->
-    <section class="pdf-viewer-section" id="pdf-viewer-section">
+    <!-- Galeria de Obras (Usando master-container) -->
+    <main class="gallery-container master-container" id="gallery-container"></main>
+
+    <!-- Visualizador de PDF (Usando master-container para alinhar com a galeria) -->
+    <section class="pdf-viewer-section master-container" id="pdf-viewer-section">
         <button class="btn-fechar-pdf" onclick="fecharVisualizador()">FECHAR VISUALIZAÇÃO X</button>
-        <iframe id="pdf-iframe" src=""></iframe>
+        <!-- A tag embed será gerada aqui via JavaScript -->
+        <div class="pdf-embed-container" id="pdf-embed-wrapper"></div>
     </section>
 
     <script>
@@ -227,16 +261,14 @@
                 const urlImagem = `https://betshoptv.github.io/img/fallback/${nomeDaImagem}.jpg`;
                 const urlPdf = `https://betshoptv.github.io/pdf/${peca.id_peca}.pdf`;
 
-                // Cria o contêiner do card
                 const card = document.createElement('div');
                 card.className = 'artwork-card';
 
-                // Preenche o card com a imagem, título e os dois botões
                 card.innerHTML = `
                     <img src="${urlImagem}" alt="${peca.titulo}">
                     <h2 class="artwork-title">${peca.titulo}</h2>
                     <div class="button-group">
-                        <a href="${urlPdf}" download="Guia_${peca.id_peca}.pdf" class="btn-action btn-download">BAIXAR PDF</a>
+                        <a href="${urlPdf}" download="BetShopTV_Guia_de_Montagem_${peca.id_peca}.pdf" class="btn-action btn-download">BAIXAR PDF</a>
                         <button onclick="abrirVisualizador('${urlPdf}')" class="btn-action btn-view">VISUALIZAR</button>
                     </div>
                 `;
@@ -245,28 +277,24 @@
             });
         }
 
-        // Função que aciona o Iframe para visualização rápida
+        // Nova Função de Visualização: Injeta <embed> ao invés de usar <iframe>
         function abrirVisualizador(urlDoPdf) {
             const viewerSection = document.getElementById('pdf-viewer-section');
-            const iframe = document.getElementById('pdf-iframe');
+            const wrapper = document.getElementById('pdf-embed-wrapper');
             
-            // Injeta a URL do PDF no Iframe
-            iframe.src = urlDoPdf;
+            // Injeta o HTML do embed no DOM, forçando o navegador a usar o plugin nativo de PDF
+            wrapper.innerHTML = `<embed src="${urlDoPdf}" type="application/pdf" width="100%" height="100%">`;
             
-            // Exibe a seção na tela (muda de 'none' para 'flex')
             viewerSection.style.display = 'flex';
-            
-            // Rola a tela suavemente para baixo, até o visualizador
             viewerSection.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Função para esconder o visualizador
         function fecharVisualizador() {
             const viewerSection = document.getElementById('pdf-viewer-section');
-            const iframe = document.getElementById('pdf-iframe');
+            const wrapper = document.getElementById('pdf-embed-wrapper');
             
-            // Limpa o src e esconde a seção
-            iframe.src = "";
+            // Remove o embed da memória e esconde a seção
+            wrapper.innerHTML = "";
             viewerSection.style.display = 'none';
         }
 
