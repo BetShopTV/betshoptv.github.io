@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://betshoptv.github.io/FAVICON.png" type="image/x-icon">
-    <title>BetShopTV - Guia de Montagem - Aposta 46</title>
+    <title>BetShopTV - Aposta 46</title>
     
-    <!-- Importação da família completa da Roboto Semi Condensed -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
     <style>
-        /* =========================================
-           1. VARIÁVEIS E RESET
-           ========================================= */
         :root {
             --red: #ff0000;
             --ink: #2b2424;
@@ -32,20 +28,13 @@
             overflow-x: hidden;
         }
 
-        /* =========================================
-           2. CONTÊINER MESTRE (Alinhamento global)
-           ========================================= */
-        /* Esta classe garante que o cabeçalho, a galeria e o PDF 
-           tenham exatamente a mesma largura e alinhamento */
         .master-container {
             width: 95%;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* =========================================
-           3. CABEÇALHO
-           ========================================= */
+        /* CABEÇALHO */
         .top-bar {
             background-color: var(--red);
             width: 100%;
@@ -53,7 +42,6 @@
             box-sizing: border-box;
         }
 
-        /* O interior do cabeçalho usa o master-container para alinhar com o resto */
         .top-bar-inner {
             height: 100%;
             display: flex;
@@ -64,24 +52,23 @@
         .bar-logo {
             height: 100%;
             width: auto;
-            padding: 4px; /* Padding solicitado */
+            padding: 4px;
             box-sizing: border-box;
         }
 
         .bar-title {
             color: var(--white);
             font-size: 1.5rem;
-            font-weight: 700; /* Peso 700 conforme solicitado */
+            font-weight: 700;
             letter-spacing: 1px;
             margin: 0;
-            flex-grow: 1; /* Ocupa todo o espaço restante */
-            text-align: center; /* Centraliza no espaço restante */
+            flex-grow: 1;
+            text-align: center;
         }
 
-        /* =========================================
-           4. TEXTO CENTRAL DE DESTAQUE
-           ========================================= */
+        /* DESTAQUE - CENTRALIZADO NA TELA */
         .aposta-destaque {
+            width: 100%; /* Garante centralização absoluta na tela */
             text-align: center;
             margin: 40px 0 20px 0;
             border-bottom: 1px solid rgba(43, 36, 36, 0.2);
@@ -100,26 +87,26 @@
             font-weight: 700;
         }
 
-        /* =========================================
-           5. GALERIA DE OBRAS
-           ========================================= */
+        /* GALERIA - LINHA ÚNICA */
         .gallery-container {
             display: flex;
             flex-direction: row;
-            justify-content: space-between; /* Distribui os itens na largura total */
-            gap: 20px;
-            flex-wrap: wrap; 
+            justify-content: center; /* Centraliza o bloco todo */
+            gap: 30px; /* Espaçamento entre as peças */
+            flex-wrap: nowrap; /* FORÇA A LINHA ÚNICA NO DESKTOP */
             padding-top: 20px;
+            margin-bottom: 60px;
         }
 
         .artwork-card {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            flex: 0 0 auto; /* Impede que os cards sejam esmagados pelo flexbox */
         }
 
         .artwork-card img {
-            height: 350px; /* Altura fixa */
+            height: 350px;
             width: auto;   
             object-fit: contain;
             margin-bottom: 15px;
@@ -134,15 +121,7 @@
             max-width: 250px;
         }
 
-        /* =========================================
-           6. BOTÕES
-           ========================================= */
-        .button-group {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-        }
-
+        /* BOTÃO DE DOWNLOAD */
         .btn-action {
             display: inline-block;
             padding: 8px 15px;
@@ -164,52 +143,10 @@
             color: var(--white);
         }
 
-        .btn-view {
-            background-color: transparent;
-            color: var(--ink);
-            border: 2px solid var(--ink);
-        }
-
-        .btn-view:hover {
-            background-color: var(--ink);
-            color: var(--beige);
-        }
-
-        /* =========================================
-           7. VISUALIZADOR DE PDF
-           ========================================= */
-        .pdf-viewer-section {
-            display: none; /* Escondido por padrão */
-            flex-direction: column;
-            margin-top: 40px;
-            margin-bottom: 60px;
-        }
-
-        .btn-fechar-pdf {
-            align-self: flex-end;
-            background-color: var(--red);
-            color: var(--white);
-            border: none;
-            padding: 8px 15px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-bottom: 0;
-        }
-
-        /* Contêiner onde o <embed> será injetado pelo JS */
-        .pdf-embed-container {
-            width: 100%;
-            height: 80vh; /* Altura relativa ao tamanho da tela */
-            border: 2px solid var(--ink);
-            background-color: #e5e5e5;
-            box-sizing: border-box;
-        }
-
     </style>
 </head>
 <body>
 
-    <!-- Cabeçalho (Usando master-container internamente) -->
     <header class="top-bar">
         <div class="top-bar-inner master-container">
             <img src="https://betshoptv.github.io/elementos/logo-bstv.png" alt="BetShopTV" class="bar-logo">
@@ -217,35 +154,21 @@
         </div>
     </header>
 
-    <!-- Destaque da Aposta (Usando master-container) -->
-    <div class="aposta-destaque master-container">
+    <div class="aposta-destaque">
         <h2>PEÇAS ESCOLHIDAS</h2>
         <p>Aposta nº 46</p>
     </div>
 
-    <!-- Galeria de Obras (Usando master-container) -->
     <main class="gallery-container master-container" id="gallery-container"></main>
 
-    <!-- Visualizador de PDF (Usando master-container para alinhar com a galeria) -->
-    <section class="pdf-viewer-section master-container" id="pdf-viewer-section">
-        <button class="btn-fechar-pdf" onclick="fecharVisualizador()">FECHAR VISUALIZAÇÃO X</button>
-        <!-- A tag embed será gerada aqui via JavaScript -->
-        <div class="pdf-embed-container" id="pdf-embed-wrapper"></div>
-    </section>
-
     <script>
-        // Array com os IDs da aposta
         const idsDisponiveis = ["0507", "0611", "0613", "0706"];
 
         async function carregarEFiltrarObras() {
             try {
-                // Busca os dados oficiais
                 const resposta = await fetch('https://betshoptv.github.io/dados/pecas.json');
                 const dadosJson = await resposta.json();
-
-                // Filtra as peças pela lista de IDs
                 const pecasFiltradas = dadosJson.filter(peca => idsDisponiveis.includes(peca.id_peca));
-                
                 renderizarGaleria(pecasFiltradas);
             } catch (erro) {
                 console.error("Erro ao cruzar o banco de dados:", erro);
@@ -267,38 +190,13 @@
                 card.innerHTML = `
                     <img src="${urlImagem}" alt="${peca.titulo}">
                     <h2 class="artwork-title">${peca.titulo}</h2>
-                    <div class="button-group">
-                        <a href="${urlPdf}" download="BetShopTV_Guia_de_Montagem_${peca.id_peca}.pdf" class="btn-action btn-download">BAIXAR PDF</a>
-                        <button onclick="abrirVisualizador('${urlPdf}')" class="btn-action btn-view">VISUALIZAR</button>
-                    </div>
+                    <a href="${urlPdf}" download="BetShopTV_Guia_de_Montagem_${peca.id_peca}.pdf" class="btn-action btn-download">BAIXAR PDF</a>
                 `;
 
                 container.appendChild(card);
             });
         }
 
-        // Nova Função de Visualização: Injeta <embed> ao invés de usar <iframe>
-        function abrirVisualizador(urlDoPdf) {
-            const viewerSection = document.getElementById('pdf-viewer-section');
-            const wrapper = document.getElementById('pdf-embed-wrapper');
-            
-            // Injeta o HTML do embed no DOM, forçando o navegador a usar o plugin nativo de PDF
-            wrapper.innerHTML = `<embed src="${urlDoPdf}" type="application/pdf" width="100%" height="100%">`;
-            
-            viewerSection.style.display = 'flex';
-            viewerSection.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function fecharVisualizador() {
-            const viewerSection = document.getElementById('pdf-viewer-section');
-            const wrapper = document.getElementById('pdf-embed-wrapper');
-            
-            // Remove o embed da memória e esconde a seção
-            wrapper.innerHTML = "";
-            viewerSection.style.display = 'none';
-        }
-
-        // Inicializa a página
         carregarEFiltrarObras();
     </script>
 </body>
