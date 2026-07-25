@@ -1,1 +1,191 @@
-a
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://betshoptv.github.io/FAVICON.png" type="image/x-icon">
+    <title>BetShopTV - Guia de Montagem</title>
+    <style>
+        /* 1. VARIÁVEIS E RESET GERAL */
+        :root {
+            --red: #ff0000;
+            --ink: #2b2424;
+            --beige: #bebab0;
+            --white: #ffffff;
+            --ff-body: "Roboto SemiCondensed", sans-serif;
+        }
+        
+        body, html {
+            background: var(--beige);
+            color: var(--ink);
+            font-family: var(--ff-body);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* 2. BARRA SUPERIOR VERMELHA */
+        .top-bar {
+            background-color: var(--red);
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* O padding lateral de 3% de cada lado alinha o conteúdo com os 94% da galeria (3+3+94 = 100) */
+            padding: 0 3%; 
+            box-sizing: border-box;
+        }
+
+        .bar-title {
+            color: var(--white);
+            font-size: 1.1rem;
+            font-weight: normal;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .bar-logo {
+            height: 35px;
+            width: auto;
+        }
+
+        /* 3. GALERIA DE OBRAS (Layout Horizontal) */
+        .gallery-container {
+            width: 94%;
+            margin: 60px auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        /* 4. ESTILOS DO CARD DA OBRA (Sem efeito de hover) */
+        .artwork-card {
+            text-decoration: none;
+            color: var(--ink);
+            display: flex;
+            flex-direction: column;
+            flex: 1; /* Permite que cada card ocupe o mesmo espaço disponível */
+        }
+
+        .artwork-card img {
+            width: 100%;
+            height: 50vh; /* Define a mesma altura para todas as imagens na linha */
+            object-fit: contain; /* Garante que nenhuma imagem seja cortada (crop) */
+            margin-bottom: 15px;
+        }
+
+        .artwork-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            line-height: 1.3;
+            text-align: left;
+        }
+
+        .download-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: var(--ink);
+            color: var(--beige);
+            font-size: 0.9rem;
+            font-weight: bold;
+            align-self: flex-start;
+            transition: background-color 0.2s;
+        }
+
+        /* O hover fica restrito apenas ao botão para indicar que é clicável */
+        .download-badge:hover {
+            background-color: var(--red);
+            color: var(--white);
+        }
+
+        /* 5. RESPONSIVIDADE (Mobile) */
+        @media (max-width: 800px) {
+            .gallery-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 50px;
+                margin: 40px auto;
+            }
+            
+            .artwork-card img {
+                height: auto;
+                max-height: 60vh;
+            }
+            
+            .top-bar {
+                padding: 0 5%;
+            }
+            
+            .bar-title {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho Fino e Vermelho -->
+    <header class="top-bar">
+        <h1 class="bar-title">GUIA DE MONTAGEM E CONSERVAÇÃO</h1>
+        <img src="https://betshoptv.github.io/elementos/logo-bstv.png" alt="BetShopTV" class="bar-logo">
+    </header>
+
+    <!-- Container da Galeria de Downloads -->
+    <main class="gallery-container" id="gallery-container"></main>
+
+    <script>
+        // Array com os IDs cujos manuais foram gerados em PDF via InDesign
+        const idsDisponiveis = ["0507", "0611", "0613", "0706"];
+
+        async function carregarEFiltrarObras() {
+            try {
+                // Conecta e baixa os metadados da base oficial
+                const resposta = await fetch('https://betshoptv.github.io/dados/pecas.json');
+                const dadosJson = await resposta.json();
+
+                // Filtra apenas as peças que estão no array da coleção 46wm
+                const pecasFiltradas = dadosJson.filter(peca => idsDisponiveis.includes(peca.id_peca));
+                
+                renderizarGaleria(pecasFiltradas);
+            } catch (erro) {
+                console.error("Erro ao cruzar o banco de dados:", erro);
+            }
+        }
+
+        function renderizarGaleria(pecas) {
+            const container = document.getElementById('gallery-container');
+
+            pecas.forEach(peca => {
+                // Seleciona obrigatoriamente a primeira foto cadastrada
+                const nomeDaImagem = (peca.imagens && peca.imagens.length > 0) ? peca.imagens[0] : 'fallback';
+                
+                // Monta as URLs apontando para o seu diretório final
+                const urlImagem = `https://betshoptv.github.io/img/fallback/${nomeDaImagem}.jpg`;
+                const urlPdf = `https://betshoptv.github.io/pdf/${peca.id_peca}.pdf`;
+
+                // Cria o encapsulamento clicável sem interferir na visualização da imagem
+                const linkTag = document.createElement('a');
+                linkTag.href = urlPdf;
+                linkTag.className = 'artwork-card';
+                linkTag.target = '_blank'; 
+                linkTag.download = `Guia_Montagem_${peca.id_peca}.pdf`; 
+
+                // Injeta a estrutura de visualização
+                linkTag.innerHTML = `
+                    <img src="${urlImagem}" alt="${peca.titulo}">
+                    <h2 class="artwork-title">${peca.titulo}</h2>
+                    <span class="download-badge">BAIXAR PDF</span>
+                `;
+
+                container.appendChild(linkTag);
+            });
+        }
+
+        // Aciona a rotina imediatamente ao abrir o site
+        carregarEFiltrarObras();
+    </script>
+</body>
+</html>
