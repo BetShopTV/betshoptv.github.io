@@ -235,29 +235,46 @@
     });
 
     // 4. Inicialização: Busca de Dados JSON
-    async function init() {
-        try {
-            const response = await fetch(JSON_URL);
-            const pecasData = await response.json();
+async function init() {
+    try {
+        const response = await fetch(JSON_URL);
+        const pecasData = await response.json();
 
-            pecasData.forEach(peca => {
-                const id = String(peca.id_peca).trim();
-                if (artworksMap[id]) {
-                    artworksMap[id].data = {
-                        titulo: peca.titulo || `Obra ${id}`,
-                        tecnica: peca.tecnica || '',
-                        dimensao: peca.dimensao || peca.tamanho || ''
-                    };
-                }
-            });
+        pecasData.forEach(peca => {
+            const id = String(peca.id_peca).trim();
+            if (artworksMap[id]) {
+                artworksMap[id].data = {
+                    titulo: peca.titulo || `Obra ${id}`,
+                    tecnica: peca.tecnica || '',
+                    dimensao: peca.dimensao || peca.tamanho || ''
+                };
+            }
+        });
 
-            renderGrid();
-            startAutoScrollLoop();
+        // =========================================================
+        // NOVO: Adição manual da obra "EVA TV Man"
+        // =========================================================
+        artworksMap['ETM'] = {
+            images: [
+                "ETM_001.jpg", "ETM_002.jpg", "ETM_003.jpg", 
+                "ETM_004.jpg", "ETM_005.jpg", "ETM_006.jpg"
+            ],
+            data: {
+                titulo: "EVA TV Man",
+                tecnica: "Impressão offset em papel couché transferida para refugo de EVA e pregos",
+                dimensao: "50 x 42 x 6 cm"
+            },
+            isSpecialFolder: true // Marca para sabermos que a URL base é diferente (/galeria/)
+        };
+        // =========================================================
 
-        } catch (error) {
-            console.error("Erro ao carregar dados:", error);
-        }
+        renderGrid();
+        startAutoScrollLoop();
+
+    } catch (error) {
+        console.error("Erro ao carregar dados:", error);
     }
+}
 
     // 5. Renderização do Grid (Apenas 'a.avif')
     function renderGrid() {
@@ -270,13 +287,22 @@
             const obra = artworksMap[id];
             const info = obra.data || { titulo: `Obra ${id}`, tecnica: '', dimensao: '' };
             
-            const mainImageFile = obra.images.find(img => img.endsWith('a.avif')) || obra.images[0];
-            
+// Se for a obra ETM, a capa é ETM_003.jpg; caso contrário, busca a 'a.avif' ou a primeira
+let mainImageFile;
+if (id === 'ETM') {
+    mainImageFile = 'ETM_003.jpg';
+} else {
+    mainImageFile = obra.images.find(img => img.endsWith('a.avif')) || obra.images[0];
+}
+
+// Define o caminho correto da imagem dependendo de onde ela está alojada
+const basePath = obra.isSpecialFolder ? 'https://betshoptv.github.io/galeria/' : URL_BASE_IMG;
+
             const groupDiv = document.createElement('div');
             groupDiv.className = 'artwork-group';
             
             const imgEl = document.createElement('img');
-            imgEl.src = `${URL_BASE_IMG}${mainImageFile}`;
+            imgEl.src = `${basePath}${mainImageFile}`;
             imgEl.loading = "lazy"; 
             
             const overlayDiv = document.createElement('div');
@@ -376,6 +402,14 @@
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxCounter = document.getElementById('lightbox-counter');
 
+// Função auxiliar para saber de onde carregar cada imagem
+function getImageUrl(obraId, imageFile) {
+    if (artworksMap[obraId] && artworksMap[obraId].isSpecialFolder) {
+        return `https://betshoptv.github.io/galeria/${imageFile}`;
+    }
+    return `${URL_BASE_IMG}${imageFile}`;
+}
+
     function openLightbox(obraId, startImageFile) {
         isLightboxOpen = true; 
         currentLightboxImages = artworksMap[obraId].images;
@@ -392,10 +426,18 @@
         lightbox.classList.remove('active');
     }
 
-    function updateLightboxView() {
-        lightboxImg.src = `${URL_BASE_IMG}${currentLightboxImages[currentImageIndex]}`;
-        lightboxCounter.textContent = `${currentImageIndex + 1} / ${currentLightboxImages.length}`;
-    }
+function updateLightboxView() {
+    // Procura o ID da obra atual no Lightbox
+    const currentObraId = Object.keys(artworksMap).find(
+        id => artworksMap[id].images.includes(currentLightboxImages[0])
+    );
+
+    // Substitui: lightboxImg.src = `${URL_BASE_IMG}${currentLightboxImages[currentImageIndex]}`;
+    // Por:
+    lightboxImg.src = getImageUrl(currentObraId, currentLightboxImages[currentImageIndex]);
+    
+    lightboxCounter.textContent = `${currentImageIndex + 1} / ${currentLightboxImages.length}`;
+}
 
     function nextImage() {
         currentImageIndex = (currentImageIndex + 1) % currentLightboxImages.length;
