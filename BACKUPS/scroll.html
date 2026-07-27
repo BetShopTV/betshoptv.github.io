@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BetShopTV ⦿ Scroll</title>
+<style>
+    /* Variáveis Globais e Reset */
+    :root {
+        --gap: 8px;
+        --bg-color: #bebab0;
+        --text-color: #2b2424;
+    }
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body, html {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: "Roboto Condensed", system-ui, sans-serif;
+        /* Permite scroll nativo e esconde rolagem horizontal */
+        overflow-x: hidden; 
+        overflow-y: auto; 
+    }
+
+    /* Ocultar a barra de rolagem visualmente, mantendo a funcionalidade */
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
+
+    #scroll-wrapper {
+        width: 100%;
+        padding: var(--gap);
+    }
+
+    /* Layout Masonry - Ajustável por tamanho de tela */
+    .masonry-grid {
+        column-count: 1;
+        column-gap: var(--gap);
+        width: 100%;
+    }
+    
+    @media (min-width: 600px) { .masonry-grid { column-count: 2; } }
+    @media (min-width: 900px) { .masonry-grid { column-count: 3; } }
+    @media (min-width: 1200px) { .masonry-grid { column-count: 4; } }
+
+    /* Container Individual da Obra */
+    .artwork-group {
+        break-inside: avoid;
+        margin-bottom: var(--gap);
+        position: relative;
+        background: #fff;
+        border: 1px solid var(--text-color);
+        cursor: pointer;
+        display: block;
+        overflow: hidden;
+    }
+
+    /* Imagem da Obra no Grid */
+    .artwork-group img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: filter 0.4s ease;
+    }
+
+/* Overlay com informações no Hover - Alinhado à esquerda */
+.artwork-info-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(43, 36, 36, 0.85);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinha o conteúdo flex à esquerda */
+    justify-content: center; /* Mantém o bloco no centro vertical */
+    text-align: left;        /* Alinha o texto interno à esquerda */
+    padding: 0px 60px 0px 20px; 
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 2;
+    pointer-events: none;
+}
+
+    /* Efeitos de Hover */
+    .artwork-group:hover img { filter: grayscale(100%); }
+    .artwork-group:hover .artwork-info-overlay { opacity: 1; }
+
+    .artwork-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; }
+    .artwork-meta { font-size: 0.9rem; }
+
+    /* Estilos do Lightbox */
+    #lightbox {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #lightbox.active { display: flex; }
+
+    #lightbox-img {
+        max-width: 90vw;
+        max-height: 85vh;
+        object-fit: contain;
+        user-select: none;
+    }
+
+    .lightbox-controls {
+        position: absolute;
+        top: 50%; width: 100%;
+        display: flex; justify-content: space-between;
+        padding: 0 20px; transform: translateY(-50%);
+        pointer-events: none;
+    }
+
+    .btn-nav {
+        background: transparent; border: none; color: #fff;
+        font-size: 3rem; cursor: pointer; pointer-events: auto;
+        opacity: 0.7; transition: opacity 0.2s;
+    }
+
+    .btn-nav:hover { opacity: 1; }
+
+    #btn-close {
+        position: absolute; top: 20px; right: 30px;
+        background: transparent; border: none; color: #fff;
+        font-size: 2rem; cursor: pointer; z-index: 10000;
+    }
+
+    .lightbox-counter {
+        position: absolute; bottom: 20px; color: #fff;
+        font-size: 1rem; letter-spacing: 2px;
+    }
+</style>
+</head>
+<body>
+
+<!-- Envoltório principal -->
+<div id="scroll-wrapper">
+    <!-- Grade principal -->
+    <div id="masonry-content" class="masonry-grid"></div>
+    <!-- Clone para rolagem infinita -->
+    <div id="masonry-clone" class="masonry-grid"></div>
+</div>
+
+<!-- Estrutura do Lightbox -->
+<div id="lightbox">
+    <button id="btn-close">✕</button>
+    <div class="lightbox-controls">
+        <button id="btn-prev" class="btn-nav">‹</button>
+        <button id="btn-next" class="btn-nav">›</button>
+    </div>
+    <img id="lightbox-img" src="" alt="Ampliada">
+    <div class="lightbox-counter" id="lightbox-counter">1 / 1</div>
+</div>
+
+<script>
+    // 1. Dados Iniciais
+    const rawImages = [
+        "02-01a.avif", "02-01b.avif", "02-01c.avif", "02-02a.avif", "02-02b.avif", "02-02c.avif",
+        "02-03a.avif", "02-03b.avif", "02-03c.avif", "02-04a.avif", "02-04b.avif", "02-04c.avif",
+        "02-05a.avif", "02-05b.avif", "02-06a.avif", "02-06b.avif", "02-07a.avif", "02-07b.avif",
+        "02-08a.avif", "02-08b.avif", "02-09a.avif", "02-09b.avif", "03-01a.avif", "03-01b.avif",
+        "03-01c.avif", "03-01d.avif", "03-02a.avif", "03-02b.avif", "03-02c.avif", "03-03a.avif",
+        "03-03b.avif", "03-03c.avif", "03-04a.avif", "03-04b.avif", "03-05a.avif", "03-05b.avif",
+        "03-05c.avif", "03-06a.avif", "03-06b.avif", "03-07a.avif", "03-07b.avif", "03-08a.avif",
+        "03-08b.avif", "03-08c.avif", "03-09a.avif", "03-09b.avif", "03-10a.avif", "03-10b.avif",
+        "03-10c.avif", "03-11a.avif", "03-11b.avif", "03-11c.avif", "03-12a.avif", "03-12b.avif",
+        "03-12c.avif", "03-13a.avif", "03-13b.avif", "03-13c.avif", "04-01a.avif", "04-01b.avif",
+        "04-02a.avif", "04-02b.avif", "04-03a.avif", "04-03b.avif", "04-03c.avif", "04-04a.avif",
+        "04-04b.avif", "04-05a.avif", "04-05b.avif", "04-05c.avif", "04-05d.avif", "04-06a.avif",
+        "04-06b.avif", "04-06c.avif", "04-06d.avif", "04-07a.avif", "04-07b.avif", "04-07c.avif",
+        "04-07d.avif", "04-08a.avif", "04-08b.avif", "04-08c.avif", "04-09a.avif", "04-10a.avif",
+        "04-10b.avif", "04-10c.avif", "04-10d.avif", "04-11a.avif", "04-11b.avif", "04-11c.avif",
+        "04-12a.avif", "04-12b.avif", "04-12c.avif", "04-13a.avif", "04-13b.avif", "04-13c.avif",
+        "05-01a.avif", "05-01b.avif", "05-01c.avif", "05-05a.avif", "05-05b.avif", "05-05c.avif",
+        "05-05d.avif", "05-05e.avif", "05-06a.avif", "05-06b.avif", "05-06c.avif", "05-06d.avif",
+        "05-06e.avif", "05-06f.avif", "05-07a.avif", "05-07b.avif", "05-07c.avif", "05-07d.avif",
+        "05-07e.avif", "05-07f.avif", "05-08a.avif", "05-08b.avif", "06-01a.avif", "06-01b.avif",
+        "06-01c.avif", "06-02a.avif", "06-02b.avif", "06-02c.avif", "06-03a.avif", "06-03b.avif",
+        "06-03c.avif", "06-03d.avif", "06-04a.avif", "06-04b.avif", "06-04c.avif", "06-04d.avif",
+        "06-04e.avif", "06-04f.avif", "06-05a.avif", "06-05b.avif", "06-05c.avif", "06-05d.avif",
+        "06-06a.avif", "06-06b.avif", "06-06c.avif", "06-06d.avif", "06-07a.avif", "06-07b.avif",
+        "06-07c.avif", "06-07d.avif", "06-08a.avif", "06-08b.avif", "06-08c.avif", "06-08d.avif",
+        "06-09a.avif", "06-09b.avif", "06-09c.avif", "06-10a.avif", "06-10b.avif", "06-10c.avif",
+        "06-10d.avif", "06-10e.avif", "06-11a.avif", "06-11b.avif", "06-11c.avif", "06-12a.avif",
+        "06-12b.avif", "06-12c.avif", "06-12d.avif", "06-12e.avif", "06-13a.avif", "06-13b.avif",
+        "06-13c.avif", "06-14a.avif", "06-14b.avif", "06-14c.avif", "06-14d.avif", "06-15a.avif",
+        "06-15b.avif", "06-15c.avif", "06-16a.avif", "06-16b.avif", "06-16c.avif", "06-17a.avif",
+        "06-17b.avif", "06-17c.avif", "06-17d.avif", "07-01a.avif", "07-01b.avif", "07-01c.avif",
+        "07-01d.avif", "07-01e.avif", "07-01f.avif", "07-03a.avif", "07-03b.avif", "07-03c.avif",
+        "07-04a.avif", "07-04b.avif", "07-05a.avif", "07-05b.avif", "07-05c.avif", "07-06a.avif",
+        "07-06b.avif", "07-06c.avif", "07-06d.avif", "07-07a.avif", "07-07b.avif", "07-07c.avif",
+        "07-08a.avif", "07-08b.avif", "07-08c.avif", "07-08d.avif", "07-08e.avif", "07-08f.avif",
+        "07-08g.avif", "07-08h.avif", "07-08i.avif", "07-08j.avif", "08-01a.avif", "08-01b.avif",
+        "08-01c.avif", "08-01d.avif", "08-02a.avif", "08-02b.avif", "08-02c.avif", "08-02d.avif",
+        "08-03a.avif", "08-03b.avif", "08-03c.avif", "08-04a.avif", "08-04b.avif", "08-04c.avif",
+        "08-05a.avif", "08-05b.avif", "08-05c.avif", "08-05d.avif", "08-06a.avif", "08-06b.avif",
+        "08-06c.avif", "08-07a.avif", "08-07b.avif", "08-07c.avif", "08-08a.avif", "08-08b.avif",
+        "08-08c.avif", "08-08d.avif", "08-09a.avif", "08-09b.avif", "08-09c.avif", "08-09d.avif",
+        "08-10a.avif", "08-10b.avif", "08-10c.avif", "08-10d.avif", "08-11a.avif", "08-11b.avif",
+        "08-11c.avif", "08-11d.avif", "08-12a.avif", "08-12b.avif", "08-12c.avif", "08-13a.avif",
+        "08-13b.avif", "08-13c.avif", "08-14a.avif", "08-14b.avif", "08-14c.avif", "08-16a.avif",
+        "08-16b.avif", "08-16c.avif", "08-24a.avif", "08-24b.avif", "08-24c.avif", "08-24d.avif",
+        "08-24e.avif"
+    ];
+
+    const URL_BASE_IMG = 'https://betshoptv.github.io/img/otm/';
+    const JSON_URL = 'https://betshoptv.github.io/dados/pecas.json';
+    const artworksMap = {};
+
+    // 2. Embaralha as Obras (Algoritmo Fisher-Yates)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; 
+        }
+        return array;
+    }
+
+    // 3. Agrupando Imagens por Obra
+    rawImages.forEach(img => {
+        const rawId = img.substring(0, 5);
+        const id = rawId.replace('-', '');
+        if (!artworksMap[id]) artworksMap[id] = { images: [], data: null };
+        artworksMap[id].images.push(img);
+    });
+
+    // 4. Inicialização: Busca de Dados JSON
+    async function init() {
+        try {
+            const response = await fetch(JSON_URL);
+            const pecasData = await response.json();
+
+            pecasData.forEach(peca => {
+                const id = String(peca.id_peca).trim();
+                if (artworksMap[id]) {
+                    artworksMap[id].data = {
+                        titulo: peca.titulo || `Obra ${id}`,
+                        tecnica: peca.tecnica || '',
+                        dimensao: peca.dimensao || peca.tamanho || ''
+                    };
+                }
+            });
+
+            renderGrid();
+            startAutoScrollLoop();
+
+        } catch (error) {
+            console.error("Erro ao carregar dados:", error);
+        }
+    }
+
+    // 5. Renderização do Grid (Apenas 'a.avif')
+    function renderGrid() {
+        const content = document.getElementById('masonry-content');
+        const artworkIds = Object.keys(artworksMap);
+        
+        shuffleArray(artworkIds);
+        
+        artworkIds.forEach(id => {
+            const obra = artworksMap[id];
+            const info = obra.data || { titulo: `Obra ${id}`, tecnica: '', dimensao: '' };
+            
+            const mainImageFile = obra.images.find(img => img.endsWith('a.avif')) || obra.images[0];
+            
+            const groupDiv = document.createElement('div');
+            groupDiv.className = 'artwork-group';
+            
+            const imgEl = document.createElement('img');
+            imgEl.src = `${URL_BASE_IMG}${mainImageFile}`;
+            imgEl.loading = "lazy"; 
+            
+            const overlayDiv = document.createElement('div');
+            overlayDiv.className = 'artwork-info-overlay';
+            overlayDiv.innerHTML = `
+                <div class="artwork-title">${info.titulo}</div>
+                <div class="artwork-meta">${info.tecnica}</div>
+                <div class="artwork-meta">${info.dimensao}</div>
+            `;
+
+            groupDiv.addEventListener('mouseenter', () => isHovering = true);
+            groupDiv.addEventListener('mouseleave', () => isHovering = false);
+
+            groupDiv.addEventListener('click', () => openLightbox(id, mainImageFile));
+
+            groupDiv.appendChild(imgEl);
+            groupDiv.appendChild(overlayDiv);
+            content.appendChild(groupDiv);
+        });
+
+        document.getElementById('masonry-clone').innerHTML = content.innerHTML;
+        
+        const clonedGroups = document.getElementById('masonry-clone').querySelectorAll('.artwork-group');
+        clonedGroups.forEach(group => {
+            group.addEventListener('mouseenter', () => isHovering = true);
+            group.addEventListener('mouseleave', () => isHovering = false);
+            
+            group.addEventListener('click', () => {
+                const imgName = group.querySelector('img').src.split('/').pop();
+                const rawId = imgName.substring(0, 5);
+                const id = rawId.replace('-', '');
+                openLightbox(id, imgName);
+            });
+        });
+    }
+
+    // 6. Lógica Refinada de Rolagem Automática (COM ACUMULADOR)
+    let isHovering = false;
+    let isLightboxOpen = false;
+    let isUserInteracting = false; 
+    let interactionTimeout;
+    
+    // Configurações de velocidade e acumulação de sub-pixels
+    const scrollSpeed = 0.375; 
+    let scrollAccumulator = 0; // Armazena frações de pixel até formar 1 inteiro
+
+    function startAutoScrollLoop() {
+        if (!isUserInteracting && !isHovering && !isLightboxOpen) {
+            
+            // Adicionamos a velocidade fracionada ao acumulador
+            scrollAccumulator += scrollSpeed;
+            
+            // Somente disparamos a rolagem quando juntarmos 1 pixel ou mais
+            if (scrollAccumulator >= 1) {
+                const pixelsToScroll = Math.floor(scrollAccumulator);
+                window.scrollBy(0, pixelsToScroll);
+                
+                // Guardamos o "resto" (a fração que sobrou) para o próximo quadro
+                scrollAccumulator -= pixelsToScroll;
+                
+                // Checagem de rolagem infinita
+                const contentHeight = document.getElementById('masonry-content').offsetHeight;
+                if (window.scrollY >= contentHeight) {
+                    window.scrollTo(0, window.scrollY - contentHeight);
+                }
+            }
+        }
+        requestAnimationFrame(startAutoScrollLoop);
+    }
+
+    // Identifica que o usuário assumiu o controle (mouse wheel, touch, teclado)
+    function handleUserInteraction() {
+        isUserInteracting = true;
+        clearTimeout(interactionTimeout);
+        
+        // Retoma a rolagem automática estritamente após 3 segundos de inatividade (3000ms)
+        interactionTimeout = setTimeout(() => {
+            isUserInteracting = false;
+            scrollAccumulator = 0; // Zera o acumulador ao retomar para evitar pulos
+        }, 3000); 
+    }
+
+    // Escutamos ações físicas específicas
+    window.addEventListener('wheel', handleUserInteraction, { passive: true });
+    window.addEventListener('touchmove', handleUserInteraction, { passive: true });
+    window.addEventListener('keydown', (e) => {
+        if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Space'].includes(e.code)) {
+            handleUserInteraction();
+        }
+    }, { passive: true });
+
+    // 7. Lógica do Lightbox
+    let currentLightboxImages = [];
+    let currentImageIndex = 0;
+    
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+
+    function openLightbox(obraId, startImageFile) {
+        isLightboxOpen = true; 
+        currentLightboxImages = artworksMap[obraId].images;
+        
+        currentImageIndex = currentLightboxImages.indexOf(startImageFile);
+        if (currentImageIndex === -1) currentImageIndex = 0;
+        
+        updateLightboxView();
+        lightbox.classList.add('active');
+    }
+
+    function closeLightbox() {
+        isLightboxOpen = false;
+        lightbox.classList.remove('active');
+    }
+
+    function updateLightboxView() {
+        lightboxImg.src = `${URL_BASE_IMG}${currentLightboxImages[currentImageIndex]}`;
+        lightboxCounter.textContent = `${currentImageIndex + 1} / ${currentLightboxImages.length}`;
+    }
+
+    function nextImage() {
+        currentImageIndex = (currentImageIndex + 1) % currentLightboxImages.length;
+        updateLightboxView();
+    }
+
+    function prevImage() {
+        currentImageIndex = (currentImageIndex - 1 + currentLightboxImages.length) % currentLightboxImages.length;
+        updateLightboxView();
+    }
+
+    document.getElementById('btn-close').addEventListener('click', closeLightbox);
+    document.getElementById('btn-next').addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
+    document.getElementById('btn-prev').addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
+    
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (!isLightboxOpen) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') nextImage();
+        if (e.key === 'ArrowLeft') prevImage();
+    });
+
+    lightbox.addEventListener('wheel', (e) => {
+        if (!isLightboxOpen) return;
+        e.preventDefault(); 
+        if (e.deltaX > 0 || e.deltaY > 0) nextImage();
+        else if (e.deltaX < 0 || e.deltaY < 0) prevImage();
+    }, { passive: false });
+
+    // Executa inicialização
+    init();
+
+</script>
+</body>
+</html>
